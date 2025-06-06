@@ -490,12 +490,12 @@ class GSWProcessor:
         # Save combined results (all raw responses in one JSONL)
         combined_file = os.path.join(output_dir, "gsw_results_combined.jsonl")
         with open(combined_file, "w") as f:
-            for resp in gsw_responses:
+            for resp in gsw_responses.dataset:
                 f.write(json.dumps(resp) + "\n")
         
         # Save individual results and visualizations
         print("--- Saving Networks and Visualizations ---")
-        for response, gsw_structure in zip(gsw_responses, gsw_structures):
+        for response, gsw_structure in zip(gsw_responses.dataset, gsw_structures):
             try:
                 doc_idx = response["doc_idx"]
                 chunk_idx = response["idx"]
