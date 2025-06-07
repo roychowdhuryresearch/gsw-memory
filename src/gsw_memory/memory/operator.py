@@ -1,213 +1,16 @@
 """
-GSW Operator - Core functionality for generating Generative Semantic Workspaces.
+GSW Memory Main Operator.
 
-This module contains the main operator classes for processing text and generating
-semantic workspaces, including coreference resolution, context generation, 
-and GSW structure creation.
+This module contains the main GSWProcessor class that orchestrates the complete
+GSW generation pipeline using modular operator components.
 """
+
 import json
+import os
 from typing import Dict, List, Optional
 
-from bespokelabs import curator
-
-from .models import EntityNode, GSWStructure, Question, Role, VerbPhraseNode
-from ..prompts.operator_prompts import CorefPrompts, ContextPrompts, OperatorPrompts
-
-
-class CorefOperator(curator.LLM):
-    """Curator class for performing coreference resolution."""
-
-    return_completions_object = True
-
-    def prompt(self, input):
-        """Create a prompt for the LLM to perform coreference resolution."""
-        return [
-            {"role": "system", "content": CorefPrompts.SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": CorefPrompts.USER_PROMPT_TEMPLATE.format(text=input['text']),
-            },
-        ]
-
-    def parse(self, input, response):
-        """Parse the LLM response to extract resolved text."""
-        return [
-            {
-                "text": response["choices"][0]["message"]["content"],
-                "idx": input["idx"],
-            }
-        ]
-
-
-class ContextGenerator(curator.LLM):
-    """Curator class for generating chunk-specific context."""
-
-    return_completions_object = True
-
-    def prompt(self, input):
-        """Create a prompt for the LLM to generate context."""
-        return [
-            {"role": "system", "content": ContextPrompts.SYSTEM_PROMPT},
-            {
-                "role": "user", 
-                "content": ContextPrompts.USER_PROMPT_TEMPLATE.format(
-                    doc_text=input['doc_text'],
-                    chunk_text=input['chunk_text']
-                )
-            },
-        ]
-
-    def parse(self, input, response):
-        """Parse the LLM response to extract the generated context."""
-        return [
-            {
-                "context": response["choices"][0]["message"]["content"].strip(),
-                "doc_idx": input["doc_idx"],
-                "chunk_idx": input["chunk_idx"],
-            }
-        ]
-
-
-class GSWOperator(curator.LLM):
-    """Curator class for generating GSWs using sophisticated semantic role extraction."""
-
-    return_completions_object = True
-
-    def prompt(self, input):
-        """Create a prompt for the LLM to generate a GSW."""
-        return [
-            {"role": "system", "content": OperatorPrompts.SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": OperatorPrompts.USER_PROMPT_TEMPLATE.replace(
-                    "{{input_text}}", input["text"]
-                ).replace(
-                    "{{background_context}}", input.get("context", "")
-                ),
-            },
-        ]
-
-    def parse(self, input, response):
-        """Parse the LLM response to extract text and graph."""
-        parsed_response = {
-            "text": input["text"],
-            "idx": input["idx"],
-            "graph": response["choices"][0]["message"]["content"],
-            "context": input.get("context", ""),
-            "doc_idx": input.get("doc_idx", input["idx"]),
-        }
-        
-        # Include sentence indices if available
-        if "start_sentence" in input:
-            parsed_response["start_sentence"] = input["start_sentence"]
-        if "end_sentence" in input:
-            parsed_response["end_sentence"] = input["end_sentence"]
-
-        return [parsed_response]
-
-
-def extract_json_from_output(text: str) -> dict:
-    """Extract JSON part from LLM output."""
-    try:
-        return json.loads(text)
-    except Exception as e:
-        raise ValueError(f"Error extracting JSON: {e}")
-
-
-def parse_gsw(text: str) -> GSWStructure:
-    """Parse LLM output text into a GSWStructure object."""
-    # Clean up the text to extract JSON
-    if "```json" in text:
-        text = text.split("```json")[1].split("```")[0]
-    elif "```" in text:
-        text = text.split("```")[1].split("```")[0]
-    elif "</semantic_construction>" in text:
-        text = text.split("</semantic_construction>")[0]
-    else:
-        # Try to find JSON structure
-        text = text.rsplit("}", 1)[0] + "}"
-    
-    try:
-        # Extract JSON part
-        data = extract_json_from_output(text.strip())
-
-        # Parse entity nodes
-        entities = []
-        if "entity_nodes" in data:
-            for e in data["entity_nodes"]:
-                roles = [Role(**r) for r in e.get("roles", [])]
-                entities.append(
-                    EntityNode(
-                        id=e["id"], 
-                        name=e["name"], 
-                        roles=roles,
-                        chunk_id=e.get("chunk_id"),
-                        summary=e.get("summary")
-                    )
-                )
-
-        # Parse verb phrase nodes
-        verb_phrases = []
-        if "verb_phrase_nodes" in data:
-            for v in data["verb_phrase_nodes"]:
-                questions = [Question(**q) for q in v.get("questions", [])]
-                verb_phrases.append(
-                    VerbPhraseNode(
-                        id=v["id"],
-                        phrase=v["phrase"],
-                        questions=questions,
-                        chunk_id=v.get("chunk_id")
-                    )
-                )
-
-        return GSWStructure(entity_nodes=entities, verb_phrase_nodes=verb_phrases)
-
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Invalid JSON format: {e}")
-    except KeyError as e:
-        raise ValueError(f"Missing required field: {e}")
-
-
-def chunk_text(text: str, chunk_size: int = 3, overlap: int = 1) -> List[Dict]:
-    """Split text into overlapping chunks.
-
-    Args:
-        text: The input text to chunk
-        chunk_size: Number of sentences per chunk
-        overlap: Number of sentences to overlap between chunks
-
-    Returns:
-        List of dictionaries containing chunked text and indices
-    """
-    # Split into sentences - basic split on ., ! and ?
-    sentences = [
-        s.strip()
-        for s in text.replace("!", ".").replace("?", ".").split(".")
-        if s.strip()
-    ]
-
-    chunks = []
-    i = 0
-    chunk_id = 0
-
-    while i < len(sentences):
-        # Get chunk_size sentences starting from i
-        chunk_sentences = sentences[i : i + chunk_size]
-        if chunk_sentences:  # Only add if we have sentences
-            chunks.append(
-                {
-                    "text": ". ".join(chunk_sentences) + ".",
-                    "idx": chunk_id,
-                    "start_sentence": i,
-                    "end_sentence": i + len(chunk_sentences),
-                }
-            )
-            chunk_id += 1
-
-        # Move forward by chunk_size - overlap sentences
-        i += chunk_size - overlap
-
-    return chunks
+from .models import GSWStructure
+from .operators import CorefOperator, ContextGenerator, GSWOperator, SpaceTimeLinker, chunk_text, parse_gsw
 
 
 class GSWProcessor:
@@ -220,9 +23,9 @@ class GSWProcessor:
         enable_coref: bool = True,
         enable_chunking: bool = True,
         enable_context: bool = True,
+        enable_spacetime: bool = True,
         chunk_size: int = 3,
         overlap: int = 1,
-        coref_chunk_size: int = 20,
         enable_visualization: bool = False
     ):
         """Initialize the GSW processor with configuration options."""
@@ -231,9 +34,9 @@ class GSWProcessor:
         self.enable_coref = enable_coref
         self.enable_chunking = enable_chunking
         self.enable_context = enable_context
+        self.enable_spacetime = enable_spacetime
         self.chunk_size = chunk_size
         self.overlap = overlap
-        self.coref_chunk_size = coref_chunk_size
         self.enable_visualization = enable_visualization
         
         # Check if visualization is requested but NetworkX is not available
@@ -255,8 +58,9 @@ class GSWProcessor:
         enable_coref: Optional[bool] = None,
         enable_chunking: Optional[bool] = None,
         enable_context: Optional[bool] = None,
+        enable_spacetime: Optional[bool] = None,
         enable_visualization: Optional[bool] = None
-    ) -> List[GSWStructure]:
+    ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
         
         Args:
@@ -266,19 +70,24 @@ class GSWProcessor:
             enable_coref: Override class setting for coreference resolution
             enable_chunking: Override class setting for chunking
             enable_context: Override class setting for context generation
+            enable_spacetime: Override class setting for spacetime linking
             enable_visualization: Override class setting for visualization
             
         Returns:
-            List of GSWStructure objects (one per chunk across all documents)
+            List of dictionaries, one per document. Each dict contains chunk_id -> chunk_data mappings.
+            Structure: [{"0_0": {gsw, text, spacetime, context, ...}, "0_1": {...}}, {"1_0": {...}}]
         """
-        import os
-        import json
         
         # Override class settings if provided
         do_coref = enable_coref if enable_coref is not None else self.enable_coref
         do_chunking = enable_chunking if enable_chunking is not None else self.enable_chunking
         do_context = enable_context if enable_context is not None else self.enable_context
+        do_spacetime = enable_spacetime if enable_spacetime is not None else self.enable_spacetime
         do_visualization = enable_visualization if enable_visualization is not None else self.enable_visualization
+        
+        # Initialize unified chunk data structure: List[Dict[str, Dict]]
+        # Each list item represents a document, each dict key is chunk_id, value is chunk data
+        all_documents_data = []
         
         # Step 1: Coreference Resolution (parallel across all documents)
         if do_coref:
@@ -288,161 +97,193 @@ class GSWProcessor:
                 generation_params={"temperature": 0.0, "max_tokens": 4000}
             )
             
-            # Prepare coref inputs
-            coref_inputs = []
-            for doc_idx, document in enumerate(documents):
-                if self.coref_chunk_size == -1:
-                    coref_inputs.append({"text": document, "idx": doc_idx})
-                else:
-                    # Chunk document for coref
-                    coref_chunks = chunk_text(document, chunk_size=self.coref_chunk_size, overlap=2)
-                    for chunk in coref_chunks:
-                        chunk["doc_idx"] = doc_idx
-                        coref_inputs.append(chunk)
+            # Prepare coref inputs - one per document
+            coref_inputs = [
+                {"text": document, "idx": doc_idx}
+                for doc_idx, document in enumerate(documents)
+            ]
             
-            # Process all coref chunks in parallel
+            # Process all documents in parallel
             coref_responses = coref_model(coref_inputs)
             
-            # Reconstruct resolved documents
-            if self.coref_chunk_size == -1:
-                resolved_documents = {resp["idx"]: resp["text"] for resp in coref_responses.dataset}
-            else:
-                # Group responses by document and reconstruct
-                doc_coref_texts = {}
-                for resp in coref_responses.dataset:
-                    doc_idx = resp.get("doc_idx", resp["idx"])
-                    if doc_idx not in doc_coref_texts:
-                        doc_coref_texts[doc_idx] = []
-                    doc_coref_texts[doc_idx].append(resp["text"])
-                
-                resolved_documents = {
-                    doc_idx: " ".join(texts) for doc_idx, texts in doc_coref_texts.items()
-                }
+            # Create resolved documents mapping
+            resolved_documents = {resp["idx"]: resp["text"] for resp in coref_responses.dataset}
         else:
             resolved_documents = {idx: doc for idx, doc in enumerate(documents)}
         
-        # Step 2: Chunking (create all chunks from all documents)
-        all_chunks = []
-        if do_chunking:
-            print("--- Chunking Documents ---")
-            for doc_idx, resolved_text in resolved_documents.items():
+        # Step 2: Chunking and Initialize Chunk Data Structure
+        print("--- Chunking Documents and Initializing Data Structure ---")
+        for doc_idx, resolved_text in resolved_documents.items():
+            document_chunks = {}
+            
+            if do_chunking:
                 chunks = chunk_text(resolved_text, chunk_size=self.chunk_size, overlap=self.overlap)
-                for chunk in chunks:
-                    chunk["doc_idx"] = doc_idx
-                    # Create global ID as doc_idx_chunk_idx
-                    chunk["global_id"] = f"{doc_idx}_{chunk['idx']}"
-                all_chunks.extend(chunks)
-        else:
-            # No chunking: each document becomes one chunk
-            for doc_idx, resolved_text in resolved_documents.items():
-                chunk = {
+            else:
+                # No chunking: each document becomes one chunk
+                chunks = [{
                     "text": resolved_text,
                     "idx": 0,
+                    "start_sentence": 0,
+                    "end_sentence": 0,
+                }]
+            
+            # Initialize chunk data for this document
+            for chunk in chunks:
+                global_id = f"{doc_idx}_{chunk['idx']}"
+                document_chunks[global_id] = {
+                    "text": chunk["text"],
                     "doc_idx": doc_idx,
-                    "global_id": f"{doc_idx}_0"
+                    "chunk_idx": chunk["idx"],
+                    "global_id": global_id,
+                    "start_sentence": chunk.get("start_sentence", 0),
+                    "end_sentence": chunk.get("end_sentence", 0),
+                    # Placeholders for pipeline results
+                    "gsw": None,
+                    "context": "",
+                    "spacetime": {},
                 }
-                all_chunks.append(chunk)
+            
+            all_documents_data.append(document_chunks)
         
         # Step 3: Context Generation (parallel across all chunks, but only if multiple chunks exist)
-        contexts = {}
-        should_generate_context = do_context and len(all_chunks) > len(documents)  # More chunks than docs
+        total_chunks = sum(len(doc_chunks) for doc_chunks in all_documents_data)
+        should_generate_context = do_context and total_chunks > len(documents)  # More chunks than docs
         
         if should_generate_context:
-            print(f"--- Generating Context for {len(all_chunks)} chunks ---")
+            print(f"--- Generating Context for {total_chunks} chunks ---")
             context_model = ContextGenerator(
                 model_name=self.model_name,
                 generation_params={"temperature": 0.1, "max_tokens": 150}
             )
             
-            context_inputs = [
-                {
-                    "doc_text": resolved_documents[chunk["doc_idx"]],
-                    "chunk_text": chunk["text"],
-                    "doc_idx": chunk["doc_idx"],
-                    "chunk_idx": chunk["idx"],
-                }
-                for chunk in all_chunks
-            ]
+            # Prepare context inputs from all chunks across all documents
+            context_inputs = []
+            for doc_idx, doc_chunks in enumerate(all_documents_data):
+                for chunk_id, chunk_data in doc_chunks.items():
+                    context_inputs.append({
+                        "doc_text": resolved_documents[doc_idx],
+                        "chunk_text": chunk_data["text"],
+                        "doc_idx": doc_idx,
+                        "chunk_idx": chunk_data["chunk_idx"],
+                        "global_id": chunk_id,
+                    })
             
+            # Process all context generation in parallel
             context_responses = context_model(context_inputs)
+            
+            # Update chunk data with context results
             for resp in context_responses.dataset:
-                key = (resp["doc_idx"], resp["chunk_idx"])
-                contexts[key] = resp["context"]
+                print(f"DEBUG: Context response keys: {list(resp.keys())}")
+                print(f"DEBUG: Full response: {resp}")
+                doc_idx = resp["doc_idx"]
+                global_id = resp["global_id"]
+                all_documents_data[doc_idx][global_id]["context"] = resp["context"]
         
         # Step 4: GSW Generation (parallel across all chunks)
-        print(f"--- Generating GSWs for {len(all_chunks)} chunks ---")
+        print(f"--- Generating GSWs for {total_chunks} chunks ---")
         gsw_model = GSWOperator(
             model_name=self.model_name,
             generation_params=self.generation_params
         )
         
-        # Prepare GSW inputs
+        # Prepare GSW inputs from all chunks across all documents
         gsw_inputs = []
-        for chunk in all_chunks:
-            chunk_data = {
-                "text": chunk["text"],
-                "idx": chunk["idx"],
-                "doc_idx": chunk["doc_idx"],
-                "global_id": chunk["global_id"]
-            }
-            
-            # Add sentence indices if available
-            if "start_sentence" in chunk:
-                chunk_data["start_sentence"] = chunk["start_sentence"]
-            if "end_sentence" in chunk:
-                chunk_data["end_sentence"] = chunk["end_sentence"]
-            
-            # Add context if available
-            if should_generate_context:
-                key = (chunk["doc_idx"], chunk["idx"])
-                chunk_data["context"] = contexts.get(key, "")
-            else:
-                chunk_data["context"] = ""
-                
-            gsw_inputs.append(chunk_data)
+        for doc_idx, doc_chunks in enumerate(all_documents_data):
+            for chunk_id, chunk_data in doc_chunks.items():
+                gsw_input = {
+                    "text": chunk_data["text"],
+                    "idx": chunk_data["chunk_idx"],
+                    "doc_idx": doc_idx,
+                    "global_id": chunk_id,
+                    "start_sentence": chunk_data["start_sentence"],
+                    "end_sentence": chunk_data["end_sentence"],
+                    "context": chunk_data["context"],
+                }
+                gsw_inputs.append(gsw_input)
         
         # Generate all GSWs in parallel
         gsw_responses = gsw_model(gsw_inputs)
         
-        # Step 5: Parse responses into GSWStructure objects
-        gsw_structures = []
+        # Step 5: Parse responses and update chunk data with GSW structures
         for response in gsw_responses.dataset:
             try:
                 gsw = parse_gsw(response["graph"])
-                gsw_structures.append(gsw)
+                doc_idx = response["doc_idx"]
+                global_id = response["global_id"]
+                all_documents_data[doc_idx][global_id]["gsw"] = gsw
             except Exception as e:
                 print(f"Error parsing GSW for chunk {response.get('global_id', 'unknown')}: {e}")
                 continue
         
-        # Step 6: Save outputs if requested
+        # Step 6: Spacetime Linking (parallel across all chunks)
+        if do_spacetime:
+            print(f"--- Processing Spacetime Links for {total_chunks} chunks ---")
+            spacetime_model = SpaceTimeLinker(
+                model_name=self.model_name,
+                generation_params={"temperature": 0.0, "max_tokens": 1000}
+            )
+            
+            # Prepare spacetime inputs from all chunks that have GSW structures
+            spacetime_inputs = []
+            for doc_idx, doc_chunks in enumerate(all_documents_data):
+                for chunk_id, chunk_data in doc_chunks.items():
+                    if chunk_data["gsw"] is not None:  # Only process chunks with valid GSWs
+                        # Format the GSW data for the LLM
+                        operator_output = {
+                            "entity_nodes": [
+                                {
+                                    "id": entity.id,
+                                    "name": entity.name,
+                                    "roles": [
+                                        {"role": role.role, "states": role.states} for role in entity.roles
+                                    ],
+                                }
+                                for entity in chunk_data["gsw"].entity_nodes
+                            ]
+                        }
+                        
+                        spacetime_inputs.append({
+                            "text_chunk_content": chunk_data["text"],
+                            "operator_output_json": json.dumps(operator_output, indent=2),
+                            "chunk_id": chunk_id,
+                            "doc_idx": doc_idx,
+                            "global_id": chunk_id,
+                        })
+            
+            if spacetime_inputs:
+                # Process all spacetime linking in parallel
+                spacetime_responses = spacetime_model(spacetime_inputs)
+                
+                # Update chunk data with spacetime results
+                for resp in spacetime_responses.dataset:
+                    doc_idx = resp["doc_idx"]
+                    global_id = resp["global_id"]
+                    all_documents_data[doc_idx][global_id]["spacetime"] = {
+                        "spatio_temporal_links": resp.get("spatio_temporal_links", []),
+                        "full_response": resp.get("full_response", ""),
+                    }
+        
+        # Step 7: Save outputs if requested
         if output_dir:
-            self._save_outputs(
+            self._save_outputs_unified(
                 output_dir=output_dir,
                 save_intermediates=save_intermediates,
                 resolved_documents=resolved_documents,
-                all_chunks=all_chunks,
-                contexts=contexts,
-                gsw_responses=gsw_responses,
-                gsw_structures=gsw_structures,
+                all_documents_data=all_documents_data,
                 do_visualization=do_visualization
             )
         
-        return gsw_structures
+        return all_documents_data
     
-    def _save_outputs(
+    def _save_outputs_unified(
         self,
         output_dir: str,
         save_intermediates: bool,
         resolved_documents: Dict[int, str],
-        all_chunks: List[Dict],
-        contexts: Dict,
-        gsw_responses: List[Dict],
-        gsw_structures: List[GSWStructure],
+        all_documents_data: List[Dict[str, Dict]],
         do_visualization: bool
     ):
-        """Save all outputs according to the saving strategy."""
-        import os
-        import json
+        """Save all outputs according to the unified chunk data structure."""
         
         # Create output directories
         os.makedirs(output_dir, exist_ok=True)
@@ -462,77 +303,119 @@ class GSWProcessor:
             coref_dir = os.path.join(output_dir, "coref")
             chunks_dir = os.path.join(output_dir, "chunks")
             context_dir = os.path.join(output_dir, "context")
+            spacetime_dir = os.path.join(output_dir, "spacetime")
             os.makedirs(coref_dir, exist_ok=True)
             os.makedirs(chunks_dir, exist_ok=True)
             os.makedirs(context_dir, exist_ok=True)
+            os.makedirs(spacetime_dir, exist_ok=True)
             
             # Save coreference results
             for doc_idx, resolved_text in resolved_documents.items():
                 with open(os.path.join(coref_dir, f"coref_{doc_idx}.txt"), "w") as f:
                     f.write(resolved_text)
             
-            # Save individual chunks
-            for chunk in all_chunks:
-                doc_chunks_dir = os.path.join(chunks_dir, f"doc_{chunk['doc_idx']}")
-                os.makedirs(doc_chunks_dir, exist_ok=True)
-                chunk_file = os.path.join(doc_chunks_dir, f"chunk_{chunk['idx']}.txt")
-                with open(chunk_file, "w") as f:
-                    f.write(chunk["text"])
-            
-            # Save context files
-            for (doc_idx, chunk_idx), context in contexts.items():
-                doc_context_dir = os.path.join(context_dir, f"doc_{doc_idx}")
-                os.makedirs(doc_context_dir, exist_ok=True)
-                context_file = os.path.join(doc_context_dir, f"context_{chunk_idx}.txt")
-                with open(context_file, "w") as f:
-                    f.write(context)
+            # Save individual chunks, contexts, and spacetime results
+            for doc_idx, doc_chunks in enumerate(all_documents_data):
+                for chunk_id, chunk_data in doc_chunks.items():
+                    doc_idx_val = chunk_data["doc_idx"]
+                    chunk_idx_val = chunk_data["chunk_idx"]
+                    
+                    # Save chunks
+                    doc_chunks_dir = os.path.join(chunks_dir, f"doc_{doc_idx_val}")
+                    os.makedirs(doc_chunks_dir, exist_ok=True)
+                    chunk_file = os.path.join(doc_chunks_dir, f"chunk_{chunk_idx_val}.txt")
+                    with open(chunk_file, "w") as f:
+                        f.write(chunk_data["text"])
+                    
+                    # Save contexts
+                    if chunk_data["context"]:
+                        doc_context_dir = os.path.join(context_dir, f"doc_{doc_idx_val}")
+                        os.makedirs(doc_context_dir, exist_ok=True)
+                        context_file = os.path.join(doc_context_dir, f"context_{chunk_idx_val}.txt")
+                        with open(context_file, "w") as f:
+                            f.write(chunk_data["context"])
+                    
+                    # Save spacetime results
+                    if chunk_data["spacetime"]:
+                        doc_spacetime_dir = os.path.join(spacetime_dir, f"doc_{doc_idx_val}")
+                        os.makedirs(doc_spacetime_dir, exist_ok=True)
+                        spacetime_file = os.path.join(doc_spacetime_dir, f"spacetime_{chunk_idx_val}.json")
+                        with open(spacetime_file, "w") as f:
+                            json.dump(chunk_data["spacetime"], f, indent=4)
         
-        # Save combined results (all raw responses in one JSONL)
-        combined_file = os.path.join(output_dir, "gsw_results_combined.jsonl")
+        # Save combined results (all unified chunk data in one JSON)
+        combined_file = os.path.join(output_dir, "gsw_results_combined.json")
+        combined_data = {
+            "metadata": {
+                "total_documents": len(all_documents_data),
+                "total_chunks": sum(len(doc_chunks) for doc_chunks in all_documents_data),
+                "processed_at": __import__("datetime").datetime.now().isoformat()
+            },
+            "documents": {}
+        }
+        
+        # Convert all_documents_data to JSON-serializable format
+        for doc_idx, doc_chunks in enumerate(all_documents_data):
+            combined_data["documents"][f"doc_{doc_idx}"] = {}
+            for chunk_id, chunk_data in doc_chunks.items():
+                # Convert GSW structure to dict if it exists
+                chunk_export = chunk_data.copy()
+                if chunk_export["gsw"] is not None:
+                    chunk_export["gsw"] = chunk_export["gsw"].model_dump(mode="json")
+                combined_data["documents"][f"doc_{doc_idx}"][chunk_id] = chunk_export
+        
         with open(combined_file, "w") as f:
-            for resp in gsw_responses.dataset:
-                f.write(json.dumps(resp) + "\n")
+            json.dump(combined_data, f, indent=2)
         
         # Save individual results and visualizations
         print("--- Saving Networks and Visualizations ---")
-        for response, gsw_structure in zip(gsw_responses.dataset, gsw_structures):
-            try:
-                doc_idx = response["doc_idx"]
-                chunk_idx = response["idx"]
-                file_stem = f"gsw_{doc_idx}_{chunk_idx}"
-                
-                # Create document-specific subdirectories
-                doc_networks_dir = os.path.join(networks_dir, f"doc_{doc_idx}")
-                doc_networks_raw_dir = os.path.join(networks_raw_dir, f"doc_{doc_idx}")
-                os.makedirs(doc_networks_dir, exist_ok=True)
-                os.makedirs(doc_networks_raw_dir, exist_ok=True)
-                
-                # Save raw response
-                raw_file = os.path.join(doc_networks_raw_dir, f"{file_stem}.json")
-                with open(raw_file, "w") as f:
-                    json.dump(response, f, indent=4)
-                
-                # Save parsed network
-                network_file = os.path.join(doc_networks_dir, f"{file_stem}.json")
-                with open(network_file, "w") as f:
-                    json.dump(gsw_structure.model_dump(mode="json"), f, indent=4)
-                
-                # Save visualization if enabled
-                if do_visualization:
-                    try:
-                        from ..utils.visualization import create_and_save_gsw_visualization
+        for doc_idx, doc_chunks in enumerate(all_documents_data):
+            for chunk_id, chunk_data in doc_chunks.items():
+                try:
+                    if chunk_data["gsw"] is None:
+                        print(f"Warning: No GSW structure for chunk {chunk_id}, skipping...")
+                        continue
                         
-                        doc_viz_dir = os.path.join(viz_dir, f"doc_{doc_idx}")
-                        os.makedirs(doc_viz_dir, exist_ok=True)
-                        viz_file = os.path.join(doc_viz_dir, f"{file_stem}.cyjs")
-                        create_and_save_gsw_visualization(gsw_structure, viz_file)
-                        
-                    except Exception as viz_error:
-                        print(f"Warning: Failed to create visualization for {file_stem}: {viz_error}")
-                        
-            except Exception as e:
-                print(f"Error saving outputs for chunk {response.get('global_id', 'unknown')}: {e}")
-                continue
+                    doc_idx_val = chunk_data["doc_idx"]
+                    chunk_idx_val = chunk_data["chunk_idx"]
+                    file_stem = f"gsw_{doc_idx_val}_{chunk_idx_val}"
+                    
+                    # Create document-specific subdirectories
+                    doc_networks_dir = os.path.join(networks_dir, f"doc_{doc_idx_val}")
+                    doc_networks_raw_dir = os.path.join(networks_raw_dir, f"doc_{doc_idx_val}")
+                    os.makedirs(doc_networks_dir, exist_ok=True)
+                    os.makedirs(doc_networks_raw_dir, exist_ok=True)
+                    
+                    # Save raw chunk data (includes text, spacetime, context, etc.)
+                    raw_chunk_data = chunk_data.copy()
+                    if raw_chunk_data["gsw"] is not None:
+                        raw_chunk_data["gsw"] = raw_chunk_data["gsw"].model_dump(mode="json")
+                    
+                    raw_file = os.path.join(doc_networks_raw_dir, f"{file_stem}.json")
+                    with open(raw_file, "w") as f:
+                        json.dump(raw_chunk_data, f, indent=4)
+                    
+                    # Save parsed network (GSW structure only)
+                    network_file = os.path.join(doc_networks_dir, f"{file_stem}.json")
+                    with open(network_file, "w") as f:
+                        json.dump(chunk_data["gsw"].model_dump(mode="json"), f, indent=4)
+                    
+                    # Save visualization if enabled
+                    if do_visualization:
+                        try:
+                            from ..utils.visualization import create_and_save_gsw_visualization
+                            
+                            doc_viz_dir = os.path.join(viz_dir, f"doc_{doc_idx_val}")
+                            os.makedirs(doc_viz_dir, exist_ok=True)
+                            viz_file = os.path.join(doc_viz_dir, f"{file_stem}.cyjs")
+                            create_and_save_gsw_visualization(chunk_data["gsw"], viz_file)
+                            
+                        except Exception as viz_error:
+                            print(f"Warning: Failed to create visualization for {file_stem}: {viz_error}")
+                            
+                except Exception as e:
+                    print(f"Error saving outputs for chunk {chunk_id}: {e}")
+                    continue
     
     def create_visualization(self, gsw: GSWStructure, output_path: str) -> None:
         """Create and save a visualization for a GSW structure.
@@ -562,8 +445,7 @@ if __name__ == "__main__":
         enable_chunking=False,
         enable_context=False,
         chunk_size=3,
-        overlap=1,
-        coref_chunk_size=20
+        overlap=1
     )
 
     test_document = """

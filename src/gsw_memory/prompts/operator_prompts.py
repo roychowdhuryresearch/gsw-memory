@@ -307,3 +307,69 @@ Show all your reasoning and task by task breakdown within <semantic_construction
   ]
 }
 ```"""
+
+
+class SpaceTimePrompts:
+    """Prompts for space-time linking."""
+    
+    SYSTEM_PROMPT = """You are a helpful assistant that is an expert at understanding spatio-temporal relationships between entities. 
+
+You will be given a list of entities along with the context of the narrative in which they appear. 
+
+Your task is to link entities that share a spatio-temporal relationship."""
+    
+    USER_PROMPT_TEMPLATE = """
+**Analyze the Text and Semantic Map for Shared Time/Place**
+
+**Input:**
+
+1.  **Text Chunk:**
+    ```
+    {text_chunk_content}
+    ```
+2.  **Operator Output (JSON):**
+    ```json
+    {operator_output_json}
+    ```
+
+**Task:**
+
+Read the `Text Chunk` and examine the entities in the `Operator Output`. Identify groups of entity IDs that share the same location (spatial context) or the same time/date (temporal context) based on the events described.
+
+The entities have the following attributes:
+
+* `id`: (String) The entity ID.
+* `name`: (String) The entity name.
+* `roles`: A role is a situation-relevant descriptor (noun phrase) that describes how an actor functions or exists within the context. Roles define the potential relationships an actor can have with other actors.
+* `states`: A state is a condition or description (using adjectives or verb phrases) that characterizes how an actor exists in their role at a specific point. States provide additional context about the actor's condition, status, or situation. 
+
+
+**Output Format:**
+
+Return a JSON object with a single key "spatio_temporal_links". The value should be a list of link objects. Each link object must have:
+
+* `linked_entities`: (List of Strings) Entity IDs sharing the context (e.g., `["e1", "e2", "e3"]`).
+* `tag_type`: (String) Either "spatial" or "temporal".
+* `tag_value`: (String or Null)
+    * If the specific location/time/date is mentioned in the `Text Chunk` for this group, extract it.
+    * Otherwise, use `null`.
+
+**Example Output Structure:**
+
+```json
+{{
+"spatio_temporal_links": [
+    {{
+    "linked_entities": ["e1", "e2", "e3"],
+    "tag_type": "spatial",
+    "tag_value": "Yosemite National Park"
+    }},
+    {{
+    "linked_entities": ["e5", "e6"],
+    "tag_type": "temporal",
+    "tag_value": "December 25th 2025"
+    }}
+]
+}}
+```
+"""
