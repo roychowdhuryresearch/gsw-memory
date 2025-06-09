@@ -33,6 +33,7 @@ def main():
     book = book[:5]
     print("Processing book of length", len(book))
     gsw_structures = processor.process_documents(book, output_dir="output")
+    print(gsw_structures)
 
     print("GSW structures generated successfully!")
 

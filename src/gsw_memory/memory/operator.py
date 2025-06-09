@@ -9,6 +9,9 @@ import json
 import os
 from typing import Dict, List, Optional
 
+# Disable curator cache to ensure fresh responses during development
+os.environ["CURATOR_DISABLE_CACHE"] = "true"
+
 from .models import GSWStructure
 from .operators import CorefOperator, ContextGenerator, GSWOperator, SpaceTimeLinker, chunk_text, parse_gsw
 

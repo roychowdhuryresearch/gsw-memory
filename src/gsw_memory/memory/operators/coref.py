@@ -21,7 +21,7 @@ class CorefOperator(curator.LLM):
             {"role": "system", "content": CorefPrompts.SYSTEM_PROMPT},
             {
                 "role": "user",
-                "content": CorefPrompts.USER_PROMPT_TEMPLATE.format(text=input['text']),
+                "content": CorefPrompts.USER_PROMPT_TEMPLATE.format(text=input["text"]),
             },
         ]
 
