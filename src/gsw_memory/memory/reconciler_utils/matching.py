@@ -8,7 +8,7 @@ during reconciliation, with each strategy paired with its corresponding index.
 import json
 import re
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Tuple, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from bespokelabs import curator
 
@@ -16,6 +16,7 @@ try:
     import faiss
     import numpy as np
     from langchain_voyageai import VoyageAIEmbeddings
+
     EMBEDDING_AVAILABLE = True
 except ImportError:
     EMBEDDING_AVAILABLE = False
@@ -23,8 +24,11 @@ except ImportError:
     np = None
     VoyageAIEmbeddings = None
 
+from ...prompts.reconciler_prompts import (
+    EntityVerificationPrompts,
+    QuestionResolutionPrompts,
+)
 from ..models import EntityNode, GSWStructure
-from ...prompts.reconciler_prompts import QuestionResolutionPrompts, EntityVerificationPrompts
 
 
 def format_entity_string(entity: EntityNode) -> str:
@@ -36,6 +40,7 @@ def format_entity_string(entity: EntityNode) -> str:
 
 
 # Abstract Base Classes
+
 
 class EntityIndex(ABC):
     """Abstract base class for entity indices."""
@@ -78,6 +83,7 @@ class MatchingStrategy(ABC):
 
 # LLM Components for Question Resolution
 
+
 class QuestionResolver(curator.LLM):
     """Curator class for resolving unanswered questions."""
 
@@ -96,7 +102,7 @@ class QuestionResolver(curator.LLM):
         user_prompt = QuestionResolutionPrompts.USER_PROMPT_TEMPLATE.format(
             new_chunk_text=new_chunk_text,
             candidate_list_str=candidate_list_str,
-            new_entity_manifest=new_entity_manifest
+            new_entity_manifest=new_entity_manifest,
         )
 
         return [
@@ -112,7 +118,7 @@ class QuestionResolver(curator.LLM):
                 content = content.split("```json")[1].split("```")[0].strip()
             elif "```" in content:
                 content = content.split("```")[1].split("```")[0].strip()
-            
+
             parsed_response = json.loads(content)
             return {"parsed_response": parsed_response}
         except Exception as e:
@@ -128,7 +134,7 @@ class EntityVerifier(curator.LLM):
     def prompt(self, input_data: Dict[str, Any]) -> List[Dict[str, str]]:
         """Create prompt for verifying entity similarity."""
         pair_descriptions = input_data.get("pair_descriptions", [])
-        
+
         user_prompt = EntityVerificationPrompts.USER_PROMPT_TEMPLATE.format(
             pair_descriptions="\n".join(pair_descriptions)
         )
@@ -155,6 +161,7 @@ class EntityVerifier(curator.LLM):
 
 
 # Exact Match Strategy + Index
+
 
 class ExactMatchEntityIndex(EntityIndex):
     """Maintains entities and looks up by exact name match."""
@@ -199,12 +206,13 @@ class ExactMatchStrategy(MatchingStrategy):
     ):
         """Initialize with model name and generation parameters."""
         self.model_name = model_name
-        self.generation_params = generation_params or {"temperature": 0.0, "max_tokens": 500}
-        
+        self.generation_params = generation_params or {
+            "temperature": 0.0,
+        }
+
         # Initialize LLM components
         self.question_resolver = QuestionResolver(
-            model_name=model_name, 
-            generation_params=self.generation_params
+            model_name=model_name, generation_params=self.generation_params
         )
 
     def reconcile_entities(
@@ -234,7 +242,7 @@ class ExactMatchStrategy(MatchingStrategy):
         self, new_gsw: GSWStructure, global_memory: GSWStructure
     ) -> Set[str]:
         """Reconcile verb phrases based on exact verb + argument match."""
-        
+
         def _get_first_word(text):
             """Helper to safely get the first word of a string."""
             return text.split(maxsplit=1)[0] if text and isinstance(text, str) else ""
@@ -259,8 +267,12 @@ class ExactMatchStrategy(MatchingStrategy):
                             old_q_first_word = _get_first_word(old_q.text)
                             if new_q_first_word == old_q_first_word:
                                 # Check for shared non-"None" answers
-                                new_answers_set = {a for a in new_q.answers if a != "None"}
-                                old_answers_set = {a for a in old_q.answers if a != "None"}
+                                new_answers_set = {
+                                    a for a in new_q.answers if a != "None"
+                                }
+                                old_answers_set = {
+                                    a for a in old_q.answers if a != "None"
+                                }
                                 if new_answers_set & old_answers_set:
                                     found_arg_match = True
                                     break
@@ -296,7 +308,11 @@ class ExactMatchStrategy(MatchingStrategy):
                         is_old_none = old_q.answers == ["None"]
                         is_new_none = new_q.answers == ["None"]
 
-                        if is_old_none and not is_new_none and not updated_existing_none:
+                        if (
+                            is_old_none
+                            and not is_new_none
+                            and not updated_existing_none
+                        ):
                             # Update the first found "None" answer
                             old_q.answers = new_q.answers
                             old_q.chunk_id = new_q.chunk_id
@@ -311,20 +327,27 @@ class ExactMatchStrategy(MatchingStrategy):
                     if not updated_existing_none:
                         is_new_none = new_q.answers == ["None"]
                         is_different_from_all = True
-                        
+
                         if not is_new_none:
                             for old_q in matching_old_qs:
-                                if old_q.answers != ["None"] and sorted(old_q.answers) == sorted(new_q.answers):
+                                if old_q.answers != ["None"] and sorted(
+                                    old_q.answers
+                                ) == sorted(new_q.answers):
                                     is_different_from_all = False
                                     needs_adding_as_new = False
                                     break
                         else:
                             needs_adding_as_new = False
 
-                        if needs_adding_as_new and not is_new_none and is_different_from_all:
+                        if (
+                            needs_adding_as_new
+                            and not is_new_none
+                            and is_different_from_all
+                        ):
                             new_q_tuple = (new_q.text, tuple(sorted(new_q.answers)))
                             if new_q_tuple not in existing_question_tuples and not any(
-                                q.text == new_q.text and tuple(sorted(q.answers)) == new_q_tuple[1]
+                                q.text == new_q.text
+                                and tuple(sorted(q.answers)) == new_q_tuple[1]
                                 for q in questions_to_add
                             ):
                                 questions_to_add.append(new_q)
@@ -333,7 +356,8 @@ class ExactMatchStrategy(MatchingStrategy):
                     # Question text is new, add it
                     new_q_tuple = (new_q.text, tuple(sorted(new_q.answers)))
                     if not any(
-                        q.text == new_q.text and tuple(sorted(q.answers)) == new_q_tuple[1]
+                        q.text == new_q.text
+                        and tuple(sorted(q.answers)) == new_q_tuple[1]
                         for q in questions_to_add
                     ):
                         questions_to_add.append(new_q)
@@ -354,7 +378,7 @@ class ExactMatchStrategy(MatchingStrategy):
     ) -> None:
         """Identify and resolve unanswered questions linked to matched entities."""
         import os
-        
+
         if not new_chunk_text or not matched_old_entity_ids:
             return
 
@@ -378,7 +402,7 @@ class ExactMatchStrategy(MatchingStrategy):
             if entity_id in entity_to_vp_indices:
                 for vp_idx in entity_to_vp_indices[entity_id]:
                     vp = global_memory.verb_phrase_nodes[vp_idx]
-                    
+
                     answered_q_list = []
                     unanswered_q_list = []
                     has_unanswered = False
@@ -424,14 +448,13 @@ class ExactMatchStrategy(MatchingStrategy):
                     answered_qas.append(f"    - {ans_q.text} -> {formatted_ans}")
                 if answered_qas:
                     vp_context_str = (
-                        f"  Context from VP '{data['phrase']}':\n" + "\n".join(answered_qas)
+                        f"  Context from VP '{data['phrase']}':\n"
+                        + "\n".join(answered_qas)
                     )
 
             for q in data["unanswered"]:
                 q_context = (
-                    f"Question ID: {q.id}\n"
-                    f"  Question Text: {q.text}\n"
-                    f"{vp_context_str}"
+                    f"Question ID: {q.id}\n  Question Text: {q.text}\n{vp_context_str}"
                 )
                 unanswered_prompt_list.append(q_context)
 
@@ -464,16 +487,17 @@ class ExactMatchStrategy(MatchingStrategy):
         try:
             # Call the LLM
             llm_results = self.question_resolver([input_data])
-            
+
             # Log the response
             with open(log_file, "a") as f:
                 f.write("=== RESPONSE ===\n")
-                f.write(f"Parsed: {llm_results[0]['parsed_response']}\n\n")
+                f.write(f"Parsed: {llm_results.dataset[0]['parsed_response']}\n\n")
 
             # Process the results and update global memory
-            resolved_answers_list = llm_results[0]["parsed_response"]
-            
+            resolved_answers_list = llm_results.dataset[0]["parsed_response"]
+
             if resolved_answers_list and isinstance(resolved_answers_list, list):
+
                 def find_question_by_id(question_id):
                     """Find a question by its ID in the global memory."""
                     for vp in global_memory.verb_phrase_nodes:
@@ -496,7 +520,8 @@ class ExactMatchStrategy(MatchingStrategy):
                         if answer_entity_id:
                             # Verify the entity exists in global memory
                             entity_exists = any(
-                                e.id == answer_entity_id for e in global_memory.entity_nodes
+                                e.id == answer_entity_id
+                                for e in global_memory.entity_nodes
                             )
                             if entity_exists:
                                 question_node.answers = [answer_entity_id]
@@ -524,6 +549,7 @@ class ExactMatchStrategy(MatchingStrategy):
 
 # Embedding Match Strategy + Index
 
+
 class EmbeddingEntityIndex(EntityIndex):
     """Maintains an index of entity embeddings for efficient similarity search."""
 
@@ -533,7 +559,7 @@ class EmbeddingEntityIndex(EntityIndex):
                 "Embedding dependencies not available. Install with: "
                 "pip install faiss-cpu langchain-voyageai"
             )
-        
+
         self.embedding_dim = embedding_dim
         self.entity_to_id: Dict[str, int] = {}
         self.id_to_entity: Dict[int, EntityNode] = {}
@@ -635,15 +661,14 @@ class EmbeddingMatchStrategy(MatchingStrategy):
                 "Embedding dependencies not available. Install with: "
                 "pip install faiss-cpu langchain-voyageai"
             )
-        
+
         self.k = k
         self.model_name = model_name
         self.generation_params = generation_params or {"temperature": 0.0}
-        
+
         # Initialize verifier
         self.entity_verifier = EntityVerifier(
-            model_name=model_name,
-            generation_params=self.generation_params
+            model_name=model_name, generation_params=self.generation_params
         )
 
     def format_candidate_pairs(
@@ -668,7 +693,7 @@ class EmbeddingMatchStrategy(MatchingStrategy):
 
         pair_descriptions = self.format_candidate_pairs(candidate_pairs)
         input_data = {"pair_descriptions": pair_descriptions}
-        
+
         verification_results = self.entity_verifier([input_data])
         return verification_results[0]["parsed_response"]
 
@@ -717,49 +742,53 @@ class EmbeddingMatchStrategy(MatchingStrategy):
     ) -> None:
         """Default implementation - no question resolution."""
         if matched_old_entity_ids:
-            print("Warning: Question resolution not implemented for EmbeddingMatchStrategy.")
+            print(
+                "Warning: Question resolution not implemented for EmbeddingMatchStrategy."
+            )
 
 
 # Factory Function
 
+
 def create_matching_components(
-    approach: str = "exact",
-    **kwargs
+    approach: str = "exact", **kwargs
 ) -> Tuple[MatchingStrategy, EntityIndex]:
     """
     Factory function to create matching strategy and index pairs.
-    
+
     Args:
         approach: Matching approach ("exact" or "embedding")
         **kwargs: Additional parameters for strategy/index initialization
-        
+
     Returns:
         Tuple of (strategy, index) instances
     """
     if approach == "exact":
         strategy = ExactMatchStrategy(
             model_name=kwargs.get("model_name", "gpt-4o"),
-            generation_params=kwargs.get("generation_params", {"temperature": 0.0, "max_tokens": 500})
+            generation_params=kwargs.get(
+                "generation_params", {"temperature": 0.0, "max_tokens": 500}
+            ),
         )
         index = ExactMatchEntityIndex()
         return strategy, index
-        
+
     elif approach == "embedding":
         if not EMBEDDING_AVAILABLE:
             raise ImportError(
                 "Embedding dependencies not available. Install with: "
                 "pip install faiss-cpu langchain-voyageai"
             )
-        
+
         strategy = EmbeddingMatchStrategy(
             k=kwargs.get("k", 5),
             model_name=kwargs.get("model_name", "gpt-4o"),
-            generation_params=kwargs.get("generation_params", {"temperature": 0.0})
+            generation_params=kwargs.get("generation_params", {"temperature": 0.0}),
         )
-        index = EmbeddingEntityIndex(
-            embedding_dim=kwargs.get("embedding_dim", 1024)
-        )
+        index = EmbeddingEntityIndex(embedding_dim=kwargs.get("embedding_dim", 1024))
         return strategy, index
-        
+
     else:
-        raise ValueError(f"Unknown matching approach: {approach}. Use 'exact' or 'embedding'.")
+        raise ValueError(
+            f"Unknown matching approach: {approach}. Use 'exact' or 'embedding'."
+        )
