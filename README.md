@@ -33,10 +33,10 @@ pip install -e .
 
 ## Quick Start
 
-### Basic Operator Usage
+### Complete GSW Memory Creation
 
 ```python
-from gsw_memory.memory import GSWProcessor
+from gsw_memory.memory import GSWProcessor, reconcile_gsw_outputs
 
 # Initialize the processor
 processor = GSWProcessor(
@@ -45,43 +45,87 @@ processor = GSWProcessor(
     enable_chunking=True,
     enable_context=True,
     chunk_size=3,
-    overlap=1
+    overlap=0,
+    enable_spacetime=True,
 )
 
 # Process documents
 documents = [
-    "John walked to the coffee shop. He ordered a latte.",
-    "The barista prepared his drink carefully. She smiled at John."
+    "John walked to the coffee shop. He ordered a latte. The drink was expensive.",
+    "The barista prepared his drink carefully. She smiled at John. He thanked her."
 ]
 
-gsw_structures = processor.process_documents(documents)
+# Step 1: Generate GSW structures from documents
+gsw_structures = processor.process_documents(documents, output_dir="output")
+print(f"Generated GSW structures for {len(gsw_structures)} documents")
 
-# Each GSW structure contains entities and verb phrases
-for i, gsw in enumerate(gsw_structures):
-    print(f"Chunk {i}: {len(gsw.entity_nodes)} entities, {len(gsw.verb_phrase_nodes)} verb phrases")
-```
-
-### Save Processing Results
-
-```python
-# Process and save all outputs
-gsw_structures = processor.process_documents(
-    documents,
-    output_dir="output",
-    save_intermediates=True  # Save coref, chunks, context files
+# Step 2: Reconcile entities across chunks/documents
+reconciled_chapters = reconcile_gsw_outputs(
+    gsw_structures, 
+    strategy="local",           # "local" or "global"
+    matching_approach="exact",  # "exact" or "embedding"
+    output_dir="reconciled_output",
+    save_statistics=True,
+    enable_visualization=False  # Set to True if you have NetworkX installed
 )
 
-# This creates:
-# output/
-# ├── networks/           # Parsed GSW structures
-# ├── networks_raw/       # Raw LLM responses  
-# ├── coref/             # Coreference resolved texts
-# ├── chunks/            # Individual chunks
-# ├── context/           # Generated contexts
-# └── visualizations/    # Network visualizations (if enabled)
+print(f"Reconciled {len(reconciled_chapters)} chapters:")
+for i, chapter_gsw in enumerate(reconciled_chapters):
+    print(f"  Chapter {i}: {len(chapter_gsw.entity_nodes)} entities, "
+          f"{len(chapter_gsw.verb_phrase_nodes)} verb phrases")
 ```
 
-### Configuration Options
+This creates organized output directories:
+```
+output/                    # GSWProcessor outputs
+├── networks/             # Parsed GSW structures
+├── networks_raw/         # Raw LLM responses  
+├── coref/               # Coreference resolved texts
+├── chunks/              # Individual chunks
+└── context/             # Generated contexts
+
+reconciled_output/         # Reconciliation outputs
+├── reconciled/           # Final reconciled GSW structures
+├── statistics/           # Reconciliation statistics
+└── visualizations/       # Network visualizations (optional)
+```
+
+## Entity Reconciliation
+
+The package provides flexible reconciliation strategies:
+
+### Local vs Global Reconciliation
+```python
+# Local: Reconcile entities within each document separately
+reconciled_local = reconcile_gsw_outputs(
+    gsw_structures, 
+    strategy="local"
+)
+
+# Global: Reconcile entities across all documents together
+reconciled_global = reconcile_gsw_outputs(
+    gsw_structures, 
+    strategy="global"
+)
+```
+
+### Matching Approaches
+```python
+# Exact matching: Entities with identical names
+reconciled_exact = reconcile_gsw_outputs(
+    gsw_structures,
+    matching_approach="exact"
+)
+
+# Embedding matching: Semantically similar entities (requires additional dependencies)
+reconciled_embedding = reconcile_gsw_outputs(
+    gsw_structures,
+    matching_approach="embedding",
+    k=5  # Top-k similar entities to consider
+)
+```
+
+## Configuration
 
 ```python
 processor = GSWProcessor(
@@ -89,69 +133,14 @@ processor = GSWProcessor(
     enable_coref=True,             # Enable coreference resolution
     enable_chunking=True,          # Enable text chunking
     enable_context=True,           # Enable context generation
-    enable_visualization=False,    # Enable network visualizations
+    enable_spacetime=True,         # Enable spacetime linking
     chunk_size=3,                  # Sentences per chunk
-    overlap=1,                     # Sentence overlap between chunks
-    coref_chunk_size=20,          # Sentences per coref chunk
+    overlap=0,                     # Sentence overlap between chunks
     generation_params={            # LLM generation parameters
         "temperature": 0.0,
         "max_tokens": 2000
     }
 )
-```
-
-### Override Settings Per Call
-
-```python
-# Override class settings for specific processing
-gsw_structures = processor.process_documents(
-    documents,
-    enable_coref=False,      # Disable coref for this call
-    enable_chunking=False,   # Process as single chunks
-    enable_context=False     # Skip context generation
-)
-```
-
-## Entity Reconciliation
-
-The package includes sophisticated entity reconciliation capabilities:
-
-```python
-from gsw_memory.memory.reconciler import Reconciler
-
-# Initialize reconciler with exact matching
-reconciler = Reconciler(matching_approach="exact")
-
-# Or use embedding-based matching (requires additional dependencies)
-reconciler = Reconciler(
-    matching_approach="embedding",
-    model_name="gpt-4o",
-    k=5  # Top-k similar entities to consider
-)
-
-# Reconcile new GSW with existing memory
-global_memory = reconciler.reconcile(
-    new_gsw=gsw_structures[0],
-    chunk_id="doc_0_chunk_1",
-    new_chunk_text="The original chunk text..."
-)
-
-# Get reconciliation statistics
-stats = reconciler.get_statistics()
-print(f"Total entities: {stats['entities']}")
-print(f"Entities with evolution: {stats['entities_with_evolution']}")
-```
-
-## Testing
-
-Run the test suite to verify functionality:
-
-```bash
-# Basic functionality test
-python playground/test_operator.py
-
-# Interactive testing (Jupyter notebook)
-jupyter notebook playground/operator_tests.ipynb
 ```
 
 ## Dependencies
@@ -176,46 +165,17 @@ OPENAI_API_KEY=your_openai_api_key_here
 VOYAGE_API_KEY=your_voyage_api_key_here  # For embedding features
 ```
 
-## API Reference
-
-### GSWProcessor
-
-The main class for processing documents through the GSW pipeline.
-
-**Parameters:**
-- `model_name` (str): LLM model name (default: "gpt-4o")
-- `generation_params` (dict): LLM generation parameters
-- `enable_coref` (bool): Enable coreference resolution (default: True)
-- `enable_chunking` (bool): Enable text chunking (default: True)  
-- `enable_context` (bool): Enable context generation (default: True)
-- `enable_visualization` (bool): Enable visualizations (default: False)
-- `chunk_size` (int): Sentences per chunk (default: 3)
-- `overlap` (int): Sentence overlap (default: 1)
-- `coref_chunk_size` (int): Sentences per coref chunk (default: 20)
-
-**Methods:**
-- `process_documents(documents, **kwargs)`: Process multiple documents
-- `create_visualization(gsw, output_path)`: Create network visualization
-
-### Reconciler
-
-Entity and question reconciliation across GSW structures.
-
-**Parameters:**
-- `matching_approach` (str): "exact" or "embedding"
-- `model_name` (str): LLM model for verification
-- `generation_params` (dict): LLM parameters
-
-**Methods:**
-- `reconcile(new_gsw, chunk_id, new_chunk_text)`: Reconcile new GSW
-- `get_statistics()`: Get reconciliation statistics
-
-## Examples
+## Examples & Testing
 
 See the `playground/` directory for comprehensive examples:
 
-- `test_operator.py`: Complete test suite with various scenarios
-- `operator_tests.ipynb`: Interactive Jupyter notebook examples
+```bash
+# Basic functionality test
+python playground/test_operator.py
+
+# Interactive testing (Jupyter notebook)
+jupyter notebook playground/operator_tests.ipynb
+```
 
 ## Contributing
 
@@ -225,10 +185,6 @@ See the `playground/` directory for comprehensive examples:
 4. Add tests for new functionality
 5. Run the test suite (`python playground/test_operator.py`)
 6. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Citation
 

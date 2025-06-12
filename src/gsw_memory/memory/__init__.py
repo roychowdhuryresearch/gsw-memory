@@ -10,10 +10,10 @@ from .models import (
     VerbPhraseNode,
 )
 from .operator import GSWProcessor
-from .reconciler import Reconciler
+from .reconciler import Reconciler, reconcile_gsw_outputs
 
 # Import individual operators for backward compatibility
-from .operators import (
+from .operator_utils import (
     CorefOperator,
     ContextGenerator,
     GSWOperator,
@@ -35,6 +35,7 @@ __all__ = [
     # Main processor and reconciler
     "GSWProcessor",
     "Reconciler",
+    "reconcile_gsw_outputs",
     # Individual operators (for advanced usage)
     "CorefOperator",
     "ContextGenerator",
