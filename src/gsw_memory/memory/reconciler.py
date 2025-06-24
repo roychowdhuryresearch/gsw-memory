@@ -9,28 +9,28 @@ import json
 import os
 import uuid
 from datetime import datetime
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, List, Optional, Union
 
-from .models import GSWStructure, EntityNode
-from .reconciler_utils.matching import create_matching_components, MatchingStrategy, EntityIndex
+from .models import GSWStructure
+from .reconciler_utils.matching import (
+    EntityIndex,
+    MatchingStrategy,
+    create_matching_components,
+)
 
 
 class Reconciler:
     """
     Reconciles a new GSW representation with an existing global memory.
-    
+
     The reconciler handles two main processes:
     1. Entity Reconciliation - Merging new entities with existing ones
     2. Question Reconciliation - Resolving unanswered questions with new information
-    
+
     Formula: GSW_new = Reconciler(GSW_old, new_context)
     """
 
-    def __init__(
-        self,
-        matching_approach: str = "exact",
-        **matching_kwargs
-    ):
+    def __init__(self, matching_approach: str = "exact", **matching_kwargs):
         """
         Initialize the reconciler with a matching approach.
 
@@ -40,25 +40,22 @@ class Reconciler:
         """
         # Create strategy and index using factory
         self.matching_strategy, self.entity_index = create_matching_components(
-            approach=matching_approach,
-            **matching_kwargs
+            approach=matching_approach, **matching_kwargs
         )
-        
+
         self.global_memory = None
 
     @classmethod
     def with_strategy(
-        cls,
-        matching_strategy: MatchingStrategy,
-        entity_index: EntityIndex
+        cls, matching_strategy: MatchingStrategy, entity_index: EntityIndex
     ) -> "Reconciler":
         """
         Create a reconciler with custom strategy and index instances.
-        
+
         Args:
             matching_strategy: Custom matching strategy instance
             entity_index: Custom entity index instance
-            
+
         Returns:
             Reconciler instance
         """
@@ -111,8 +108,12 @@ class Reconciler:
         self._add_unmerged_entities(new_gsw, entity_merge_map)
 
         # Step 6: Handle space/time nodes and edges
-        self._reconcile_spacetime_nodes(new_gsw, space_merge_map, time_merge_map, chunk_id)
-        self._update_spacetime_edges(new_gsw, entity_merge_map, space_merge_map, time_merge_map)
+        self._reconcile_spacetime_nodes(
+            new_gsw, space_merge_map, time_merge_map, chunk_id
+        )
+        self._update_spacetime_edges(
+            new_gsw, entity_merge_map, space_merge_map, time_merge_map
+        )
 
         # Step 7: Update answers in new GSW to point to merged entities
         self._update_verb_phrase_answers(new_gsw, entity_merge_map)
@@ -235,30 +236,30 @@ class Reconciler:
                 if self.global_memory.space_edges and new_gsw.space_edges:
                     old_space_id = None
                     new_space_id = None
-                    
+
                     for entity_id, space_id in self.global_memory.space_edges:
                         if entity_id == old_entity.id:
                             old_space_id = space_id
-                    
+
                     for entity_id, space_id in new_gsw.space_edges:
                         if entity_id == new_entity.id:
                             new_space_id = space_id
-                    
+
                     if old_space_id and new_space_id:
                         space_merge_map[new_space_id] = old_space_id
 
                 if self.global_memory.time_edges and new_gsw.time_edges:
                     old_time_id = None
                     new_time_id = None
-                    
+
                     for entity_id, time_id in self.global_memory.time_edges:
                         if entity_id == old_entity.id:
                             old_time_id = time_id
-                    
+
                     for entity_id, time_id in new_gsw.time_edges:
                         if entity_id == new_entity.id:
                             new_time_id = time_id
-                    
+
                     if old_time_id and new_time_id:
                         time_merge_map[new_time_id] = old_time_id
 
@@ -270,13 +271,15 @@ class Reconciler:
         unmerged_new_entities = [
             e for e in new_gsw.entity_nodes if e.id not in merged_new_entity_ids
         ]
-        
+
         for entity in unmerged_new_entities:
             self.global_memory.add_entity(entity)
-        
+
         self.entity_index.add_entities(unmerged_new_entities)
 
-    def _reconcile_spacetime_nodes(self, new_gsw, space_merge_map, time_merge_map, chunk_id):
+    def _reconcile_spacetime_nodes(
+        self, new_gsw, space_merge_map, time_merge_map, chunk_id
+    ):
         """Handle space and time node reconciliation."""
         # Add space/time nodes
         for space_node in new_gsw.space_nodes:
@@ -293,7 +296,7 @@ class Reconciler:
                     source_id=new_space_id,
                     chunk_id=chunk_id,
                 )
-        
+
         if time_merge_map:
             for new_time_id, old_time_id in time_merge_map.items():
                 self.global_memory.merge_time_nodes(
@@ -302,15 +305,19 @@ class Reconciler:
                     chunk_id=chunk_id,
                 )
 
-    def _update_spacetime_edges(self, new_gsw, entity_merge_map, space_merge_map, time_merge_map):
+    def _update_spacetime_edges(
+        self, new_gsw, entity_merge_map, space_merge_map, time_merge_map
+    ):
         """Update space and time edges with final IDs."""
         # Update space edges
         existing_global_space_edges = set(self.global_memory.space_edges)
         for original_entity_id, original_space_id in new_gsw.space_edges:
-            final_entity_id = entity_merge_map.get(original_entity_id, original_entity_id)
+            final_entity_id = entity_merge_map.get(
+                original_entity_id, original_entity_id
+            )
             final_space_id = space_merge_map.get(original_space_id, original_space_id)
             final_space_edge = (final_entity_id, final_space_id)
-            
+
             if final_space_edge not in existing_global_space_edges:
                 self.global_memory.add_space_edge(final_entity_id, final_space_id)
                 existing_global_space_edges.add(final_space_edge)
@@ -318,10 +325,12 @@ class Reconciler:
         # Update time edges
         existing_global_time_edges = set(self.global_memory.time_edges)
         for original_entity_id, original_time_id in new_gsw.time_edges:
-            final_entity_id = entity_merge_map.get(original_entity_id, original_entity_id)
+            final_entity_id = entity_merge_map.get(
+                original_entity_id, original_entity_id
+            )
             final_time_id = time_merge_map.get(original_time_id, original_time_id)
             final_time_edge = (final_entity_id, final_time_id)
-            
+
             if final_time_edge not in existing_global_time_edges:
                 self.global_memory.add_time_edge(final_entity_id, final_time_id)
                 existing_global_time_edges.add(final_time_edge)
@@ -340,11 +349,16 @@ class Reconciler:
         """Add verb phrases that didn't match existing ones."""
         existing_vp_ids = {vp.id for vp in self.global_memory.verb_phrase_nodes}
         for new_vp in new_gsw.verb_phrase_nodes:
-            if new_vp.id not in matched_new_verb_ids and new_vp.id not in existing_vp_ids:
+            if (
+                new_vp.id not in matched_new_verb_ids
+                and new_vp.id not in existing_vp_ids
+            ):
                 self.global_memory.add_verb_phrase(new_vp)
                 existing_vp_ids.add(new_vp.id)
 
-    def _resolve_questions(self, new_chunk_text, matched_old_entity_ids, new_gsw_entities, chunk_id):
+    def _resolve_questions(
+        self, new_chunk_text, matched_old_entity_ids, new_gsw_entities, chunk_id
+    ):
         """Delegate question resolution to the matching strategy."""
         try:
             self.matching_strategy.resolve_questions(
@@ -355,7 +369,9 @@ class Reconciler:
                 chunk_id=f"chunk_{chunk_id}",
             )
         except NotImplementedError:
-            print("Warning: resolve_questions not implemented for the current strategy.")
+            print(
+                "Warning: resolve_questions not implemented for the current strategy."
+            )
         except Exception as e:
             print(f"Error during question resolution: {e}")
 
@@ -363,26 +379,30 @@ class Reconciler:
         """Get statistics about the current global memory."""
         if not self.global_memory:
             return {"entities": 0, "verb_phrases": 0, "questions": 0}
-        
-        total_questions = sum(len(vp.questions) for vp in self.global_memory.verb_phrase_nodes)
-        
+
+        total_questions = sum(
+            len(vp.questions) for vp in self.global_memory.verb_phrase_nodes
+        )
+
         # Count entities with temporal evolution
         entities_with_evolution = 0
         total_roles = 0
-        
+
         for entity in self.global_memory.entity_nodes:
             chunk_ids = set(role.chunk_id for role in entity.roles if role.chunk_id)
             if len(chunk_ids) > 1:
                 entities_with_evolution += 1
             total_roles += len(entity.roles)
-        
+
         return {
             "entities": len(self.global_memory.entity_nodes),
             "verb_phrases": len(self.global_memory.verb_phrase_nodes),
             "questions": total_questions,
             "entities_with_evolution": entities_with_evolution,
             "total_roles": total_roles,
-            "avg_roles_per_entity": total_roles / len(self.global_memory.entity_nodes) if self.global_memory.entity_nodes else 0,
+            "avg_roles_per_entity": total_roles / len(self.global_memory.entity_nodes)
+            if self.global_memory.entity_nodes
+            else 0,
             "space_nodes": len(self.global_memory.space_nodes),
             "time_nodes": len(self.global_memory.time_nodes),
             "space_edges": len(self.global_memory.space_edges),
@@ -392,18 +412,19 @@ class Reconciler:
 
 # Integration Functions
 
+
 def _extract_chunk_data(processor_outputs: List[Dict[str, Dict]]) -> List[Dict]:
     """
     Extract chunk data from GSWProcessor output format.
-    
+
     Args:
         processor_outputs: List of document outputs from GSWProcessor.process_documents()
-        
+
     Returns:
         List of chunk data dictionaries with keys: chunk_id, gsw, text, doc_idx, chunk_idx
     """
     all_chunks = []
-    
+
     for doc_idx, doc_chunks in enumerate(processor_outputs):
         for chunk_id, chunk_data in doc_chunks.items():
             if chunk_data.get("gsw") is not None:  # Only include chunks with valid GSW
@@ -415,35 +436,36 @@ def _extract_chunk_data(processor_outputs: List[Dict[str, Dict]]) -> List[Dict]:
                     "chunk_idx": chunk_data.get("chunk_idx", 0),
                 }
                 all_chunks.append(extracted_chunk)
-    
+
     return all_chunks
 
 
-def _create_reconciler(matching_approach: str = "exact", **reconciler_kwargs) -> Reconciler:
+def _create_reconciler(
+    matching_approach: str = "exact", **reconciler_kwargs
+) -> Reconciler:
     """
     Create a new Reconciler instance with specified matching approach.
-    
+
     Args:
         matching_approach: "exact" or "embedding"
         **reconciler_kwargs: Additional arguments for the reconciler
-        
+
     Returns:
         Configured Reconciler instance
     """
-    return Reconciler(
-        matching_approach=matching_approach,
-        **reconciler_kwargs
-    )
+    return Reconciler(matching_approach=matching_approach, **reconciler_kwargs)
 
 
-def _reconcile_document_chunks(reconciler: Reconciler, doc_chunks: List[Dict]) -> GSWStructure:
+def _reconcile_document_chunks(
+    reconciler: Reconciler, doc_chunks: List[Dict]
+) -> GSWStructure:
     """
     Reconcile all chunks from a single document through the provided reconciler.
-    
+
     Args:
         reconciler: Reconciler instance to use
         doc_chunks: List of chunk data for a single document
-        
+
     Returns:
         Reconciled GSWStructure for the document
     """
@@ -451,20 +473,22 @@ def _reconcile_document_chunks(reconciler: Reconciler, doc_chunks: List[Dict]) -
         reconciler.reconcile(
             new_gsw=chunk_data["gsw"],
             chunk_id=chunk_data["chunk_id"],
-            new_chunk_text=chunk_data["text"]
+            new_chunk_text=chunk_data["text"],
         )
-    
+
     return reconciler.global_memory
 
 
-def _reconcile_all_chunks(reconciler: Reconciler, all_chunks: List[Dict]) -> GSWStructure:
+def _reconcile_all_chunks(
+    reconciler: Reconciler, all_chunks: List[Dict]
+) -> GSWStructure:
     """
     Reconcile all chunks from all documents through the provided reconciler.
-    
+
     Args:
         reconciler: Reconciler instance to use
         all_chunks: List of all chunk data from all documents
-        
+
     Returns:
         Reconciled GSWStructure across all documents
     """
@@ -472,9 +496,9 @@ def _reconcile_all_chunks(reconciler: Reconciler, all_chunks: List[Dict]) -> GSW
         reconciler.reconcile(
             new_gsw=chunk_data["gsw"],
             chunk_id=chunk_data["chunk_id"],
-            new_chunk_text=chunk_data["text"]
+            new_chunk_text=chunk_data["text"],
         )
-    
+
     return reconciler.global_memory
 
 
@@ -486,11 +510,11 @@ def _save_reconciled_outputs(
     processor_outputs: List[Dict[str, Dict]],
     all_chunks: List[Dict],
     save_statistics: bool,
-    enable_visualization: bool
+    enable_visualization: bool,
 ) -> None:
     """
     Save reconciled GSW outputs with comprehensive metadata and statistics.
-    
+
     Args:
         reconciled_results: Reconciled GSW structure(s)
         strategy: Reconciliation strategy used
@@ -505,15 +529,15 @@ def _save_reconciled_outputs(
     os.makedirs(output_dir, exist_ok=True)
     reconciled_dir = os.path.join(output_dir, "reconciled")
     os.makedirs(reconciled_dir, exist_ok=True)
-    
+
     if save_statistics:
         stats_dir = os.path.join(output_dir, "statistics")
         os.makedirs(stats_dir, exist_ok=True)
-    
+
     if enable_visualization:
         viz_dir = os.path.join(output_dir, "visualizations")
         os.makedirs(viz_dir, exist_ok=True)
-    
+
     # Create metadata
     metadata = {
         "reconciliation_metadata": {
@@ -521,137 +545,192 @@ def _save_reconciled_outputs(
             "matching_approach": matching_approach,
             "processed_at": datetime.now().isoformat(),
             "total_input_chunks": len(all_chunks),
-            "total_documents": len(processor_outputs)
+            "total_documents": len(processor_outputs),
         }
     }
-    
+
     # Save metadata
     with open(os.path.join(reconciled_dir, "metadata.json"), "w") as f:
         json.dump(metadata, f, indent=2)
-    
+
     if strategy == "local":
         # Save individual reconciled GSWs
         assert isinstance(reconciled_results, list)
-        
+
         per_doc_stats = {}
         for doc_idx, reconciled_gsw in enumerate(reconciled_results):
             # Save reconciled GSW
             gsw_file = os.path.join(reconciled_dir, f"doc_{doc_idx}_reconciled.json")
             with open(gsw_file, "w") as f:
                 json.dump(reconciled_gsw.model_dump(mode="json"), f, indent=2)
-            
+
             # Calculate statistics for this document
             if save_statistics:
-                doc_chunks = [chunk for chunk in all_chunks if chunk["doc_idx"] == doc_idx]
-                input_entities = sum(len(chunk["gsw"].entity_nodes) for chunk in doc_chunks)
-                
+                doc_chunks = [
+                    chunk for chunk in all_chunks if chunk["doc_idx"] == doc_idx
+                ]
+                input_entities = sum(
+                    len(chunk["gsw"].entity_nodes) for chunk in doc_chunks
+                )
+
                 # Count entities with evolution (roles from multiple chunks)
                 entities_with_evolution = 0
                 for entity in reconciled_gsw.entity_nodes:
-                    chunk_ids = set(role.chunk_id for role in entity.roles if role.chunk_id)
+                    chunk_ids = set(
+                        role.chunk_id for role in entity.roles if role.chunk_id
+                    )
                     if len(chunk_ids) > 1:
                         entities_with_evolution += 1
-                
+
                 per_doc_stats[f"doc_{doc_idx}"] = {
                     "input_chunks": len(doc_chunks),
                     "input_entities": input_entities,
                     "reconciled_entities": len(reconciled_gsw.entity_nodes),
-                    "compression_ratio": input_entities / len(reconciled_gsw.entity_nodes) if reconciled_gsw.entity_nodes else 0,
+                    "compression_ratio": input_entities
+                    / len(reconciled_gsw.entity_nodes)
+                    if reconciled_gsw.entity_nodes
+                    else 0,
                     "entities_with_evolution": entities_with_evolution,
                     "verb_phrases": len(reconciled_gsw.verb_phrase_nodes),
-                    "questions": sum(len(vp.questions) for vp in reconciled_gsw.verb_phrase_nodes),
-                    "total_roles": sum(len(entity.roles) for entity in reconciled_gsw.entity_nodes),
-                    "avg_roles_per_entity": sum(len(entity.roles) for entity in reconciled_gsw.entity_nodes) / len(reconciled_gsw.entity_nodes) if reconciled_gsw.entity_nodes else 0
+                    "questions": sum(
+                        len(vp.questions) for vp in reconciled_gsw.verb_phrase_nodes
+                    ),
+                    "total_roles": sum(
+                        len(entity.roles) for entity in reconciled_gsw.entity_nodes
+                    ),
+                    "avg_roles_per_entity": sum(
+                        len(entity.roles) for entity in reconciled_gsw.entity_nodes
+                    )
+                    / len(reconciled_gsw.entity_nodes)
+                    if reconciled_gsw.entity_nodes
+                    else 0,
                 }
-                
+
                 # Save per-document statistics
                 doc_stats_file = os.path.join(stats_dir, f"doc_{doc_idx}_stats.json")
                 with open(doc_stats_file, "w") as f:
                     json.dump(per_doc_stats[f"doc_{doc_idx}"], f, indent=2)
-            
+
             # Create visualization if requested
             if enable_visualization:
                 try:
                     from ..utils.visualization import create_and_save_gsw_visualization
+
                     viz_file = os.path.join(viz_dir, f"doc_{doc_idx}_reconciled.cyjs")
                     create_and_save_gsw_visualization(reconciled_gsw, viz_file)
                 except ImportError:
-                    print("Warning: Visualization not available. Install NetworkX for visualizations.")
+                    print(
+                        "Warning: Visualization not available. Install NetworkX for visualizations."
+                    )
                 except Exception as e:
-                    print(f"Warning: Failed to create visualization for doc_{doc_idx}: {e}")
-        
+                    print(
+                        f"Warning: Failed to create visualization for doc_{doc_idx}: {e}"
+                    )
+
         # Save overall statistics
         if save_statistics:
-            total_input_entities = sum(len(chunk["gsw"].entity_nodes) for chunk in all_chunks)
-            total_reconciled_entities = sum(len(gsw.entity_nodes) for gsw in reconciled_results)
-            total_entities_with_evolution = sum(per_doc_stats[f"doc_{i}"]["entities_with_evolution"] for i in range(len(reconciled_results)))
-            
+            total_input_entities = sum(
+                len(chunk["gsw"].entity_nodes) for chunk in all_chunks
+            )
+            total_reconciled_entities = sum(
+                len(gsw.entity_nodes) for gsw in reconciled_results
+            )
+            total_entities_with_evolution = sum(
+                per_doc_stats[f"doc_{i}"]["entities_with_evolution"]
+                for i in range(len(reconciled_results))
+            )
+
             overall_stats = {
                 "reconciliation_metadata": metadata["reconciliation_metadata"],
                 "per_document_stats": per_doc_stats,
                 "overall_stats": {
                     "total_input_entities": total_input_entities,
                     "total_reconciled_entities": total_reconciled_entities,
-                    "overall_compression_ratio": total_input_entities / total_reconciled_entities if total_reconciled_entities else 0,
+                    "overall_compression_ratio": total_input_entities
+                    / total_reconciled_entities
+                    if total_reconciled_entities
+                    else 0,
                     "cross_chunk_evolution_entities": total_entities_with_evolution,
-                    "total_verb_phrases": sum(len(gsw.verb_phrase_nodes) for gsw in reconciled_results),
-                    "total_questions": sum(sum(len(vp.questions) for vp in gsw.verb_phrase_nodes) for gsw in reconciled_results)
-                }
+                    "total_verb_phrases": sum(
+                        len(gsw.verb_phrase_nodes) for gsw in reconciled_results
+                    ),
+                    "total_questions": sum(
+                        sum(len(vp.questions) for vp in gsw.verb_phrase_nodes)
+                        for gsw in reconciled_results
+                    ),
+                },
             }
-            
+
             summary_file = os.path.join(stats_dir, "reconciliation_summary.json")
             with open(summary_file, "w") as f:
                 json.dump(overall_stats, f, indent=2)
-    
+
     elif strategy == "global":
         # Save single global reconciled GSW
         assert isinstance(reconciled_results, GSWStructure)
-        
+
         gsw_file = os.path.join(reconciled_dir, "global_reconciled.json")
         with open(gsw_file, "w") as f:
             json.dump(reconciled_results.model_dump(mode="json"), f, indent=2)
-        
+
         # Calculate global statistics
         if save_statistics:
-            total_input_entities = sum(len(chunk["gsw"].entity_nodes) for chunk in all_chunks)
-            
+            total_input_entities = sum(
+                len(chunk["gsw"].entity_nodes) for chunk in all_chunks
+            )
+
             # Count entities with evolution
             entities_with_evolution = 0
             for entity in reconciled_results.entity_nodes:
                 chunk_ids = set(role.chunk_id for role in entity.roles if role.chunk_id)
                 if len(chunk_ids) > 1:
                     entities_with_evolution += 1
-            
+
             global_stats = {
                 "reconciliation_metadata": metadata["reconciliation_metadata"],
                 "global_stats": {
                     "total_input_chunks": len(all_chunks),
                     "total_input_entities": total_input_entities,
                     "reconciled_entities": len(reconciled_results.entity_nodes),
-                    "compression_ratio": total_input_entities / len(reconciled_results.entity_nodes) if reconciled_results.entity_nodes else 0,
+                    "compression_ratio": total_input_entities
+                    / len(reconciled_results.entity_nodes)
+                    if reconciled_results.entity_nodes
+                    else 0,
                     "entities_with_evolution": entities_with_evolution,
                     "verb_phrases": len(reconciled_results.verb_phrase_nodes),
-                    "questions": sum(len(vp.questions) for vp in reconciled_results.verb_phrase_nodes),
-                    "total_roles": sum(len(entity.roles) for entity in reconciled_results.entity_nodes),
-                    "avg_roles_per_entity": sum(len(entity.roles) for entity in reconciled_results.entity_nodes) / len(reconciled_results.entity_nodes) if reconciled_results.entity_nodes else 0
-                }
+                    "questions": sum(
+                        len(vp.questions) for vp in reconciled_results.verb_phrase_nodes
+                    ),
+                    "total_roles": sum(
+                        len(entity.roles) for entity in reconciled_results.entity_nodes
+                    ),
+                    "avg_roles_per_entity": sum(
+                        len(entity.roles) for entity in reconciled_results.entity_nodes
+                    )
+                    / len(reconciled_results.entity_nodes)
+                    if reconciled_results.entity_nodes
+                    else 0,
+                },
             }
-            
+
             summary_file = os.path.join(stats_dir, "reconciliation_summary.json")
             with open(summary_file, "w") as f:
                 json.dump(global_stats, f, indent=2)
-        
+
         # Create visualization if requested
         if enable_visualization:
             try:
                 from ..utils.visualization import create_and_save_gsw_visualization
+
                 viz_file = os.path.join(viz_dir, "global_reconciled.cyjs")
                 create_and_save_gsw_visualization(reconciled_results, viz_file)
             except ImportError:
-                print("Warning: Visualization not available. Install NetworkX for visualizations.")
+                print(
+                    "Warning: Visualization not available. Install NetworkX for visualizations."
+                )
             except Exception as e:
                 print(f"Warning: Failed to create global visualization: {e}")
-    
+
     print(f"Reconciled outputs saved to: {output_dir}")
     if save_statistics:
         print(f"  - Statistics: {stats_dir}")
@@ -661,17 +740,17 @@ def _save_reconciled_outputs(
 
 
 def reconcile_gsw_outputs(
-    processor_outputs: List[Dict[str, Dict]], 
+    processor_outputs: List[Dict[str, Dict]],
     strategy: str = "local",
     matching_approach: str = "exact",
     output_dir: Optional[str] = None,
     save_statistics: bool = True,
     enable_visualization: bool = False,
-    **reconciler_kwargs
+    **reconciler_kwargs,
 ) -> Union[List[GSWStructure], GSWStructure]:
     """
     Reconcile GSWProcessor outputs using different reconciliation strategies.
-    
+
     Args:
         processor_outputs: Output from GSWProcessor.process_documents()
         strategy: Reconciliation strategy - "local" or "global"
@@ -680,87 +759,95 @@ def reconcile_gsw_outputs(
         save_statistics: Whether to save reconciliation statistics
         enable_visualization: Whether to create Cytoscape visualizations
         **reconciler_kwargs: Additional arguments passed to Reconciler initialization
-        
+
     Returns:
         - For "local" strategy: List[GSWStructure] - one reconciled GSW per document
         - For "global" strategy: GSWStructure - single unified GSW across all documents
-        
+
     Raises:
         ValueError: If strategy is not "local" or "global"
     """
     if strategy not in ["local", "global"]:
         raise ValueError(f"Strategy must be 'local' or 'global', got '{strategy}'")
-    
+
     # Extract all chunk data from processor outputs
     all_chunks = _extract_chunk_data(processor_outputs)
-    
+
     if not all_chunks:
         print("Warning: No valid chunks found in processor outputs")
         return [] if strategy == "local" else None
-    
-    print(f"Found {len(all_chunks)} valid chunks across {len(processor_outputs)} documents")
-    
+
+    print(
+        f"Found {len(all_chunks)} valid chunks across {len(processor_outputs)} documents"
+    )
+
     # Initialize result variables
     reconciled_documents = None
     reconciled_gsw = None
-    
+
     if strategy == "local":
         # Document-level reconciliation: one reconciler per document
         reconciled_documents = []
-        
+
         for doc_idx in range(len(processor_outputs)):
             # Get chunks for this document
             doc_chunks = [chunk for chunk in all_chunks if chunk["doc_idx"] == doc_idx]
-            
+
             if not doc_chunks:
                 print(f"Warning: No valid chunks found for document {doc_idx}")
                 continue
-            
+
             print(f"Reconciling document {doc_idx} with {len(doc_chunks)} chunks")
-            
+
             # Create fresh reconciler for this document
             doc_reconciler = _create_reconciler(matching_approach, **reconciler_kwargs)
-            
+
             # Reconcile all chunks for this document
             try:
-                doc_reconciled_gsw = _reconcile_document_chunks(doc_reconciler, doc_chunks)
+                doc_reconciled_gsw = _reconcile_document_chunks(
+                    doc_reconciler, doc_chunks
+                )
                 reconciled_documents.append(doc_reconciled_gsw)
-                
+
                 # Print statistics for this document
                 stats = doc_reconciler.get_statistics()
-                print(f"Document {doc_idx} reconciled: {stats['entities']} entities, "
-                      f"{stats['entities_with_evolution']} with evolution")
-                
+                print(
+                    f"Document {doc_idx} reconciled: {stats['entities']} entities, "
+                    f"{stats['entities_with_evolution']} with evolution"
+                )
+
             except Exception as e:
                 print(f"Error reconciling document {doc_idx}: {e}")
                 continue
-    
+
     elif strategy == "global":
         # Global reconciliation: one reconciler for all documents
         print(f"Reconciling all {len(all_chunks)} chunks globally")
-        
+
         # Create single reconciler for all documents
         global_reconciler = _create_reconciler(matching_approach, **reconciler_kwargs)
-        
+
         # Sort chunks to ensure consistent processing order
         all_chunks.sort(key=lambda x: (x["doc_idx"], x["chunk_idx"]))
-        
+
         try:
             # Reconcile all chunks sequentially
             reconciled_gsw = _reconcile_all_chunks(global_reconciler, all_chunks)
-            
+
             # Print final statistics
             stats = global_reconciler.get_statistics()
-            print(f"Global reconciliation complete: {stats['entities']} entities, "
-                  f"{stats['entities_with_evolution']} with evolution")
-            
+            print(
+                f"Global reconciliation complete: {stats['entities']} entities, "
+                f"{stats['entities_with_evolution']} with evolution"
+            )
+
         except Exception as e:
             print(f"Error in global reconciliation: {e}")
             return None
-    
+
     # Determine final results
     final_results = reconciled_documents if strategy == "local" else reconciled_gsw
-    
+
     # Save outputs if output_dir is provided
     if output_dir is not None:
         _save_reconciled_outputs(
@@ -771,9 +858,9 @@ def reconcile_gsw_outputs(
             processor_outputs=processor_outputs,
             all_chunks=all_chunks,
             save_statistics=save_statistics,
-            enable_visualization=enable_visualization
+            enable_visualization=enable_visualization,
         )
     else:
         print("No output directory specified - results not saved")
-    
+
     return final_results
