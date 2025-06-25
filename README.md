@@ -1,16 +1,37 @@
 # GSW Memory
 
-A Python package for generating Generative Semantic Workspaces (GSW) from text documents. This package provides tools for processing documents through coreference resolution, chunking, context generation, and semantic workspace creation with entity reconciliation capabilities.
+A Python package for building  memory systems using Generative Semantic Workspaces (GSW). This package provides a complete pipeline for processing documents, extracting entities and relationships, and answering questions using structured semantic memory.
 
 ## Features
 
-- **Multi-document Processing**: Process multiple documents simultaneously with full parallelization
-- **Coreference Resolution**: Resolve pronouns and references for clearer semantic understanding
-- **Smart Chunking**: Split documents into overlapping chunks with configurable size and overlap
-- **Context Generation**: Generate contextual information for each chunk within its document
-- **GSW Generation**: Create semantic workspaces with entities, roles, and question-answer pairs
-- **Entity Reconciliation**: Merge and reconcile entities across different chunks and documents
-- **Comprehensive Saving**: Organized output structure with intermediates and visualizations
+- **Document Processing**: Convert text documents into structured semantic workspaces
+- **Entity Reconciliation**: Merge and reconcile entities across documents using multiple strategies
+- **Question-Answering**: Answer questions using semantic memory with entity extraction and matching
+- **Evaluation System**: Built-in evaluation tools for benchmarking Q&A performance
+
+
+## Package Structure
+
+```
+gsw_memory/
+├── memory/                    # Core GSW processing
+│   ├── processors.py         # Document → GSW conversion
+│   ├── reconciliation.py     # Entity reconciliation across documents
+│   ├── aggregators.py        # Entity summary generation
+│   └── models.py            # Data structures (EntityNode, GSWStructure, etc.)
+├── qa/                       # Question-answering system
+│   ├── qa_system.py         # Main Q&A orchestrator
+│   ├── entity_extractor.py  # Extract entities from questions
+│   ├── entity_matcher.py    # Match entities to GSW nodes
+│   ├── summary_reranker.py  # Rerank summaries by relevance
+│   └── answering_agent.py   # Generate final answers
+├── evaluation/               # Evaluation framework
+│   ├── judges/              # Base evaluation interfaces
+│   └── benchmarks/          # Benchmark-specific evaluators
+│       └── tulving_bench/   # Tulving Bench evaluation
+└── benchmarks/              # Benchmark datasets
+    └── tulvingbench/        # Tulving Bench data
+```
 
 ## Installation
 
@@ -21,140 +42,10 @@ pip install gsw-memory
 
 ### For Development
 ```bash
-git clone https://github.com/shreyasrajesh0308/gsw-memory.git
+git clone <repository-url>
 cd gsw-memory
-
-# Option 1: Using uv (recommended for contributors)
-uv pip install -e .
-
-# Option 2: Using pip
-pip install -e .
+uv sync --group dev
 ```
-
-## Quick Start
-
-### Complete GSW Memory Creation
-
-```python
-from gsw_memory.memory import GSWProcessor, reconcile_gsw_outputs
-
-# Initialize the processor
-processor = GSWProcessor(
-    model_name="gpt-4o",
-    enable_coref=True,
-    enable_chunking=True,
-    enable_context=True,
-    chunk_size=3,
-    overlap=0,
-    enable_spacetime=True,
-)
-
-# Process documents
-documents = [
-    "John walked to the coffee shop. He ordered a latte. The drink was expensive.",
-    "The barista prepared his drink carefully. She smiled at John. He thanked her."
-]
-
-# Step 1: Generate GSW structures from documents
-gsw_structures = processor.process_documents(documents, output_dir="output")
-print(f"Generated GSW structures for {len(gsw_structures)} documents")
-
-# Step 2: Reconcile entities across chunks/documents
-reconciled_chapters = reconcile_gsw_outputs(
-    gsw_structures, 
-    strategy="local",           # "local" or "global"
-    matching_approach="exact",  # "exact" or "embedding"
-    output_dir="reconciled_output",
-    save_statistics=True,
-    enable_visualization=False  # Set to True if you have NetworkX installed
-)
-
-print(f"Reconciled {len(reconciled_chapters)} chapters:")
-for i, chapter_gsw in enumerate(reconciled_chapters):
-    print(f"  Chapter {i}: {len(chapter_gsw.entity_nodes)} entities, "
-          f"{len(chapter_gsw.verb_phrase_nodes)} verb phrases")
-```
-
-This creates organized output directories:
-```
-output/                    # GSWProcessor outputs
-├── networks/             # Parsed GSW structures
-├── networks_raw/         # Raw LLM responses  
-├── coref/               # Coreference resolved texts
-├── chunks/              # Individual chunks
-└── context/             # Generated contexts
-
-reconciled_output/         # Reconciliation outputs
-├── reconciled/           # Final reconciled GSW structures
-├── statistics/           # Reconciliation statistics
-└── visualizations/       # Network visualizations (optional)
-```
-
-## Entity Reconciliation
-
-The package provides flexible reconciliation strategies:
-
-### Local vs Global Reconciliation
-```python
-# Local: Reconcile entities within each document separately
-reconciled_local = reconcile_gsw_outputs(
-    gsw_structures, 
-    strategy="local"
-)
-
-# Global: Reconcile entities across all documents together
-reconciled_global = reconcile_gsw_outputs(
-    gsw_structures, 
-    strategy="global"
-)
-```
-
-### Matching Approaches
-```python
-# Exact matching: Entities with identical names
-reconciled_exact = reconcile_gsw_outputs(
-    gsw_structures,
-    matching_approach="exact"
-)
-
-# Embedding matching: Semantically similar entities (requires additional dependencies)
-reconciled_embedding = reconcile_gsw_outputs(
-    gsw_structures,
-    matching_approach="embedding",
-    k=5  # Top-k similar entities to consider
-)
-```
-
-## Configuration
-
-```python
-processor = GSWProcessor(
-    model_name="gpt-4o",           # LLM model to use
-    enable_coref=True,             # Enable coreference resolution
-    enable_chunking=True,          # Enable text chunking
-    enable_context=True,           # Enable context generation
-    enable_spacetime=True,         # Enable spacetime linking
-    chunk_size=3,                  # Sentences per chunk
-    overlap=0,                     # Sentence overlap between chunks
-    generation_params={            # LLM generation parameters
-        "temperature": 0.0,
-        "max_tokens": 2000
-    }
-)
-```
-
-## Dependencies
-
-### Core Dependencies
-- `bespokelabs-curator`: LLM orchestration and parallel processing
-- `pydantic`: Data validation and serialization
-- `openai`: LLM API access
-- `numpy`: Numerical computations
-
-### Optional Dependencies
-- `networkx`: For network visualizations
-- `faiss-cpu`: For embedding-based entity matching
-- `langchain-voyageai`: For generating embeddings
 
 ## Environment Setup
 
@@ -162,19 +53,119 @@ Create a `.env` file in the project root:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
-VOYAGE_API_KEY=your_voyage_api_key_here  # For embedding features
+VOYAGE_API_KEY=your_voyage_api_key_here  # For embeddings
 ```
+
+## Quick Start
+
+Try our comprehensive end-to-end example that demonstrates the complete GSW pipeline:
+
+```bash
+cd gsw-memory
+python playground/test_tulving_bench_e2e.py
+```
+
+This example shows:
+1. **Document Processing** → GSW structures
+2. **Entity Reconciliation** (LOCAL strategy, chapter-by-chapter)
+3. **Entity Summary Generation** for each chapter
+4. **Multi-Chapter Q&A System** that searches across chapters
+5. **LLM-as-a-Judge Evaluation** using Tulving Bench
+6. **Performance Comparison** against baseline
+
+## Usage Examples
+
+### Multi-Document Q&A (Recommended)
+For processing multiple documents separately and answering questions across all of them:
+
+```python
+from gsw_memory import GSWProcessor, reconcile_gsw_outputs, GSWQuestionAnswerer
+from gsw_memory.memory.aggregators import EntitySummaryAggregator
+
+# Process documents
+processor = GSWProcessor(model_name="gpt-4o")
+gsw_structures = processor.process_documents(documents)
+
+# Reconcile with local strategy (keeps documents separate)
+reconciled_gsws = reconcile_gsw_outputs(gsw_structures, strategy="local")
+
+# Generate entity summaries for each document
+llm_config = {"model_name": "gpt-4o", "generation_params": {"temperature": 0.0}}
+aggregators = []
+for gsw in reconciled_gsws:
+    aggregator = EntitySummaryAggregator(gsw, llm_config)
+    aggregators.append(aggregator)
+
+# Create Q&A system that searches across all documents
+qa_system = GSWQuestionAnswerer(reconciled_gsws, aggregators, llm_config)
+answer = qa_system.ask("Who is the main character?")
+```
+
+### Single Unified Q&A
+For merging all documents into one unified GSW:
+
+```python
+# Reconcile with global strategy (merges all documents)
+unified_gsw = reconcile_gsw_outputs(gsw_structures, strategy="global")
+
+# Generate entity summaries for unified GSW
+aggregator = EntitySummaryAggregator(unified_gsw, llm_config)
+
+# Create Q&A system with single GSW (backward compatible)
+qa_system = GSWQuestionAnswerer(unified_gsw, aggregator, llm_config)
+answer = qa_system.ask("Who is the main character?")
+```
+
+### Evaluation
+
+```python
+from gsw_memory import TulvingBenchEvaluator
+
+# Evaluate Q&A results
+evaluator = TulvingBenchEvaluator(model_name="gpt-4o")
+results = evaluator.evaluate(qa_results=qa_results, ground_truth=ground_truth)
+
+print(f"Precision: {results['system_metrics']['precision']:.3f}")
+print(f"Recall: {results['system_metrics']['recall']:.3f}")
+print(f"F1 Score: {results['system_metrics']['f1']:.3f}")
+```
+
+## When to Use Each Strategy
+
+**Local Strategy**: Use when you want to:
+- Preserve document boundaries and sources
+- Answer questions that may span multiple documents
+- Maintain separate entity contexts per document
+- Scale to many documents efficiently
+
+**Global Strategy**: Use when you want to:
+- Merge all information into one unified memory
+- Simplify entity reconciliation across documents
+- Have a single comprehensive knowledge base
+- Work with smaller document sets
+
+## Core Dependencies
+
+- `bespokelabs-curator`: LLM orchestration and parallel processing
+- `pydantic`: Data validation and serialization
+- `openai`: LLM API access
+- `langchain-voyageai`: Embeddings for entity matching and reranking
+- `faiss-cpu`: Vector similarity search
+- `rank-bm25`: BM25 retrieval for question answering
 
 ## Examples & Testing
 
-See the `playground/` directory for comprehensive examples:
+The `playground/` directory contains comprehensive examples:
 
 ```bash
-# Basic functionality test
+# Complete end-to-end pipeline with evaluation
+python playground/test_tulving_bench_e2e.py
+
+# Basic GSW processing functionality
 python playground/test_operator.py
 
-# Interactive testing (Jupyter notebook)
-jupyter notebook playground/operator_tests.ipynb
+# Complete Q&A pipeline integration test
+python playground/test_qa_complete.py
 ```
 
 ## Contributing
@@ -183,7 +174,7 @@ jupyter notebook playground/operator_tests.ipynb
 2. Create a feature branch (`git checkout -b feature-name`)
 3. Make your changes
 4. Add tests for new functionality
-5. Run the test suite (`python playground/test_operator.py`)
+5. Run the test suite (`python playground/test_tulving_bench_e2e.py`)
 6. Submit a pull request
 
 ## Citation

@@ -201,20 +201,24 @@ def evaluate_with_tulving_bench(evaluation_data):
     # Use single system evaluation interface: qa_results + ground_truth
     qa_results = []
     ground_truth = []
-    
+
     for item in evaluation_data:
-        qa_results.append({
-            "question": item["question"],
-            "answer": item["predicted_answer"],
-            "matched_entities": item["matched_entities"]  # For chapter metrics
-        })
-        
-        ground_truth.append({
-            "question": item["question"],
-            "correct_answer": item["ground_truth"],
-            "correct_answer_chapters": [],  # We don't have this info, so empty
-            "retrieval_type": "unknown"  # Default since we don't have this classification
-        })
+        qa_results.append(
+            {
+                "question": item["question"],
+                "answer": item["predicted_answer"],
+                "matched_entities": item["matched_entities"],  # For chapter metrics
+            }
+        )
+
+        ground_truth.append(
+            {
+                "question": item["question"],
+                "correct_answer": item["ground_truth"],
+                "correct_answer_chapters": [],  # We don't have this info, so empty
+                "retrieval_type": "unknown",  # Default since we don't have this classification
+            }
+        )
 
     print("Running LLM-as-a-judge evaluation...")
     results = evaluator.evaluate(qa_results=qa_results, ground_truth=ground_truth)
@@ -231,16 +235,16 @@ def evaluate_with_tulving_bench(evaluation_data):
         print(f"\nQuestion {i + 1}: {detail['question']}")
         print(f"  Predicted: {detail['answer_evaluated']}")
         print(f"  Ground Truth: {detail['correct_answer']}")
-        
+
         # Handle None values gracefully
-        precision = detail['precision']
-        recall = detail['recall'] 
-        f1 = detail['f1']
-        
+        precision = detail["precision"]
+        recall = detail["recall"]
+        f1 = detail["f1"]
+
         precision_str = f"{precision:.3f}" if precision is not None else "N/A"
         recall_str = f"{recall:.3f}" if recall is not None else "N/A"
         f1_str = f"{f1:.3f}" if f1 is not None else "N/A"
-        
+
         print(f"  Precision: {precision_str}")
         print(f"  Recall: {recall_str}")
         print(f"  F1: {f1_str}")
@@ -255,26 +259,34 @@ def compare_with_baseline(evaluation_data):
     # Create baseline qa_results and ground_truth data
     baseline_qa_results = []
     baseline_ground_truth = []
-    
+
     for item in evaluation_data:
-        baseline_qa_results.append({
-            "question": item["question"],
-            "answer": "I don't have enough information to answer this question.",  # Simple baseline
-            "matched_entities": []  # No entities for baseline
-        })
-        
-        baseline_ground_truth.append({
-            "question": item["question"],
-            "correct_answer": item["ground_truth"],
-            "correct_answer_chapters": [],  # We don't have this info
-            "retrieval_type": "unknown"
-        })
+        baseline_qa_results.append(
+            {
+                "question": item["question"],
+                "answer": "I don't have enough information to answer this question.",  # Simple baseline
+                "matched_entities": [],  # No entities for baseline
+            }
+        )
+
+        baseline_ground_truth.append(
+            {
+                "question": item["question"],
+                "correct_answer": item["ground_truth"],
+                "correct_answer_chapters": [],  # We don't have this info
+                "retrieval_type": "unknown",
+            }
+        )
 
     # Evaluate baseline
-    evaluator = TulvingBenchEvaluator(model_name="gpt-4o", generation_params={"temperature": 0.0})
+    evaluator = TulvingBenchEvaluator(
+        model_name="gpt-4o", generation_params={"temperature": 0.0}
+    )
 
     print("Evaluating baseline (no GSW)...")
-    baseline_results = evaluator.evaluate(qa_results=baseline_qa_results, ground_truth=baseline_ground_truth)
+    baseline_results = evaluator.evaluate(
+        qa_results=baseline_qa_results, ground_truth=baseline_ground_truth
+    )
 
     print("\nBaseline Results:")
     print(f"  Precision: {baseline_results['system_metrics']['precision']:.3f}")
@@ -296,7 +308,7 @@ def main():
         chapters, questions_data = load_tulving_bench_data()
 
         # Step 2: Process book to separate chapter GSWs (LOCAL strategy like original)
-        reconciled_chapters = process_book_to_gsws(chapters, use_subset=True)
+        reconciled_chapters = process_book_to_gsws(chapters, use_subset=False)
 
         # Step 3: Generate entity summaries for each chapter
         aggregators = generate_entity_summaries(reconciled_chapters)
@@ -305,7 +317,7 @@ def main():
         qa_system = setup_qa_system(reconciled_chapters, aggregators)
 
         # Step 5: Run Q&A evaluation across chapters
-        evaluation_data = run_qa_evaluation(qa_system, questions_data, use_subset=True)
+        evaluation_data = run_qa_evaluation(qa_system, questions_data, use_subset=False)
 
         # Step 6: Evaluate with Tulving Bench judge
         gsw_results = evaluate_with_tulving_bench(evaluation_data)

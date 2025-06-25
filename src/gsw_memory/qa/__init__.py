@@ -9,14 +9,16 @@ implementing the paper's approach:
 4. Rerank summaries using VoyageAI embeddings
 """
 
+from .answering_agent import AnsweringAgent
 from .entity_extractor import QuestionEntityExtractor
 from .matcher import EntityMatcher
-from .reranker import SummaryReranker
 from .qa_system import GSWQuestionAnswerer
+from .reranker import SummaryReranker
 
 __all__ = [
     "QuestionEntityExtractor",
-    "EntityMatcher", 
+    "EntityMatcher",
     "SummaryReranker",
     "GSWQuestionAnswerer",
+    "AnsweringAgent",
 ]

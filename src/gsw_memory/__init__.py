@@ -76,6 +76,9 @@ from .memory.aggregators import EntitySummaryAggregator
 # Q&A system
 from .qa import GSWQuestionAnswerer, QuestionEntityExtractor, EntityMatcher, SummaryReranker
 
+# Evaluation system
+from .evaluation.benchmarks.tulving_bench.evaluator import TulvingBenchEvaluator
+
 __version__ = "0.1.0"
 
 __all__ = [
@@ -98,6 +101,9 @@ __all__ = [
     "QuestionEntityExtractor",
     "EntityMatcher", 
     "SummaryReranker",
+    
+    # Evaluation
+    "TulvingBenchEvaluator",
 ]
 
 
