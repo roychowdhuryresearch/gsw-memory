@@ -150,6 +150,17 @@ class EntitySummaryAggregator(BaseAggregator):
         Returns:
             Dictionary mapping entity IDs to their summary data
         """
+        # If we already have precomputed summaries, return those instead of regenerating
+        if self._precomputed_summaries is not None:
+            if entity_ids is None:
+                return self._precomputed_summaries
+            else:
+                # Return subset for specific entity IDs
+                return {eid: self._precomputed_summaries[eid] 
+                       for eid in entity_ids 
+                       if eid in self._precomputed_summaries}
+        
+        # Otherwise generate new summaries
         if entity_ids is None:
             entity_ids = [entity.id for entity in self.gsw.entity_nodes]
 

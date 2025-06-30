@@ -28,6 +28,7 @@ from gsw_memory import (
     hipporag_eval,
     reconcile_gsw_outputs,
 )
+from gsw_memory.utils.loaders import load_from_logs
 
 # Disable cache for testing
 os.environ["CURATOR_DISABLE_CACHE"] = "true"
@@ -35,26 +36,48 @@ os.environ["CURATOR_DISABLE_CACHE"] = "true"
 # Load environment variables
 load_dotenv()
 
+# ===== CONFIGURATION: Granular Stage Control =====
+# Control which stages to regenerate vs load from existing logs
+# Dependencies: operator → reconciler → aggregator
+# If you regenerate an earlier stage, all downstream stages will also regenerate
+
+# LOAD_BASE_LOGS = None  # Base directory for loading existing data
+LOAD_BASE_LOGS = "../logs/2wiki_eval_20250629_201214"  # Uncomment and set path
+
+REGENERATE_FROM = None  # Which stage to start regenerating from
+# Options:
+#   None - Load all stages (operator, reconciler, aggregator), just run Q&A
+#   "operator" - Regenerate operator + reconciler + aggregator
+#   "reconciler" - Load operator, regenerate reconciler + aggregator
+#   "aggregator" - Load operator + reconciler, regenerate aggregator
+
+# Examples:
+# REGENERATE_FROM = "aggregator"  # Test new summary logic, load everything else
+# REGENERATE_FROM = "reconciler"  # Test new reconciler logic, load operator only
+# REGENERATE_FROM = None          # Just test Q&A changes, load all preprocessing
+
 
 def setup_timestamped_logging():
     """Create timestamped logs directory for all outputs."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_dir = os.path.join(os.path.dirname(__file__), "..", "logs", f"2wiki_eval_{timestamp}")
-    
+    log_dir = os.path.join(
+        os.path.dirname(__file__), "..", "logs", f"2wiki_eval_{timestamp}"
+    )
+
     # Create logs directory structure
     os.makedirs(log_dir, exist_ok=True)
     os.makedirs(os.path.join(log_dir, "gsw_output"), exist_ok=True)
     os.makedirs(os.path.join(log_dir, "reconciled_output"), exist_ok=True)
     os.makedirs(os.path.join(log_dir, "results"), exist_ok=True)
-    
+
     print(f"📁 Created timestamped log directory: {log_dir}")
-    
+
     return {
         "base_dir": log_dir,
         "gsw_output_dir": os.path.join(log_dir, "gsw_output"),
         "reconciled_output_dir": os.path.join(log_dir, "reconciled_output"),
         "results_dir": os.path.join(log_dir, "results"),
-        "timestamp": timestamp
+        "timestamp": timestamp,
     }
 
 
@@ -162,7 +185,7 @@ def generate_entity_summaries(reconciled_gsw, log_dirs):
     summaries = aggregator.precompute_summaries(include_space_time=True)
 
     print(f"Generated summaries for {len(summaries)} entities")
-    
+
     # Save all generated summaries for debugging
     summaries_file = os.path.join(log_dirs["results_dir"], "all_entity_summaries.json")
     with open(summaries_file, "w") as f:
@@ -241,10 +264,15 @@ def run_2wiki_evaluation(qa_system, questions_data, log_dirs, use_subset=True):
             "extracted_entities": result["extracted_entities"],
             "matched_entities": result["matched_entities"],
             "num_summaries_used": result["num_summaries_used"],
-            "summaries_used": result.get("summaries_used", [])  # The actual summaries passed to answering agent
+            "ranked_summaries": result.get(
+                "ranked_summaries", []
+            ),  # The ranked entity summaries
+            "context_to_answering_agent": result.get(
+                "context_to_answering_agent", ""
+            ),  # The context passed to LLM
         }
         qa_debug_info.append(debug_item)
-    
+
     # Save Q&A debug information
     qa_debug_file = os.path.join(log_dirs["results_dir"], "qa_debug_info.json")
     with open(qa_debug_file, "w") as f:
@@ -320,15 +348,19 @@ def run_2wiki_evaluation(qa_system, questions_data, log_dirs, use_subset=True):
     return detailed_results, overall_metrics
 
 
-def save_evaluation_results(evaluation_results, overall_metrics, log_dirs, num_questions):
+def save_evaluation_results(
+    evaluation_results, overall_metrics, log_dirs, num_questions
+):
     """Save evaluation results to timestamped log directory."""
     print(f"\n💾 Saving results to {log_dirs['results_dir']}")
-    
+
     # Save detailed results
-    detailed_results_file = os.path.join(log_dirs["results_dir"], "detailed_results.json")
+    detailed_results_file = os.path.join(
+        log_dirs["results_dir"], "detailed_results.json"
+    )
     with open(detailed_results_file, "w") as f:
         json.dump(evaluation_results, f, indent=2)
-    
+
     # Save summary metrics
     summary_data = {
         "timestamp": log_dirs["timestamp"],
@@ -337,7 +369,7 @@ def save_evaluation_results(evaluation_results, overall_metrics, log_dirs, num_q
         "overall_metrics": overall_metrics,
         "question_type_breakdown": {},
     }
-    
+
     # Calculate question type breakdown
     type_metrics = {}
     for result in evaluation_results:
@@ -346,27 +378,27 @@ def save_evaluation_results(evaluation_results, overall_metrics, log_dirs, num_q
             type_metrics[qtype] = {"em_scores": [], "f1_scores": []}
         type_metrics[qtype]["em_scores"].append(result["exact_match"])
         type_metrics[qtype]["f1_scores"].append(result["f1_score"])
-    
+
     for qtype, metrics in type_metrics.items():
         avg_em = sum(metrics["em_scores"]) / len(metrics["em_scores"])
         avg_f1 = sum(metrics["f1_scores"]) / len(metrics["f1_scores"])
         summary_data["question_type_breakdown"][qtype] = {
             "count": len(metrics["em_scores"]),
             "exact_match": round(avg_em, 4),
-            "f1_score": round(avg_f1, 4)
+            "f1_score": round(avg_f1, 4),
         }
-    
+
     summary_file = os.path.join(log_dirs["results_dir"], "summary_metrics.json")
     with open(summary_file, "w") as f:
         json.dump(summary_data, f, indent=2)
-    
+
     # Save a quick README
-    readme_content = f"""# 2wiki Evaluation Results - {log_dirs['timestamp']}
+    readme_content = f"""# 2wiki Evaluation Results - {log_dirs["timestamp"]}
 
 ## Summary
 - **Total Questions**: {num_questions}
-- **Exact Match**: {overall_metrics['ExactMatch']:.4f}
-- **F1 Score**: {overall_metrics['F1']:.4f}
+- **Exact Match**: {overall_metrics["ExactMatch"]:.4f}
+- **F1 Score**: {overall_metrics["F1"]:.4f}
 
 ## Files
 - `detailed_results.json`: Per-question results with predictions and scores
@@ -383,45 +415,132 @@ The debug files contain:
 - **Entity Summaries**: See what summaries were generated for each entity
 - **Q&A Process**: See which entities were extracted, matched, and which summaries were used for each question
 """
-    
+
     readme_file = os.path.join(log_dirs["base_dir"], "README.md")
     with open(readme_file, "w") as f:
         f.write(readme_content)
-    
-    print(f"✅ Results saved:")
+
+    print("✅ Results saved:")
     print(f"   Detailed: {detailed_results_file}")
     print(f"   Summary: {summary_file}")
     print(f"   README: {readme_file}")
 
 
 def main():
-    """Run complete 2wiki evaluation pipeline."""
+    """Run complete 2wiki evaluation pipeline with granular stage control."""
     print("🚀 Starting 2wiki MultiHopQA Evaluation")
     print("Testing GSW-Memory on factual multi-hop reasoning\n")
 
     try:
-        # Step 0: Setup timestamped logging
-        log_dirs = setup_timestamped_logging()
+        # Determine what to load vs regenerate
+        load_operator = LOAD_BASE_LOGS and REGENERATE_FROM not in ["operator"]
+        load_reconciler = LOAD_BASE_LOGS and REGENERATE_FROM not in [
+            "operator",
+            "reconciler",
+        ]
+        load_aggregator = LOAD_BASE_LOGS and REGENERATE_FROM not in [
+            "operator",
+            "reconciler",
+            "aggregator",
+        ]
 
-        # Step 1: Load 2wiki data
+        # Print execution plan
+        if LOAD_BASE_LOGS:
+            print(f"📂 Base logs: {LOAD_BASE_LOGS}")
+            print(f"🔄 Regenerate from: {REGENERATE_FROM or 'None (load all)'}")
+            print("📋 Execution plan:")
+            print(f"   Operator: {'Load' if load_operator else 'Regenerate'}")
+            print(f"   Reconciler: {'Load' if load_reconciler else 'Regenerate'}")
+            print(f"   Aggregator: {'Load' if load_aggregator else 'Regenerate'}")
+            print()
+        else:
+            print("🔄 Running full pipeline from scratch\n")
+
+        # Setup logging directory
+        if LOAD_BASE_LOGS and not REGENERATE_FROM:
+            # Use existing directory for Q&A only runs
+            log_dirs = {
+                "base_dir": LOAD_BASE_LOGS,
+                "gsw_output_dir": os.path.join(LOAD_BASE_LOGS, "gsw_output"),
+                "reconciled_output_dir": os.path.join(
+                    LOAD_BASE_LOGS, "reconciled_output"
+                ),
+                "results_dir": os.path.join(LOAD_BASE_LOGS, "results"),
+                "timestamp": os.path.basename(LOAD_BASE_LOGS).split("_")[-2]
+                + "_"
+                + os.path.basename(LOAD_BASE_LOGS).split("_")[-1],
+            }
+        else:
+            # Create new timestamped directory for any regeneration
+            log_dirs = setup_timestamped_logging()
+
+        # Step 1: Load 2wiki data (always needed for questions)
         documents, questions_data, document_titles = load_2wiki_data(use_subset=True)
 
-        # Step 2: Process corpus to reconciled GSW
-        reconciled_gsw = process_corpus_to_gsws(documents, log_dirs, use_subset=True)
+        # Load existing data once if needed
+        loaded_data = None
+        if LOAD_BASE_LOGS and (load_operator or load_reconciler or load_aggregator):
+            print(f"📂 Loading data from {LOAD_BASE_LOGS}")
+            loaded_data = load_from_logs(LOAD_BASE_LOGS)
 
-        # Step 3: Generate entity summaries
-        aggregator = generate_entity_summaries(reconciled_gsw, log_dirs)
+        # Step 2: Operator + Reconciler stages (since current function combines them)
+        if load_reconciler:
+            print("📂 Using loaded reconciled GSW")
+            reconciled_gsw = loaded_data["reconciled_gsw"]
+        else:
+            if load_operator:
+                print("📂 Using loaded operator outputs, then running reconciler")
+                operator_outputs = loaded_data["operator_outputs"]
 
-        # Step 4: Setup Q&A system
+                # Convert operator outputs to GSW structures for reconciler
+                gsw_structures = []
+                for doc_chunks in operator_outputs:
+                    for chunk_data in doc_chunks.values():
+                        if chunk_data["gsw"] is not None:
+                            gsw_structures.append(chunk_data["gsw"])
+
+                print("🔄 Running reconciler on loaded GSW structures")
+                reconciled_gsw = reconcile_gsw_outputs(
+                    gsw_structures,
+                    strategy="global",
+                    output_dir=log_dirs["reconciled_output_dir"],
+                    save_statistics=True,
+                    enable_visualization=False,
+                )
+            else:
+                print("🔄 Processing documents through operator + reconciler")
+                reconciled_gsw = process_corpus_to_gsws(
+                    documents, log_dirs, use_subset=True
+                )
+
+        # Step 3: Aggregator stage - load or regenerate
+        if load_aggregator:
+            print("📂 Using loaded entity summaries")
+
+            # Create aggregator with preloaded summaries
+            llm_config = {
+                "model_name": "gpt-4o",
+                "generation_params": {"temperature": 0.0, "max_tokens": 500},
+            }
+            aggregator = EntitySummaryAggregator(reconciled_gsw, llm_config)
+            aggregator._precomputed_summaries = loaded_data["entity_summaries"]
+            print(f"✅ Loaded {len(loaded_data['entity_summaries'])} precomputed entity summaries")
+        else:
+            print("🔄 Generating entity summaries")
+            aggregator = generate_entity_summaries(reconciled_gsw, log_dirs)
+
+        # Step 4: Setup Q&A system (always run)
         qa_system = setup_qa_system(reconciled_gsw, aggregator)
 
-        # Step 5: Run evaluation
+        # Step 5: Run evaluation (always run)
         evaluation_results, overall_metrics = run_2wiki_evaluation(
             qa_system, questions_data, log_dirs, use_subset=True
         )
 
-        # Step 6: Save results
-        save_evaluation_results(evaluation_results, overall_metrics, log_dirs, len(questions_data))
+        # Step 6: Save results (always run)
+        save_evaluation_results(
+            evaluation_results, overall_metrics, log_dirs, len(questions_data)
+        )
 
         # Step 7: Final summary
         print("\n🎉 2wiki Evaluation Completed!")
