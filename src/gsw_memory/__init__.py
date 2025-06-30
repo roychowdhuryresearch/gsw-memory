@@ -78,6 +78,7 @@ from .qa import GSWQuestionAnswerer, QuestionEntityExtractor, EntityMatcher, Sum
 
 # Evaluation system
 from .evaluation.benchmarks.tulving_bench.evaluator import TulvingBenchEvaluator
+from .evaluation import hipporag_eval
 
 __version__ = "0.1.0"
 
@@ -104,6 +105,7 @@ __all__ = [
     
     # Evaluation
     "TulvingBenchEvaluator",
+    "hipporag_eval",
 ]
 
 

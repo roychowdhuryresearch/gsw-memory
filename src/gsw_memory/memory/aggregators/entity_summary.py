@@ -21,6 +21,7 @@ class GSWEntitySummarizer(curator.LLM):
     """Curator class for generating entity summaries from GSW data."""
 
     return_completions_object = True
+    require_all_responses = False  # Allow some requests to fail
 
     def prompt(self, input_data):
         """Create the prompt for the LLM summarizer."""
@@ -246,15 +247,32 @@ class EntitySummaryAggregator(BaseAggregator):
 
         # Convert results to dictionary format
         summary_map = {}
+        failed_entities = []
+        
         for result in summarization_results.dataset:
             entity_id = result["entity_id"]
-            summary_map[entity_id] = {
-                "entity_name": result["entity_name"],
-                "summary": result["summary"],
-                "entity_id": entity_id,
-            }
+            
+            # Check if we got a valid summary
+            if "summary" in result and result["summary"]:
+                summary_map[entity_id] = {
+                    "entity_name": result["entity_name"],
+                    "summary": result["summary"],
+                    "entity_id": entity_id,
+                }
+            else:
+                failed_entities.append(entity_id)
+                # Create a fallback summary for failed entities
+                entity_name = result.get("entity_name", entity_id)
+                summary_map[entity_id] = {
+                    "entity_name": entity_name,
+                    "summary": f"Entity: {entity_name}. Summary generation failed.",
+                    "entity_id": entity_id,
+                }
 
-        print(f"Generated {len(summary_map)} summaries")
+        if failed_entities:
+            print(f"Warning: Failed to generate summaries for {len(failed_entities)} entities")
+            
+        print(f"Generated {len(summary_map)} summaries ({len(summary_map) - len(failed_entities)} successful)")
         return summary_map
 
     def _get_entity_by_id(self, entity_id: str) -> Optional[EntityNode]:
