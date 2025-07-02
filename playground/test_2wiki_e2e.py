@@ -249,7 +249,7 @@ def run_2wiki_evaluation(qa_system, questions_data, log_dirs, use_subset=True):
     print(f"Processing {len(questions)} questions...")
 
     # Run batch Q&A
-    qa_results = qa_system.ask_batch(questions, max_summaries=5)
+    qa_results = qa_system.ask_batch(questions, max_summaries=5, include_connected=True)
     predicted_answers = [result["answer"].strip() for result in qa_results]
 
     # Save Q&A debugging information
@@ -270,6 +270,9 @@ def run_2wiki_evaluation(qa_system, questions_data, log_dirs, use_subset=True):
             "context_to_answering_agent": result.get(
                 "context_to_answering_agent", ""
             ),  # The context passed to LLM
+            "reasoning": result.get(
+                "reasoning", "No reasoning captured"
+            ),  # The LLM's reasoning for the answer
         }
         qa_debug_info.append(debug_item)
 
@@ -524,7 +527,9 @@ def main():
             }
             aggregator = EntitySummaryAggregator(reconciled_gsw, llm_config)
             aggregator._precomputed_summaries = loaded_data["entity_summaries"]
-            print(f"✅ Loaded {len(loaded_data['entity_summaries'])} precomputed entity summaries")
+            print(
+                f"✅ Loaded {len(loaded_data['entity_summaries'])} precomputed entity summaries"
+            )
         else:
             print("🔄 Generating entity summaries")
             aggregator = generate_entity_summaries(reconciled_gsw, log_dirs)

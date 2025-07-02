@@ -83,22 +83,23 @@ class GSWQuestionAnswerer:
         # Cache for precomputed summaries from all aggregators
         self._summaries_cache: Optional[Dict[str, Dict[str, str]]] = None
 
-    def ask(self, question: str, max_summaries: int = 17) -> Dict[str, Any]:
+    def ask(self, question: str, max_summaries: int = 17, include_connected: bool = False) -> Dict[str, Any]:
         """
         Simple interface: ask a question and get an answer.
 
         Args:
             question: The user's question
             max_summaries: Maximum summaries to use for context
+            include_connected: If True, also include entities connected via verb phrases
 
         Returns:
             Dict with answer, sources, and metadata
         """
-        results = self.ask_batch([question], max_summaries)
+        results = self.ask_batch([question], max_summaries, include_connected)
         return results[0]
 
     def ask_batch(
-        self, questions: List[str], max_summaries: int = 17
+        self, questions: List[str], max_summaries: int = 17, include_connected: bool = False
     ) -> List[Dict[str, Any]]:
         """
         Batch interface: ask multiple questions efficiently using curator batching.
@@ -106,6 +107,7 @@ class GSWQuestionAnswerer:
         Args:
             questions: List of questions to ask
             max_summaries: Maximum summaries to use for context per question
+            include_connected: If True, also include entities connected via verb phrases
 
         Returns:
             List of result dicts, one per question
@@ -119,7 +121,7 @@ class GSWQuestionAnswerer:
             # Steps 2-4: Process each question individually
             # (these steps are fast and don't need batching)
             entities = all_entities[i]
-            matches_with_source = self.find_matching_entities(entities)
+            matches_with_source = self.find_matching_entities(entities, include_connected)
             summaries = self.get_entity_summaries(matches_with_source)
             ranked_summaries = self.rerank_summaries(summaries, question, max_summaries)
             context_to_answering_agent = []
@@ -153,6 +155,7 @@ class GSWQuestionAnswerer:
         for i, result in enumerate(results):
             result["answer"] = answers[i]["answer"]
             result["sources"] = answers[i]["context_used"]
+            result["reasoning"] = answers[i].get("reasoning", "No reasoning captured")
 
         return results
 
@@ -166,12 +169,13 @@ class GSWQuestionAnswerer:
         return self.entity_extractor.extract_entities_batch(questions)
 
     def find_matching_entities(
-        self, entity_names: List[str]
+        self, entity_names: List[str], include_connected: bool = False
     ) -> List[Tuple[EntityNode, int]]:
         """Step 2: Find matching entities across all GSWs.
 
         Args:
             entity_names: List of entity names to match
+            include_connected: If True, also include entities connected via verb phrases
 
         Returns:
             List of (EntityNode, gsw_index) tuples indicating which GSW each entity came from
@@ -181,7 +185,7 @@ class GSWQuestionAnswerer:
         # Search across all GSWs
         for gsw_index, gsw in enumerate(self.gsws):
             matched_entities = self.entity_matcher.find_matching_entities(
-                entity_names, gsw
+                entity_names, gsw, include_connected
             )
             # Add source GSW index to each matched entity
             for entity in matched_entities:
