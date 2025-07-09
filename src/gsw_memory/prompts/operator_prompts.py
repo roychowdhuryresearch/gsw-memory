@@ -2,6 +2,14 @@
 Prompt templates for GSW Operator components.
 """
 
+from enum import Enum
+
+
+class PromptType(Enum):
+    """Enum for different types of operator prompts."""
+    EPISODIC = "episodic"
+    FACTUAL = "factual"
+
 
 class CorefPrompts:
     """Prompts for coreference resolution."""
@@ -307,6 +315,267 @@ Show all your reasoning and task by task breakdown within <semantic_construction
   ]
 }
 ```"""
+
+
+class FactualExtractionPrompts:
+    """Prompts for factual GSW generation - optimized for Wikipedia-style content and 2wiki QA."""
+    
+    SYSTEM_PROMPT = """You are an expert linguist focused on extracting factual relationships and attributes from Wikipedia-style content. Your primary task is to analyze text to create structured semantic networks that capture key factual information such as dates, places, nationalities, and other attributes needed for multi-hop question answering."""
+    
+    USER_PROMPT_TEMPLATE = """
+Given the following text, extract factual relationships and attributes following this structure:
+
+<input_text>
+{input_text}
+</input_text>
+
+<background_context>
+{background_context}
+</background_context>
+
+Follow these examples for the desired extraction pattern:
+
+**Example 1: Biographical Information**
+Input: "Ermengarde of Tours (d. 20 March 851) was the daughter of Hugh of Tours, a member of the Etichonen family. In October 821 in Thionville, she married the Carolingian Emperor Lothair I of the Franks (795–855)."
+
+Expected Output:
+```json
+{{
+  "entity_nodes": [
+    {{
+      "id": "e1", 
+      "name": "Ermengarde of Tours",
+      "roles": [
+        {{"role": "person", "states": ["deceased", "historical figure"]}},
+        {{"role": "nobility", "states": ["medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e2", 
+      "name": "20 March 851",
+      "roles": [
+        {{"role": "date", "states": ["death date", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e3", 
+      "name": "Hugh of Tours",
+      "roles": [
+        {{"role": "person", "states": ["historical figure"]}},
+        {{"role": "nobility", "states": ["medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e4", 
+      "name": "Etichonen family",
+      "roles": [
+        {{"role": "family", "states": ["noble family", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e5", 
+      "name": "October 821",
+      "roles": [
+        {{"role": "date", "states": ["marriage date", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e6", 
+      "name": "Thionville",
+      "roles": [
+        {{"role": "location", "states": ["marriage location", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e7", 
+      "name": "Lothair I of the Franks",
+      "roles": [
+        {{"role": "person", "states": ["historical figure"]}},
+        {{"role": "ruler", "states": ["Carolingian Emperor", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e8", 
+      "name": "Carolingian Emperor",
+      "roles": [
+        {{"role": "title", "states": ["imperial title", "medieval period"]}}
+      ]
+    }},
+    {{
+      "id": "e9", 
+      "name": "795–855",
+      "roles": [
+        {{"role": "date range", "states": ["life span", "medieval period"]}}
+      ]
+    }}
+  ],
+  "verb_phrase_nodes": [
+    {{
+      "id": "v1",
+      "phrase": "died on",
+      "questions": [
+        {{"id": "q1", "text": "Who died on 20 March 851?", "answers": ["e1"]}},
+        {{"id": "q2", "text": "When did Ermengarde of Tours die?", "answers": ["e2"]}}
+      ]
+    }},
+    {{
+      "id": "v2", 
+      "phrase": "daughter of",
+      "questions": [
+        {{"id": "q3", "text": "Who is the daughter of Hugh of Tours?", "answers": ["e1"]}},
+        {{"id": "q4", "text": "Who is Ermengarde of Tours the daughter of?", "answers": ["e3"]}}
+      ]
+    }},
+    {{
+      "id": "v3",
+      "phrase": "married",
+      "questions": [
+        {{"id": "q5", "text": "Who did Ermengarde of Tours marry?", "answers": ["e7"]}},
+        {{"id": "q6", "text": "When did they marry?", "answers": ["e5"]}},
+        {{"id": "q7", "text": "Where did they marry?", "answers": ["e6"]}}
+      ]
+    }}
+  ]
+}}
+```
+
+**Example 2: Film Information**
+Input: "Altid ballade (English: 'Nothing but trouble') is a 1955 Danish drama film directed by Gabriel Axel."
+
+Expected Output:
+```json
+{{
+  "entity_nodes": [
+    {{
+      "id": "e1", 
+      "name": "Altid ballade",
+      "roles": [
+        {{"role": "film", "states": ["Danish cinema", "1950s"]}},
+        {{"role": "creative work", "states": ["drama genre"]}}
+      ]
+    }},
+    {{
+      "id": "e2", 
+      "name": "Nothing but trouble",
+      "roles": [
+        {{"role": "title", "states": ["English translation", "alternative title"]}}
+      ]
+    }},
+    {{
+      "id": "e3", 
+      "name": "1955",
+      "roles": [
+        {{"role": "date", "states": ["release year", "1950s"]}}
+      ]
+    }},
+    {{
+      "id": "e4", 
+      "name": "Danish",
+      "roles": [
+        {{"role": "nationality", "states": ["European cinema", "Scandinavian"]}}
+      ]
+    }},
+    {{
+      "id": "e5", 
+      "name": "drama film",
+      "roles": [
+        {{"role": "genre", "states": ["film category", "serious genre"]}}
+      ]
+    }},
+    {{
+      "id": "e6", 
+      "name": "Gabriel Axel",
+      "roles": [
+        {{"role": "person", "states": ["film director"]}},
+        {{"role": "creative professional", "states": ["Danish cinema", "1950s"]}}
+      ]
+    }}
+  ],
+  "verb_phrase_nodes": [
+    {{
+      "id": "v1",
+      "phrase": "English title",
+      "questions": [
+        {{"id": "q1", "text": "What is the English title of Altid ballade?", "answers": ["e2"]}},
+        {{"id": "q2", "text": "What film has the English title 'Nothing but trouble'?", "answers": ["e1"]}}
+      ]
+    }},
+    {{
+      "id": "v2",
+      "phrase": "released in", 
+      "questions": [
+        {{"id": "q3", "text": "When was Altid ballade released?", "answers": ["e3"]}},
+        {{"id": "q4", "text": "What film was released in 1955?", "answers": ["e1"]}}
+      ]
+    }},
+    {{
+      "id": "v3",
+      "phrase": "directed by",
+      "questions": [
+        {{"id": "q5", "text": "Who directed Altid ballade?", "answers": ["e6"]}},
+        {{"id": "q6", "text": "What film did Gabriel Axel direct?", "answers": ["e1"]}}
+      ]
+    }}
+  ]
+}}
+```
+
+**Key Instructions:**
+
+1. **Extract ALL entities**: Include people, places, dates, titles, nationalities, professions, etc.
+
+2. **Create relationship phrases**: These can be:
+   - Factual attributes: "born on", "died on", "nationality", "profession"
+   - Relationships: "directed by", "married to", "daughter of", "member of"  
+   - Properties: "English title", "released in", "located in"
+
+3. **Generate bidirectional questions**: Always create questions from both directions:
+   - "Who was born in X?" AND "Where was Y born?"
+   - "Who directed X?" AND "What did Y direct?"
+
+4. **Capture temporal information**: Ensure dates and temporal relationships are connected to relevant entities.
+
+5. **Include biographical details**: Birth/death dates, family relationships, professions, nationalities.
+
+6. **Include work attributes**: For films, books, etc. capture directors, release dates, genres, etc.
+
+Now extract the factual relationships from the given input text following this pattern:
+
+```json
+{{
+  "entity_nodes": [
+    {{
+      "id": "e1",
+      "name": "<entity>",
+      "roles": [
+        {{
+          "role": "<entity_type>", 
+          "states": ["<general_status>", "<context>"]
+        }}
+      ]
+    }}
+  ],
+  "verb_phrase_nodes": [
+    {{
+      "id": "v1",
+      "phrase": "<relationship_phrase>",
+      "questions": [
+        {{
+          "id": "q1",
+          "text": "<bidirectional_question>",
+          "answers": ["<entity_id>"]
+        }}
+      ]
+    }}
+  ]
+}}
+```
+
+**Guidelines for Roles and States:**
+- **Roles**: General entity types (person, location, date, film, title, etc.)
+- **States**: Simple status indicators (deceased, historical figure, release year, etc.)
+- Keep roles/states general since detailed facts are captured in verb phrase questions
+"""
 
 
 class SpaceTimePrompts:

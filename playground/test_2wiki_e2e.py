@@ -28,6 +28,7 @@ from gsw_memory import (
     hipporag_eval,
     reconcile_gsw_outputs,
 )
+from gsw_memory.prompts.operator_prompts import PromptType
 from gsw_memory.utils.loaders import load_from_logs
 
 # Disable cache for testing
@@ -42,9 +43,9 @@ load_dotenv()
 # If you regenerate an earlier stage, all downstream stages will also regenerate
 
 # LOAD_BASE_LOGS = None  # Base directory for loading existing data
-LOAD_BASE_LOGS = "../logs/2wiki_eval_20250629_201214"  # Uncomment and set path
+LOAD_BASE_LOGS = "../logs/2wiki_eval_20250707_170220"  # Uncomment and set path
 
-REGENERATE_FROM = None  # Which stage to start regenerating from
+REGENERATE_FROM = "aggregator"  # Which stage to start regenerating from
 # Options:
 #   None - Load all stages (operator, reconciler, aggregator), just run Q&A
 #   "operator" - Regenerate operator + reconciler + aggregator
@@ -144,6 +145,7 @@ def process_corpus_to_gsws(documents, log_dirs, use_subset=True):
         overlap=0,
         enable_context=False,
         enable_spacetime=True,
+        prompt_type=PromptType.FACTUAL,  # Use factual extraction prompts for 2wiki
     )
 
     print(f"Processing {len(documents)} documents...")

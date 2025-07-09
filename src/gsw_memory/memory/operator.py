@@ -18,6 +18,7 @@ from .operator_utils import (
     chunk_text,
     parse_gsw,
 )
+from ..prompts.operator_prompts import PromptType
 
 
 class GSWProcessor:
@@ -34,6 +35,7 @@ class GSWProcessor:
         chunk_size: int = 3,
         overlap: int = 1,
         enable_visualization: bool = False,
+        prompt_type: PromptType = PromptType.EPISODIC,
     ):
         """Initialize the GSW processor with configuration options."""
         self.model_name = model_name
@@ -45,6 +47,7 @@ class GSWProcessor:
         self.chunk_size = chunk_size
         self.overlap = overlap
         self.enable_visualization = enable_visualization
+        self.prompt_type = prompt_type
 
         # Check if visualization is requested but NetworkX is not available
         if self.enable_visualization:
@@ -212,7 +215,9 @@ class GSWProcessor:
         # Step 4: GSW Generation (parallel across all chunks)
         print(f"--- Generating GSWs for {total_chunks} chunks ---")
         gsw_model = GSWOperator(
-            model_name=self.model_name, generation_params=self.generation_params
+            model_name=self.model_name, 
+            generation_params=self.generation_params,
+            prompt_type=self.prompt_type
         )
 
         # Prepare GSW inputs from all chunks across all documents

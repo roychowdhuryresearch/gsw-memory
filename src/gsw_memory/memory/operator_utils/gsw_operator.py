@@ -7,7 +7,7 @@ Workspaces from text using sophisticated semantic role extraction.
 
 from bespokelabs import curator
 
-from ...prompts.operator_prompts import OperatorPrompts
+from ...prompts.operator_prompts import FactualExtractionPrompts, OperatorPrompts, PromptType
 
 
 class GSWOperator(curator.LLM):
@@ -15,16 +15,33 @@ class GSWOperator(curator.LLM):
 
     return_completions_object = True
 
+    def __init__(self, prompt_type: PromptType = PromptType.EPISODIC, **kwargs):
+        """Initialize GSWOperator with specified prompt type.
+        
+        Args:
+            prompt_type: Type of prompts to use (EPISODIC or FACTUAL)
+            **kwargs: Additional arguments passed to curator.LLM
+        """
+        super().__init__(**kwargs)
+        self.prompt_type = prompt_type
+        
+        # Select appropriate prompt class based on type
+        if prompt_type == PromptType.EPISODIC:
+            self.prompt_class = OperatorPrompts
+        elif prompt_type == PromptType.FACTUAL:
+            self.prompt_class = FactualExtractionPrompts
+        else:
+            raise ValueError(f"Unsupported prompt type: {prompt_type}")
+
     def prompt(self, input):
         """Create a prompt for the LLM to generate a GSW."""
         return [
-            {"role": "system", "content": OperatorPrompts.SYSTEM_PROMPT},
+            {"role": "system", "content": self.prompt_class.SYSTEM_PROMPT},
             {
                 "role": "user",
-                "content": OperatorPrompts.USER_PROMPT_TEMPLATE.replace(
-                    "{{input_text}}", input["text"]
-                ).replace(
-                    "{{background_context}}", input.get("context", "")
+                "content": self.prompt_class.USER_PROMPT_TEMPLATE.format(
+                    input_text=input["text"],
+                    background_context=input.get("context", "")
                 ),
             },
         ]

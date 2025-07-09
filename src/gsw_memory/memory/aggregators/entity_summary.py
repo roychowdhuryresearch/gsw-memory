@@ -72,6 +72,7 @@ class EntitySummaryAggregator(BaseAggregator):
             "generation_params": {"temperature": 0.0, "max_tokens": 500},
         }
         self._entity_map = {entity.id: entity.name for entity in gsw.entity_nodes}
+        self._precomputed_summaries = None  # Cache for precomputed summaries
 
     def aggregate(self, query: str, **kwargs) -> AggregatedView:
         """
@@ -164,7 +165,13 @@ class EntitySummaryAggregator(BaseAggregator):
         if entity_ids is None:
             entity_ids = [entity.id for entity in self.gsw.entity_nodes]
 
-        return self._generate_summaries(entity_ids, include_space_time)
+        summaries = self._generate_summaries(entity_ids, include_space_time)
+        
+        # Cache the results if we generated summaries for all entities
+        if entity_ids == [entity.id for entity in self.gsw.entity_nodes]:
+            self._precomputed_summaries = summaries
+        
+        return summaries
 
     def _extract_entities_from_query(self, query: str) -> List[str]:
         """
