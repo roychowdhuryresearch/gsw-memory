@@ -9,16 +9,18 @@ import json
 import os
 from typing import Dict, List, Optional
 
-from .models import GSWStructure
+from .models import GSWStructure, SpaceNode, TimeNode
 from .operator_utils import (
     ContextGenerator,
     CorefOperator,
     GSWOperator,
     SpaceTimeLinker,
-    chunk_text,
     parse_gsw,
 )
-
+from .operator_utils.utils import estimate_tokens
+from .operator_utils.coref import process_single_coref_batch, process_chunked_coref_batch
+from .operator_utils.chunk import chunk_text_unified
+from .operator_utils.conversation import process_conversation_batch
 
 class GSWProcessor:
     """Main processor class that orchestrates the complete GSW generation pipeline."""
@@ -31,8 +33,11 @@ class GSWProcessor:
         enable_chunking: bool = True,
         enable_context: bool = True,
         enable_spacetime: bool = True,
+        enable_conversation: bool = True,
         chunk_size: int = 3,
         overlap: int = 1,
+        chunking_method: str = "sentence",  # "sentence" or "event_boundary"
+        event_chunking_params: Optional[Dict] = None,  # Parameters for event boundary chunking
         enable_visualization: bool = False,
     ):
         """Initialize the GSW processor with configuration options."""
@@ -42,8 +47,14 @@ class GSWProcessor:
         self.enable_chunking = enable_chunking
         self.enable_context = enable_context
         self.enable_spacetime = enable_spacetime
+        self.enable_conversation = enable_conversation
         self.chunk_size = chunk_size
         self.overlap = overlap
+        self.chunking_method = chunking_method
+        self.event_chunking_params = event_chunking_params or {
+            "window_size": 5000,
+            "overlap": 1000
+        }
         self.enable_visualization = enable_visualization
 
         # Check if visualization is requested but NetworkX is not available
@@ -69,6 +80,7 @@ class GSWProcessor:
         enable_chunking: Optional[bool] = None,
         enable_context: Optional[bool] = None,
         enable_spacetime: Optional[bool] = None,
+        enable_conversation: Optional[bool] = None,
         enable_visualization: Optional[bool] = None,
     ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
@@ -99,6 +111,9 @@ class GSWProcessor:
         do_spacetime = (
             enable_spacetime if enable_spacetime is not None else self.enable_spacetime
         )
+        do_conversation = (
+            enable_conversation if enable_conversation is not None else self.enable_conversation
+        )
         do_visualization = (
             enable_visualization
             if enable_visualization is not None
@@ -112,24 +127,36 @@ class GSWProcessor:
         # Step 1: Coreference Resolution (parallel across all documents)
         if do_coref:
             print(f"--- Processing Coreference for {len(documents)} documents ---")
-            coref_model = CorefOperator(
-                model_name=self.model_name,
-                generation_params={"temperature": 0.0, "max_tokens": 4000},
-            )
-
-            # Prepare coref inputs - one per document
-            coref_inputs = [
-                {"text": document, "idx": doc_idx}
-                for doc_idx, document in enumerate(documents)
-            ]
-
-            # Process all documents in parallel
-            coref_responses = coref_model(coref_inputs)
-
-            # Create resolved documents mapping
-            resolved_documents = {
-                resp["idx"]: resp["text"] for resp in coref_responses.dataset
-            }
+            
+            # Separate documents into short and long based on token count
+            short_docs = []
+            long_docs = []
+            
+            for doc_idx, document in enumerate(documents):
+                token_count = estimate_tokens(document, self.model_name)
+                print(f"Document {doc_idx}: {token_count} tokens")
+                
+                doc_info = {"text": document, "idx": doc_idx}
+                if token_count <= 3000:
+                    short_docs.append(doc_info)
+                else:
+                    long_docs.append(doc_info)
+            
+            # Process short documents in parallel
+            resolved_documents = {}
+            if short_docs:
+                print(f"Processing {len(short_docs)} short documents with single-pass coreference")
+                short_resolved = process_single_coref_batch(short_docs, self.model_name)
+                resolved_documents.update(short_resolved)
+            
+            # Process long documents with chunking in parallel
+            if long_docs:
+                print(f"Processing {len(long_docs)} long documents with chunked coreference")
+                long_resolved = process_chunked_coref_batch(long_docs, self.model_name)
+                resolved_documents.update(long_resolved)
+            
+            # Ensure documents are in the correct order
+            resolved_documents = {idx: resolved_documents[idx] for idx in range(len(documents))}
         else:
             resolved_documents = {idx: doc for idx, doc in enumerate(documents)}
 
@@ -139,9 +166,27 @@ class GSWProcessor:
             document_chunks = {}
 
             if do_chunking:
-                chunks = chunk_text(
-                    resolved_text, chunk_size=self.chunk_size, overlap=self.overlap
-                )
+                if self.chunking_method == "sentence":
+                    # Use sentence-based chunking
+                    chunks = chunk_text_unified(
+                        resolved_text,
+                        method="sentence",
+                        chunk_size=self.chunk_size,
+                        overlap=self.overlap
+                    )
+                elif self.chunking_method == "event_boundary":
+                    # Use event boundary-based chunking
+                    chunks = chunk_text_unified(
+                        resolved_text,
+                        method="event_boundary",
+                        model_name=self.model_name,
+                        window_size=self.event_chunking_params["window_size"],
+                        overlap=self.event_chunking_params["overlap"]
+                    )
+                    print(f"DEBUG: Chunking method: {self.chunking_method}")
+                    print(f"DEBUG: Number of chunks: {len(chunks)}")
+                else:
+                    raise ValueError(f"Unknown chunking method: {self.chunking_method}")
             else:
                 # No chunking: each document becomes one chunk
                 chunks = [
@@ -203,8 +248,6 @@ class GSWProcessor:
 
             # Update chunk data with context results
             for resp in context_responses.dataset:
-                print(f"DEBUG: Context response keys: {list(resp.keys())}")
-                print(f"DEBUG: Full response: {resp}")
                 doc_idx = resp["doc_idx"]
                 global_id = resp["global_id"]
                 all_documents_data[doc_idx][global_id]["context"] = resp["context"]
@@ -301,6 +344,20 @@ class GSWProcessor:
                         "full_response": resp.get("full_response", ""),
                     }
 
+        # Step 6.1: Integrate spacetime data into GSW structures
+        if do_spacetime:
+            print(f"--- Integrating Spacetime Data into GSW Structures ---")
+            self._integrate_spacetime_into_gsw_structures(all_documents_data)
+
+        # Step 6.5: Conversation Linking (parallel across all chunks)
+        if do_conversation:
+            print(f"--- Processing Conversation Links for {total_chunks} chunks ---")
+            all_documents_data = process_conversation_batch(
+                all_documents_data,
+                model_name=self.model_name,
+                generation_params={"temperature": 0.0, "max_tokens": 1500}
+            )
+
         # Step 7: Save outputs if requested
         if output_dir:
             self._save_outputs_unified(
@@ -309,9 +366,105 @@ class GSWProcessor:
                 resolved_documents=resolved_documents,
                 all_documents_data=all_documents_data,
                 do_visualization=do_visualization,
+                do_conversation=do_conversation,
             )
 
         return all_documents_data
+
+    def _integrate_spacetime_into_gsw_structures(self, all_documents_data: List[Dict[str, Dict]]) -> None:
+        """
+        Integrate spacetime data into GSW structures by creating SpaceNode and TimeNode objects.
+        
+        This converts the separate spacetime link data generated by SpaceTimeLinker
+        into actual nodes and edges in the GSW structure.
+        """
+        total_space_nodes = 0
+        total_time_nodes = 0
+        total_space_edges = 0
+        total_time_edges = 0
+        
+        for doc_idx, doc_chunks in enumerate(all_documents_data):
+            for chunk_id, chunk_data in doc_chunks.items():
+                gsw = chunk_data.get("gsw")
+                spacetime_data = chunk_data.get("spacetime", {})
+                
+                if not gsw or not spacetime_data:
+                    continue
+                
+                spatio_temporal_links = spacetime_data.get("spatio_temporal_links", [])
+                
+                if not spatio_temporal_links:
+                    continue
+                
+                # Track space and time nodes by tag_value to avoid duplicates
+                space_nodes_created = {}
+                time_nodes_created = {}
+                
+                for link in spatio_temporal_links:
+                    linked_entities = link.get("linked_entities", [])
+                    tag_type = link.get("tag_type", "")  # "spatial" or "temporal"
+                    tag_value = link.get("tag_value")  # actual location/time name
+                    
+                    if not linked_entities or not tag_type or tag_value is None:
+                        continue
+                    
+                    if tag_type == "spatial":
+                        # Create or reuse space node
+                        if tag_value in space_nodes_created:
+                            space_node_id = space_nodes_created[tag_value]
+                        else:
+                            space_node_id = f"sp_{len(gsw.space_nodes)}_{doc_idx}_{chunk_id}"
+                            space_node = SpaceNode(
+                                id=space_node_id,
+                                current_name=tag_value,
+                                name_history={chunk_id: tag_value},
+                                chunk_id=chunk_id,
+                                type="space"
+                            )
+                            gsw.add_space_node(space_node)
+                            space_nodes_created[tag_value] = space_node_id
+                            total_space_nodes += 1
+                        
+                        # Add edges for each linked entity
+                        for entity_id in linked_entities:
+                            # Check if entity exists in GSW
+                            if any(e.id == entity_id for e in gsw.entity_nodes):
+                                gsw.add_space_edge(entity_id, space_node_id)
+                                total_space_edges += 1
+                            else:
+                                print(f"Warning: Entity {entity_id} not found in GSW for space linking")
+                    
+                    elif tag_type == "temporal":
+                        # Create or reuse time node
+                        if tag_value in time_nodes_created:
+                            time_node_id = time_nodes_created[tag_value]
+                        else:
+                            time_node_id = f"tm_{len(gsw.time_nodes)}_{doc_idx}_{chunk_id}"
+                            time_node = TimeNode(
+                                id=time_node_id,
+                                current_name=tag_value,
+                                name_history={chunk_id: tag_value},
+                                chunk_id=chunk_id,
+                                type="time"
+                            )
+                            gsw.add_time_node(time_node)
+                            time_nodes_created[tag_value] = time_node_id
+                            total_time_nodes += 1
+                        
+                        # Add edges for each linked entity
+                        for entity_id in linked_entities:
+                            # Check if entity exists in GSW
+                            if any(e.id == entity_id for e in gsw.entity_nodes):
+                                gsw.add_time_edge(entity_id, time_node_id)
+                                total_time_edges += 1
+                            else:
+                                print(f"Warning: Entity {entity_id} not found in GSW for time linking")
+        
+        print(f"   ✅ Spacetime integration complete!")
+        print(f"      Space nodes created: {total_space_nodes}")
+        print(f"      Time nodes created: {total_time_nodes}")
+        print(f"      Space edges created: {total_space_edges}")
+        print(f"      Time edges created: {total_time_edges}")
 
     def _save_outputs_unified(
         self,
@@ -320,6 +473,7 @@ class GSWProcessor:
         resolved_documents: Dict[int, str],
         all_documents_data: List[Dict[str, Dict]],
         do_visualization: bool,
+        do_conversation: bool,
     ):
         """Save all outputs according to the unified chunk data structure."""
 
@@ -342,10 +496,14 @@ class GSWProcessor:
             chunks_dir = os.path.join(output_dir, "chunks")
             context_dir = os.path.join(output_dir, "context")
             spacetime_dir = os.path.join(output_dir, "spacetime")
+            if do_conversation:
+                conversation_dir = os.path.join(output_dir, "conversation")
             os.makedirs(coref_dir, exist_ok=True)
             os.makedirs(chunks_dir, exist_ok=True)
             os.makedirs(context_dir, exist_ok=True)
             os.makedirs(spacetime_dir, exist_ok=True)
+            if do_conversation:
+                os.makedirs(conversation_dir, exist_ok=True)
 
             # Save coreference results
             for doc_idx, resolved_text in resolved_documents.items():
@@ -391,6 +549,27 @@ class GSWProcessor:
                         with open(spacetime_file, "w") as f:
                             json.dump(chunk_data["spacetime"], f, indent=4)
 
+                    # Save conversation results (now part of main GSW structure)
+                    if do_conversation and chunk_data.get("has_conversation", False):
+                        doc_conversation_dir = os.path.join(
+                            conversation_dir, f"doc_{doc_idx_val}"
+                        )
+                        os.makedirs(doc_conversation_dir, exist_ok=True)
+                        conversation_file = os.path.join(
+                            doc_conversation_dir, f"conversation_{chunk_idx_val}.json"
+                        )
+                        # Extract conversation data from the main GSW structure
+                        gsw_data = chunk_data["gsw"].model_dump(mode="json")
+                        conversation_data = {
+                            "conversation_nodes": gsw_data.get("conversation_nodes", []),
+                            "conversation_participant_edges": gsw_data.get("conversation_participant_edges", []),
+                            "conversation_topic_edges": gsw_data.get("conversation_topic_edges", []),
+                            "conversation_space_edges": gsw_data.get("conversation_space_edges", []),
+                            "conversation_time_edges": gsw_data.get("conversation_time_edges", [])
+                        }
+                        with open(conversation_file, "w") as f:
+                            json.dump(conversation_data, f, indent=4)
+
         # Save combined results (all unified chunk data in one JSON)
         combined_file = os.path.join(output_dir, "gsw_results_combined.json")
         combined_data = {
@@ -412,6 +591,7 @@ class GSWProcessor:
                 chunk_export = chunk_data.copy()
                 if chunk_export["gsw"] is not None:
                     chunk_export["gsw"] = chunk_export["gsw"].model_dump(mode="json")
+                # Note: Conversation data is now part of the main GSW structure
                 combined_data["documents"][f"doc_{doc_idx}"][chunk_id] = chunk_export
 
         with open(combined_file, "w") as f:
@@ -446,6 +626,7 @@ class GSWProcessor:
                         raw_chunk_data["gsw"] = raw_chunk_data["gsw"].model_dump(
                             mode="json"
                         )
+                    # Note: Conversation data is now part of the main GSW structure
 
                     raw_file = os.path.join(doc_networks_raw_dir, f"{file_stem}.json")
                     with open(raw_file, "w") as f:
@@ -508,21 +689,33 @@ class GSWProcessor:
 if __name__ == "__main__":
     processor = GSWProcessor(
         model_name="gpt-4o",
-        enable_coref=False,
-        enable_chunking=False,
-        enable_context=False,
+        enable_coref=True,
+        enable_chunking=True,
+        enable_context=True,
+        enable_conversation=True,
+        chunking_method="event_boundary",
+        event_chunking_params={
+            "window_size": 5000,
+            "overlap": 1000
+        },
         chunk_size=3,
         overlap=1,
     )
 
-    test_document = """
-    John walked into the coffee shop. He ordered a large latte from the barista. 
-    The barista, whose name was Sarah, smiled at him. She prepared the drink carefully. 
-    John paid for his coffee and sat down at a table near the window. 
-    He opened his laptop and began working on his presentation.
-    """
+    # test_document = """
+    # John walked into the coffee shop. He ordered a large latte from the barista. 
+    # The barista, whose name was Sarah, smiled at him. She prepared the drink carefully. 
+    # John paid for his coffee and sat down at a table near the window. 
+    # He opened his laptop and began working on his presentation.
+    # """
+    
+    with open(
+        "/mnt/SSD1/nlp/gsw/new_data/corpus/narrativeqa_docs_10_raw_docs.json", "r"
+    ) as f:
+        chapters = json.load(f)
+    test_document = chapters['5']
 
     print("Processing single document...")
-    gsw_structures = processor.process_documents([test_document])
+    gsw_structures = processor.process_documents([test_document], output_dir="test_output", save_intermediates=True)
 
-    print(gsw_structures)
+    print("Processing complete! Results saved to test_output/ directory.")

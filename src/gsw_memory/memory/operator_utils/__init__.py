@@ -9,7 +9,9 @@ from .coref import CorefOperator
 from .context import ContextGenerator
 from .gsw_operator import GSWOperator
 from .spacetime import SpaceTimeLinker
-from .utils import chunk_text, extract_json_from_output, parse_gsw
+from .utils import extract_json_from_output, parse_gsw
+from .chunk import chunk_text, chunk_by_event_boundaries
+from .conversation import process_conversation_batch
 
 __all__ = [
     "CorefOperator",
@@ -17,6 +19,8 @@ __all__ = [
     "GSWOperator",
     "SpaceTimeLinker",
     "chunk_text",
+    "chunk_by_event_boundaries",
     "extract_json_from_output",
     "parse_gsw",
+    "process_conversation_batch",
 ]

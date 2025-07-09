@@ -373,3 +373,168 @@ Return a JSON object with a single key "spatio_temporal_links". The value should
 }}
 ```
 """
+
+class EventBoundaryPrompts:
+    """Prompts for event boundary detection."""
+    
+    SYSTEM_PROMPT = """You are an expert at analyzing narrative text and identifying where new events begin. 
+
+DEFINITION OF AN EVENT:
+An event is a distinct occurrence that has:
+- A unique PLACE (location/setting)
+- A unique TIME (temporal moment or period)  
+- Specific PARTICIPANTS (characters involved)
+
+Your task: Identify sentence indices where new events start in the provided text.
+
+RULES:
+1. ONLY return sentence indices that appear in the provided text (look at the [X] numbers)
+2. Don't include the first sentence index (text always starts with an event)
+3. Mark boundaries when there are changes in:
+   - Location/setting (place changes)
+   - Time shifts (temporal transitions)
+   - Participant groups (different characters become active)
+4. SPECIAL ATTENTION TO CONVERSATIONS:
+   - Keep complete conversations within the same event/chunk
+   - Only mark a boundary AFTER a conversation ends, not during it
+   - Look for dialogue end markers like speaker changes to different scenes
+5. Be conservative - only mark clear event boundaries
+6. Return "NONE" if no clear boundaries exist
+7. IMPORTANT: Only use indices that you can see in the brackets [X] in the text below
+
+OUTPUT FORMAT:
+Return a JSON list where each item contains:
+- "index": sentence number where new event starts
+- "event_summary": brief description of the new event starting at that sentence
+
+The text below has explicit sentence indices. For example:
+[0] First sentence here.
+[1] Second sentence here.
+[2] Third sentence here.
+
+Example response: 
+[
+  {"index": 5, "event_summary": "Characters move to kitchen for breakfast"},
+  {"index": 12, "event_summary": "Phone conversation with mother begins"},
+  {"index": 18, "event_summary": "Scene shifts to office workplace"}
+]
+
+Or return: "NONE" if no clear boundaries exist
+"""
+    USER_PROMPT_TEMPLATE = """
+Analyze this text and identify sentence indices where new events begin:
+
+{text}
+"""
+
+class ConversationAnalysisPrompts:
+    """Prompts for conversation analysis."""
+    
+    SYSTEM_PROMPT = """You are a helpful assistant that analyzes conversations and dialogue in text.
+
+You will be given a text chunk that contains dialogue/conversation and the current GSW (semantic map) structure.
+
+Your task is to extract detailed information about the conversation including participants, topics, location, timing, and motivation.
+"""
+
+    USER_PROMPT_TEMPLATE = """
+**Text Chunk:**
+```
+{input_data['text_chunk_content']}
+```
+
+**Current GSW Structure:**
+```json
+{json.dumps(input_data['gsw_structure'], indent=2)}
+```
+
+**Task:**
+Analyze the conversation in the text chunk and extract the following information:
+
+1. **Participants**: Identify who is participating in the conversation (speaking, listening, or present)
+2. **Topics**: What/who is being discussed
+3. **Context**: When and where the conversation takes place
+4. **Purpose**: Why is this conversation happening
+5. **Summary**: Brief overview of the conversation
+6. **Participant Roles**: How each participant contributes
+
+**Instructions:**
+- Use existing entity IDs from the GSW structure when possible
+- For new speakers not in the existing entities, you can reference them by name (we'll create entities for them)
+- Link to existing space/time nodes when the conversation occurs in an established location/time
+- Distinguish between conversation participants (who speak/listen) and conversation topics (what/who is discussed)
+
+**Notes:**
+- Set `location_id` and `time_id` to null if no existing space/time nodes apply
+- Include entities in `topics_entity` only if they are subjects of discussion, not participants
+- In `participants`, use existing entity IDs when available, or speaker names for new entities
+- For `new_entities`, infer appropriate roles and states from the conversation context
+
+**Example Response:**
+{{
+    "conversation_node": {{
+        "id": "cv_0",
+        "chunk_id": "example_chunk_id",
+        "participants": ["e2", "e3", "e4"],
+        "topics_entity": ["e1", "e6"],
+        "topics_general": ["Chris's medical condition", "war news"],
+        "location_id": "sp_0",
+        "time_id": "tm_2",
+        "motivation": "Mrs Grey tries to inform Kitty of Chris's condition and whereabouts",
+        "summary": "Mrs Grey arrives to tell Kitty that Chris is alive in a hospital in Boulogne. Kitty is skeptical and questions her motives.",
+        "participant_summaries": {{
+            "e2": "Bearer of news; anxious but determined to deliver information",
+            "e3": "Wife receiving news; defensive and interrogative", 
+            "e4": "Silent observer; embarrassed by the confrontation"
+        }}
+    }},
+    "new_entities": [
+        {{
+            "name": "Doctor Smith",
+            "roles": [
+                {{
+                    "role": "medical professional",
+                    "states": ["treating Chris", "mentioned in conversation"]
+                }}
+            ]
+        }}
+    ]
+}}
+"""
+
+class ConversationDetectionPrompts:
+    SYSTEM_PROMPT = """You are a helpful assistant that identifies whether a text chunk contains dialogue or conversation.
+
+You will be given a text chunk and need to determine if it contains any dialogue between characters.
+
+Dialogue includes:
+- Direct speech with quotation marks
+- Reported dialogue (e.g., "he said that...")
+- Back-and-forth exchanges between characters
+- Internal monologue presented as dialogue
+
+Your task is to classify whether the chunk is "conversation-heavy" (contains dialogue).
+"""
+
+    USER_PROMPT_TEMPLATE = """
+**Text Chunk:**
+```
+{input_data['text_chunk_content']}
+```
+
+**Task:**
+Analyze the text chunk and determine if it contains dialogue or conversation between characters.
+
+Provide:
+- `has_conversation`: True if the chunk contains dialogue/conversation, False otherwise
+- `confidence`: Your confidence in this classification (0.0-1.0)
+- `reasoning`: Brief explanation for your decision
+
+**Example Response:**
+{{
+    "has_conversation": true,
+    "confidence": 0.9,
+    "reasoning": "Contains direct dialogue with quotation marks between multiple characters discussing Chris's condition"
+}}
+"""
+    

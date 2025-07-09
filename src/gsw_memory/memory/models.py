@@ -143,6 +143,23 @@ class GSWStructure(BaseModel):
     time_edges: List[Tuple[str, str]] = Field(
         default_factory=list, description="Entity-time connections"
     )
+    
+    # Conversation nodes and edges
+    conversation_nodes: List[Dict] = Field(
+        default_factory=list, description="Conversation nodes with participants, topics, etc."
+    )
+    conversation_participant_edges: List[List[str]] = Field(
+        default_factory=list, description="Entity-conversation participant connections"
+    )
+    conversation_topic_edges: List[List[str]] = Field(
+        default_factory=list, description="Entity-conversation topic connections"
+    )
+    conversation_space_edges: List[List[str]] = Field(
+        default_factory=list, description="Conversation-space connections"
+    )
+    conversation_time_edges: List[List[str]] = Field(
+        default_factory=list, description="Conversation-time connections"
+    )
 
     @classmethod
     def from_json(cls, json_data: dict) -> "GSWStructure":
@@ -159,6 +176,11 @@ class GSWStructure(BaseModel):
             similarity_edges=self.similarity_edges.copy(),
             space_edges=self.space_edges.copy(),
             time_edges=self.time_edges.copy(),
+            conversation_nodes=self.conversation_nodes.copy(),
+            conversation_participant_edges=self.conversation_participant_edges.copy(),
+            conversation_topic_edges=self.conversation_topic_edges.copy(),
+            conversation_space_edges=self.conversation_space_edges.copy(),
+            conversation_time_edges=self.conversation_time_edges.copy(),
         )
 
     # Entity management methods
@@ -237,6 +259,50 @@ class GSWStructure(BaseModel):
             if time.id == time_id:
                 return time
         return None
+
+    # Conversation management methods
+    def add_conversation_node(self, conversation_data: Dict) -> None:
+        """Add a new conversation node to the GSW structure."""
+        conv_id = conversation_data.get("id")
+        if not conv_id:
+            return
+        
+        # Check if conversation already exists
+        if any(conv.get("id") == conv_id for conv in self.conversation_nodes):
+            return
+        
+        self.conversation_nodes.append(conversation_data)
+
+    def get_conversation_by_id(self, conv_id: str) -> Optional[Dict]:
+        """Find a conversation node by its ID."""
+        for conv in self.conversation_nodes:
+            if conv.get("id") == conv_id:
+                return conv
+        return None
+
+    def add_conversation_participant_edge(self, entity_id: str, conv_id: str) -> None:
+        """Add a participant edge between an entity and a conversation."""
+        edge = [entity_id, conv_id]
+        if edge not in self.conversation_participant_edges:
+            self.conversation_participant_edges.append(edge)
+
+    def add_conversation_topic_edge(self, entity_id: str, conv_id: str) -> None:
+        """Add a topic edge between an entity and a conversation."""
+        edge = [entity_id, conv_id]
+        if edge not in self.conversation_topic_edges:
+            self.conversation_topic_edges.append(edge)
+
+    def add_conversation_space_edge(self, conv_id: str, space_id: str) -> None:
+        """Add a space edge between a conversation and a space node."""
+        edge = [conv_id, space_id]
+        if edge not in self.conversation_space_edges:
+            self.conversation_space_edges.append(edge)
+
+    def add_conversation_time_edge(self, conv_id: str, time_id: str) -> None:
+        """Add a time edge between a conversation and a time node."""
+        edge = [conv_id, time_id]
+        if edge not in self.conversation_time_edges:
+            self.conversation_time_edges.append(edge)
 
     # Edge management
     def add_space_edge(self, entity_node_id: str, space_node_id: str) -> None:
@@ -409,6 +475,15 @@ class GSWStructure(BaseModel):
                 entity_connections[entity_id] += 1
 
         for entity_id, _ in self.time_edges:
+            if entity_id in entity_connections:
+                entity_connections[entity_id] += 1
+
+        # Count conversation connections
+        for entity_id, _ in self.conversation_participant_edges:
+            if entity_id in entity_connections:
+                entity_connections[entity_id] += 1
+
+        for entity_id, _ in self.conversation_topic_edges:
             if entity_id in entity_connections:
                 entity_connections[entity_id] += 1
 

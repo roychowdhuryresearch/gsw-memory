@@ -6,9 +6,22 @@ including text chunking, JSON extraction, and GSW parsing.
 """
 
 import json
+import tiktoken
 from typing import Dict, List
 
 from ..models import EntityNode, GSWStructure, Question, Role, VerbPhraseNode
+
+
+def estimate_tokens(text: str, model: str = "gpt-4o") -> int:
+    """Estimate the number of tokens in a text string"""
+    try:
+        # Get the tokenizer for the model
+        encoding = tiktoken.encoding_for_model(model)
+    except KeyError:
+        # Fall back to cl100k_base encoding (used by GPT-4 and newer models)
+        encoding = tiktoken.get_encoding("cl100k_base")
+    
+    return len(encoding.encode(text))
 
 
 def extract_json_from_output(text: str) -> dict:
@@ -73,43 +86,6 @@ def parse_gsw(text: str) -> GSWStructure:
         raise ValueError(f"Missing required field: {e}")
 
 
-def chunk_text(text: str, chunk_size: int = 3, overlap: int = 1) -> List[Dict]:
-    """Split text into overlapping chunks.
 
-    Args:
-        text: The input text to chunk
-        chunk_size: Number of sentences per chunk
-        overlap: Number of sentences to overlap between chunks
 
-    Returns:
-        List of dictionaries containing chunked text and indices
-    """
-    # Split into sentences - basic split on ., ! and ?
-    sentences = [
-        s.strip()
-        for s in text.replace("!", ".").replace("?", ".").split(".")
-        if s.strip()
-    ]
 
-    chunks = []
-    i = 0
-    chunk_id = 0
-
-    while i < len(sentences):
-        # Get chunk_size sentences starting from i
-        chunk_sentences = sentences[i : i + chunk_size]
-        if chunk_sentences:  # Only add if we have sentences
-            chunks.append(
-                {
-                    "text": ". ".join(chunk_sentences) + ".",
-                    "idx": chunk_id,
-                    "start_sentence": i,
-                    "end_sentence": i + len(chunk_sentences),
-                }
-            )
-            chunk_id += 1
-
-        # Move forward by chunk_size - overlap sentences
-        i += chunk_size - overlap
-
-    return chunks

@@ -9,6 +9,7 @@ import json
 import os
 import uuid
 from datetime import datetime
+from tqdm import tqdm
 from typing import Dict, List, Optional, Union
 
 from .models import GSWStructure
@@ -135,6 +136,11 @@ class Reconciler:
                 new_chunk_text, matched_old_entity_ids, new_gsw.entity_nodes, chunk_id
             )
 
+        # Step 11: Handle conversation nodes and edges
+        self._reconcile_conversation_nodes_and_edges(
+            new_gsw, entity_merge_map, space_merge_map, time_merge_map
+        )
+
         return self.global_memory
 
     def _prepare_new_gsw(self, new_gsw: GSWStructure, chunk_id: str) -> None:
@@ -215,6 +221,87 @@ class Reconciler:
                     else:
                         updated_answers.append(answer)
                 question.answers = updated_answers
+
+        # Process conversation nodes and create ID mapping
+        conv_id_mapping = {}
+        for conv_node in new_gsw.conversation_nodes:
+            original_conv_id = conv_node.get("id", "")
+            if original_conv_id:
+                global_conv_id = f"{chunk_id}::{original_conv_id}"
+                conv_id_mapping[original_conv_id] = global_conv_id
+                conv_node["id"] = global_conv_id
+                if not conv_node.get("chunk_id"):
+                    conv_node["chunk_id"] = chunk_id
+                
+                # Update participant entity IDs to global IDs
+                if "participants" in conv_node:
+                    updated_participants = []
+                    for participant_id in conv_node["participants"]:
+                        global_participant_id = id_mapping.get(participant_id, participant_id)
+                        updated_participants.append(global_participant_id)
+                    conv_node["participants"] = updated_participants
+                
+                # Update topics_entity IDs to global IDs
+                if "topics_entity" in conv_node:
+                    updated_topics_entity = []
+                    for topic_entity_id in conv_node["topics_entity"]:
+                        global_topic_entity_id = id_mapping.get(topic_entity_id, topic_entity_id)
+                        updated_topics_entity.append(global_topic_entity_id)
+                    conv_node["topics_entity"] = updated_topics_entity
+                
+                # Update participant_summaries keys to global IDs
+                if "participant_summaries" in conv_node and conv_node["participant_summaries"]:
+                    updated_participant_summaries = {}
+                    for original_entity_id, summary in conv_node["participant_summaries"].items():
+                        # Skip special keys like "TEXT:me"
+                        if original_entity_id.startswith("TEXT:"):
+                            updated_participant_summaries[original_entity_id] = summary
+                        else:
+                            global_entity_id = id_mapping.get(original_entity_id, original_entity_id)
+                            updated_participant_summaries[global_entity_id] = summary
+                    conv_node["participant_summaries"] = updated_participant_summaries
+                
+                # Update location_id and time_id to global IDs if they exist
+                if "location_id" in conv_node and conv_node["location_id"]:
+                    global_location_id = id_mapping.get(conv_node["location_id"], conv_node["location_id"])
+                    conv_node["location_id"] = global_location_id
+                
+                if "time_id" in conv_node and conv_node["time_id"]:
+                    global_time_id = id_mapping.get(conv_node["time_id"], conv_node["time_id"])
+                    conv_node["time_id"] = global_time_id
+
+        # Update conversation edges with global IDs
+        new_conv_participant_edges = []
+        for edge in new_gsw.conversation_participant_edges:
+            if len(edge) >= 2:
+                entity_id = id_mapping.get(edge[0], edge[0])
+                conv_id = conv_id_mapping.get(edge[1], edge[1])
+                new_conv_participant_edges.append([entity_id, conv_id])
+        new_gsw.conversation_participant_edges = new_conv_participant_edges
+
+        new_conv_topic_edges = []
+        for edge in new_gsw.conversation_topic_edges:
+            if len(edge) >= 2:
+                entity_id = id_mapping.get(edge[0], edge[0])
+                conv_id = conv_id_mapping.get(edge[1], edge[1])
+                new_conv_topic_edges.append([entity_id, conv_id])
+        new_gsw.conversation_topic_edges = new_conv_topic_edges
+
+        new_conv_space_edges = []
+        for edge in new_gsw.conversation_space_edges:
+            if len(edge) >= 2:
+                conv_id = conv_id_mapping.get(edge[0], edge[0])
+                space_id = id_mapping.get(edge[1], edge[1])
+                new_conv_space_edges.append([conv_id, space_id])
+        new_gsw.conversation_space_edges = new_conv_space_edges
+
+        new_conv_time_edges = []
+        for edge in new_gsw.conversation_time_edges:
+            if len(edge) >= 2:
+                conv_id = conv_id_mapping.get(edge[0], edge[0])
+                time_id = id_mapping.get(edge[1], edge[1])
+                new_conv_time_edges.append([conv_id, time_id])
+        new_gsw.conversation_time_edges = new_conv_time_edges
 
     def _merge_entities(self, verified_entity_pairs, new_gsw):
         """Merge entities and return mapping dictionaries."""
@@ -375,6 +462,120 @@ class Reconciler:
         except Exception as e:
             print(f"Error during question resolution: {e}")
 
+    def _reconcile_conversation_nodes_and_edges(
+        self, new_gsw, entity_merge_map, space_merge_map, time_merge_map
+    ):
+        """Handle conversation nodes and edges reconciliation."""
+        # Add conversation nodes to global memory with updated entity references
+        for conv_node in new_gsw.conversation_nodes:
+            conv_id = conv_node.get("id")
+            if conv_id and not self.global_memory.get_conversation_by_id(conv_id):
+                # Create a copy of the conversation node to avoid modifying the original
+                updated_conv_node = conv_node.copy()
+                
+                # Update participant entity IDs to final merged IDs
+                if "participants" in updated_conv_node:
+                    final_participants = []
+                    for participant_id in updated_conv_node["participants"]:
+                        final_participant_id = entity_merge_map.get(participant_id, participant_id)
+                        final_participants.append(final_participant_id)
+                    updated_conv_node["participants"] = final_participants
+                
+                # Update topics_entity IDs to final merged IDs
+                if "topics_entity" in updated_conv_node:
+                    final_topics_entity = []
+                    for topic_entity_id in updated_conv_node["topics_entity"]:
+                        final_topic_entity_id = entity_merge_map.get(topic_entity_id, topic_entity_id)
+                        final_topics_entity.append(final_topic_entity_id)
+                    updated_conv_node["topics_entity"] = final_topics_entity
+                
+                # Update participant_summaries keys to final merged IDs
+                if "participant_summaries" in updated_conv_node and updated_conv_node["participant_summaries"]:
+                    final_participant_summaries = {}
+                    for entity_id, summary in updated_conv_node["participant_summaries"].items():
+                        # Skip special keys like "TEXT:me"
+                        if entity_id.startswith("TEXT:"):
+                            final_participant_summaries[entity_id] = summary
+                        else:
+                            final_entity_id = entity_merge_map.get(entity_id, entity_id)
+                            final_participant_summaries[final_entity_id] = summary
+                    updated_conv_node["participant_summaries"] = final_participant_summaries
+                
+                # Update location_id and time_id to final merged IDs
+                if "location_id" in updated_conv_node and updated_conv_node["location_id"]:
+                    final_location_id = space_merge_map.get(updated_conv_node["location_id"], updated_conv_node["location_id"])
+                    updated_conv_node["location_id"] = final_location_id
+                
+                if "time_id" in updated_conv_node and updated_conv_node["time_id"]:
+                    final_time_id = time_merge_map.get(updated_conv_node["time_id"], updated_conv_node["time_id"])
+                    updated_conv_node["time_id"] = final_time_id
+                
+                self.global_memory.add_conversation_node(updated_conv_node)
+
+        # Update conversation participant edges with final entity IDs
+        existing_global_conv_participant_edges = set(
+            tuple(edge) for edge in self.global_memory.conversation_participant_edges
+        )
+        for edge in new_gsw.conversation_participant_edges:
+            if len(edge) >= 2:
+                final_entity_id = entity_merge_map.get(edge[0], edge[0])
+                conv_id = edge[1]
+                final_edge = [final_entity_id, conv_id]
+                
+                if tuple(final_edge) not in existing_global_conv_participant_edges:
+                    self.global_memory.add_conversation_participant_edge(
+                        final_entity_id, conv_id
+                    )
+                    existing_global_conv_participant_edges.add(tuple(final_edge))
+
+        # Update conversation topic edges with final entity IDs
+        existing_global_conv_topic_edges = set(
+            tuple(edge) for edge in self.global_memory.conversation_topic_edges
+        )
+        for edge in new_gsw.conversation_topic_edges:
+            if len(edge) >= 2:
+                final_entity_id = entity_merge_map.get(edge[0], edge[0])
+                conv_id = edge[1]
+                final_edge = [final_entity_id, conv_id]
+                
+                if tuple(final_edge) not in existing_global_conv_topic_edges:
+                    self.global_memory.add_conversation_topic_edge(
+                        final_entity_id, conv_id
+                    )
+                    existing_global_conv_topic_edges.add(tuple(final_edge))
+
+        # Update conversation space edges with final space IDs
+        existing_global_conv_space_edges = set(
+            tuple(edge) for edge in self.global_memory.conversation_space_edges
+        )
+        for edge in new_gsw.conversation_space_edges:
+            if len(edge) >= 2:
+                conv_id = edge[0]
+                final_space_id = space_merge_map.get(edge[1], edge[1])
+                final_edge = [conv_id, final_space_id]
+                
+                if tuple(final_edge) not in existing_global_conv_space_edges:
+                    self.global_memory.add_conversation_space_edge(
+                        conv_id, final_space_id
+                    )
+                    existing_global_conv_space_edges.add(tuple(final_edge))
+
+        # Update conversation time edges with final time IDs
+        existing_global_conv_time_edges = set(
+            tuple(edge) for edge in self.global_memory.conversation_time_edges
+        )
+        for edge in new_gsw.conversation_time_edges:
+            if len(edge) >= 2:
+                conv_id = edge[0]
+                final_time_id = time_merge_map.get(edge[1], edge[1])
+                final_edge = [conv_id, final_time_id]
+                
+                if tuple(final_edge) not in existing_global_conv_time_edges:
+                    self.global_memory.add_conversation_time_edge(
+                        conv_id, final_time_id
+                    )
+                    existing_global_conv_time_edges.add(tuple(final_edge))
+
     def get_statistics(self) -> dict:
         """Get statistics about the current global memory."""
         if not self.global_memory:
@@ -407,6 +608,11 @@ class Reconciler:
             "time_nodes": len(self.global_memory.time_nodes),
             "space_edges": len(self.global_memory.space_edges),
             "time_edges": len(self.global_memory.time_edges),
+            "conversation_nodes": len(self.global_memory.conversation_nodes),
+            "conversation_participant_edges": len(self.global_memory.conversation_participant_edges),
+            "conversation_topic_edges": len(self.global_memory.conversation_topic_edges),
+            "conversation_space_edges": len(self.global_memory.conversation_space_edges),
+            "conversation_time_edges": len(self.global_memory.conversation_time_edges),
         }
 
 
@@ -469,7 +675,7 @@ def _reconcile_document_chunks(
     Returns:
         Reconciled GSWStructure for the document
     """
-    for chunk_data in doc_chunks:
+    for chunk_data in tqdm(doc_chunks, desc="Reconciling chunks"):
         reconciler.reconcile(
             new_gsw=chunk_data["gsw"],
             chunk_id=chunk_data["chunk_id"],

@@ -7,6 +7,7 @@ dynamic query-driven generation with efficient batching.
 """
 
 import json
+import os
 from collections import defaultdict
 from typing import Any, Dict, List, Optional
 
@@ -72,6 +73,7 @@ class EntitySummaryAggregator(BaseAggregator):
             "generation_params": {"temperature": 0.0, "max_tokens": 500},
         }
         self._entity_map = {entity.id: entity.name for entity in gsw.entity_nodes}
+        self._precomputed_summaries = None  # Cache for precomputed summaries
 
     def aggregate(self, query: str, **kwargs) -> AggregatedView:
         """
@@ -138,7 +140,8 @@ class EntitySummaryAggregator(BaseAggregator):
         return "\n\n".join(context_parts)
 
     def precompute_summaries(
-        self, entity_ids: Optional[List[str]] = None, include_space_time: bool = False
+        self, entity_ids: Optional[List[str]] = None, include_space_time: bool = False,
+        cache_file: Optional[str] = None, force_recompute: bool = False
     ) -> Dict[str, Dict]:
         """
         Pre-compute summaries for multiple entities (static generation).
@@ -146,12 +149,24 @@ class EntitySummaryAggregator(BaseAggregator):
         Args:
             entity_ids: List of entity IDs to process (None for all entities)
             include_space_time: Whether to include spatial/temporal information
+            cache_file: Optional file path to save/load summaries cache
+            force_recompute: If True, ignore existing cache and recompute
 
         Returns:
             Dictionary mapping entity IDs to their summary data
         """
+        # Try to load from file cache first (if not forcing recompute)
+        if cache_file and not force_recompute and os.path.exists(cache_file):
+            try:
+                loaded_summaries = self.load_summaries_from_file(cache_file)
+                if loaded_summaries:
+                    self._precomputed_summaries = loaded_summaries
+                    print(f"Loaded {len(loaded_summaries)} summaries from cache file: {cache_file}")
+            except Exception as e:
+                print(f"Warning: Failed to load cache file {cache_file}: {e}")
+
         # If we already have precomputed summaries, return those instead of regenerating
-        if self._precomputed_summaries is not None:
+        if self._precomputed_summaries is not None and not force_recompute:
             if entity_ids is None:
                 return self._precomputed_summaries
             else:
@@ -164,7 +179,23 @@ class EntitySummaryAggregator(BaseAggregator):
         if entity_ids is None:
             entity_ids = [entity.id for entity in self.gsw.entity_nodes]
 
-        return self._generate_summaries(entity_ids, include_space_time)
+        # Generate and cache summaries
+        generated_summaries = self._generate_summaries(entity_ids, include_space_time)
+        
+        # Cache the summaries for future use (only if generating all entities)
+        all_entity_ids = [entity.id for entity in self.gsw.entity_nodes]
+        if entity_ids == all_entity_ids:
+            self._precomputed_summaries = generated_summaries
+            
+            # Save to file cache if specified
+            if cache_file:
+                try:
+                    self.save_summaries_to_file(generated_summaries, cache_file)
+                    print(f"Saved {len(generated_summaries)} summaries to cache file: {cache_file}")
+                except Exception as e:
+                    print(f"Warning: Failed to save cache file {cache_file}: {e}")
+        
+        return generated_summaries
 
     def _extract_entities_from_query(self, query: str) -> List[str]:
         """
@@ -503,3 +534,57 @@ class EntitySummaryAggregator(BaseAggregator):
             prompt_text.append("")  # Add space between chunks
 
         return "\n".join(prompt_text)
+
+    def save_summaries_to_file(self, summaries: Dict[str, Dict], file_path: str) -> None:
+        """
+        Save precomputed summaries to a JSON file.
+
+        Args:
+            summaries: Dictionary mapping entity IDs to summary data
+            file_path: Path to save the file
+        """
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        
+        # Add metadata to the saved data
+        cache_data = {
+            "metadata": {
+                "aggregator_type": "entity_summary",
+                "total_summaries": len(summaries),
+                "llm_config": self.llm_config
+            },
+            "summaries": summaries
+        }
+        
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(cache_data, f, indent=2, ensure_ascii=False)
+
+    def load_summaries_from_file(self, file_path: str) -> Optional[Dict[str, Dict]]:
+        """
+        Load precomputed summaries from a JSON file.
+
+        Args:
+            file_path: Path to load the file from
+
+        Returns:
+            Dictionary mapping entity IDs to summary data, or None if loading fails
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+            
+            # Validate the cache data structure
+            if "summaries" not in cache_data:
+                print(f"Warning: Invalid cache file format in {file_path}")
+                return None
+                
+            metadata = cache_data.get("metadata", {})
+            if metadata.get("aggregator_type") != "entity_summary":
+                print(f"Warning: Cache file {file_path} is not for entity summaries")
+                return None
+                
+            return cache_data["summaries"]
+            
+        except Exception as e:
+            print(f"Error loading cache file {file_path}: {e}")
+            return None
