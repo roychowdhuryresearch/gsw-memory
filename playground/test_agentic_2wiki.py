@@ -23,7 +23,7 @@ load_dotenv()
 
 # Configuration
 LOAD_BASE_LOGS = "../logs/2wiki_eval_20250707_170220"  # Existing logs with reconciled GSW
-USE_SUBSET = True  # Test on subset of questions
+USE_SUBSET = True # Test on subset of questions
 
 
 def setup_logging():
@@ -55,7 +55,7 @@ def load_existing_data():
         questions_data = json.load(f)
     
     if USE_SUBSET:
-        questions_data = questions_data[:5]
+        questions_data = questions_data[:10]
         print(f"Using subset: {len(questions_data)} questions")
     
     return reconciled_gsw, questions_data
