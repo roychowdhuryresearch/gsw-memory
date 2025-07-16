@@ -316,6 +316,7 @@ class GSWProcessor:
                 resolved_documents=resolved_documents,
                 all_documents_data=all_documents_data,
                 do_visualization=do_visualization,
+                batch_idx=batch_idx,
             )
 
         return all_documents_data
@@ -327,6 +328,7 @@ class GSWProcessor:
         resolved_documents: Dict[int, str],
         all_documents_data: List[Dict[str, Dict]],
         do_visualization: bool,
+        batch_idx: int,
     ):
         """Save all outputs according to the unified chunk data structure."""
 
@@ -413,13 +415,13 @@ class GSWProcessor:
 
         # Convert all_documents_data to JSON-serializable format
         for doc_idx, doc_chunks in enumerate(all_documents_data):
-            combined_data["documents"][f"doc_{doc_idx}"] = {}
+            combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"] = {} # Fixed doc_idx to account for batching
             for chunk_id, chunk_data in doc_chunks.items():
                 # Convert GSW structure to dict if it exists
                 chunk_export = chunk_data.copy()
                 if chunk_export["gsw"] is not None:
                     chunk_export["gsw"] = chunk_export["gsw"].model_dump(mode="json")
-                combined_data["documents"][f"doc_{doc_idx}"][chunk_id] = chunk_export
+                combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"][chunk_id] = chunk_export # Fixed doc_idx to account for batching
 
         with open(combined_file, "w") as f:
             json.dump(combined_data, f, indent=2)
