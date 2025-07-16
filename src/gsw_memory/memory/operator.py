@@ -73,6 +73,7 @@ class GSWProcessor:
         enable_context: Optional[bool] = None,
         enable_spacetime: Optional[bool] = None,
         enable_visualization: Optional[bool] = None,
+        batch_idx: Optional[int] = 1,
     ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
 
@@ -85,6 +86,7 @@ class GSWProcessor:
             enable_context: Override class setting for context generation
             enable_spacetime: Override class setting for spacetime linking
             enable_visualization: Override class setting for visualization
+            batch_idx: Index of the batch being processed if processing in batches else 1 for single batch processing
 
         Returns:
             List of dictionaries, one per document. Each dict contains chunk_id -> chunk_data mappings.
@@ -122,7 +124,7 @@ class GSWProcessor:
 
             # Prepare coref inputs - one per document
             coref_inputs = [
-                {"text": document, "idx": doc_idx}
+                {"text": document, "idx": len(documents) * (batch_idx - 1) + doc_idx}
                 for doc_idx, document in enumerate(documents)
             ]
 
@@ -134,7 +136,7 @@ class GSWProcessor:
                 resp["idx"]: resp["text"] for resp in coref_responses.dataset
             }
         else:
-            resolved_documents = {idx: doc for idx, doc in enumerate(documents)}
+            resolved_documents = {len(documents) * (batch_idx - 1) + idx: doc for idx, doc in enumerate(documents)}
 
         # Step 2: Chunking and Initialize Chunk Data Structure
         print("--- Chunking Documents and Initializing Data Structure ---")
