@@ -22,8 +22,9 @@ from gsw_memory.utils.loaders import load_from_logs
 load_dotenv()
 
 # Configuration
-LOAD_BASE_LOGS = "../logs/2wiki_eval_20250707_170220"  # Existing logs with reconciled GSW
+LOAD_BASE_LOGS = "../logs/full_2wiki_corpus_20250710_202211"  # Existing logs with reconciled GSW
 USE_SUBSET = True # Test on subset of questions
+TEST_MODE = "multi_file"  # Options: "reconciled", "multi_file", "both"
 
 
 def setup_logging():
@@ -87,21 +88,26 @@ def test_gsw_tools(gsw_tools):
                 print(f"  Example: {context['questions'][0]['question_text'][:80]}...")
 
 
-def run_agentic_evaluation(reconciled_gsw, questions_data, log_dir):
-    """Run agentic Q&A evaluation on 2wiki questions."""
-    print("\n=== Running Agentic Q&A Evaluation ===")
+def run_agentic_evaluation_reconciled(questions_data, log_dir):
+    """Run agentic Q&A evaluation using reconciled GSW."""
+    print("\n=== Running Agentic Q&A Evaluation (Reconciled) ===")
     
-    # Initialize tools and agent
-    gsw_tools = GSWTools(reconciled_gsw)
+    # Initialize tools and agent with reconciled file
+    reconciled_file_path = os.path.join(LOAD_BASE_LOGS, "reconciled_output", "reconciled", "global_reconciled.json")
+    gsw_tools = GSWTools(reconciled_file_path)
+    
+    # Build search index explicitly for better performance
+    gsw_tools.build_index()
     agent = AgenticAnsweringAgent(
-        model_name="gpt-4o",
+        model_name="gpt-4o-mini",
         generation_params={"temperature": 0.0},
         max_iterations=10
     )
     
     # Create tool dictionary for agent
     tools = {
-        "search_gsw": gsw_tools.search_gsw,
+        # "search_gsw": gsw_tools.search_gsw,
+        "search_gsw_bm25": gsw_tools.search_gsw_bm25,
         "get_entity_context": gsw_tools.get_entity_context
     }
     
@@ -224,6 +230,101 @@ def run_agentic_evaluation(reconciled_gsw, questions_data, log_dir):
     return overall_metrics, detailed_results
 
 
+def run_agentic_evaluation_multi_file(questions_data, log_dir):
+    """Run agentic Q&A evaluation using multiple individual GSW files (no reconciliation)."""
+    print("\n=== Running Agentic Q&A Evaluation (Multi-File) ===")
+    
+    # Get all individual GSW files with global IDs
+    import glob
+    gsw_files_pattern = os.path.join(LOAD_BASE_LOGS, "gsw_output_global_ids", "networks", "doc_*", "gsw_*_0.json")
+    gsw_files = glob.glob(gsw_files_pattern)
+    
+    # if USE_SUBSET:
+        # Use only first 10 files for testing
+    gsw_files = gsw_files
+    print(f"Using subset: {len(gsw_files)} GSW files")
+    
+    print(f"Loading {len(gsw_files)} individual GSW files...")
+    
+    # Initialize tools and agent with multiple files
+    gsw_tools = GSWTools(gsw_files)
+    
+    # Build search index explicitly (this may take time with many files)
+    gsw_tools.build_index()
+    agent = AgenticAnsweringAgent(
+        model_name="gpt-4o",
+        generation_params={"temperature": 0.0},
+        max_iterations=10
+    )
+    
+    # Create tool dictionary for agent
+    tools = {
+        "search_gsw": gsw_tools.search_gsw,
+        "search_gsw_bm25": gsw_tools.search_gsw_bm25,
+        "get_entity_context": gsw_tools.get_entity_context
+    }
+    
+    # Test tools first
+    test_gsw_tools(gsw_tools)
+    
+    # Extract questions and gold answers
+    questions = [item["question"] for item in questions_data]
+    question_types = [item["type"] for item in questions_data]
+    
+    gold_answers_list = []
+    for item in questions_data:
+        if isinstance(item["answer"], str):
+            gold_answers = [item["answer"]]
+        else:
+            gold_answers = item["answer"] if isinstance(item["answer"], list) else [str(item["answer"])]
+        
+        if "answer_aliases" in item:
+            gold_answers.extend(item["answer_aliases"])
+        
+        gold_answers_list.append(gold_answers)
+    
+    print(f"\nProcessing {len(questions)} questions...")
+    
+    # Run agentic Q&A
+    responses = agent.answer_batch(questions, tools)
+    predicted_answers = [r.answer for r in responses]
+    
+    # Save detailed results
+    detailed_results = []
+    for i, (response, question) in enumerate(zip(responses, questions)):
+        detailed_results.append({
+            "question_id": i,
+            "question": question,
+            "question_type": question_types[i],
+            "predicted_answer": response.answer,
+            "gold_answers": gold_answers_list[i],
+            "reasoning": response.reasoning,
+            "tool_calls": response.tool_calls_made,
+            "num_tool_calls": len(response.tool_calls_made),
+            "approach": "multi_file"
+        })
+    
+    # Save results
+    results_file = os.path.join(log_dir, "agentic_multi_file_results.json")
+    with open(results_file, "w") as f:
+        json.dump(detailed_results, f, indent=2)
+    print(f"💾 Saved detailed results to {results_file}")
+    
+    # Evaluate using HippoRAG methodology
+    from gsw_memory import hipporag_eval
+    overall_metrics, example_results = hipporag_eval.evaluate_qa_batch(
+        gold_answers_list, predicted_answers
+    )
+    
+    print("\n=== Multi-File Agentic Evaluation Results ===")
+    print(f"Total questions: {len(questions)}")
+    print(f"Exact Match: {overall_metrics['ExactMatch']:.4f}")
+    print(f"F1 Score: {overall_metrics['F1']:.4f}")
+    print(f"GSW files used: {len(gsw_files)}")
+    
+    return overall_metrics, detailed_results
+
+
 def compare_with_traditional(agentic_metrics, log_dir):
     """Compare agentic results with traditional approach."""
     print("\n=== Comparison with Traditional Approach ===")
@@ -270,28 +371,56 @@ def compare_with_traditional(agentic_metrics, log_dir):
 def main():
     """Run complete agentic evaluation pipeline."""
     print("🚀 Starting Agentic 2wiki Q&A Evaluation")
-    print("Testing dynamic GSW exploration vs pre-computed summaries\n")
+    print(f"Testing dynamic GSW exploration - Mode: {TEST_MODE}\n")
     
     try:
         # Setup logging
         log_dir, timestamp = setup_logging()
         
-        # Load data
+        # Load questions data
         reconciled_gsw, questions_data = load_existing_data()
         
-        # Run agentic evaluation
-        agentic_metrics, detailed_results = run_agentic_evaluation(
-            reconciled_gsw, questions_data, log_dir
-        )
+        results = {}
         
-        # Compare with traditional approach
-        compare_with_traditional(agentic_metrics, log_dir)
+        if TEST_MODE == "reconciled" or TEST_MODE == "both":
+            # Run reconciled evaluation
+            agentic_metrics, detailed_results = run_agentic_evaluation_reconciled(
+                questions_data, log_dir
+            )
+            results["reconciled"] = {
+                "metrics": agentic_metrics,
+                "results": detailed_results
+            }
+            
+            # Compare with traditional approach
+            compare_with_traditional(agentic_metrics, log_dir)
+        
+        if TEST_MODE == "multi_file" or TEST_MODE == "both":
+            # Run multi-file evaluation
+            multi_metrics, multi_results = run_agentic_evaluation_multi_file(
+                questions_data, log_dir
+            )
+            results["multi_file"] = {
+                "metrics": multi_metrics,
+                "results": multi_results
+            }
+        
+        if TEST_MODE == "both":
+            # Compare reconciled vs multi-file
+            print("\n=== Reconciled vs Multi-File Comparison ===")
+            reconciled_em = results["reconciled"]["metrics"]["ExactMatch"]
+            multi_em = results["multi_file"]["metrics"]["ExactMatch"]
+            reconciled_f1 = results["reconciled"]["metrics"]["F1"]
+            multi_f1 = results["multi_file"]["metrics"]["F1"]
+            
+            print(f"Reconciled - EM: {reconciled_em:.4f}, F1: {reconciled_f1:.4f}")
+            print(f"Multi-File  - EM: {multi_em:.4f}, F1: {multi_f1:.4f}")
+            print(f"Difference  - EM: {multi_em - reconciled_em:+.4f}, F1: {multi_f1 - reconciled_f1:+.4f}")
         
         print(f"\n✅ Evaluation complete! Results saved to: {log_dir}")
         
         return {
-            "metrics": agentic_metrics,
-            "results": detailed_results,
+            "results": results,
             "log_dir": log_dir
         }
         

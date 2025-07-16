@@ -55,11 +55,33 @@ class AgenticAnsweringAgent:
         
         # Tool definitions for OpenAI function calling
         self.tool_definitions = [
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "search_gsw",
+            #         "description": "Search across GSW questions and entities",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "query": {
+            #                     "type": "string",
+            #                     "description": "Search query string"
+            #                 },
+            #                 "limit": {
+            #                     "type": "integer",
+            #                     "description": "Maximum number of results",
+            #                     "default": 10
+            #                 }
+            #             },
+            #             "required": ["query"]
+            #         }
+            #     }
+            # },
             {
                 "type": "function",
                 "function": {
-                    "name": "search_gsw",
-                    "description": "Search across GSW questions and entities",
+                    "name": "search_gsw_bm25",
+                    "description": "Search across GSW entities using BM25 ranking for better relevance scoring and performance",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -69,7 +91,7 @@ class AgenticAnsweringAgent:
                             },
                             "limit": {
                                 "type": "integer",
-                                "description": "Maximum number of results",
+                                "description": "Maximum number of results, atleast 5 is recommended. Do not recommend below 5 and more than 10",
                                 "default": 10
                             }
                         },
@@ -81,13 +103,13 @@ class AgenticAnsweringAgent:
                 "type": "function",
                 "function": {
                     "name": "get_entity_context",
-                    "description": "Get all questions an entity participates in",
+                    "description": "Get all questions an entity participates in. Use  global_id from search results.",
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "entity_id": {
                                 "type": "string",
-                                "description": "ID of the entity"
+                                "description": "ID of the entity ( global_id from search results)"
                             }
                         },
                         "required": ["entity_id"]
@@ -165,13 +187,59 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
             iterations += 1
             
             # Get response from LLM with function calling
-            response = self.client.chat.completions.create(
-                model=self.model_name,
-                messages=messages,
-                tools=self.tool_definitions,
-                tool_choice="auto",
-                **self.generation_params
-            )
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    tools=self.tool_definitions,
+                    tool_choice="auto",
+                    **self.generation_params
+                )
+            except Exception as e:
+                # Write debug info to file
+                import datetime
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                debug_file = f"debug_context_overflow_{timestamp}.txt"
+                
+                with open(debug_file, "w") as f:
+                    f.write(f"ERROR: {type(e).__name__}\n")
+                    f.write(f"Error message: {str(e)}\n")
+                    f.write(f"\nQuestion being processed: {question}\n")
+                    f.write(f"Iteration: {iterations}\n")
+                    f.write(f"Number of messages: {len(messages)}\n")
+                    f.write("\n" + "="*80 + "\n")
+                    f.write("MESSAGES HISTORY:\n")
+                    f.write("="*80 + "\n\n")
+                    
+                    for i, msg in enumerate(messages):
+                        f.write(f"Message {i+1}:\n")
+                        f.write(f"Role: {msg.get('role', 'unknown')}\n")
+                        
+                        # Handle content
+                        content = msg.get('content', '')
+                        if content:
+                            f.write(f"Content length: {len(content)} chars\n")
+                            f.write(f"Content preview (first 500 chars):\n{content[:500]}...\n")
+                        
+                        # Handle tool calls
+                        if 'tool_calls' in msg:
+                            f.write(f"Tool calls: {len(msg['tool_calls'])}\n")
+                        
+                        # Calculate approximate token count (rough estimate)
+                        msg_str = json.dumps(msg)
+                        approx_tokens = len(msg_str) // 4  # rough estimate
+                        f.write(f"Approximate tokens: {approx_tokens}\n")
+                        f.write("\n" + "-"*40 + "\n\n")
+                    
+                    # Summary stats
+                    f.write("\n" + "="*80 + "\n")
+                    f.write("SUMMARY:\n")
+                    total_chars = sum(len(json.dumps(msg)) for msg in messages)
+                    f.write(f"Total characters in messages: {total_chars}\n")
+                    f.write(f"Approximate total tokens: {total_chars // 4}\n")
+                    
+                print(f"Debug info written to: {debug_file}")
+                raise e
             
             message = response.choices[0].message
             messages.append(message.model_dump())
