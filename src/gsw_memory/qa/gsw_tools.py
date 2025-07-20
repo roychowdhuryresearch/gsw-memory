@@ -6,7 +6,7 @@ direct access to query and explore the GSW structure dynamically.
 """
 
 import json
-from typing import Dict, List, Any, Optional, Union
+from typing import Dict, List, Any, Union
 from rank_bm25 import BM25Okapi
 from ..memory.models import GSWStructure
 
@@ -300,3 +300,96 @@ class GSWTools:
                     })
         
         return context
+    
+    
+    def get_all_relevant_entity_contexts(self, entity_ids: List[str]) -> Dict[str, Any]:
+        """
+        Get the context of an entities with the same name - all questions it participates in
+        and other entities in those questions.
+        
+        Args:
+            entity_ids: IDs of the entities to get context for (can be global_id or original entity_id)
+            
+        Returns:
+            Dict containing entity info and all questions it participates in
+        """
+        # Handle both global IDs and original entity IDs
+        contexts = []
+        for entity_id in entity_ids:
+            if "::" in entity_id:
+                # Global ID format: "file_path::entity_id"
+                source_file, actual_entity_id = entity_id.split("::", 1)
+            else:
+                # Original entity ID - need to find it in all files
+                source_file = None
+                actual_entity_id = entity_id
+                
+                # Search through all files to find this entity
+                for file_path in self.gsw_files:
+                    try:
+                        with open(file_path, 'r') as f:
+                            gsw_data = json.load(f)
+                        gsw = GSWStructure.from_json(gsw_data)
+                        if gsw.get_entity_by_id(actual_entity_id):
+                            source_file = file_path
+                            break
+                    except Exception:
+                        continue
+                
+                if not source_file:
+                    return {"error": f"Entity {entity_id} not found in any GSW file"}
+            
+            # Load the specific GSW file
+            try:
+                with open(source_file, 'r') as f:
+                    gsw_data = json.load(f)
+                gsw = GSWStructure.from_json(gsw_data)
+            except Exception as e:
+                return {"error": f"Failed to load GSW file {source_file}: {e}"}
+            
+            entity = gsw.get_entity_by_id(actual_entity_id)
+            if not entity:
+                return {"error": f"Entity {actual_entity_id} not found in {source_file}"}
+            
+            context = {
+                "entity_id": actual_entity_id,
+                "global_id": f"{source_file}::{actual_entity_id}",
+                "entity_name": entity.name,
+                "source_file": source_file,
+                "roles": [{"role": r.role, "states": r.states} 
+                        for r in entity.roles],
+                "questions": []
+            }
+            
+            # Find all questions this entity answers
+            for vp in gsw.verb_phrase_nodes:
+                for question in vp.questions:
+                    if actual_entity_id in question.answers:
+                        # Get all other entities in this same question
+                        other_entities = []
+                        for answer_id in question.answers:
+                            if answer_id != actual_entity_id and answer_id != "None":
+                                other_entity = gsw.get_entity_by_id(answer_id)
+                                if other_entity:
+                                    other_entities.append({
+                                        "entity_id": answer_id,
+                                        "global_id": f"{source_file}::{answer_id}",
+                                        "entity_name": other_entity.name
+                                    })
+                                else:
+                                    # Handle non-entity answers
+                                    other_entities.append({
+                                        "entity_id": answer_id,
+                                        "entity_name": answer_id
+                                    })
+                        
+                        context["questions"].append({
+                            "question_id": question.id,
+                            "question_text": question.text,
+                            "verb_phrase": vp.phrase,
+                            "other_entities": other_entities
+                        })
+            
+            contexts.append(context)
+        
+        return contexts

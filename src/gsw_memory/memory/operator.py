@@ -73,6 +73,7 @@ class GSWProcessor:
         enable_context: Optional[bool] = None,
         enable_spacetime: Optional[bool] = None,
         enable_visualization: Optional[bool] = None,
+        batch_idx: Optional[int] = 1,
     ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
 
@@ -85,6 +86,7 @@ class GSWProcessor:
             enable_context: Override class setting for context generation
             enable_spacetime: Override class setting for spacetime linking
             enable_visualization: Override class setting for visualization
+            batch_idx: Index of the batch being processed if processing in batches else 1 for single batch processing
 
         Returns:
             List of dictionaries, one per document. Each dict contains chunk_id -> chunk_data mappings.
@@ -122,7 +124,7 @@ class GSWProcessor:
 
             # Prepare coref inputs - one per document
             coref_inputs = [
-                {"text": document, "idx": doc_idx}
+                {"text": document, "idx": len(documents) * (batch_idx - 1) + doc_idx}
                 for doc_idx, document in enumerate(documents)
             ]
 
@@ -134,7 +136,7 @@ class GSWProcessor:
                 resp["idx"]: resp["text"] for resp in coref_responses.dataset
             }
         else:
-            resolved_documents = {idx: doc for idx, doc in enumerate(documents)}
+            resolved_documents = {len(documents) * (batch_idx - 1) + idx: doc for idx, doc in enumerate(documents)}
 
         # Step 2: Chunking and Initialize Chunk Data Structure
         print("--- Chunking Documents and Initializing Data Structure ---")
@@ -314,6 +316,7 @@ class GSWProcessor:
                 resolved_documents=resolved_documents,
                 all_documents_data=all_documents_data,
                 do_visualization=do_visualization,
+                batch_idx=batch_idx,
             )
 
         return all_documents_data
@@ -325,6 +328,7 @@ class GSWProcessor:
         resolved_documents: Dict[int, str],
         all_documents_data: List[Dict[str, Dict]],
         do_visualization: bool,
+        batch_idx: int,
     ):
         """Save all outputs according to the unified chunk data structure."""
 
@@ -411,13 +415,13 @@ class GSWProcessor:
 
         # Convert all_documents_data to JSON-serializable format
         for doc_idx, doc_chunks in enumerate(all_documents_data):
-            combined_data["documents"][f"doc_{doc_idx}"] = {}
+            combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"] = {} # Fixed doc_idx to account for batching
             for chunk_id, chunk_data in doc_chunks.items():
                 # Convert GSW structure to dict if it exists
                 chunk_export = chunk_data.copy()
                 if chunk_export["gsw"] is not None:
                     chunk_export["gsw"] = chunk_export["gsw"].model_dump(mode="json")
-                combined_data["documents"][f"doc_{doc_idx}"][chunk_id] = chunk_export
+                combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"][chunk_id] = chunk_export # Fixed doc_idx to account for batching
 
         with open(combined_file, "w") as f:
             json.dump(combined_data, f, indent=2)
