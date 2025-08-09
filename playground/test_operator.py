@@ -18,6 +18,12 @@ def main():
     ) as f:
         chapters = json.load(f)
 
+    with open(
+        "/mnt/SSD1/nlp/episodic-memory-benchmark/epbench/data/qa_list_20_allinfo.json",
+        "r",
+    ) as f:
+        qa_data = json.load(f)
+
     processor = GSWProcessor(
         model_name="gpt-4o",
         enable_coref=True,

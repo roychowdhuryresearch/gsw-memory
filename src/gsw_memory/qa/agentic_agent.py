@@ -9,6 +9,7 @@ import json
 from typing import Dict, List, Any, Optional, Callable
 from pydantic import BaseModel, Field
 from openai import OpenAI
+from tqdm import tqdm
 
 
 class ToolCall(BaseModel):
@@ -31,7 +32,7 @@ class AgenticAnsweringAgent:
     """
     Agent that can use GSW tools to answer questions through exploration.
     
-    Uses OpenAI function calling to dynamically query the GSW structure.
+    Uses OpenAI Responses API tool calling to dynamically query the GSW structure.
     """
     
     def __init__(
@@ -54,70 +55,68 @@ class AgenticAnsweringAgent:
         self.client = OpenAI()
         
         # Tool definitions for OpenAI function calling
-        self.tool_definitions = [
+        self.tool_definitions_newformat = [
             # {
             #     "type": "function",
-            #     "function": {
-            #         "name": "search_gsw",
-            #         "description": "Search across GSW questions and entities",
-            #         "parameters": {
-            #             "type": "object",
-            #             "properties": {
-            #                 "query": {
-            #                     "type": "string",
-            #                     "description": "Search query string"
-            #                 },
-            #                 "limit": {
-            #                     "type": "integer",
-            #                     "description": "Maximum number of results",
-            #                     "default": 10
-            #                 }
+            #     "name": "search_gsw_bm25",
+            #     "description": "Search across GSW entities using BM25 ranking for exact and partial keyword matches",
+            #     "parameters": {
+            #         "type": "object",
+            #         "properties": {
+            #             "query": {
+            #                 "type": "string",
+            #                 "description": "Search query string"
             #             },
-            #             "required": ["query"]
-            #         }
+            #             "limit": {
+            #                 "type": "integer",
+            #                 "description": "Maximum number of results, atleast 5 is recommended. Do not recommend below 5 and more than 10",
+            #                 "default": 10
+            #             }
+            #         },
+            #         "required": ["query"]
             #     }
             # },
             {
                 "type": "function",
-                "function": {
-                    "name": "search_gsw_bm25",
-                    "description": "Search across GSW entities using BM25 ranking for better relevance scoring and performance",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "query": {
-                                "type": "string",
-                                "description": "Search query string"
-                            },
-                            "limit": {
-                                "type": "integer",
-                                "description": "Maximum number of results, atleast 5 is recommended. Do not recommend below 5 and more than 10",
-                                "default": 10
-                            }
+                "name": "search_gsw_entity_embeddings",
+                "description": "Search GSW entities using semantic embeddings. Better for handling name variations, titles, abbreviations, and finding semantically similar entities. Use this when exact matches fail or when dealing with partial names.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "query": {
+                            "type": "string",
+                            "description": "Search query string"
                         },
-                        "required": ["query"]
-                    }
+                        "limit": {
+                            "type": "integer",
+                            "description": "Maximum number of results (recommend 10-15 for embeddings)",
+                            "default": 10
+                        }
+                    },
+                    "required": ["query"]
                 }
             },
             {
                 "type": "function",
-                "function": {
-                    "name": "get_entity_context",
-                    "description": "Get all questions an entity participates in. Use  global_id from search results.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "entity_id": {
-                                "type": "string",
-                                "description": "ID of the entity ( global_id from search results)"
-                            }
-                        },
-                        "required": ["entity_id"]
-                    }
+                "name": "get_multiple_entity_contexts",
+                "description": "Get contexts for multiple entities efficiently in a single call. Use global_id from search results.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "entity_ids": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "description": "List of entity global_ids from search results (max 5 recommended)",
+                            "maxItems": 10
+                        }
+                    },
+                    "required": ["entity_ids"]
                 }
-            }
+            },
         ]
-    
+            
     def answer_question(
         self, 
         question: str, 
@@ -142,8 +141,11 @@ Your task is to answer the given question by exploring the GSW using the provide
 Think step by step and use the tools to find relevant information.
 
 Important Guidelines:
-- Start by searching for relevant entities or questions
-- Use get_entity_context to explore relationships
+- Start by breaking down the question into smaller atomic questions.
+- For each atomic question, use a combinations of the tools to find the answer.
+- Start by searching for relevant entities using search_gsw_embeddings.
+- Based on the entities found, explore their relationships using get_multiple_entity_contexts. This provides QA pairs for that entity.
+- If you do not find any relevant entities, attempt to rephrase the question and search again.
 - Follow entity connections to find multi-hop answers
 - Be thorough but efficient in your exploration
 
@@ -175,8 +177,8 @@ Your final response should be:
 
 Do NOT include phrases like "The answer is" or "Based on my search" in the answer field."""
 
-        messages = [
-            {"role": "system", "content": system_prompt},
+        # Build Responses API input list and iterate with tool calls
+        input_list = [
             {"role": "user", "content": f"Question: {question}"}
         ]
         
@@ -186,13 +188,12 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
         while iterations < self.max_iterations:
             iterations += 1
             
-            # Get response from LLM with function calling
             try:
-                response = self.client.chat.completions.create(
+                response = self.client.responses.create(
                     model=self.model_name,
-                    messages=messages,
-                    tools=self.tool_definitions,
-                    tool_choice="auto",
+                    tools=self.tool_definitions_newformat,
+                    input=input_list,
+                    instructions=system_prompt,
                     **self.generation_params
                 )
             except Exception as e:
@@ -200,107 +201,92 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
                 import datetime
                 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                 debug_file = f"debug_context_overflow_{timestamp}.txt"
-                
                 with open(debug_file, "w") as f:
                     f.write(f"ERROR: {type(e).__name__}\n")
                     f.write(f"Error message: {str(e)}\n")
                     f.write(f"\nQuestion being processed: {question}\n")
                     f.write(f"Iteration: {iterations}\n")
-                    f.write(f"Number of messages: {len(messages)}\n")
-                    f.write("\n" + "="*80 + "\n")
-                    f.write("MESSAGES HISTORY:\n")
-                    f.write("="*80 + "\n\n")
-                    
-                    for i, msg in enumerate(messages):
-                        f.write(f"Message {i+1}:\n")
-                        f.write(f"Role: {msg.get('role', 'unknown')}\n")
-                        
-                        # Handle content
-                        content = msg.get('content', '')
-                        if content:
-                            f.write(f"Content length: {len(content)} chars\n")
-                            f.write(f"Content preview (first 500 chars):\n{content[:500]}...\n")
-                        
-                        # Handle tool calls
-                        if 'tool_calls' in msg:
-                            f.write(f"Tool calls: {len(msg['tool_calls'])}\n")
-                        
-                        # Calculate approximate token count (rough estimate)
-                        msg_str = json.dumps(msg)
-                        approx_tokens = len(msg_str) // 4  # rough estimate
-                        f.write(f"Approximate tokens: {approx_tokens}\n")
-                        f.write("\n" + "-"*40 + "\n\n")
-                    
-                    # Summary stats
-                    f.write("\n" + "="*80 + "\n")
-                    f.write("SUMMARY:\n")
-                    total_chars = sum(len(json.dumps(msg)) for msg in messages)
-                    f.write(f"Total characters in messages: {total_chars}\n")
-                    f.write(f"Approximate total tokens: {total_chars // 4}\n")
-                    
+                    f.write(f"Number of input items: {len(input_list)}\n")
                 print(f"Debug info written to: {debug_file}")
                 raise e
             
-            message = response.choices[0].message
-            messages.append(message.model_dump())
+            # Append the model output items back to the running input list
+            try:
+                input_list += response.output  # type: ignore[attr-defined]
+            except Exception:
+                pass
             
-            # Check if the model wants to make tool calls
-            if message.tool_calls:
-                for tool_call in message.tool_calls:
-                    function_name = tool_call.function.name
-                    function_args = json.loads(tool_call.function.arguments)
+            # Collect function calls from the output
+            function_calls = []
+            try:
+                for item in response.output:  # type: ignore[attr-defined]
+                    if getattr(item, "type", None) == "function_call":
+                        function_calls.append(item)
+            except Exception:
+                function_calls = []
+            
+            if function_calls:
+                for fc in function_calls:
+                    function_name = getattr(fc, "name", None)
+                    arguments_raw = getattr(fc, "arguments", "{}")
+                    call_id = getattr(fc, "call_id", None)
+                    try:
+                        function_args = json.loads(arguments_raw) if arguments_raw else {}
+                    except Exception:
+                        function_args = {}
                     
-                    # Execute the tool
                     if function_name in tools:
                         result = tools[function_name](**function_args)
-                        
-                        # Record the tool call
                         tool_calls_made.append({
                             "tool": function_name,
                             "arguments": function_args,
                             "result": result
                         })
-                        
-                        # Add tool result to conversation
-                        messages.append({
-                            "role": "tool",
-                            "tool_call_id": tool_call.id,
-                            "content": json.dumps(result, indent=2)
+                        input_list.append({
+                            "type": "function_call_output",
+                            "call_id": call_id,
+                            "output": json.dumps(result)
                         })
                     else:
-                        messages.append({
-                            "role": "tool",
-                            "tool_call_id": tool_call.id,
-                            "content": f"Error: Tool {function_name} not found"
+                        input_list.append({
+                            "type": "function_call_output",
+                            "call_id": call_id,
+                            "output": json.dumps({"error": f"Tool {function_name} not found"})
                         })
-            else:
-                # No more tool calls, extract final answer
-                content = message.content or ""
-                
-                # Try to parse JSON response
+                # Continue to next iteration so model can consume tool outputs
+                continue
+            
+            # If no function calls were returned, treat response as final
+            content = getattr(response, "output_text", "")
+            if not content:
+                # Try to fallback to the last message item
                 try:
-                    # Find JSON in the content (it might have extra text), this can be replaced with structured output.
-                    json_start = content.find('{')
-                    json_end = content.rfind('}') + 1
-                    if json_start != -1 and json_end > json_start:
-                        json_str = content[json_start:json_end]
-                        response_data = json.loads(json_str)
-                        answer_part = response_data.get("answer", "")
-                        reasoning_part = response_data.get("reasoning", "")
-                    else:
-                        # Fallback if no JSON found
-                        answer_part = content
-                        reasoning_part = "See tool calls for reasoning process"
-                except json.JSONDecodeError:
-                    # Fallback if JSON parsing fails
+                    message_items = [it for it in response.output if getattr(it, "type", None) == "message"]  # type: ignore[attr-defined]
+                    if message_items:
+                        content = getattr(message_items[-1], "content", "") or ""
+                except Exception:
+                    content = ""
+            
+            try:
+                json_start = content.find('{')
+                json_end = content.rfind('}') + 1
+                if json_start != -1 and json_end > json_start:
+                    json_str = content[json_start:json_end]
+                    response_data = json.loads(json_str)
+                    answer_part = response_data.get("answer", "")
+                    reasoning_part = response_data.get("reasoning", "")
+                else:
                     answer_part = content
                     reasoning_part = "See tool calls for reasoning process"
-                
-                return AgentResponse(
-                    answer=answer_part,
-                    reasoning=reasoning_part,
-                    tool_calls_made=tool_calls_made
-                )
+            except json.JSONDecodeError:
+                answer_part = content
+                reasoning_part = "See tool calls for reasoning process"
+            
+            return AgentResponse(
+                answer=answer_part,
+                reasoning=reasoning_part,
+                tool_calls_made=tool_calls_made
+            )
         
         # Reached max iterations
         return AgentResponse(
@@ -325,7 +311,7 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
             List of AgentResponse objects
         """
         responses = []
-        for question in questions:
+        for question in tqdm(questions, desc="Answering questions"):
             response = self.answer_question(question, tools)
             responses.append(response)
         return responses

@@ -6,8 +6,19 @@ direct access to query and explore the GSW structure dynamically.
 """
 
 import json
-from typing import Dict, List, Any, Union
+import os
+import hashlib
+from typing import Dict, List, Any, Union, Optional
 from rank_bm25 import BM25Okapi
+import numpy as np
+try:
+    import faiss
+    from langchain_voyageai import VoyageAIEmbeddings
+    EMBEDDING_AVAILABLE = True
+except ImportError:
+    EMBEDDING_AVAILABLE = False
+    faiss = None
+    VoyageAIEmbeddings = None
 from ..memory.models import GSWStructure
 
 class GSWTools:
@@ -30,6 +41,16 @@ class GSWTools:
         self.entity_corpus = []
         self.entity_metadata = []
         self._index_built = False
+        
+        # Embedding search components
+        self.embedding_model = None
+        self.faiss_index = None
+        self.entity_embeddings = []
+        self.embedding_metadata = []  # Same structure as entity_metadata
+        
+        # Cache directory for embeddings
+        self.cache_dir = ".gsw_cache"
+        os.makedirs(self.cache_dir, exist_ok=True)
     
     def build_index(self):
         """
@@ -65,7 +86,7 @@ class GSWTools:
                         "entity_name": entity.name,
                         "source_file": file_path,
                         "global_id": f"{file_path}::{entity.id}",  # Prevent ID collisions
-                        "roles": [{"role": r.role, "states": r.states} for r in entity.roles]
+                        # "roles": [{"role": r.role, "states": r.states} for r in entity.roles]
                     })
                     file_entities += 1
                     total_entities += 1
@@ -87,6 +108,13 @@ class GSWTools:
             self.bm25 = BM25Okapi(self.entity_corpus)
         else:
             self.bm25 = None
+        
+        # Build embedding index if available
+        if EMBEDDING_AVAILABLE and total_entities > 0:
+            print(f"Building embedding index from {total_entities} entities...")
+            self._build_embedding_index()
+        elif not EMBEDDING_AVAILABLE:
+            print("⚠️  Embedding search not available (missing dependencies)")
             
         self._index_built = True
         print(f"✅ Search index built successfully! {total_entities} entities indexed from {processed_files} files.")
@@ -98,6 +126,84 @@ class GSWTools:
             
         print("Building search index lazily...")
         self.build_index()
+    
+    def _build_embedding_index(self):
+        """Build FAISS embedding index for semantic search."""
+        if not EMBEDDING_AVAILABLE:
+            return
+            
+        # Initialize embedding model
+        self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
+        
+        # Copy metadata for embeddings (same as BM25)
+        self.embedding_metadata = self.entity_metadata.copy()
+        
+        # Extract entity names for embedding
+        entity_names = [meta["entity_name"] for meta in self.entity_metadata]
+        
+        # Simple cache file names
+        embeddings_cache = "gsw_embeddings.npy"
+        metadata_cache = "gsw_metadata.json"
+        
+        # Try to load from cache first
+        if os.path.exists(embeddings_cache) and os.path.exists(metadata_cache):
+            try:
+                print(f"Loading cached embeddings from {embeddings_cache}")
+                self.entity_embeddings = np.load(embeddings_cache)
+                
+                with open(metadata_cache, 'r') as f:
+                    cached_metadata = json.load(f)
+                
+                # Simple check: same number of entities
+                if len(self.entity_embeddings) == len(entity_names):
+                    print(f"✅ Loaded {len(self.entity_embeddings)} cached embeddings")
+                    # Create FAISS index from cached embeddings
+                    embedding_dim = self.entity_embeddings.shape[1]
+                    self.faiss_index = faiss.IndexFlatIP(embedding_dim)
+                    self.faiss_index.add(self.entity_embeddings)
+                    return
+                else:
+                    print("⚠️ Cache size mismatch, rebuilding...")
+                    
+            except Exception as e:
+                print(f"⚠️ Failed to load cache: {e}, rebuilding...")
+        
+        # Build embeddings from scratch
+        print("Building embeddings from scratch...")
+        batch_size = 500  # Increased from 100 to reduce API calls
+        all_embeddings = []
+        
+        for i in range(0, len(entity_names), batch_size):
+            batch = entity_names[i:i + batch_size]
+            batch_embeddings = self.embedding_model.embed_documents(batch)
+            all_embeddings.extend(batch_embeddings)
+            
+            # Progress update
+            processed = min(i + batch_size, len(entity_names))
+            if processed % 1000 == 0 or processed == len(entity_names):
+                print(f"  Embedded {processed}/{len(entity_names)} entities")
+        
+        # Convert to numpy array
+        self.entity_embeddings = np.array(all_embeddings, dtype=np.float32)
+        
+        # Normalize embeddings for cosine similarity
+        faiss.normalize_L2(self.entity_embeddings)
+        
+        # Save to cache
+        try:
+            np.save(embeddings_cache, self.entity_embeddings)
+            with open(metadata_cache, 'w') as f:
+                json.dump(self.embedding_metadata, f)
+            print(f"💾 Saved embeddings cache to {embeddings_cache}")
+        except Exception as e:
+            print(f"⚠️ Failed to save cache: {e}")
+        
+        # Create FAISS index
+        embedding_dim = self.entity_embeddings.shape[1]
+        self.faiss_index = faiss.IndexFlatIP(embedding_dim)  # Inner product = cosine similarity after normalization
+        self.faiss_index.add(self.entity_embeddings)
+        
+        print(f"✅ Embedding index built with {len(entity_names)} entities")
     
     def search_gsw(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
         """
@@ -213,6 +319,47 @@ class GSWTools:
         
         return results
     
+    def search_gsw_entity_embeddings(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        Search across GSW entities using semantic embeddings.
+        
+        Better for handling name variations, titles, and partial matches.
+        
+        Args:
+            query: Search query string
+            limit: Maximum number of results to return
+            
+        Returns:
+            List of matching entities sorted by semantic similarity
+        """
+        # Build index if not already built
+        self._build_search_index()
+        
+        if not EMBEDDING_AVAILABLE or self.faiss_index is None:
+            print("Warning: Embedding search not available, falling back to BM25")
+            return self.search_gsw_bm25(query, limit)
+        
+        # Embed the query
+        query_embedding = np.array(self.embedding_model.embed_query(query), dtype=np.float32)
+        query_embedding = query_embedding.reshape(1, -1)
+        
+        # Normalize query embedding
+        faiss.normalize_L2(query_embedding)
+        
+        # Search the index
+        similarities, indices = self.faiss_index.search(query_embedding, limit)
+        
+        # Convert to result format
+        results = []
+        for idx, similarity in zip(indices[0], similarities[0]):
+            if idx >= 0 and similarity > 0:  # Valid index with positive similarity
+                result = self.embedding_metadata[idx].copy()
+                result["match_score"] = float(similarity)
+                result["type"] = "entity"
+                results.append(result)
+        
+        return results
+    
     def get_entity_context(self, entity_id: str) -> Dict[str, Any]:
         """
         Get the context of an entity - all questions it participates in
@@ -302,9 +449,9 @@ class GSWTools:
         return context
     
     
-    def get_all_relevant_entity_contexts(self, entity_ids: List[str]) -> Dict[str, Any]:
+    def get_multiple_entity_contexts(self, entity_ids: List[str]) -> Dict[str, Any]:
         """
-        Get the context of an entities with the same name - all questions it participates in
+        Get the context of multiple entities - all questions they participate in
         and other entities in those questions.
         
         Args:

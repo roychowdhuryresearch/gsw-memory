@@ -25,13 +25,14 @@ load_dotenv()
 LOAD_BASE_LOGS = "../logs/full_2wiki_corpus_20250710_202211"  # Existing logs with reconciled GSW
 USE_SUBSET = True # Test on subset of questions
 TEST_MODE = "multi_file"  # Options: "reconciled", "multi_file", "both"
+SEARCH_METHOD = "embeddings"  # Options: "bm25", "embeddings"
 
 
 def setup_logging():
     """Create timestamped log directory for agentic results."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_dir = os.path.join(
-        os.path.dirname(__file__), "..", "logs", f"agentic_2wiki_{timestamp}"
+        os.path.dirname(__file__), "..", "logs", f"agentic_2wiki_{SEARCH_METHOD}_{timestamp}"
     )
     os.makedirs(log_dir, exist_ok=True)
     print(f"📁 Created log directory: {log_dir}")
@@ -52,11 +53,12 @@ def load_existing_data():
     
     # Load questions
     questions_path = "/home/shreyas/NLP/SM/gensemworkspaces/HippoRAG/reproduce/dataset/2wikimultihopqa.json"
+    # questions_path = "../logs/agentic_2wiki_20250715_163600/failure_analysis/all_failures.json"
     with open(questions_path, "r") as f:
         questions_data = json.load(f)
     
     if USE_SUBSET:
-        questions_data = questions_data[:10]
+        questions_data = questions_data[:100]
         print(f"Using subset: {len(questions_data)} questions")
     
     return reconciled_gsw, questions_data
@@ -66,21 +68,24 @@ def test_gsw_tools(gsw_tools):
     """Quick test of GSW tools functionality."""
     print("\n=== Testing GSW Tools ===")
     
-    # Test search
-    print("\nTest 1: Search for 'Academy Award'")
-    results = gsw_tools.search_gsw("Academy Award", limit=3)
+    # Test embedding search
+    print("\nTest 1: Embedding Search for 'Academy Award'")
+    results = gsw_tools.search_gsw_entity_embeddings("Academy Award", limit=3)
     print(f"Found {len(results)} results")
     for r in results[:2]:
-        if r["type"] == "question":
-            print(f"  Q: {r['question_text'][:80]}...")
-        else:
-            print(f"  E: {r['entity_name']}")
+        print(f"  E: {r['entity_name']} (score: {r['match_score']:.3f})")
+    
+    # Test with a name that might have variations
+    print("\nTest 2: Embedding Search for 'Prince of Orange'")
+    results = gsw_tools.search_gsw_entity_embeddings("Prince of Orange", limit=3)
+    print(f"Found {len(results)} results")
+    for r in results[:2]:
+        print(f"  E: {r['entity_name']} (score: {r['match_score']:.3f})")
     
     # Test entity context (if we found any entities)
-    entity_results = [r for r in results if r["type"] == "entity"]
-    if entity_results:
-        entity_id = entity_results[0]["entity_id"]
-        print(f"\nTest 2: Get context for entity '{entity_results[0]['entity_name']}'")
+    if results:
+        entity_id = results[0]["global_id"]
+        print(f"\nTest 3: Get context for entity '{results[0]['entity_name']}'")
         context = gsw_tools.get_entity_context(entity_id)
         if "error" not in context:
             print(f"  Participates in {len(context['questions'])} questions")
@@ -99,17 +104,22 @@ def run_agentic_evaluation_reconciled(questions_data, log_dir):
     # Build search index explicitly for better performance
     gsw_tools.build_index()
     agent = AgenticAnsweringAgent(
-        model_name="gpt-4o-mini",
-        generation_params={"temperature": 0.0},
+        model_name="gpt-5-mini",
+        generation_params={"temperature": 1.0},
         max_iterations=10
     )
     
     # Create tool dictionary for agent
-    tools = {
-        # "search_gsw": gsw_tools.search_gsw,
-        "search_gsw_bm25": gsw_tools.search_gsw_bm25,
-        "get_entity_context": gsw_tools.get_entity_context
-    }
+    if SEARCH_METHOD == "embeddings":
+        tools = {
+            "search_gsw_entity_embeddings": gsw_tools.search_gsw_entity_embeddings,
+            "get_multiple_entity_contexts": gsw_tools.get_multiple_entity_contexts
+        }
+    else:  # bm25
+        tools = {
+            "search_gsw_bm25": gsw_tools.search_gsw_bm25,
+            "get_multiple_entity_contexts": gsw_tools.get_multiple_entity_contexts
+        }
     
     # Test tools first
     test_gsw_tools(gsw_tools)
@@ -147,7 +157,8 @@ def run_agentic_evaluation_reconciled(questions_data, log_dir):
             "gold_answers": gold_answers_list[i],
             "reasoning": response.reasoning,
             "tool_calls": response.tool_calls_made,
-            "num_tool_calls": len(response.tool_calls_made)
+            "num_tool_calls": len(response.tool_calls_made),
+            "search_method": SEARCH_METHOD
         })
     
     # Save results
@@ -258,11 +269,16 @@ def run_agentic_evaluation_multi_file(questions_data, log_dir):
     )
     
     # Create tool dictionary for agent
-    tools = {
-        "search_gsw": gsw_tools.search_gsw,
-        "search_gsw_bm25": gsw_tools.search_gsw_bm25,
-        "get_entity_context": gsw_tools.get_entity_context
-    }
+    if SEARCH_METHOD == "embeddings":
+        tools = {
+            "search_gsw_entity_embeddings": gsw_tools.search_gsw_entity_embeddings,
+            "get_multiple_entity_contexts": gsw_tools.get_multiple_entity_contexts
+        }
+    else:  # bm25
+        tools = {
+            "search_gsw_bm25": gsw_tools.search_gsw_bm25,
+            "get_multiple_entity_contexts": gsw_tools.get_multiple_entity_contexts
+        }
     
     # Test tools first
     test_gsw_tools(gsw_tools)
@@ -270,6 +286,7 @@ def run_agentic_evaluation_multi_file(questions_data, log_dir):
     # Extract questions and gold answers
     questions = [item["question"] for item in questions_data]
     question_types = [item["type"] for item in questions_data]
+    # question_types = [item["question_type"] for item in questions_data]
     
     gold_answers_list = []
     for item in questions_data:
@@ -301,7 +318,8 @@ def run_agentic_evaluation_multi_file(questions_data, log_dir):
             "reasoning": response.reasoning,
             "tool_calls": response.tool_calls_made,
             "num_tool_calls": len(response.tool_calls_made),
-            "approach": "multi_file"
+            "approach": "multi_file",
+            "search_method": SEARCH_METHOD
         })
     
     # Save results
@@ -371,7 +389,8 @@ def compare_with_traditional(agentic_metrics, log_dir):
 def main():
     """Run complete agentic evaluation pipeline."""
     print("🚀 Starting Agentic 2wiki Q&A Evaluation")
-    print(f"Testing dynamic GSW exploration - Mode: {TEST_MODE}\n")
+    print(f"Testing dynamic GSW exploration - Mode: {TEST_MODE}")
+    print(f"Search Method: {SEARCH_METHOD}\n")
     
     try:
         # Setup logging
