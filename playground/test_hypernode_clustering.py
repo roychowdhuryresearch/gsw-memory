@@ -528,7 +528,7 @@ def main():
     print("=" * 80)
     
     # Configuration
-    num_documents = 50  # Start with 50 documents
+    num_documents = 200  # Start with 50 documents
     similarity_threshold = 0.85  # High threshold for same-entity detection
     output_dir = f"/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/hypernode_results_{int(time.time())}"
     

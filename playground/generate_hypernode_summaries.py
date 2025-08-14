@@ -212,15 +212,18 @@ def extract_entity_context(entity_data: Dict[str, Any], gsw_structure: GSWStruct
             if entity_id in question.answers or any(entity_id in str(answer) for answer in question.answers):
                 qa_pair = {
                     'question': question.text,
-                    'answers': entity_name,
+                    'answers': "Entity: " + entity_name + "\t" + "description: " + "".join(roles_and_states),
                     'verb_phrase': verb_phrase.phrase
                 }
                 questions_and_answers.append(qa_pair)
                 
                 # Collect related entities from the same questions
                 for answer in question.answers:
-                    if answer != entity_id and answer != "None" and not str(answer).startswith("TEXT:"):
-                        related_entities.add(answer)
+                    if answer != entity_id and answer != "None":
+                        if str(answer).startswith("TEXT:"):
+                            related_entities.add(str(answer).split("TEXT:")[1].strip())
+                        else:
+                            related_entities.add(answer)
     
     return {
         'roles_and_states': roles_and_states,
@@ -468,7 +471,7 @@ def main():
     else:
         # Use curator for parallel processing
         summarizer = HypernodeSummarizer(
-            model_name="gpt-4o",
+            model_name="gpt-4o-mini",
             generation_params={"temperature": 0.1, "max_tokens": 400}
         )
         
