@@ -149,6 +149,76 @@ def evaluate_qa_batch(gold_answers_list: List[List[str]],
     
     return overall_results, example_results
 
+def evaluate_qa_batch_w_types(question_types: List[str], gold_answers_list: List[List[str]], 
+                     predicted_answers: List[str]) -> Tuple[Dict[str, float], List[Dict[str, float]]]:
+    """
+    Evaluate a batch of Q&A predictions using HippoRAG methodology.
+    
+    Args:
+        gold_answers_list: List of lists, each containing gold answers for a question
+        predicted_answers: List of predicted answers
+        
+    Returns:
+        Tuple of (overall_metrics, per_example_metrics)
+        - overall_metrics: Dict with average EM and F1 scores
+        - per_example_metrics: List of dicts with per-question EM and F1 scores
+    """
+    unique_question_types = list(set(question_types))
+    assert len(gold_answers_list) == len(predicted_answers), \
+        "Length of gold answers and predicted answers should be the same."
+    assert len(question_types) == len(gold_answers_list), \
+        "Length of question types and gold answers should be the same."
+    
+    example_results = []
+    total_em = 0.0
+    total_f1 = 0.0
+    
+    # Initialize per-type metrics
+    type_metrics = {qtype: {"total_em": 0.0, "total_f1": 0.0, "count": 0} for qtype in unique_question_types}
+    
+    for i, (q_type, gold_answers, predicted) in enumerate(zip(question_types, gold_answers_list, predicted_answers)):
+        em_score = calculate_exact_match(gold_answers, predicted)
+        f1_score = calculate_f1_score(gold_answers, predicted)
+        
+        example_results.append({
+            "ExactMatch": em_score,
+            "F1": f1_score,
+            "predicted_answer": predicted,
+            "gold_answers": gold_answers,
+            "question_type": q_type
+        })
+        
+        # Update overall metrics
+        total_em += em_score
+        total_f1 += f1_score
+        
+        # Update per-type metrics
+        type_metrics[q_type]["total_em"] += em_score
+        type_metrics[q_type]["total_f1"] += f1_score
+        type_metrics[q_type]["count"] += 1
+    
+    # Calculate overall averages
+    avg_em = total_em / len(gold_answers_list) if gold_answers_list else 0.0
+    avg_f1 = total_f1 / len(gold_answers_list) if gold_answers_list else 0.0
+    
+    # Calculate per-type averages
+    type_results = {}
+    for q_type, metrics in type_metrics.items():
+        if metrics["count"] > 0:
+            type_results[q_type] = {
+                "ExactMatch": round(metrics["total_em"] / metrics["count"], 4),
+                "F1": round(metrics["total_f1"] / metrics["count"], 4),
+                "count": metrics["count"]
+            }
+    
+    overall_results = {
+        "ExactMatch": round(avg_em, 4),
+        "F1": round(avg_f1, 4),
+        "by_type": type_results
+    }
+    
+    return overall_results, example_results
+
 
 def format_evaluation_report(overall_results: Dict[str, float], 
                            example_results: List[Dict[str, float]],

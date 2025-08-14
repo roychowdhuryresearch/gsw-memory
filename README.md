@@ -1,192 +1,158 @@
-# GSW Memory
+# 🤖 Agent Trace Analyzer
 
-A Python package for building  memory systems using Generative Semantic Workspaces (GSW). This package provides a complete pipeline for processing documents, extracting entities and relationships, and answering questions using structured semantic memory.
+A comprehensive Streamlit application for analyzing and tracking agent trace results from different types of questions. This tool provides detailed insights into agent performance, tool usage patterns, and allows for collaborative commenting on individual questions.
 
 ## Features
 
-- **Document Processing**: Convert text documents into structured semantic workspaces
-- **Entity Reconciliation**: Merge and reconcile entities across documents using multiple strategies
-- **Question-Answering**: Answer questions using semantic memory with entity extraction and matching
-- **Evaluation System**: Built-in evaluation tools for benchmarking Q&A performance
+### 📊 Dashboard Overview
+- **Real-time Metrics**: Total questions, accuracy percentage, correct answers count, and average reasoning length
+- **Visual Analytics**: Interactive charts showing question type distribution and tool calls patterns
+- **Performance Tracking**: Color-coded accuracy indicators (green for ≥80%, yellow for ≥60%, red for <60%)
 
+### 🔍 Detailed Analysis
+- **Question Filtering**: Filter by question type (2hop, 3hop1, 4hop1, 4hop2, etc.)
+- **Correctness Filtering**: View only correct or incorrect answers
+- **Search Functionality**: Search through question content
+- **Pagination**: Navigate through large datasets efficiently
 
-## Package Structure
+### 📝 Interactive Features
+- **Detailed Question View**: Expand each question to see:
+  - Original question and predicted answer
+  - Gold standard answers
+  - Correctness status
+  - Agent reasoning
+  - Tool calls with full JSON details
+  - Question decomposition steps
+- **Comment System**: Add and view comments for each question
+- **Export Capabilities**: Download filtered results and comments as CSV
 
-```
-gsw_memory/
-├── memory/                    # Core GSW processing
-│   ├── processors.py         # Document → GSW conversion
-│   ├── reconciliation.py     # Entity reconciliation across documents
-│   ├── aggregators.py        # Entity summary generation
-│   └── models.py            # Data structures (EntityNode, GSWStructure, etc.)
-├── qa/                       # Question-answering system
-│   ├── qa_system.py         # Main Q&A orchestrator
-│   ├── entity_extractor.py  # Extract entities from questions
-│   ├── entity_matcher.py    # Match entities to GSW nodes
-│   ├── summary_reranker.py  # Rerank summaries by relevance
-│   └── answering_agent.py   # Generate final answers
-├── evaluation/               # Evaluation framework
-│   ├── judges/              # Base evaluation interfaces
-│   └── benchmarks/          # Benchmark-specific evaluators
-│       └── tulving_bench/   # Tulving Bench evaluation
-└── benchmarks/              # Benchmark datasets
-    └── tulvingbench/        # Tulving Bench data
-```
+### 🎨 Modern UI
+- **Responsive Design**: Works on desktop and mobile
+- **Custom Styling**: Professional appearance with color-coded metrics
+- **Intuitive Navigation**: Sidebar for file selection and main content area
 
 ## Installation
 
-### For Users
-```bash
-pip install gsw-memory
+1. **Clone or download the files** to your local machine
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Ensure your data structure**:
+   - Place your agent trace result JSON files in a `logs/` directory
+   - Files should be named with `agentic_multi_file_results` in the filename
+   - The app will automatically detect and list available files
+
+## Usage
+
+1. **Start the application**:
+   ```bash
+   streamlit run agent_trace_analyzer.py
+   ```
+
+2. **Select your data file**:
+   - Use the sidebar to choose from available result files
+   - The app will automatically load and analyze the data
+
+3. **Explore the dashboard**:
+   - View overview metrics at the top
+   - Examine charts for patterns
+   - Use filters to focus on specific question types or correctness
+
+4. **Analyze individual questions**:
+   - Click on question expanders to see detailed information
+   - Review agent reasoning and tool calls
+   - Add comments for collaboration or notes
+
+5. **Export results**:
+   - Download filtered results as CSV
+   - Export comments separately
+
+## Data Format
+
+The app expects JSON files with the following structure:
+
+```json
+[
+  {
+    "question_id": 0,
+    "question": "Your question text here",
+    "question_type": "2hop",
+    "predicted_answer": "Agent's answer",
+    "gold_answers": ["Correct answer 1", "Correct answer 2"],
+    "supporting_doc_ids": ["doc1", "doc2"],
+    "question_decomposition_gold": [
+      {
+        "id": 13548,
+        "question": "Sub-question 1",
+        "answer": "Sub-answer 1",
+        "paragraph_support_idx": 1
+      }
+    ],
+    "reasoning": "Agent's reasoning process",
+    "tool_calls": [
+      {
+        "tool": "tool_name",
+        "arguments": {...},
+        "result": [...]
+      }
+    ],
+    "num_tool_calls": 3,
+    "approach": "method_used"
+  }
+]
 ```
 
-### For Development
-```bash
-git clone <repository-url>
-cd gsw-memory
-uv sync --group dev
+## File Structure
+
+```
+your-project/
+├── agent_trace_analyzer.py    # Main Streamlit application
+├── requirements.txt           # Python dependencies
+├── README.md                 # This file
+├── logs/                     # Your data directory
+│   └── agentic_2wiki_20250729_135333/
+│       └── agentic_multi_file_results.json
+└── agent_trace_comments.json # Auto-generated comments file
 ```
 
-## Environment Setup
+## Customization
 
-Create a `.env` file in the project root:
+### Adding New Metrics
+To add new analysis metrics, modify the `calculate_metrics()` function in the main script.
 
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-VOYAGE_API_KEY=your_voyage_api_key_here  # For embeddings
-```
+### Styling Changes
+Update the CSS in the `st.markdown()` section at the top of the script to customize colors and layout.
 
-## Quick Start
+### Additional Filters
+Add new filter options by extending the filtering logic in the main function.
 
-Try our comprehensive end-to-end example that demonstrates the complete GSW pipeline:
+## Troubleshooting
 
-```bash
-cd gsw-memory
-python playground/test_tulving_bench_e2e.py
-```
+### Common Issues
 
-This example shows:
-1. **Document Processing** → GSW structures
-2. **Entity Reconciliation** (LOCAL strategy, chapter-by-chapter)
-3. **Entity Summary Generation** for each chapter
-4. **Multi-Chapter Q&A System** that searches across chapters
-5. **LLM-as-a-Judge Evaluation** using Tulving Bench
-6. **Performance Comparison** against baseline
+1. **No files found**: Ensure your JSON files are in the `logs/` directory and contain `agentic_multi_file_results` in the filename
 
-## Usage Examples
+2. **Import errors**: Make sure all dependencies are installed:
+   ```bash
+   pip install streamlit pandas plotly numpy
+   ```
 
-### Multi-Document Q&A (Recommended)
-For processing multiple documents separately and answering questions across all of them:
+3. **Large file loading**: The app uses caching to handle large files efficiently. If you encounter memory issues, consider splitting your data into smaller files.
 
-```python
-from gsw_memory import GSWProcessor, reconcile_gsw_outputs, GSWQuestionAnswerer
-from gsw_memory.memory.aggregators import EntitySummaryAggregator
-
-# Process documents
-processor = GSWProcessor(model_name="gpt-4o")
-gsw_structures = processor.process_documents(documents)
-
-# Reconcile with local strategy (keeps documents separate)
-reconciled_gsws = reconcile_gsw_outputs(gsw_structures, strategy="local")
-
-# Generate entity summaries for each document
-llm_config = {"model_name": "gpt-4o", "generation_params": {"temperature": 0.0}}
-aggregators = []
-for gsw in reconciled_gsws:
-    aggregator = EntitySummaryAggregator(gsw, llm_config)
-    aggregators.append(aggregator)
-
-# Create Q&A system that searches across all documents
-qa_system = GSWQuestionAnswerer(reconciled_gsws, aggregators, llm_config)
-answer = qa_system.ask("Who is the main character?")
-```
-
-### Single Unified Q&A
-For merging all documents into one unified GSW:
-
-```python
-# Reconcile with global strategy (merges all documents)
-unified_gsw = reconcile_gsw_outputs(gsw_structures, strategy="global")
-
-# Generate entity summaries for unified GSW
-aggregator = EntitySummaryAggregator(unified_gsw, llm_config)
-
-# Create Q&A system with single GSW (backward compatible)
-qa_system = GSWQuestionAnswerer(unified_gsw, aggregator, llm_config)
-answer = qa_system.ask("Who is the main character?")
-```
-
-### Evaluation
-
-```python
-from gsw_memory import TulvingBenchEvaluator
-
-# Evaluate Q&A results
-evaluator = TulvingBenchEvaluator(model_name="gpt-4o")
-results = evaluator.evaluate(qa_results=qa_results, ground_truth=ground_truth)
-
-print(f"Precision: {results['system_metrics']['precision']:.3f}")
-print(f"Recall: {results['system_metrics']['recall']:.3f}")
-print(f"F1 Score: {results['system_metrics']['f1']:.3f}")
-```
-
-## When to Use Each Strategy
-
-**Local Strategy**: Use when you want to:
-- Preserve document boundaries and sources
-- Answer questions that may span multiple documents
-- Maintain separate entity contexts per document
-- Scale to many documents efficiently
-
-**Global Strategy**: Use when you want to:
-- Merge all information into one unified memory
-- Simplify entity reconciliation across documents
-- Have a single comprehensive knowledge base
-- Work with smaller document sets
-
-## Core Dependencies
-
-- `bespokelabs-curator`: LLM orchestration and parallel processing
-- `pydantic`: Data validation and serialization
-- `openai`: LLM API access
-- `langchain-voyageai`: Embeddings for entity matching and reranking
-- `faiss-cpu`: Vector similarity search
-- `rank-bm25`: BM25 retrieval for question answering
-
-## Examples & Testing
-
-The `playground/` directory contains comprehensive examples:
-
-```bash
-# Complete end-to-end pipeline with evaluation
-python playground/test_tulving_bench_e2e.py
-
-# Basic GSW processing functionality
-python playground/test_operator.py
-
-# Complete Q&A pipeline integration test
-python playground/test_qa_complete.py
-```
+4. **Comments not saving**: Ensure the app has write permissions in the directory where it's running.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature-name`)
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite (`python playground/test_tulving_bench_e2e.py`)
-6. Submit a pull request
+Feel free to extend this application with additional features such as:
+- User authentication for comments
+- More advanced analytics and visualizations
+- Integration with external databases
+- Real-time collaboration features
+- Advanced export formats (Excel, PDF reports)
 
-## Citation
+## License
 
-If you use this package in your research, please cite:
-
-```bibtex
-@inproceedings{rajesh2025gsw,
-  title={Generative Semantic Workspaces: An Episodic Memory Framework for Large Language Models},
-  author={Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
-  booktitle={Advances in Neural Information Processing Systems},
-  year={2025},
-  note={Under review}
-}
-```
+This project is open source and available under the MIT License.

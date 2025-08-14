@@ -32,7 +32,7 @@ os.environ["CURATOR_DISABLE_CACHE"] = "true"
 load_dotenv()
 
 # Configuration
-CORPUS_PATH = "/home/shreyas/NLP/SM/gensemworkspaces/HippoRAG/reproduce/dataset/2wikimultihopqa_corpus.json"
+CORPUS_PATH = "/mnt/SSD1/nlp/gsw/musiquedata/musique_corpus.json"
 BATCH_SIZE = 100  # Process documents in batches to manage memory
 
 
@@ -138,7 +138,8 @@ def process_corpus_in_batches(
         try:
             batch_gsw_structures = processor.process_documents(
                 batch_docs, 
-                output_dir=os.path.join(log_dirs["gsw_output_dir"], f"batch_{batch_num:03d}")
+                output_dir=os.path.join(log_dirs["gsw_output_dir"], f"batch_{batch_num:03d}"),
+                batch_idx=batch_num
             )
             
             # Count successful GSW structures
@@ -330,8 +331,8 @@ def save_corpus_processing_summary(
 
 def main():
     """Run the complete full corpus processing pipeline."""
-    print("🚀 Starting Full 2wiki Corpus Processing")
-    print("Processing 6,119 documents through GSW pipeline for agentic Q&A\n")
+    print(f"🚀 Starting Full 2wiki Corpus Processing")
+    print(f"Processing 6,119 documents through GSW pipeline for agentic Q&A\n")
     
     processing_start_time = datetime.now()
     
@@ -351,26 +352,26 @@ def main():
         )
         
         # Reconcile into unified GSW
-        reconciled_gsw = reconcile_full_corpus(gsw_structures, log_dirs)
+        # reconciled_gsw = reconcile_full_corpus(gsw_structures, log_dirs)
         
         # Save processing summary
-        save_corpus_processing_summary(
-            log_dirs, len(documents), len(gsw_structures), 
-            reconciled_gsw, processing_start_time
-        )
+        # save_corpus_processing_summary(
+        #     log_dirs, len(documents), len(gsw_structures), 
+        #     reconciled_gsw, processing_start_time
+        # )
         
         print(f"\n🎉 Full corpus processing completed successfully!")
         print(f"📁 All outputs saved to: {log_dirs['base_dir']}")
-        print(f"🔍 Ready for agentic Q&A evaluation with {len(reconciled_gsw.entity_nodes):,} entities")
+        # print(f"🔍 Ready for agentic Q&A evaluation with {len(reconciled_gsw.entity_nodes):,} entities")
         
         return {
-            "reconciled_gsw": reconciled_gsw,
+            # "reconciled_gsw": reconciled_gsw,
             "log_dirs": log_dirs,
             "processing_stats": {
                 "total_documents": len(documents),
                 "gsw_structures": len(gsw_structures),
-                "final_entities": len(reconciled_gsw.entity_nodes),
-                "final_verb_phrases": len(reconciled_gsw.verb_phrase_nodes)
+                # "final_entities": len(reconciled_gsw.entity_nodes),
+                # "final_verb_phrases": len(reconciled_gsw.verb_phrase_nodes)
             }
         }
         

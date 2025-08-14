@@ -7,9 +7,8 @@ expensive LLM operations.
 """
 
 import json
-import os
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 from ..memory.models import GSWStructure
 
@@ -206,8 +205,8 @@ def load_from_logs(log_dir: Union[str, Path]) -> Dict[str, any]:
     except (FileNotFoundError, LoaderError):
         pass
         
-    if not result["available_stages"]:
-        raise LoaderError(f"No valid evaluation data found in {log_dir}")
+    # if not result["available_stages"]:
+    #     raise LoaderError(f"No valid evaluation data found in {log_dir}")
         
     print(f"📁 Loaded from {log_dir}")
     print(f"   Available stages: {', '.join(result['available_stages'])}")

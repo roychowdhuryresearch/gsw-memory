@@ -225,7 +225,7 @@ class EntitySummaryAggregator(BaseAggregator):
                 continue
 
             # Aggregate chronological data
-            chronological_data = self._aggregate_entity_data(entity, include_space_time)
+            chronological_data = self._aggregate_entity_data_wo_chunks(entity, include_space_time)
 
             # Skip entities with no data
             if not chronological_data:
@@ -352,6 +352,69 @@ class EntitySummaryAggregator(BaseAggregator):
                                     )
 
                         chronological_data[q.chunk_id]["actions"].append(action_context)
+
+        # 3. Gather Space/Time information if requested
+        if include_space_time:
+            self._add_space_time_data(entity, chronological_data)
+
+        # 4. Sort by chunk_id
+        sorted_chunk_ids = sorted(chronological_data.keys(), key=self._sort_chunk_key)
+        sorted_data = {
+            chunk_id: chronological_data[chunk_id] for chunk_id in sorted_chunk_ids
+        }
+
+        return sorted_data
+    
+    def _aggregate_entity_data_wo_chunks(
+        self, entity: EntityNode, include_space_time: bool = False
+    ) -> Dict[str, Any]:
+        """
+        Aggregate chronological data for a single entity.
+
+        This method ports the core logic from gsw_summarizer.py's _aggregate_entity_data.
+        """
+        chronological_data = defaultdict(
+            lambda: {"roles_states": [], "actions": [], "space_time": []}
+        )
+
+        # 1. Gather Roles/States
+        for role_info in entity.roles:
+            chronological_data[0]["roles_states"].append(
+                    {"role": role_info.role, "states": role_info.states}
+                )
+
+        # 2. Gather VP Involvement (Actions)
+        for vp in self.gsw.verb_phrase_nodes:
+            for q in vp.questions:
+                if entity.id in q.answers:
+                    action_context = {
+                        "vp_phrase": vp.phrase,
+                        "answered_question": q.text,
+                        "context": [],
+                    }
+
+                    # Gather context from other questions in same VP
+                    for other_q in vp.questions:
+                        if (
+                            other_q.id != q.id
+                            and other_q.answers
+                            and other_q.answers != ["None"]
+                        ):
+                            context_answers = []
+                            for ans_id in other_q.answers:
+                                if ans_id in self._entity_map:
+                                    context_answers.append(self._entity_map[ans_id])
+                                elif ans_id.startswith("TEXT:"):
+                                    context_answers.append(ans_id[5:].strip())
+                                elif ans_id not in ["None", "none", "NA"]:
+                                    context_answers.append(ans_id)
+
+                            if context_answers:
+                                action_context["context"].append(
+                                    f"{other_q.text} -> {', '.join(context_answers)}"
+                                )
+
+                    chronological_data[0]["actions"].append(action_context)
 
         # 3. Gather Space/Time information if requested
         if include_space_time:

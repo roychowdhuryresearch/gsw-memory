@@ -58,61 +58,151 @@ class AgenticAnsweringAgent:
             # {
             #     "type": "function",
             #     "function": {
-            #         "name": "search_gsw",
-            #         "description": "Search across GSW questions and entities",
+            #         "name": "search_gsw_bm25_entity_name",
+            #         "description": """Search for entities by name/title in the knowledge base.
+
+            #             WHEN TO USE:
+            #             - First hop: Always use this first
+            #             - Later hops: Add relation hints to disambiguate (e.g., "Paris France" not just "Paris")
+
+            #             GOOD QUERIES:
+            #             - Hop 1: "Forrest Gump", "Christopher Nolan", "France"
+            #             - Hop 2+: "London England", "Christopher Nolan director", "Paris France capital"
+
+            #             BAD QUERIES:
+            #             - "director of Forrest Gump" (use entity_features for this)
+            #             - "capital of France" (use entity_features for this)
+
+            #             Returns entities with IDs in format: doc_path/gsw_id.json::entity_id""",
             #         "parameters": {
             #             "type": "object",
             #             "properties": {
             #                 "query": {
             #                     "type": "string",
-            #                     "description": "Search query string"
+            #                     "description": "Entity name, with relation hints for hop 2+"
             #                 },
             #                 "limit": {
             #                     "type": "integer",
-            #                     "description": "Maximum number of results",
-            #                     "default": 10
+            #                     "description": "Number of results (10-20 recommended)",
+            #                     "default": 15
             #                 }
             #             },
             #             "required": ["query"]
             #         }
             #     }
             # },
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "search_gsw_bm25_entity_with_entity_features",
+            #         "description": """Search for entities by their relationships or properties.
+            #             CRITICAL: Use this for Variant 2 (attribute-of-attribute) patterns!
+
+            #             WHEN TO USE:
+            #             - Middle hops in nested queries: "capital of France", "director of Inception"
+            #             - When entity is defined by relationship: "company that created iPhone"
+            #             - When entity_name search fails to find relationship-defined entities
+
+            #             GOOD QUERIES:
+            #             - "capital of France" (to find Paris as capital entity)
+            #             - "birthplace of Christopher Nolan" (to find London as birthplace)
+            #             - "director of Forrest Gump" (to find Zemeckis as director)
+            #             - "country containing London" (to find UK as container)
+
+            #             Returns entities defined by these relationships.""",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "query": {
+            #                     "type": "string",
+            #                     "description": "Relationship/property-based description"
+            #                 },
+            #                 "limit": {
+            #                     "type": "integer",
+            #                     "description": "Number of results (5-10 recommended)",
+            #                     "default": 10
+            #                 }
+            #             },
+            #             "required": ["query"]   
+            #         }
+            #     }
+            # },
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "get_multiple_relevant_entity_contexts",
+            #         "description": """Get all facts and relationships for entities.
+
+            #             MANDATORY: Use after EVERY search to get entity information.
+
+            #             USAGE:
+            #             - Single entity: ["entity_123"]
+            #             - Multiple entities (disambiguation): ["entity_123", "entity_456", "entity_789"]
+            #             - Can handle up to 20 entities at once
+
+            #             Returns all facts about entities including:
+            #             - Relationships (director of, capital of, birthplace, etc.)
+            #             - Properties (birth year, population, government type, etc.)
+            #             - Connected entities for next hops
+
+            #             READ THE ENTIRE CONTEXT - the information you need is there.""",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "entity_ids": {
+            #                     "type": "array",
+            #                     "items": {
+            #                         "type": "string",
+            #                         "description": "Entity ID from search (format: doc_path/gsw_id.json::entity_id)"
+            #                     },
+            #                     "description": "List of entity IDs (1-20)"
+            #                 }
+            #             },
+            #             "required": ["entity_ids"]
+            #         }
+            #     }
+            # },
             {
                 "type": "function",
                 "function": {
-                    "name": "search_gsw_bm25",
-                    "description": "Search across GSW entities using BM25 ranking for better relevance scoring and performance",
+                    "name": "search_gsw_embeddings_of_entity_summaries",
+                    "description": """Search for entities using semantic similarity and neural embeddings.
+                        ADVANCED: Uses deep learning to understand meaning beyond keyword matching.
+
+                        WHEN TO USE:
+                        - Complex conceptual queries that BM25 might miss
+                        - Natural language descriptions of entities
+                        - When you need semantic understanding, not just keyword matching
+                        - As backup when BM25 searches return insufficient results
+                        - Multi-word descriptive queries about entity characteristics
+
+                        GOOD QUERIES:
+                        - "major European financial center" (finds London, Frankfurt, etc.)
+                        - "large technology company founded in garage" (finds Apple, HP, etc.)
+                        - "ancient civilization along the Nile river" (finds Ancient Egypt)
+                        - "island nation in the Pacific with volcanic activity" (finds Japan, Philippines, etc.)
+                        - "person who revolutionized computer graphics and animation" (finds Steve Jobs, John Lasseter, etc.)
+
+                        COMPLEMENTARY TO BM25:
+                        - Use BM25 first for direct name/title matches
+                        - Use embeddings when BM25 misses conceptual connections
+                        - Embedding search understands context and relationships semantically
+
+                        Returns same rich metadata as BM25 searches with semantic relevance scores.""",
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "query": {
                                 "type": "string",
-                                "description": "Search query string"
+                                "description": "Natural language description or conceptual query"
                             },
-                            "limit": {
+                            "top_k": {
                                 "type": "integer",
-                                "description": "Maximum number of results, atleast 5 is recommended. Do not recommend below 5 and more than 10",
-                                "default": 10
+                                "description": "Number of results to return (30-50 recommended)",
+                                "default": 30
                             }
                         },
                         "required": ["query"]
-                    }
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    "name": "get_entity_context",
-                    "description": "Get all questions an entity participates in. Use  global_id from search results.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "entity_id": {
-                                "type": "string",
-                                "description": "ID of the entity ( global_id from search results)"
-                            }
-                        },
-                        "required": ["entity_id"]
                     }
                 }
             }
@@ -134,47 +224,138 @@ class AgenticAnsweringAgent:
             AgentResponse with answer, reasoning, and tool calls
         """
         # System prompt for the agent
-        system_prompt = """You are an expert at navigating knowledge graphs to answer questions.
-You have access to a Generative Semantic Workspace (GSW) that contains entities, 
-their relationships, and questions about them.
+        system_prompt = """You are an expert at answering multi-hop questions using semantic search.
+        You have ONE powerful tool: neural embedding search that understands meaning and context.
 
-Your task is to answer the given question by exploring the GSW using the provided tools.
-Think step by step and use the tools to find relevant information.
+        ═══════════════════════════════════════════════════════════════════════════════
+                        🧠 EMBEDDING-ONLY STRATEGY: SEMANTIC REASONING
+        ═══════════════════════════════════════════════════════════════════════════════
 
-Important Guidelines:
-- Start by searching for relevant entities or questions
-- Use get_entity_context to explore relationships
-- Follow entity connections to find multi-hop answers
-- Be thorough but efficient in your exploration
+        YOUR APPROACH:
+        1. ANALYZE the question to identify what information you need
+        2. CRAFT strategic search queries that capture semantic meaning
+        3. EXTRACT answers from rich summaries and metadata returned
+        4. FOLLOW the chain by searching for newly discovered entities/concepts
+        5. REPEAT until you have the complete answer
 
-Relationship Navigation Tips:
-- GSW may store relationships in only one direction (e.g., "son of" but not "parent of")
-- If you don't find a direct relationship, search for the INVERSE:
-  * Looking for parent? Search for who has this person as their son/daughter
-  * Looking for director? Search for films and check who directed them
-  * Looking for author? Search for books and check who wrote them
-  * Looking for spouse? Search for who is married to this person
-- Try multiple related search terms when exploring relationships
-- Use get_entity_context to see ALL relationships an entity participates in, then reason about inverses
-- Example: If you need "parent of X", search for X first, then look for entities where X appears as "son" or "daughter"
+        ✅ KEY ADVANTAGE: Embedding search provides COMPLETE information in search results:
+        • Entity summaries with full details
+        • Relationship information and connections  
+        • Historical facts and temporal data
+        • Contextual information and properties
+        • NO NEED for separate context retrieval!
 
-CRITICAL - Output Format:
-When you have found the answer, respond with ONLY a JSON object in this exact format:
-{
-    "reasoning": "Step-by-step explanation of how you found the answer",
-    "answer": "Just the answer itself, no extra words"
-}
+        ═══════════════════════════════════════════════════════════════════════════════
+                      🔍 MASTERING EMBEDDING SEARCH QUERIES
+        ═══════════════════════════════════════════════════════════════════════════════
 
-Example:
-Question: "What is the birth year of the director of Forrest Gump?"
-Your final response should be:
-{
-    "reasoning": "I searched for Forrest Gump and found it was directed by Robert Zemeckis. Then I searched for Robert Zemeckis and found he was born in 1951.",
-    "answer": "1951"
-}
+        🧠 search_gsw_embeddings_of_entity_summaries - YOUR SEMANTIC POWERHOUSE
+        • PURPOSE: Neural understanding of meaning, relationships, and context
+        • RETURNS: Rich entity summaries with all needed information
+        • POWER: Understands synonyms, relationships, descriptions, and concepts
 
-Do NOT include phrases like "The answer is" or "Based on my search" in the answer field."""
+        📋 QUERY STRATEGIES (All work with embedding search!):
 
+        🎯 DIRECT ENTITIES: "Sam Nujoma", "McDonald's", "Namibia", "Philipsburg"
+        → Returns: Full entity details, relationships, historical facts
+
+        🎯 RELATIONSHIPS: "first president of Namibia", "successor to Sam Nujoma"
+        → Returns: Entities with those specific relationships
+
+        🎯 DESCRIPTIONS: "Nordic country known for fjords", "technology company founded in garage"  
+        → Returns: Entities matching semantic descriptions
+
+        🎯 CONCEPTS: "French colonization Caribbean", "German population Brazil"
+        → Returns: Entities with conceptual connections
+
+        🎯 MULTI-HOP: "capital of country where Horndean is located"
+        → Returns: Entities understanding the nested relationship
+
+        ═══════════════════════════════════════════════════════════════════════════════
+                                EXECUTION WORKFLOW
+        ═══════════════════════════════════════════════════════════════════════════════
+
+        🎯 SMART SEARCH STRATEGY:
+        1. Start with direct entities from the question
+        2. Read ALL details in the returned summaries carefully
+        3. Extract key information and connected entities
+        4. Search for missing pieces using semantic queries
+        5. Chain searches until complete answer emerges
+
+        🚫 CRITICAL PRINCIPLES:
+        • READ every summary completely - answers are embedded in the rich metadata
+        • Use diverse query formulations to find different aspects
+        • Don't repeat identical searches
+        • Maximum 8-10 searches - be strategic
+        • Trust the semantic understanding of embedding search
+
+        ═══════════════════════════════════════════════════════════════════════════════
+                            EMBEDDING-ONLY EXAMPLES
+        ═══════════════════════════════════════════════════════════════════════════════
+
+        🔵 EXAMPLE 1: Simple succession - "Who succeeded the first President of Namibia?"
+        1. search_gsw_embeddings_of_entity_summaries("first president of Namibia")
+           → Returns: Sam Nujoma entity with full details including presidency dates
+        2. search_gsw_embeddings_of_entity_summaries("successor to Sam Nujoma Namibia president")
+           → Returns: Hifikepunye Pohamba entity with succession details
+        ANSWER: Hifikepunye Pohamba
+
+        🟢 EXAMPLE 2: Geographic chain - "What currency is used where Billy Giles died?"
+        1. search_gsw_embeddings_of_entity_summaries("Billy Giles death location")  
+           → Returns: Billy Giles entity with death details (died in London)
+        2. search_gsw_embeddings_of_entity_summaries("London England currency")
+           → Returns: UK/England entities with currency information (Pound Sterling)
+        ANSWER: Pound Sterling
+
+        🟡 EXAMPLE 3: Descriptive query - "What is the capital of the Nordic country known for fjords?"
+        1. search_gsw_embeddings_of_entity_summaries("Nordic country known for fjords")
+           → Returns: Norway entity with geographic/cultural details and capital (Oslo)
+        ANSWER: Oslo
+
+        🔴 EXAMPLE 4: Complex temporal - "When did French arrive in Caribbean?"
+        1. search_gsw_embeddings_of_entity_summaries("French colonization Caribbean arrival date")
+           → Returns: Historical entities with French Caribbean colonization timeline (1625)
+        ANSWER: 1625
+
+        ═══════════════════════════════════════════════════════════════════════════════
+                                REASONING REQUIREMENTS  
+        ═══════════════════════════════════════════════════════════════════════════════
+
+        📋 BEFORE EVERY search, explain:
+        • What specific information you're seeking
+        • How your query captures the semantic meaning needed
+        • What aspect of the question this addresses
+
+        📋 AFTER EVERY search, analyze:
+        • Key information found in the summaries and metadata
+        • What questions are now answered vs still need answers
+        • What to search for next (if anything)
+
+        📋 TRACK your multi-hop progress:
+        • Hop 1: [Query] → [Key Information Found]
+        • Hop 2: [Query] → [Key Information Found]  
+        • Hop 3+: [Query] → [Key Information Found]
+
+        💡 REMEMBER: Embedding search results contain COMPLETE entity information including relationships, properties, dates, and connections. Read everything carefully!
+
+        ═══════════════════════════════════════════════════════════════════════════════
+                           ✅ FINAL VERIFICATION & OUTPUT
+        ═══════════════════════════════════════════════════════════════════════════════
+
+        Before answering, verify you have:
+        ✓ Searched for all key concepts/entities in the question
+        ✓ Found concrete evidence in the search result summaries
+        ✓ Traced the complete reasoning chain with evidence
+        ✓ Extracted the final answer from reliable entity information
+
+        📤 OUTPUT FORMAT - Respond with ONLY this JSON:
+        {
+            "reasoning": "Clear step-by-step explanation with evidence from search results",
+            "answer": "Just the final answer, no extra words or phrases"
+        }
+
+        ❌ Do NOT include: "The answer is...", "Based on my search...", etc. in the answer field."""
+            
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": f"Question: {question}"}
@@ -277,6 +458,18 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
                 # No more tool calls, extract final answer
                 content = message.content or ""
                 
+                # Build comprehensive reasoning from all tool calls and final content
+                reasoning_parts = []
+                
+                # Add reasoning from tool calls
+                for msg in messages[2:]:
+                    if msg.get("role") != "tool":
+                        reasoning_parts.append(msg.get("content", ""))
+                
+                # delete empty messages
+                reasoning_parts = [part for part in reasoning_parts if part]
+                reasoning_part = "\n".join(reasoning_parts)
+                
                 # Try to parse JSON response
                 try:
                     # Find JSON in the content (it might have extra text), this can be replaced with structured output.
@@ -286,15 +479,12 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
                         json_str = content[json_start:json_end]
                         response_data = json.loads(json_str)
                         answer_part = response_data.get("answer", "")
-                        reasoning_part = response_data.get("reasoning", "")
                     else:
                         # Fallback if no JSON found
                         answer_part = content
-                        reasoning_part = "See tool calls for reasoning process"
                 except json.JSONDecodeError:
                     # Fallback if JSON parsing fails
                     answer_part = content
-                    reasoning_part = "See tool calls for reasoning process"
                 
                 return AgentResponse(
                     answer=answer_part,

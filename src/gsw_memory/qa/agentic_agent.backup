@@ -1,0 +1,518 @@
+"""
+Agentic Answering Agent with GSW Tool Access.
+
+This module implements an agent that can dynamically explore the GSW structure
+using tool calls to answer multi-hop questions.
+"""
+
+import json
+from typing import Dict, List, Any, Optional, Callable
+from pydantic import BaseModel, Field
+from openai import OpenAI
+
+
+class ToolCall(BaseModel):
+    """Represents a tool call the agent wants to make."""
+    tool_name: str = Field(description="Name of the tool to call")
+    arguments: Dict[str, Any] = Field(description="Arguments for the tool")
+
+
+class AgentResponse(BaseModel):
+    """Response from the agentic agent."""
+    answer: str = Field(description="The final answer to the question")
+    reasoning: str = Field(description="Step-by-step reasoning process")
+    tool_calls_made: List[Dict[str, Any]] = Field(
+        default_factory=list, 
+        description="List of tool calls made during reasoning"
+    )
+
+
+class AgenticAnsweringAgent:
+    """
+    Agent that can use GSW tools to answer questions through exploration.
+    
+    Uses OpenAI function calling to dynamically query the GSW structure.
+    """
+    
+    def __init__(
+        self, 
+        model_name: str = "gpt-4o",
+        generation_params: Optional[Dict[str, Any]] = None,
+        max_iterations: int = 10
+    ):
+        """
+        Initialize the agentic answering agent.
+        
+        Args:
+            model_name: LLM model to use
+            generation_params: Parameters for generation (temperature, etc.)
+            max_iterations: Maximum number of tool calls allowed
+        """
+        self.model_name = model_name
+        self.generation_params = generation_params or {"temperature": 0.0}
+        self.max_iterations = max_iterations
+        self.client = OpenAI()
+        
+        # Tool definitions for OpenAI function calling
+        self.tool_definitions = [
+            # {
+            #     "type": "function",
+            #     "function": {
+            #         "name": "search_gsw",
+            #         "description": "Search across GSW questions and entities",
+            #         "parameters": {
+            #             "type": "object",
+            #             "properties": {
+            #                 "query": {
+            #                     "type": "string",
+            #                     "description": "Search query string"
+            #                 },
+            #                 "limit": {
+            #                     "type": "integer",
+            #                     "description": "Maximum number of results",
+            #                     "default": 10
+            #                 }
+            #             },
+            #             "required": ["query"]
+            #         }
+            #     }
+            # },
+            {
+                "type": "function",
+                "function": {
+                    "name": "search_gsw_bm25_entity_name",
+                    "description": """Search for entities by name/title in the knowledge base.
+
+                        WHEN TO USE:
+                        - First hop: Always use this first
+                        - Later hops: Add relation hints to disambiguate (e.g., "Paris France" not just "Paris")
+
+                        GOOD QUERIES:
+                        - Hop 1: "Forrest Gump", "Christopher Nolan", "France"
+                        - Hop 2+: "London England", "Christopher Nolan director", "Paris France capital"
+
+                        BAD QUERIES:
+                        - "director of Forrest Gump" (use entity_features for this)
+                        - "capital of France" (use entity_features for this)
+
+                        Returns entities with IDs in format: doc_path/gsw_id.json::entity_id""",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "Entity name, with relation hints for hop 2+"
+                            },
+                            "limit": {
+                                "type": "integer",
+                                "description": "Number of results (10-20 recommended)",
+                                "default": 15
+                            }
+                        },
+                        "required": ["query"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_multiple_relevant_entity_contexts",
+                    "description": """Get all facts and relationships for entities.
+
+                        MANDATORY: Use after EVERY search to get entity information.
+
+                        USAGE:
+                        - Single entity: ["entity_123"]
+                        - Multiple entities (disambiguation): ["entity_123", "entity_456", "entity_789"]
+                        - Can handle up to 20 entities at once
+
+                        Returns all facts about entities including:
+                        - Relationships (director of, capital of, birthplace, etc.)
+                        - Properties (birth year, population, government type, etc.)
+                        - Connected entities for next hops
+
+                        READ THE ENTIRE CONTEXT - the information you need is there.""",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "entity_ids": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "Entity ID from search (format: doc_path/gsw_id.json::entity_id)"
+                                },
+                                "description": "List of entity IDs (1-20)"
+                            }
+                        },
+                        "required": ["entity_ids"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "search_gsw_bm25_entity_with_entity_features",
+                    "description": """Search for entities by their relationships or properties.
+                        CRITICAL: Use this for Variant 2 (attribute-of-attribute) patterns!
+
+                        WHEN TO USE:
+                        - Middle hops in nested queries: "capital of France", "director of Inception"
+                        - When entity is defined by relationship: "company that created iPhone"
+                        - When entity_name search fails to find relationship-defined entities
+
+                        GOOD QUERIES:
+                        - "capital of France" (to find Paris as capital entity)
+                        - "birthplace of Christopher Nolan" (to find London as birthplace)
+                        - "director of Forrest Gump" (to find Zemeckis as director)
+                        - "country containing London" (to find UK as container)
+
+                        Returns entities defined by these relationships.""",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "query": {
+                                "type": "string",
+                                "description": "Relationship/property-based description"
+                            },
+                            "limit": {
+                                "type": "integer",
+                                "description": "Number of results (5-10 recommended)",
+                                "default": 10
+                            }
+                        },
+                        "required": ["query"]   
+                    }
+                }
+            }
+        ]
+    
+    def answer_question(
+        self, 
+        question: str, 
+        tools: Dict[str, Callable]
+    ) -> AgentResponse:
+        """
+        Answer a question using GSW tools.
+        
+        Args:
+            question: The question to answer
+            tools: Dict mapping tool names to callable functions
+            
+        Returns:
+            AgentResponse with answer, reasoning, and tool calls
+        """
+        # System prompt for the agent
+        system_prompt = """You are an expert at answering multi-hop questions using a knowledge base.
+            You have access to tools that help you find entities and their relationships.
+
+            CRITICAL - How Musique Questions Work:
+            Musique questions require finding information through multiple connected entities. For example:
+            - "What is the birth year of the director of Forrest Gump?" requires:
+            1. Find "Forrest Gump" → discover its director
+            2. Find the director → discover their birth year
+
+            Your Strategy:
+            1. IDENTIFY all entity names in the question (people, places, things)
+            2. SEARCH for each entity INDIVIDUALLY by name only
+            3. GET CONTEXT for found entities to discover relationships
+            4. FOLLOW the chain of information to the final answer
+            5. VERIFY each hop has concrete evidence before proceeding
+
+            CRITICAL - Entity Extraction:
+            Before searching, extract entity names from the question:
+            - "When was the person who Ronaldo's goals in Champions League compared to get signed by Real Madrid?"
+            → Entities to search: "Ronaldo", "Champions League", "Real Madrid"
+            - "What is the capital of the country where the Eiffel Tower is located?"
+            → Entities to search: "Eiffel Tower"
+            - "Who directed the movie that won the Oscar for Best Picture in 1994?"
+            → Search: "Oscar Best Picture 1994" or just "1994"
+
+            MANDATORY RULES:
+            1. You MUST search for ALL entities mentioned in the question
+            2. You MUST get context for EVERY entity you find
+            3. You MUST follow the complete chain - NO guessing or assumptions
+            4. If information is missing, keep searching - don't skip steps
+            5. NEVER answer based on partial information
+            6. ALWAYS provide reasoning BEFORE and AFTER each tool call
+            7. TRACK your searches - DO NOT repeat the same query
+            8. For 3+ hop questions, add relation context to searches (see examples)
+            9. VERIFY evidence for EACH hop before final answer
+
+            REASONING REQUIREMENTS:
+            Before EVERY tool call, explain:
+            - What you're looking for and why
+            - What you expect to find
+            - How this helps answer the question
+
+            After EVERY tool call, explain:
+            - What you found in the results
+            - What specific information is relevant
+            - What your next step will be and why
+
+            EVIDENCE TRACKING:
+            Keep track of:
+            - Hop 1: [Entity] → [Found Information]
+            - Hop 2: [Entity] → [Found Information]
+            - Hop 3+: [Entity] → [Found Information]
+            - ONLY provide final answer when ALL hops have evidence
+
+            Tool Usage Guidelines:
+
+            search_gsw_bm25_entity_name:
+            - Extract and search ONLY entity names from the question
+            - NEVER search for relationships or descriptive phrases
+            - For deeper hops (3+), include relation context when needed:
+            * Instead of just "Paris", try "Paris France" if you need the city
+            * Instead of just "Jordan", try "Michael Jordan" if you need the person
+            - TRACK SEARCHES - never repeat exact same query
+            - If initial search fails, try variations: "Barack Obama" → "Obama" → "Barack Hussein Obama"
+
+            search_gsw_bm25_entity_with_entity_features:
+            - ONLY use as FALLBACK when entity name search fails completely
+            - For relation-aware searches in deep hops:
+            * "director of Forrest Gump"
+            * "capital of France"
+            * "CEO who succeeded Steve Jobs"
+
+            CRITICAL RULE: After ANY search → IMMEDIATELY use get_multiple_relevant_entity_contexts
+            - Do NOT continue searching without checking context first
+            - Do NOT search for related terms if you already have potential entities
+            - ALWAYS get the context to find relationships/facts before more searches
+
+            get_multiple_relevant_entity_contexts:
+            - USE FOR EVERYTHING - both single entities and multiple entities
+            - Single entity: Pass one ID in a list → ["entity_123"]
+            - Multiple entities: Pass all IDs → ["entity_123", "entity_456", "entity_789"]
+            - This reveals ALL facts and relationships about the entities
+            - READ THE ENTIRE CONTEXT - don't assume information isn't there
+            - Compare contexts when multiple entities to find the right one
+
+            AVOIDING TOOL-CALL THRASHING:
+            - Keep a mental list of queries already tried
+            - If you've searched for an entity 3 times with no success, try:
+            1. Different name variations
+            2. Adding disambiguating context (e.g., "Jordan country" vs just "Jordan")
+            3. Using entity_features search as last resort
+            - STOP if you've made 10+ tool calls - reassess your approach
+
+            Common Patterns in Musique:
+
+            1. Person-Work relationships:
+            - Question: "Who directed [movie]?" → Search movie, get context
+            - Question: "What did [person] direct?" → Search person, get context
+
+            2. Location relationships:
+            - Question: "What country is [city] in?" → Search city, get context
+            - Question: "Capital of [country]?" → Search country, get context
+
+            3. Temporal information:
+            - Question: "When was [person] born?" → Search person, get context
+            - Question: "What year was [event]?" → Search event, get context
+
+            4. Multi-hop chains (3+ hops):
+            - Break complex questions into steps
+            - Add context to disambiguate entities in deeper hops
+            - Track evidence for each hop explicitly
+
+            5. REPEATED ENTITIES - Important!
+            - Many entities have the same name (e.g., multiple "John Smith", multiple "Springfield")
+            - When searching returns multiple results, pass ALL IDs to get_multiple_relevant_entity_contexts
+            - Use distinguishing features from the question to identify the correct entity
+
+            Examples:
+
+            Example 1: "What is the birth year of the director of Forrest Gump?"
+            1. search_gsw_bm25_entity_name("Forrest Gump") → Find movie entity
+            2. get_multiple_relevant_entity_contexts(["movie_id"]) → Find director: Robert Zemeckis [HOP 1 COMPLETE]
+            3. search_gsw_bm25_entity_name("Robert Zemeckis") → Find person entity
+            4. get_multiple_relevant_entity_contexts(["person_id"]) → Find birth year: 1951 [HOP 2 COMPLETE]
+            Evidence: Forrest Gump → directed by Robert Zemeckis → born 1951
+
+            Example 2: "What type of government does the country containing the birthplace of the director of Inception have?"
+            1. search_gsw_bm25_entity_name("Inception") → Find movie
+            2. get_multiple_relevant_entity_contexts(["movie_id"]) → Director: Christopher Nolan [HOP 1]
+            3. search_gsw_bm25_entity_name("Christopher Nolan") → Find person
+            4. get_multiple_relevant_entity_contexts(["person_id"]) → Birthplace: London [HOP 2]
+            5. search_gsw_bm25_entity_name("London England") → Find city (add context for disambiguation)
+            6. get_multiple_relevant_entity_contexts(["london_id"]) → Country: United Kingdom [HOP 3]
+            7. search_gsw_bm25_entity_name("United Kingdom") → Find country
+            8. get_multiple_relevant_entity_contexts(["uk_id"]) → Government type [HOP 4]
+
+            ANSWER NORMALIZATION:
+            Be flexible with answer formats:
+            - "4 years" = "four years" = "four-year" = "4-year"
+            - "United States" = "USA" = "US" = "United States of America"
+            - Dates: "1990" = "1990s" (when asking about decades)
+
+            VERIFICATION CHECKLIST:
+            Before providing an answer, verify:
+            □ Did I search for ALL entities mentioned in the question?
+            □ Did I track and avoid repeating searches?
+            □ Did I get context for EVERY entity found?
+            □ Do I have evidence for EACH hop in the chain?
+            □ Did I follow the complete information chain?
+            □ Is my answer based on concrete information from the context, not assumptions?
+
+            Output Format:
+            When you find the answer, respond with ONLY this JSON:
+            {
+                "reasoning": "Step-by-step explanation with evidence for each hop",
+                "answer": "Just the final answer in several words, no extra words"
+            }
+
+            Do NOT include phrases like "The answer is" or "Based on my search" in the answer field."""
+            
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"Question: {question}"}
+        ]
+        
+        tool_calls_made = []
+        iterations = 0
+        
+        while iterations < self.max_iterations:
+            iterations += 1
+            
+            # Get response from LLM with function calling
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=messages,
+                    tools=self.tool_definitions,
+                    tool_choice="auto",
+                    **self.generation_params
+                )
+            except Exception as e:
+                # Write debug info to file
+                import datetime
+                timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                debug_file = f"debug_context_overflow_{timestamp}.txt"
+                
+                with open(debug_file, "w") as f:
+                    f.write(f"ERROR: {type(e).__name__}\n")
+                    f.write(f"Error message: {str(e)}\n")
+                    f.write(f"\nQuestion being processed: {question}\n")
+                    f.write(f"Iteration: {iterations}\n")
+                    f.write(f"Number of messages: {len(messages)}\n")
+                    f.write("\n" + "="*80 + "\n")
+                    f.write("MESSAGES HISTORY:\n")
+                    f.write("="*80 + "\n\n")
+                    
+                    for i, msg in enumerate(messages):
+                        f.write(f"Message {i+1}:\n")
+                        f.write(f"Role: {msg.get('role', 'unknown')}\n")
+                        
+                        # Handle content
+                        content = msg.get('content', '')
+                        if content:
+                            f.write(f"Content length: {len(content)} chars\n")
+                            f.write(f"Content preview (first 500 chars):\n{content[:500]}...\n")
+                        
+                        # Handle tool calls
+                        if 'tool_calls' in msg:
+                            f.write(f"Tool calls: {len(msg['tool_calls'])}\n")
+                        
+                        # Calculate approximate token count (rough estimate)
+                        msg_str = json.dumps(msg)
+                        approx_tokens = len(msg_str) // 4  # rough estimate
+                        f.write(f"Approximate tokens: {approx_tokens}\n")
+                        f.write("\n" + "-"*40 + "\n\n")
+                    
+                    # Summary stats
+                    f.write("\n" + "="*80 + "\n")
+                    f.write("SUMMARY:\n")
+                    total_chars = sum(len(json.dumps(msg)) for msg in messages)
+                    f.write(f"Total characters in messages: {total_chars}\n")
+                    f.write(f"Approximate total tokens: {total_chars // 4}\n")
+                    
+                print(f"Debug info written to: {debug_file}")
+                raise e
+            
+            message = response.choices[0].message
+            messages.append(message.model_dump())
+            
+            # Check if the model wants to make tool calls
+            if message.tool_calls:
+                for tool_call in message.tool_calls:
+                    function_name = tool_call.function.name
+                    function_args = json.loads(tool_call.function.arguments)
+                    
+                    # Execute the tool
+                    if function_name in tools:
+                        result = tools[function_name](**function_args)
+                        
+                        # Record the tool call
+                        tool_calls_made.append({
+                            "tool": function_name,
+                            "arguments": function_args,
+                            "result": result
+                        })
+                        
+                        # Add tool result to conversation
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tool_call.id,
+                            "content": json.dumps(result, indent=2)
+                        })
+                    else:
+                        messages.append({
+                            "role": "tool",
+                            "tool_call_id": tool_call.id,
+                            "content": f"Error: Tool {function_name} not found"
+                        })
+            else:
+                # No more tool calls, extract final answer
+                content = message.content or ""
+                
+                # Try to parse JSON response
+                try:
+                    # Find JSON in the content (it might have extra text), this can be replaced with structured output.
+                    json_start = content.find('{')
+                    json_end = content.rfind('}') + 1
+                    if json_start != -1 and json_end > json_start:
+                        json_str = content[json_start:json_end]
+                        response_data = json.loads(json_str)
+                        answer_part = response_data.get("answer", "")
+                        reasoning_part = response_data.get("reasoning", "")
+                    else:
+                        # Fallback if no JSON found
+                        answer_part = content
+                        reasoning_part = "See tool calls for reasoning process"
+                except json.JSONDecodeError:
+                    # Fallback if JSON parsing fails
+                    answer_part = content
+                    reasoning_part = "See tool calls for reasoning process"
+                
+                return AgentResponse(
+                    answer=answer_part,
+                    reasoning=reasoning_part,
+                    tool_calls_made=tool_calls_made
+                )
+        
+        # Reached max iterations
+        return AgentResponse(
+            answer="Unable to find answer within iteration limit",
+            reasoning=f"Reached maximum of {self.max_iterations} iterations",
+            tool_calls_made=tool_calls_made
+        )
+    
+    def answer_batch(
+        self, 
+        questions: List[str], 
+        tools: Dict[str, Callable]
+    ) -> List[AgentResponse]:
+        """
+        Answer multiple questions (processes sequentially for now).
+        
+        Args:
+            questions: List of questions to answer
+            tools: Dict mapping tool names to callable functions
+            
+        Returns:
+            List of AgentResponse objects
+        """
+        responses = []
+        for question in questions:
+            response = self.answer_question(question, tools)
+            responses.append(response)
+        return responses
