@@ -43,7 +43,7 @@ class ReasoningChain:
     chain_id: str
     steps: List[Dict[str, Any]]
     final_entities: List[str]
-    accumulated_evidence: List[Dict[str, Any]]
+    accumulated_evidence: Dict[str, List[Dict[str, Any]]]  # Dict mapping questions to their evidences
     
 
 class MultiHopQA:
@@ -449,11 +449,12 @@ Decomposition:"""
             'chain_id': chain_id
         }
     
-    def generate_chains(self, decomposed_questions: List[str]) -> List[ReasoningChain]:
+    def generate_chains(self, decomposed_questions: List[str], show_intermediate_qa: bool = False) -> List[ReasoningChain]:
         """Generate and execute reasoning chains for multi-hop questions.
         
         Args:
             decomposed_questions: List of entity-agnostic decomposed questions
+            show_intermediate_qa: Whether to store detailed Q&A pairs for intermediate steps
             
         Returns:
             List of completed reasoning chains
@@ -470,11 +471,17 @@ Decomposition:"""
         # Initialize chains with global entity IDs from first hop
         chains = []
         for i, global_entity_id in enumerate(first_hop_result['next_hop_global_entity_ids']):  # Limit to top 5 entities
+            # Initialize accumulated_evidence as dict with first question
+            if not show_intermediate_qa:
+                initial_evidence = {first_hop_result['question']: self._get_entity_name_from_global_id(global_entity_id)}
+            else:
+                initial_evidence = {first_hop_result['question']: first_hop_result['qa_pairs']}
+            
             chain = ReasoningChain(
                 chain_id=f"chain_{i+1}",
                 steps=[first_hop_result],
                 final_entities=[global_entity_id],  # Store global entity IDs
-                accumulated_evidence=first_hop_result['qa_pairs'].copy()
+                accumulated_evidence=initial_evidence
             )
             chains.append(chain)
         
@@ -530,11 +537,36 @@ Decomposition:"""
                     else:
                         final_entities_for_chain = hop_result['next_hop_global_entity_ids'] 
                     
+                    # Create new accumulated evidence dict by copying existing and adding new question
+                    new_accumulated_evidence = chain.accumulated_evidence.copy()
+                    
+                    # Update the previous question's evidence with the entity we're actually using
+                    # This happens when we're beyond the first hop\
+                    if not show_intermediate_qa:
+                        if step_idx > 0:
+                            prev_questions = list(new_accumulated_evidence.keys())
+                            if prev_questions:
+                                last_question = prev_questions[-1]
+                                # Update it to show which entity we're continuing with
+                                new_accumulated_evidence[last_question] = entity_name
+                    
+                    if not is_final_step:
+                        # For intermediate steps, store based on mode
+                        if show_intermediate_qa:
+                            # Store Q&A pairs for detailed evidence display
+                            new_accumulated_evidence[substituted_question] = hop_result['qa_pairs']
+                        else:
+                            # Store placeholder - will be updated with entity name when we continue
+                            new_accumulated_evidence[substituted_question] = "[To be determined]"
+                    else:
+                        # For final step, always store the Q&A pairs for reasoning
+                        new_accumulated_evidence[substituted_question] = hop_result['qa_pairs']
+                    
                     new_chain = ReasoningChain(
                         chain_id=f"{chain.chain_id}_{entity_short_id}",
                         steps=chain.steps + [hop_result],
                         final_entities=final_entities_for_chain,
-                        accumulated_evidence= hop_result['qa_pairs']
+                        accumulated_evidence=new_accumulated_evidence
                     )
                     new_chains.append(new_chain)
             
@@ -543,7 +575,7 @@ Decomposition:"""
         
         return chains
     
-    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[str] = None, show_prompt: bool = True) -> str:
+    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[str] = None, show_prompt: bool = True, show_intermediate_qa: bool = False) -> str:
         """Use LLM to reason over accumulated chains and generate final answer.
         
         Args:
@@ -551,6 +583,7 @@ Decomposition:"""
             chains: List of completed reasoning chains with accumulated evidence
             decomposed_questions: The decomposed questions used to generate chains
             show_prompt: Whether to display the full prompt sent to LLM
+            show_intermediate_qa: Whether to show Q&A pairs for intermediate steps (instead of just entity names)
             
         Returns:
             Final answer generated by LLM
@@ -567,29 +600,70 @@ Decomposition:"""
         context_parts.append("Here are different evidence chains to answer this question:\n")
         
         for i, chain in enumerate(chains, 1):
-            context_parts.append(f"EVIDENCE CHAIN {i} (followed entity path: {chain.chain_id}):")
+            # context_parts.append(f"EVIDENCE CHAIN {i} (followed entity path: {chain.chain_id}):")
+            context_parts.append(f"EVIDENCE CHAIN {i}:")
             
-            # Debug: Show what questions were asked in this chain
-            if decomposed_questions:
-                context_parts.append("  Questions asked:")
-                for step in chain.steps:
-                    context_parts.append(f"    - {step['question']}")
+            # # Debug: Show what questions were asked in this chain
+            # if decomposed_questions:
+            #     context_parts.append("  Questions asked:")
+            #     for step in chain.steps:
+            #         context_parts.append(f"    - {step['question']}")
             
             context_parts.append("  Evidence collected:")
-            # Show all accumulated Q&A pairs as evidence
-            for j, qa in enumerate(chain.accumulated_evidence[:10], 1):  # Show top 10 Q&A pairs per chain
-                question_text = qa['question']
-                answer_text = qa.get('answer_names', qa.get('answers', ''))
-                if isinstance(answer_text, list):
-                    answer_text = ', '.join(str(a) for a in answer_text)
+            # Show evidences organized by decomposed questions using the new dict structure
+            accumulated_items = list(chain.accumulated_evidence.items())
+            
+            # For intermediate questions (all except last): show entity names or Q&A pairs based on mode and storage
+            for idx, (question_asked, evidence_data) in enumerate(accumulated_items[:-1]):
+                context_parts.append(f"    Question asked: {question_asked}")
                 
-                # Include source document info if available
-                doc_id = qa.get('doc_id', '')
-                if doc_id:
-                    context_parts.append(f"  {j}. [Doc: {doc_id}] Q: {question_text}")
+                # Check if evidence_data is Q&A pairs (list) or entity name (string)
+                if isinstance(evidence_data, list) and evidence_data:
+                    # Evidence is stored as Q&A pairs (detailed mode was used during generation)
+                    context_parts.append(f"    Evidence collected:")
+                    # Show top 5 Q&A pairs for this intermediate step
+                    for j, qa in enumerate(evidence_data[:5], 1):
+                        question_text = qa['question']
+                        answer_text = qa.get('answer_names', qa.get('answers', ''))
+                        if isinstance(answer_text, list):
+                            answer_text = ', '.join(str(a) for a in answer_text)
+                        
+                        context_parts.append(f"      {j}. Q: {question_text}")
+                        context_parts.append(f"         A: {answer_text}")
+                    
+                    # For Q&A mode, we need to show which entity was used for continuation
+                    # We can get this from the next question in the chain or from chain structure
+                    context_parts.append(f"    → Evidence from this step used for continuation")
                 else:
-                    context_parts.append(f"  {j}. Q: {question_text}")
-                context_parts.append(f"     A: {answer_text}")
+                    # Evidence is stored as entity name (fast mode was used)
+                    if show_intermediate_qa and isinstance(evidence_data, str) and evidence_data != "[To be determined]":
+                        # User wants detailed view but we only have entity names
+                        context_parts.append(f"    → Continued with: {evidence_data}")
+                    else:
+                        # Show entity name or placeholder
+                        context_parts.append(f"    → Continued with: {evidence_data}")
+                
+                context_parts.append("")  # Blank line between questions within chain
+            
+            # For the last question: show top 5 evidences for final reasoning
+            if accumulated_items:
+                last_question, last_qa_pairs = accumulated_items[-1]
+                context_parts.append(f"    Question asked: {last_question}")
+                context_parts.append(f"    Evidence collected:")
+                
+                # Show top 5 Q&A pairs for the last question
+                for j, qa in enumerate(last_qa_pairs[:5], 1):
+                    question_text = qa['question']
+                    answer_text = qa.get('answer_names', qa.get('answers', ''))
+                    if isinstance(answer_text, list):
+                        answer_text = ', '.join(str(a) for a in answer_text)
+                    
+                    context_parts.append(f"      {j}. Q: {question_text}")
+                    context_parts.append(f"         A: {answer_text}")
+                
+                if not last_qa_pairs:
+                    context_parts.append("      No evidence found for this question.")
+                context_parts.append("")  # Blank line between questions within chain
             
             context_parts.append("")  # Blank line between chains
         
@@ -605,7 +679,7 @@ IMPORTANT:
 - If the evidence doesn't contain the answer, say so
 
 <answer>
-Provide your answer based solely on the Q&A evidence shown above.
+Provide your answer based solely on the Q&A evidence shown above without any extra words, just the answer in few words.
 </answer>"""
 
         # Display the prompt if requested
@@ -658,7 +732,9 @@ Provide your answer based solely on the Q&A evidence shown above.
         for chain in chains:
             steps_count = str(len(chain.steps))
             final_entities = str(len(chain.final_entities))
-            evidence_count = str(len(chain.accumulated_evidence))
+            # Count total evidences across all questions in the dict
+            total_evidence_count = sum(len(qa_pairs) for qa_pairs in chain.accumulated_evidence.values())
+            evidence_count = str(total_evidence_count)
             
             # Create path summary
             path_parts = []
@@ -682,11 +758,12 @@ Provide your answer based solely on the Q&A evidence shown above.
         
         console.print(table)
     
-    def ask_multihop_question(self, question: str) -> str:
+    def ask_multihop_question(self, question: str, show_intermediate_qa: bool = False) -> str:
         """Execute the complete multi-hop QA pipeline.
         
         Args:
             question: The multi-hop question to answer
+            show_intermediate_qa: Whether to show Q&A pairs for intermediate steps (richer context)
             
         Returns:
             Final answer after multi-hop reasoning
@@ -697,13 +774,13 @@ Provide your answer based solely on the Q&A evidence shown above.
         decomposed_questions = self.decompose_question(question)
         
         # Step 2: Generate and execute reasoning chains
-        chains = self.generate_chains(decomposed_questions)
+        chains = self.generate_chains(decomposed_questions, show_intermediate_qa=show_intermediate_qa)
         
         # Step 3: Display chains summary
         self.display_chains_summary(chains)
         
         # Step 4: Final LLM reasoning (with prompt display and decomposition context)
-        final_answer = self.reason_over_chains(question, chains, decomposed_questions=decomposed_questions, show_prompt=True)
+        final_answer = self.reason_over_chains(question, chains, decomposed_questions=decomposed_questions, show_prompt=True, show_intermediate_qa=show_intermediate_qa)
         
         return final_answer
     
@@ -713,7 +790,12 @@ Provide your answer based solely on the Q&A evidence shown above.
         console.print("Commands:")
         console.print("  - Type a multi-hop question to get an answer")
         console.print("  - 'help' - Show this help")
+        console.print("  - 'mode' - Toggle between entity names only (fast) and full Q&A pairs (detailed)")
         console.print("  - 'quit' or 'exit' - Exit")
+        
+        # Default mode: show only entity names for faster processing
+        show_intermediate_qa = False
+        console.print(f"[dim]Current mode: {'Detailed Q&A pairs' if show_intermediate_qa else 'Entity names only'}[/dim]")
         
         while True:
             try:
@@ -727,10 +809,20 @@ Provide your answer based solely on the Q&A evidence shown above.
                     console.print("Ask a multi-hop question like:")
                     console.print("  - 'What is the birth year of the spouse of the director of Casablanca?'")
                     console.print("  - 'Where was the author of To Kill a Mockingbird born?'")
+                    console.print("  - 'Which film was released first, Casablanca or The Godfather?'")
+                
+                elif user_input.lower() == 'mode':
+                    show_intermediate_qa = not show_intermediate_qa
+                    mode_desc = 'Detailed Q&A pairs' if show_intermediate_qa else 'Entity names only'
+                    console.print(f"[green]Switched to: {mode_desc}[/green]")
+                    if show_intermediate_qa:
+                        console.print("[dim]Will show full Q&A evidence for all steps (more context, slower)[/dim]")
+                    else:
+                        console.print("[dim]Will show only entity names for intermediate steps (faster)[/dim]")
                 
                 else:
                     # Process as a multi-hop question
-                    answer = self.ask_multihop_question(user_input)
+                    answer = self.ask_multihop_question(user_input, show_intermediate_qa=show_intermediate_qa)
                     console.print("\n[bold green]Final Answer:[/bold green]")
                     console.print(Panel(answer, expand=False))
                     
