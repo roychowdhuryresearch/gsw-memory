@@ -95,42 +95,59 @@ class MultiHopQA:
         
         console.print("[bold green]✓ Multi-Hop QA System ready[/bold green]")
     
-    def decompose_question(self, question: str) -> List[str]:
-        """Decompose a multi-hop question into single-hop questions with <ENTITY> placeholders.
+    def decompose_question(self, question: str) -> List[Dict[str, Any]]:
+        """Decompose a multi-hop question into single-hop questions with <ENTITY> placeholders and retrieval flags.
         
         Args:
             question: The multi-hop question to decompose
             
         Returns:
-            List of single-hop questions where first question is specific and subsequent use <ENTITY> placeholder
+            List of dictionaries with 'question' and 'requires_retrieval' keys.
+            First question is specific and subsequent use <ENTITY> placeholder.
         """
         if not self.openai_client:
             console.print("[red]OpenAI client not available for question decomposition[/red]")
-            return [question]  # Fallback to original question
+            return [{"question": question, "requires_retrieval": True}]  # Fallback to original question
         
         decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
 The FIRST question should keep the original specific entity/information from the question.
 SUBSEQUENT questions should use <ENTITY> as a placeholder that will be replaced with entities found from previous steps.
 
+For each question, indicate whether it requires retrieval from the knowledge base (requires_retrieval: true) 
+or can be answered directly from the previous step's result (requires_retrieval: false).
+
+Format each decomposed question as:
+Question: [the question text]
+Requires retrieval: [true/false]
+
 Examples:
 
 Question: "What is the birth year of the spouse of the director of Casablanca?"
 Decomposition:
-1. Who directed Casablanca?
-2. Who was <ENTITY>'s spouse?
-3. What is <ENTITY>'s birth year?
-
-Question: "In which city was the university founded where the author of 'To Kill a Mockingbird' studied?"
-Decomposition:
-1. Who wrote 'To Kill a Mockingbird'?
-2. Where did <ENTITY> study?
-3. In which city was <ENTITY> founded?
+1. Question: Who directed Casablanca?
+   Requires retrieval: true
+2. Question: Who was <ENTITY>'s spouse?
+   Requires retrieval: true
+3. Question: What is <ENTITY>'s birth year?
+   Requires retrieval: true
 
 Question: "What is the capital of the country where the author of '1984' was born?"
 Decomposition:
-1. Who wrote '1984'?
-2. Where was <ENTITY> born?
-3. What is the capital of <ENTITY>?
+1. Question: Who wrote '1984'?
+   Requires retrieval: true
+2. Question: Where was <ENTITY> born?
+   Requires retrieval: true
+3. Question: What is the capital of <ENTITY>?
+   Requires retrieval: true
+
+Question: "Is the director of Inception older than the director of The Dark Knight?"
+Decomposition:
+1. Question: Who directed Inception?
+   Requires retrieval: true
+2. Question: Who directed The Dark Knight?
+   Requires retrieval: true
+3. Question: Is <ENTITY> older than <ENTITY>?
+   Requires retrieval: false
 
 Now decompose this question:
 Question: "{question}"
@@ -149,32 +166,59 @@ Decomposition:"""
             
             decomposition_text = response.choices[0].message.content
             
-            # Extract numbered questions from the response
+            # Parse the structured response with questions and retrieval flags
             questions = []
             lines = decomposition_text.strip().split('\n')
-            for line in lines:
-                line = line.strip()
-                # Match patterns like "1. Question?" or "1) Question?" or "- Question?"
-                if re.match(r'^[\d]+[\.\)]\s+', line) or line.startswith('- '):
-                    # Remove the numbering/bullets
-                    question = re.sub(r'^[\d]+[\.\)]\s+', '', line)
-                    question = re.sub(r'^-\s+', '', question)
-                    if question:
-                        questions.append(question)
+            i = 0
+            while i < len(lines):
+                line = lines[i].strip()
+                
+                # Look for question lines (starting with number or "Question:")
+                if re.match(r'^[\d]+[\.\)]\s*Question:', line) or line.startswith('Question:'):
+                    # Extract the question text
+                    question_match = re.search(r'Question:\s*(.+)', line)
+                    if question_match:
+                        question_text = question_match.group(1).strip()
+                        
+                        # Look for the requires_retrieval flag in the next line or same line
+                        requires_retrieval = True  # Default to true
+                        
+                        # Check if it's on the same line
+                        if 'Requires retrieval:' in line:
+                            retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', line, re.IGNORECASE)
+                            if retrieval_match:
+                                requires_retrieval = retrieval_match.group(1).lower() == 'true'
+                        # Check the next line
+                        elif i + 1 < len(lines):
+                            next_line = lines[i + 1].strip()
+                            if 'Requires retrieval:' in next_line:
+                                retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', next_line, re.IGNORECASE)
+                                if retrieval_match:
+                                    requires_retrieval = retrieval_match.group(1).lower() == 'true'
+                                i += 1  # Skip the retrieval line
+                        
+                        questions.append({
+                            "question": question_text,
+                            "requires_retrieval": requires_retrieval
+                        })
+                
+                i += 1
             
             if not questions:
-                # Fallback: split by lines and take non-empty ones
-                questions = [line.strip() for line in lines if line.strip() and not line.strip().endswith(':')]
+                # Fallback: treat the whole response as a single question if parsing fails
+                console.print("[yellow]Warning: Could not parse structured decomposition, using fallback[/yellow]")
+                return [{"question": question, "requires_retrieval": True}]
             
             console.print(f"[cyan]Decomposed into {len(questions)} questions:[/cyan]")
             for i, q in enumerate(questions, 1):
-                console.print(f"  {i}. {q}")
+                retrieval_str = "✓ retrieval" if q["requires_retrieval"] else "✗ no retrieval"
+                console.print(f"  {i}. {q['question']} [{retrieval_str}]")
             
-            return questions if questions else [question]
+            return questions if questions else [{"question": question, "requires_retrieval": True}]
             
         except Exception as e:
             console.print(f"[red]Error in question decomposition: {e}[/red]")
-            return [question]  # Fallback to original question
+            return [{"question": question, "requires_retrieval": True}]  # Fallback to original question
     
     def extract_global_entity_ids_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]]) -> List[str]:
         """Extract unique global entity IDs from reranked Q&A pairs.
@@ -470,11 +514,11 @@ Decomposition:"""
             'chain_id': chain_id
         }
     
-    def generate_chains(self, decomposed_questions: List[str], show_intermediate_qa: bool = False) -> List[ReasoningChain]:
+    def generate_chains(self, decomposed_questions: List[Dict[str, Any]], show_intermediate_qa: bool = False) -> List[ReasoningChain]:
         """Generate and execute reasoning chains for multi-hop questions.
         
         Args:
-            decomposed_questions: List of entity-agnostic decomposed questions
+            decomposed_questions: List of dicts with 'question' and 'requires_retrieval' keys
             show_intermediate_qa: Whether to store detailed Q&A pairs for intermediate steps
             
         Returns:
@@ -486,22 +530,51 @@ Decomposition:"""
         console.print(f"\n[bold magenta]Executing {len(decomposed_questions)} reasoning steps...[/bold magenta]")
         
         # Start with the first question - no entity focus needed
-        first_question = decomposed_questions[0]
-        first_hop_result = self.execute_single_hop(first_question, step_num=1, chain_id="init")
+        first_q_info = decomposed_questions[0]
+        first_question = first_q_info["question"]
+        
+        # Only execute retrieval if needed
+        if first_q_info["requires_retrieval"]:
+            first_hop_result = self.execute_single_hop(first_question, step_num=1, chain_id="init")
+        else:
+            # Skip retrieval for questions that don't need it
+            console.print(f"\n[bold cyan]Step 1 - Chain init:[/bold cyan] {first_question}")
+            console.print(f"[dim]Skipping retrieval (requires_retrieval=false)[/dim]")
+            first_hop_result = {
+                'question': first_question,
+                'search_results': [],
+                'qa_pairs': [],
+                'next_hop_global_entity_ids': [],
+                'step_num': 1,
+                'chain_id': "init"
+            }
         
         # Initialize chains with global entity IDs from first hop
         chains = []
-        for i, global_entity_id in enumerate(first_hop_result['next_hop_global_entity_ids']):  # Limit to top 5 entities
-            # Initialize accumulated_evidence as dict with first question
-            if not show_intermediate_qa:
-                initial_evidence = {first_hop_result['question']: self._get_entity_name_from_global_id(global_entity_id)}
-            else:
-                initial_evidence = {first_hop_result['question']: first_hop_result['qa_pairs']}
-            
+        if first_hop_result['next_hop_global_entity_ids']:
+            # Normal case: we have entities from retrieval
+            for i, global_entity_id in enumerate(first_hop_result['next_hop_global_entity_ids']):  # Limit to top 5 entities
+                # Initialize accumulated_evidence as dict with first question
+                if not show_intermediate_qa:
+                    initial_evidence = {first_hop_result['question']: self._get_entity_name_from_global_id(global_entity_id)}
+                else:
+                    initial_evidence = {first_hop_result['question']: first_hop_result['qa_pairs']}
+                
+                chain = ReasoningChain(
+                    chain_id=f"chain_{i+1}",
+                    steps=[first_hop_result],
+                    final_entities=[global_entity_id],  # Store global entity IDs
+                    accumulated_evidence=initial_evidence
+                )
+                chains.append(chain)
+        else:
+            # Special case: first question didn't need retrieval or didn't find entities
+            # Create a single chain with no entities
+            initial_evidence = {first_hop_result['question']: first_hop_result['qa_pairs'] if show_intermediate_qa else "No retrieval needed"}
             chain = ReasoningChain(
-                chain_id=f"chain_{i+1}",
+                chain_id="chain_1",
                 steps=[first_hop_result],
-                final_entities=[global_entity_id],  # Store global entity IDs
+                final_entities=[],  # No entities yet
                 accumulated_evidence=initial_evidence
             )
             chains.append(chain)
@@ -510,18 +583,72 @@ Decomposition:"""
         
         # Execute remaining questions for each chain
         for step_idx in range(1, len(decomposed_questions)):
-            question_template = decomposed_questions[step_idx]
+            q_info = decomposed_questions[step_idx]
+            question_template = q_info["question"]
+            requires_retrieval = q_info["requires_retrieval"]
             is_final_step_global = (step_idx + 1) == len(decomposed_questions)
             
             if is_final_step_global:
-                console.print(f"\n[bold red]FINAL Step {step_idx + 1} Template:[/bold red] {question_template}")
+                console.print(f"\n[bold red]FINAL Step {step_idx + 1} Template:[/bold red] {question_template} [retrieval: {requires_retrieval}]")
                 console.print(f"[dim]This is the final step - collecting Q&A pairs for answer generation[/dim]")
             else:
-                console.print(f"\n[bold magenta]Step {step_idx + 1} Template:[/bold magenta] {question_template}")
+                console.print(f"\n[bold magenta]Step {step_idx + 1} Template:[/bold magenta] {question_template} [retrieval: {requires_retrieval}]")
             
             new_chains = []
             
             for chain in chains:
+                # Handle chains with no entities (e.g., from non-retrieval questions)
+                if not chain.final_entities:
+                    # Process question without entity substitution
+                    console.print(f"[bold yellow]Chain {chain.chain_id} - No entities to substitute[/bold yellow]")
+                    
+                    # For questions with <ENTITY> but no entities, we might need to skip or handle specially
+                    if "<ENTITY>" in question_template:
+                        console.print(f"[yellow]Warning: Question template contains <ENTITY> but no entities available from previous step[/yellow]")
+                        continue  # Skip this chain for this question
+                    
+                    # Process the question as-is without substitution
+                    substituted_question = question_template
+                    is_final_step = (step_idx + 1) == len(decomposed_questions)
+                    
+                    # Execute based on retrieval flag
+                    if requires_retrieval:
+                        hop_result = self.execute_single_hop(
+                            substituted_question, 
+                            step_num=step_idx + 1, 
+                            chain_id=chain.chain_id,
+                            is_final_step=is_final_step,
+                            final_top_k=15
+                        )
+                    else:
+                        hop_result = {
+                            'question': substituted_question,
+                            'search_results': [],
+                            'qa_pairs': [],
+                            'next_hop_global_entity_ids': [],
+                            'step_num': step_idx + 1,
+                            'chain_id': chain.chain_id
+                        }
+                    
+                    # Create new chain
+                    new_accumulated_evidence = chain.accumulated_evidence.copy()
+                    if not is_final_step:
+                        if show_intermediate_qa:
+                            new_accumulated_evidence[substituted_question] = hop_result['qa_pairs']
+                        else:
+                            new_accumulated_evidence[substituted_question] = "No entities"
+                    else:
+                        new_accumulated_evidence[substituted_question] = hop_result['qa_pairs']
+                    
+                    new_chain = ReasoningChain(
+                        chain_id=chain.chain_id,
+                        steps=chain.steps + [hop_result],
+                        final_entities=hop_result['next_hop_global_entity_ids'] if not is_final_step else [],
+                        accumulated_evidence=new_accumulated_evidence
+                    )
+                    new_chains.append(new_chain)
+                    continue
+                
                 # For each global entity ID in the chain's final entities, create a new branch
                 for global_entity_id in chain.final_entities:
                     # Get entity name from the global entity ID for substitution
@@ -539,14 +666,29 @@ Decomposition:"""
                     # Check if this is the final step
                     is_final_step = (step_idx + 1) == len(decomposed_questions)
                     
-                    # Execute this hop with semantic search
-                    hop_result = self.execute_single_hop(
-                        substituted_question, 
-                        step_num=step_idx + 1, 
-                        chain_id=chain.chain_id,
-                        is_final_step=is_final_step,
-                        final_top_k=15  # Keep top 15 Q&A pairs for final answer generation
-                    )
+                    # Execute this hop with semantic search only if retrieval is needed
+                    if requires_retrieval:
+                        hop_result = self.execute_single_hop(
+                            substituted_question, 
+                            step_num=step_idx + 1, 
+                            chain_id=chain.chain_id,
+                            is_final_step=is_final_step,
+                            final_top_k=15  # Keep top 15 Q&A pairs for final answer generation
+                        )
+                    else:
+                        # Skip retrieval - just pass through entities and create a simple result
+                        console.print(f"\n[bold cyan]Step {step_idx + 1} - Chain {chain.chain_id}:[/bold cyan] {substituted_question}")
+                        console.print(f"[dim]Skipping retrieval (requires_retrieval=false) - reasoning question[/dim]")
+                        
+                        # For non-retrieval questions, we still want to maintain the chain structure
+                        hop_result = {
+                            'question': substituted_question,
+                            'search_results': [],
+                            'qa_pairs': [],  # No Q&A pairs for reasoning-only questions
+                            'next_hop_global_entity_ids': [] if is_final_step else chain.final_entities,  # Pass entities forward if not final
+                            'step_num': step_idx + 1,
+                            'chain_id': chain.chain_id
+                        }
                     
                     # Create new chain with this hop's results
                     # Use shortened entity ID for chain naming to avoid overly long IDs
@@ -596,13 +738,13 @@ Decomposition:"""
         
         return chains
     
-    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[str] = None, show_prompt: bool = True, show_intermediate_qa: bool = False) -> str:
+    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[Dict[str, Any]] = None, show_prompt: bool = True, show_intermediate_qa: bool = False) -> str:
         """Use LLM to reason over accumulated chains and generate final answer.
         
         Args:
             original_question: The original multi-hop question
             chains: List of completed reasoning chains with accumulated evidence
-            decomposed_questions: The decomposed questions used to generate chains
+            decomposed_questions: The decomposed questions (with retrieval flags) used to generate chains
             show_prompt: Whether to display the full prompt sent to LLM
             show_intermediate_qa: Whether to show Q&A pairs for intermediate steps (instead of just entity names)
             
@@ -643,7 +785,7 @@ Decomposition:"""
                     # Evidence is stored as Q&A pairs (detailed mode was used during generation)
                     context_parts.append(f"    Evidence collected:")
                     # Show top 5 Q&A pairs for this intermediate step
-                    for j, qa in enumerate(evidence_data[:5], 1):
+                    for j, qa in enumerate(evidence_data[:10], 1):
                         question_text = qa['question']
                         answer_text = qa.get('answer_names', qa.get('answers', ''))
                         if isinstance(answer_text, list):
