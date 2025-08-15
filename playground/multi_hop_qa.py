@@ -113,6 +113,8 @@ class MultiHopQA:
 The FIRST question should keep the original specific entity/information from the question.
 SUBSEQUENT questions should use <ENTITY> as a placeholder that will be replaced with entities found from previous steps.
 
+IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+
 For each question, indicate whether it requires retrieval from the knowledge base (requires_retrieval: true) 
 or can be answered directly from the previous step's result (requires_retrieval: false).
 
@@ -148,6 +150,13 @@ Decomposition:
    Requires retrieval: true
 3. Question: Is <ENTITY> older than <ENTITY>?
    Requires retrieval: false
+
+AVOID over-decomposition like this:
+DON'T break "Who is John Doe?" into:
+1. Who is John Doe? → "English"
+2. When was <ENTITY> born? → "When was English born?"
+
+DO ask directly: "When was John Doe born?"
 
 Now decompose this question:
 Question: "{question}"
@@ -815,7 +824,7 @@ Decomposition:"""
                 context_parts.append(f"    Evidence collected:")
                 
                 # Show top 5 Q&A pairs for the last question
-                for j, qa in enumerate(last_qa_pairs[:5], 1):
+                for j, qa in enumerate(last_qa_pairs[:10], 1):
                     question_text = qa['question']
                     answer_text = qa.get('answer_names', qa.get('answers', ''))
                     if isinstance(answer_text, list):
