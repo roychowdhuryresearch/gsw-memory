@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 import sys
 from dataclasses import dataclass
+from datetime import datetime
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -34,7 +35,30 @@ except ImportError:
     print("Warning: OpenAI not available. Install with: pip install openai")
     OPENAI_AVAILABLE = False
 
-console = Console()
+# Setup logging
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
+LOG_FILE = LOG_DIR / f"multihop_qa_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+log_handle = open(LOG_FILE, "w", buffering=1)  # Line buffered
+
+class LoggingConsole(Console):
+    """Console that also logs to file."""
+    def print(self, *args, **kwargs):
+        # Capture plain text
+        with self.capture() as capture:
+            super().print(*args, **kwargs)
+        
+        # Write to log file
+        text = capture.get()
+        if text:
+            log_handle.write(text)
+            log_handle.flush()
+        
+        # Print to terminal
+        super().print(*args, **kwargs)
+
+console = LoggingConsole()
+print(f"📝 Logging to: {LOG_FILE}")
 
 
 @dataclass
@@ -58,7 +82,7 @@ class MultiHopQA:
         console.print("[bold blue]Initializing Multi-Hop QA System...[/bold blue]")
         
         # Initialize the enhanced entity searcher
-        self.entity_searcher = EntitySearcher(num_documents)
+        self.entity_searcher = EntitySearcher(num_documents, cache_dir=".gsw_cache")
         
         # Initialize OpenAI client
         self.openai_client = None
@@ -291,46 +315,42 @@ Decomposition:"""
             return qa_pairs[:top_k]
         
         try:
-            # Import required modules for embeddings (same as simple_entity_search)
+            # Import required modules for embeddings
             import numpy as np
             from sklearn.metrics.pairwise import cosine_similarity
             
-            def get_detailed_instruct(task_description: str, query: str) -> str:
-                """Create instruction for Qwen embedding model."""
-                return f'Instruct: {task_description}\nQuery: {query}'
-            
-            # Embed the query using the same approach as simple_entity_search
-            task = 'Given a user question, create an embedding optimized for finding relevant question-answer pairs'
-            instructed_query = get_detailed_instruct(task, query)
-            query_outputs = self.entity_searcher.embedding_model.embed([instructed_query])
-            query_embedding = np.array(query_outputs[0].outputs.embedding)
+            # Embed the query using entity_searcher's method
+            query_embedding = self.entity_searcher._embed_query(query)
+            if query_embedding is None:
+                return qa_pairs[:top_k]
             
             console.print(f"[cyan]Reranking {len(qa_pairs)} Q&A pairs for multi-hop reasoning...[/cyan]")
             
-            # Create text representations for each Q&A pair (question + answer)
-            qa_texts = []
+            # Create text representations and get cached embeddings
+            qa_embeddings = []
+            missing_count = 0
+            
             for qa in qa_pairs:
                 # Use answer_names if available, otherwise use answers
                 answer_text = qa.get('answer_names', qa.get('answers', ''))
                 if isinstance(answer_text, list):
                     answer_text = ', '.join(str(a) for a in answer_text)
                 qa_text = f"{qa['question']} {answer_text}"
-                qa_texts.append(qa_text)
-            
-            # Embed all Q&A pairs using the same task as simple_entity_search
-            task = 'Given a question-answer pair, create an embedding that captures the semantic meaning for similarity comparison with user queries.'
-            qa_embeddings = []
-            
-            for qa_text in qa_texts:
-                instructed_qa = get_detailed_instruct(task, qa_text)
-                try:
-                    outputs = self.entity_searcher.embedding_model.embed([instructed_qa])
-                    embedding = np.array(outputs[0].outputs.embedding)
-                    qa_embeddings.append(embedding)
-                except Exception as e:
-                    console.print(f"[red]Error embedding Q&A pair: {e}[/red]")
+                
+                # Get embedding from cache
+                qa_hash = self.entity_searcher._get_qa_text_hash(qa_text)
+                
+                if qa_hash in self.entity_searcher.qa_embedding_cache:
+                    # Use cached embedding
+                    qa_embeddings.append(self.entity_searcher.qa_embedding_cache[qa_hash])
+                else:
+                    # This shouldn't happen if precomputation worked correctly
+                    missing_count += 1
                     # Use zero embedding as fallback
                     qa_embeddings.append(np.zeros_like(query_embedding))
+            
+            if missing_count > 0:
+                console.print(f"[yellow]Warning: {missing_count} Q&A pairs not found in cache[/yellow]")
             
             qa_embeddings = np.array(qa_embeddings)
             
@@ -348,7 +368,8 @@ Decomposition:"""
                 qa_with_score['similarity_score'] = float(similarities[idx])
                 reranked_pairs.append(qa_with_score)
             
-            console.print(f"[green]Selected top {len(reranked_pairs)} Q&A pairs (scores: {reranked_pairs[0]['similarity_score']:.3f} - {reranked_pairs[-1]['similarity_score']:.3f})[/green]")
+            if reranked_pairs:
+                console.print(f"[green]Selected top {len(reranked_pairs)} Q&A pairs (scores: {reranked_pairs[0]['similarity_score']:.3f} - {reranked_pairs[-1]['similarity_score']:.3f})[/green]")
             
             return reranked_pairs
             
@@ -677,6 +698,13 @@ IMPORTANT:
 - Use ONLY the Q&A evidence provided above
 - Do NOT use any external knowledge
 - If the evidence doesn't contain the answer, say so
+
+
+Please reason step by step and provide your answer in few words and provide your answer in the following format:
+
+<reasoning>
+Please reason step by step and provide your answer in few words.
+</reasoning>
 
 <answer>
 Provide your answer based solely on the Q&A evidence shown above without any extra words, just the answer in few words.

@@ -9,6 +9,7 @@ Returns top-k entities based on query similarity using Qwen-3 embeddings.
 import json
 import glob
 import os
+import hashlib
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 import sys
@@ -95,11 +96,13 @@ def load_gsw_files(num_documents: int = 50) -> Tuple[List[GSWStructure], List[st
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50):
+    def __init__(self, num_documents: int = 50, cache_dir: str = None, rebuild_cache: bool = False):
         """Initialize the entity searcher.
         
         Args:
             num_documents: Number of documents to load from GSW corpus
+            cache_dir: Directory to store/load embedding caches (default: current dir)
+            rebuild_cache: If True, force regenerate all embeddings even if cache exists
         """
         self.entities = []
         self.entity_texts = []
@@ -108,6 +111,16 @@ class EntitySearcher:
         self.gsw_by_doc_id = {}  # Store GSW structures by doc_id for QA lookup
         self.openai_client = None  # For answer generation
         self.show_llm_prompt = True  # Toggle for debugging LLM prompts
+        
+        # Embedding cache attributes
+        self.cache_dir = Path(cache_dir) if cache_dir else Path(".")
+        self.rebuild_cache = rebuild_cache
+        self.qa_embedding_cache = {}  # In-memory cache for Q&A embeddings: {qa_text_hash: embedding}
+        self.entity_embedding_cache_file = self.cache_dir / f"entity_embeddings_{num_documents}docs.npz"
+        self.qa_embedding_cache_file = self.cache_dir / f"qa_embeddings_{num_documents}docs.npz"
+        self.cache_metadata_file = self.cache_dir / f"embedding_metadata_{num_documents}docs.json"
+        self.cache_hits = 0
+        self.cache_misses = 0
         
         console.print("[bold blue]Loading GSW entities...[/bold blue]")
         gsw_structures, doc_ids = load_gsw_files(num_documents)
@@ -121,7 +134,19 @@ class EntitySearcher:
         if VLLM_AVAILABLE:
             self._initialize_embedding_model()
             if self.embedding_model:
-                self._generate_embeddings()
+                # Try to load cached embeddings first
+                if not self.rebuild_cache and self._load_entity_embeddings_cache():
+                    console.print("[green]✓ Loaded entity embeddings from cache[/green]")
+                else:
+                    self._generate_embeddings()
+                    self._save_entity_embeddings_cache()
+                
+                # Load Q&A embedding cache if it exists, or precompute all Q&A embeddings
+                if not self.rebuild_cache and self._load_qa_embeddings_cache():
+                    console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
+                
+                # Precompute any missing Q&A embeddings
+                self._precompute_qa_embeddings()
         
         # Initialize OpenAI client if available
         if OPENAI_AVAILABLE:
@@ -302,6 +327,80 @@ class EntitySearcher:
             console.print(f"[red]Error generating embeddings: {e}[/red]")
             self.embeddings = None
     
+    def _precompute_qa_embeddings(self):
+        """Precompute embeddings for all Q&A pairs in the GSW structures."""
+        if not self.embedding_model:
+            return
+        
+        console.print("Precomputing Q&A pair embeddings...")
+        
+        # Collect all unique Q&A pairs from all GSW structures
+        all_qa_texts = set()
+        qa_count = 0
+        
+        for doc_id, gsw in self.gsw_by_doc_id.items():
+            # Look through verb phrase nodes for QA pairs
+            for verb_node in gsw.verb_phrase_nodes:
+                if hasattr(verb_node, 'questions') and verb_node.questions:
+                    for question in verb_node.questions:
+                        if hasattr(question, 'answers') and question.answers:
+                            # Resolve answer IDs to names for embedding
+                            answer_names = self._resolve_entity_ids_to_names(question.answers, doc_id)
+                            answers_text = ', '.join(answer_names)
+                            
+                            # Create Q&A text representation (same format as in _rerank_qa_pairs)
+                            qa_text = f"{question.text} {answers_text}"
+                            all_qa_texts.add(qa_text)
+                            qa_count += 1
+        
+        console.print(f"Found {len(all_qa_texts)} unique Q&A pairs from {qa_count} total pairs")
+        
+        if not all_qa_texts:
+            return
+        
+        # Check how many are already cached
+        uncached_texts = []
+        for qa_text in all_qa_texts:
+            qa_hash = self._get_qa_text_hash(qa_text)
+            if qa_hash not in self.qa_embedding_cache:
+                uncached_texts.append(qa_text)
+        
+        if not uncached_texts:
+            console.print(f"[green]✓ All {len(all_qa_texts)} Q&A pairs already cached[/green]")
+            return
+        
+        console.print(f"Generating embeddings for {len(uncached_texts)} uncached Q&A pairs...")
+        
+        try:
+            # Task for Q&A embeddings
+            task = 'Given a question-answer pair, create an embedding that captures the semantic meaning for similarity comparison with user queries.'
+            
+            # Generate embeddings in batches
+            batch_size = 32
+            for i in range(0, len(uncached_texts), batch_size):
+                batch_texts = uncached_texts[i:i+batch_size]
+                console.print(f"  Processing batch {i//batch_size + 1}/{(len(uncached_texts) + batch_size - 1)//batch_size}...")
+                
+                # Create instructed texts for this batch
+                instructed_batch = [get_detailed_instruct(task, qa_text) for qa_text in batch_texts]
+                
+                # Generate embeddings
+                outputs = self.embedding_model.embed(instructed_batch)
+                
+                # Store in cache
+                for qa_text, output in zip(batch_texts, outputs):
+                    qa_hash = self._get_qa_text_hash(qa_text)
+                    embedding = np.array(output.outputs.embedding)
+                    self.qa_embedding_cache[qa_hash] = embedding
+            
+            console.print(f"[green]✓ Precomputed {len(uncached_texts)} Q&A embeddings (total cached: {len(self.qa_embedding_cache)})[/green]")
+            
+            # Save the Q&A cache after precomputation
+            self._save_qa_embeddings_cache()
+            
+        except Exception as e:
+            console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
+    
     def _embed_query(self, query: str) -> Optional[np.ndarray]:
         """Embed a query using the Qwen model."""
         if not self.embedding_model:
@@ -318,6 +417,104 @@ class EntitySearcher:
         except Exception as e:
             console.print(f"[red]Error embedding query: {e}[/red]")
             return None
+    
+    def _get_qa_text_hash(self, qa_text: str) -> str:
+        """Generate a hash for Q&A text to use as cache key."""
+        return hashlib.md5(qa_text.encode()).hexdigest()
+    
+    def _save_entity_embeddings_cache(self):
+        """Save entity embeddings to disk."""
+        if self.embeddings is None:
+            return
+        
+        try:
+            # Save embeddings and metadata
+            np.savez_compressed(
+                self.entity_embedding_cache_file,
+                embeddings=self.embeddings,
+                entity_texts=self.entity_texts
+            )
+            console.print(f"[green]✓ Saved entity embeddings to {self.entity_embedding_cache_file}[/green]")
+        except Exception as e:
+            console.print(f"[yellow]Warning: Could not save entity embeddings cache: {e}[/yellow]")
+    
+    def _load_entity_embeddings_cache(self) -> bool:
+        """Load entity embeddings from disk cache.
+        
+        Returns:
+            True if cache was loaded successfully, False otherwise
+        """
+        if not self.entity_embedding_cache_file.exists():
+            return False
+        
+        try:
+            data = np.load(self.entity_embedding_cache_file, allow_pickle=True)
+            cached_texts = data['entity_texts']
+            
+            # Verify that cached texts match current entity texts
+            if len(cached_texts) != len(self.entity_texts):
+                console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
+                return False
+            
+            # Check if texts are the same (order matters)
+            if not all(ct == et for ct, et in zip(cached_texts, self.entity_texts)):
+                console.print("[yellow]Entity texts changed, regenerating embeddings[/yellow]")
+                return False
+            
+            self.embeddings = data['embeddings']
+            return True
+        except Exception as e:
+            console.print(f"[yellow]Could not load entity embeddings cache: {e}[/yellow]")
+            return False
+    
+    def _save_qa_embeddings_cache(self):
+        """Save Q&A embeddings cache to disk."""
+        if not self.qa_embedding_cache:
+            return
+        
+        try:
+            # Prepare data for saving
+            qa_texts = []
+            qa_hashes = []
+            qa_embeddings = []
+            
+            for qa_hash, embedding in self.qa_embedding_cache.items():
+                qa_hashes.append(qa_hash)
+                qa_embeddings.append(embedding)
+            
+            np.savez_compressed(
+                self.qa_embedding_cache_file,
+                hashes=qa_hashes,
+                embeddings=np.array(qa_embeddings)
+            )
+            console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A embeddings to cache[/green]")
+        except Exception as e:
+            console.print(f"[yellow]Warning: Could not save Q&A embeddings cache: {e}[/yellow]")
+    
+    def _load_qa_embeddings_cache(self) -> bool:
+        """Load Q&A embeddings from disk cache.
+        
+        Returns:
+            True if cache was loaded successfully, False otherwise
+        """
+        if not self.qa_embedding_cache_file.exists():
+            return False
+        
+        try:
+            data = np.load(self.qa_embedding_cache_file, allow_pickle=True)
+            qa_hashes = data['hashes']
+            qa_embeddings = data['embeddings']
+            
+            # Rebuild the cache dictionary
+            self.qa_embedding_cache = {}
+            for qa_hash, embedding in zip(qa_hashes, qa_embeddings):
+                self.qa_embedding_cache[qa_hash] = embedding
+            
+            console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
+            return True
+        except Exception as e:
+            console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
+            return False
     
     def search(self, query: str, top_k: int = 5, verbose: bool = True, generate_answer: bool = True, qa_top_k: int = 15) -> List[Tuple[Dict[str, Any], float]]:
         """Search for entities matching the query.
@@ -553,21 +750,26 @@ class EntitySearcher:
 
         print(qa_texts)
         
-        # Embed all Q&A pairs
-        task = 'Given a question-answer pair, create an embedding that captures the semantic meaning for similarity comparison with user queries.'
-        # task = 'Given a comprehensive entity summary, create an embedding optimized for semantic search and question answering retrieval'
+        # Get embeddings from cache (should all be precomputed)
         qa_embeddings = []
+        missing_count = 0
         
         for qa_text in qa_texts:
-            instructed_query = get_detailed_instruct(task, qa_text)
-            try:
-                outputs = self.embedding_model.embed([instructed_query])
-                embedding = np.array(outputs[0].outputs.embedding)
-                qa_embeddings.append(embedding)
-            except Exception as e:
-                console.print(f"[red]Error embedding Q&A pair: {e}[/red]")
+            qa_hash = self._get_qa_text_hash(qa_text)
+            
+            if qa_hash in self.qa_embedding_cache:
+                # Use cached embedding
+                qa_embeddings.append(self.qa_embedding_cache[qa_hash])
+                self.cache_hits += 1
+            else:
+                # This shouldn't happen if precomputation worked correctly
+                missing_count += 1
+                self.cache_misses += 1
                 # Use zero embedding as fallback
-                qa_embeddings.append(np.zeros_like(query_embedding))
+                qa_embeddings.append(np.zeros(self.embeddings.shape[1]))  # Use same dimension as entity embeddings
+        
+        if missing_count > 0:
+            console.print(f"[yellow]Warning: {missing_count} Q&A pairs not found in cache[/yellow]")
         
         qa_embeddings = np.array(qa_embeddings)
         
@@ -861,6 +1063,12 @@ Only final answer, NA if you cannot find the answer.
         console.print(f"  Unique documents: {unique_docs}")
         console.print(f"  Unique chunks: {unique_chunks}")
         console.print(f"  Embeddings available: {'Yes' if self.embeddings is not None else 'No'}")
+    
+    def save_cache(self):
+        """Save all caches to disk."""
+        self._save_entity_embeddings_cache()
+        self._save_qa_embeddings_cache()
+        console.print(f"[green]✓ Cache saved (hits: {self.cache_hits}, misses: {self.cache_misses})[/green]")
     
     def _run_test_queries(self, top_k: int):
         """Run predefined test queries."""
