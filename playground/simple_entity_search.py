@@ -68,7 +68,7 @@ def load_gsw_files(num_documents: int = 50) -> Tuple[List[GSWStructure], List[st
     """Load GSW structures from JSON files."""
     print(f"Loading first {num_documents} GSW files...")
     
-    base_dir = "/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/logs/full_2wiki_corpus_20250710_202211/gsw_output_global_ids/networks"
+    base_dir = "/mnt/SSD1/shreyas/SM_GSW/2wiki/networks"
     
     # Get first N document directories
     doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
@@ -96,14 +96,16 @@ def load_gsw_files(num_documents: int = 50) -> Tuple[List[GSWStructure], List[st
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50, cache_dir: str = None, rebuild_cache: bool = False):
+    def __init__(self, num_documents: int = 50, cache_dir: str = None, rebuild_cache: bool = False, verbose: bool = True):
         """Initialize the entity searcher.
         
         Args:
             num_documents: Number of documents to load from GSW corpus
             cache_dir: Directory to store/load embedding caches (default: current dir)
             rebuild_cache: If True, force regenerate all embeddings even if cache exists
+            verbose: If True, show initialization messages
         """
+        self.verbose_init = verbose
         self.entities = []
         self.entity_texts = []
         self.embeddings = None
@@ -122,7 +124,8 @@ class EntitySearcher:
         self.cache_hits = 0
         self.cache_misses = 0
         
-        console.print("[bold blue]Loading GSW entities...[/bold blue]")
+        if self.verbose_init:
+            console.print("[bold blue]Loading GSW entities...[/bold blue]")
         gsw_structures, doc_ids = load_gsw_files(num_documents)
         
         # Store GSW structures by doc_id for later QA lookup
@@ -136,14 +139,16 @@ class EntitySearcher:
             if self.embedding_model:
                 # Try to load cached embeddings first
                 if not self.rebuild_cache and self._load_entity_embeddings_cache():
-                    console.print("[green]✓ Loaded entity embeddings from cache[/green]")
+                    if self.verbose_init:
+                        console.print("[green]✓ Loaded entity embeddings from cache[/green]")
                 else:
                     self._generate_embeddings()
                     self._save_entity_embeddings_cache()
                 
                 # Load Q&A embedding cache if it exists, or precompute all Q&A embeddings
                 if not self.rebuild_cache and self._load_qa_embeddings_cache():
-                    console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
+                    if self.verbose_init:
+                        console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
                 
                 # Precompute any missing Q&A embeddings
                 self._precompute_qa_embeddings()
@@ -152,17 +157,21 @@ class EntitySearcher:
         if OPENAI_AVAILABLE:
             try:
                 self.openai_client = OpenAI()
-                console.print("[green]✓ OpenAI client initialized for answer generation[/green]")
+                if self.verbose_init:
+                    console.print("[green]✓ OpenAI client initialized for answer generation[/green]")
             except Exception as e:
-                console.print(f"[yellow]Warning: Could not initialize OpenAI client: {e}[/yellow]")
+                if self.verbose_init:
+                    console.print(f"[yellow]Warning: Could not initialize OpenAI client: {e}[/yellow]")
                 self.openai_client = None
         
-        console.print(f"[bold green]✓ Loaded {len(self.entities)} entities[/bold green]")
-        console.print(f"[bold green]✓ Embeddings: {'Available' if self.embeddings is not None else 'Text search only'}[/bold green]")
+        if self.verbose_init:
+            console.print(f"[bold green]✓ Loaded {len(self.entities)} entities[/bold green]")
+            console.print(f"[bold green]✓ Embeddings: {'Available' if self.embeddings is not None else 'Text search only'}[/bold green]")
     
     def _extract_entities_from_gsw(self, gsw_structures: List[GSWStructure], doc_ids: List[str]):
         """Extract entities from GSW structures."""
-        console.print("Extracting entity data...")
+        if self.verbose_init:
+            console.print("Extracting entity data...")
         
         entity_count = 0
         
@@ -210,7 +219,8 @@ class EntitySearcher:
                 self.entity_texts.append(search_text)
                 entity_count += 1
         
-        console.print(f"Extracted {entity_count} entities from {len(set(doc_ids))} documents")
+        if self.verbose_init:
+            console.print(f"Extracted {entity_count} entities from {len(set(doc_ids))} documents")
     
     def _resolve_entity_ids_to_names(self, entity_ids: List[str], doc_id: str) -> List[str]:
         """Resolve entity IDs to their names using the GSW structure.
@@ -282,11 +292,14 @@ class EntitySearcher:
     def _initialize_embedding_model(self):
         """Initialize the Qwen embedding model."""
         try:
-            console.print("[cyan]Initializing Qwen3-Embedding-8B model...[/cyan]")
+            if self.verbose_init:
+                console.print("[cyan]Initializing Qwen3-Embedding-8B model...[/cyan]")
             self.embedding_model = LLM(model="Qwen/Qwen3-Embedding-8B", task="embed")
-            console.print("[green]✓ Qwen embedding model initialized[/green]")
+            if self.verbose_init:
+                console.print("[green]✓ Qwen embedding model initialized[/green]")
         except Exception as e:
-            console.print(f"[red]Error initializing embedding model: {e}[/red]")
+            if self.verbose_init:
+                console.print(f"[red]Error initializing embedding model: {e}[/red]")
             self.embedding_model = None
     
     def _generate_embeddings(self):
@@ -294,7 +307,8 @@ class EntitySearcher:
         if not self.entity_texts or not self.embedding_model:
             return
         
-        console.print("Generating embeddings for entity search...")
+        if self.verbose_init:
+            console.print("Generating embeddings for entity search...")
         
         try:
             # Use task description similar to hypernode clustering
@@ -314,17 +328,20 @@ class EntitySearcher:
                 batch_texts = input_texts[batch_start:batch_start+batch_size]
                 batch_num = batch_start//batch_size + 1
                 total_batches = (len(input_texts) + batch_size - 1)//batch_size
-                console.print(f"Processing batch {batch_num}/{total_batches}")
+                if self.verbose_init:
+                    console.print(f"Processing batch {batch_num}/{total_batches}")
                 
                 outputs = self.embedding_model.embed(batch_texts)
                 batch_embeddings = [o.outputs.embedding for o in outputs]
                 all_embeddings.extend(batch_embeddings)
             
             self.embeddings = np.array(all_embeddings)
-            console.print(f"Generated embeddings with shape: {self.embeddings.shape}")
+            if self.verbose_init:
+                console.print(f"Generated embeddings with shape: {self.embeddings.shape}")
             
         except Exception as e:
-            console.print(f"[red]Error generating embeddings: {e}[/red]")
+            if self.verbose_init:
+                console.print(f"[red]Error generating embeddings: {e}[/red]")
             self.embeddings = None
     
     def _precompute_qa_embeddings(self):
@@ -332,7 +349,8 @@ class EntitySearcher:
         if not self.embedding_model:
             return
         
-        console.print("Precomputing Q&A pair embeddings...")
+        if self.verbose_init:
+            console.print("Precomputing Q&A pair embeddings...")
         
         # Collect all unique Q&A pairs from all GSW structures
         all_qa_texts = set()
@@ -353,7 +371,8 @@ class EntitySearcher:
                             all_qa_texts.add(qa_text)
                             qa_count += 1
         
-        console.print(f"Found {len(all_qa_texts)} unique Q&A pairs from {qa_count} total pairs")
+        if self.verbose_init:
+            console.print(f"Found {len(all_qa_texts)} unique Q&A pairs from {qa_count} total pairs")
         
         if not all_qa_texts:
             return
@@ -366,10 +385,12 @@ class EntitySearcher:
                 uncached_texts.append(qa_text)
         
         if not uncached_texts:
-            console.print(f"[green]✓ All {len(all_qa_texts)} Q&A pairs already cached[/green]")
+            if self.verbose_init:
+                console.print(f"[green]✓ All {len(all_qa_texts)} Q&A pairs already cached[/green]")
             return
         
-        console.print(f"Generating embeddings for {len(uncached_texts)} uncached Q&A pairs...")
+        if self.verbose_init:
+            console.print(f"Generating embeddings for {len(uncached_texts)} uncached Q&A pairs...")
         
         try:
             # Task for Q&A embeddings
@@ -379,7 +400,8 @@ class EntitySearcher:
             batch_size = 32
             for i in range(0, len(uncached_texts), batch_size):
                 batch_texts = uncached_texts[i:i+batch_size]
-                console.print(f"  Processing batch {i//batch_size + 1}/{(len(uncached_texts) + batch_size - 1)//batch_size}...")
+                if self.verbose_init:
+                    console.print(f"  Processing batch {i//batch_size + 1}/{(len(uncached_texts) + batch_size - 1)//batch_size}...")
                 
                 # Create instructed texts for this batch
                 instructed_batch = [get_detailed_instruct(task, qa_text) for qa_text in batch_texts]
@@ -393,13 +415,15 @@ class EntitySearcher:
                     embedding = np.array(output.outputs.embedding)
                     self.qa_embedding_cache[qa_hash] = embedding
             
-            console.print(f"[green]✓ Precomputed {len(uncached_texts)} Q&A embeddings (total cached: {len(self.qa_embedding_cache)})[/green]")
+            if self.verbose_init:
+                console.print(f"[green]✓ Precomputed {len(uncached_texts)} Q&A embeddings (total cached: {len(self.qa_embedding_cache)})[/green]")
             
             # Save the Q&A cache after precomputation
             self._save_qa_embeddings_cache()
             
         except Exception as e:
-            console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
+            if self.verbose_init:
+                console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
     
     def _embed_query(self, query: str) -> Optional[np.ndarray]:
         """Embed a query using the Qwen model."""
@@ -434,7 +458,8 @@ class EntitySearcher:
                 embeddings=self.embeddings,
                 entity_texts=self.entity_texts
             )
-            console.print(f"[green]✓ Saved entity embeddings to {self.entity_embedding_cache_file}[/green]")
+            if self.verbose_init:
+                console.print(f"[green]✓ Saved entity embeddings to {self.entity_embedding_cache_file}[/green]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save entity embeddings cache: {e}[/yellow]")
     
@@ -487,7 +512,8 @@ class EntitySearcher:
                 hashes=qa_hashes,
                 embeddings=np.array(qa_embeddings)
             )
-            console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A embeddings to cache[/green]")
+            if self.verbose_init:
+                console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A embeddings to cache[/green]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save Q&A embeddings cache: {e}[/yellow]")
     
@@ -510,7 +536,8 @@ class EntitySearcher:
             for qa_hash, embedding in zip(qa_hashes, qa_embeddings):
                 self.qa_embedding_cache[qa_hash] = embedding
             
-            console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
+            if self.verbose_init:
+                console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
             return True
         except Exception as e:
             console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
@@ -734,12 +761,12 @@ class EntitySearcher:
             return qa_pairs[:top_k]
         
         # Embed the query
-        print(f"[cyan]Embedding query: {query}[/cyan]")
+        # Removed debug print
         query_embedding = self._embed_query(query)
         if query_embedding is None:
             return qa_pairs[:top_k]
         
-        console.print(f"[cyan]Reranking {len(qa_pairs)} Q&A pairs...[/cyan]")
+        # Removed verbose print
         
         # Create text representations for each Q&A pair (question + answer)
         qa_texts = []
@@ -748,7 +775,7 @@ class EntitySearcher:
             qa_text = f"{qa['question']} {qa['answers']}"
             qa_texts.append(qa_text)
 
-        print(qa_texts)
+        # Removed debug print
         
         # Get embeddings from cache (should all be precomputed)
         qa_embeddings = []
@@ -777,9 +804,7 @@ class EntitySearcher:
         query_embedding = query_embedding.reshape(1, -1)
         similarities = cosine_similarity(query_embedding, qa_embeddings)[0]
 
-        # Print all the sorted queries with respective scores
-        for i, qa_text in enumerate(qa_texts):
-            print(f"{i}. {qa_text} - {similarities[i]:.3f}")
+        # Removed debug prints
         
         # Get top-k indices
         top_indices = np.argsort(similarities)[::-1][:top_k]
@@ -791,7 +816,7 @@ class EntitySearcher:
             qa_with_score['similarity_score'] = float(similarities[idx])
             reranked_pairs.append(qa_with_score)
         
-        console.print(f"[green]Selected top {len(reranked_pairs)} Q&A pairs (scores: {reranked_pairs[0]['similarity_score']:.3f} - {reranked_pairs[-1]['similarity_score']:.3f})[/green]")
+        # Removed verbose output about selected Q&A pairs
         
         return reranked_pairs
     
@@ -893,7 +918,7 @@ Only final answer, NA if you cannot find the answer.
             console.print(f"\n[cyan]Token count: {token_count} tokens[/cyan]")
         
         try:
-            console.print("[cyan]Generating LLM answer...[/cyan]")
+            # Removed verbose generating message
             response = self.openai_client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
