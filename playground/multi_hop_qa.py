@@ -73,13 +73,17 @@ class ReasoningChain:
 class MultiHopQA:
     """Simple multi-hop QA system using enhanced entity search."""
     
-    def __init__(self, num_documents: int = 200):
+    def __init__(self, num_documents: int = 200, verbose: bool = True):
         """Initialize multi-hop QA system.
         
         Args:
             num_documents: Number of documents to load for entity search
+            verbose: Whether to show detailed output during initialization and processing
         """
-        console.print("[bold blue]Initializing Multi-Hop QA System...[/bold blue]")
+        self.verbose = verbose
+        
+        if verbose:
+            console.print("[bold blue]Initializing Multi-Hop QA System...[/bold blue]")
         
         # Initialize the enhanced entity searcher
         self.entity_searcher = EntitySearcher(num_documents, cache_dir=".gsw_cache")
@@ -89,11 +93,14 @@ class MultiHopQA:
         if OPENAI_AVAILABLE:
             try:
                 self.openai_client = OpenAI()
-                console.print("[green]✓ OpenAI client initialized for decomposition and reasoning[/green]")
+                if verbose:
+                    console.print("[green]✓ OpenAI client initialized for decomposition and reasoning[/green]")
             except Exception as e:
-                console.print(f"[yellow]Warning: Could not initialize OpenAI client: {e}[/yellow]")
+                if verbose:
+                    console.print(f"[yellow]Warning: Could not initialize OpenAI client: {e}[/yellow]")
         
-        console.print("[bold green]✓ Multi-Hop QA System ready[/bold green]")
+        if verbose:
+            console.print("[bold green]✓ Multi-Hop QA System ready[/bold green]")
     
     def decompose_question(self, question: str) -> List[Dict[str, Any]]:
         """Decompose a multi-hop question into single-hop questions with <ENTITY> placeholders and retrieval flags.
@@ -106,7 +113,8 @@ class MultiHopQA:
             First question is specific and subsequent use <ENTITY> placeholder.
         """
         if not self.openai_client:
-            console.print("[red]OpenAI client not available for question decomposition[/red]")
+            if self.verbose:
+                console.print("[red]OpenAI client not available for question decomposition[/red]")
             return [{"question": question, "requires_retrieval": True}]  # Fallback to original question
         
         decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
@@ -133,30 +141,27 @@ Decomposition:
 3. Question: What is <ENTITY>'s birth year?
    Requires retrieval: true
 
-Question: "What is the capital of the country where the author of '1984' was born?"
+Question: "Which film has the director who is older, Dune or The Dark Knight?"
 Decomposition:
-1. Question: Who wrote '1984'?
-   Requires retrieval: true
-2. Question: Where was <ENTITY> born?
-   Requires retrieval: true
-3. Question: What is the capital of <ENTITY>?
-   Requires retrieval: true
-
-Question: "Is the director of Inception older than the director of The Dark Knight?"
-Decomposition:
-1. Question: Who directed Inception?
+1. Question: Who directed Dune?
    Requires retrieval: true
 2. Question: Who directed The Dark Knight?
    Requires retrieval: true
-3. Question: Is <ENTITY> older than <ENTITY>?
+3. Question: When was <ENTITY> born?
+   Requires retrieval: true
+4. Question: When was <ENTITY> born?
+   Requires retrieval: true
+5. Question: Who is older, <ENTITY> or <ENTITY>?
    Requires retrieval: false
 
-AVOID over-decomposition like this:
-DON'T break "Who is John Doe?" into:
-1. Who is John Doe? → "English"
-2. When was <ENTITY> born? → "When was English born?"
 
-DO ask directly: "When was John Doe born?"
+IMPORTANT:
+    AVOID over-decomposition like this:
+    DON'T break "Who is John Doe?" into:
+    1. Who is John Doe? → "English"
+    2. When was <ENTITY> born? → "When was English born?"
+
+    DO ask directly: "When was John Doe born?"
 
 Now decompose this question:
 Question: "{question}"
@@ -215,18 +220,21 @@ Decomposition:"""
             
             if not questions:
                 # Fallback: treat the whole response as a single question if parsing fails
-                console.print("[yellow]Warning: Could not parse structured decomposition, using fallback[/yellow]")
+                if self.verbose:
+                    console.print("[yellow]Warning: Could not parse structured decomposition, using fallback[/yellow]")
                 return [{"question": question, "requires_retrieval": True}]
             
-            console.print(f"[cyan]Decomposed into {len(questions)} questions:[/cyan]")
-            for i, q in enumerate(questions, 1):
-                retrieval_str = "✓ retrieval" if q["requires_retrieval"] else "✗ no retrieval"
-                console.print(f"  {i}. {q['question']} [{retrieval_str}]")
+            if self.verbose:
+                console.print(f"[cyan]Decomposed into {len(questions)} questions:[/cyan]")
+                for i, q in enumerate(questions, 1):
+                    retrieval_str = "✓ retrieval" if q["requires_retrieval"] else "✗ no retrieval"
+                    console.print(f"  {i}. {q['question']} [{retrieval_str}]")
             
             return questions if questions else [{"question": question, "requires_retrieval": True}]
             
         except Exception as e:
-            console.print(f"[red]Error in question decomposition: {e}[/red]")
+            if self.verbose:
+                console.print(f"[red]Error in question decomposition: {e}[/red]")
             return [{"question": question, "requires_retrieval": True}]  # Fallback to original question
     
     def extract_global_entity_ids_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]]) -> List[str]:
@@ -523,7 +531,7 @@ Decomposition:"""
             'chain_id': chain_id
         }
     
-    def generate_chains(self, decomposed_questions: List[Dict[str, Any]], show_intermediate_qa: bool = False) -> List[ReasoningChain]:
+    def generate_chains(self, decomposed_questions: List[Dict[str, Any]], show_intermediate_qa: bool = True) -> List[ReasoningChain]:
         """Generate and execute reasoning chains for multi-hop questions.
         
         Args:
@@ -536,7 +544,8 @@ Decomposition:"""
         if not decomposed_questions:
             return []
         
-        console.print(f"\n[bold magenta]Executing {len(decomposed_questions)} reasoning steps...[/bold magenta]")
+        if self.verbose:
+            console.print(f"\n[bold magenta]Executing {len(decomposed_questions)} reasoning steps...[/bold magenta]")
         
         # Start with the first question - no entity focus needed
         first_q_info = decomposed_questions[0]
@@ -747,7 +756,7 @@ Decomposition:"""
         
         return chains
     
-    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[Dict[str, Any]] = None, show_prompt: bool = True, show_intermediate_qa: bool = False) -> str:
+    def reason_over_chains(self, original_question: str, chains: List[ReasoningChain], decomposed_questions: List[Dict[str, Any]] = None, show_prompt: bool = True, show_intermediate_qa: bool = True) -> str:
         """Use LLM to reason over accumulated chains and generate final answer.
         
         Args:
@@ -794,7 +803,7 @@ Decomposition:"""
                     # Evidence is stored as Q&A pairs (detailed mode was used during generation)
                     context_parts.append(f"    Evidence collected:")
                     # Show top 5 Q&A pairs for this intermediate step
-                    for j, qa in enumerate(evidence_data[:10], 1):
+                    for j, qa in enumerate(evidence_data[10], 1):
                         question_text = qa['question']
                         answer_text = qa.get('answer_names', qa.get('answers', ''))
                         if isinstance(answer_text, list):
@@ -858,7 +867,7 @@ Please reason step by step and provide your answer in few words.
 </reasoning>
 
 <answer>
-Provide your answer based solely on the Q&A evidence shown above without any extra words, just the answer in few words.
+Provide your answer based solely on the Q&A evidence shown above without sentence, just the pure answer in single word or phrase.
 </answer>"""
 
         # Display the prompt if requested
@@ -937,17 +946,22 @@ Provide your answer based solely on the Q&A evidence shown above without any ext
         
         console.print(table)
     
-    def ask_multihop_question(self, question: str, show_intermediate_qa: bool = False) -> str:
+    def ask_multihop_question(self, question: str, show_intermediate_qa: bool = True, verbose: bool = None) -> str:
         """Execute the complete multi-hop QA pipeline.
         
         Args:
             question: The multi-hop question to answer
             show_intermediate_qa: Whether to show Q&A pairs for intermediate steps (richer context)
+            verbose: Whether to show detailed output (if None, uses instance default)
             
         Returns:
             Final answer after multi-hop reasoning
         """
-        console.print(f"\n[bold blue]Multi-Hop Question:[/bold blue] {question}")
+        # Use method parameter or fall back to instance default
+        show_verbose = verbose if verbose is not None else self.verbose
+        
+        if show_verbose:
+            console.print(f"\n[bold blue]Multi-Hop Question:[/bold blue] {question}")
         
         # Step 1: Decompose the question
         decomposed_questions = self.decompose_question(question)
@@ -955,11 +969,12 @@ Provide your answer based solely on the Q&A evidence shown above without any ext
         # Step 2: Generate and execute reasoning chains
         chains = self.generate_chains(decomposed_questions, show_intermediate_qa=show_intermediate_qa)
         
-        # Step 3: Display chains summary
-        self.display_chains_summary(chains)
+        # Step 3: Display chains summary (only if verbose)
+        if show_verbose:
+            self.display_chains_summary(chains)
         
-        # Step 4: Final LLM reasoning (with prompt display and decomposition context)
-        final_answer = self.reason_over_chains(question, chains, decomposed_questions=decomposed_questions, show_prompt=True, show_intermediate_qa=show_intermediate_qa)
+        # Step 4: Final LLM reasoning
+        final_answer = self.reason_over_chains(question, chains, decomposed_questions=decomposed_questions, show_prompt=show_verbose, show_intermediate_qa=show_intermediate_qa)
         
         return final_answer
     
@@ -973,7 +988,7 @@ Provide your answer based solely on the Q&A evidence shown above without any ext
         console.print("  - 'quit' or 'exit' - Exit")
         
         # Default mode: show only entity names for faster processing
-        show_intermediate_qa = False
+        show_intermediate_qa = True
         console.print(f"[dim]Current mode: {'Detailed Q&A pairs' if show_intermediate_qa else 'Entity names only'}[/dim]")
         
         while True:
@@ -1018,7 +1033,7 @@ def main():
     
     # Initialize multi-hop QA system
     try:
-        multihop_qa = MultiHopQA(num_documents=200)  # Load 200 documents
+        multihop_qa = MultiHopQA(num_documents=200, verbose=True)  # Load 200 documents
     except Exception as e:
         console.print(f"[red]Error initializing system: {e}[/red]")
         return
