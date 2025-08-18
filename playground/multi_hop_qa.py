@@ -16,6 +16,9 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime
 
+import os 
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.table import Table
@@ -86,7 +89,7 @@ class MultiHopQA:
             console.print("[bold blue]Initializing Multi-Hop QA System...[/bold blue]")
         
         # Initialize the enhanced entity searcher
-        self.entity_searcher = EntitySearcher(num_documents, cache_dir=".gsw_cache", verbose=self.verbose)
+        self.entity_searcher = EntitySearcher(num_documents, cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.gsw_cache", verbose=self.verbose)
         
         # Initialize OpenAI client
         self.openai_client = None
@@ -119,7 +122,7 @@ class MultiHopQA:
         
         decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
 The FIRST question should keep the original specific entity/information from the question.
-SUBSEQUENT questions should use <ENTITY> as a placeholder that will be replaced with entities found from previous steps.
+SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
 
 IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
 
@@ -174,7 +177,7 @@ Decomposition:"""
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
                 ],
-                temperature=0.3,
+                temperature=0.0,
                 max_tokens=300
             )
             
@@ -472,15 +475,15 @@ Decomposition:"""
                 console.print(f"[yellow]Warning: Q&A reranking failed: {e}. Using original order.[/yellow]")
             return qa_pairs[:top_k]
     
-    def _extract_unique_entities_from_reranked_qa(self, reranked_qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> List[str]:
-        """Extract unique global entity IDs from reranked Q&A pairs.
+    def _extract_unique_entities_from_reranked_qa(self, reranked_qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> List[tuple]:
+        """Extract unique global entity IDs from reranked Q&A pairs along with the Q&A pair that justified each selection.
         
         Args:
             reranked_qa_pairs: List of reranked Q&A pairs (most relevant first)
             max_entities: Maximum number of unique entities to extract
             
         Returns:
-            List of unique global entity IDs from top-ranked Q&A pairs
+            List of tuples: (global_entity_id, qa_pair_that_contains_this_entity)
         """
         unique_entities = []
         seen_entities = set()
@@ -496,7 +499,7 @@ Decomposition:"""
                     
                     # Only add if we haven't seen this entity before
                     if global_id not in seen_entities:
-                        unique_entities.append(global_id)
+                        unique_entities.append((global_id, qa))  # Store both entity and the Q&A pair
                         seen_entities.add(global_id)
                         
                         # Stop once we have enough unique entities
@@ -531,8 +534,6 @@ Decomposition:"""
             query=question,
             top_k=10,  # Get top 10 entities
             verbose=False,  # Don't show tables for intermediate steps
-            generate_answer=False,  # No LLM answer for intermediate steps
-            qa_top_k=15  # Get top 15 Q&A pairs for reranking
         )
         
         # Extract Q&A pairs from semantic search results
@@ -557,7 +558,9 @@ Decomposition:"""
         else:
             # For intermediate steps: Rerank all Q&A pairs, then extract entities for next hop
             reranked_qa_pairs = self._rerank_qa_pairs_for_multihop(question, all_qa_pairs, top_k=-1)
-            global_entity_ids_for_next_hop = self._extract_unique_entities_from_reranked_qa(reranked_qa_pairs, max_entities=5)
+            entities_with_qa = self._extract_unique_entities_from_reranked_qa(reranked_qa_pairs, max_entities=5)
+            # Split into separate lists for backward compatibility
+            global_entity_ids_for_next_hop = [entity_id for entity_id, _ in entities_with_qa]
             if self.verbose:
                 console.print(f"[green]Intermediate step: Found {len(global_entity_ids_for_next_hop)} global entity IDs for next hop: {global_entity_ids_for_next_hop[:3]}{'...' if len(global_entity_ids_for_next_hop) > 3 else ''}[/green]")
         
@@ -566,6 +569,7 @@ Decomposition:"""
             'search_results': search_results,
             'qa_pairs': reranked_qa_pairs,  # Use reranked Q&A pairs for better quality
             'next_hop_global_entity_ids': global_entity_ids_for_next_hop,
+            'next_hop_entities_with_qa': entities_with_qa if not is_final_step else [],  # Include Q&A pairs for each entity
             'step_num': step_num,
             'chain_id': chain_id
         }
@@ -609,14 +613,44 @@ Decomposition:"""
         
         # Initialize chains with global entity IDs from first hop
         chains = []
-        if first_hop_result['next_hop_global_entity_ids']:
-            # Normal case: we have entities from retrieval
-            for i, global_entity_id in enumerate(first_hop_result['next_hop_global_entity_ids']):  # Limit to top 5 entities
+        entities_with_qa = first_hop_result.get('next_hop_entities_with_qa', [])
+        
+        if entities_with_qa:
+            # We have both entities and their justifying Q&A pairs
+            for i, (global_entity_id, qa_pair) in enumerate(entities_with_qa):
                 # Initialize accumulated_evidence as dict with first question
+                # For intermediate steps, only store the Q&A pair that justified this entity selection
                 if not show_intermediate_qa:
                     initial_evidence = {first_hop_result['question']: self._get_entity_name_from_global_id(global_entity_id)}
                 else:
-                    initial_evidence = {first_hop_result['question']: first_hop_result['qa_pairs']}
+                    # Store only the Q&A pair that led to selecting this entity
+                    initial_evidence = {first_hop_result['question']: [qa_pair]}
+                
+                chain = ReasoningChain(
+                    chain_id=f"chain_{i+1}",
+                    steps=[first_hop_result],
+                    final_entities=[global_entity_id],  # Store global entity IDs
+                    accumulated_evidence=initial_evidence
+                )
+                chains.append(chain)
+        elif first_hop_result['next_hop_global_entity_ids']:
+            # Fallback: find the Q&A pair for each entity manually
+            qa_pairs = first_hop_result.get('qa_pairs', [])
+            for i, global_entity_id in enumerate(first_hop_result['next_hop_global_entity_ids']):
+                # Find the Q&A pair that contains this entity
+                justifying_qa = None
+                if "::" in global_entity_id:
+                    doc_id, entity_id = global_entity_id.split("::", 1)
+                    for qa in qa_pairs:
+                        if qa.get('doc_id') == doc_id and entity_id in qa.get('answer_ids', []):
+                            justifying_qa = qa
+                            break
+                
+                if not show_intermediate_qa:
+                    initial_evidence = {first_hop_result['question']: self._get_entity_name_from_global_id(global_entity_id)}
+                else:
+                    # Store only the justifying Q&A pair, not all of them
+                    initial_evidence = {first_hop_result['question']: [justifying_qa] if justifying_qa else []}
                 
                 chain = ReasoningChain(
                     chain_id=f"chain_{i+1}",
@@ -863,7 +897,7 @@ Decomposition:"""
                         chain_id=f"chain_q{i+1}_{j+1}",
                         steps=[hop_result],
                         final_entities=[entity_id],
-                        accumulated_evidence={question: hop_result['qa_pairs'] if show_intermediate_qa else self._get_entity_name_from_global_id(entity_id)}
+                        accumulated_evidence={question: hop_result['next_hop_entities_with_qa'][j][1]}
                     )
                     chain.entity_context = entity_context  # Add entity tracking
                     chains.append(chain)
@@ -874,7 +908,7 @@ Decomposition:"""
                     chain_id=f"chain_q{i+1}_1", 
                     steps=[hop_result],
                     final_entities=[],
-                    accumulated_evidence={question: hop_result['qa_pairs'] if show_intermediate_qa else "No entities"}
+                    accumulated_evidence={question: hop_result['qa_pairs']}
                 )
                 chain.entity_context = entity_context
                 chains.append(chain)
@@ -937,7 +971,7 @@ Decomposition:"""
                     step_num=i+1,
                     chain_id=chain.chain_id,
                     is_final_step=is_final_step,
-                    final_top_k=15
+                    final_top_k=5
                 )
                 
                 # Handle chain branching based on entities found
@@ -966,7 +1000,8 @@ Decomposition:"""
                     # Final step or no entities found - create single chain
                     new_entity_context = getattr(chain, 'entity_context', {}).copy()
                     new_accumulated_evidence = chain.accumulated_evidence.copy()
-                    new_accumulated_evidence[substituted_question] = hop_result['qa_pairs'] if (show_intermediate_qa or is_final_step) else "Entity tracked"
+                    new_accumulated_evidence[substituted_question] = hop_result['qa_pairs'] if  is_final_step else ""
+             
                     
                     new_chain = ReasoningChain(
                         chain_id=chain.chain_id,
@@ -1021,46 +1056,40 @@ Decomposition:"""
             # Show evidences organized by decomposed questions using the new dict structure
             accumulated_items = list(chain.accumulated_evidence.items())
             
-            # For intermediate questions (all except last): show entity names or Q&A pairs based on mode and storage
+            # For intermediate questions (all except last): show ONLY the Q&A pair that justified the entity selection
             for idx, (question_asked, evidence_data) in enumerate(accumulated_items[:-1]):
                 context_parts.append(f"    Question asked: {question_asked}")
                 
                 # Check if evidence_data is Q&A pairs (list) or entity name (string)
-                if isinstance(evidence_data, list) and evidence_data:
-                    # Evidence is stored as Q&A pairs (detailed mode was used during generation)
-                    context_parts.append(f"    Evidence collected:")
-                    # Show top 5 Q&A pairs for this intermediate step
-                    for j, qa in enumerate(evidence_data[:10], 1):
-                        question_text = qa['question']
-                        answer_text = qa.get('answer_names', qa.get('answers', ''))
-                        if isinstance(answer_text, list):
-                            answer_text = ', '.join(str(a) for a in answer_text)
-                        
-                        context_parts.append(f"      {j}. Q: {question_text}")
-                        context_parts.append(f"         A: {answer_text}")
-                    
-                    # For Q&A mode, we need to show which entity was used for continuation
-                    # We can get this from the next question in the chain or from chain structure
-                    context_parts.append(f"    → Evidence from this step used for continuation")
+                if isinstance(evidence_data, dict) and evidence_data:
+                    # Evidence is stored as one QA pair with metadata
+                    context_parts.append(f"    QA pair from knowledge base that led to next entity:")
+                    # Show only the Q&A pair(s) that justified this chain - should be 1 or very few
+                    question_text = evidence_data['question']
+                    answer_text = ", ".join(evidence_data.get('answer_names'))
+                    context_parts.append(f"      Q: {question_text}")
+                    context_parts.append(f"      A: {answer_text}")
+                    context_parts.append(f"    → Following entity: {answer_text}")
                 else:
                     # Evidence is stored as entity name (fast mode was used)
-                    if show_intermediate_qa and isinstance(evidence_data, str) and evidence_data != "[To be determined]":
-                        # User wants detailed view but we only have entity names
-                        context_parts.append(f"    → Continued with: {evidence_data}")
+                    if isinstance(evidence_data, str) and evidence_data != "[To be determined]":
+                        context_parts.append(f"    → Following entity: {evidence_data}")
                     else:
-                        # Show entity name or placeholder
-                        context_parts.append(f"    → Continued with: {evidence_data}")
+                        context_parts.append(f"    → Following entity: {evidence_data}")
                 
                 context_parts.append("")  # Blank line between questions within chain
             
-            # For the last question: show top 5 evidences for final reasoning
+            # For the last question: show top k evidences for final reasoning
             if accumulated_items:
                 last_question, last_qa_pairs = accumulated_items[-1]
                 context_parts.append(f"    Question asked: {last_question}")
                 context_parts.append(f"    Evidence collected:")
-                
+                 
+                if isinstance(last_qa_pairs, dict):
+                    last_qa_pairs = [last_qa_pairs]
+
                 # Show top 5 Q&A pairs for the last question
-                for j, qa in enumerate(last_qa_pairs[:10], 1):
+                for j, qa in enumerate(last_qa_pairs, 1):
                     question_text = qa['question']
                     answer_text = qa.get('answer_names', qa.get('answers', ''))
                     if isinstance(answer_text, list):
@@ -1070,31 +1099,50 @@ Decomposition:"""
                     context_parts.append(f"         A: {answer_text}")
                 
                 if not last_qa_pairs:
-                    context_parts.append("      No evidence found for this question.")
+                    context_parts.append(" No evidence found for this question.")
                 context_parts.append("")  # Blank line between questions within chain
             
             context_parts.append("")  # Blank line between chains
         
         context = "\n".join(context_parts)
         
-        # Create final reasoning prompt - simple approach
-        reasoning_prompt = f"""{context}
-Based on the evidence chains above, please answer: {original_question}
+        # Create final reasoning prompt with proper system explanation
+        reasoning_prompt = f"""You are an agent designed to answer multi-hop questions using structured knowledge.
 
-IMPORTANT: 
-- Use ONLY the Q&A evidence provided above
-- Do NOT use any external knowledge
-- If the evidence doesn't contain the answer, say so
+SYSTEM OVERVIEW:
+The knowledge base has been processed into semantic workspaces containing question-answer pairs. To answer multi-hop questions, we decompose them into steps and follow entity paths through the knowledge.
+
+METHODOLOGY:
+1. We break the multi-hop question into single steps
+2. For each step, we identify relevant entities and explore them
+3. Each "Evidence Chain" below represents following a specific entity path
+4. Most chains will be irrelevant - only some lead to the correct answer
+
+YOUR TASK:
+Identify which evidence chain(s) logically answer the question and extract the answer.
 
 
-Please reason step by step and provide your answer in few words and provide your answer in the following format:
+{context}
+
+EVALUATION PROCESS:
+1. Identify what information the question seeks
+2. Determine which chains follow entities relevant to that information
+3. Discard chains following irrelevant entities (e.g., for "mother's death", ignore chains about spouse/children)
+4. Extract the answer from relevant chain(s)
+
+RULES:
+- Use ONLY the provided Q&A evidence
+- Do NOT use external knowledge
+- If no chain contains the answer, state "No answer found"
+
+Please respond in the following format:
 
 <reasoning>
-Please reason step by step and provide your answer in few words.
+Please reason step by step to arrive at the answer.
 </reasoning>
 
 <answer>
-Provide your answer based solely on the Q&A evidence shown above without sentence, just the pure answer in single word or phrase.
+[Provide only the answer based solely on evidence given. Provide the answer in a single word or phrase.]
 </answer>"""
 
         # Display the prompt if requested
@@ -1185,11 +1233,16 @@ Provide your answer based solely on the Q&A evidence shown above without sentenc
         Returns:
             Final answer after multi-hop reasoning
         """
+        import time
+        
         # Use method parameter or fall back to instance default
         show_verbose = verbose if verbose is not None else self.verbose
         
         if show_verbose:
             console.print(f"\n[bold blue]Multi-Hop Question:[/bold blue] {question}")
+        
+        # Start timing from the beginning of retrieval
+        start_time = time.time()
         
         # Step 1: Decompose the question
         decomposed_questions = self.decompose_question(question)
@@ -1212,6 +1265,13 @@ Provide your answer based solely on the Q&A evidence shown above without sentenc
         
         # Step 4: Final LLM reasoning
         final_answer = self.reason_over_chains(question, chains, decomposed_questions=decomposed_questions, show_prompt=show_verbose, show_intermediate_qa=show_intermediate_qa)
+        
+        # Calculate total time
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        
+        # Display timing information
+        console.print(f"\n[bold yellow]⏱️ Time taken: {elapsed_time:.2f} seconds[/bold yellow]")
         
         return final_answer
     
@@ -1270,7 +1330,7 @@ def main():
     
     # Initialize multi-hop QA system
     try:
-        multihop_qa = MultiHopQA(num_documents=200, verbose=True)  # Load 200 documents
+        multihop_qa = MultiHopQA(num_documents=-1, verbose=True)  # Load 200 documents
     except Exception as e:
         console.print(f"[red]Error initializing system: {e}[/red]")
         return

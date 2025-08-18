@@ -495,7 +495,7 @@ def main(verbose: bool = False):
     
     try:
         # Initialize evaluator with verbose control
-        evaluator = MultiHopQAEvaluator(num_documents=200, num_questions=20, verbose=verbose)
+        evaluator = MultiHopQAEvaluator(num_documents=-1, num_questions=20, verbose=verbose)
         
         # Run evaluation
         results = evaluator.run_evaluation()

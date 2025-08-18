@@ -543,15 +543,13 @@ class EntitySearcher:
             console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
             return False
     
-    def search(self, query: str, top_k: int = 5, verbose: bool = True, generate_answer: bool = True, qa_top_k: int = 15) -> List[Tuple[Dict[str, Any], float]]:
+    def search(self, query: str, top_k: int = 5, verbose: bool = True) -> List[Tuple[Dict[str, Any], float]]:
         """Search for entities matching the query.
         
         Args:
             query: Search query
             top_k: Number of top results to return
             verbose: Whether to display search results
-            generate_answer: Whether to generate an LLM answer
-            qa_top_k: Number of Q&A pairs to pass to LLM after reranking
             
         Returns:
             List of (entity_info, score) tuples sorted by relevance
@@ -576,11 +574,7 @@ class EntitySearcher:
         if verbose:
             self._display_qa_pairs_table(enriched_results)
         
-        # Generate LLM answer if requested
-        if generate_answer and verbose:
-            answer = self._generate_llm_answer(query, enriched_results, qa_top_k=qa_top_k)
-            console.print("\n[bold green]LLM Answer:[/bold green]")
-            console.print(Panel(answer, expand=False))
+
         
         return enriched_results
     
