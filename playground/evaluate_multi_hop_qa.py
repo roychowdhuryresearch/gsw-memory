@@ -21,11 +21,14 @@ from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress
 
+import os 
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
 
-# Import our multi-hop QA system
-from playground.multi_hop_qa import MultiHopQA
+# Import our simplified multi-hop QA system
+from playground.multi_hop_qa_simple import SimplifiedMultiHopQA
 # Import evaluation utilities
 from src.gsw_memory.evaluation.hipporag_eval import evaluate_qa_batch, format_evaluation_report
 
@@ -45,29 +48,32 @@ class EvaluationResult:
     gold_answers: List[str]
     processing_time: float
     decomposed_questions: List[Dict[str, Any]]
+    final_prompt: Optional[str] = None
     error: Optional[str] = None
 
 class MultiHopQAEvaluator:
-    """Evaluator for multi-hop QA system on 2WikiMultihopQA dataset."""
+    """Evaluator for simplified multi-hop QA system on 2WikiMultihopQA dataset."""
     
-    def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False):
+    def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False, show_prompt: bool = False):
         """Initialize evaluator.
         
         Args:
             num_documents: Number of documents to load (first N from corpus)
             num_questions: Number of questions to evaluate (first N from dataset)
             verbose: Whether to show detailed output during evaluation
+            show_prompt: Whether to show LLM prompts during evaluation
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
         self.data_dir = Path(".data/2wiki")
         self.verbose = verbose
+        self.show_prompt = show_prompt
         
         if verbose:
             console.print("[bold blue]Initializing Multi-Hop QA Evaluator...[/bold blue]")
         
-        # Initialize the multi-hop QA system with verbose control
-        self.qa_system = MultiHopQA(num_documents=num_documents, verbose=verbose)
+        # Initialize the simplified multi-hop QA system with verbose control
+        self.qa_system = SimplifiedMultiHopQA(num_documents=num_documents, verbose=verbose, show_prompt=show_prompt)
         
         if verbose:
             console.print(f"[green]✓ Evaluator ready for {num_questions} questions on {num_documents} documents[/green]")
@@ -173,20 +179,19 @@ class MultiHopQAEvaluator:
         start_time = datetime.now()
         
         try:
-            # Run the multi-hop QA pipeline (disable verbose output for clean evaluation)
-            raw_response = self.qa_system.ask_multihop_question(
-                question, 
-                show_intermediate_qa=True,  # Keep processing but reduce output 
-                verbose=False  # Disable verbose output during evaluation
-            )
+            # Run the simplified multi-hop QA pipeline (disable verbose output for clean evaluation)
+            result = self.qa_system.process_multihop_question(question)
             
-            # Extract the final answer
-            predicted_answer = self.extract_answer_from_response(raw_response)
+            # Extract the final answer from the result
+            predicted_answer = self.extract_answer_from_response(result['answer'])
             
-            # Get decomposed questions for analysis (if available)
-            decomposed_questions = self.qa_system.decompose_question(question)
+            # Get decomposed questions from the result
+            decomposed_questions = result.get('decomposed_questions', [])
             
-            processing_time = (datetime.now() - start_time).total_seconds()
+            # Get the final prompt that was used
+            final_prompt = result.get('final_prompt', None)
+            
+            processing_time = result.get('time_taken', (datetime.now() - start_time).total_seconds())
             
             return EvaluationResult(
                 question_id=question_id,
@@ -195,6 +200,7 @@ class MultiHopQAEvaluator:
                 gold_answers=gold_answers,
                 processing_time=processing_time,
                 decomposed_questions=decomposed_questions,
+                final_prompt=final_prompt,
                 error=None
             )
             
@@ -209,6 +215,7 @@ class MultiHopQAEvaluator:
                 gold_answers=gold_answers,
                 processing_time=processing_time,
                 decomposed_questions=[],
+                final_prompt=None,
                 error=str(e)
             )
     
@@ -474,6 +481,7 @@ class MultiHopQAEvaluator:
                 "metrics": metrics,
                 "processing_time": result.processing_time,
                 "decomposed_questions": result.decomposed_questions,
+                "final_prompt": result.final_prompt,
                 "error": result.error
             }
             output_data["per_question_results"].append(question_data)
@@ -484,18 +492,19 @@ class MultiHopQAEvaluator:
         console.print(f"[green]✓ Results saved to: {output_file}[/green]")
 
 
-def main(verbose: bool = False):
+def main(verbose: bool = False, show_prompt: bool = False):
     """Main evaluation function.
     
     Args:
         verbose: Whether to show detailed output during evaluation
+        show_prompt: Whether to show LLM prompts during evaluation
     """
-    console.print("\n[bold cyan]🔗 Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
-    console.print("Evaluating system performance against HippoRAG baseline")
+    console.print("\n[bold cyan]🔗 Simplified Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
+    console.print("Evaluating simplified system performance against HippoRAG baseline")
     
     try:
         # Initialize evaluator with verbose control
-        evaluator = MultiHopQAEvaluator(num_documents=-1, num_questions=20, verbose=verbose)
+        evaluator = MultiHopQAEvaluator(num_documents=-1, num_questions=20, verbose=verbose, show_prompt=show_prompt)
         
         # Run evaluation
         results = evaluator.run_evaluation()
@@ -526,5 +535,6 @@ def main(verbose: bool = False):
 
 
 if __name__ == "__main__":
-    # You can set verbose=True here for detailed output during development
-    main(verbose=False)  # Default to non-verbose for clean evaluation runs
+    # You can set verbose=True and show_prompt=True here for detailed output during development
+    # main(verbose=True, show_prompt=True)  # For debugging prompts and detailed output
+    main(verbose=False, show_prompt=False)  # Default to non-verbose for clean evaluation runs

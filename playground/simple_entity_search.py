@@ -766,7 +766,8 @@ class EntitySearcher:
         qa_texts = []
         for qa in qa_pairs:
             # Combine question and answer for embedding
-            qa_text = f"{qa['question']} {qa['answers']}"
+            answer_names = qa.get('answer_names', qa.get('answers', []))
+            qa_text = f"{qa['question']} {', '.join(answer_names)}"
             qa_texts.append(qa_text)
 
         # Removed debug print
