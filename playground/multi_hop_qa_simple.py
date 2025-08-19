@@ -281,6 +281,31 @@ Decomposition:"""
         # Otherwise just return top k by entity score
         return all_qa_pairs[:top_k_qa]
     
+    def is_question_referenced_in_future(self, current_index: int, decomposed: List[Dict[str, Any]]) -> bool:
+        """Check if the current question index is referenced in any future questions.
+        
+        Args:
+            current_index: Current question index (0-based)
+            decomposed: List of all decomposed questions
+            
+        Returns:
+            True if any future question references this one with <ENTITY_Q{}>
+        """
+        current_q_ref = f"<ENTITY_Q{current_index + 1}>"  # Q1 is index 0, so add 1
+        
+        # Check all subsequent questions (only those that require retrieval)
+        for future_index in range(current_index + 1, len(decomposed)):
+            future_q_info = decomposed[future_index]
+            # Skip non-retrieval questions when checking for references
+            if not future_q_info.get("requires_retrieval", True):
+                continue
+            
+            future_question = future_q_info.get("question", "")
+            if current_q_ref in future_question:
+                return True
+        
+        return False
+    
     def extract_entities_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> List[str]:
         """Extract unique entity names from Q&A pairs.
         
@@ -305,14 +330,15 @@ Decomposition:"""
                 if name and name not in seen:
                     unique_entities.append(name)
                     answer_text = ', '.join(qa.get('answer_names', qa.get('answer_ids', [])))
-                    qa_pair_used.append(f"{qa['question']} {answer_text}")
+                    answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+                    qa_pair_used.append(f"{qa['question']} {answer_text} {answer_rolestates}")
                     seen.add(name)
                     if len(unique_entities) >= max_entities:
                         return unique_entities, qa_pair_used
         
         return unique_entities, qa_pair_used
     
-    def process_multihop_question(self, question: str) -> Dict[str, Any]:
+    def process_multihop_question(self, question: str, final_topk: int = 10) -> Dict[str, Any]:
         """Process a multi-hop question with simplified approach.
         
         Args:
@@ -344,13 +370,17 @@ Decomposition:"""
                     console.print(f"[dim]Skipping Q{i+1} (no retrieval needed): {question_template}[/dim]")
                 continue
             
+            # Check if this question is referenced in future questions
+            is_referenced = self.is_question_referenced_in_future(i, decomposed)
+            
             # Substitute entities from PREVIOUS questions if needed
             # For Q1, there are no previous entities, so it stays as-is
             # For Q2+, we substitute using entities found in previous questions
             actual_questions = self.substitute_entities(question_template, entities_by_question)
             
             if self.verbose:
-                console.print(f"\n[cyan]Q{i+1}: Processing {len(actual_questions)} question(s)[/cyan]")
+                mode = "entity extraction" if is_referenced else "Q&A collection"
+                console.print(f"\n[cyan]Q{i+1}: Processing {len(actual_questions)} question(s) [{mode}][/cyan]")
             
             # Collect evidence for this question level
             question_evidence = []
@@ -360,22 +390,44 @@ Decomposition:"""
                 if self.verbose:
                     console.print(f"  → {actual_q}")
                 
-                # Search and collect evidence
+                # Search and collect evidence (already returns top-k reranked Q&A pairs)
                 qa_pairs = self.search_and_collect_evidence(actual_q)
-                # question_evidence.extend(qa_pairs)
                 
-                # Extract entities for NEXT questions
-                entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-                question_entities.extend(entities)
-                question_evidence.extend(qa_pair_used)
+                if is_referenced:
+                    # Extract entities for NEXT questions
+                    entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
+                    question_entities.extend(entities)
+                    question_evidence.extend(qa_pair_used)
+                else:
+                    # Just format the Q&A pairs as evidence strings
+                    final_question_evidence = set()
+                    for qa in qa_pairs:
+                        if len(final_question_evidence) >= final_topk:
+                            break
+                        q_text = qa.get('question', '')
+                        answer_names = qa.get('answer_names', qa.get('answers', []))
+                        if isinstance(answer_names, str):
+                            answer_names = [answer_names]
+                        answer_text = ', '.join(str(name) for name in answer_names if name)
+                        answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+                        if q_text and answer_text:
+                            final_question_evidence.add(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+                    question_evidence.extend(list(final_question_evidence))
             
             # Store results
             all_evidence.extend(question_evidence)
-            # Store the entities found from THIS question's answers for use in NEXT questions
-            entities_by_question[f"Q{i+1}"] = list(set(question_entities))  # Unique entities
+            # Only store entities if they'll be referenced in future
+            if is_referenced:
+                entities_by_question[f"Q{i+1}"] = list(set(question_entities))  # Unique entities
             
             if self.verbose:
-                console.print(f"  [green]Found {len(question_evidence)} Q&A pairs, {len(entities_by_question[f'Q{i+1}'])} unique entities[/green]")
+                if is_referenced:
+                    console.print(f"  [green]Found {len(question_evidence)} Q&A pairs, {len(entities_by_question[f'Q{i+1}'])} unique entities[/green]")
+                else:
+                    console.print(f"  [green]Collected {len(question_evidence)} Q&A pairs (terminal question)[/green]")
+        
+        # final deduplication of evidence
+        all_evidence = list(set(all_evidence))
         
         # Step 4: Generate final answer
         answer = self.generate_answer(question, all_evidence, decomposed)
@@ -424,9 +476,10 @@ Available Evidence (Q&A pairs from knowledge base):
 
 Instructions:
 1. Use ONLY the Q&A pairs provided above
-2. Do NOT use any external knowledge
-3. If the evidence doesn't contain the answer, say "Cannot determine from available evidence"
-4. Be concise and direct
+2. Be sure to check all the Q&A pairs for the answer
+3. Do NOT use any external knowledge
+4. If the evidence doesn't contain the answer, say "Cannot determine from available evidence"
+5. Be concise and direct
 
 Please respond in the following format:
 
@@ -473,7 +526,7 @@ Only the final answer, respond with a single word or phrase only.
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.0,
-                max_tokens=500
+                max_tokens=1000
             )
             
             return response.choices[0].message.content

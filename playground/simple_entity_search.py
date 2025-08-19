@@ -239,15 +239,19 @@ class EntitySearcher:
         
         # Create ID to name mapping
         id_to_name = {}
+        id_to_rolestate = {}
         for entity_node in gsw.entity_nodes:
             id_to_name[entity_node.id] = entity_node.name
+            # create a rolestate string for each entity
+            id_to_rolestate[entity_node.id] = ' | '.join([f"{role.role}: {', '.join(role.states)}" for role in entity_node.roles])
         
         # Resolve each ID
         resolved_names = []
+        resolved_rolestates = []
         for entity_id in entity_ids:
             resolved_names.append(id_to_name.get(entity_id, entity_id))
-        
-        return resolved_names
+            resolved_rolestates.append(id_to_rolestate.get(entity_id, ''))
+        return resolved_names, resolved_rolestates
     
     def _find_qa_pairs_for_entity(self, entity_id: str, doc_id: str) -> List[Dict[str, Any]]:
         """Find QA pairs where this entity ID appears as an answer, 
@@ -276,12 +280,13 @@ class EntitySearcher:
                     for question in verb_node.questions:
                         if hasattr(question, 'answers') and question.answers:
                             # Resolve answer IDs to names
-                            answer_names = self._resolve_entity_ids_to_names(question.answers, doc_id)
+                            answer_names, answer_rolestates = self._resolve_entity_ids_to_names(question.answers, doc_id)
                             
                             qa_pairs.append({
                                 "question": question.text if hasattr(question, 'text') else "Unknown question",
                                 "answer_ids": question.answers,
                                 "answer_names": answer_names,
+                                "answer_rolestates": answer_rolestates,
                                 "question_id": question.id if hasattr(question, 'id') else None,
                                 "verb_phrase": verb_node.phrase if hasattr(verb_node, 'phrase') else "Unknown verb phrase"
                             })
@@ -363,7 +368,7 @@ class EntitySearcher:
                     for question in verb_node.questions:
                         if hasattr(question, 'answers') and question.answers:
                             # Resolve answer IDs to names for embedding
-                            answer_names = self._resolve_entity_ids_to_names(question.answers, doc_id)
+                            answer_names, _ = self._resolve_entity_ids_to_names(question.answers, doc_id)
                             answers_text = ', '.join(answer_names)
                             
                             # Create Q&A text representation (same format as in _rerank_qa_pairs)
