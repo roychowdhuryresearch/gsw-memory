@@ -59,7 +59,7 @@ class SimplifiedMultiHopQA:
         num_documents: int = 200,
         verbose: bool = True,
         show_prompt: bool = False,
-        similarity_threshold: float = 0.7
+        similarity_threshold: float = 0.6
     ):
         """Initialize the simplified multi-hop QA system with similarity filtering.
         
