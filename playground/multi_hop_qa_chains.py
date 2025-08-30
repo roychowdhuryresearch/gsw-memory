@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 """
-Simplified Multi-Hop Question Answering System
+Chain-Following Multi-Hop Question Answering System
 
-A streamlined version that:
-1. Decomposes questions into sub-questions
+An enhanced version that implements smart chain following:
+1. Decomposes questions into sub-questions  
 2. Processes each question sequentially with entity substitution
-3. Collects all evidence in a flat list
-4. Sends consolidated evidence to LLM for final answer
+3. For terminal questions: Forms complete reasoning chains
+4. Reranks chains against the original query
+5. Selects top-k most coherent chains
+6. Extracts unique Q&A pairs from selected chains
 
-No complex chain tracking - just simple, linear processing.
+This addresses the exponential explosion problem by focusing on 
+semantically coherent reasoning paths.
 """
 
 import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import sys
 from datetime import datetime
 from collections import defaultdict
+import numpy as np
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -43,22 +47,26 @@ except ImportError:
 console = Console()
 
 
-class SimplifiedMultiHopQA:
-    """Simplified multi-hop QA system with flat evidence collection."""
+class ChainFollowingMultiHopQA:
+    """Chain-following multi-hop QA system with intelligent chain reranking."""
     
-    def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False):
-        """Initialize the simplified multi-hop QA system.
+    def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False, 
+                 chain_top_k: int = 15):
+        """Initialize the chain-following multi-hop QA system.
         
         Args:
             num_documents: Number of documents to load
             verbose: Whether to show detailed output
             show_prompt: Whether to show the full LLM prompt
+            chain_top_k: Number of top chains to select after reranking
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
+        self.chain_top_k = chain_top_k
         
         if verbose:
-            console.print("[bold blue]Initializing Simplified Multi-Hop QA System...[/bold blue]")
+            console.print("[bold blue]Initializing Chain-Following Multi-Hop QA System...[/bold blue]")
+            console.print(f"  Chain selection: Top {chain_top_k} chains")
         
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
@@ -307,7 +315,7 @@ Decomposition:"""
         
         return False
     
-    def extract_entities_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> List[str]:
+    def extract_entities_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> Tuple[List[str], List[str]]:
         """Extract unique entity names from Q&A pairs.
         
         Args:
@@ -315,7 +323,7 @@ Decomposition:"""
             max_entities: Maximum number of unique entities to extract
             
         Returns:
-            List of unique entity names
+            Tuple of (unique entity names, evidence strings used)
         """
         unique_entities = []
         qa_pair_used = []
@@ -332,18 +340,174 @@ Decomposition:"""
                     unique_entities.append(name)
                     answer_text = ', '.join(qa.get('answer_names', qa.get('answer_ids', [])))
                     answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-                    qa_pair_used.append(f"{qa['question']} {answer_text} {answer_rolestates}")
+                    qa_pair_used.append(f"Q: {qa['question']} A: {answer_text} {answer_rolestates}")
                     seen.add(name)
                     if len(unique_entities) >= max_entities:
                         return unique_entities, qa_pair_used
         
         return unique_entities, qa_pair_used
+
+    def form_reasoning_chains(self, q1_qa_pairs: List[Dict[str, Any]], q2_qa_pairs_by_entity: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+        """Form complete reasoning chains by combining Q1 and Q2 Q&A pairs.
+        
+        Args:
+            q1_qa_pairs: Q&A pairs from the first question
+            q2_qa_pairs_by_entity: Q2 Q&A pairs grouped by entity from Q1
+            
+        Returns:
+            List of complete reasoning chains
+        """
+        chains = []
+        
+        # For each Q1 Q&A pair
+        for q1_qa in q1_qa_pairs:
+            # Get the answer entities from Q1
+            q1_answer_names = q1_qa.get('answer_names', q1_qa.get('answers', []))
+            if isinstance(q1_answer_names, str):
+                q1_answer_names = [q1_answer_names]
+            
+            # For each entity found in Q1
+            for entity in q1_answer_names:
+                if entity and entity in q2_qa_pairs_by_entity:
+                    # Get Q2 Q&A pairs for this entity
+                    q2_qa_pairs = q2_qa_pairs_by_entity[entity]
+                    
+                    # Create a chain for each Q2 Q&A pair
+                    for q2_qa in q2_qa_pairs:
+                        # Format the complete chain as a single text
+                        chain_text = self._format_chain(q1_qa, q2_qa)
+                        
+                        chain = {
+                            'chain_text': chain_text,
+                            'q1_qa': q1_qa,
+                            'q2_qa': q2_qa,
+                            'entity_bridge': entity
+                        }
+                        chains.append(chain)
+        
+        return chains
     
+    def _format_chain(self, q1_qa: Dict[str, Any], q2_qa: Dict[str, Any]) -> str:
+        """Format a complete reasoning chain as text for embedding.
+        
+        Args:
+            q1_qa: First question Q&A pair
+            q2_qa: Second question Q&A pair
+            
+        Returns:
+            Formatted chain text
+        """
+        # Format Q1
+        q1_question = q1_qa.get('question', '')
+        q1_answer_names = q1_qa.get('answer_names', q1_qa.get('answers', []))
+        if isinstance(q1_answer_names, str):
+            q1_answer_names = [q1_answer_names]
+        q1_answer = ', '.join(str(name) for name in q1_answer_names if name)
+        
+        # Format Q2
+        q2_question = q2_qa.get('question', '')
+        q2_answer_names = q2_qa.get('answer_names', q2_qa.get('answers', []))
+        if isinstance(q2_answer_names, str):
+            q2_answer_names = [q2_answer_names]
+        q2_answer = ', '.join(str(name) for name in q2_answer_names if name)
+        
+        # Create complete chain
+        chain_text = f"Q: {q1_question} A: {q1_answer}. Q: {q2_question} A: {q2_answer}"
+        return chain_text
+    
+    def rerank_chains_against_original(self, chains: List[Dict[str, Any]], original_question: str) -> List[Dict[str, Any]]:
+        """Rerank complete reasoning chains against the original query.
+        
+        Args:
+            chains: List of complete reasoning chains
+            original_question: The original multi-hop question
+            
+        Returns:
+            Chains sorted by relevance to original question
+        """
+        if not chains:
+            return []
+        
+        # Get embedding for original question
+        original_embedding = self.entity_searcher._embed_query(original_question)
+        if original_embedding is None:
+            if self.verbose:
+                console.print("[yellow]Could not embed original question for chain reranking[/yellow]")
+            return chains  # Return unsorted if embedding fails
+        
+        # Calculate similarity for each chain
+        for chain in chains:
+            chain_embedding = self.entity_searcher._embed_query(chain['chain_text'])
+            if chain_embedding is not None:
+                # Calculate cosine similarity
+                similarity = np.dot(original_embedding, chain_embedding) / (
+                    np.linalg.norm(original_embedding) * np.linalg.norm(chain_embedding)
+                )
+                chain['chain_score'] = float(similarity)
+            else:
+                chain['chain_score'] = 0.0
+        
+        # Sort by chain score (highest first)
+        sorted_chains = sorted(chains, key=lambda x: x['chain_score'], reverse=True)
+        
+        if self.verbose:
+            console.print(f"[dim]Reranked {len(chains)} chains by similarity to original question[/dim]")
+            if sorted_chains:
+                console.print(f"[dim]Top chain score: {sorted_chains[0]['chain_score']:.3f}, Bottom: {sorted_chains[-1]['chain_score']:.3f}[/dim]")
+        
+        return sorted_chains
+    
+    def extract_unique_qa_pairs_from_chains(self, selected_chains: List[Dict[str, Any]]) -> List[str]:
+        """Extract unique Q&A pairs from selected chains for final evidence.
+        
+        Args:
+            selected_chains: Top-k selected reasoning chains
+            
+        Returns:
+            List of unique Q&A pair strings
+        """
+        unique_qa_pairs = set()
+        
+        for chain in selected_chains:
+            q1_qa = chain['q1_qa']
+            q2_qa = chain['q2_qa']
+            
+            # Format Q1 Q&A pair
+            q1_question = q1_qa.get('question', '')
+            q1_answer_names = q1_qa.get('answer_names', q1_qa.get('answers', []))
+            if isinstance(q1_answer_names, str):
+                q1_answer_names = [q1_answer_names]
+            q1_answer = ', '.join(str(name) for name in q1_answer_names if name)
+            q1_rolestates = ', '.join(q1_qa.get('answer_rolestates', []))
+            
+            if q1_question and q1_answer:
+                q1_formatted = f"Q: {q1_question} A: {q1_answer}"
+                if q1_rolestates:
+                    q1_formatted += f" {q1_rolestates}"
+                unique_qa_pairs.add(q1_formatted)
+            
+            # Format Q2 Q&A pair
+            q2_question = q2_qa.get('question', '')
+            q2_answer_names = q2_qa.get('answer_names', q2_qa.get('answers', []))
+            if isinstance(q2_answer_names, str):
+                q2_answer_names = [q2_answer_names]
+            q2_answer = ', '.join(str(name) for name in q2_answer_names if name)
+            q2_rolestates = ', '.join(q2_qa.get('answer_rolestates', []))
+            
+            if q2_question and q2_answer:
+                q2_formatted = f"Q: {q2_question} A: {q2_answer}"
+                if q2_rolestates:
+                    q2_formatted += f" {q2_rolestates}"
+                unique_qa_pairs.add(q2_formatted)
+        
+        return list(unique_qa_pairs)
+
     def process_multihop_question(self, question: str, final_topk: int = 10) -> Dict[str, Any]:
-        """Process a multi-hop question with simplified approach.
+        """Process a multi-hop question with chain-following approach.
         
         Args:
             question: The multi-hop question to answer
+            final_topk: Maximum evidence items for final questions (unused in chain version)
             
         Returns:
             Dictionary containing the answer and collected evidence
@@ -352,87 +516,110 @@ Decomposition:"""
         start_time = time.time()
         
         if self.verbose:
-            console.print(f"\n[bold blue]Processing: {question}[/bold blue]")
+            console.print(f"\n[bold blue]Processing with Chain Following: {question}[/bold blue]")
         
         # Step 1: Decompose the question
         decomposed = self.decompose_question(question)
         
-        # Step 2: Initialize simple storage
-        all_evidence = []  # Flat list of all Q&A pairs
-        entities_by_question = {}  # Q1 -> ["Michael Curtiz"], Q2 -> ["Mildred Lewis"]
-        question_lineage = defaultdict(list)
+        # Step 2: Initialize storage
+        all_evidence = []  # Final evidence after chain selection
+        entities_by_question = {}
+        chains_info = {}  # For debugging/analysis
         
-        # Step 3: Process each question sequentially
+        # Step 3: Process questions - focus on 2-hop for now
+        retrieval_questions = [q for q in decomposed if q["requires_retrieval"]]
+        
+        # Check if any retrieval question creates dependencies for future retrieval questions
+        has_dependent_chains = False
         for i, q_info in enumerate(decomposed):
-            question_template = q_info["question"]
-            requires_retrieval = q_info["requires_retrieval"]
+            if q_info.get("requires_retrieval", True):
+                if self.is_question_referenced_in_future(i, decomposed):
+                    has_dependent_chains = True
+                    break
+        
+        if not has_dependent_chains:
+            # No dependent chains found, use simple approach
+            if self.verbose:
+                console.print("[yellow]No dependent chains detected, using simple approach[/yellow]")
+            return self._fallback_to_simple(question, decomposed)
+        
+        # Process Q1 (first retrieval question)
+        q1_info = retrieval_questions[0]
+        if self.verbose:
+            console.print(f"\n[cyan]Q1: {q1_info['question']}[/cyan]")
+        
+        q1_qa_pairs = self.search_and_collect_evidence(q1_info['question'], top_k_entities=20, top_k_qa=15)
+        q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs)
+        entities_by_question["Q1"] = q1_entities
+        
+        if self.verbose:
+            console.print(f"  [green]Found {len(q1_entities)} entities: {', '.join(q1_entities[:3])}{'...' if len(q1_entities) > 3 else ''}[/green]")
+        
+        # Process Q2 (terminal question - apply chain following here)
+        q2_info = retrieval_questions[1] 
+        q2_template = q2_info['question']
+        
+        if self.verbose:
+            console.print(f"\n[cyan]Q2: {q2_template} [CHAIN FOLLOWING][/cyan]")
+        
+        # Substitute entities and collect Q2 Q&A pairs for each entity
+        q2_qa_pairs_by_entity = {}
+        actual_questions, _ = self.substitute_entities(q2_template, entities_by_question)
+        
+        for actual_q in actual_questions:
+            if self.verbose:
+                console.print(f"  → {actual_q}")
             
-            if not requires_retrieval:
-                if self.verbose:
-                    console.print(f"[dim]Skipping Q{i+1} (no retrieval needed): {question_template}[/dim]")
-                continue
+            # Extract the entity from the question to group Q&A pairs
+            # This is a bit hacky but works for our use case
+            entity = None
+            for ent in q1_entities:
+                if ent in actual_q:
+                    entity = ent
+                    break
             
-            # Check if this question is referenced in future questions
-            is_referenced = self.is_question_referenced_in_future(i, decomposed)
+            if entity:
+                qa_pairs = self.search_and_collect_evidence(actual_q, top_k_entities=20, top_k_qa=15)
+                q2_qa_pairs_by_entity[entity] = qa_pairs
+        
+        # Step 4: Form complete reasoning chains
+        if self.verbose:
+            total_potential_chains = sum(len(qa_pairs) for qa_pairs in q2_qa_pairs_by_entity.values()) * len(q1_qa_pairs)
+            console.print(f"\n[yellow]Forming reasoning chains from {len(q1_qa_pairs)} Q1 pairs and {sum(len(qa_pairs) for qa_pairs in q2_qa_pairs_by_entity.values())} Q2 pairs[/yellow]")
+            console.print(f"[yellow]Potential chains: ~{total_potential_chains}[/yellow]")
+        
+        chains = self.form_reasoning_chains(q1_qa_pairs, q2_qa_pairs_by_entity)
+        
+        if self.verbose:
+            console.print(f"[yellow]Formed {len(chains)} complete reasoning chains[/yellow]")
+        
+        # Step 5: Rerank chains against original question
+        if chains:
+            sorted_chains = self.rerank_chains_against_original(chains, question)
             
-            # Substitute entities from PREVIOUS questions if needed
-            # For Q1, there are no previous entities, so it stays as-is
-            # For Q2+, we substitute using entities found in previous questions
-            actual_questions, is_substituted = self.substitute_entities(question_template, entities_by_question)
-
+            # Step 6: Select top-k chains
+            selected_chains = sorted_chains[:self.chain_top_k]
+            chains_info = {
+                'total_chains': len(chains),
+                'selected_chains': len(selected_chains),
+                'top_score': selected_chains[0]['chain_score'] if selected_chains else 0.0,
+                'score_range': f"{selected_chains[-1]['chain_score']:.3f} - {selected_chains[0]['chain_score']:.3f}" if selected_chains else "N/A"
+            }
             
             if self.verbose:
-                mode = "entity extraction" if is_referenced else "Q&A collection"
-                console.print(f"\n[cyan]Q{i+1}: Processing {len(actual_questions)} question(s) [{mode}][/cyan]")
+                console.print(f"[green]Selected top {len(selected_chains)} chains (score range: {chains_info['score_range']})[/green]")
             
-            # Collect evidence for this question level
-            question_evidence = []
-            question_entities = []
-            
-            for actual_q in actual_questions:
-                if self.verbose:
-                    console.print(f"  → {actual_q}")
-                
-                # Search and collect evidence (already returns top-k reranked Q&A pairs)
-                qa_pairs = self.search_and_collect_evidence(actual_q, top_k_entities=20)
-                
-                if is_referenced:
-                    # Extract entities for NEXT questions
-                    entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-                    question_entities.extend(entities)
-                    question_evidence.extend(qa_pair_used)
-                else:
-                    # Just format the Q&A pairs as evidence strings
-                    final_question_evidence = set()
-                    for qa in qa_pairs:
-                        if len(final_question_evidence) >= final_topk:
-                            break
-                        q_text = qa.get('question', '')
-                        answer_names = qa.get('answer_names', qa.get('answers', []))
-                        if isinstance(answer_names, str):
-                            answer_names = [answer_names]
-                        answer_text = ', '.join(str(name) for name in answer_names if name)
-                        answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-                        if q_text and answer_text:
-                            final_question_evidence.add(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-                    question_evidence.extend(list(final_question_evidence))
-            
-            # Store results
-            all_evidence.extend(question_evidence)
-            # Only store entities if they'll be referenced in future
-            if is_referenced:
-                entities_by_question[f"Q{i+1}"] = list(set(question_entities))  # Unique entities
+            # Step 7: Extract unique Q&A pairs from selected chains
+            all_evidence = self.extract_unique_qa_pairs_from_chains(selected_chains)
             
             if self.verbose:
-                if is_referenced:
-                    console.print(f"  [green]Found {len(question_evidence)} Q&A pairs, {len(entities_by_question[f'Q{i+1}'])} unique entities[/green]")
-                else:
-                    console.print(f"  [green]Collected {len(question_evidence)} Q&A pairs (terminal question)[/green]")
+                console.print(f"[green]Extracted {len(all_evidence)} unique Q&A pairs from selected chains[/green]")
+        else:
+            if self.verbose:
+                console.print("[yellow]No chains formed, falling back to simple approach[/yellow]")
+            return self._fallback_to_simple(question, decomposed)
         
-        # final deduplication of evidence
-        all_evidence = list(set(all_evidence))
-        
-        # Step 4: Generate final answer
+        # Step 8: Generate final answer
         answer = self.generate_answer(question, all_evidence, decomposed)
         
         elapsed_time = time.time() - start_time
@@ -444,10 +631,60 @@ Decomposition:"""
             "time_taken": elapsed_time,
             "decomposed_questions": decomposed,
             "entities_found": entities_by_question,
-            "final_prompt": getattr(self, '_last_prompt', None)  # Include the last prompt used
+            "chains_info": chains_info,
+            "final_prompt": getattr(self, '_last_prompt', None)
         }
     
-    def generate_answer(self, original_question: str, all_evidence: List[Dict[str, Any]], 
+    def _fallback_to_simple(self, question: str, decomposed: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Fallback to simple approach for non-2-hop questions."""
+        if self.verbose:
+            console.print("[yellow]Using fallback simple approach[/yellow]")
+        
+        # Simple implementation for fallback
+        all_evidence = []
+        entities_by_question = {}
+        
+        for i, q_info in enumerate(decomposed):
+            if not q_info["requires_retrieval"]:
+                continue
+                
+            question_template = q_info["question"]
+            is_referenced = self.is_question_referenced_in_future(i, decomposed)
+            
+            actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
+            
+            for actual_q in actual_questions:
+                qa_pairs = self.search_and_collect_evidence(actual_q, top_k_entities=20)
+                
+                if is_referenced:
+                    entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
+                    entities_by_question[f"Q{i+1}"] = list(set(entities))
+                    all_evidence.extend(qa_pair_used)
+                else:
+                    # Format as evidence strings
+                    for qa in qa_pairs[:10]:
+                        q_text = qa.get('question', '')
+                        answer_names = qa.get('answer_names', qa.get('answers', []))
+                        if isinstance(answer_names, str):
+                            answer_names = [answer_names]
+                        answer_text = ', '.join(str(name) for name in answer_names if name)
+                        answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+                        if q_text and answer_text:
+                            all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+        
+        all_evidence = list(set(all_evidence))
+        answer = self.generate_answer(question, all_evidence, decomposed)
+        
+        return {
+            "question": question,
+            "answer": answer,
+            "evidence_count": len(all_evidence),
+            "decomposed_questions": decomposed,
+            "entities_found": entities_by_question,
+            "chains_info": {"fallback": True}
+        }
+    
+    def generate_answer(self, original_question: str, all_evidence: List[str], 
                        decomposed_questions: List[Dict[str, Any]] = None) -> str:
         """Generate final answer using collected evidence.
         
@@ -465,8 +702,7 @@ Decomposition:"""
         if not all_evidence:
             return "No evidence found to answer the question"
         
-        # Format evidence nicely
-        # evidence_text = self.format_evidence(all_evidence)
+        # Format evidence
         evidence_text = '\n'.join(all_evidence)
         
         # Create a simple, clear prompt
@@ -537,44 +773,18 @@ Only the final answer, respond with a single word or phrase only.
         except Exception as e:
             return f"Error generating answer: {e}"
     
-    def format_evidence(self, evidence: List[Dict[str, Any]]) -> str:
-        """Format Q&A pairs for presentation to LLM.
-        
-        Groups evidence by the question that found it for clarity.
-        """
-        # Group by search question
-        grouped = {}
-        for qa in evidence:
-            search_q = qa.get('search_question', 'Unknown')
-            if search_q not in grouped:
-                grouped[search_q] = []
-            grouped[search_q].append(qa)
-        
-        formatted_parts = []
-        for search_q, qa_list in grouped.items():
-            formatted_parts.append(f"\n[Found when searching: {search_q}]")
-            for qa in qa_list[:5]:  # Limit to top 5 per search
-                q_text = qa.get('question', '')
-                a_text = qa.get('answer_names', qa.get('answers', ''))
-                if isinstance(a_text, list):
-                    a_text = ', '.join(str(a) for a in a_text)
-                formatted_parts.append(f"Q: {q_text}")
-                formatted_parts.append(f"A: {a_text}")
-                formatted_parts.append("")
-        
-        return '\n'.join(formatted_parts)
-    
     def run_interactive_mode(self):
         """Run interactive question-answering mode."""
-        console.print("\n[bold cyan]🔍 Simplified Multi-Hop QA System[/bold cyan]")
+        console.print("\n[bold cyan]🔗 Chain-Following Multi-Hop QA System[/bold cyan]")
         console.print("Commands:")
         console.print("  - Type a multi-hop question to get an answer")
+        console.print(f"  - 'chains <number>' - Set number of chains to select (current: {self.chain_top_k})")
         console.print("  - 'prompt on/off' - Toggle showing the full LLM prompt")
         console.print("  - 'verbose on/off' - Toggle detailed output")
         console.print("  - 'help' - Show this help")
         console.print("  - 'quit' or 'exit' - Exit\n")
         
-        console.print(f"[dim]Current settings: verbose={self.verbose}, show_prompt={self.show_prompt}[/dim]")
+        console.print(f"[dim]Current settings: verbose={self.verbose}, show_prompt={self.show_prompt}, chains={self.chain_top_k}[/dim]")
         
         while True:
             try:
@@ -587,8 +797,15 @@ Only the final answer, respond with a single word or phrase only.
                 elif user_input.lower() == 'help':
                     console.print("Ask multi-hop questions like:")
                     console.print("  - 'What is the birth year of the spouse of the director of Casablanca?'")
-                    console.print("  - 'Where was the author of To Kill a Mockingbird born?'")
+                    console.print("  - 'When did Lothair II's mother die?'")
                     console.print("  - 'Which film was released first, Dune or The Dark Knight?'")
+                
+                elif user_input.lower().startswith('chains '):
+                    try:
+                        self.chain_top_k = int(user_input.split()[1])
+                        console.print(f"[green]✓ Chain selection set to top {self.chain_top_k}[/green]")
+                    except:
+                        console.print("[yellow]Invalid number. Use 'chains <integer>'[/yellow]")
                 
                 elif user_input.lower().startswith('prompt '):
                     setting = user_input.lower().split()[1]
@@ -619,11 +836,21 @@ Only the final answer, respond with a single word or phrase only.
                     # Display results
                     console.print(f"\n[bold green]Answer:[/bold green]")
                     console.print(Panel(result['answer'], expand=False))
-                    console.print(f"\n[dim]Evidence used: {result['evidence_count']} Q&A pairs[/dim]")
-                    console.print(f"[dim]Time taken: {result['time_taken']:.2f} seconds[/dim]")
+                    
+                    # Show statistics
+                    console.print(f"\n[dim]Statistics:[/dim]")
+                    console.print(f"  Evidence used: {result['evidence_count']} Q&A pairs")
+                    console.print(f"  Time taken: {result['time_taken']:.2f} seconds")
+                    
+                    # Show chain info if available
+                    chains_info = result.get('chains_info', {})
+                    if chains_info and not chains_info.get('fallback', False):
+                        console.print(f"  Chains formed: {chains_info['total_chains']}")
+                        console.print(f"  Chains selected: {chains_info['selected_chains']}")
+                        console.print(f"  Score range: {chains_info['score_range']}")
                     
                     # Optionally show entities found
-                    if result['entities_found'] and self.verbose:
+                    if result.get('entities_found') and self.verbose:
                         console.print("\n[dim]Entities discovered:[/dim]")
                         for q_num, entities in result['entities_found'].items():
                             if entities:
@@ -637,11 +864,11 @@ Only the final answer, respond with a single word or phrase only.
 
 def main():
     """Main entry point."""
-    console.print("\n[bold cyan]🔍 Simplified Multi-Hop QA System[/bold cyan]")
+    console.print("\n[bold cyan]🔗 Chain-Following Multi-Hop QA System[/bold cyan]")
     console.print("Initializing...")
     
     try:
-        qa_system = SimplifiedMultiHopQA(num_documents=-1, verbose=True)
+        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True)
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
