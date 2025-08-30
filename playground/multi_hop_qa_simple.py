@@ -19,7 +19,7 @@ from datetime import datetime
 from collections import defaultdict
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 from rich.console import Console
 from rich.prompt import Prompt

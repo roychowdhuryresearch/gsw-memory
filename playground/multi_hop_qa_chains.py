@@ -460,15 +460,19 @@ Decomposition:"""
     def extract_unique_qa_pairs_from_chains(self, selected_chains: List[Dict[str, Any]]) -> List[str]:
         """Extract unique Q&A pairs from selected chains for final evidence.
         
+        Maintains the ranking order of chains while deduplicating Q&A pairs.
+        Q&A pairs from higher-ranked chains appear first in the output.
+        
         Args:
-            selected_chains: Top-k selected reasoning chains
+            selected_chains: Top-k selected reasoning chains (already sorted by relevance)
             
         Returns:
-            List of unique Q&A pair strings
+            List of unique Q&A pair strings in ranked order
         """
-        unique_qa_pairs = set()
+        seen = set()  # Track what we've already added
+        unique_qa_pairs = []  # Maintains insertion order
         
-        for chain in selected_chains:
+        for chain in selected_chains:  # Iterate in ranked order (best chains first)
             q1_qa = chain['q1_qa']
             q2_qa = chain['q2_qa']
             
@@ -484,7 +488,9 @@ Decomposition:"""
                 q1_formatted = f"Q: {q1_question} A: {q1_answer}"
                 if q1_rolestates:
                     q1_formatted += f" {q1_rolestates}"
-                unique_qa_pairs.add(q1_formatted)
+                if q1_formatted not in seen:
+                    seen.add(q1_formatted)
+                    unique_qa_pairs.append(q1_formatted)
             
             # Format Q2 Q&A pair
             q2_question = q2_qa.get('question', '')
@@ -498,9 +504,11 @@ Decomposition:"""
                 q2_formatted = f"Q: {q2_question} A: {q2_answer}"
                 if q2_rolestates:
                     q2_formatted += f" {q2_rolestates}"
-                unique_qa_pairs.add(q2_formatted)
+                if q2_formatted not in seen:
+                    seen.add(q2_formatted)
+                    unique_qa_pairs.append(q2_formatted)
         
-        return list(unique_qa_pairs)
+        return unique_qa_pairs  # Returns list in ranked order
 
     def process_multihop_question(self, question: str, final_topk: int = 10) -> Dict[str, Any]:
         """Process a multi-hop question with chain-following approach.
