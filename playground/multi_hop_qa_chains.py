@@ -23,7 +23,7 @@ from collections import defaultdict
 import numpy as np
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 from rich.console import Console
 from rich.prompt import Prompt
