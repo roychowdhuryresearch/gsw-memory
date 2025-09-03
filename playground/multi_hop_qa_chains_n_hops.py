@@ -103,7 +103,7 @@ class ChainFollowingMultiHopQA:
 The FIRST question should keep the original specific entity/information from the question.
 SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
 
-IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+IMPORTANT: Avoid over-decomposition. Avoid yes/no questions. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
 
 For each question, indicate whether it requires retrieval from the knowledge base, any question that requires factual information MUST require retrieval.
 The only case where retreival is not required is if the question just requires comparison of responses from previous questions.
@@ -220,9 +220,12 @@ Decomposition:"""
             List of substituted questions (one per entity combination)
         """
         if "<ENTITY" not in question_template:
-            return ([question_template], False)
+            return ([question_template], False, [])
         
         substituted_questions = []
+        q_key = None
+        entities = []
+        
         
         # Handle simple <ENTITY> placeholder (use most recent question's entities)
         if "<ENTITY>" in question_template:
@@ -250,8 +253,10 @@ Decomposition:"""
                         for entity in entities_by_question[q_key]:
                             q = question_template.replace(f"<ENTITY_Q{ref}>", entity)
                             substituted_questions.append(q)
-        
-        return (substituted_questions, True) if substituted_questions else ([question_template], False)
+                            
+                    entities.extend(entities_by_question[q_key])
+                
+        return (substituted_questions, True, entities_by_question[q_key]) if substituted_questions else ([question_template], False, [])
     
     def search_and_collect_evidence(self, question: str, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
         """Search for a question and collect relevant Q&A pairs.
@@ -980,7 +985,7 @@ Decomposition:"""
                     console.print(f"  [cyan]Q1→Q2: Forming complete chains[/cyan]")
                 
                 # Substitute Q1 entities into Q2
-                actual_questions, has_substitution = self.substitute_entities(question_template, entities_by_question)
+                actual_questions, has_substitution, _ = self.substitute_entities(question_template, entities_by_question)
                 
                 if has_substitution:
                     # Collect Q2 Q&A pairs for each Q1 entity
@@ -1057,8 +1062,8 @@ Decomposition:"""
                 current_entities = list(set(current_entities))
                 
                 # Use current entities for substitution
-                entities_for_substitution = {f"Q{q_idx}": list(set(current_entities))}
-                actual_questions, has_substitution = self.substitute_entities(question_template, entities_for_substitution)
+                entities_by_question[f"Q{q_idx}"] = list(set(current_entities))
+                actual_questions, has_substitution, current_entities = self.substitute_entities(question_template, entities_by_question)
                 
                 if has_substitution:
                     # Collect Q&A pairs for current entities
@@ -1166,7 +1171,7 @@ Decomposition:"""
             question_template = q_info["question"]
             is_referenced = self.is_question_referenced_in_future(i, decomposed)
             
-            actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
+            actual_questions, _, _ = self.substitute_entities(question_template, entities_by_question)
             
             for actual_q in actual_questions:
                 qa_pairs = self.search_and_collect_evidence(actual_q, top_k_entities=20)
