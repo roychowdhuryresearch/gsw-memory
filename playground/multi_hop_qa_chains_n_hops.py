@@ -21,9 +21,11 @@ import sys
 from datetime import datetime
 from collections import defaultdict
 import numpy as np
+import json
+import time
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -47,11 +49,349 @@ except ImportError:
 console = Console()
 
 
+class ChainDebugger:
+    """Debug tracker for chain formation and entity-evidence mapping."""
+    
+    def __init__(self, debug_dir: str = "chain_debug", enabled: bool = True):
+        self.enabled = enabled
+        self.debug_dir = Path(debug_dir)
+        self.debug_dir.mkdir(exist_ok=True)
+        
+        self.current_state = {
+            "question_id": None,
+            "original_question": None,
+            "decomposed_questions": [],
+            "chain_evolution": [],
+            "final_chains": [],
+            "entity_evidence_map": defaultdict(dict),
+            "final_evidence_usage": {},
+            "fallback_reason": None,
+            "total_time": 0,
+            "start_time": None
+        }
+    
+    def start_tracking(self, question_id: str, question: str, decomposed: List[Dict[str, Any]]):
+        """Initialize tracking for a new question."""
+        if not self.enabled:
+            return
+        
+        self.current_state = {
+            "question_id": question_id,
+            "original_question": question,
+            "decomposed_questions": decomposed,
+            "chain_evolution": [],
+            "final_chains": [],
+            "entity_evidence_map": defaultdict(dict),
+            "final_evidence_usage": {},
+            "fallback_reason": None,
+            "total_time": 0,
+            "start_time": time.time()
+        }
+    
+    def track_step(self, step: int, step_name: str, question_template: str, 
+                  substituted_questions: List[str] = None, entities_used: List[str] = None):
+        """Track the start of a new step."""
+        if not self.enabled:
+            return
+        
+        step_data = {
+            "step": step,
+            "step_name": step_name,
+            "question_template": question_template,
+            "substituted_questions": substituted_questions or [],
+            "entities_used": entities_used or [],
+            "entity_evidence_map": {},
+            "chains_before": 0,
+            "chains_formed": 0,
+            "chains_after_filtering": 0,
+            "chains": [],
+            "entities_extracted": {},
+            "entities_filtered": [],
+            "searches_performed": [],
+            "step_duration": 0,
+            "timestamp": datetime.now().isoformat(),
+            "step_start_time": time.time()
+        }
+        
+        self.current_state["chain_evolution"].append(step_data)
+    
+    def track_entity_search(self, entity: str, substituted_question: str, 
+                           search_results: List[Dict[str, Any]], step_idx: int = -1):
+        """Track what evidence was collected for a specific entity."""
+        if not self.enabled:
+            return
+        
+        if step_idx == -1:
+            step_idx = len(self.current_state["chain_evolution"]) - 1
+        
+        if step_idx < 0 or step_idx >= len(self.current_state["chain_evolution"]):
+            return
+        
+        # Process evidence collected
+        evidence_list = []
+        entities_discovered = []
+        
+        for i, qa_pair in enumerate(search_results):
+            evidence_item = {
+                "qa_pair": {
+                    "question": qa_pair.get("question", ""),
+                    "answer_names": qa_pair.get("answer_names", []),
+                    "answer_rolestates": qa_pair.get("answer_rolestates", []),
+                    "source_entity": qa_pair.get("source_entity", ""),
+                    "doc_id": qa_pair.get("doc_id", ""),
+                    "entity_score": qa_pair.get("entity_score", 0.0)
+                },
+                "rank": i + 1,
+                "used_in_chain": False  # Will be updated later
+            }
+            evidence_list.append(evidence_item)
+            
+            # Extract new entities discovered
+            answer_names = qa_pair.get("answer_names", [])
+            if isinstance(answer_names, str):
+                answer_names = [answer_names]
+            entities_discovered.extend([name for name in answer_names if name and name != entity])
+        
+        entity_evidence_info = {
+            "substituted_question": substituted_question,
+            "evidence_collected": evidence_list,
+            "total_evidence_found": len(evidence_list),
+            "evidence_after_filtering": len(evidence_list),  # Will be updated if filtering occurs
+            "entities_discovered": list(set(entities_discovered))
+        }
+        
+        # Store in current step and global entity map
+        step_data = self.current_state["chain_evolution"][step_idx]
+        step_data["entity_evidence_map"][entity] = entity_evidence_info
+        self.current_state["entity_evidence_map"][entity] = entity_evidence_info
+        
+        # Track the search performed
+        step_data["searches_performed"].append({
+            "query": substituted_question,
+            "for_entity": entity,
+            "results_count": len(search_results),
+            "top_entities": entities_discovered[:5],
+            "qa_pairs_retrieved": len(evidence_list)
+        })
+    
+    def track_chain_formation(self, chains_before: int, chains_formed: List[Dict[str, Any]], 
+                             chains_after_filtering: List[Dict[str, Any]], step_idx: int = -1):
+        """Track chain formation and filtering at a step."""
+        if not self.enabled:
+            return
+        
+        if step_idx == -1:
+            step_idx = len(self.current_state["chain_evolution"]) - 1
+        
+        if step_idx < 0 or step_idx >= len(self.current_state["chain_evolution"]):
+            return
+        
+        step_data = self.current_state["chain_evolution"][step_idx]
+        step_data["chains_before"] = chains_before
+        step_data["chains_formed"] = len(chains_formed)
+        step_data["chains_after_filtering"] = len(chains_after_filtering)
+        
+        # Store detailed chain information
+        for i, chain in enumerate(chains_after_filtering):
+            chain_info = {
+                "chain_id": f"chain_{step_idx}_{i}",
+                "qa_chain": chain.get("qa_chain", []),
+                "entity_bridges": chain.get("entity_bridges", []),
+                "evidence_path": self._extract_evidence_path(chain),
+                "chain_text": chain.get("chain_text", ""),
+                "score": chain.get("chain_score", 0.0),
+                "selected": True,  # These are the filtered chains
+                "rank": i + 1
+            }
+            step_data["chains"].append(chain_info)
+        
+        # Mark evidence as used in chains
+        self._mark_evidence_usage(chains_after_filtering, step_idx)
+    
+    def _extract_evidence_path(self, chain: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Extract the evidence path showing which entity led to which evidence."""
+        evidence_path = []
+        qa_chain = chain.get("qa_chain", [])
+        entity_bridges = chain.get("entity_bridges", [])
+        
+        for i, qa_pair in enumerate(qa_chain):
+            path_item = {
+                "hop": i + 1,
+                "entity_queried": entity_bridges[i] if i < len(entity_bridges) else "unknown",
+                "evidence_used": {
+                    "question": qa_pair.get("question", ""),
+                    "answer": qa_pair.get("answer_names", []),
+                    "source_entity": qa_pair.get("source_entity", "")
+                }
+            }
+            evidence_path.append(path_item)
+        
+        return evidence_path
+    
+    def _mark_evidence_usage(self, chains: List[Dict[str, Any]], step_idx: int):
+        """Mark which evidence pieces were used in the given chains."""
+        if step_idx < 0 or step_idx >= len(self.current_state["chain_evolution"]):
+            return
+        
+        step_data = self.current_state["chain_evolution"][step_idx]
+        
+        # Get all Q&A pairs used in chains
+        used_qa_pairs = set()
+        for chain in chains:
+            for qa_pair in chain.get("qa_chain", []):
+                qa_key = (qa_pair.get("question", ""), tuple(qa_pair.get("answer_names", [])))
+                used_qa_pairs.add(qa_key)
+        
+        # Mark evidence as used
+        for entity, evidence_info in step_data["entity_evidence_map"].items():
+            for evidence_item in evidence_info["evidence_collected"]:
+                qa_pair = evidence_item["qa_pair"]
+                qa_key = (qa_pair["question"], tuple(qa_pair["answer_names"]))
+                if qa_key in used_qa_pairs:
+                    evidence_item["used_in_chain"] = True
+    
+    def finish_step(self, step_idx: int = -1):
+        """Finish tracking for the current step."""
+        if not self.enabled:
+            return
+        
+        if step_idx == -1:
+            step_idx = len(self.current_state["chain_evolution"]) - 1
+        
+        if step_idx < 0 or step_idx >= len(self.current_state["chain_evolution"]):
+            return
+        
+        step_data = self.current_state["chain_evolution"][step_idx]
+        step_data["step_duration"] = time.time() - step_data["step_start_time"]
+        del step_data["step_start_time"]  # Remove temporary field
+    
+    def set_final_chains(self, final_chains: List[Dict[str, Any]]):
+        """Set the final selected chains."""
+        if not self.enabled:
+            return
+        
+        self.current_state["final_chains"] = final_chains
+        
+        # Calculate final evidence usage statistics
+        total_searches = sum(len(step["searches_performed"]) for step in self.current_state["chain_evolution"])
+        total_qa_pairs = sum(len(evidence_info["evidence_collected"]) 
+                           for evidence_info in self.current_state["entity_evidence_map"].values())
+        
+        qa_pairs_used = 0
+        entities_that_contributed = set()
+        entity_contribution_count = defaultdict(int)
+        
+        for chain in final_chains:
+            for qa_pair in chain.get("qa_chain", []):
+                qa_pairs_used += 1
+                source_entity = qa_pair.get("source_entity", "")
+                if source_entity:
+                    entities_that_contributed.add(source_entity)
+                    entity_contribution_count[source_entity] += 1
+        
+        self.current_state["final_evidence_usage"] = {
+            "total_searches": total_searches,
+            "total_qa_pairs_retrieved": total_qa_pairs,
+            "qa_pairs_used_in_chains": qa_pairs_used,
+            "entities_that_contributed": list(entities_that_contributed),
+            "entity_contribution_count": dict(entity_contribution_count)
+        }
+    
+    def set_fallback_reason(self, reason: str):
+        """Set the reason for fallback if used."""
+        if not self.enabled:
+            return
+        
+        self.current_state["fallback_reason"] = reason
+    
+    def save_debug_info(self) -> str:
+        """Save all debug information to files."""
+        if not self.enabled:
+            return ""
+        
+        if self.current_state["start_time"]:
+            self.current_state["total_time"] = time.time() - self.current_state["start_time"]
+        
+        # Create timestamped directory
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        question_id = self.current_state.get("question_id", "unknown")
+        save_dir = self.debug_dir / timestamp / question_id
+        save_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save complete debug state
+        debug_file = save_dir / "full_debug.json"
+        with open(debug_file, 'w') as f:
+            json.dump(self.current_state, f, indent=2, default=str)
+        
+        # Save entity-evidence mapping separately
+        entity_evidence_file = save_dir / "entity_evidence_map.json"
+        with open(entity_evidence_file, 'w') as f:
+            json.dump(dict(self.current_state["entity_evidence_map"]), f, indent=2, default=str)
+        
+        # Save chain evolution
+        chain_evolution_file = save_dir / "chain_evolution.json"
+        with open(chain_evolution_file, 'w') as f:
+            json.dump(self.current_state["chain_evolution"], f, indent=2, default=str)
+        
+        # Save human-readable summary
+        summary_file = save_dir / "summary.txt"
+        with open(summary_file, 'w') as f:
+            self._write_summary(f)
+        
+        return str(save_dir)
+    
+    def _write_summary(self, f):
+        """Write a human-readable summary of the debug information."""
+        f.write(f"Chain Debug Summary\n")
+        f.write(f"==================\n\n")
+        f.write(f"Question: {self.current_state['original_question']}\n")
+        f.write(f"Question ID: {self.current_state['question_id']}\n")
+        f.write(f"Total Time: {self.current_state['total_time']:.2f}s\n\n")
+        
+        f.write(f"Decomposed Questions:\n")
+        for i, q in enumerate(self.current_state['decomposed_questions'], 1):
+            f.write(f"  {i}. {q.get('question', '')}\n")
+        f.write(f"\n")
+        
+        if self.current_state['fallback_reason']:
+            f.write(f"Fallback Used: {self.current_state['fallback_reason']}\n\n")
+        
+        f.write(f"Chain Evolution:\n")
+        f.write(f"===============\n")
+        for step in self.current_state['chain_evolution']:
+            f.write(f"\n{step['step_name']}:\n")
+            f.write(f"  Template: {step['question_template']}\n")
+            f.write(f"  Duration: {step['step_duration']:.2f}s\n")
+            f.write(f"  Searches: {len(step['searches_performed'])}\n")
+            f.write(f"  Chains before: {step['chains_before']}\n")
+            f.write(f"  Chains formed: {step['chains_formed']}\n")
+            f.write(f"  Chains after filtering: {step['chains_after_filtering']}\n")
+            
+            if step['entity_evidence_map']:
+                f.write(f"  Entity Evidence:\n")
+                for entity, evidence_info in step['entity_evidence_map'].items():
+                    f.write(f"    {entity}: {evidence_info['total_evidence_found']} evidence pieces\n")
+        
+        f.write(f"\nFinal Evidence Usage:\n")
+        f.write(f"====================\n")
+        usage = self.current_state['final_evidence_usage']
+        f.write(f"Total searches: {usage.get('total_searches', 0)}\n")
+        f.write(f"Total Q&A pairs retrieved: {usage.get('total_qa_pairs_retrieved', 0)}\n")
+        f.write(f"Q&A pairs used in chains: {usage.get('qa_pairs_used_in_chains', 0)}\n")
+        f.write(f"Entities that contributed: {len(usage.get('entities_that_contributed', []))}\n")
+        
+        if usage.get('entity_contribution_count'):
+            f.write(f"\nEntity Contributions:\n")
+            for entity, count in usage['entity_contribution_count'].items():
+                f.write(f"  {entity}: {count} Q&A pairs\n")
+
+
 class ChainFollowingMultiHopQA:
     """Chain-following multi-hop QA system with intelligent chain reranking."""
     
     def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False, 
-                 chain_top_k: int = 15, max_entities_per_hop: int = 5):
+                 chain_top_k: int = 15, max_entities_per_hop: int = 5, debug_mode: bool = False, 
+                 debug_dir: str = "chain_debug"):
         """Initialize the chain-following multi-hop QA system.
         
         Args:
@@ -60,15 +400,24 @@ class ChainFollowingMultiHopQA:
             show_prompt: Whether to show the full LLM prompt
             chain_top_k: Number of top chains to select after reranking
             max_entities_per_hop: Maximum entities to consider at each hop to prevent explosion
+            debug_mode: Whether to enable detailed debug tracking and file saving
+            debug_dir: Directory to save debug files (only used if debug_mode=True)
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
         self.chain_top_k = chain_top_k
         self.max_entities_per_hop = max_entities_per_hop
+        self.debug_mode = debug_mode
+        self.debug_dir = debug_dir
         
         if verbose:
             console.print("[bold blue]Initializing Chain-Following Multi-Hop QA System...[/bold blue]")
             console.print(f"  Chain selection: Top {chain_top_k} chains")
+            if debug_mode:
+                console.print(f"  Debug mode: ENABLED (saving to {debug_dir})")
+        
+        # Initialize debugger
+        self.debugger = ChainDebugger(debug_dir=debug_dir, enabled=debug_mode)
         
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
@@ -99,53 +448,152 @@ class ChainFollowingMultiHopQA:
         if not self.openai_client:
             return [{"question": question, "requires_retrieval": True}]
         
-        decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
-The FIRST question should keep the original specific entity/information from the question.
-SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
+        decomposition_prompt = f"""Your task is to break down a complex multi-hop question into the most efficient sequence of single-hop, **atomic** questions.
 
-IMPORTANT: Avoid over-decomposition. Avoid yes/no questions. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+## Your Main Goal: Build Smart Bridges, Don't Just Collect Nouns
+The most critical skill is to convert complex logical clauses (like "despite," "the country where," "the year before") into a single, powerful **bridging question**. This question should use a known entity as context to find the next one. Avoid finding all the entities separately and then trying to figure out how they connect.
 
-For each question, indicate whether it requires retrieval from the knowledge base, any question that requires factual information MUST require retrieval.
-The only case where retreival is not required is if the question just requires comparison of responses from previous questions.
+---
+## A Simple Analogy for Efficiency
 
-Format each decomposed question as:
+**Question:** "What is the phone number of the mother of the tallest player on the Lakers?"
+
+** Inefficient Path:**
+1.  Who are the players on the Lakers?
+2.  What are all their heights?
+3.  Who is the mother of the tallest player? *(This step is a logical leap)*
+
+** Efficient Path:**
+1.  Who is the tallest player on the Lakers?
+2.  Who is the mother of `<ENTITY_Q1>`?
+3.  What is the phone number of `<ENTITY_Q2>`?
+
+---
+## How to Decompose a Question
+This process follows a logical flow from high-level analysis to the fine-tuning of your question chain.
+
+### 1. Analyze the Query's Components
+First, break down the original question into its fundamental building blocks. Identify the core **entities** (people, places, organizations), their **properties** (attributes like rank, location, date), and the **relationships** that connect them.
+
+### 2. Construct an Atomic Chain
+Next, formulate a sequence of questions where each question retrieves a single fact.
+* **Isolate Comparisons:** Don't ask "who is faster?" Ask for the specific rank or time of each person involved.
+* **Link with Placeholders:** Use `<ENTITY_Qn>` to pass the answer from a previous question (`Qn`) into the next one.
+
+### 3. Optimize for Efficiency and Precision
+Your final goal is the **shortest and most direct path** to the answer.
+* **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
+  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
+
+## Formatting
+Format each decomposed question as follows:
+
+<decomposition>
 Question: [the question text]
 Requires retrieval: [true/false]
+</decomposition>
 
-Examples:
+- Any question that requires factual information from a knowledge base **MUST** have `Requires retrieval: true`.
+- A question only has `Requires retrieval: false` if it involves a simple logical step or comparison based *only* on the previously retrieved answers (this is rare).
 
-Question: "What is the birth year of the spouse of the director of Casablanca?"
+---
+
+## Gold Standard Example (Atomic Decomposition)
+
+Question: "When was the town where the headquarters of the only music label larger than the label that produced Take Me to the Ball Game explored?"
+
+**Correct Decomposition (Atomic):**
+<decomposition>
+1. Question: Which label produced Take Me to the Ball Game?
+   Requires retrieval: true
+2. Question: What is the ranking of <ENTITY_Q1> among music labels?
+   Requires retrieval: true
+3. Question: Which music label is the larger than <ENTITY_Q2> in the country?
+   Requires retrieval: true
+4. Question: Where are the headquarters of <ENTITY_Q3> located?
+   Requires retrieval: true
+5. Question: When was <ENTITY_Q4> explored?
+   Requires retrieval: true
+</decomposition>
+
+*Reasoning (handled by the system later): The logic correctly separates the lookup for the first label (StarTone), its rank (second), the label with the higher rank (Harmonia), its location (Clearwater), and the final fact about that location (1823). No single question attempts to bridge these facts.*
+
+---
+
+## Efficiency Example: Good vs. Bad Decomposition
+
+Question: "What was the political party of the U.S. President who signed the Civil Rights Act of 1964, despite having previously led the party whose southern bloc largely opposed it?"
+
+** Inefficient Decomposition (Avoid This):**
+<decomposition>
+1.  Question: Which political party's southern bloc opposed the Civil Rights Act of 1964?
+    Requires retrieval: true
+2.  Question: Who signed the Civil Rights Act of 1964?
+    Requires retrieval: true
+3.  Question: What was the political party of <ENTITY_Q2>?
+    Requires retrieval: true
+</decomposition>
+*Reasoning for avoidance: This chain is broken. Step 1 finds a political party, but that information is never used. Step 2 makes a logical leap to find the president, completely ignoring the complex clause. This fails to follow the logic of the original question.*
+
+** Efficient Decomposition (Correct):**
+<decomposition>
+1.  Question: Which political party's southern bloc largely opposed the Civil Rights Act of 1964?
+    Requires retrieval: true
+2.  Question: Which U.S. President, who was previously a Senate Majority Leader for the `<ENTITY_Q1>`, signed the Civil Rights Act of 1964?
+    Requires retrieval: true
+3.  Question: What was the political party of `<ENTITY_Q2>`?
+    Requires retrieval: true
+</decomposition>
+*Reasoning for correctness: This chain is efficient and logically sound. Step 2 is a perfect "contextual bridge." It uses the party from Step 1 as a constraint to resolve the "despite" clause and identify the correct person (Lyndon B. Johnson), ensuring the full logic of the question is followed.*
+
+---
+
+## Further Examples
+
+Question: "When was the first establishment that Mc-Donaldization is named after, open in the country Horndean is located?"
 Decomposition:
-1. Question: Who directed Casablanca?
+<decomposition>
+1. Question: What is McDonaldization named after?
    Requires retrieval: true
-2. Question: Who was <ENTITY_Q1>'s spouse?
+2. Question: Which state is Horndean located in?
    Requires retrieval: true
-3. Question: What is <ENTITY_Q2>'s birth year?
+3. Question: When did the first <ENTITY_Q1> open in <ENTITY_Q2>?
    Requires retrieval: true
-
-Question: "Which film has the director who is older, Dune or The Dark Knight?"
+</decomposition>
+Question: "How many Germans live in the colonial holding in Aruba's continent that was governed by Prazeres's country?
 Decomposition:
-1. Question: Who directed Dune?
+<decomposition>
+1. Question: In what continent is Aruba located?
    Requires retrieval: true
-2. Question: Who directed The Dark Knight?
+2. Question: What country is Prazeres?
    Requires retrieval: true
-3. Question: When was <ENTITY_Q1> born?
+3. Question: Colonial holding in <ENTITY_Q1> governed by <ENTITY_Q2>?
    Requires retrieval: true
-4. Question: When was <ENTITY_Q2> born?
+4. How many Germans live in <ENTITY_Q3>?
    Requires retrieval: true
-5. Question: Who is older, <ENTITY_Q3> or <ENTITY_Q4>?
-   Requires retrieval: false
+</decomposition>
 
+Question: "When did the people who captured Malakoff come to the region where Philipsburg is located?
+Decomposition:
+<decomposition>
+1. Question: What is Philipsburg capital of?
+   Requires retrieval: true
+2. Question: What terrain feature is <ENTITY_Q1> located in?
+   Requires retrieval: true
+3. Who captured Malakoff?
+   Requires retrieval: true
+4. When did <ENTITY_Q3> come to <ENTITY_Q4>?
+   Requires retrieval: true
+</decomposition>
 
-IMPORTANT:
-    AVOID over-decomposition like this:
-    DON'T break "Who is John Doe?" into:
-    1. Who is John Doe? → "English"
-    2. When was <ENTITY_Q1> born? → "When was English born?"
+## Important Constraints
+-   **AVOID YES/NO QUESTIONS.**
+-   ** THERE CANNOT BE <ENTITY_Qn> IF NTH QUESTION DOES NOT REQUIRE RETRIEVAL.**
+-   **AVOID OVER-DECOMPOSITION.** Each question should seek a meaningful entity or property.
+-   DON'T break "When was John Doe born?" into "Who is John Doe?" -> "English", then "When was English born?".
+-   DO ask directly: "When was John Doe born?".
 
-    DO ask directly: "When was John Doe born?"
-
-Now decompose this question:
+Now decompose this question with provided format:
 Question: "{question}"
 Decomposition:"""
 
@@ -156,20 +604,29 @@ Decomposition:"""
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
                 ],
-                temperature=0.0,
-                max_tokens=300
+                temperature=0,
+                max_tokens=600
             )
             
             decomposition_text = response.choices[0].message.content
             
             # Parse the response
             questions = []
-            lines = decomposition_text.strip().split('\n')
+            # First try to extract content within <decomposition> tags
+            decomposition_match = re.search(r'<decomposition>(.*?)</decomposition>', decomposition_text, re.DOTALL)
+            if decomposition_match:
+                # Parse content within decomposition tags
+                content_to_parse = decomposition_match.group(1).strip()
+            else:
+                # Fallback to parsing the entire response
+                content_to_parse = decomposition_text.strip()
+            
+            lines = content_to_parse.split('\n')
             i = 0
             while i < len(lines):
                 line = lines[i].strip()
                 
-                if re.match(r'^[\d]+[\.)\s]*Question:', line) or line.startswith('Question:'):
+                if re.match(r'^[\d]+[\.)\s]*Question:', line) or line.startswith('Question:') or re.match(r'^-\s*Question:', line):
                     question_match = re.search(r'Question:\s*(.+)', line)
                     if question_match:
                         question_text = question_match.group(1).strip()
@@ -897,6 +1354,9 @@ Decomposition:"""
         
         for chain in selected_chains:  # Iterate in ranked order (best chains first)
             qa_chain = chain.get('qa_chain', [])
+            if not qa_chain:
+                chain = self.convert_2hop_to_nhop_format(chain)
+                qa_chain = chain.get('qa_chain', [])
             
             for qa in qa_chain:
                 # Format Q&A pair
@@ -930,11 +1390,19 @@ Decomposition:"""
         import time
         start_time = time.time()
         
+        # Generate question ID for debugging
+        question_id = f"q_{hash(question) % 10000:04d}"
+        
         if self.verbose:
             console.print(f"\n[bold blue]Processing with Chain Following: {question}[/bold blue]")
+            if self.debug_mode:
+                console.print(f"[dim]Debug ID: {question_id}[/dim]")
         
         # Step 1: Decompose the question
         decomposed = self.decompose_question(question)
+        
+        # Initialize debug tracking
+        self.debugger.start_tracking(question_id, question, decomposed)
         
         # Step 2: Initialize storage
         all_evidence = []  # Final evidence after chain selection
@@ -956,6 +1424,7 @@ Decomposition:"""
             # No dependent chains found, use simple approach
             if self.verbose:
                 console.print("[yellow]No dependent chains detected, using simple approach[/yellow]")
+            self.debugger.set_fallback_reason("No dependent chains detected")
             return self._fallback_to_simple(question, decomposed)
         
         # Step 3: Process questions with incremental chain building and filtering
@@ -970,9 +1439,15 @@ Decomposition:"""
             
             if q_idx == 0:
                 # Step 3.1: Q1 - Get Q&A pairs, extract entities (max 5)
+                self.debugger.track_step(q_idx, q_num, q_info['question'])
+                
                 q1_qa_pairs = self.search_and_collect_evidence(q_info['question'], top_k_entities=20, top_k_qa=15)
                 q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs, max_entities=5)
                 entities_by_question[q_num] = q1_entities
+                
+                # Track entity search for Q1 (no specific entity, just the question)
+                self.debugger.track_entity_search("Q1_DIRECT", q_info['question'], q1_qa_pairs)
+                self.debugger.finish_step()
                 
                 if self.verbose:
                     console.print(f"  [green]Q1 entities (max 5): {', '.join(q1_entities[:3])}{'...' if len(q1_entities) > 3 else ''}[/green]")
@@ -986,6 +1461,9 @@ Decomposition:"""
                 
                 # Substitute Q1 entities into Q2
                 actual_questions, has_substitution, _ = self.substitute_entities(question_template, entities_by_question)
+                
+                # Track this step
+                self.debugger.track_step(q_idx, f"{q_num}→Q2", question_template, actual_questions, entities_by_question.get("Q1", []))
                 
                 if has_substitution:
                     # Collect Q2 Q&A pairs for each Q1 entity
@@ -1004,9 +1482,13 @@ Decomposition:"""
                         if entity_used:
                             qa_pairs = self.search_and_collect_evidence(actual_q, top_k_entities=20, top_k_qa=15)
                             q2_qa_pairs_by_entity[entity_used] = qa_pairs
+                            
+                            # Track entity search
+                            self.debugger.track_entity_search(entity_used, actual_q, qa_pairs)
                     
                     # Form complete Q1→Q2 chains
-                    current_chains = self.form_reasoning_chains(q1_qa_pairs, q2_qa_pairs_by_entity)
+                    current_chains_2hop = self.form_reasoning_chains(q1_qa_pairs, q2_qa_pairs_by_entity)
+                    current_chains = [self.convert_2hop_to_nhop_format(chain) for chain in current_chains_2hop]
                     
                     if self.verbose:
                         console.print(f"    [yellow]Formed {len(current_chains)} Q1→Q2 chains[/yellow]")
@@ -1014,13 +1496,21 @@ Decomposition:"""
                     # Rerank and filter to top K chains
                     if current_chains:
                         sorted_chains = self.rerank_chains_against_original(current_chains, question)
+                        old_chains = current_chains.copy()
                         current_chains = sorted_chains[:self.chain_top_k]
+                        
+                        # Track chain formation and filtering
+                        self.debugger.track_chain_formation(0, old_chains, current_chains)
                         
                         if self.verbose:
                             console.print(f"    [green]Filtered to top {len(current_chains)} chains[/green]")
+                    
+                    self.debugger.finish_step()
                 else:
                     if self.verbose:
                         console.print(f"    [yellow]No substitution needed, using fallback[/yellow]")
+                    self.debugger.set_fallback_reason("No entity substitution in Q2")
+                    self.debugger.finish_step()
                     return self._fallback_to_simple(question, decomposed)
             
             else:
@@ -1045,18 +1535,6 @@ Decomposition:"""
                         if isinstance(answer_names, str):
                             answer_names = [answer_names]
                         current_entities.extend([name for name in answer_names if name])
-                    # For 2-hop chains, get entities from the Q2 answer (last hop)
-                    elif 'q2_qa' in chain:
-                        q2_qa = chain['q2_qa']
-                        answer_names = q2_qa.get('answer_names', q2_qa.get('answers', []))
-                        if isinstance(answer_names, str):
-                            answer_names = [answer_names]
-                        current_entities.extend([name for name in answer_names if name])
-                    # Last resort fallback to bridge entities
-                    elif 'entity_bridge' in chain:
-                        current_entities.append(chain['entity_bridge'])
-                    elif 'entity_bridges' in chain and chain['entity_bridges']:
-                        current_entities.append(chain['entity_bridges'][-1])
                 
                 # Keep only unique entities
                 current_entities = list(set(current_entities))
@@ -1064,6 +1542,9 @@ Decomposition:"""
                 # Use current entities for substitution
                 entities_by_question[f"Q{q_idx}"] = list(set(current_entities))
                 actual_questions, has_substitution, current_entities = self.substitute_entities(question_template, entities_by_question)
+                
+                # Track this step
+                self.debugger.track_step(q_idx, f"Q1→...→Q{q_idx + 1}", question_template, actual_questions, current_entities)
                 
                 if has_substitution:
                     # Collect Q&A pairs for current entities
@@ -1084,8 +1565,12 @@ Decomposition:"""
                             if entity_used not in qa_pairs_by_entity:
                                 qa_pairs_by_entity[entity_used] = []
                             qa_pairs_by_entity[entity_used].extend(qa_pairs)
+                            
+                            # Track entity search
+                            self.debugger.track_entity_search(entity_used, actual_q, qa_pairs)
                     
                     # Extend current chains
+                    old_chains_count = len(current_chains)
                     extended_chains = self.extend_chains_to_next_hop(current_chains, qa_pairs_by_entity, q_idx)
                     
                     if self.verbose:
@@ -1094,7 +1579,11 @@ Decomposition:"""
                     # Rerank and filter extended chains
                     if extended_chains:
                         sorted_chains = self.rerank_n_hop_chains(extended_chains, question)
+                        old_extended = extended_chains.copy()
                         current_chains = sorted_chains[:self.chain_top_k]
+                        
+                        # Track chain extension and filtering
+                        self.debugger.track_chain_formation(old_chains_count, old_extended, current_chains)
                         
                         if self.verbose:
                             console.print(f"    [green]Filtered to top {len(current_chains)} chains[/green]")
@@ -1102,9 +1591,12 @@ Decomposition:"""
                         current_chains = []
                         if self.verbose:
                             console.print(f"    [red]No chains could be extended[/red]")
+                    
+                    self.debugger.finish_step()
                 else:
                     if self.verbose:
                         console.print(f"    [yellow]No substitution needed for Q{q_idx + 1}[/yellow]")
+                    self.debugger.finish_step()
         
         # Final chains are in current_chains
         chains = current_chains
@@ -1129,6 +1621,9 @@ Decomposition:"""
             if self.verbose:
                 console.print(f"[green]Selected top {len(selected_chains)} chains (score range: {chains_info['score_range']})[/green]")
             
+            # Set final chains for debugging
+            self.debugger.set_final_chains(selected_chains)
+            
             # Step 7: Extract unique Q&A pairs from selected chains
             all_evidence = self.extract_unique_qa_pairs_from_n_hop_chains(selected_chains)
             
@@ -1137,6 +1632,7 @@ Decomposition:"""
         else:
             if self.verbose:
                 console.print("[yellow]No chains formed, falling back to simple approach[/yellow]")
+            self.debugger.set_fallback_reason("No chains formed")
             return self._fallback_to_simple(question, decomposed)
         
         # Step 8: Generate final answer
@@ -1144,7 +1640,14 @@ Decomposition:"""
         
         elapsed_time = time.time() - start_time
         
-        return {
+        # Save debug information if enabled
+        debug_path = ""
+        if self.debug_mode:
+            debug_path = self.debugger.save_debug_info()
+            if self.verbose:
+                console.print(f"[dim]Debug files saved to: {debug_path}[/dim]")
+        
+        result = {
             "question": question,
             "answer": answer,
             "evidence_count": len(all_evidence),
@@ -1154,6 +1657,11 @@ Decomposition:"""
             "chains_info": chains_info,
             "final_prompt": getattr(self, '_last_prompt', None)
         }
+        
+        if debug_path:
+            result["debug_path"] = debug_path
+        
+        return result
     
     def _fallback_to_simple(self, question: str, decomposed: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Fallback to simple approach for non-2-hop questions."""
@@ -1195,7 +1703,14 @@ Decomposition:"""
         all_evidence = list(set(all_evidence))
         answer = self.generate_answer(question, all_evidence, decomposed)
         
-        return {
+        # Save debug information if enabled
+        debug_path = ""
+        if self.debug_mode:
+            debug_path = self.debugger.save_debug_info()
+            if self.verbose:
+                console.print(f"[dim]Debug files saved to: {debug_path}[/dim]")
+        
+        result = {
             "question": question,
             "answer": answer,
             "evidence_count": len(all_evidence),
@@ -1203,6 +1718,11 @@ Decomposition:"""
             "entities_found": entities_by_question,
             "chains_info": {"fallback": True}
         }
+        
+        if debug_path:
+            result["debug_path"] = debug_path
+        
+        return result
     
     def generate_answer(self, original_question: str, all_evidence: List[str], 
                        decomposed_questions: List[Dict[str, Any]] = None) -> str:
@@ -1225,10 +1745,16 @@ Decomposition:"""
         # Format evidence
         evidence_text = '\n'.join(all_evidence)
         
+        # Format decomposed questions
+        decomposed_questions_text = '\n'.join([f"Q{i+1}: {q['question']}" for i, q in enumerate(decomposed_questions)])
+        
         # Create a simple, clear prompt
         prompt = f"""Answer the following multi-hop question using ONLY the provided evidence.
 
 Question: {original_question}
+In order to answer the question, the multi-hop question is broken down into the following single-hop questions and evidence are gathered from the knowledge base:
+Decomposition: 
+{decomposed_questions_text}
 
 Available Evidence (Q&A pairs from knowledge base):
 {evidence_text}
@@ -1388,7 +1914,7 @@ def main():
     console.print("Initializing...")
     
     try:
-        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True)
+        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, debug_mode=True)
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
