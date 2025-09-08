@@ -23,7 +23,7 @@ from collections import defaultdict
 import numpy as np
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -73,7 +73,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
+            # cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
+            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache",
             verbose=False  # Keep entity searcher quiet
         )
         
@@ -971,7 +972,7 @@ Decomposition:"""
             if q_idx == 0:
                 # Step 3.1: Q1 - Get Q&A pairs, extract entities (max 5)
                 q1_qa_pairs = self.search_and_collect_evidence(q_info['question'], top_k_entities=20, top_k_qa=15)
-                q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs, max_entities=5)
+                q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs, max_entities=10)
                 entities_by_question[q_num] = q1_entities
                 
                 if self.verbose:
