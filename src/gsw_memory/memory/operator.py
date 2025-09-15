@@ -74,6 +74,7 @@ class GSWProcessor:
         enable_spacetime: Optional[bool] = None,
         enable_visualization: Optional[bool] = None,
         batch_idx: Optional[int] = 1,
+        batch_size: Optional[int] = None,
     ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
 
@@ -87,7 +88,7 @@ class GSWProcessor:
             enable_spacetime: Override class setting for spacetime linking
             enable_visualization: Override class setting for visualization
             batch_idx: Index of the batch being processed if processing in batches else 1 for single batch processing
-
+            batch_size: Size of the batch being processed if processing in batches else None for single batch processing
         Returns:
             List of dictionaries, one per document. Each dict contains chunk_id -> chunk_data mappings.
             Structure: [{"0_0": {gsw, text, spacetime, context, ...}, "0_1": {...}}, {"1_0": {...}}]
@@ -124,7 +125,7 @@ class GSWProcessor:
 
             # Prepare coref inputs - one per document
             coref_inputs = [
-                {"text": document, "idx": len(documents) * (batch_idx - 1) + doc_idx}
+                {"text": document, "idx": batch_size * (batch_idx - 1) + doc_idx if batch_size is not None else doc_idx}
                 for doc_idx, document in enumerate(documents)
             ]
 
@@ -136,7 +137,7 @@ class GSWProcessor:
                 resp["idx"]: resp["text"] for resp in coref_responses.dataset
             }
         else:
-            resolved_documents = {len(documents) * (batch_idx - 1) + idx: doc for idx, doc in enumerate(documents)}
+            resolved_documents = {batch_size * (batch_idx - 1) + idx: doc for idx, doc in enumerate(documents)}
 
         # Step 2: Chunking and Initialize Chunk Data Structure
         print("--- Chunking Documents and Initializing Data Structure ---")
@@ -241,7 +242,7 @@ class GSWProcessor:
         gsw_responses = gsw_model(gsw_inputs)
 
         # Step 5: Parse responses and update chunk data with GSW structures
-        for response in gsw_responses.dataset:
+        for response in gsw_responses: #TODO: Check if this is correct
             try:
                 gsw = parse_gsw(response["graph"])
                 doc_idx = response["doc_idx"]
