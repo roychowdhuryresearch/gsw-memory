@@ -64,11 +64,15 @@ def get_detailed_instruct(task_description: str, query: str) -> str:
     return f'Instruct: {task_description}\nQuery: {query}'
 
 
-def load_gsw_files(num_documents: int = 50) -> Tuple[List[GSWStructure], List[str]]:
+def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tuple[List[GSWStructure], List[str]]:
     """Load GSW structures from JSON files."""
     print(f"Loading first {num_documents} GSW files...")
     
-    base_dir = "/mnt/SSD1/shreyas/SM_GSW/2wiki/networks"
+    # base_dir = "/mnt/SSD1/shreyas/SM_GSW/2wiki/networks"
+    if not path_to_gsw_files:
+        base_dir = "/mnt/SSD1/shreyas/SM_GSW/musique/networks"
+    else:
+        base_dir = path_to_gsw_files
     
     # Get first N document directories
     doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
@@ -96,11 +100,12 @@ def load_gsw_files(num_documents: int = 50) -> Tuple[List[GSWStructure], List[st
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50, cache_dir: str = None, rebuild_cache: bool = False, verbose: bool = True):
+    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True):
         """Initialize the entity searcher.
         
         Args:
             num_documents: Number of documents to load from GSW corpus
+            path_to_gsw_files: Path to the GSW files
             cache_dir: Directory to store/load embedding caches (default: current dir)
             rebuild_cache: If True, force regenerate all embeddings even if cache exists
             verbose: If True, show initialization messages
@@ -113,7 +118,7 @@ class EntitySearcher:
         self.gsw_by_doc_id = {}  # Store GSW structures by doc_id for QA lookup
         self.openai_client = None  # For answer generation
         self.show_llm_prompt = True  # Toggle for debugging LLM prompts
-        
+        self.path_to_gsw_files = path_to_gsw_files # Path to the GSW files
         # Embedding cache attributes
         self.cache_dir = Path(cache_dir) if cache_dir else Path(".")
         self.rebuild_cache = rebuild_cache
@@ -126,7 +131,7 @@ class EntitySearcher:
         
         if self.verbose_init:
             console.print("[bold blue]Loading GSW entities...[/bold blue]")
-        gsw_structures, doc_ids = load_gsw_files(num_documents)
+        gsw_structures, doc_ids = load_gsw_files(num_documents, self.path_to_gsw_files)
         
         # Store GSW structures by doc_id for later QA lookup
         for gsw, doc_id in zip(gsw_structures, doc_ids):
@@ -445,6 +450,22 @@ class EntitySearcher:
             return embedding
         except Exception as e:
             console.print(f"[red]Error embedding query: {e}[/red]")
+            return None
+
+    def _embed_chain(self, chain: str) -> Optional[np.ndarray]:
+        """Embed a chain using the Qwen model."""
+        if not self.embedding_model:
+            return None
+        
+        task = 'Given a chain of questions and answer pairs, create an embedding that captures the semantic meaning captured across all question-answer pairs in the chain for similarity comparison with user queries.'
+        instructed_chain = get_detailed_instruct(task, chain)
+
+        try:
+            outputs = self.embedding_model.embed([instructed_chain])
+            embedding = np.array(outputs[0].outputs.embedding)
+            return embedding
+        except Exception as e:
+            console.print(f"[red]Error embedding chain: {e}[/red]")
             return None
     
     def _get_qa_text_hash(self, qa_text: str) -> str:

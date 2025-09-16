@@ -25,7 +25,6 @@ import json
 import time
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 from rich.console import Console
@@ -392,8 +391,8 @@ class ChainFollowingMultiHopQA:
     
     def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False, 
                  chain_top_k: int = 15, max_entities_per_hop: int = 5, debug_mode: bool = False, 
-                 debug_dir: str = "chain_debug", use_elbow_entity: bool = False,
-                 use_elbow_qa: bool = False, elbow_min_keep: int = 5):
+                 debug_dir: str = "chain_debug", use_elbow_entity: bool = True,
+                 use_elbow_qa: bool = True, elbow_min_keep: int = 5):
         """Initialize the chain-following multi-hop QA system.
         
         Args:
@@ -430,8 +429,7 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            # cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
-            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache",
+            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
             verbose=False  # Keep entity searcher quiet
         )
         
@@ -729,35 +727,33 @@ Decomposition:"""
         return (substituted_questions, True, entities_by_question[q_key]) if substituted_questions else ([question_template], False, [])
     
     def search_and_collect_evidence(self, question: str, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
-        """Search for a question and collect relevant Q&A pairs using dual search.
-
-        Uses both entity-based search and direct Q&A search, then merges and reranks results.
-
+        """Search for a question and collect relevant Q&A pairs.
+        
         Args:
             question: The question to search for
             top_k_entities: Number of top entities to retrieve (before elbow filtering)
             top_k_qa: Number of top Q&A pairs to keep after reranking (before elbow filtering)
-
+            
         Returns:
             List of relevant Q&A pairs with metadata
         """
-        # 1. Entity-based search (existing approach)
+        # Search for relevant entities
         search_results = self.entity_searcher.search(
             query=question,
             top_k=top_k_entities,
             verbose=False
         )
-
+        
         # Apply elbow method to entity results if enabled
-        if self.use_elbow_entity and search_results:
-            elbow_cutoff = self._find_elbow_cutoff(search_results)
-            if elbow_cutoff < len(search_results):
-                if self.verbose:
-                    console.print(f"[cyan]Entity elbow filtering: {len(search_results)} → {elbow_cutoff} entities[/cyan]")
-                search_results = search_results[:elbow_cutoff]
-
-        # Extract Q&A pairs from entity search results
-        entity_qa_pairs = []
+        # if self.use_elbow_entity and search_results:
+        #     elbow_cutoff = self._find_elbow_cutoff(search_results)
+        #     if elbow_cutoff < len(search_results):
+        #         if self.verbose:
+        #             console.print(f"[cyan]Entity elbow filtering: {len(search_results)} → {elbow_cutoff} entities[/cyan]")
+        #         search_results = search_results[:elbow_cutoff]
+        
+        # Extract all Q&A pairs from search results
+        all_qa_pairs = []
         for entity, score in search_results:
             qa_pairs = entity.get('qa_pairs', [])
             for qa in qa_pairs:
@@ -767,51 +763,7 @@ Decomposition:"""
                 qa_with_context['doc_id'] = entity['doc_id']
                 qa_with_context['entity_score'] = score
                 qa_with_context['search_question'] = question  # Track what question led to this
-                qa_with_context['source_method'] = 'entity_search'
-                entity_qa_pairs.append(qa_with_context)
-
-        # 2. Direct Q&A search (new approach)
-        direct_qa_pairs = []
-        if hasattr(self.entity_searcher, 'search_qa_pairs_direct'):
-            direct_results = self.entity_searcher.search_qa_pairs_direct(
-                query=question,
-                top_k=top_k_qa,  # Get same number as final target
-                verbose=False
-            )
-
-            # Add context to direct Q&A results
-            for qa in direct_results:
-                qa_with_context = qa.copy()
-                qa_with_context['search_question'] = question
-                # Note: source_method is already set to 'direct_qa_search' in search_qa_pairs_direct
-                direct_qa_pairs.append(qa_with_context)
-
-            if self.verbose and direct_qa_pairs:
-                console.print(f"[cyan]Direct Q&A search found {len(direct_qa_pairs)} pairs[/cyan]")
-
-        # 3. Merge and deduplicate Q&A pairs
-        all_qa_pairs = []
-        seen_qa = set()  # Track (question, answer_names) to avoid duplicates
-
-        # Add entity-based Q&A pairs first
-        for qa in entity_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
-
-        # Add direct Q&A pairs that aren't duplicates
-        for qa in direct_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
-
-        if self.verbose:
-            console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
-                         f"(entity: {len(entity_qa_pairs)}, direct: {len(direct_qa_pairs)})[/cyan]")
-            # console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
-            #               f"(entity: {len(entity_qa_pairs)})[/cyan]")
+                all_qa_pairs.append(qa_with_context)
         
         # Rerank Q&A pairs if we have embedding capability
         if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
@@ -889,28 +841,7 @@ Decomposition:"""
             console.print(f"[yellow]Elbow detected: Keeping top {elbow_idx} items (relative drop: {max_relative_drop:.2%})[/yellow]")
         
         return elbow_idx
-
-    def _calculate_chain_score(self, qa_pairs: List[Dict[str, Any]]) -> float:
-        """Calculate cumulative multiplicative score for a chain of Q&A pairs.
-
-        Args:
-            qa_pairs: List of Q&A pairs in the chain
-
-        Returns:
-            Cumulative score (product of individual Q&A scores)
-        """
-        if not qa_pairs:
-            return 0.0
-
-        # Direct multiplication - let the scores be what they are
-        cumulative_score = 1.0
-        for qa in qa_pairs:
-            # Get the best available score for this Q&A pair
-            score = qa.get('similarity_score', qa.get('entity_score', 0.0))
-            cumulative_score *= score
-
-        return float(cumulative_score)
-
+    
     def is_question_referenced_in_future(self, current_index: int, decomposed: List[Dict[str, Any]]) -> bool:
         """Check if the current question index is referenced in any future questions.
         
@@ -997,16 +928,12 @@ Decomposition:"""
                     for q2_qa in q2_qa_pairs:
                         # Format the complete chain as a single text
                         chain_text = self._format_chain(q1_qa, q2_qa)
-
-                        # Calculate cumulative score for this chain
-                        cumulative_score = self._calculate_chain_score([q1_qa, q2_qa])
-
+                        
                         chain = {
                             'chain_text': chain_text,
                             'q1_qa': q1_qa,
                             'q2_qa': q2_qa,
-                            'entity_bridge': entity,
-                            'cumulative_score': cumulative_score
+                            'entity_bridge': entity
                         }
                         chains.append(chain)
         
@@ -1031,8 +958,7 @@ Decomposition:"""
                 'qa_chain': [chain['q1_qa'], chain['q2_qa']],
                 'entity_bridges': [chain['entity_bridge']] if 'entity_bridge' in chain else [],
                 'chain_text': chain.get('chain_text', ''),
-                'chain_score': chain.get('chain_score', 0.0),
-                'cumulative_score': chain.get('cumulative_score', 0.0)
+                'chain_score': chain.get('chain_score', 0.0)
             }
         
         return chain
@@ -1086,14 +1012,10 @@ Decomposition:"""
                 
                 # Extend current chain with each filtered entity
                 for entity, qa_pair in filtered_entities:
-                    new_qa_chain = qa_chain + [qa_pair]
-                    cumulative_score = self._calculate_chain_score(new_qa_chain)
-
                     extended_chain = {
-                        'qa_chain': new_qa_chain,
+                        'qa_chain': qa_chain + [qa_pair],
                         'entity_bridges': entity_bridges + [entity],
-                        'chain_text': self._format_n_hop_chain(new_qa_chain),
-                        'cumulative_score': cumulative_score
+                        'chain_text': self._format_n_hop_chain(qa_chain + [qa_pair])
                     }
                     extended_chains.append(extended_chain)
                     
@@ -1138,14 +1060,10 @@ Decomposition:"""
                         
                         # Extend current chain with each filtered entity
                         for entity, qa_pair in filtered_entities:
-                            new_qa_chain = qa_chain + [qa_pair]
-                            cumulative_score = self._calculate_chain_score(new_qa_chain)
-
                             extended_chain = {
-                                'qa_chain': new_qa_chain,
+                                'qa_chain': qa_chain + [qa_pair],
                                 'entity_bridges': entity_bridges + [entity],
-                                'chain_text': self._format_n_hop_chain(new_qa_chain),
-                                'cumulative_score': cumulative_score
+                                'chain_text': self._format_n_hop_chain(qa_chain + [qa_pair])
                             }
                             extended_chains.append(extended_chain)
         
@@ -1172,12 +1090,10 @@ Decomposition:"""
             
             if level >= len(qa_pairs_by_level):
                 # We've reached the end, create a complete chain
-                cumulative_score = self._calculate_chain_score(partial_chain)
                 return [{
                     'qa_chain': partial_chain.copy(),
                     'entity_bridges': entity_bridges.copy(),
-                    'chain_text': self._format_n_hop_chain(partial_chain),
-                    'cumulative_score': cumulative_score
+                    'chain_text': self._format_n_hop_chain(partial_chain)
                 }]
             
             chains = []
@@ -1275,12 +1191,10 @@ Decomposition:"""
                             # Last level - don't need to filter entities, just add all chains
                             for qa_pair in qa_pairs_for_entity:
                                 new_chain = partial_chain + [qa_pair]
-                                cumulative_score = self._calculate_chain_score(new_chain)
                                 chains.append({
                                     'qa_chain': new_chain,
                                     'entity_bridges': entity_bridges.copy(),
-                                    'chain_text': self._format_n_hop_chain(new_chain),
-                                    'cumulative_score': cumulative_score
+                                    'chain_text': self._format_n_hop_chain(new_chain)
                                 })
                         else:
                             # Not last level - need to filter entities for next hop
@@ -1374,50 +1288,89 @@ Decomposition:"""
         
         return ". ".join(chain_parts)
     
-    # DEPRECATED: Reranking methods replaced by cumulative scoring with beam search
-    # Keeping for reference and potential future use
-
-    # def rerank_chains_against_original(self, chains: List[Dict[str, Any]], original_question: str) -> List[Dict[str, Any]]:
-    #     """Rerank complete reasoning chains against the original query.
-    #
-    #     Args:
-    #         chains: List of complete reasoning chains
-    #         original_question: The original multi-hop question
-    #
-    #     Returns:
-    #         Chains sorted by relevance to original question
-    #     """
-    #     if not chains:
-    #         return []
-    #
-    #     # Get embedding for original question
-    #     original_embedding = self.entity_searcher._embed_query(original_question)
-    #     if original_embedding is None:
-    #         if self.verbose:
-    #             console.print("[yellow]Could not embed original question for chain reranking[/yellow]")
-    #         return chains  # Return unsorted if embedding fails
-    #
-    #     # Calculate similarity for each chain
-    #     for chain in chains:
-    #         chain_embedding = self.entity_searcher._embed_query(chain['chain_text'])
-    #         if chain_embedding is not None:
-    #             # Calculate cosine similarity
-    #             similarity = np.dot(original_embedding, chain_embedding) / (
-    #                 np.linalg.norm(original_embedding) * np.linalg.norm(chain_embedding)
-    #             )
-    #             chain['chain_score'] = float(similarity)
-    #         else:
-    #             chain['chain_score'] = 0.0
-    #
-    #     # Sort by chain score (highest first)
-    #     sorted_chains = sorted(chains, key=lambda x: x['chain_score'], reverse=True)
-    #
-    #     if self.verbose:
-    #         console.print(f"[dim]Reranked {len(chains)} chains by similarity to original question[/dim]")
-    #         if sorted_chains:
-    #             console.print(f"[dim]Top chain score: {sorted_chains[0]['chain_score']:.3f}, Bottom: {sorted_chains[-1]['chain_score']:.3f}[/dim]")
-    #
-    #     return sorted_chains
+    def rerank_chains_against_original(self, chains: List[Dict[str, Any]], original_question: str) -> List[Dict[str, Any]]:
+        """Rerank complete reasoning chains against the original query.
+        
+        Args:
+            chains: List of complete reasoning chains
+            original_question: The original multi-hop question
+            
+        Returns:
+            Chains sorted by relevance to original question
+        """
+        if not chains:
+            return []
+        
+        # Get embedding for original question
+        original_embedding = self.entity_searcher._embed_query(original_question)
+        if original_embedding is None:
+            if self.verbose:
+                console.print("[yellow]Could not embed original question for chain reranking[/yellow]")
+            return chains  # Return unsorted if embedding fails
+        
+        # Calculate similarity for each chain
+        for chain in chains:
+            chain_embedding = self.entity_searcher._embed_query(chain['chain_text'])
+            if chain_embedding is not None:
+                # Calculate cosine similarity
+                similarity = np.dot(original_embedding, chain_embedding) / (
+                    np.linalg.norm(original_embedding) * np.linalg.norm(chain_embedding)
+                )
+                chain['chain_score'] = float(similarity)
+            else:
+                chain['chain_score'] = 0.0
+        
+        # Sort by chain score (highest first)
+        sorted_chains = sorted(chains, key=lambda x: x['chain_score'], reverse=True)
+        
+        if self.verbose:
+            console.print(f"[dim]Reranked {len(chains)} chains by similarity to original question[/dim]")
+            if sorted_chains:
+                console.print(f"[dim]Top chain score: {sorted_chains[0]['chain_score']:.3f}, Bottom: {sorted_chains[-1]['chain_score']:.3f}[/dim]")
+        
+        return sorted_chains
+    
+    def rerank_n_hop_chains(self, chains: List[Dict[str, Any]], original_question: str) -> List[Dict[str, Any]]:
+        """Rerank N-hop reasoning chains against the original query.
+        
+        Args:
+            chains: List of N-hop reasoning chains
+            original_question: The original multi-hop question
+            
+        Returns:
+            Chains sorted by relevance to original question
+        """
+        if not chains:
+            return []
+        
+        # Get embedding for original question
+        original_embedding = self.entity_searcher._embed_query(original_question)
+        if original_embedding is None:
+            if self.verbose:
+                console.print("[yellow]Could not embed original question for chain reranking[/yellow]")
+            return chains  # Return unsorted if embedding fails
+        
+        # Calculate similarity for each chain
+        for chain in chains:
+            chain_embedding = self.entity_searcher._embed_query(chain['chain_text'])
+            if chain_embedding is not None:
+                # Calculate cosine similarity
+                similarity = np.dot(original_embedding, chain_embedding) / (
+                    np.linalg.norm(original_embedding) * np.linalg.norm(chain_embedding)
+                )
+                chain['chain_score'] = float(similarity)
+            else:
+                chain['chain_score'] = 0.0
+        
+        # Sort by chain score (highest first)
+        sorted_chains = sorted(chains, key=lambda x: x['chain_score'], reverse=True)
+        
+        if self.verbose:
+            console.print(f"[dim]Reranked {len(chains)} N-hop chains by similarity to original question[/dim]")
+            if sorted_chains:
+                console.print(f"[dim]Top chain score: {sorted_chains[0]['chain_score']:.3f}, Bottom: {sorted_chains[-1]['chain_score']:.3f}[/dim]")
+        
+        return sorted_chains
     
     def extract_unique_qa_pairs_from_chains(self, selected_chains: List[Dict[str, Any]]) -> List[str]:
         """Extract unique Q&A pairs from selected chains for final evidence.
@@ -1577,7 +1530,7 @@ Decomposition:"""
                 self.debugger.track_step(q_idx, q_num, q_info['question'])
                 
                 q1_qa_pairs = self.search_and_collect_evidence(q_info['question'], top_k_entities=20, top_k_qa=15)
-                q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs, max_entities=10)
+                q1_entities, _ = self.extract_entities_from_qa_pairs(q1_qa_pairs, max_entities=5)
                 entities_by_question[q_num] = q1_entities
                 
                 # Track entity search for Q1 (no specific entity, just the question)
@@ -1628,22 +1581,17 @@ Decomposition:"""
                     if self.verbose:
                         console.print(f"    [yellow]Formed {len(current_chains)} Q1→Q2 chains[/yellow]")
                     
-                    # Beam search: filter to top K chains by cumulative score
+                    # Rerank and filter to top K chains
                     if current_chains:
-                        # Sort by cumulative score (highest first)
-                        sorted_chains = sorted(current_chains, key=lambda x: x.get('cumulative_score', 0.0), reverse=True)
+                        sorted_chains = self.rerank_chains_against_original(current_chains, question)
                         old_chains = current_chains.copy()
                         current_chains = sorted_chains[:self.chain_top_k]
-
+                        
                         # Track chain formation and filtering
                         self.debugger.track_chain_formation(0, old_chains, current_chains)
-
+                        
                         if self.verbose:
-                            console.print(f"    [green]Beam search: Filtered to top {len(current_chains)} chains by cumulative score[/green]")
-                            if current_chains:
-                                top_score = current_chains[0].get('cumulative_score', 0)
-                                bottom_score = current_chains[-1].get('cumulative_score', 0)
-                                console.print(f"    [dim]Score range: {bottom_score:.6f} - {top_score:.6f}[/dim]")
+                            console.print(f"    [green]Filtered to top {len(current_chains)} chains[/green]")
                     
                     self.debugger.finish_step()
                 else:
@@ -1716,22 +1664,17 @@ Decomposition:"""
                     if self.verbose:
                         console.print(f"    [yellow]Extended to {len(extended_chains)} chains[/yellow]")
                     
-                    # Beam search: filter extended chains by cumulative score
+                    # Rerank and filter extended chains
                     if extended_chains:
-                        # Sort by cumulative score (highest first)
-                        sorted_chains = sorted(extended_chains, key=lambda x: x.get('cumulative_score', 0.0), reverse=True)
+                        sorted_chains = self.rerank_n_hop_chains(extended_chains, question)
                         old_extended = extended_chains.copy()
                         current_chains = sorted_chains[:self.chain_top_k]
-
+                        
                         # Track chain extension and filtering
                         self.debugger.track_chain_formation(old_chains_count, old_extended, current_chains)
-
+                        
                         if self.verbose:
-                            console.print(f"    [green]Beam search: Filtered to top {len(current_chains)} chains by cumulative score[/green]")
-                            if current_chains:
-                                top_score = current_chains[0].get('cumulative_score', 0)
-                                bottom_score = current_chains[-1].get('cumulative_score', 0)
-                                console.print(f"    [dim]Score range: {bottom_score:.6f} - {top_score:.6f}[/dim]")
+                            console.print(f"    [green]Filtered to top {len(current_chains)} chains[/green]")
                     else:
                         current_chains = []
                         if self.verbose:
@@ -1751,21 +1694,20 @@ Decomposition:"""
         
         # Step 4: Final processing of selected chains
         if chains:
-            # Chains are already filtered at each step by cumulative score, just ensure top-k
-            # Sort by cumulative score one final time for consistency
-            sorted_chains = sorted(chains, key=lambda x: x.get('cumulative_score', 0.0), reverse=True)
-
+            # Chains are already filtered at each step, but do one final ranking to be sure
+            sorted_chains = self.rerank_n_hop_chains(chains, question) if len(chains) > 1 else chains
+            
             # Select top-k chains (may already be at the right count, but ensure consistency)
             selected_chains = sorted_chains[:self.chain_top_k]
             chains_info = {
                 'total_chains': len(chains),
                 'selected_chains': len(selected_chains),
-                'top_score': selected_chains[0].get('cumulative_score', 0.0) if selected_chains else 0.0,
-                'score_range': f"{selected_chains[-1].get('cumulative_score', 0.0):.6f} - {selected_chains[0].get('cumulative_score', 0.0):.6f}" if selected_chains else "N/A"
+                'top_score': selected_chains[0]['chain_score'] if selected_chains else 0.0,
+                'score_range': f"{selected_chains[-1]['chain_score']:.3f} - {selected_chains[0]['chain_score']:.3f}" if selected_chains else "N/A"
             }
-
+            
             if self.verbose:
-                console.print(f"[green]Selected top {len(selected_chains)} chains (cumulative score range: {chains_info['score_range']})[/green]")
+                console.print(f"[green]Selected top {len(selected_chains)} chains (score range: {chains_info['score_range']})[/green]")
             
             # Set final chains for debugging
             self.debugger.set_final_chains(selected_chains)

@@ -49,42 +49,163 @@ class ModelAnswerGenerator(curator.LLM):
     def __init__(self, model_name: str, **kwargs):
         """Initialize the answer generator with a specific model."""
         self.model_name = model_name
+        self._last_prompt = None  # Initialize the attribute
         super().__init__(model_name=model_name, **kwargs)
     
     def prompt(self, input_data):
-        """Use the exact same prompt from the original evaluation."""
+        """Use oracle-style prompting with one-shot example."""
         final_prompt = input_data['final_prompt']
+        question = input_data['question']
         
-        # Store for token counting
-        self._last_prompt = final_prompt
+        # Extract evidence content from the final_prompt
+        evidence_text = self.extract_evidence_content(final_prompt)
         
-        return [
-            {"role": "system", "content": "You are a helpful assistant that answers questions using only provided evidence."},
-            {"role": "user", "content": final_prompt}
+        # Build oracle-style prompt with one-shot example
+        prompt_text = f"""
+{evidence_text}
+\n\nQuestion: {question}
+\n\nThought: 
+
+"""
+        
+        # Store the actual prompt in the input_data for later access
+        input_data['actual_prompt_sent'] = prompt_text
+        
+        # One-shot example with Q&A pairs format (concise entity-focused answers)
+        one_shot_docs = (
+            """Q: Who directed The Last Horse?
+A: Edgar Neville
+
+Q: When was The Last Horse released?
+A: 1950
+
+Q: When was the University of Southampton founded?
+A: 1862
+
+Q: Where is the University of Southampton located?
+A: Southampton
+
+Q: What is the population of Stanton Township?
+A: 505
+
+Q: Where is Stanton Township?
+A: Champaign County, Illinois
+
+Q: Who is Neville A. Stanton?
+A: British Professor of Human Factors and Ergonomics
+
+Q: Where does Neville A. Stanton work?
+A: University of Southampton
+
+Q: What is Neville A. Stanton's profession?
+A: Professor
+
+Q: Who directed Finding Nemo?
+A: Andrew Stanton
+
+Q: When was Finding Nemo released?
+A: 2003
+
+Q: What company produced Finding Nemo?
+A: Pixar Animation Studios"""
+        )
+        
+        # System message for advanced reading comprehension
+        rag_qa_system = (
+            'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
+            'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
+            'Conclude with "Answer: " to present a concise, definitive response, devoid of additional elaborations.'
+        )
+        
+        # One-shot example input
+        one_shot_input = (
+            f"{one_shot_docs}"
+            "\n\nQuestion: "
+            "When was Neville A. Stanton's employer founded?"
+            '\nThought: '
+        )
+        
+        # One-shot example output
+        one_shot_output = (
+            " From the QA paris, The employer of Neville A. Stanton is University of Southampton. The University of Southampton was founded in 1862. "
+            "\nAnswer: 1862."
+        )
+        
+        # Build the prompt template
+        prompt_template = [
+            {"role": "system", "content": rag_qa_system},
+            {"role": "user", "content": one_shot_input},
+            {"role": "assistant", "content": one_shot_output},
+            {"role": "user", "content": prompt_text}
         ]
+        
+        return prompt_template
+    
+    def extract_evidence_content(self, final_prompt: str) -> str:
+        """Extract just the evidence content from the final_prompt.
+        
+        Args:
+            final_prompt: The full prompt containing question, evidence, and instructions
+            
+        Returns:
+            Just the evidence content (Q&A pairs)
+        """
+        # Try to find the evidence section
+        evidence_start = final_prompt.find("Available Evidence (Q&A pairs from knowledge base):")
+        instructions_start = final_prompt.find("\n\nInstructions:")
+        
+        if evidence_start != -1 and instructions_start != -1:
+            # Extract the evidence section
+            evidence_start += len("Available Evidence (Q&A pairs from knowledge base):\n")
+            evidence_text = final_prompt[evidence_start:instructions_start].strip()
+            return evidence_text
+        
+        # Alternative format - look for Q&A patterns
+        if "Q:" in final_prompt and "A:" in final_prompt:
+            # Try to extract Q&A pairs
+            lines = final_prompt.split('\n')
+            qa_lines = []
+            for line in lines:
+                if line.strip().startswith(("Q:", "A:")):
+                    qa_lines.append(line)
+            if qa_lines:
+                return '\n'.join(qa_lines)
+        
+        # Fallback - return the whole prompt if we can't parse it
+        return final_prompt
     
     def parse(self, input_data, response):
         """Parse the answer from the response."""
         answer_text = response["choices"][0]["message"]["content"]
         
-        # Extract answer from tags (same logic as original evaluation)
-        if '</answer>' in answer_text:
-            answer_match = re.search(r'<answer>\s*(.*?)\s*</answer>', answer_text, re.DOTALL | re.IGNORECASE)
-            if answer_match:
-                final_answer = answer_match.group(1).strip()
-            else:
-                # If we have opening tag but no closing tag
-                answer_parts = answer_text.split('<answer>')
-                if len(answer_parts) > 1:
-                    final_answer = answer_parts[1].strip()
-                else:
-                    final_answer = answer_text.strip()
+        # First try to extract answer from "Answer:" format (oracle-style)
+        if 'Answer: ' in answer_text:
+            final_answer = answer_text.split('Answer: ')[-1].strip()
+            # Remove any trailing period if it's just a number/date
+            if final_answer.endswith('.') and final_answer[:-1].replace(',', '').replace(' ', '').isdigit():
+                final_answer = final_answer[:-1]
+        # Fallback if no "Answer:" found
         else:
-            # Fallback to full response
-            if '<answer>' in answer_text:
-                final_answer = answer_text.split('<answer>')[1]
-            else:
-                final_answer = answer_text.strip()
+            # Just use the full response as the answer
+            final_answer = answer_text.strip()
+            print(f"Warning: No 'Answer:' found in response, using full text")
+        # elif '</answer>' in answer_text:
+        #     answer_match = re.search(r'<answer>\s*(.*?)\s*</answer>', answer_text, re.DOTALL | re.IGNORECASE)
+        #     if answer_match:
+        #         final_answer = answer_match.group(1).strip()
+        #     else:
+        #         # If we have opening tag but no closing tag
+        #         answer_parts = answer_text.split('<answer>')
+        #         if len(answer_parts) > 1:
+        #             final_answer = answer_parts[1].strip()
+        #         else:
+        #             final_answer = answer_text.strip()
+        # else:
+        #     # Fallback to full response
+        #     if '<answer>' in answer_text:
+        #         final_answer = answer_text.split('<answer>')[1]
+        #     else:
+        #         final_answer = answer_text.strip()
         
 
         
@@ -95,7 +216,8 @@ class ModelAnswerGenerator(curator.LLM):
             "gold_answers": input_data['gold_answers'],
             "full_response": answer_text,
             "token_count": input_data['token_count'],
-            "final_prompt": input_data['final_prompt']
+            "original_prompt": input_data.get('final_prompt', ''),  # Keep original for reference
+            "actual_prompt_sent": input_data.get('actual_prompt_sent', '')  # What was actually sent to the model
         }]
 
 

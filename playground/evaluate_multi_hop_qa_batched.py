@@ -290,7 +290,7 @@ class BatchedMultiHopQAEvaluator:
         
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
-            self.decomposer = QuestionDecomposer(model_name="gpt-4.1-mini", generation_params={"temperature": 0.0, "max_tokens": 300})
+            self.decomposer = QuestionDecomposer(model_name="gpt-4o-mini", generation_params={"temperature": 0.0, "max_tokens": 300})
             self.answer_generator = AnswerGenerator(model_name="gpt-4o-mini", generation_params={"temperature": 0.0})
             console.print("[green]✓ Curator initialized for parallel processing[/green]")
         else:

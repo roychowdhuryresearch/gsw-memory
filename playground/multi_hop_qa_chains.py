@@ -175,13 +175,13 @@ Decomposition:"""
 
         try:
             response = self.openai_client.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-5",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
-                ],
-                temperature=0.0,
-                max_tokens=300
+                ]
+                # temperature=0.1,
+                # max_tokens=300
             )
             
             decomposition_text = response.choices[0].message.content
@@ -308,6 +308,36 @@ Decomposition:"""
                 qa_with_context['search_question'] = question  # Track what question led to this
                 all_qa_pairs.append(qa_with_context)
         
+        # Deduplicate Q&A pairs before reranking using (question, answer_ids|answer_names) as key
+        if all_qa_pairs:
+            seen_keys: Dict[Any, int] = {}
+            deduped_qa_pairs: List[Dict[str, Any]] = []
+            for qa in all_qa_pairs:
+                q_text = (qa.get('question', '') or '').strip()
+                ans_ids = qa.get('answer_ids', [])
+                if isinstance(ans_ids, list) and len(ans_ids) > 0:
+                    ans_key = tuple(ans_ids)
+                else:
+                    ans_names = qa.get('answer_names', qa.get('answers', []))
+                    if isinstance(ans_names, str):
+                        ans_names = [ans_names]
+                    ans_key = tuple(str(n).strip().lower() for n in ans_names if n)
+                key = (q_text, ans_key)
+
+                existing_idx = seen_keys.get(key)
+                if existing_idx is None:
+                    seen_keys[key] = len(deduped_qa_pairs)
+                    deduped_qa_pairs.append(qa)
+                else:
+                    # Prefer the entry with higher entity_score (keep richer context)
+                    prev = deduped_qa_pairs[existing_idx]
+                    prev_score = float(prev.get('entity_score', 0.0) or 0.0)
+                    new_score = float(qa.get('entity_score', 0.0) or 0.0)
+                    if new_score > prev_score:
+                        deduped_qa_pairs[existing_idx] = qa
+
+            all_qa_pairs = deduped_qa_pairs
+
         # Rerank Q&A pairs if we have embedding capability
         if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
             reranked = self.entity_searcher._rerank_qa_pairs(question, all_qa_pairs, top_k=top_k_qa)
@@ -498,7 +528,7 @@ Decomposition:"""
                         chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
                         try:
                             if orig_emb is not None and chain_text:
-                                emb = self.entity_searcher._embed_query(chain_text)
+                                emb = self.entity_searcher._embed_chain(chain_text)
                                 if emb is not None:
                                     sim = float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
                                 else:
@@ -552,7 +582,7 @@ Decomposition:"""
                             chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
                             try:
                                 if orig_emb is not None and chain_text:
-                                    emb = self.entity_searcher._embed_query(chain_text)
+                                    emb = self.entity_searcher._embed_chain(chain_text)
                                     if emb is not None:
                                         sim = float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
                                     else:
