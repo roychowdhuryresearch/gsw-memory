@@ -25,8 +25,7 @@ import json
 import time
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from rich.console import Console
 from rich.prompt import Prompt
