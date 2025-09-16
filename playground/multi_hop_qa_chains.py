@@ -23,7 +23,7 @@ from collections import defaultdict
 import numpy as np
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -52,7 +52,7 @@ class ChainFollowingMultiHopQA:
     
     def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False,
                  chain_top_k: int = 15, beam_width: int = 5, entity_top_k: int = 20, qa_rerank_top_k: int = 15,
-                 final_only_evidence: bool = False, scoring_mode: str = "similarity"):
+                 final_only_evidence: bool = False, scoring_mode: str = "cumulative"):
         """Initialize the chain-following multi-hop QA system.
 
         Args:
@@ -80,8 +80,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.gsw_cache",
-            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/2wiki/networks",
+            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
+            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks",
             verbose=False  # Keep entity searcher quiet
         )
         
@@ -150,7 +150,7 @@ class ChainFollowingMultiHopQA:
         for qa in evidence_pairs:
             # Get the best available score for this QA pair
             score = qa.get('similarity_score', qa.get('entity_score', 0.0))
-            cumulative_score *= max(score, 0.0001)  # Avoid zero scores killing the chain
+            cumulative_score *= max(score, 1e-6)  # Avoid zero scores killing the chain
 
         return float(cumulative_score)
 
@@ -193,7 +193,7 @@ class ChainFollowingMultiHopQA:
         if isinstance(answer_names, str):
             answer_names = [answer_names]
         if answer_names:
-            new_state['entities_by_qidx'][q_idx] = answer_names[0]
+            new_state['entities_by_qidx'][q_idx] = answer_names[0] #TODO: Why only the first one?
 
         # Add QA pair to evidence
         new_state['evidence_pairs'].append(qa_used)
@@ -253,53 +253,152 @@ class ChainFollowingMultiHopQA:
         if not self.openai_client:
             return [{"question": question, "requires_retrieval": True}]
         
-        decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
-The FIRST question should keep the original specific entity/information from the question.
-SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
+        decomposition_prompt = f"""Your task is to break down a complex multi-hop question into the most efficient sequence of single-hop, **atomic** questions.
 
-IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+## Your Main Goal: Build Smart Bridges, Don't Just Collect Nouns
+The most critical skill is to convert complex logical clauses (like "despite," "the country where," "the year before") into a single, powerful **bridging question**. This question should use a known entity as context to find the next one. Avoid finding all the entities separately and then trying to figure out how they connect.
 
-For each question, indicate whether it requires retrieval from the knowledge base, any question that requires factual information MUST require retrieval.
-The only case where retreival is not required is if the question just requires comparison of responses from previous questions.
+---
+## A Simple Analogy for Efficiency
 
-Format each decomposed question as:
+**Question:** "What is the phone number of the mother of the tallest player on the Lakers?"
+
+** Inefficient Path:**
+1.  Who are the players on the Lakers?
+2.  What are all their heights?
+3.  Who is the mother of the tallest player? *(This step is a logical leap)*
+
+** Efficient Path:**
+1.  Who is the tallest player on the Lakers?
+2.  Who is the mother of `<ENTITY_Q1>`?
+3.  What is the phone number of `<ENTITY_Q2>`?
+
+---
+## How to Decompose a Question
+This process follows a logical flow from high-level analysis to the fine-tuning of your question chain.
+
+### 1. Analyze the Query's Components
+First, break down the original question into its fundamental building blocks. Identify the core **entities** (people, places, organizations), their **properties** (attributes like rank, location, date), and the **relationships** that connect them.
+
+### 2. Construct an Atomic Chain
+Next, formulate a sequence of questions where each question retrieves a single fact.
+* **Isolate Comparisons:** Don't ask "who is faster?" Ask for the specific rank or time of each person involved.
+* **Link with Placeholders:** Use `<ENTITY_Qn>` to pass the answer from a previous question (`Qn`) into the next one.
+
+### 3. Optimize for Efficiency and Precision
+Your final goal is the **shortest and most direct path** to the answer.
+* **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
+  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
+
+## Formatting
+Format each decomposed question as follows:
+
+<decomposition>
 Question: [the question text]
 Requires retrieval: [true/false]
+</decomposition>
 
-Examples:
+- Any question that requires factual information from a knowledge base **MUST** have `Requires retrieval: true`.
+- A question only has `Requires retrieval: false` if it involves a simple logical step or comparison based *only* on the previously retrieved answers (this is rare).
 
-Question: "What is the birth year of the spouse of the director of Casablanca?"
+---
+
+## Gold Standard Example (Atomic Decomposition)
+
+Question: "When was the town where the headquarters of the only music label larger than the label that produced Take Me to the Ball Game explored?"
+
+**Correct Decomposition (Atomic):**
+<decomposition>
+1. Question: Which label produced Take Me to the Ball Game?
+   Requires retrieval: true
+2. Question: What is the ranking of <ENTITY_Q1> among music labels?
+   Requires retrieval: true
+3. Question: Which music label is the larger than <ENTITY_Q2> in the country?
+   Requires retrieval: true
+4. Question: Where are the headquarters of <ENTITY_Q3> located?
+   Requires retrieval: true
+5. Question: When was <ENTITY_Q4> explored?
+   Requires retrieval: true
+</decomposition>
+
+*Reasoning (handled by the system later): The logic correctly separates the lookup for the first label (StarTone), its rank (second), the label with the higher rank (Harmonia), its location (Clearwater), and the final fact about that location (1823). No single question attempts to bridge these facts.*
+
+---
+
+## Efficiency Example: Good vs. Bad Decomposition
+
+Question: "What was the political party of the U.S. President who signed the Civil Rights Act of 1964, despite having previously led the party whose southern bloc largely opposed it?"
+
+** Inefficient Decomposition (Avoid This):**
+<decomposition>
+1.  Question: Which political party's southern bloc opposed the Civil Rights Act of 1964?
+    Requires retrieval: true
+2.  Question: Who signed the Civil Rights Act of 1964?
+    Requires retrieval: true
+3.  Question: What was the political party of <ENTITY_Q2>?
+    Requires retrieval: true
+</decomposition>
+*Reasoning for avoidance: This chain is broken. Step 1 finds a political party, but that information is never used. Step 2 makes a logical leap to find the president, completely ignoring the complex clause. This fails to follow the logic of the original question.*
+
+** Efficient Decomposition (Correct):**
+<decomposition>
+1.  Question: Which political party's southern bloc largely opposed the Civil Rights Act of 1964?
+    Requires retrieval: true
+2.  Question: Which U.S. President, who was previously a Senate Majority Leader for the `<ENTITY_Q1>`, signed the Civil Rights Act of 1964?
+    Requires retrieval: true
+3.  Question: What was the political party of `<ENTITY_Q2>`?
+    Requires retrieval: true
+</decomposition>
+*Reasoning for correctness: This chain is efficient and logically sound. Step 2 is a perfect "contextual bridge." It uses the party from Step 1 as a constraint to resolve the "despite" clause and identify the correct person (Lyndon B. Johnson), ensuring the full logic of the question is followed.*
+
+---
+
+## Further Examples
+
+Question: "When was the first establishment that Mc-Donaldization is named after, open in the country Horndean is located?"
 Decomposition:
-1. Question: Who directed Casablanca?
+<decomposition>
+1. Question: What is McDonaldization named after?
    Requires retrieval: true
-2. Question: Who was <ENTITY_Q1>'s spouse?
+2. Question: Which state is Horndean located in?
    Requires retrieval: true
-3. Question: What is <ENTITY_Q2>'s birth year?
+3. Question: When did the first <ENTITY_Q1> open in <ENTITY_Q2>?
    Requires retrieval: true
-
-Question: "Which film has the director who is older, Dune or The Dark Knight?"
+</decomposition>
+Question: "How many Germans live in the colonial holding in Aruba's continent that was governed by Prazeres's country?
 Decomposition:
-1. Question: Who directed Dune?
+<decomposition>
+1. Question: In what continent is Aruba located?
    Requires retrieval: true
-2. Question: Who directed The Dark Knight?
+2. Question: What country is Prazeres?
    Requires retrieval: true
-3. Question: When was <ENTITY_Q1> born?
+3. Question: Colonial holding in <ENTITY_Q1> governed by <ENTITY_Q2>?
    Requires retrieval: true
-4. Question: When was <ENTITY_Q2> born?
+4. How many Germans live in <ENTITY_Q3>?
    Requires retrieval: true
-5. Question: Who is older, <ENTITY_Q3> or <ENTITY_Q4>?
-   Requires retrieval: false
+</decomposition>
 
+Question: "When did the people who captured Malakoff come to the region where Philipsburg is located?
+Decomposition:
+<decomposition>
+1. Question: What is Philipsburg capital of?
+   Requires retrieval: true
+2. Question: What terrain feature is <ENTITY_Q1> located in?
+   Requires retrieval: true
+3. Who captured Malakoff?
+   Requires retrieval: true
+4. When did <ENTITY_Q3> come to <ENTITY_Q4>?
+   Requires retrieval: true
+</decomposition>
 
-IMPORTANT:
-    AVOID over-decomposition like this:
-    DON'T break "Who is John Doe?" into:
-    1. Who is John Doe? → "English"
-    2. When was <ENTITY_Q1> born? → "When was English born?"
+## Important Constraints
+-   **AVOID YES/NO QUESTIONS.**
+-   ** THERE CANNOT BE <ENTITY_Qn> IF NTH QUESTION DOES NOT REQUIRE RETRIEVAL.**
+-   **AVOID OVER-DECOMPOSITION.** Each question should seek a meaningful entity or property.
+-   DON'T break "When was John Doe born?" into "Who is John Doe?" -> "English", then "When was English born?".
+-   DO ask directly: "When was John Doe born?".
 
-    DO ask directly: "When was John Doe born?"
-
-Now decompose this question:
+Now decompose this question with provided format:
 Question: "{question}"
 Decomposition:"""
 
@@ -318,12 +417,21 @@ Decomposition:"""
             
             # Parse the response
             questions = []
-            lines = decomposition_text.strip().split('\n')
+            # First try to extract content within <decomposition> tags
+            decomposition_match = re.search(r'<decomposition>(.*?)</decomposition>', decomposition_text, re.DOTALL)
+            if decomposition_match:
+                # Parse content within decomposition tags
+                content_to_parse = decomposition_match.group(1).strip()
+            else:
+                # Fallback to parsing the entire response
+                content_to_parse = decomposition_text.strip()
+            
+            lines = content_to_parse.split('\n')
             i = 0
             while i < len(lines):
                 line = lines[i].strip()
                 
-                if re.match(r'^[\d]+[\.)\s]*Question:', line) or line.startswith('Question:'):
+                if re.match(r'^[\d]+[\.)\s]*Question:', line) or line.startswith('Question:') or re.match(r'^-\s*Question:', line):
                     question_match = re.search(r'Question:\s*(.+)', line)
                     if question_match:
                         question_text = question_match.group(1).strip()
@@ -408,25 +516,27 @@ Decomposition:"""
         return (substituted_questions, True) if substituted_questions else ([question_template], False)
     
     def search_and_collect_evidence(self, question: str, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
-        """Search for a question and collect relevant Q&A pairs.
-        
+        """Search for a question and collect relevant Q&A pairs using dual search.
+
+        Uses both entity-based search and direct Q&A search, then merges and reranks results.
+
         Args:
             question: The question to search for
             top_k_entities: Number of top entities to retrieve
             top_k_qa: Number of top Q&A pairs to keep after reranking
-            
+
         Returns:
             List of relevant Q&A pairs with metadata
         """
-        # Search for relevant entities
+        # 1. Entity-based search (existing approach)
         search_results = self.entity_searcher.search(
             query=question,
             top_k=top_k_entities,
             verbose=False
         )
-        
-        # Extract all Q&A pairs from search results
-        all_qa_pairs = []
+
+        # Extract Q&A pairs from entity search results
+        entity_qa_pairs = []
         for entity, score in search_results:
             qa_pairs = entity.get('qa_pairs', [])
             for qa in qa_pairs:
@@ -436,43 +546,55 @@ Decomposition:"""
                 qa_with_context['doc_id'] = entity['doc_id']
                 qa_with_context['entity_score'] = score
                 qa_with_context['search_question'] = question  # Track what question led to this
-                all_qa_pairs.append(qa_with_context)
-        
-        # Deduplicate Q&A pairs before reranking using (question, answer_ids|answer_names) as key
-        if all_qa_pairs:
-            seen_keys: Dict[Any, int] = {}
-            deduped_qa_pairs: List[Dict[str, Any]] = []
-            for qa in all_qa_pairs:
-                q_text = (qa.get('question', '') or '').strip()
-                ans_ids = qa.get('answer_ids', [])
-                if isinstance(ans_ids, list) and len(ans_ids) > 0:
-                    ans_key = tuple(ans_ids)
-                else:
-                    ans_names = qa.get('answer_names', qa.get('answers', []))
-                    if isinstance(ans_names, str):
-                        ans_names = [ans_names]
-                    ans_key = tuple(str(n).strip().lower() for n in ans_names if n)
-                key = (q_text, ans_key)
+                qa_with_context['source_method'] = 'entity_search'
+                entity_qa_pairs.append(qa_with_context)
 
-                existing_idx = seen_keys.get(key)
-                if existing_idx is None:
-                    seen_keys[key] = len(deduped_qa_pairs)
-                    deduped_qa_pairs.append(qa)
-                else:
-                    # Prefer the entry with higher entity_score (keep richer context)
-                    prev = deduped_qa_pairs[existing_idx]
-                    prev_score = float(prev.get('entity_score', 0.0) or 0.0)
-                    new_score = float(qa.get('entity_score', 0.0) or 0.0)
-                    if new_score > prev_score:
-                        deduped_qa_pairs[existing_idx] = qa
+        # 2. Direct Q&A search (new approach)
+        direct_qa_pairs = []
+        if hasattr(self.entity_searcher, 'search_qa_pairs_direct'):
+            direct_results = self.entity_searcher.search_qa_pairs_direct(
+                query=question,
+                top_k=top_k_qa,  # Get same number as final target
+                verbose=False
+            )
 
-            all_qa_pairs = deduped_qa_pairs
+            # Add context to direct Q&A results
+            for qa in direct_results:
+                qa_with_context = qa.copy()
+                qa_with_context['search_question'] = question
+                # Note: source_method is already set to 'direct_qa_search' in search_qa_pairs_direct
+                direct_qa_pairs.append(qa_with_context)
+
+            if self.verbose and direct_qa_pairs:
+                console.print(f"[cyan]Direct Q&A search found {len(direct_qa_pairs)} pairs[/cyan]")
+
+        # 3. Merge and deduplicate Q&A pairs
+        all_qa_pairs = []
+        seen_qa = set()  # Track (question, answer_names) to avoid duplicates
+
+        # Add entity-based Q&A pairs first
+        for qa in entity_qa_pairs:
+            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
+            if qa_key not in seen_qa:
+                all_qa_pairs.append(qa)
+                seen_qa.add(qa_key)
+
+        # Add direct Q&A pairs that aren't duplicates
+        for qa in direct_qa_pairs:
+            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
+            if qa_key not in seen_qa:
+                all_qa_pairs.append(qa)
+                seen_qa.add(qa_key)
+
+        if self.verbose:
+            console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
+                         f"(entity: {len(entity_qa_pairs)}, direct: {len(direct_qa_pairs)})[/cyan]")
 
         # Rerank Q&A pairs if we have embedding capability
         if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
             reranked = self.entity_searcher._rerank_qa_pairs(question, all_qa_pairs, top_k=top_k_qa)
             return reranked
-        
+
         # Otherwise just return top k by entity score
         return all_qa_pairs[:top_k_qa]
     
