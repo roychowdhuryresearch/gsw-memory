@@ -94,12 +94,15 @@ Next, formulate a sequence of questions where each question retrieves a single f
 ### 3. Optimize for Efficiency and Precision
 Your final goal is the **shortest and most direct path** to the answer.
 * **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
-
+  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
 
 ## Formatting
-Format each decomposed question as:
+Format each decomposed question as follows:
+
+<decomposition>
 Question: [the question text]
 Requires retrieval: [true/false]
+</decomposition>
 
 - Any question that requires factual information from a knowledge base **MUST** have `Requires retrieval: true`.
 - A question only has `Requires retrieval: false` if it involves a simple logical step or comparison based *only* on the previously retrieved answers (this is rare).
@@ -111,9 +114,10 @@ Requires retrieval: [true/false]
 Question: "When was the town where the headquarters of the only music label larger than the label that produced Take Me to the Ball Game explored?"
 
 **Correct Decomposition (Atomic):**
+<decomposition>
 1. Question: Which label produced Take Me to the Ball Game?
    Requires retrieval: true
-2. Question: What is the ranking of StarTone Records among music labels?
+2. Question: What is the ranking of <ENTITY_Q1> among music labels?
    Requires retrieval: true
 3. Question: Which music label is the larger than <ENTITY_Q2> in the country?
    Requires retrieval: true
@@ -121,6 +125,7 @@ Question: "When was the town where the headquarters of the only music label larg
    Requires retrieval: true
 5. Question: When was <ENTITY_Q4> explored?
    Requires retrieval: true
+</decomposition>
 
 *Reasoning (handled by the system later): The logic correctly separates the lookup for the first label (StarTone), its rank (second), the label with the higher rank (Harmonia), its location (Clearwater), and the final fact about that location (1823). No single question attempts to bridge these facts.*
 
@@ -131,21 +136,25 @@ Question: "When was the town where the headquarters of the only music label larg
 Question: "What was the political party of the U.S. President who signed the Civil Rights Act of 1964, despite having previously led the party whose southern bloc largely opposed it?"
 
 ** Inefficient Decomposition (Avoid This):**
+<decomposition>
 1.  Question: Which political party's southern bloc opposed the Civil Rights Act of 1964?
     Requires retrieval: true
 2.  Question: Who signed the Civil Rights Act of 1964?
     Requires retrieval: true
 3.  Question: What was the political party of <ENTITY_Q2>?
     Requires retrieval: true
+</decomposition>
 *Reasoning for avoidance: This chain is broken. Step 1 finds a political party, but that information is never used. Step 2 makes a logical leap to find the president, completely ignoring the complex clause. This fails to follow the logic of the original question.*
 
 ** Efficient Decomposition (Correct):**
+<decomposition>
 1.  Question: Which political party's southern bloc largely opposed the Civil Rights Act of 1964?
     Requires retrieval: true
 2.  Question: Which U.S. President, who was previously a Senate Majority Leader for the `<ENTITY_Q1>`, signed the Civil Rights Act of 1964?
     Requires retrieval: true
 3.  Question: What was the political party of `<ENTITY_Q2>`?
     Requires retrieval: true
+</decomposition>
 *Reasoning for correctness: This chain is efficient and logically sound. Step 2 is a perfect "contextual bridge." It uses the party from Step 1 as a constraint to resolve the "despite" clause and identify the correct person (Lyndon B. Johnson), ensuring the full logic of the question is followed.*
 
 ---
@@ -154,15 +163,17 @@ Question: "What was the political party of the U.S. President who signed the Civ
 
 Question: "When was the first establishment that Mc-Donaldization is named after, open in the country Horndean is located?"
 Decomposition:
+<decomposition>
 1. Question: What is McDonaldization named after?
    Requires retrieval: true
 2. Question: Which state is Horndean located in?
    Requires retrieval: true
 3. Question: When did the first <ENTITY_Q1> open in <ENTITY_Q2>?
    Requires retrieval: true
-   
+</decomposition>
 Question: "How many Germans live in the colonial holding in Aruba's continent that was governed by Prazeres's country?
 Decomposition:
+<decomposition>
 1. Question: In what continent is Aruba located?
    Requires retrieval: true
 2. Question: What country is Prazeres?
@@ -171,9 +182,11 @@ Decomposition:
    Requires retrieval: true
 4. How many Germans live in <ENTITY_Q3>?
    Requires retrieval: true
+</decomposition>
 
 Question: "When did the people who captured Malakoff come to the region where Philipsburg is located?
 Decomposition:
+<decomposition>
 1. Question: What is Philipsburg capital of?
    Requires retrieval: true
 2. Question: What terrain feature is <ENTITY_Q1> located in?
@@ -182,14 +195,16 @@ Decomposition:
    Requires retrieval: true
 4. When did <ENTITY_Q3> come to <ENTITY_Q4>?
    Requires retrieval: true
+</decomposition>
 
 ## Important Constraints
 -   **AVOID YES/NO QUESTIONS.**
+-   ** THERE CANNOT BE <ENTITY_Qn> IF NTH QUESTION DOES NOT REQUIRE RETRIEVAL.**
 -   **AVOID OVER-DECOMPOSITION.** Each question should seek a meaningful entity or property.
-    -   DON'T break "When was John Doe born?" into "Who is John Doe?" -> "English", then "When was English born?".
-    -   DO ask directly: "When was John Doe born?".
+-   DON'T break "When was John Doe born?" into "Who is John Doe?" -> "English", then "When was English born?".
+-   DO ask directly: "When was John Doe born?".
 
-Now decompose this question:
+Now decompose this question with provided format:
 Question: "{input['question']}"
 Decomposition:"""
         
@@ -204,7 +219,17 @@ Decomposition:"""
         
         # Parse the response into structured format
         questions = []
-        lines = decomposition_text.strip().split('\n')
+        
+        # First try to extract content within <decomposition> tags
+        decomposition_match = re.search(r'<decomposition>(.*?)</decomposition>', decomposition_text, re.DOTALL)
+        if decomposition_match:
+            # Parse content within decomposition tags
+            content_to_parse = decomposition_match.group(1).strip()
+        else:
+            # Fallback to parsing the entire response
+            content_to_parse = decomposition_text.strip()
+        
+        lines = content_to_parse.split('\n')
         i = 0
         while i < len(lines):
             line = lines[i].strip()
@@ -256,17 +281,22 @@ class AnswerGenerator(curator.LLM):
     def __init__(self, **kwargs):
         """Initialize the answer generator."""
         super().__init__(**kwargs)
+        self.final_prompt_dict = {}
     
     def prompt(self, input):
         """Create an answer generation prompt."""
         evidence_text = '\n'.join(input['evidence'])
         
+        #format decomposed questions
+        decomposed_questions_text = '\n'.join([f"Q{i+1}: {q['question']}" for i, q in enumerate(input['decomposed_questions'])])
+        
         # Include decomposition if available
         decomposition_text = ""
         if 'decomposed_questions' in input and input['decomposed_questions']:
             decomposition_text = f"""
-In order to answer the question, the multi-hop question is broken down into the following single-hop questions:
-Decomposition: {input['decomposed_questions']}
+In order to answer the question, the multi-hop question is broken down into the following single-hop questions and evidence are gathered from the knowledge base:
+Decomposition: 
+{decomposed_questions_text}
 """
         
         prompt_text = f"""Answer the following multi-hop question using ONLY the provided evidence.
@@ -296,6 +326,7 @@ Only the final answer, respond with a single word or phrase only.
         
         # Store the full prompt for later reference
         self._last_prompt = prompt_text
+        self.final_prompt_dict[input['question_id']] = prompt_text
         
         return [
             {"role": "system", "content": "You are a helpful assistant that answers questions using only provided evidence."},
@@ -345,7 +376,7 @@ Only the final answer, respond with a single word or phrase only.
             "predicted_answer": final_answer,
             "full_response": answer_text,
             "evidence_count": len(input['evidence']),
-            "final_prompt": self._last_prompt,
+            "final_prompt": self.final_prompt_dict[input['question_id']],
             "token_count": token_count
         }]
 
@@ -356,6 +387,7 @@ class BatchedChainEvaluationResult:
     question_id: str
     question: str
     predicted_answer: str
+    full_response: str
     gold_answers: List[str]
     processing_time: float
     decomposed_questions: List[Dict[str, Any]]
@@ -402,8 +434,8 @@ class BatchedChainFollowingEvaluator:
         
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
-            self.decomposer = QuestionDecomposer(model_name="gpt-4o", generation_params={"temperature": 0.0, "max_tokens": 600})
-            self.answer_generator = AnswerGenerator(model_name="gpt-4o-mini", generation_params={"temperature": 0.0})
+            self.decomposer = QuestionDecomposer(model_name="gpt-4o", generation_params={"temperature": 0, "max_tokens": 600})
+            self.answer_generator = AnswerGenerator(model_name="gpt-4o-mini", generation_params={"temperature": 0})
             console.print("[green]✓ Curator initialized for parallel processing[/green]")
         else:
             console.print("[yellow]⚠ Curator not available - will fall back to sequential processing[/yellow]")
@@ -435,6 +467,9 @@ class BatchedChainFollowingEvaluator:
             # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
                 gold_answers = [gold_answers]
+                answer_aliases = item.get("answer_aliases", [])
+                answer_aliases = [alias.strip() for alias in answer_aliases]
+                gold_answers.extend(answer_aliases)
             
             # Optional: filter by hop count if needed
             # if "3hop1" not in question_id:
@@ -706,7 +741,7 @@ class BatchedChainFollowingEvaluator:
         console.print(f"[green]✓ Chain retrieval complete for {len(evidence_by_question)} questions[/green]")
         return evidence_by_question, chains_info_by_question
     
-    def _simple_retrieval_fallback(self, decomposed: List[Dict[str, Any]], question_id: str) -> List[str]:
+    def _simple_retrieval_fallback(self, decomposed: List[Dict[str, Any]], _question_id: str) -> List[str]:
         """Fallback to simple retrieval for non-chain questions."""
         all_evidence = []
         entities_by_question = {}
@@ -860,6 +895,7 @@ class BatchedChainFollowingEvaluator:
                 question_id=question_id,
                 question=question,
                 predicted_answer=answer_data["predicted_answer"],
+                full_response=answer_data["full_response"],
                 gold_answers=gold_answers,
                 processing_time=0.0,  # Will be updated with total time
                 decomposed_questions=decomposed,
@@ -939,6 +975,7 @@ class BatchedChainFollowingEvaluator:
                 "question_id": result.question_id,
                 "question": result.question,
                 "predicted_answer": result.predicted_answer,
+                "full_response": result.full_response,
                 "gold_answers": result.gold_answers,
                 "metrics": metrics,
                 "processing_time": result.processing_time,
@@ -1056,4 +1093,4 @@ def main(verbose: bool = False):
 
 if __name__ == "__main__":
     # Set verbose=True for detailed output during development
-    main(verbose=False)
+    main(verbose=True)

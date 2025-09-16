@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -89,7 +89,7 @@ class MultiHopQA:
             console.print("[bold blue]Initializing Multi-Hop QA System...[/bold blue]")
         
         # Initialize the enhanced entity searcher
-        self.entity_searcher = EntitySearcher(num_documents, cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.gsw_cache", verbose=self.verbose)
+        self.entity_searcher = EntitySearcher(num_documents, cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache", verbose=self.verbose)
         
         # Initialize OpenAI client
         self.openai_client = None

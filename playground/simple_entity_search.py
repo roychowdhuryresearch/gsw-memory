@@ -123,6 +123,9 @@ class EntitySearcher:
         self.cache_dir = Path(cache_dir) if cache_dir else Path(".")
         self.rebuild_cache = rebuild_cache
         self.qa_embedding_cache = {}  # In-memory cache for Q&A embeddings: {qa_text_hash: embedding}
+        self.qa_metadata_cache = {}  # Maps qa_text_hash to Q&A metadata for direct search
+        self.qa_embeddings_matrix = None  # Numpy matrix of all Q&A embeddings for fast similarity search
+        self.qa_hash_to_idx = {}  # Maps qa_text_hash to index in embeddings matrix
         self.entity_embedding_cache_file = self.cache_dir / f"entity_embeddings_{num_documents}docs.npz"
         self.qa_embedding_cache_file = self.cache_dir / f"qa_embeddings_{num_documents}docs.npz"
         self.cache_metadata_file = self.cache_dir / f"embedding_metadata_{num_documents}docs.json"
@@ -154,7 +157,9 @@ class EntitySearcher:
                 if not self.rebuild_cache and self._load_qa_embeddings_cache():
                     if self.verbose_init:
                         console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
-                
+                    # Build embeddings matrix for loaded cache
+                    self._build_qa_embeddings_matrix()
+
                 # Precompute any missing Q&A embeddings
                 self._precompute_qa_embeddings()
         
@@ -358,14 +363,14 @@ class EntitySearcher:
         """Precompute embeddings for all Q&A pairs in the GSW structures."""
         if not self.embedding_model:
             return
-        
+
         if self.verbose_init:
             console.print("Precomputing Q&A pair embeddings...")
-        
+
         # Collect all unique Q&A pairs from all GSW structures
-        all_qa_texts = set()
+        all_qa_data = {}  # qa_text -> metadata dict
         qa_count = 0
-        
+
         for doc_id, gsw in self.gsw_by_doc_id.items():
             # Look through verb phrase nodes for QA pairs
             for verb_node in gsw.verb_phrase_nodes:
@@ -373,30 +378,47 @@ class EntitySearcher:
                     for question in verb_node.questions:
                         if hasattr(question, 'answers') and question.answers:
                             # Resolve answer IDs to names for embedding
-                            answer_names, _ = self._resolve_entity_ids_to_names(question.answers, doc_id)
+                            answer_names, answer_rolestates = self._resolve_entity_ids_to_names(question.answers, doc_id)
                             answers_text = ', '.join(answer_names)
-                            
+
                             # Create Q&A text representation (same format as in _rerank_qa_pairs)
                             qa_text = f"{question.text} {answers_text}"
-                            all_qa_texts.add(qa_text)
+
+                            # Store metadata for this Q&A pair
+                            if qa_text not in all_qa_data:
+                                all_qa_data[qa_text] = {
+                                    'question': question.text if hasattr(question, 'text') else "Unknown question",
+                                    'answer_ids': question.answers,
+                                    'answer_names': answer_names,
+                                    'answer_rolestates': answer_rolestates,
+                                    'doc_id': doc_id,
+                                    'verb_phrase': verb_node.phrase if hasattr(verb_node, 'phrase') else "Unknown verb phrase"
+                                }
                             qa_count += 1
-        
+
         if self.verbose_init:
-            console.print(f"Found {len(all_qa_texts)} unique Q&A pairs from {qa_count} total pairs")
-        
-        if not all_qa_texts:
+            console.print(f"Found {len(all_qa_data)} unique Q&A pairs from {qa_count} total pairs")
+
+        if not all_qa_data:
             return
-        
+
+        # Store metadata for all Q&A pairs
+        for qa_text, metadata in all_qa_data.items():
+            qa_hash = self._get_qa_text_hash(qa_text)
+            self.qa_metadata_cache[qa_hash] = metadata
+
         # Check how many are already cached
         uncached_texts = []
-        for qa_text in all_qa_texts:
+        for qa_text in all_qa_data.keys():
             qa_hash = self._get_qa_text_hash(qa_text)
             if qa_hash not in self.qa_embedding_cache:
                 uncached_texts.append(qa_text)
         
         if not uncached_texts:
             if self.verbose_init:
-                console.print(f"[green]✓ All {len(all_qa_texts)} Q&A pairs already cached[/green]")
+                console.print(f"[green]✓ All {len(all_qa_data)} Q&A pairs already cached[/green]")
+            # Build embeddings matrix even if all are cached
+            self._build_qa_embeddings_matrix()
             return
         
         if self.verbose_init:
@@ -430,7 +452,10 @@ class EntitySearcher:
             
             # Save the Q&A cache after precomputation
             self._save_qa_embeddings_cache()
-            
+
+            # Build embeddings matrix for fast similarity search
+            self._build_qa_embeddings_matrix()
+
         except Exception as e:
             if self.verbose_init:
                 console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
@@ -568,7 +593,80 @@ class EntitySearcher:
         except Exception as e:
             console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
             return False
-    
+
+    def _build_qa_embeddings_matrix(self):
+        """Build a matrix of all Q&A embeddings for fast similarity search."""
+        if not self.qa_embedding_cache:
+            return
+
+        # Create ordered lists of hashes and embeddings
+        qa_hashes = []
+        qa_embeddings = []
+
+        for qa_hash, embedding in self.qa_embedding_cache.items():
+            qa_hashes.append(qa_hash)
+            qa_embeddings.append(embedding)
+
+        # Convert to numpy array for fast similarity computation
+        self.qa_embeddings_matrix = np.array(qa_embeddings)
+
+        # Create hash to index mapping
+        self.qa_hash_to_idx = {qa_hash: idx for idx, qa_hash in enumerate(qa_hashes)}
+
+        if self.verbose_init:
+            console.print(f"[green]✓ Built Q&A embeddings matrix with shape {self.qa_embeddings_matrix.shape}[/green]")
+
+    def search_qa_pairs_direct(self, query: str, top_k: int = 10, verbose: bool = False) -> List[Dict[str, Any]]:
+        """Search directly for Q&A pairs matching the query using embeddings.
+
+        Args:
+            query: Search query
+            top_k: Number of top Q&A pairs to return
+            verbose: Whether to display search results
+
+        Returns:
+            List of Q&A pair dictionaries with similarity scores
+        """
+        if not self.embedding_model or self.qa_embeddings_matrix is None or not SIMILARITY_AVAILABLE:
+            if verbose:
+                console.print("[yellow]Q&A embeddings not available for direct search[/yellow]")
+            return []
+
+        # Embed the query
+        query_embedding = self._embed_query(query)
+        if query_embedding is None:
+            return []
+
+        # Calculate similarities with all Q&A pairs
+        query_embedding = query_embedding.reshape(1, -1)
+        similarities = cosine_similarity(query_embedding, self.qa_embeddings_matrix)[0]
+
+        # Get top-k results
+        top_indices = np.argsort(similarities)[::-1][:top_k]
+
+        results = []
+        for idx in top_indices:
+            # Find the hash for this index
+            qa_hash = None
+            for h, i in self.qa_hash_to_idx.items():
+                if i == idx:
+                    qa_hash = h
+                    break
+
+            if qa_hash and qa_hash in self.qa_metadata_cache:
+                metadata = self.qa_metadata_cache[qa_hash].copy()
+                metadata['similarity_score'] = float(similarities[idx])
+                # Add a source indicator for tracking
+                metadata['source_method'] = 'direct_qa_search'
+                results.append(metadata)
+
+        if verbose:
+            console.print(f"[cyan]Direct Q&A search found {len(results)} pairs[/cyan]")
+            if results:
+                console.print(f"[dim]Top score: {results[0]['similarity_score']:.3f}[/dim]")
+
+        return results
+
     def search(self, query: str, top_k: int = 5, verbose: bool = True) -> List[Tuple[Dict[str, Any], float]]:
         """Search for entities matching the query.
         

@@ -50,16 +50,17 @@ console = Console()
 class ChainFollowingMultiHopQA:
     """Chain-following multi-hop QA system with intelligent chain reranking."""
     
-    def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False, 
+    def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False,
                  chain_top_k: int = 15, beam_width: int = 5, entity_top_k: int = 20, qa_rerank_top_k: int = 15,
-                 final_only_evidence: bool = False):
+                 final_only_evidence: bool = False, scoring_mode: str = "similarity"):
         """Initialize the chain-following multi-hop QA system.
-        
+
         Args:
             num_documents: Number of documents to load
             verbose: Whether to show detailed output
             show_prompt: Whether to show the full LLM prompt
             chain_top_k: Number of top chains to select after reranking
+            scoring_mode: How to score chains - "similarity" (cosine sim to original) or "cumulative" (product of QA scores)
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
@@ -68,11 +69,13 @@ class ChainFollowingMultiHopQA:
         self.entity_top_k = entity_top_k
         self.qa_rerank_top_k = qa_rerank_top_k
         self.final_only_evidence = final_only_evidence
+        self.scoring_mode = scoring_mode
         
         if verbose:
             console.print("[bold blue]Initializing Chain-Following Multi-Hop QA System...[/bold blue]")
             console.print(f"  Chain selection: Top {chain_top_k} chains")
             console.print(f"  Beam width per hop: {beam_width}; Entity@{entity_top_k}, QA@{qa_rerank_top_k}")
+            console.print(f"  Scoring mode: {scoring_mode}")
         
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
@@ -95,6 +98,133 @@ class ChainFollowingMultiHopQA:
         
         if verbose:
             console.print("[bold green]✓ System ready[/bold green]")
+
+    def _compute_similarity_score(self, state: Dict[str, Any], orig_emb: np.ndarray) -> float:
+        """Compute similarity-based score between chain text and original question.
+
+        Args:
+            state: State dict with 'evidence_pairs' containing QA pairs
+            orig_emb: Original question embedding
+
+        Returns:
+            Similarity score (cosine similarity) or -1.0 on error
+        """
+        # Build chain text from evidence pairs
+        chain_text_parts = []
+        for qa in state.get('evidence_pairs', []):
+            q_text = qa.get('question', '')
+            ans = qa.get('answer_names', qa.get('answers', []))
+            if isinstance(ans, str):
+                ans = [ans]
+            a_text = ', '.join(str(x) for x in ans if x)
+            if q_text and a_text:
+                chain_text_parts.append(f"Q: {q_text} A: {a_text}")
+
+        chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
+
+        # Compute similarity score
+        try:
+            if orig_emb is not None and chain_text:
+                emb = self.entity_searcher._embed_chain(chain_text)
+                if emb is not None:
+                    return float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
+            return -1.0
+        except Exception:
+            return -1.0
+
+    def _compute_cumulative_score(self, state: Dict[str, Any]) -> float:
+        """Compute cumulative score as product of individual QA pair scores.
+
+        Args:
+            state: State dict with 'evidence_pairs' containing QA pairs
+
+        Returns:
+            Cumulative score (product of QA scores)
+        """
+        evidence_pairs = state.get('evidence_pairs', [])
+        if not evidence_pairs:
+            return 0.0
+
+        # Product of all QA pair scores
+        cumulative_score = 1.0
+        for qa in evidence_pairs:
+            # Get the best available score for this QA pair
+            score = qa.get('similarity_score', qa.get('entity_score', 0.0))
+            cumulative_score *= max(score, 0.0001)  # Avoid zero scores killing the chain
+
+        return float(cumulative_score)
+
+    def _score_chain_state(self, state: Dict[str, Any], orig_emb: np.ndarray = None) -> Dict[str, Any]:
+        """Score a chain state using the configured scoring method.
+
+        Args:
+            state: State dict with 'evidence_pairs' containing QA pairs
+            orig_emb: Original question embedding (required for similarity mode)
+
+        Returns:
+            Updated state with 'chain_score' added
+        """
+        if self.scoring_mode == "cumulative":
+            state['chain_score'] = self._compute_cumulative_score(state)
+        else:  # Default to similarity
+            state['chain_score'] = self._compute_similarity_score(state, orig_emb)
+
+        return state
+
+    def _create_expansion_state(self, base_state: Dict[str, Any], qa_used: Dict[str, Any], q_idx: int) -> Dict[str, Any]:
+        """Create a new expanded state by adding a QA pair to the base state.
+
+        Args:
+            base_state: Base state to expand from
+            qa_used: QA pair to add
+            q_idx: Question index for entity mapping
+
+        Returns:
+            New state with QA added and scores updated
+        """
+        new_state = {
+            'entities_by_qidx': dict(base_state.get('entities_by_qidx', {})),
+            'evidence_pairs': list(base_state.get('evidence_pairs', [])),
+            'score': 0.0,
+        }
+
+        # Update entity mapping if there's an answer entity
+        answer_names = qa_used.get('answer_names', qa_used.get('answers', []))
+        if isinstance(answer_names, str):
+            answer_names = [answer_names]
+        if answer_names:
+            new_state['entities_by_qidx'][q_idx] = answer_names[0]
+
+        # Add QA pair to evidence
+        new_state['evidence_pairs'].append(qa_used)
+        new_state['last_hop_score'] = float(qa_used.get('similarity_score', 0.0))
+
+        return new_state
+
+    def _prune_to_beam_width(self, candidates: List[Dict[str, Any]], beam_width: int) -> List[Dict[str, Any]]:
+        """Prune candidate states to beam width using chain scores.
+
+        Args:
+            candidates: List of candidate states with scores
+            beam_width: Maximum number of states to keep
+
+        Returns:
+            Top beam_width states sorted by score
+        """
+        if not candidates:
+            return []
+
+        # Sort by chain score (primary) and last hop score (secondary)
+        if any('chain_score' in s and s['chain_score'] is not None for s in candidates):
+            candidates.sort(
+                key=lambda s: (s.get('chain_score', -1.0), s.get('last_hop_score', 0.0)),
+                reverse=True
+            )
+        else:
+            # Fallback to last hop score if chain scores unavailable
+            candidates.sort(key=lambda s: s.get('last_hop_score', 0.0), reverse=True)
+
+        return candidates[:beam_width]
 
     def _extract_top_entities_from_qa(self, qa_pairs: List[Dict[str, Any]], max_entities: int) -> List[Tuple[str, Dict[str, Any]]]:
         """From reranked QA pairs, pick top unique answer entities with their source QA pair.
@@ -500,44 +630,10 @@ Decomposition:"""
                 if is_final_hop:
                     # Final hop: select by top QA pairs directly (no entity grouping)
                     for qa_used in qa_pairs:
-                        # Build new candidate including this QA
-                        new_state = {
-                            'entities_by_qidx': dict(state['entities_by_qidx']),
-                            'evidence_pairs': list(state['evidence_pairs']),
-                            'score': 0.0,
-                        }
-                        # Keep entity map consistent if there is an answer entity
-                        answer_names = qa_used.get('answer_names', qa_used.get('answers', []))
-                        if isinstance(answer_names, str):
-                            answer_names = [answer_names]
-                        if answer_names:
-                            new_state['entities_by_qidx'][q_idx] = answer_names[0]
-                        new_state['evidence_pairs'].append(qa_used)
-                        new_state['last_hop_score'] = float(qa_used.get('similarity_score', 0.0))
-
-                        # Score chain vs original
-                        chain_text_parts = []
-                        for qa in new_state['evidence_pairs']:
-                            q_text = qa.get('question', '')
-                            ans = qa.get('answer_names', qa.get('answers', []))
-                            if isinstance(ans, str):
-                                ans = [ans]
-                            a_text = ', '.join(str(x) for x in ans if x)
-                            if q_text and a_text:
-                                chain_text_parts.append(f"Q: {q_text} A: {a_text}")
-                        chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
-                        try:
-                            if orig_emb is not None and chain_text:
-                                emb = self.entity_searcher._embed_chain(chain_text)
-                                if emb is not None:
-                                    sim = float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
-                                else:
-                                    sim = -1.0
-                            else:
-                                sim = -1.0
-                        except Exception:
-                            sim = -1.0
-                        new_state['chain_score'] = sim
+                        # Create new state with QA pair
+                        new_state = self._create_expansion_state(state, qa_used, q_idx)
+                        # Score the chain
+                        new_state = self._score_chain_state(new_state, orig_emb)
                         candidate_expansions.append(new_state)
                 else:
                     # Non-final hop: entity-by-best-QA selection
@@ -560,39 +656,12 @@ Decomposition:"""
                             if not ent_key:
                                 ent_key = str(ent_name)
 
-                            new_state = {
-                                'entities_by_qidx': dict(state['entities_by_qidx']),
-                                'evidence_pairs': list(state['evidence_pairs']),
-                                'score': 0.0,
-                            }
-                            new_state['entities_by_qidx'][q_idx] = ent_name
-                            new_state['evidence_pairs'].append(qa_used)
-                            new_state['last_hop_score'] = float(qa_used.get('similarity_score', 0.0))
+                            # Create and score new state
+                            new_state = self._create_expansion_state(state, qa_used, q_idx)
+                            new_state['entities_by_qidx'][q_idx] = ent_name  # Override with specific entity
+                            new_state = self._score_chain_state(new_state, orig_emb)
 
-                            # Score chain vs original
-                            chain_text_parts = []
-                            for qa in new_state['evidence_pairs']:
-                                q_text = qa.get('question', '')
-                                ans = qa.get('answer_names', qa.get('answers', []))
-                                if isinstance(ans, str):
-                                    ans = [ans]
-                                a_text = ', '.join(str(x) for x in ans if x)
-                                if q_text and a_text:
-                                    chain_text_parts.append(f"Q: {q_text} A: {a_text}")
-                            chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
-                            try:
-                                if orig_emb is not None and chain_text:
-                                    emb = self.entity_searcher._embed_chain(chain_text)
-                                    if emb is not None:
-                                        sim = float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
-                                    else:
-                                        sim = -1.0
-                                else:
-                                    sim = -1.0
-                            except Exception:
-                                sim = -1.0
-                            new_state['chain_score'] = sim
-
+                            # Keep best scoring chain for each entity
                             prev = per_entity_best.get(ent_key)
                             if prev is None or (new_state['chain_score'], new_state['last_hop_score']) > (
                                 prev.get('chain_score', -1.0), prev.get('last_hop_score', 0.0)
@@ -605,16 +674,8 @@ Decomposition:"""
                 beams = []
                 break
 
-            # Prune to beam width globally using chain-level reranking against the original question.
-            # Fallback to current-hop score if embeddings are unavailable.
-            if any('chain_score' in s and s['chain_score'] is not None for s in candidate_expansions):
-                candidate_expansions.sort(
-                    key=lambda s: (s.get('chain_score', -1.0), s.get('last_hop_score', 0.0)),
-                    reverse=True,
-                )
-            else:
-                candidate_expansions.sort(key=lambda s: s.get('last_hop_score', 0.0), reverse=True)
-            beams = candidate_expansions[: self.beam_width]
+            # Prune to beam width
+            beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
             if self.verbose:
                 console.print(f"      Expanded to {len(candidate_expansions)} beams → kept top {len(beams)}")
 
