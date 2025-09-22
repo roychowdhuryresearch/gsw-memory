@@ -74,7 +74,7 @@ class GSWProcessor:
         enable_spacetime: Optional[bool] = None,
         enable_visualization: Optional[bool] = None,
         batch_idx: Optional[int] = 1,
-        batch_size: Optional[int] = None,
+        batch_size: Optional[int] = 1,
     ) -> List[Dict[str, Dict]]:
         """Process multiple documents through the complete GSW pipeline with full parallelization.
 
@@ -242,7 +242,7 @@ class GSWProcessor:
         gsw_responses = gsw_model(gsw_inputs)
 
         # Step 5: Parse responses and update chunk data with GSW structures
-        for response in gsw_responses: #TODO: Check if this is correct
+        for response in gsw_responses.dataset: #TODO: Check if this is correct
             try:
                 gsw = parse_gsw(response["graph"])
                 doc_idx = response["doc_idx"]
