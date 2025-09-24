@@ -23,7 +23,8 @@ from collections import defaultdict
 import numpy as np
 
 import os 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+if "CUDA_VISIBLE_DEVICES" not in os.environ:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -52,7 +53,7 @@ class ChainFollowingMultiHopQA:
     
     def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False,
                  chain_top_k: int = 15, beam_width: int = 5, entity_top_k: int = 20, qa_rerank_top_k: int = 15,
-                 final_only_evidence: bool = False, scoring_mode: str = "cumulative"):
+                 final_only_evidence: bool = False, chain_following_mode: str = "cumulative", alpha: float = 0.5):
         """Initialize the chain-following multi-hop QA system.
 
         Args:
@@ -60,7 +61,7 @@ class ChainFollowingMultiHopQA:
             verbose: Whether to show detailed output
             show_prompt: Whether to show the full LLM prompt
             chain_top_k: Number of top chains to select after reranking
-            scoring_mode: How to score chains - "similarity" (cosine sim to original) or "cumulative" (product of QA scores)
+            chain_following_mode: How to score chains - "similarity" (cosine sim to original) or "cumulative" (product of QA scores)
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
@@ -69,19 +70,21 @@ class ChainFollowingMultiHopQA:
         self.entity_top_k = entity_top_k
         self.qa_rerank_top_k = qa_rerank_top_k
         self.final_only_evidence = final_only_evidence
-        self.scoring_mode = scoring_mode
-        
+        self.chain_following_mode = chain_following_mode
+        self.alpha = alpha # If weighting cumulative and chain scores
         if verbose:
             console.print("[bold blue]Initializing Chain-Following Multi-Hop QA System...[/bold blue]")
             console.print(f"  Chain selection: Top {chain_top_k} chains")
             console.print(f"  Beam width per hop: {beam_width}; Entity@{entity_top_k}, QA@{qa_rerank_top_k}")
-            console.print(f"  Scoring mode: {scoring_mode}")
+            console.print(f"  Chain following mode: {chain_following_mode}")
         
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache",
-            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks",
+            # cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_memory/playground/.gsw_cache",
+            # rebuild_cache=True,
+            cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/.gsw_cache",
+            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/normalized_networks",
             verbose=False  # Keep entity searcher quiet
         )
         
@@ -109,6 +112,7 @@ class ChainFollowingMultiHopQA:
         Returns:
             Similarity score (cosine similarity) or -1.0 on error
         """
+        eps = 1e-6
         # Build chain text from evidence pairs
         chain_text_parts = []
         for qa in state.get('evidence_pairs', []):
@@ -117,8 +121,9 @@ class ChainFollowingMultiHopQA:
             if isinstance(ans, str):
                 ans = [ans]
             a_text = ', '.join(str(x) for x in ans if x)
+            rolestate = ', '.join(qa.get('answer_rolestates', []))
             if q_text and a_text:
-                chain_text_parts.append(f"Q: {q_text} A: {a_text}")
+                chain_text_parts.append(f"Q: {q_text} A: {a_text}, {rolestate}")
 
         chain_text = " | ".join(chain_text_parts) if chain_text_parts else ""
 
@@ -127,10 +132,13 @@ class ChainFollowingMultiHopQA:
             if orig_emb is not None and chain_text:
                 emb = self.entity_searcher._embed_chain(chain_text)
                 if emb is not None:
-                    return float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
-            return -1.0
+                    similarity = float(np.dot(orig_emb, emb) / (np.linalg.norm(orig_emb) * np.linalg.norm(emb)))
+                    normalized_score = 0.5 * (similarity + 1)
+                    normalized_score = max(eps, min(normalized_score, 1))
+                    return float(normalized_score)
+            return eps
         except Exception:
-            return -1.0
+            return eps
 
     def _compute_cumulative_score(self, state: Dict[str, Any]) -> float:
         """Compute cumulative score as product of individual QA pair scores.
@@ -142,17 +150,43 @@ class ChainFollowingMultiHopQA:
             Cumulative score (product of QA scores)
         """
         evidence_pairs = state.get('evidence_pairs', [])
+        eps = 1e-6
         if not evidence_pairs:
-            return 0.0
+            return eps
 
+        
         # Product of all QA pair scores
-        cumulative_score = 1.0
+        normalized_scores = []
         for qa in evidence_pairs:
             # Get the best available score for this QA pair
             score = qa.get('similarity_score', qa.get('entity_score', 0.0))
-            cumulative_score *= max(score, 1e-6)  # Avoid zero scores killing the chain
+            if score is None: 
+                score = -1 
+            try: 
+                score = float(score)
+            except Exception as e:
+                print(f"Error converting score to float: {e}, defaulting to -1")
+                score = -1
 
-        return float(cumulative_score)
+            normalized_score = 0.5 * (score + 1)
+            normalized_score = max(eps, min(normalized_score, 1))
+            normalized_scores.append(normalized_score)
+
+        #Geometric mean
+        geometric_mean = float(np.exp(np.mean(np.log(normalized_scores))))
+
+        return float(geometric_mean)
+
+
+    def _compute_combined_score(self, state: Dict[str, Any], orig_emb: np.ndarray, alpha: float = 0.5) -> float:
+        """
+        Combine both cumulative and chain similarity scores.
+        """
+
+        cumulative_score = self._compute_cumulative_score(state)
+        chain_score = self._compute_similarity_score(state, orig_emb)
+        return alpha * cumulative_score + (1 - alpha) * chain_score
+        
 
     def _score_chain_state(self, state: Dict[str, Any], orig_emb: np.ndarray = None) -> Dict[str, Any]:
         """Score a chain state using the configured scoring method.
@@ -164,10 +198,14 @@ class ChainFollowingMultiHopQA:
         Returns:
             Updated state with 'chain_score' added
         """
-        if self.scoring_mode == "cumulative":
+        if self.chain_following_mode == "cumulative":
             state['chain_score'] = self._compute_cumulative_score(state)
-        else:  # Default to similarity
+        elif self.chain_following_mode == "similarity":
             state['chain_score'] = self._compute_similarity_score(state, orig_emb)
+        elif self.chain_following_mode == "combined":
+            state['chain_score'] = self._compute_combined_score(state, orig_emb, self.alpha)
+        else:
+            raise ValueError(f"Invalid chain following mode: {self.chain_following_mode}")
 
         return state
 
@@ -404,12 +442,12 @@ Decomposition:"""
 
         try:
             response = self.openai_client.chat.completions.create(
-                model="gpt-5",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
-                ]
-                # temperature=0.1,
+                ],
+                temperature=0.0
                 # max_tokens=300
             )
             
@@ -1468,7 +1506,7 @@ def main():
     console.print("Initializing...")
     
     try:
-        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True)
+        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="combined", beam_width=5, alpha=0.5)
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
