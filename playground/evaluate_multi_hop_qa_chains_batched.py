@@ -319,7 +319,9 @@ class ChainBatchedMultiHopQAEvaluator:
             show_prompt=False,
             chain_top_k=chain_top_k,
             chain_following_mode="cumulative", 
-            beam_width=10
+            beam_width=5, 
+            reranker_model_name="voyage",
+            use_chain_reranker=True
         )
         
         # Initialize curator classes if available
@@ -729,7 +731,7 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=1000, 
+            num_questions=20, 
             verbose=verbose,
         )
         

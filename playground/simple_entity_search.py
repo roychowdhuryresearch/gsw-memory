@@ -18,6 +18,7 @@ from rich.console import Console
 from rich.prompt import Prompt
 from rich.table import Table
 from rich.panel import Panel
+import re
 
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -37,6 +38,14 @@ try:
 except ImportError:
     print("Warning: VLLM not available. Install with: pip install vllm>=0.8.5")
     VLLM_AVAILABLE = False
+
+# BM25 for entity search
+try:
+    from rank_bm25 import BM25Okapi
+    BM25_AVAILABLE = True
+except ImportError:
+    print("Warning: BM25 not available. Install with: pip install rank-bm25")
+    BM25_AVAILABLE = False
 
 # OpenAI for answer generation
 try:
@@ -100,7 +109,7 @@ def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tu
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True):
+    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True, use_bm25: bool = False):
         """Initialize the entity searcher.
         
         Args:
@@ -131,6 +140,8 @@ class EntitySearcher:
         self.cache_metadata_file = self.cache_dir / f"embedding_metadata_{num_documents}docs.json"
         self.cache_hits = 0
         self.cache_misses = 0
+        self.use_bm25 = use_bm25
+
         
         if self.verbose_init:
             console.print("[bold blue]Loading GSW entities...[/bold blue]")
@@ -144,8 +155,14 @@ class EntitySearcher:
         
         if VLLM_AVAILABLE:
             self._initialize_embedding_model()
+
+            # BM25 index is only for the entity search
             if self.embedding_model:
                 # Try to load cached embeddings first
+
+                if self.use_bm25:
+                    self._build_bm25_index()
+
                 if not self.rebuild_cache and self._load_entity_embeddings_cache():
                     if self.verbose_init:
                         console.print("[green]✓ Loaded entity embeddings from cache[/green]")
@@ -162,6 +179,9 @@ class EntitySearcher:
 
                 # Precompute any missing Q&A embeddings
                 self._precompute_qa_embeddings()
+
+            else:
+                raise ValueError("No embedding model or BM25 index found")
         
         # Initialize OpenAI client if available
         if OPENAI_AVAILABLE:
@@ -316,6 +336,21 @@ class EntitySearcher:
             if self.verbose_init:
                 console.print(f"[red]Error initializing embedding model: {e}[/red]")
             self.embedding_model = None
+
+    def _build_bm25_index(self) -> None:
+        """Build BM25 index for entity search."""
+        if not self.entity_texts:
+            return
+        
+        if self.verbose_init:
+            console.print("Building BM25 index for entity search...")
+
+        token_pattern = re.compile(r"\w+")
+        self.tokenized_entities = [
+            token_pattern.findall(text.lower()) for text in self.entity_texts
+        ]
+        self.bm25 = BM25Okapi(self.tokenized_entities)
+
     
     def _generate_embeddings(self):
         """Generate embeddings for all entity texts."""
@@ -616,7 +651,7 @@ class EntitySearcher:
         if self.verbose_init:
             console.print(f"[green]✓ Built Q&A embeddings matrix with shape {self.qa_embeddings_matrix.shape}[/green]")
 
-    def search_qa_pairs_direct(self, query: str, top_k: int = 10, verbose: bool = False) -> List[Dict[str, Any]]:
+    def search_qa_pairs_direct(self, query: str, query_embedding: np.ndarray = None, top_k: int = 10, verbose: bool = False) -> List[Dict[str, Any]]:
         """Search directly for Q&A pairs matching the query using embeddings.
 
         Args:
@@ -633,7 +668,10 @@ class EntitySearcher:
             return []
 
         # Embed the query
-        query_embedding = self._embed_query(query)
+        if query_embedding is not None:
+            query_embedding = query_embedding.reshape(1, -1)
+        else:
+            query_embedding = self._embed_query(query)
         if query_embedding is None:
             return []
 
@@ -667,7 +705,7 @@ class EntitySearcher:
 
         return results
 
-    def search(self, query: str, top_k: int = 5, verbose: bool = True) -> List[Tuple[Dict[str, Any], float]]:
+    def search(self, query: str, query_embedding: np.ndarray = None, top_k: int = 5, verbose: bool = True) -> List[Tuple[Dict[str, Any], float]]:
         """Search for entities matching the query.
         
         Args:
@@ -680,11 +718,13 @@ class EntitySearcher:
         """
         if verbose:
             console.print(f"[cyan]Searching for: '{query}'[/cyan]")
-        
-        if self.embeddings is not None and SIMILARITY_AVAILABLE:
-            results = self._search_with_embeddings(query, top_k, verbose)
+
+        if self.use_bm25 and self.bm25 is not None:
+            results = self._search_with_bm25(query=query, top_k=top_k, verbose=verbose)
+        elif self.embeddings is not None and SIMILARITY_AVAILABLE:
+            results = self._search_with_embeddings(query=query, query_embedding=query_embedding, top_k=top_k, verbose=verbose)
         else:
-            results = self._search_with_text(query, top_k, verbose)
+            results = self._search_with_text(query=query, top_k=top_k, verbose=verbose)
         
         # Enrich results with QA pairs
         enriched_results = []
@@ -699,13 +739,16 @@ class EntitySearcher:
             self._display_qa_pairs_table(enriched_results)
         
 
-        
         return enriched_results
     
-    def _search_with_embeddings(self, query: str, top_k: int, verbose: bool) -> List[Tuple[Dict[str, Any], float]]:
+    def _search_with_embeddings(self, query: str, top_k: int, verbose: bool, query_embedding: np.ndarray = None) -> List[Tuple[Dict[str, Any], float]]:
         """Search using embedding similarity."""
         # Get query embedding
-        query_embedding = self._embed_query(query)
+        if query_embedding is not None:
+            query_embedding = query_embedding.reshape(1, -1)
+        else:
+            query_embedding = self._embed_query(query)
+        
         if query_embedding is None:
             console.print("[yellow]Warning: Could not embed query, using text search[/yellow]")
             return self._search_with_text(query, top_k, verbose)
@@ -762,6 +805,31 @@ class EntitySearcher:
             self._display_search_results(results, "Text-based Search")
         
         return results
+
+
+    def _search_with_bm25(self, query: str, top_k: int, verbose: bool):
+        if not self.bm25:
+            console.print("[yellow]BM25 index not built, using text search[/yellow]")
+            return self._search_with_text(query, top_k, verbose)
+
+        token_pattern = re.compile(r"\w+")
+        query_tokens = token_pattern.findall(query.lower())
+        scores = self.bm25.get_scores(query_tokens)
+
+        top_indices = np.argsort(scores)[::-1][:top_k]
+        results = [
+            (self.entities[idx], float(scores[idx]))
+            for idx in top_indices
+            if scores[idx] > 0
+        ]
+
+        if not results:
+            return self._search_with_text(query, top_k, verbose)
+
+        if verbose:
+            self._display_search_results(results, "BM25 Search")
+        return results
+
     
     def _display_search_results(self, results: List[Tuple[Dict[str, Any], float]], search_type: str):
         """Display search results in a formatted table."""
@@ -899,7 +967,7 @@ class EntitySearcher:
         # Get embeddings from cache (should all be precomputed)
         qa_embeddings = []
         missing_count = 0
-        
+
         for qa_text in qa_texts:
             qa_hash = self._get_qa_text_hash(qa_text)
             
@@ -927,7 +995,8 @@ class EntitySearcher:
         
         # Get top-k indices
         top_indices = np.argsort(similarities)[::-1][:top_k]
-        
+
+
         # Return reranked Q&A pairs with scores
         reranked_pairs = []
         for idx in top_indices:
