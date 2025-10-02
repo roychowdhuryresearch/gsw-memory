@@ -26,12 +26,13 @@ import voyageai
 
 import os 
 if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from rich.console import Console
 from rich.prompt import Prompt
 from rich.table import Table
 from rich.panel import Panel
+from itertools import product
 
 # Optional HTTP client for external reranker
 try:
@@ -63,7 +64,8 @@ class ChainFollowingMultiHopQA:
                  final_only_evidence: bool = False, chain_following_mode: str = "cumulative", alpha: float = 0.5,
                  use_chain_reranker: bool = False, reranker_model_name: str = None,
                  reranker_instruction: str = "Given a question, score the chain of QA pairs based on how likely it is to lead to the answer",
-                 reranker_endpoint_url: Optional[str] = None, reranker_http_timeout: float = 15.0):
+                 reranker_endpoint_url: Optional[str] = None, reranker_http_timeout: float = 15.0,
+                 multi_dep_quality_threshold: float = 0.3):
         """Initialize the chain-following multi-hop QA system.
 
         Args:
@@ -87,6 +89,7 @@ class ChainFollowingMultiHopQA:
         self.reranker_model_name = reranker_model_name
         self.reranker_endpoint_url = reranker_endpoint_url
         self.reranker_http_timeout = reranker_http_timeout
+        self.multi_dep_quality_threshold = multi_dep_quality_threshold
         self._reranker = None
         self.voyage_client = None
         self.rerank_instruction = "Given a question, you need to score the chain of decomposed questions based on how likely it is to lead to the answer. Make sure to focues on both questions"
@@ -108,12 +111,9 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            # cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_memory/playground/.gsw_cache",
-            # rebuild_cache=True,
-            cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/.gsw_cache",
-            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/normalized_networks",
-            verbose=False,  # Keep entity searcher quiet
-            use_bm25=False
+            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache_mini_trial",
+            path_to_gsw_files="/home/yigit/codebase/gsw-memory/logs/full_musique_corpus_new_gsws/gsw_output_global_ids/networks",
+            verbose=False  # Keep entity searcher quiet
         )
         
         # Initialize OpenAI client
@@ -314,7 +314,31 @@ class ChainFollowingMultiHopQA:
         cumulative_score = self._compute_cumulative_score(state)
         chain_score = self._compute_similarity_score(state, orig_emb)
         return alpha * cumulative_score + (1 - alpha) * chain_score
-        
+
+
+    def _harmonic_mean(self, scores: List[float]) -> float:
+        """Compute harmonic mean of scores.
+
+        Harmonic mean heavily penalizes low outliers, making it ideal for
+        multi-dependency scoring where one weak parent breaks the chain.
+
+        Args:
+            scores: List of scores (all should be > 0)
+
+        Returns:
+            Harmonic mean: n / (1/s1 + 1/s2 + ... + 1/sn)
+        """
+        if not scores:
+            return 1e-6
+
+        # Filter out zero/negative scores
+        valid_scores = [s for s in scores if s > 1e-6]
+        if not valid_scores:
+            return 1e-6
+
+        n = len(valid_scores)
+        harmonic = n / sum(1.0 / s for s in valid_scores)
+        return float(harmonic)
 
     def _score_chain_state(self, state: Dict[str, Any], orig_emb: np.ndarray = None) -> Dict[str, Any]:
         """Score a chain state using the configured scoring method.
@@ -337,7 +361,7 @@ class ChainFollowingMultiHopQA:
 
         return state
 
-    def _create_expansion_state(self, base_state: Dict[str, Any], qa_used: Dict[str, Any], q_idx: int) -> Dict[str, Any]:
+    def _create_expansion_state(self, base_state: Dict[str, Any], qa_used: Dict[str, Any], q_idx: int, is_last_hop: bool = False) -> Dict[str, Any]:
         """Create a new expanded state by adding a QA pair to the base state.
 
         Args:
@@ -359,7 +383,7 @@ class ChainFollowingMultiHopQA:
         if isinstance(answer_names, str):
             answer_names = [answer_names]
         if answer_names:
-            new_state['entities_by_qidx'][q_idx] = answer_names[0] #TODO: Why only the first one?
+            new_state['entities_by_qidx'][q_idx] = answer_names[0] if not is_last_hop else answer_names
 
         # Add QA pair to evidence
         new_state['evidence_pairs'].append(qa_used)
@@ -557,12 +581,22 @@ Decomposition:
    Requires retrieval: true
 </decomposition>
 
+Question: "Which countries experienced economic growth while canals were being constructed in Europe?"
+Decomposition:
+<decomposition>
+1. Question: When were canals constructed in Europe?
+   Requires retrieval: true
+2. Question: What countries found their economic growth in <ENTITY_Q1>?
+   Requires retrieval: true
+</decomposition>
+
 ## Important Constraints
 -   **AVOID YES/NO QUESTIONS.**
 -   ** THERE CANNOT BE <ENTITY_Qn> IF NTH QUESTION DOES NOT REQUIRE RETRIEVAL.**
 -   **AVOID OVER-DECOMPOSITION.** Each question should seek a meaningful entity or property.
 -   DON'T break "When was John Doe born?" into "Who is John Doe?" -> "English", then "When was English born?".
 -   DO ask directly: "When was John Doe born?".
+-   DON'T add any knowledge from your own knowledge, only use the provided question to decompose.
 
 Now decompose this question with provided format:
 Question: "{question}"
@@ -570,12 +604,12 @@ Decomposition:"""
 
         try:
             response = self.openai_client.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-5",
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
-                ],
-                temperature=0.0
+                ]
+                # temperature=0.1,
                 # max_tokens=300
             )
             
@@ -813,27 +847,31 @@ Decomposition:"""
     
     def identify_reasoning_chains(self, decomposed: List[Dict[str, Any]]) -> List[List[int]]:
         """Identify which questions belong to which reasoning chains.
-        
+
+        This enhanced version handles both linear chains and DAG structures where
+        a question can depend on multiple previous questions.
+
         Args:
             decomposed: List of decomposed questions with metadata
-            
+
         Returns:
             List of chains, where each chain is a list of question indices (0-based)
+            For DAG structures, returns the connected component in topological order
         """
         # Only consider questions that require retrieval
         retrieval_questions = [(i, q) for i, q in enumerate(decomposed) if q.get("requires_retrieval", True)]
-        
+
         if not retrieval_questions:
             return []
-        
+
         # Build dependency graph
         dependencies = {}  # question_idx -> [list of dependent question indices]
         dependents = {}    # question_idx -> [list of questions that depend on this one]
-        
+
         for i, (q_idx, q_info) in enumerate(retrieval_questions):
             question_text = q_info.get("question", "")
             dependencies[q_idx] = []
-            
+
             # Find all <ENTITY_Q*> references in this question
             import re
             refs = re.findall(r'<ENTITY_Q(\d+)>', question_text)
@@ -841,55 +879,98 @@ Decomposition:"""
                 dep_q_idx = int(ref) - 1  # Q1 is index 0
                 if dep_q_idx < len(decomposed):
                     dependencies[q_idx].append(dep_q_idx)
-                    
+
                     # Build reverse dependency
                     if dep_q_idx not in dependents:
                         dependents[dep_q_idx] = []
                     dependents[dep_q_idx].append(q_idx)
-        
-        # Find root questions (no dependencies) and build chains from them
+
+        # Find connected components (handles both linear chains and DAGs)
         chains = []
         visited = set()
-        
-        def build_chain_from_root(root_idx: int) -> List[int]:
-            """Build a reasoning chain starting from a root question."""
-            chain = [root_idx]
-            current = root_idx
-            
-            # Follow the dependency chain
-            while current in dependents:
-                # For now, follow the first dependent (could be extended for branching)
-                next_questions = [q for q in dependents[current] if q not in visited]
-                if next_questions:
-                    next_q = next_questions[0]
-                    chain.append(next_q)
-                    visited.add(next_q)
-                    current = next_q
-                else:
-                    break
-            
-            return chain
-        
-        # Find all root questions and build chains
+
+        def topological_sort_component(component_nodes: set) -> List[int]:
+            """Perform topological sort on a component of the dependency graph."""
+            # Create in-degree map for the component
+            in_degree = {}
+            for node in component_nodes:
+                in_degree[node] = 0
+                for dep in dependencies.get(node, []):
+                    if dep in component_nodes:
+                        in_degree[node] += 1
+
+            # Find nodes with no dependencies within component
+            queue = [node for node in component_nodes if in_degree[node] == 0]
+            result = []
+
+            while queue:
+                # Sort queue to ensure deterministic ordering
+                queue.sort()
+                node = queue.pop(0)
+                result.append(node)
+
+                # Process dependents
+                for dependent in dependents.get(node, []):
+                    if dependent in component_nodes:
+                        in_degree[dependent] -= 1
+                        if in_degree[dependent] == 0:
+                            queue.append(dependent)
+
+            return result
+
+        def find_connected_component(start_idx: int) -> set:
+            """Find all questions in the connected component containing start_idx."""
+            component = set()
+            to_explore = [start_idx]
+
+            while to_explore:
+                current = to_explore.pop()
+                if current in component:
+                    continue
+                component.add(current)
+
+                # Add dependencies and dependents
+                for dep in dependencies.get(current, []):
+                    if dep not in component:
+                        to_explore.append(dep)
+                for dependent in dependents.get(current, []):
+                    if dependent not in component:
+                        to_explore.append(dependent)
+
+            return component
+
+        # Process each unvisited question
         for q_idx, _ in retrieval_questions:
-            if q_idx not in visited and not dependencies[q_idx]:  # Root question
-                chain = build_chain_from_root(q_idx)
-                if len(chain) > 1:  # Only include multi-step chains
-                    chains.append(chain)
-                    for idx in chain:
-                        visited.add(idx)
-        
+            if q_idx not in visited:
+                # Find the connected component
+                component = find_connected_component(q_idx)
+
+                # Only process multi-question components
+                if len(component) > 1:
+                    # Perform topological sort to get proper ordering
+                    sorted_component = topological_sort_component(component)
+                    chains.append(sorted_component)
+
+                    # Mark all nodes as visited
+                    visited.update(component)
+                elif len(component) == 1:
+                    # Single question - mark as visited but don't create a chain
+                    visited.add(q_idx)
+
         return chains
     
-    def process_reasoning_chain(self, chain_indices: List[int], decomposed: List[Dict[str, Any]], 
+    def process_reasoning_chain(self, chain_indices: List[int], decomposed: List[Dict[str, Any]],
                                original_question: str) -> List[str]:
         """Process a single reasoning chain using beam search over answer entities.
+
+        Enhanced to handle DAG structures where questions can have multiple dependencies.
 
         Implements the flow:
         1) For each question in the chain, search top-K entities (20), collect and rerank QA pairs.
         2) Select top-5 unique answer entities from the reranked QA pairs to continue the chain.
         3) Maintain beams with accumulated evidence and scores across hops.
-        4) At the end, send final QA pairs (configurable) for answer generation.
+        4) Handle multi-dependency questions by combining entity states from multiple parents.
+        5) At the end, send final QA pairs (configurable) for answer generation.
         """
         if self.verbose:
             chain_questions = [decomposed[i]['question'] for i in chain_indices]
@@ -902,8 +983,20 @@ Decomposition:"""
         except Exception:
             orig_emb = None
 
-        # Beam state per hop
-        beams: List[Dict[str, Any]] = []  # each: {'entities_by_qidx': {q_idx: name}, 'evidence_pairs': [qa,...], 'score': float}
+        # Build dependency map for this chain
+        dependencies = {}
+        for q_idx in chain_indices:
+            question_text = decomposed[q_idx].get("question", "")
+            deps = []
+            refs = re.findall(r'<ENTITY_Q(\d+)>', question_text)
+            for ref in refs:
+                dep_idx = int(ref) - 1
+                if dep_idx in chain_indices:
+                    deps.append(dep_idx)
+            dependencies[q_idx] = deps
+
+        # Process questions in topological order (chain_indices should already be sorted)
+        completed_questions = {}  # q_idx -> List of beam states
 
         def substitute_from_state(q: str, state: Dict[int, str]) -> str:
             out = q
@@ -926,23 +1019,86 @@ Decomposition:"""
 
             candidate_expansions: List[Dict[str, Any]] = []
 
-            prior_states = beams if step > 0 else [{'entities_by_qidx': {}, 'evidence_pairs': [], 'score': 0.0}]
+            # Get dependencies for this question
+            deps = dependencies.get(q_idx, [])
+
+            if not deps:
+                # No dependencies - this is a root question
+                prior_states = [{'entities_by_qidx': {}, 'evidence_pairs': [], 'score': 0.0}]
+            elif len(deps) == 1:
+                # Single dependency - use existing logic
+                prior_states = completed_questions.get(deps[0], [])
+            else:
+                # Multiple dependencies - need to combine states with harmonic mean pruning
+                dep_states = [completed_questions.get(dep, [])[: self.beam_width] for dep in deps]
+
+                # Score all possible combinations with harmonic mean BEFORE creating merged states
+                combinations = []
+                for state_combination in product(*dep_states):
+                    if not state_combination:
+                        continue
+
+                    # Compute harmonic mean of parent chain scores
+                    parent_scores = [s.get('chain_score', 0.5) for s in state_combination]
+                    h_mean = self._harmonic_mean(parent_scores)
+
+                    combinations.append({
+                        'harmonic_score': h_mean,
+                        'states': state_combination
+                    })
+
+                # Sort by harmonic mean (best combinations first)
+                combinations.sort(key=lambda x: x['harmonic_score'], reverse=True)
+
+                # Take top beam_width combinations that meet quality threshold
+                top_combinations = [
+                    c for c in combinations[:self.beam_width] #TODO: Try beam_width*2 or different approach
+                    if c['harmonic_score'] >= self.multi_dep_quality_threshold
+                ]
+
+                # Fallback: if all combinations are below threshold, take best 1
+                if not top_combinations and combinations:
+                    top_combinations = combinations[:1]
+
+                if self.verbose and len(combinations) > len(top_combinations):
+                    console.print(f"      [dim]Pruned {len(combinations)} combinations → {len(top_combinations)} via harmonic mean (threshold={self.multi_dep_quality_threshold:.2f})[/dim]")
+
+                # NOW create merged states only for selected high-quality combinations
+                prior_states = []
+                for combo in top_combinations:
+                    combined_state = {
+                        'entities_by_qidx': {},
+                        'evidence_pairs': [],
+                        'pre_combination_score': combo['harmonic_score']  # Track for debugging
+                    }
+                    for parent_state in combo['states']:
+                        combined_state['entities_by_qidx'].update(parent_state['entities_by_qidx'])
+                        combined_state['evidence_pairs'].extend(parent_state['evidence_pairs'])
+                    prior_states.append(combined_state)
 
             is_final_hop = (step == len(chain_indices) - 1)
+            substituted_questions = []
+            substituted_entities = {}
 
             for state in prior_states:
-                concrete_q = question_template if step == 0 else substitute_from_state(question_template, state['entities_by_qidx'])
-                if self.verbose:
-                    console.print(f"      → {concrete_q}")
+                concrete_q = substitute_from_state(question_template, state['entities_by_qidx'])
+                if concrete_q not in substituted_questions:
+                    if self.verbose:
+                        console.print(f"      → {concrete_q}")
 
-                concrete_q_embedding = self.entity_searcher._embed_query(concrete_q)
-                qa_pairs = self.search_and_collect_evidence(question=concrete_q, question_embedding=concrete_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
+                    concrete_q_embedding = self.entity_searcher._embed_query(concrete_q)
+                    qa_pairs = self.search_and_collect_evidence(question=concrete_q, question_embedding=concrete_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
+                    substituted_entities[concrete_q] = qa_pairs
+                    substituted_questions.append(concrete_q)
+
+                else:
+                    qa_pairs = substituted_entities[concrete_q]
 
                 if is_final_hop:
                     # Final hop: select by top QA pairs directly (no entity grouping)
                     for qa_used in qa_pairs:
                         # Create new state with QA pair
-                        new_state = self._create_expansion_state(state, qa_used, q_idx)
+                        new_state = self._create_expansion_state(state, qa_used, q_idx, is_last_hop=True)
                         # Score the chain
                         new_state = self._score_chain_state(new_state, orig_emb)
                         candidate_expansions.append(new_state)
@@ -982,28 +1138,38 @@ Decomposition:"""
                     candidate_expansions.extend(per_entity_best.values())
 
             if not candidate_expansions:
-                beams = []
-                break
+                completed_questions[q_idx] = []
+                continue
 
             # Rerank candidates with cross-encoder (no fusion), then prune
             # self._rerank_states(original_question, candidate_expansions)
             if not is_final_hop:
                 beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
+                
+            # Final rerank before evidence extraction only for final hop
+            if is_final_hop:
+                self._rerank_states(original_question, candidate_expansions)
+                beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
+                
             if self.verbose:
                 console.print(f"      Expanded to {len(candidate_expansions)} beams → kept top {len(beams)}")
 
-        # Final rerank before evidence extraction only for final hop
-        if is_final_hop:
-            self._rerank_states(original_question, candidate_expansions)
-            beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
+            # Store completed beams for this question (for use by dependent questions)
+            completed_questions[q_idx] = beams
+
+        # Evidence from final question's beams
+        # Get the last question index from the chain
+        final_q_idx = chain_indices[-1] if chain_indices else None
+        final_beams = completed_questions.get(final_q_idx, []) if final_q_idx is not None else []
 
         # Evidence from final beams
-        if not beams:
+
+        if not final_beams:
             return []
 
         evidence: List[str] = []
         seen = set()
-        for state in beams:
+        for state in final_beams:
             qa_list = state['evidence_pairs'] if not self.final_only_evidence else ([state['evidence_pairs'][-1]] if state['evidence_pairs'] else [])
             for qa in qa_list:
                 q_text = qa.get('question', '')
@@ -1341,8 +1507,10 @@ Decomposition:"""
         # System message for advanced reading comprehension
         rag_qa_system = (
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
+            'Synthesize information from ALL provided QA pairs to answer questions, combining partial information across multiple pairs and making logical inferences when the answer is not explicitly stated. '
+            'Even if the complete answer is not directly available, use the relevant evidence to construct the most comprehensive response possible rather than claiming the information is missing'
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
-            'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations such as inference source or the reasoning process.'
         )
         
         # One-shot example input
@@ -1511,7 +1679,7 @@ def main():
     console.print("Initializing...")
     
     try:
-        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="cumulative", beam_width=5, alpha=0.5, use_chain_reranker=True, reranker_model_name="voyage")
+        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="cumulative", beam_width=5, alpha=0.5, use_chain_reranker=True, reranker_model_name="voyage", multi_dep_quality_threshold=0.3)
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
