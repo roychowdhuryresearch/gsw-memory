@@ -1507,10 +1507,8 @@ Decomposition:"""
         # System message for advanced reading comprehension
         rag_qa_system = (
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
-            'Synthesize information from ALL provided QA pairs to answer questions, combining partial information across multiple pairs and making logical inferences when the answer is not explicitly stated. '
-            'Even if the complete answer is not directly available, use the relevant evidence to construct the most comprehensive response possible rather than claiming the information is missing'
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
-            'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations such as inference source or the reasoning process.'
+            'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
         )
         
         # One-shot example input
