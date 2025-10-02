@@ -22,7 +22,7 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2'
 
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -317,14 +317,18 @@ class ChainBatchedMultiHopQAEvaluator:
             num_documents=num_documents, 
             verbose=False, 
             show_prompt=False,
-            chain_top_k=chain_top_k
+            chain_top_k=chain_top_k,
+            chain_following_mode="cumulative", 
+            beam_width=5, 
+            reranker_model_name="voyage",
+            use_chain_reranker=True
         )
         
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
             self.decomposer = ChainQuestionDecomposer(
                 model_name="gpt-4o", 
-                generation_params={"temperature": 0.0, "max_tokens": 300}
+                generation_params={"temperature": 0.0}
             )
             self.answer_generator = ChainAnswerGenerator(
                 model_name="gpt-4o-mini", 
@@ -727,9 +731,8 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=1000, 
+            num_questions=20, 
             verbose=verbose,
-            chain_top_k=15
         )
         
         # Run batched evaluation
