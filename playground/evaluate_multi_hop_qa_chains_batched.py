@@ -294,7 +294,7 @@ class ChainBatchedMultiHopQAEvaluator:
     """Batched evaluator for chain-following multi-hop QA using curator for parallel LLM calls."""
     
     def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False,
-                 chain_top_k: int = 15):
+                 chain_top_k: int = 15, use_bm25: bool = False):
         """Initialize batched chain evaluator.
         
         Args:
@@ -308,6 +308,7 @@ class ChainBatchedMultiHopQAEvaluator:
         self.data_dir = Path(".data/2wiki")
         self.verbose = verbose
         self.chain_top_k = chain_top_k
+        self.use_bm25 = use_bm25
         
         console.print("[bold blue]Initializing Chain-Based Batched Multi-Hop QA Evaluator...[/bold blue]")
         console.print(f"  Chain selection: Top {chain_top_k} chains")
@@ -321,7 +322,9 @@ class ChainBatchedMultiHopQAEvaluator:
             chain_following_mode="cumulative", 
             beam_width=5, 
             reranker_model_name="voyage",
-            use_chain_reranker=True
+            use_chain_reranker=True,
+            use_bm25=use_bm25
+
         )
         
         # Initialize curator classes if available
@@ -731,9 +734,11 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=20, 
+            num_questions=1000, 
             verbose=verbose,
+            use_bm25=True
         )
+
         
         # Run batched evaluation
         results = evaluator.run_evaluation()

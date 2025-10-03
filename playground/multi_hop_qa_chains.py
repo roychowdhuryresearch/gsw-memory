@@ -61,7 +61,7 @@ class ChainFollowingMultiHopQA:
     
     def __init__(self, num_documents: int = 200, verbose: bool = True, show_prompt: bool = False,
                  chain_top_k: int = 15, beam_width: int = 5, entity_top_k: int = 20, qa_rerank_top_k: int = 15,
-                 final_only_evidence: bool = False, chain_following_mode: str = "cumulative", alpha: float = 0.5,
+                 final_only_evidence: bool = False, chain_following_mode: str = "cumulative", use_bm25: bool = False, alpha: float = 0.5,
                  use_chain_reranker: bool = False, reranker_model_name: str = None,
                  reranker_instruction: str = "Given a question, score the chain of QA pairs based on how likely it is to lead to the answer",
                  reranker_endpoint_url: Optional[str] = None, reranker_http_timeout: float = 15.0,
@@ -83,6 +83,7 @@ class ChainFollowingMultiHopQA:
         self.qa_rerank_top_k = qa_rerank_top_k
         self.final_only_evidence = final_only_evidence
         self.chain_following_mode = chain_following_mode
+        self.use_bm25 = use_bm25
         self.alpha = alpha # If weighting cumulative and chain scores
         self.use_chain_reranker = use_chain_reranker
         self.reranker_instruction = reranker_instruction
@@ -111,9 +112,14 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            cache_dir="/home/yigit/codebase/gsw-memory/.gsw_cache_mini_trial",
-            path_to_gsw_files="/home/yigit/codebase/gsw-memory/logs/full_musique_corpus_new_gsws/gsw_output_global_ids/networks",
-            verbose=False  # Keep entity searcher quiet
+            # cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_memory/playground/.gsw_cache",
+            # rebuild_cache=True,
+            cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/.gsw_cache",
+            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/normalized_networks",
+            # cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_mini_trial",
+            # path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_mini_generated",
+            verbose=False,  # Keep entity searcher quiet
+            use_bm25=self.use_bm25
         )
         
         # Initialize OpenAI client
@@ -352,10 +358,10 @@ class ChainFollowingMultiHopQA:
         """
         if self.chain_following_mode == "cumulative":
             state['chain_score'] = self._compute_cumulative_score(state)
-        elif self.chain_following_mode == "similarity":
-            state['chain_score'] = self._compute_similarity_score(state, orig_emb)
-        elif self.chain_following_mode == "combined":
-            state['chain_score'] = self._compute_combined_score(state, orig_emb, self.alpha)
+        # elif self.chain_following_mode == "similarity":
+        #     state['chain_score'] = self._compute_similarity_score(state, orig_emb)
+        # elif self.chain_following_mode == "combined":
+        #     state['chain_score'] = self._compute_combined_score(state, orig_emb, self.alpha)
         else:
             raise ValueError(f"Invalid chain following mode: {self.chain_following_mode}")
 
@@ -977,11 +983,11 @@ Decomposition:"""
             console.print(f"  [cyan]Processing chain: {' → '.join(chain_questions)}[/cyan]")
 
         # Pre-compute embedding for the original question to use in chain-level reranking
-        orig_emb = None
-        try:
-            orig_emb = self.entity_searcher._embed_query(original_question)
-        except Exception:
-            orig_emb = None
+        # orig_emb = None
+        # try:
+        #     orig_emb = self.entity_searcher._embed_query(original_question)
+        # except Exception:
+        #     orig_emb = None
 
         # Build dependency map for this chain
         dependencies = {}
@@ -1080,16 +1086,20 @@ Decomposition:"""
             substituted_questions = []
             substituted_entities = {}
 
+            concrete_questions = []
             for state in prior_states:
                 concrete_q = substitute_from_state(question_template, state['entities_by_qidx'])
-                if concrete_q not in substituted_questions:
-                    if self.verbose:
-                        console.print(f"      → {concrete_q}")
+                concrete_questions.append(concrete_q)
+                console.print(f"Processing Question: {concrete_q}")
 
-                    concrete_q_embedding = self.entity_searcher._embed_query(concrete_q)
+            if concrete_questions:
+                concrete_q_embeddings = self.entity_searcher._embed_query(concrete_questions)
+            else:
+                concrete_q_embeddings = None
+            for state, concrete_q, concrete_q_embedding in zip(prior_states, concrete_questions, concrete_q_embeddings):
+                if concrete_q not in substituted_questions:
                     qa_pairs = self.search_and_collect_evidence(question=concrete_q, question_embedding=concrete_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
                     substituted_entities[concrete_q] = qa_pairs
-                    substituted_questions.append(concrete_q)
 
                 else:
                     qa_pairs = substituted_entities[concrete_q]
@@ -1100,7 +1110,8 @@ Decomposition:"""
                         # Create new state with QA pair
                         new_state = self._create_expansion_state(state, qa_used, q_idx, is_last_hop=True)
                         # Score the chain
-                        new_state = self._score_chain_state(new_state, orig_emb)
+                        # new_state = self._score_chain_state(new_state, orig_emb)
+                        new_state = self._score_chain_state(new_state)
                         candidate_expansions.append(new_state)
                 else:
                     # Non-final hop: entity-by-best-QA selection
@@ -1126,7 +1137,8 @@ Decomposition:"""
                             # Create and score new state
                             new_state = self._create_expansion_state(state, qa_used, q_idx)
                             new_state['entities_by_qidx'][q_idx] = ent_name  # Override with specific entity
-                            new_state = self._score_chain_state(new_state, orig_emb)
+                            # new_state = self._score_chain_state(new_state, orig_emb)
+                            new_state = self._score_chain_state(new_state)
 
                             # Keep best scoring chain for each entity
                             prev = per_entity_best.get(ent_key)
@@ -1148,7 +1160,7 @@ Decomposition:"""
                 
             # Final rerank before evidence extraction only for final hop
             if is_final_hop:
-                self._rerank_states(original_question, candidate_expansions)
+                # self._rerank_states(original_question, candidate_expansions)
                 beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
                 
             if self.verbose:
@@ -1234,13 +1246,13 @@ Decomposition:"""
             Dictionary containing the answer and collected evidence
         """
         import time
-        start_time = time.time()
         
         if self.verbose:
             console.print(f"\n[bold blue]Processing with Chain Following: {question}[/bold blue]")
         
         # Step 1: Decompose the question
         decomposed = self.decompose_question(question)
+        start_time = time.time()
         
         # Step 2: Initialize storage
         all_evidence = []  # Final evidence after chain selection
@@ -1339,8 +1351,10 @@ Decomposition:"""
                 is_referenced = self.is_question_referenced_in_future(i, decomposed)
 
                 actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-                for actual_q in actual_questions:
-                    actual_q_embedding = self.entity_searcher._embed_query(actual_q)
+
+                actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
+
+                for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
                     qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
 
                     if is_referenced:
@@ -1412,9 +1426,10 @@ Decomposition:"""
             is_referenced = self.is_question_referenced_in_future(i, decomposed)
             
             actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-            
-            for actual_q in actual_questions:
-                actual_q_embedding = self.entity_searcher._embed_query(actual_q)
+
+            actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
+
+            for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
                 qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=20)
                 
                 if is_referenced:
@@ -1677,7 +1692,7 @@ def main():
     console.print("Initializing...")
     
     try:
-        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="cumulative", beam_width=5, alpha=0.5, use_chain_reranker=True, reranker_model_name="voyage", multi_dep_quality_threshold=0.3)
+        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="cumulative", beam_width=5, alpha=0.5, use_chain_reranker=True, reranker_model_name="voyage", multi_dep_quality_threshold=0.3, use_bm25=True)
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
@@ -1686,4 +1701,5 @@ def main():
     return 0
 
 
-if __name__ == "__main__":    exit(main())
+if __name__ == "__main__":   
+     exit(main())

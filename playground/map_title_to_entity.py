@@ -2,11 +2,11 @@
 """
 map_title_to_entity_batched.py
 
-For each doc_* directory, locate the entity whose name best matches the corpus
-title. If the name differs, create a deep-copied clone of every gsw_*.json with
-only that entity’s `name` rewritten to “Old Name (Title)”. The clones are written
-to gsw_networks/normalized_networks/ in the same directory/file structure as the
-original networks so you can drop them in as a replacement set.
+For each doc_* directory, locate the entities whose names best match the corpus
+title. When a match is found, create a deep-copied clone of every gsw_*.json with
+each matching entity’s `name` rewritten to “Old Name (Title)”. The clones are
+written to gsw_networks/normalized_networks/ in the same directory/file structure
+as the original networks so you can drop them in as a replacement set.
 """
 
 import argparse
@@ -28,7 +28,7 @@ except ImportError as exc:
 # Paths
 CORPUS_PATH = Path("/home/shreyas/NLP/SM/gensemworkspaces/HippoRAG/reproduce/dataset/2wikimultihopqa_corpus.json")
 ORIG_GSW_BASE = Path("/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/networks")
-NORMALIZED_BASE = ORIG_GSW_BASE.parent / "normalized_networks"
+NORMALIZED_BASE = ORIG_GSW_BASE.parent / "double_normalized_networks"
 MODEL_NAME = "gpt-4o-mini"
 LEXICAL_STRIP = re.compile(r"[\\W_]+")
 
@@ -71,8 +71,8 @@ class TitleMatcher(curator.LLM):
 
     def prompt(self, row: Dict[str, Any]):
         lines = [
-            "Pick the entity whose name best refers to the article title.",
-            "Return JSON: { \"entity_id\": \"eX\" } or { \"entity_id\": null } if no good match.",
+            "Pick every entity whose name refers to the article title.",
+            "Return JSON: { \"entity_ids\": [\"eX\", ...] } or { \"entity_ids\": [] } if no good match.",
             f"Article title: {row['title']}",
             f"Article: {row['text']}",
             "Entities:",
@@ -87,12 +87,33 @@ class TitleMatcher(curator.LLM):
 
     def parse(self, row: Dict[str, Any], response):
         parsed = response if isinstance(response, dict) else json.loads(response)
-        entity_id = parsed.get("entity_id")
-        if not isinstance(entity_id, str):
-            entity_id = None
+        entity_ids = parsed.get("entity_ids")
+        if isinstance(entity_ids, str):
+            entity_ids = [entity_ids]
+        if entity_ids is None:
+            entity_id = parsed.get("entity_id")
+            if isinstance(entity_id, list):
+                entity_ids = [eid for eid in entity_id if isinstance(eid, str)]
+            elif isinstance(entity_id, str):
+                entity_ids = [entity_id]
+            else:
+                entity_ids = []
+        elif isinstance(entity_ids, list):
+            entity_ids = [eid for eid in entity_ids if isinstance(eid, str)]
+        else:
+            entity_ids = []
+
+        # Preserve order while removing duplicates
+        seen = set()
+        deduped: List[str] = []
+        for eid in entity_ids:
+            if eid not in seen:
+                seen.add(eid)
+                deduped.append(eid)
+
         return [{
             "doc_idx": row["doc_idx"],
-            "entity_id": entity_id,
+            "entity_ids": deduped,
         }]
 
 
@@ -151,20 +172,23 @@ def prepare_docs(limit: Optional[int], doc_ids: Optional[List[int]]) -> Tuple[Li
     return docs, prompts
 
 
-def write_normalized_gsws(doc_info: DocInfo, matched_entity_id: Optional[str], dry_run: bool):
+def write_normalized_gsws(doc_info: DocInfo, matched_entity_ids: List[str], dry_run: bool):
     title = doc_info.title
-    norm_title = normalize(title)
     out_doc_dir = NORMALIZED_BASE / f"doc_{doc_info.doc_idx}"
     out_doc_dir.mkdir(parents=True, exist_ok=True)
 
     for orig_path, gsw_data in doc_info.gsw_records:
         gsw_copy = copy.deepcopy(gsw_data)
-        if matched_entity_id:
+        if matched_entity_ids:
+            matched_ids = set(matched_entity_ids)
             for entity in gsw_copy.get("entity_nodes", []):
-                if entity.get("id") == matched_entity_id:
-                    if normalize(entity.get("name", "")) != norm_title:
-                        entity["name"] = f"{entity['name']} ({title})"
-                    break
+                if entity.get("id") in matched_ids:
+                    name = entity.get("name", "")
+                    if not isinstance(name, str):
+                        continue
+                    suffix = f" ({title})"
+                    if not name.endswith(suffix):
+                        entity["name"] = f"{name}{suffix}"
 
         out_path = out_doc_dir / orig_path.name
         if dry_run:
@@ -189,14 +213,18 @@ def main():
 
     docs, prompts = prepare_docs(limit=args.limit, doc_ids=args.doc_ids)
 
-    lexical_matches: Dict[int, str] = {}
+    lexical_matches: Dict[int, List[str]] = {}
     for info in docs:
         norm_title = normalize(info.title)
-        match = next((ent["id"] for ent in info.entities if normalize(ent["name"]) == norm_title), None)
-        if match:
-            lexical_matches[info.doc_idx] = match
+        matches = [
+            ent["id"]
+            for ent in info.entities
+            if normalize(ent.get("name", "")) == norm_title
+        ]
+        if matches:
+            lexical_matches[info.doc_idx] = matches
 
-    llm_matches: Dict[int, Optional[str]] = {}
+    llm_matches: Dict[int, List[str]] = {}
     print(f"Running LLM calls for {len(prompts)} documents")
 
     if prompts:
@@ -206,18 +234,42 @@ def main():
         )
         responses = matcher(prompts)
         for row in responses.dataset:
-            llm_matches[row["doc_idx"]] = row.get("entity_id")
+            ids = row.get("entity_ids") or []
+            if isinstance(ids, str):
+                ids = [ids]
+            elif not isinstance(ids, list):
+                ids = []
+            else:
+                ids = [eid for eid in ids if isinstance(eid, str)]
+
+            # Deduplicate while preserving order
+            seen = set()
+            deduped: List[str] = []
+            for eid in ids:
+                if eid not in seen:
+                    seen.add(eid)
+                    deduped.append(eid)
+
+            llm_matches[row["doc_idx"]] = deduped
 
     for info in docs:
-        matched_id = lexical_matches.get(info.doc_idx)
-        if matched_id is None:
-            matched_id = llm_matches.get(info.doc_idx)
+        matched_ids: List[str] = []
+        matched_ids.extend(lexical_matches.get(info.doc_idx, []))
+        matched_ids.extend(llm_matches.get(info.doc_idx, []))
 
-        if matched_id is None:
+        # Deduplicate while preserving order
+        seen = set()
+        deduped: List[str] = []
+        for eid in matched_ids:
+            if eid not in seen:
+                seen.add(eid)
+                deduped.append(eid)
+
+        if not deduped:
             print(f"[skip] doc_{info.doc_idx}: could not align '{info.title}'")
             continue
 
-        write_normalized_gsws(info, matched_id, dry_run=args.dry_run)
+        write_normalized_gsws(info, deduped, dry_run=args.dry_run)
 
     print("Done.")
 

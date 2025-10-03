@@ -72,7 +72,6 @@ def get_detailed_instruct(task_description: str, query: str) -> str:
     """Create instruction for Qwen embedding model."""
     return f'Instruct: {task_description}\nQuery: {query}'
 
-
 def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tuple[List[GSWStructure], List[str]]:
     """Load GSW structures from JSON files."""
     print(f"Loading first {num_documents} GSW files...")
@@ -495,19 +494,19 @@ class EntitySearcher:
             if self.verbose_init:
                 console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
     
-    def _embed_query(self, query: str) -> Optional[np.ndarray]:
+    def _embed_query(self, queries: List[str]) -> Optional[np.ndarray]:
         """Embed a query using the Qwen model."""
         if not self.embedding_model:
             return None
         
         # Use the same task description as for entity embeddings
         task = 'Given an query, create an embedding that captures the semantic meaning for similarity comparison with QA pairs.'
-        instructed_query = get_detailed_instruct(task, query)
+        instructed_queries = [get_detailed_instruct(task, query) for query in queries]
         
         try:
-            outputs = self.embedding_model.embed([instructed_query])
-            embedding = np.array(outputs[0].outputs.embedding)
-            return embedding
+            outputs = self.embedding_model.embed(instructed_queries)
+            embeddings = [np.array(output.outputs.embedding) for output in outputs]
+            return embeddings
         except Exception as e:
             console.print(f"[red]Error embedding query: {e}[/red]")
             return None
