@@ -26,7 +26,7 @@ import voyageai
 
 import os 
 if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -1337,55 +1337,77 @@ Decomposition:"""
 
         # If no chains, use a simple fallback retrieval that preserves order
         if not chains:
-            if self.verbose:
-                console.print("[yellow]No reasoning chains detected, using simple fallback retrieval[/yellow]")
 
-            all_evidence: List[str] = []
-            entities_by_question: Dict[str, List[str]] = {}
+            all_evidence = []
+            # entities_by_question = {}
 
-            for i, q_info in enumerate(decomposed):
-                if not q_info.get("requires_retrieval", True):
-                    continue
-
-                question_template = q_info.get("question", "")
-                is_referenced = self.is_question_referenced_in_future(i, decomposed)
-
-                actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-
-                actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
-
-                for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
-                    qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
-
-                    if is_referenced:
-                        entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-                        entities_by_question[f"Q{i+1}"] = list(dict.fromkeys(entities))
-                        all_evidence.extend(qa_pair_used)
-                    else:
-                        # Format as evidence strings
-                        for qa in qa_pairs[:5]: # Limit to number of QA pairs per non chain question.
-                            q_text = qa.get('question', '')
-                            answer_names = qa.get('answer_names', qa.get('answers', []))
-                            if isinstance(answer_names, str):
-                                answer_names = [answer_names]
-                            answer_text = ', '.join(str(name) for name in answer_names if name)
-                            answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-                            if q_text and answer_text:
-                                all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-
-            # Deduplicate while preserving order
-            seen = set()
-            unique_evidence: List[str] = []
-            for ev in all_evidence:
-                if ev not in seen:
-                    seen.add(ev)
-                    unique_evidence.append(ev)
-
-            # Rerank the evidence
-            unique_evidence = self._rerank_evidence(question=question, all_evidence=unique_evidence, top_k=5)
+            query_embeddings = self.entity_searcher._embed_query([question])[0]
+            qa_pairs = self.search_and_collect_evidence(question, query_embeddings, top_k_entities=20)
+            for qa in qa_pairs:
+                q_text = qa.get('question', '')
+                answer_names = qa.get('answer_names', qa.get('answers', []))
+                if isinstance(answer_names, str):
+                    answer_names = [answer_names]
+                answer_text = ', '.join(str(name) for name in answer_names if name)
+                answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+                if q_text and answer_text:
+                    all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+            
+            all_evidence = list(set(all_evidence))
 
             chains_info = {"fallback": True}
-            return unique_evidence, chains_info, decomposed
+            return all_evidence, chains_info, decomposed
+
+
+            # if self.verbose:
+            #     console.print("[yellow]No reasoning chains detected, using simple fallback retrieval[/yellow]")
+
+            # all_evidence: List[str] = []
+            # entities_by_question: Dict[str, List[str]] = {}
+
+            # for i, q_info in enumerate(decomposed):
+            #     if not q_info.get("requires_retrieval", True):
+            #         continue
+
+            #     question_template = q_info.get("question", "")
+            #     is_referenced = self.is_question_referenced_in_future(i, decomposed)
+
+            #     actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
+
+            #     actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
+
+            #     for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
+            #         qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
+
+            #         if is_referenced:
+            #             entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
+            #             entities_by_question[f"Q{i+1}"] = list(dict.fromkeys(entities))
+            #             all_evidence.extend(qa_pair_used)
+            #         else:
+            #             # Format as evidence strings
+            #             for qa in qa_pairs[:5]: # Limit to number of QA pairs per non chain question.
+            #                 q_text = qa.get('question', '')
+            #                 answer_names = qa.get('answer_names', qa.get('answers', []))
+            #                 if isinstance(answer_names, str):
+            #                     answer_names = [answer_names]
+            #                 answer_text = ', '.join(str(name) for name in answer_names if name)
+            #                 answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+            #                 if q_text and answer_text:
+            #                     all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+
+            # # Deduplicate while preserving order
+            # seen = set()
+            # unique_evidence: List[str] = []
+            # for ev in all_evidence:
+            #     if ev not in seen:
+            #         seen.add(ev)
+            #         unique_evidence.append(ev)
+
+            # # Rerank the evidence
+            # unique_evidence = self._rerank_evidence(question=question, all_evidence=unique_evidence, top_k=5)
+
+            # chains_info = {"fallback": True}
+            # return unique_evidence, chains_info, decomposed
 
         # Process each identified chain independently using beam search
         all_evidence: List[str] = []
@@ -1417,51 +1439,23 @@ Decomposition:"""
         # Simple implementation for fallback
         all_evidence = []
         entities_by_question = {}
+
+        query_embeddings = self.entity_searcher._embed_query([question])[0]
+        qa_pairs = self.search_and_collect_evidence(question, query_embeddings, top_k_entities=20)
+        for qa in qa_pairs:
+            q_text = qa.get('question', '')
+            answer_names = qa.get('answer_names', qa.get('answers', []))
+            if isinstance(answer_names, str):
+                answer_names = [answer_names]
+            answer_text = ', '.join(str(name) for name in answer_names if name)
+            answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+            if q_text and answer_text:
+                all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
         
-        for i, q_info in enumerate(decomposed):
-            if not q_info["requires_retrieval"]:
-                continue
-                
-            question_template = q_info["question"]
-            is_referenced = self.is_question_referenced_in_future(i, decomposed)
-            
-            actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-
-            actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
-
-            for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
-                qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=20)
-                
-                if is_referenced:
-                    entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-                    entities_by_question[f"Q{i+1}"] = list(set(entities))
-                    all_evidence.extend(qa_pair_used)
-                else:
-                    # Format as evidence strings
-                    for qa in qa_pairs[:10]:
-                        q_text = qa.get('question', '')
-                        answer_names = qa.get('answer_names', qa.get('answers', []))
-                        if isinstance(answer_names, str):
-                            answer_names = [answer_names]
-                        answer_text = ', '.join(str(name) for name in answer_names if name)
-                        answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-                        if q_text and answer_text:
-                            all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-        
-        # Remove duplicates while preserving order
-        seen = set()
-        unique_evidence = []
-        for evidence in all_evidence:
-            if evidence not in seen:
-                seen.add(evidence)
-                unique_evidence.append(evidence)
-        all_evidence = unique_evidence
-
-        # Rerank the evidence
-        all_evidence = self._rerank_evidence(question=question, all_evidence=all_evidence, top_k=5)
+        all_evidence = list(set(all_evidence))
 
         answer = self.generate_answer(question, all_evidence, decomposed)
-        
+
         return {
             "question": question,
             "answer": answer,
@@ -1470,6 +1464,90 @@ Decomposition:"""
             "entities_found": entities_by_question,
             "chains_info": {"fallback": True}
         }
+
+
+        # questions_to_collect_evidence = [q["question"] for q in decomposed if q["requires_retrieval"]]
+        # query_embeddings = self.entity_searcher._embed_query(questions_to_collect_evidence)
+
+        # for question, query_embedding in zip(questions_to_collect_evidence, query_embeddings):
+        #     qa_pairs = self.search_and_collect_evidence(question, query_embedding, top_k_entities=20)
+
+        #     for qa in qa_pairs:
+        #         q_text = qa.get('question', '')
+        #         answer_names = qa.get('answer_names', qa.get('answers', []))
+        #         if isinstance(answer_names, str):
+        #             answer_names = [answer_names]
+        #         answer_text = ', '.join(str(name) for name in answer_names if name)
+        #         answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+        #         if q_text and answer_text:
+        #             all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+
+        # all_evidence = list(set(all_evidence))
+
+        # # Rerank the evidence
+        # all_evidence = self._rerank_evidence(question=question, all_evidence=all_evidence, top_k=5)
+
+        # return {
+        #     "question": question,
+        #     "answer": answer,
+        #     "evidence_count": len(all_evidence),
+        #     "decomposed_questions": decomposed,
+        #     "entities_found": entities_by_question,
+        #     "chains_info": {"fallback": True}
+        # }
+        
+        # for i, q_info in enumerate(decomposed):
+        #     if not q_info["requires_retrieval"]:
+        #         continue
+                
+        #     question_template = q_info["question"]
+        #     is_referenced = self.is_question_referenced_in_future(i, decomposed)
+            
+        #     actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
+
+        #     actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
+
+        #     for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
+        #         qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=20)
+                
+        #         if is_referenced:
+        #             entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
+        #             entities_by_question[f"Q{i+1}"] = list(set(entities))
+        #             all_evidence.extend(qa_pair_used)
+        #         else:
+        #             # Format as evidence strings
+        #             for qa in qa_pairs:
+        #                 q_text = qa.get('question', '')
+        #                 answer_names = qa.get('answer_names', qa.get('answers', []))
+        #                 if isinstance(answer_names, str):
+        #                     answer_names = [answer_names]
+        #                 answer_text = ', '.join(str(name) for name in answer_names if name)
+        #                 answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
+        #                 if q_text and answer_text:
+        #                     all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
+        
+        # # Remove duplicates while preserving order
+        # seen = set()
+        # unique_evidence = []
+        # for evidence in all_evidence:
+        #     if evidence not in seen:
+        #         seen.add(evidence)
+        #         unique_evidence.append(evidence)
+        # all_evidence = unique_evidence
+
+        # # Rerank the evidence
+        # all_evidence = self._rerank_evidence(question=question, all_evidence=all_evidence, top_k=5)
+
+        # answer = self.generate_answer(question, all_evidence, decomposed)
+        
+        # return {
+        #     "question": question,
+        #     "answer": answer,
+        #     "evidence_count": len(all_evidence),
+        #     "decomposed_questions": decomposed,
+        #     "entities_found": entities_by_question,
+        #     "chains_info": {"fallback": True}
+        # }
     
     def generate_answer(self, original_question: str, all_evidence: List[str], 
                        decomposed_questions: List[Dict[str, Any]] = None) -> str:
