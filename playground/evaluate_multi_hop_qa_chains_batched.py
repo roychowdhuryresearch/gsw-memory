@@ -20,6 +20,8 @@ from datetime import datetime
 import time
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
+from pydantic import BaseModel
+from typing import List
 
 import os 
 os.environ['CUDA_VISIBLE_DEVICES'] = '3'
@@ -49,10 +51,17 @@ LOG_DIR.mkdir(exist_ok=True)
 LOG_FILE = LOG_DIR / f"multihop_qa_chains_batched_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
 
+class DecomposedQuestion(BaseModel):
+    question: str
+    requires_retrieval: bool
+
+class DecomposedQuestionList(BaseModel):
+    questions: List[DecomposedQuestion]
+
 class ChainQuestionDecomposer(curator.LLM):
     """Curator class for decomposing multi-hop questions in parallel."""
     
-    return_completions_object = True
+    # return_completions_object = True
     
     def __init__(self, **kwargs):
         """Initialize the question decomposer."""
@@ -73,29 +82,60 @@ Format each decomposed question as:
 Question: [the question text]
 Requires retrieval: [true/false]
 
+And provide the response in the following json format:
+{{
+  "questions": [
+    {{
+      "question": "the decomposed question text",
+      "requires_retrieval": "true/false"
+    }}
+  ]
+}}
+
 Examples:
 
-Question: "What is the birth year of the spouse of the director of Casablanca?"
-Decomposition:
-1. Question: Who directed Casablanca?
-   Requires retrieval: true
-2. Question: Who was <ENTITY_Q1>'s spouse?
-   Requires retrieval: true
-3. Question: What is <ENTITY_Q2>'s birth year?
-   Requires retrieval: true
+Input: "What is the birth year of the spouse of the director of Casablanca?"
+Output:
+{{
+    "questions": [
+        {{
+            "question": "Who directed Casablanca?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who was <ENTITY_Q1>'s spouse?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What is <ENTITY_Q2>'s birth year?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 
-Question: "Which film has the director who is older, Dune or The Dark Knight?"
-Decomposition:
-1. Question: Who directed Dune?
-   Requires retrieval: true
-2. Question: Who directed The Dark Knight?
-   Requires retrieval: true
-3. Question: When was <ENTITY_Q1> born?
-   Requires retrieval: true
-4. Question: When was <ENTITY_Q2> born?
-   Requires retrieval: true
-5. Question: Who is older, <ENTITY_Q3> or <ENTITY_Q4>?
-   Requires retrieval: false
+Input: "Which film has the director who is older, Dune or The Dark Knight?"
+Output:
+{{
+    "questions": [
+        {{
+            "question": "Who directed Dune?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who directed The Dark Knight?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who is older, <ENTITY_Q1> or <ENTITY_Q2>?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who is older, <ENTITY_Q1> or <ENTITY_Q2>?",
+            "requires_retrieval": "false"
+        }}
+    ]
+}}
+
 
 IMPORTANT:
     AVOID over-decomposition like this:
@@ -106,62 +146,29 @@ IMPORTANT:
     DO ask directly: "When was John Doe born?"
 
 Now decompose this question:
-Question: "{input['question']}"
-Decomposition:"""
+Input: "{input['question']}"
+Output:
+"""
         
         return [
             {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
             {"role": "user", "content": decomposition_prompt}
         ]
     
-    def parse(self, input, response):
+    def parse(self, input, response: DecomposedQuestionList):
         """Parse the decomposition response."""
-        decomposition_text = response["choices"][0]["message"]["content"]
-        
-        # Parse the response into structured format
-        questions = []
-        lines = decomposition_text.strip().split('\n')
-        i = 0
-        while i < len(lines):
-            line = lines[i].strip()
-            
-            if re.match(r'^[\d]+[\.\s]*Question:', line) or line.startswith('Question:'):
-                question_match = re.search(r'Question:\s*(.+)', line)
-                if question_match:
-                    question_text = question_match.group(1).strip()
-                    
-                    # Check for requires_retrieval flag
-                    requires_retrieval = True  # Default
-                    
-                    if 'Requires retrieval:' in line:
-                        retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', line, re.IGNORECASE)
-                        if retrieval_match:
-                            requires_retrieval = retrieval_match.group(1).lower() == 'true'
-                    elif i + 1 < len(lines):
-                        next_line = lines[i + 1].strip()
-                        if 'Requires retrieval:' in next_line:
-                            retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', next_line, re.IGNORECASE)
-                            if retrieval_match:
-                                requires_retrieval = retrieval_match.group(1).lower() == 'true'
-                            i += 1
-                    
-                    questions.append({
-                        "question": question_text,
-                        "requires_retrieval": requires_retrieval
-                    })
-            
-            i += 1
-        
-        # If parsing fails, return the original question
-        if not questions:
-            questions = [{"question": input['question'], "requires_retrieval": True}]
+
+        print(response)
+        questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
         
         return [{
             "question_id": input['question_id'],
             "original_question": input['question'],
             "decomposed_questions": questions,
-            "raw_response": decomposition_text
+            # "raw_response": decomposition_text
         }]
+
+
 
 
 class ChainAnswerGenerator(curator.LLM):
@@ -305,7 +312,7 @@ class ChainBatchedMultiHopQAEvaluator:
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
-        self.data_dir = Path(".data/2wiki")
+        self.data_dir = Path("/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.data/2wiki")
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
@@ -331,7 +338,8 @@ class ChainBatchedMultiHopQAEvaluator:
         if CURATOR_AVAILABLE:
             self.decomposer = ChainQuestionDecomposer(
                 model_name="gpt-4o", 
-                generation_params={"temperature": 0.0}
+                generation_params={"temperature": 0.0}, 
+                response_format=DecomposedQuestionList
             )
             self.answer_generator = ChainAnswerGenerator(
                 model_name="gpt-4o-mini", 
@@ -734,7 +742,7 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=1000, 
+            num_questions=10, 
             verbose=verbose,
             use_bm25=True
         )
