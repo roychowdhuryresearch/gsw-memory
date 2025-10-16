@@ -182,11 +182,11 @@ python playground/test_qa_complete.py
 If you use this package in your research, please cite:
 
 ```bibtex
-@inproceedings{rajesh2025gsw,
-  title={Generative Semantic Workspaces: An Episodic Memory Framework for Large Language Models},
-  author={Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
-  booktitle={Advancements in },
-  year={2026},
-  note={Under review}
+@unpublished{rajesh2025gsw,
+  title   = {Generative Semantic Workspaces: An Episodic Memory Framework for Large Language Models},
+  author  = {Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
+  note    = {Under review at the AAAI Conference on Artificial Intelligence (AAAI-26)},
+  year    = {2025}
 }
+
 ```
