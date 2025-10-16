@@ -185,7 +185,7 @@ If you use this package in your research, please cite:
 @inproceedings{rajesh2025gsw,
   title={Generative Semantic Workspaces: An Episodic Memory Framework for Large Language Models},
   author={Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
-  booktitle={Advances in Neural Information Processing Systems},
+  booktitle={AAAI},
   year={2025},
   note={Under review}
 }
