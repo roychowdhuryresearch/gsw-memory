@@ -183,7 +183,7 @@ If you use this package in your research, please cite:
 
 ```bibtex
 @unpublished{rajesh2025gsw,
-  title   = {Generative Semantic Workspaces: An Episodic Memory Framework for Large Language Models},
+  title   = {Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces},
   author  = {Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
   note    = {Under review at the AAAI Conference on Artificial Intelligence (AAAI-26)},
   year    = {2025}
