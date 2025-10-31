@@ -28,12 +28,16 @@ from gsw_memory.prompts.operator_prompts import PromptType
 # Disable cache for clean processing
 os.environ["CURATOR_DISABLE_CACHE"] = "true"
 
+import importlib
+print(importlib.metadata.version("bespokelabs-curator"))
+
+
 # Load environment variables
 load_dotenv()
 
 # Configuration
 CORPUS_PATH = "/home/shreyas/NLP/SM/gensemworkspaces/HippoRAG/reproduce/dataset/2wikimultihopqa_corpus.json"
-BATCH_SIZE = 100  # Process documents in batches to manage memory
+# BATCH_SIZE = 100  # Process documents in batches to manage memory
 
 
 def setup_logging():
@@ -79,7 +83,7 @@ def load_full_corpus() -> List[Dict[str, Any]]:
     
     print(f"Prepared {len(documents)} documents for processing")
     
-    return documents, document_titles
+    return documents[:10], document_titles[:10]
 
 
 def initialize_gsw_processor():
@@ -87,7 +91,7 @@ def initialize_gsw_processor():
     print("=== Initializing GSW Processor ===")
     
     processor = GSWProcessor(
-        model_name="gpt-4o",
+        model_name="gpt-4.1-mini",
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
         chunk_size=1,               # Single chunk per document
@@ -95,6 +99,7 @@ def initialize_gsw_processor():
         enable_context=False,       # Disable context for efficiency
         enable_spacetime=False,      # Disable spacetime for small factual content
         prompt_type=PromptType.FACTUAL,  # Optimized for factual extraction
+        batched=True,
     )
     
     print("✅ GSW processor initialized with optimizations:")
@@ -120,76 +125,66 @@ def process_corpus_in_batches(
     processed_docs = 0
     
     # Process in batches
-    for batch_start in range(0, total_docs, BATCH_SIZE):
-        batch_end = min(batch_start + BATCH_SIZE, total_docs)
-        batch_docs = documents[batch_start:batch_end]
-        batch_titles = document_titles[batch_start:batch_end]
+                # Process batch
+    start_time = datetime.now()
+    
+    # try:
+    documents = [f"{title}\n{doc}" for title, doc in zip(document_titles, documents)] # Add title to each document
+
+    gsw_structures = processor.process_documents(
+        documents, 
+        output_dir=os.path.join(log_dirs["gsw_output_dir"], f"full_corpus_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+    )
+    
+    # Count successful GSW structures
+    valid_structures = [gsw for gsw in gsw_structures if gsw is not None]
+    all_gsw_structures.extend(valid_structures)
+    
+    end_time = datetime.now()
+    run_duration = (end_time - start_time).total_seconds()
+    
+    print(f"   ✅ Processing completed in {run_duration:.1f}s")
+    print(f"   Generated {len(valid_structures)} GSW structures")
+    
+    processed_docs += len(documents)
+    progress = (processed_docs / total_docs) * 100
+    print(f"   Progress: {processed_docs}/{total_docs} docs ({progress:.1f}%)")
+    
+    # Save batch processing log
+    batch_log = {
+        "batch_num": "full_corpus",
+        "batch_start": "full_corpus",
+        "batch_end": "full_corpus",
+        "documents_processed": len(documents),
+        "gsw_structures_generated": len(valid_structures),
+        "processing_time_seconds": run_duration,
+        "timestamp": end_time.isoformat(),
+        "document_titles": document_titles
+    }
+    
+    gsw_log_file = os.path.join(
+        log_dirs["processing_logs_dir"], 
+        f"full_corpus_log.json"
+    )
+    with open(gsw_log_file, "w") as f:
+        json.dump(batch_log, f, indent=2)
+    
+    # except Exception as e:
+    #     print(f"   ❌ Error processing full corpus: {str(e)}")
+    #     print(f"   Continuing with next batch...")
         
-        batch_num = (batch_start // BATCH_SIZE) + 1
-        total_batches = (total_docs + BATCH_SIZE - 1) // BATCH_SIZE
-        
-        print(f"\n🔄 Processing Batch {batch_num}/{total_batches}")
-        print(f"   Documents {batch_start + 1}-{batch_end} of {total_docs}")
-        print(f"   Batch size: {len(batch_docs)} documents")
-        
-        # Process batch
-        batch_start_time = datetime.now()
-        
-        try:
-            batch_gsw_structures = processor.process_documents(
-                batch_docs, 
-                output_dir=os.path.join(log_dirs["gsw_output_dir"], f"batch_{batch_num:03d}")
-            )
-            
-            # Count successful GSW structures
-            valid_structures = [gsw for gsw in batch_gsw_structures if gsw is not None]
-            all_gsw_structures.extend(valid_structures)
-            
-            batch_end_time = datetime.now()
-            batch_duration = (batch_end_time - batch_start_time).total_seconds()
-            
-            print(f"   ✅ Batch {batch_num} completed in {batch_duration:.1f}s")
-            print(f"   Generated {len(valid_structures)} GSW structures")
-            
-            processed_docs += len(batch_docs)
-            progress = (processed_docs / total_docs) * 100
-            print(f"   Progress: {processed_docs}/{total_docs} docs ({progress:.1f}%)")
-            
-            # Save batch processing log
-            batch_log = {
-                "batch_num": batch_num,
-                "batch_start": batch_start,
-                "batch_end": batch_end,
-                "documents_processed": len(batch_docs),
-                "gsw_structures_generated": len(valid_structures),
-                "processing_time_seconds": batch_duration,
-                "timestamp": batch_end_time.isoformat(),
-                "document_titles": batch_titles
-            }
-            
-            batch_log_file = os.path.join(
-                log_dirs["processing_logs_dir"], 
-                f"batch_{batch_num:03d}_log.json"
-            )
-            with open(batch_log_file, "w") as f:
-                json.dump(batch_log, f, indent=2)
-            
-        except Exception as e:
-            print(f"   ❌ Error processing batch {batch_num}: {str(e)}")
-            print(f"   Continuing with next batch...")
-            
-            # Log error
-            error_log = {
-                "batch_num": batch_num,
-                "error": str(e),
-                "timestamp": datetime.now().isoformat()
-            }
-            error_log_file = os.path.join(
-                log_dirs["processing_logs_dir"], 
-                f"batch_{batch_num:03d}_error.json"
-            )
-            with open(error_log_file, "w") as f:
-                json.dump(error_log, f, indent=2)
+    #     # Log error
+    #     error_log = {
+    #         "batch_num": "full_corpus",
+    #         "error": str(e),
+    #         "timestamp": datetime.now().isoformat()
+    #     }
+    #     error_log_file = os.path.join(
+    #         log_dirs["processing_logs_dir"], 
+    #         f"full_corpus_error.json"
+    #     )
+    #     with open(error_log_file, "w") as f:
+    #         json.dump(error_log, f, indent=2)
     
     print(f"\n✅ Corpus processing completed!")
     print(f"   Total documents processed: {processed_docs}")
@@ -269,7 +264,6 @@ def save_corpus_processing_summary(
                 "total_questions": sum(len(vp.questions) for vp in reconciled_gsw.verb_phrase_nodes)
             },
             "processing_config": {
-                "batch_size": BATCH_SIZE,
                 "model_name": "gpt-4o",
                 "prompt_type": "FACTUAL",
                 "reconciliation_strategy": "global",
@@ -312,7 +306,6 @@ def save_corpus_processing_summary(
 ## Configuration Used
 - Model: GPT-4o
 - Prompt Type: FACTUAL
-- Batch Size: {BATCH_SIZE}
 - Reconciliation: Global strategy
 - Chunking: Disabled
 - Coreference: Disabled
@@ -351,26 +344,26 @@ def main():
         )
         
         # Reconcile into unified GSW
-        reconciled_gsw = reconcile_full_corpus(gsw_structures, log_dirs)
+        # reconciled_gsw = reconcile_full_corpus(gsw_structures, log_dirs)
         
         # Save processing summary
-        save_corpus_processing_summary(
-            log_dirs, len(documents), len(gsw_structures), 
-            reconciled_gsw, processing_start_time
-        )
+        # save_corpus_processing_summary(
+        #     log_dirs, len(documents), len(gsw_structures), 
+        #     reconciled_gsw, processing_start_time
+        # )
         
         print(f"\n🎉 Full corpus processing completed successfully!")
         print(f"📁 All outputs saved to: {log_dirs['base_dir']}")
-        print(f"🔍 Ready for agentic Q&A evaluation with {len(reconciled_gsw.entity_nodes):,} entities")
+        # print(f"🔍 Ready for agentic Q&A evaluation with {len(reconciled_gsw.entity_nodes):,} entities")
         
         return {
-            "reconciled_gsw": reconciled_gsw,
+            # "reconciled_gsw": reconciled_gsw,
             "log_dirs": log_dirs,
             "processing_stats": {
                 "total_documents": len(documents),
                 "gsw_structures": len(gsw_structures),
-                "final_entities": len(reconciled_gsw.entity_nodes),
-                "final_verb_phrases": len(reconciled_gsw.verb_phrase_nodes)
+                # "final_entities": len(reconciled_gsw.entity_nodes),
+                # "final_verb_phrases": len(reconciled_gsw.verb_phrase_nodes)
             }
         }
         

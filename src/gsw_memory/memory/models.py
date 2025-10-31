@@ -126,23 +126,23 @@ class GSWStructure(BaseModel):
     verb_phrase_nodes: List[VerbPhraseNode] = Field(
         default_factory=list, description="All verb phrases"
     )
-    space_nodes: List[SpaceNode] = Field(
-        default_factory=list, description="All spatial locations"
-    )
-    time_nodes: List[TimeNode] = Field(
-        default_factory=list, description="All temporal contexts"
-    )
+    # space_nodes: List[SpaceNode] = Field(
+    #     default_factory=list, description="All spatial locations"
+    # )
+    # time_nodes: List[TimeNode] = Field(
+    #     default_factory=list, description="All temporal contexts"
+    # )
 
-    # Relationship edges
-    similarity_edges: List[Tuple[str, str]] = Field(
-        default_factory=list, description="Entity similarity connections"
-    )
-    space_edges: List[Tuple[str, str]] = Field(
-        default_factory=list, description="Entity-space connections"
-    )
-    time_edges: List[Tuple[str, str]] = Field(
-        default_factory=list, description="Entity-time connections"
-    )
+    # # Relationship edges
+    # similarity_edges: List[Tuple[str, str]] = Field(
+    #     default_factory=list, description="Entity similarity connections"
+    # )
+    # space_edges: List[Tuple[str, str]] = Field(
+    #     default_factory=list, description="Entity-space connections"
+    # )
+    # time_edges: List[Tuple[str, str]] = Field(
+    #     default_factory=list, description="Entity-time connections"
+    # )
 
     @classmethod
     def from_json(cls, json_data: dict) -> "GSWStructure":

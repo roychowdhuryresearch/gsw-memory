@@ -113,9 +113,9 @@ class ChainFollowingMultiHopQA:
         self.entity_searcher = EntitySearcher(
             num_documents, 
             # cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_memory/playground/.gsw_cache",
-            # rebuild_cache=True,
+            rebuild_cache=True,
             cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/.gsw_cache",
-            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/normalized_networks",
+            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/networks_qwen8b",
             # cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_mini_trial",
             # path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_mini_generated",
             verbose=False,  # Keep entity searcher quiet

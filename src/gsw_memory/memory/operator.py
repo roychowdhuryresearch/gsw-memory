@@ -36,6 +36,7 @@ class GSWProcessor:
         overlap: int = 1,
         enable_visualization: bool = False,
         prompt_type: PromptType = PromptType.EPISODIC,
+        batched: bool = False,
     ):
         """Initialize the GSW processor with configuration options."""
         self.model_name = model_name
@@ -48,7 +49,7 @@ class GSWProcessor:
         self.overlap = overlap
         self.enable_visualization = enable_visualization
         self.prompt_type = prompt_type
-
+        self.batched = batched
         # Check if visualization is requested but NetworkX is not available
         if self.enable_visualization:
             try:
@@ -217,10 +218,63 @@ class GSWProcessor:
 
         # Step 4: GSW Generation (parallel across all chunks)
         print(f"--- Generating GSWs for {total_chunks} chunks ---")
+
+        # os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+        # gsw_model = GSWOperator(
+        #     model_name = "together_ai/openai/gpt-oss-20b",
+        #     backend = "litellm",
+        #     # backend_params = {
+        #     #     "max_requests_per_minute": 500,
+        #     #     "input_cost_per_token": 0.8,
+        #     #     "output_cost_per_token": 0.8,
+        #     #     # "in_mtok_cost": 0.8,
+        #     #     # "out_mtok_cost": 0.8,
+        #     # },
+        #     generation_params = {"temperature": 0.0},
+        #     prompt_type = self.prompt_type,
+        #     # response_format = GSWStructure,  # Use constrained decoding
+        #     # batch = True
+        # )
+        # gsw_model = GSWOperator(
+        #     model_name = "",
+        #     backend = "vllm",
+        #     backend_params = {
+        #         "base_url": "http://localhost:8787/v1"
+        #     },
+        #     generation_params = {"temperature": 0.0},
+        #     prompt_type = self.prompt_type,
+        #     response_format = GSWStructure,  # Use constrained decoding
+        #     # batch = self.batched
+        # )
+
+        # Use LiteLLM backend with server for better rate limit handling
+        # os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+        # gsw_model = GSWOperator(
+        #     model_name = "hosted_vllm/Qwen/Qwen3-32B-FP8",
+        #     backend = "litellm",
+        #     backend_params = {
+        #         "base_url": "http://localhost:8501/v1",
+        #         "request_timeout": 600.0,  
+        #         "max_concurrent_requests": 32,
+        #         "max_requests_per_minute": 120,
+        #         "max_tokens_per_minute": 200000,
+        #         "seconds_to_pause_on_rate_limit": 5,
+        #     },
+        #     generation_params = {
+        #         "temperature": 0.0,
+        #     },
+        #     prompt_type = self.prompt_type,
+        #     # batch = True,  # Enable batching with rate limit handling
+        #     # response_format = GSWStructure,  # Use constrained decoding
+        # )
+
         gsw_model = GSWOperator(
-            model_name=self.model_name, 
+            model_name=self.model_name,
             generation_params=self.generation_params,
-            prompt_type=self.prompt_type
+            prompt_type=self.prompt_type,
+            backend="openai",
+            response_format=GSWStructure,  # Use constrained decoding
+            batch=self.batched
         )
 
         # Prepare GSW inputs from all chunks across all documents
@@ -239,12 +293,15 @@ class GSWProcessor:
                 gsw_inputs.append(gsw_input)
 
         # Generate all GSWs in parallel
-        gsw_responses = gsw_model(gsw_inputs)
+        gsw_response = gsw_model(gsw_inputs)
 
-        # Step 5: Parse responses and update chunk data with GSW structures
-        for response in gsw_responses.dataset: #TODO: Check if this is correct
+        for response in gsw_response.dataset: #TODO: Check if this is correct
             try:
-                gsw = parse_gsw(response["graph"])
+                if response["gsw"]:
+                    gsw_dict = response["gsw"]
+                    gsw = GSWStructure(**gsw_dict)
+                else:
+                    gsw = parse_gsw(response["graph"])
                 doc_idx = response["doc_idx"]
                 global_id = response["global_id"]
                 all_documents_data[doc_idx][global_id]["gsw"] = gsw
@@ -253,6 +310,25 @@ class GSWProcessor:
                     f"Error parsing GSW for chunk {response.get('global_id', 'unknown')}: {e}"
                 )
                 continue
+
+        # Step 5: Process responses and update chunk data with GSW structures
+        # for response in gsw_responses.dataset:
+        #     try:
+        #         # response["gsw"] is a dict (from Pydantic.model_dump()), convert back to GSWStructure
+        #         gsw_dict = response["gsw"]
+        #         if gsw_dict:
+        #             gsw = GSWStructure(**gsw_dict)
+        #         else:
+        #             gsw = None
+
+        #         doc_idx = response["doc_idx"]
+        #         global_id = response["global_id"]
+        #         all_documents_data[doc_idx][global_id]["gsw"] = gsw
+        #     except Exception as e:
+        #         print(
+        #             f"Error processing GSW for chunk {response.get('global_id', 'unknown')}: {e}"
+        #         )
+        #         continue
 
         # Step 6: Spacetime Linking (parallel across all chunks)
         if do_spacetime:
