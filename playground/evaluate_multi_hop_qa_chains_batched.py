@@ -24,7 +24,7 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
 
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -69,16 +69,47 @@ class ChainQuestionDecomposer(curator.LLM):
     
     def prompt(self, input):
         """Create a decomposition prompt for each question."""
-        decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
-The FIRST question should keep the original specific entity/information from the question.
-SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
+        decomposition_prompt = f"""Your task is to break down a complex multi-hop question into the most efficient sequence of single-hop, **atomic** questions.
 
-IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+## Your Main Goal: Build Smart Bridges, Don't Just Collect Nouns
+The most critical skill is to convert complex logical clauses (like "despite," "the country where," "the year before") into a single, powerful **bridging question**. This question should use a known entity as context to find the next one. Avoid finding all the entities separately and then trying to figure out how they connect.
 
-For each question, indicate whether it requires retrieval from the knowledge base, any question that requires factual information MUST require retrieval.
-The only case where retreival is not required is if the question just requires comparison of responses from previous questions.
+---
+## A Simple Analogy for Efficiency
 
-Format each decomposed question as:
+**Question:** "What is the phone number of the mother of the tallest player on the Lakers?"
+
+** Inefficient Path:**
+1.  Who are the players on the Lakers?
+2.  What are all their heights?
+3.  Who is the mother of the tallest player? *(This step is a logical leap)*
+
+** Efficient Path:**
+1.  Who is the tallest player on the Lakers?
+2.  Who is the mother of `<ENTITY_Q1>`?
+3.  What is the phone number of `<ENTITY_Q2>`?
+
+---
+## How to Decompose a Question
+This process follows a logical flow from high-level analysis to the fine-tuning of your question chain.
+
+### 1. Analyze the Query's Components
+First, break down the original question into its fundamental building blocks. Identify the core **entities** (people, places, organizations), their **properties** (attributes like rank, location, date), and the **relationships** that connect them.
+
+### 2. Construct an Atomic Chain
+Next, formulate a sequence of questions where each question retrieves a single fact.
+* **Isolate Comparisons:** Don't ask "who is faster?" Ask for the specific rank or time of each person involved.
+* **Link with Placeholders:** Use `<ENTITY_Qn>` to pass the answer from a previous question (`Qn`) into the next one.
+
+### 3. Optimize for Efficiency and Precision
+Your final goal is the **shortest and most direct path** to the answer.
+* **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
+  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
+
+## Formatting
+Format each decomposed question as follows:
+
+<decomposition>
 Question: [the question text]
 Requires retrieval: [true/false]
 
@@ -158,7 +189,7 @@ Output:
     def parse(self, input, response: DecomposedQuestionList):
         """Parse the decomposition response."""
 
-        print(response)
+        # print(response)
         questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
         
         return [{
@@ -209,6 +240,11 @@ class ChainAnswerGenerator(curator.LLM):
                 Q: Who directed Finding Nemo? A: Andrew Stanton
                 Q: When was Finding Nemo released? A: 2003
                 Q: What company produced Finding Nemo? A: Pixar Animation Studios"""
+            # """Wikipedia Title: Milk and Honey (album)\nMilk and Honey is an album by John Lennon and Yoko Ono released in 1984. Following the compilation "The John Lennon Collection", it is Lennon's eighth and final studio album, and the first posthumous release of new Lennon music, having been recorded in the last months of his life during and following the sessions for their 1980 album "Double Fantasy". It was assembled by Yoko Ono in association with the Geffen label.\n\n"""
+            # """Wikipedia Title: John Lennon Museum\nJohn Lennon Museum (ジョン・レノン・ミュージアム , Jon Renon Myūjiamu ) was a museum located inside the Saitama Super Arena in Chūō-ku, Saitama, Saitama Prefecture, Japan. It was established to preserve knowledge of John Lennon's life and musical career. It displayed Lennon's widow Yoko Ono's collection of his memorabilia as well as other displays. The museum opened on October 9, 2000, the 60th anniversary of Lennon’s birth, and closed on September 30, 2010, when its exhibit contract with Yoko Ono expired. A tour of the museum began with a welcoming message and short film narrated by Yoko Ono (in Japanese with English headphones available), and ended at an avant-garde styled "reflection room" full of chairs facing a slide show of moving words and images. After this room there was a gift shop with John Lennon memorabilia available.\n\n"""
+            # """Wikipedia Title: Walls and Bridges\nWalls and Bridges is the fifth studio album by English musician John Lennon. It was issued by Apple Records on 26 September 1974 in the United States and on 4 October in the United Kingdom. Written, recorded and released during his 18-month separation from Yoko Ono, the album captured Lennon in the midst of his "Lost Weekend". "Walls and Bridges" was an American "Billboard" number-one album and featured two hit singles, "Whatever Gets You thru the Night" and "#9 Dream". The first of these was Lennon's first number-one hit in the United States as a solo artist, and his only chart-topping single in either the US or Britain during his lifetime.\n\n"""
+            # """Wikipedia Title: Nobody Loves You (When You're Down and Out)\n"Nobody Loves You (When You're Down and Out)" is a song written by John Lennon released on his 1974 album "Walls and Bridges". The song is included on the 1986 compilation "Menlove Ave.", the 1990 boxset "Lennon", the 1998 boxset "John Lennon Anthology", the 2005 two-disc compilation "", and the 2010 boxset "Gimme Some Truth".\n\n"""
+            # """Wikipedia Title: Give Peace a Chance\n"Give Peace a Chance" is an anti-war song written by John Lennon (credited to Lennon–McCartney), and performed with Yoko Ono in Montreal, Quebec, Canada. Released as a single in 1969 by the Plastic Ono Band on Apple Records (catalogue Apple 13 in the United Kingdom, Apple 1809 in the United States), it is the first solo single issued by Lennon, released when he was still a member of the Beatles, and became an anthem of the American anti-war movement during the 1970s. It peaked at number 14 on the "Billboard" Hot 100 and number 2 on the British singles chart.\n"""
         )
         
         # System message for advanced reading comprehension
@@ -216,6 +252,8 @@ class ChainAnswerGenerator(curator.LLM):
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            # 'You serve as an intelligent assistant, adept at facilitating users through complex, multi-hop reasoning across multiple documents. This task is illustrated through demonstrations, each consisting of a document set paired with a relevant question and its multi-hop reasoning thoughts. Your task is to generate one thought for current step, DON\'T generate the whole thoughts at once! If you reach what you believe to be the final step, conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations..'
+            # '\n\n'
         )
         
         # One-shot example input
@@ -224,12 +262,18 @@ class ChainAnswerGenerator(curator.LLM):
             "\n\nQuestion: "
             "When was Neville A. Stanton's employer founded?"
             '\nThought: '
+            # '\n\nQuestion: '
+            # f"Nobody Loves You was written by John Lennon and released on what album that was issued by Apple Records, and was written, recorded, and released during his 18 month separation from Yoko Ono?"
+            # '\nThought: '
         )
         
         # One-shot example output
         one_shot_output = (
             "From the QA pairs, the employer of Neville A. Stanton is University of Southampton. The University of Southampton was founded in 1862. "
             "\nAnswer: 1862."
+            # f"The album issued by Apple Records, and written, recorded, and released during John Lennon's 18 month separation from Yoko Ono is Walls and Bridges. Nobody Loves You was written by John Lennon on Walls and Bridges album."
+            # '\nAnswer: Walls and Bridges.'
+            # '\n\n'
         )
         
         # Build the prompt template
@@ -312,7 +356,7 @@ class ChainBatchedMultiHopQAEvaluator:
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
-        self.data_dir = Path("/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.data/2wiki")
+        self.data_dir = Path("/home/yigit/codebase/gsw-memory/playground_data/")
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
@@ -333,12 +377,22 @@ class ChainBatchedMultiHopQAEvaluator:
             use_bm25=use_bm25
 
         )
-        
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
+            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-4o", 
-                generation_params={"temperature": 0.0}, 
+                model_name="gpt-5",
+                # model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-128-gpt5-golden",
+                # backend = "litellm",
+                # backend_params = {
+                #     "base_url": "http://localhost:8787/v1",
+                #     "request_timeout": 600.0,  
+                #     "max_concurrent_requests": 32,
+                #     "max_requests_per_minute": 120,
+                #     "max_tokens_per_minute": 200000,
+                #     "seconds_to_pause_on_rate_limit": 5,
+                # },
+                # generation_params={"temperature": 0.0}, 
                 response_format=DecomposedQuestionList
             )
             self.answer_generator = ChainAnswerGenerator(
@@ -357,9 +411,9 @@ class ChainBatchedMultiHopQAEvaluator:
         Returns:
             List of tuples: (question_id, question, gold_answers)
         """
-        console.print("[cyan]Loading 2WikiMultihopQA questions...[/cyan]")
+        console.print("[cyan]Loading Musique questions...[/cyan]")
         
-        questions_file = self.data_dir / "2wikimultihopqa.json"
+        questions_file = self.data_dir / "musique.json"
         if not questions_file.exists():
             raise FileNotFoundError(f"Questions file not found: {questions_file}")
         
@@ -369,13 +423,32 @@ class ChainBatchedMultiHopQAEvaluator:
         # Extract first N questions
         questions_data = []
         for i, item in enumerate(data[:self.num_questions]):
+            # if "2hop" in item["id"] or "3hop1" in item["id"]:
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
             gold_answers = item.get("answer", [])
+            # gold_answers = item.get("gold_ans", [])
+            # gold_answers = item.get("reference", [])
+            # gold_answers = item.get("possible_answers", [])
+            # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
+            # Fix to always decode it if it is a string:
+            # if isinstance(gold_answers, str):
+            #     try:
+            #         gold_answers = json.loads(gold_answers)
+            #     except Exception:
+            #         gold_answers = [gold_answers]
+                
+            # else:
+            #     continue
             
-            # Ensure gold_answers is a list
+            # Ensure gold_answers is a list and add aliases
             if isinstance(gold_answers, str):
                 gold_answers = [gold_answers]
+                gold_answers.extend(item.get("answer_aliases", []))
+            else:
+                # answer is already a list, still need to add aliases
+                answer_aliases = item.get("answer_aliases", [])
+                gold_answers = gold_answers + answer_aliases
             
             questions_data.append((question_id, question, gold_answers))
         
@@ -625,29 +698,32 @@ class ChainBatchedMultiHopQAEvaluator:
     
     def compute_metrics(self, results: List[ChainBatchedEvaluationResult]) -> Tuple[Dict[str, float], List[Dict[str, Any]]]:
         """Compute evaluation metrics.
-        
+
         Args:
             results: List of evaluation results
-            
+
         Returns:
             Tuple of (overall_metrics, per_example_metrics)
         """
         console.print("\n[cyan]Computing evaluation metrics...[/cyan]")
-        
+
         # Filter out error cases
         valid_results = [r for r in results if r.error is None]
-        
+
         if not valid_results:
             console.print("[red]No valid results to evaluate![/red]")
             return {}, []
-        
+
         # Prepare data for evaluation
         gold_answers_list = [r.gold_answers for r in valid_results]
         predicted_answers = [r.predicted_answer for r in valid_results]
-        
-        # Compute metrics
-        overall_metrics, per_example_metrics = evaluate_qa_batch(gold_answers_list, predicted_answers)
-        
+
+        # Compute metrics with substring matching enabled
+        overall_metrics, per_example_metrics = evaluate_qa_batch(
+            gold_answers_list,
+            predicted_answers,
+        )
+
         return overall_metrics, per_example_metrics
     
     def save_results(self, results: List[ChainBatchedEvaluationResult], overall_metrics: Dict[str, float], 
@@ -742,10 +818,10 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=10, 
+            num_questions=1000, 
             verbose=verbose,
             use_bm25=True
-        )
+       )
 
         
         # Run batched evaluation

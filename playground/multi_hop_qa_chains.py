@@ -23,10 +23,11 @@ from datetime import datetime
 from collections import defaultdict
 import numpy as np
 import voyageai
+from pydantic import BaseModel
 
 import os 
 if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -54,6 +55,14 @@ except ImportError:
     OPENAI_AVAILABLE = False
 
 console = Console()
+
+
+class DecomposedQuestion(BaseModel):
+    question: str
+    requires_retrieval: bool
+
+class DecomposedQuestionList(BaseModel):
+    questions: List[DecomposedQuestion]
 
 
 class ChainFollowingMultiHopQA:
@@ -94,7 +103,7 @@ class ChainFollowingMultiHopQA:
         self._reranker = None
         self.voyage_client = None
         self.rerank_instruction = "Given a question, you need to score the chain of decomposed questions based on how likely it is to lead to the answer. Make sure to focues on both questions"
-
+        self.use_bm25 = use_bm25
         if self.reranker_model_name == "voyage":
             self.voyage_client = voyageai.Client()
 
@@ -112,12 +121,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents, 
-            # cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_memory/playground/.gsw_cache",
-            rebuild_cache=True,
-            cache_dir="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/.gsw_cache",
-            path_to_gsw_files="/home/shreyas/NLP/SM/gensemworkspaces/gsw_networks/networks_qwen8b",
-            # cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_mini_trial",
-            # path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_mini_generated",
+            cache_dir="/home/yigit/codebase/gsw-memory/.lveval_cache",
+            path_to_gsw_files="/home/yigit/codebase/gsw-memory/logs/lveval_qa_gsws/networks",
             verbose=False,  # Keep entity searcher quiet
             use_bm25=self.use_bm25
         )
@@ -487,15 +492,19 @@ Your final goal is the **shortest and most direct path** to the answer.
   **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
 
 ## Formatting
-Format each decomposed question as follows:
+Format your response in the following JSON format:
 
-<decomposition>
-Question: [the question text]
-Requires retrieval: [true/false]
-</decomposition>
+{{
+  "questions": [
+    {{
+      "question": "the decomposed question text",
+      "requires_retrieval": "true/false"
+    }}
+  ]
+}}
 
-- Any question that requires factual information from a knowledge base **MUST** have `Requires retrieval: true`.
-- A question only has `Requires retrieval: false` if it involves a simple logical step or comparison based *only* on the previously retrieved answers (this is rare).
+- Any question that requires factual information from a knowledge base **MUST** have `requires_retrieval: true`.
+- A question only has `requires_retrieval: false` if it involves a simple logical step or comparison based *only* on the previously retrieved answers (this is rare).
 
 ---
 
@@ -504,18 +513,30 @@ Requires retrieval: [true/false]
 Question: "When was the town where the headquarters of the only music label larger than the label that produced Take Me to the Ball Game explored?"
 
 **Correct Decomposition (Atomic):**
-<decomposition>
-1. Question: Which label produced Take Me to the Ball Game?
-   Requires retrieval: true
-2. Question: What is the ranking of <ENTITY_Q1> among music labels?
-   Requires retrieval: true
-3. Question: Which music label is the larger than <ENTITY_Q2> in the country?
-   Requires retrieval: true
-4. Question: Where are the headquarters of <ENTITY_Q3> located?
-   Requires retrieval: true
-5. Question: When was <ENTITY_Q4> explored?
-   Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "Which label produced Take Me to the Ball Game?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What is the ranking of <ENTITY_Q1> among music labels?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Which music label is the larger than <ENTITY_Q2> in the country?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Where are the headquarters of <ENTITY_Q3> located?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "When was <ENTITY_Q4> explored?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 
 *Reasoning (handled by the system later): The logic correctly separates the lookup for the first label (StarTone), its rank (second), the label with the higher rank (Harmonia), its location (Clearwater), and the final fact about that location (1823). No single question attempts to bridge these facts.*
 
@@ -526,25 +547,41 @@ Question: "When was the town where the headquarters of the only music label larg
 Question: "What was the political party of the U.S. President who signed the Civil Rights Act of 1964, despite having previously led the party whose southern bloc largely opposed it?"
 
 ** Inefficient Decomposition (Avoid This):**
-<decomposition>
-1.  Question: Which political party's southern bloc opposed the Civil Rights Act of 1964?
-    Requires retrieval: true
-2.  Question: Who signed the Civil Rights Act of 1964?
-    Requires retrieval: true
-3.  Question: What was the political party of <ENTITY_Q2>?
-    Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "Which political party's southern bloc opposed the Civil Rights Act of 1964?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who signed the Civil Rights Act of 1964?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What was the political party of <ENTITY_Q2>?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 *Reasoning for avoidance: This chain is broken. Step 1 finds a political party, but that information is never used. Step 2 makes a logical leap to find the president, completely ignoring the complex clause. This fails to follow the logic of the original question.*
 
 ** Efficient Decomposition (Correct):**
-<decomposition>
-1.  Question: Which political party's southern bloc largely opposed the Civil Rights Act of 1964?
-    Requires retrieval: true
-2.  Question: Which U.S. President, who was previously a Senate Majority Leader for the `<ENTITY_Q1>`, signed the Civil Rights Act of 1964?
-    Requires retrieval: true
-3.  Question: What was the political party of `<ENTITY_Q2>`?
-    Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "Which political party's southern bloc largely opposed the Civil Rights Act of 1964?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Which U.S. President, who was previously a Senate Majority Leader for the `<ENTITY_Q1>`, signed the Civil Rights Act of 1964?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What was the political party of `<ENTITY_Q2>`?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 *Reasoning for correctness: This chain is efficient and logically sound. Step 2 is a perfect "contextual bridge." It uses the party from Step 1 as a constraint to resolve the "despite" clause and identify the correct person (Lyndon B. Johnson), ensuring the full logic of the question is followed.*
 
 ---
@@ -552,49 +589,80 @@ Question: "What was the political party of the U.S. President who signed the Civ
 ## Further Examples
 
 Question: "When was the first establishment that Mc-Donaldization is named after, open in the country Horndean is located?"
-Decomposition:
-<decomposition>
-1. Question: What is McDonaldization named after?
-   Requires retrieval: true
-2. Question: Which state is Horndean located in?
-   Requires retrieval: true
-3. Question: When did the first <ENTITY_Q1> open in <ENTITY_Q2>?
-   Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "What is McDonaldization named after?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Which state is Horndean located in?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "When did the first <ENTITY_Q1> open in <ENTITY_Q2>?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
+
 Question: "How many Germans live in the colonial holding in Aruba's continent that was governed by Prazeres's country?
-Decomposition:
-<decomposition>
-1. Question: In what continent is Aruba located?
-   Requires retrieval: true
-2. Question: What country is Prazeres?
-   Requires retrieval: true
-3. Question: Colonial holding in <ENTITY_Q1> governed by <ENTITY_Q2>?
-   Requires retrieval: true
-4. How many Germans live in <ENTITY_Q3>?
-   Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "In what continent is Aruba located?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What country is Prazeres?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Colonial holding in <ENTITY_Q1> governed by <ENTITY_Q2>?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "How many Germans live in <ENTITY_Q3>?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 
 Question: "When did the people who captured Malakoff come to the region where Philipsburg is located?
-Decomposition:
-<decomposition>
-1. Question: What is Philipsburg capital of?
-   Requires retrieval: true
-2. Question: What terrain feature is <ENTITY_Q1> located in?
-   Requires retrieval: true
-3. Who captured Malakoff?
-   Requires retrieval: true
-4. When did <ENTITY_Q3> come to <ENTITY_Q4>?
-   Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "What is Philipsburg capital of?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What terrain feature is <ENTITY_Q1> located in?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "Who captured Malakoff?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "When did <ENTITY_Q3> come to <ENTITY_Q4>?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 
 Question: "Which countries experienced economic growth while canals were being constructed in Europe?"
-Decomposition:
-<decomposition>
-1. Question: When were canals constructed in Europe?
-   Requires retrieval: true
-2. Question: What countries found their economic growth in <ENTITY_Q1>?
-   Requires retrieval: true
-</decomposition>
+{{
+    "questions": [
+        {{
+            "question": "When were canals constructed in Europe?",
+            "requires_retrieval": "true"
+        }},
+        {{
+            "question": "What countries found their economic growth in <ENTITY_Q1>?",
+            "requires_retrieval": "true"
+        }}
+    ]
+}}
 
 ## Important Constraints
 -   **AVOID YES/NO QUESTIONS.**
@@ -604,9 +672,9 @@ Decomposition:
 -   DO ask directly: "When was John Doe born?".
 -   DON'T add any knowledge from your own knowledge, only use the provided question to decompose.
 
-Now decompose this question with provided format:
+Now decompose this question and return the response in JSON format:
 Question: "{question}"
-Decomposition:"""
+"""
 
         try:
             response = self.openai_client.chat.completions.create(
@@ -614,55 +682,19 @@ Decomposition:"""
                 messages=[
                     {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
                     {"role": "user", "content": decomposition_prompt}
-                ]
-                # temperature=0.1,
-                # max_tokens=300
+                ],
+                response_format=DecomposedQuestionList
             )
-            
-            decomposition_text = response.choices[0].message.content
-            
-            # Parse the response
-            questions = []
-            # First try to extract content within <decomposition> tags
-            decomposition_match = re.search(r'<decomposition>(.*?)</decomposition>', decomposition_text, re.DOTALL)
-            if decomposition_match:
-                # Parse content within decomposition tags
-                content_to_parse = decomposition_match.group(1).strip()
-            else:
-                # Fallback to parsing the entire response
-                content_to_parse = decomposition_text.strip()
-            
-            lines = content_to_parse.split('\n')
-            i = 0
-            while i < len(lines):
-                line = lines[i].strip()
-                
-                if re.match(r'^[\d]+[\.)\s]*Question:', line) or line.startswith('Question:') or re.match(r'^-\s*Question:', line):
-                    question_match = re.search(r'Question:\s*(.+)', line)
-                    if question_match:
-                        question_text = question_match.group(1).strip()
-                        
-                        # Check for requires_retrieval flag
-                        requires_retrieval = True  # Default
-                        
-                        if 'Requires retrieval:' in line:
-                            retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', line, re.IGNORECASE)
-                            if retrieval_match:
-                                requires_retrieval = retrieval_match.group(1).lower() == 'true'
-                        elif i + 1 < len(lines):
-                            next_line = lines[i + 1].strip()
-                            if 'Requires retrieval:' in next_line:
-                                retrieval_match = re.search(r'Requires retrieval:\s*(true|false)', next_line, re.IGNORECASE)
-                                if retrieval_match:
-                                    requires_retrieval = retrieval_match.group(1).lower() == 'true'
-                                i += 1
-                        
-                        questions.append({
-                            "question": question_text,
-                            "requires_retrieval": requires_retrieval
-                        })
-                
-                i += 1
+
+            # Parse the structured response using Pydantic
+            parsed_response = response.choices[0].message.parsed
+            questions = [
+                {
+                    "question": q.question,
+                    "requires_retrieval": q.requires_retrieval
+                }
+                for q in parsed_response.questions
+            ]
             
             if self.verbose and questions:
                 console.print(f"[cyan]Decomposed into {len(questions)} questions:[/cyan]")

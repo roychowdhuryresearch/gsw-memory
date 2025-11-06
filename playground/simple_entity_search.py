@@ -78,13 +78,16 @@ def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tu
     
     # base_dir = "/mnt/SSD1/shreyas/SM_GSW/2wiki/networks"
     if not path_to_gsw_files:
-        base_dir = "/mnt/SSD1/shreyas/SM_GSW/musique/networks"
+        base_dir = "/mnt/SSD1/shreyas/SM_GSW/musique/normalized_networks"
     else:
         base_dir = path_to_gsw_files
     
-    # Get first N document directories
-    doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
-                      key=lambda x: int(Path(x).name.replace("doc_", "")))[:num_documents]
+    if num_documents == -1:
+        doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
+                          key=lambda x: int(Path(x).name.replace("doc_", "")))
+    else:
+        doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
+                          key=lambda x: int(Path(x).name.replace("doc_", "")))[:num_documents]
     
     gsw_structures = []
     doc_ids = []

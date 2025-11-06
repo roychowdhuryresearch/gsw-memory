@@ -37,6 +37,7 @@ class GSWProcessor:
         enable_visualization: bool = False,
         prompt_type: PromptType = PromptType.EPISODIC,
         batched: bool = False,
+        batch_size: Optional[int] = 100,
     ):
         """Initialize the GSW processor with configuration options."""
         self.model_name = model_name
@@ -50,6 +51,7 @@ class GSWProcessor:
         self.enable_visualization = enable_visualization
         self.prompt_type = prompt_type
         self.batched = batched
+        self.batch_size = batch_size
         # Check if visualization is requested but NetworkX is not available
         if self.enable_visualization:
             try:
@@ -267,15 +269,27 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-
-        gsw_model = GSWOperator(
-            model_name=self.model_name,
-            generation_params=self.generation_params,
-            prompt_type=self.prompt_type,
-            backend="openai",
-            response_format=GSWStructure,  # Use constrained decoding
-            batch=self.batched
-        )
+        if self.batched:
+            gsw_model = GSWOperator(
+                model_name=self.model_name,
+                generation_params=self.generation_params,
+                prompt_type=self.prompt_type,
+                backend="openai",
+                response_format=GSWStructure,  # Use constrained decoding
+                batch=self.batched,
+                backend_params={"batch_size": self.batch_size,
+                                "require_all_responses": False},
+            )
+        else:
+            gsw_model = GSWOperator(
+                model_name=self.model_name,
+                generation_params=self.generation_params,
+                prompt_type=self.prompt_type,
+                backend="openai",
+                response_format=GSWStructure,  # Use constrained decoding
+                batch=self.batched,
+                backend_params={"require_all_responses": False},
+            )
 
         # Prepare GSW inputs from all chunks across all documents
         gsw_inputs = []
