@@ -66,6 +66,13 @@ except ImportError:
     print("Warning: VoyageAI not available. Install with: pip install voyageai")
     VOYAGEAI_AVAILABLE = False
 
+try:
+    import faiss
+    FAISS_AVAILABLE = True
+except ImportError:
+    print("Warning: FAISS not available. Install with: pip install faiss-cpu or faiss-gpu")
+    FAISS_AVAILABLE = False
+
 console = Console()
 
 # Setup logging
@@ -97,7 +104,8 @@ class Qwen3EmbeddingBaseline:
 
     def __init__(self, corpus_path: str, questions_path: str, num_questions: int = 20,
                  top_k: int = 5, cache_dir: str = ".", rebuild_cache: bool = False,
-                 verbose: bool = False, use_reranker: bool = False, reranker_top_k: int = 20):
+                 verbose: bool = False, use_reranker: bool = False, reranker_top_k: int = 20,
+                 gpu_device: int = 3):
         """Initialize the baseline system.
 
         Args:
@@ -110,6 +118,7 @@ class Qwen3EmbeddingBaseline:
             verbose: Show detailed output
             use_reranker: If True, use VoyageAI reranker to rerank top-k documents
             reranker_top_k: Number of documents to retrieve before reranking (only used if use_reranker=True)
+            gpu_device: GPU device ID for FAISS GPU acceleration (default: 3)
         """
         self.corpus_path = Path(corpus_path)
         self.questions_path = Path(questions_path)
@@ -120,6 +129,7 @@ class Qwen3EmbeddingBaseline:
         self.rebuild_cache = rebuild_cache
         self.use_reranker = use_reranker
         self.reranker_top_k = reranker_top_k
+        self.gpu_device = gpu_device
 
         # Data structures
         self.documents = []
@@ -127,9 +137,21 @@ class Qwen3EmbeddingBaseline:
         self.embedding_model = None
         self.openai_client = None
         self.voyage_client = None
+        self.doc_faiss_index = None  # FAISS GPU index for document embeddings
 
-        # Cache files
-        self.doc_embedding_cache_file = self.cache_dir / "doc_embeddings_baseline.npz"
+        # Initialize GPU resources for FAISS
+        self.gpu_resources = None
+        if FAISS_AVAILABLE:
+            try:
+                self.gpu_resources = faiss.StandardGpuResources()
+            except Exception as e:
+                console.print(f"[yellow]Warning: Could not initialize GPU resources: {e}[/yellow]")
+
+        # Cache files (GPU format)
+        self.doc_embedding_cache_file = self.cache_dir / "doc_embeddings_baseline_gpu.faiss"
+        self.doc_metadata_cache_file = self.cache_dir / "doc_metadata_baseline.json"
+        # Legacy HNSW cache path for backward compatibility
+        self.doc_embedding_hnsw_cache = self.cache_dir / "doc_embeddings_baseline_hnsw.faiss"
 
         console.print("[bold blue]Initializing Qwen-3 Embedding Baseline...[/bold blue]")
         if use_reranker:
@@ -191,21 +213,91 @@ class Qwen3EmbeddingBaseline:
 
     def _load_or_generate_embeddings(self):
         """Load embeddings from cache or generate them."""
-        # Try to load from cache
-        if not self.rebuild_cache and self.doc_embedding_cache_file.exists():
-            console.print("[cyan]Loading embeddings from cache...[/cyan]")
+        # Try to load from FAISS GPU cache first
+        if not self.rebuild_cache and FAISS_AVAILABLE and self.gpu_resources is not None and self.doc_embedding_cache_file.exists() and self.doc_metadata_cache_file.exists():
+            console.print("[cyan]Loading embeddings from FAISS GPU cache...[/cyan]")
             try:
-                data = np.load(self.doc_embedding_cache_file, allow_pickle=True)
-                cached_doc_count = data['doc_count']
+                # Load metadata
+                with open(self.doc_metadata_cache_file, 'r') as f:
+                    metadata = json.load(f)
+                cached_doc_count = metadata.get('doc_count', 0)
 
                 if cached_doc_count == len(self.documents):
-                    self.doc_embeddings = data['embeddings']
-                    console.print(f"[green] Loaded {len(self.doc_embeddings)} document embeddings from cache[/green]")
+                    # Load CPU index from disk
+                    cpu_index = faiss.read_index(str(self.doc_embedding_cache_file))
+
+                    # Transfer to GPU
+                    self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+                    # Reconstruct embeddings from CPU index for compatibility
+                    num_vectors = cpu_index.ntotal
+                    self.doc_embeddings = faiss.vector_to_array(cpu_index.reconstruct_n(0, num_vectors))
+                    self.doc_embeddings = self.doc_embeddings.reshape(num_vectors, -1)
+
+                    console.print(f"[green]✓ Loaded FAISS GPU index with {num_vectors} document embeddings[/green]")
                     return
                 else:
                     console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
             except Exception as e:
-                console.print(f"[yellow]Could not load cache: {e}[/yellow]")
+                console.print(f"[yellow]Could not load GPU cache: {e}, trying HNSW fallback[/yellow]")
+
+        # Fallback: Try to load from legacy HNSW cache and convert to GPU
+        if not self.rebuild_cache and FAISS_AVAILABLE and self.gpu_resources is not None and self.doc_embedding_hnsw_cache.exists():
+            console.print("[cyan]Loading embeddings from legacy HNSW cache...[/cyan]")
+            try:
+                # Load HNSW index
+                hnsw_index = faiss.read_index(str(self.doc_embedding_hnsw_cache))
+
+                # Reconstruct embeddings from HNSW index
+                num_vectors = hnsw_index.ntotal
+                self.doc_embeddings = faiss.vector_to_array(hnsw_index.reconstruct_n(0, num_vectors))
+                self.doc_embeddings = self.doc_embeddings.reshape(num_vectors, -1)
+
+                # Build GPU flat index from embeddings
+                embedding_dim = self.doc_embeddings.shape[1]
+                cpu_index = faiss.IndexFlatIP(embedding_dim)
+                embeddings_normalized = self.doc_embeddings.copy()
+                faiss.normalize_L2(embeddings_normalized)
+                cpu_index.add(embeddings_normalized)
+
+                # Transfer to GPU
+                self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+                console.print(f"[green]✓ Converted HNSW cache to GPU index with {num_vectors} embeddings[/green]")
+                return
+            except Exception as e:
+                console.print(f"[yellow]Could not load HNSW cache: {e}, trying npz fallback[/yellow]")
+
+        # Fallback: Try to load from NPZ cache and convert to GPU
+        npz_cache_file = self.cache_dir / "doc_embeddings_baseline.npz"
+        if not self.rebuild_cache and npz_cache_file.exists():
+            console.print("[cyan]Loading embeddings from npz cache...[/cyan]")
+            try:
+                data = np.load(npz_cache_file, allow_pickle=True)
+                cached_doc_count = data['doc_count']
+
+                if cached_doc_count == len(self.documents):
+                    self.doc_embeddings = data['embeddings'].astype(np.float32)
+
+                    # Build FAISS GPU index from loaded embeddings if FAISS is available
+                    if FAISS_AVAILABLE and self.gpu_resources is not None:
+                        embedding_dim = self.doc_embeddings.shape[1]
+                        cpu_index = faiss.IndexFlatIP(embedding_dim)
+                        embeddings_normalized = self.doc_embeddings.copy()
+                        faiss.normalize_L2(embeddings_normalized)
+                        cpu_index.add(embeddings_normalized)
+
+                        # Transfer to GPU
+                        self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+                        console.print(f"[green]✓ Loaded npz cache and built FAISS GPU index with {len(self.doc_embeddings)} embeddings[/green]")
+                    else:
+                        console.print(f"[green]✓ Loaded {len(self.doc_embeddings)} document embeddings from npz cache[/green]")
+                    return
+                else:
+                    console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
+            except Exception as e:
+                console.print(f"[yellow]Could not load npz cache: {e}[/yellow]")
 
         # Generate embeddings
         self._generate_embeddings()
@@ -238,20 +330,60 @@ class Qwen3EmbeddingBaseline:
                 all_embeddings.extend(batch_embeddings)
                 progress.update(task_id, advance=len(batch))
 
-        self.doc_embeddings = np.array(all_embeddings)
-        console.print(f"[green] Generated {len(self.doc_embeddings)} embeddings with shape {self.doc_embeddings.shape}[/green]")
+        self.doc_embeddings = np.array(all_embeddings, dtype=np.float32)
+        console.print(f"[green]✓ Generated {len(self.doc_embeddings)} embeddings with shape {self.doc_embeddings.shape}[/green]")
+
+        # Build FAISS GPU index
+        if FAISS_AVAILABLE and self.gpu_resources is not None:
+            embedding_dim = self.doc_embeddings.shape[1]
+            # Create CPU flat index for exact nearest neighbor search
+            cpu_index = faiss.IndexFlatIP(embedding_dim)
+            # Normalize embeddings for cosine similarity
+            embeddings_normalized = self.doc_embeddings.copy()
+            faiss.normalize_L2(embeddings_normalized)
+            cpu_index.add(embeddings_normalized)
+
+            # Transfer to GPU
+            self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+            console.print(f"[green]✓ Built FAISS GPU index with {self.doc_faiss_index.ntotal} vectors[/green]")
+
 
     def _save_embeddings(self):
-        """Save embeddings to cache."""
+        """Save embeddings to cache using FAISS."""
         try:
-            np.savez_compressed(
-                self.doc_embedding_cache_file,
-                embeddings=self.doc_embeddings,
-                doc_count=len(self.documents)
-            )
-            console.print(f"[green] Saved embeddings to {self.doc_embedding_cache_file}[/green]")
+            # Use FAISS if available
+            if FAISS_AVAILABLE and self.doc_faiss_index is not None:
+                # Transfer from GPU to CPU for saving
+                if self.gpu_resources is not None:
+                    cpu_index = faiss.index_gpu_to_cpu(self.doc_faiss_index)
+                else:
+                    cpu_index = self.doc_faiss_index
+
+                # Save CPU FAISS index
+                faiss.write_index(cpu_index, str(self.doc_embedding_cache_file))
+                console.print(f"[green]✓ Saved FAISS index to {self.doc_embedding_cache_file}[/green]")
+
+                # Save metadata separately
+                metadata = {
+                    "doc_count": len(self.documents),
+                    "embedding_dim": self.doc_embeddings.shape[1]
+                }
+                with open(self.doc_metadata_cache_file, 'w') as f:
+                    json.dump(metadata, f)
+                console.print(f"[green]✓ Saved metadata to {self.doc_metadata_cache_file}[/green]")
+            else:
+                # Fallback to npz if FAISS not available
+                npz_file = self.cache_dir / "doc_embeddings_baseline.npz"
+                np.savez_compressed(
+                    npz_file,
+                    embeddings=self.doc_embeddings,
+                    doc_count=len(self.documents)
+                )
+                console.print(f"[green]✓ Saved embeddings to {npz_file} (fallback)[/green]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save embeddings: {e}[/yellow]")
+
 
     def _embed_query(self, query: str) -> np.ndarray:
         """Embed a query using the Qwen model."""
@@ -267,7 +399,7 @@ class Qwen3EmbeddingBaseline:
             raise
 
     def retrieve_documents(self, question: str) -> List[Dict[str, Any]]:
-        """Retrieve top-k documents for a question.
+        """Retrieve top-k documents for a question using FAISS GPU search.
 
         Args:
             question: The question to retrieve documents for
@@ -277,23 +409,38 @@ class Qwen3EmbeddingBaseline:
         """
         # Embed the question
         query_embedding = self._embed_query(question)
-        query_embedding = query_embedding.reshape(1, -1)
-
-        # Calculate similarities
-        similarities = cosine_similarity(query_embedding, self.doc_embeddings)[0]
+        query_embedding = query_embedding.reshape(1, -1).astype(np.float32)
 
         # Determine how many to retrieve initially
         initial_k = self.reranker_top_k if self.use_reranker else self.top_k
 
-        # Get top-k indices from embedding similarity
-        top_indices = np.argsort(similarities)[::-1][:initial_k]
+        # Use FAISS search if available, otherwise fall back to cosine_similarity
+        if FAISS_AVAILABLE and self.doc_faiss_index is not None:
+            # Normalize query for cosine similarity
+            faiss.normalize_L2(query_embedding)
+            # Search FAISS GPU index - returns (similarities, indices)
+            similarities, indices = self.doc_faiss_index.search(query_embedding, initial_k)
 
-        # Build initial candidate list
-        candidates = []
-        for idx in top_indices:
-            doc = self.documents[idx].copy()
-            doc['embedding_similarity'] = float(similarities[idx])
-            candidates.append(doc)
+            # Build initial candidate list from FAISS results
+            candidates = []
+            for idx, similarity in zip(indices[0], similarities[0]):
+                if idx >= 0 and idx < len(self.documents):  # Valid index
+                    doc = self.documents[idx].copy()
+                    doc['embedding_similarity'] = float(similarity)
+                    candidates.append(doc)
+        else:
+            # Fallback to cosine_similarity if FAISS not available
+            if not SIMILARITY_AVAILABLE:
+                raise RuntimeError("Neither FAISS nor scikit-learn available for similarity search")
+
+            similarities = cosine_similarity(query_embedding, self.doc_embeddings)[0]
+            top_indices = np.argsort(similarities)[::-1][:initial_k]
+
+            candidates = []
+            for idx in top_indices:
+                doc = self.documents[idx].copy()
+                doc['embedding_similarity'] = float(similarities[idx])
+                candidates.append(doc)
 
         # If reranker is enabled, rerank the candidates
         if self.use_reranker and self.voyage_client:

@@ -29,25 +29,39 @@ class GSWTools:
     and multi-hop reasoning with minimal, focused tools.
     """
     
-    def __init__(self, gsw_file_paths: Union[str, List[str]]):
-        """Initialize GSW tools with GSW file path(s)."""
+    def __init__(self, gsw_file_paths: Union[str, List[str]], gpu_device: int = 0):
+        """Initialize GSW tools with GSW file path(s).
+
+        Args:
+            gsw_file_paths: Path or list of paths to GSW files
+            gpu_device: GPU device ID for FAISS GPU acceleration (default: 0)
+        """
         # Normalize to list
         if isinstance(gsw_file_paths, str):
             self.gsw_files = [gsw_file_paths]
         else:
             self.gsw_files = gsw_file_paths
-            
+
         self.bm25 = None
         self.entity_corpus = []
         self.entity_metadata = []
         self._index_built = False
-        
+        self.gpu_device = gpu_device
+
         # Embedding search components
         self.embedding_model = None
         self.faiss_index = None
         self.entity_embeddings = []
         self.embedding_metadata = []  # Same structure as entity_metadata
-        
+
+        # Initialize GPU resources for FAISS
+        self.gpu_resources = None
+        if EMBEDDING_AVAILABLE and faiss is not None:
+            try:
+                self.gpu_resources = faiss.StandardGpuResources()
+            except Exception as e:
+                print(f"⚠️ Warning: Could not initialize GPU resources: {e}")
+
         # Cache directory for embeddings
         self.cache_dir = ".gsw_cache"
         os.makedirs(self.cache_dir, exist_ok=True)
@@ -128,81 +142,149 @@ class GSWTools:
         self.build_index()
     
     def _build_embedding_index(self):
-        """Build FAISS embedding index for semantic search."""
+        """Build FAISS GPU embedding index for semantic search."""
         if not EMBEDDING_AVAILABLE:
             return
-            
+
         # Initialize embedding model
         self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
-        
+
         # Copy metadata for embeddings (same as BM25)
         self.embedding_metadata = self.entity_metadata.copy()
-        
+
         # Extract entity names for embedding
         entity_names = [meta["entity_name"] for meta in self.entity_metadata]
-        
-        # Simple cache file names
-        embeddings_cache = "gsw_embeddings.npy"
+
+        # Cache file names - GPU format
+        faiss_index_cache = "gsw_embeddings_gpu.faiss"
         metadata_cache = "gsw_metadata.json"
-        
-        # Try to load from cache first
-        if os.path.exists(embeddings_cache) and os.path.exists(metadata_cache):
+        # Legacy HNSW cache path for backward compatibility
+        faiss_hnsw_cache = "gsw_embeddings_hnsw.faiss"
+
+        # Try to load from FAISS GPU cache
+        if self.gpu_resources is not None and os.path.exists(faiss_index_cache) and os.path.exists(metadata_cache):
             try:
-                print(f"Loading cached embeddings from {embeddings_cache}")
-                self.entity_embeddings = np.load(embeddings_cache)
-                
+                print(f"Loading cached FAISS GPU index from {faiss_index_cache}")
+
                 with open(metadata_cache, 'r') as f:
                     cached_metadata = json.load(f)
-                
-                # Simple check: same number of entities
-                if len(self.entity_embeddings) == len(entity_names):
-                    print(f"✅ Loaded {len(self.entity_embeddings)} cached embeddings")
-                    # Create FAISS index from cached embeddings
-                    embedding_dim = self.entity_embeddings.shape[1]
-                    self.faiss_index = faiss.IndexFlatIP(embedding_dim)
-                    self.faiss_index.add(self.entity_embeddings)
+
+                # Check if cache is valid
+                cached_count = cached_metadata.get('num_entities', 0)
+                if cached_count == len(entity_names):
+                    # Load CPU index from disk
+                    cpu_index = faiss.read_index(faiss_index_cache)
+
+                    # Transfer to GPU
+                    self.faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+                    # Reconstruct embeddings from CPU index for compatibility
+                    num_vectors = cpu_index.ntotal
+                    self.entity_embeddings = faiss.vector_to_array(cpu_index.reconstruct_n(0, num_vectors))
+                    self.entity_embeddings = self.entity_embeddings.reshape(num_vectors, -1)
+
+                    print(f"✅ Loaded FAISS GPU index with {num_vectors} cached embeddings")
                     return
                 else:
                     print("⚠️ Cache size mismatch, rebuilding...")
-                    
+
             except Exception as e:
-                print(f"⚠️ Failed to load cache: {e}, rebuilding...")
-        
+                print(f"⚠️ Failed to load GPU cache: {e}, trying HNSW fallback...")
+
+        # Try to load from legacy HNSW cache and convert to GPU
+        if self.gpu_resources is not None and os.path.exists(faiss_hnsw_cache) and os.path.exists(metadata_cache):
+            try:
+                print(f"Loading cached FAISS HNSW index from {faiss_hnsw_cache}")
+
+                with open(metadata_cache, 'r') as f:
+                    cached_metadata = json.load(f)
+
+                # Check if cache is valid
+                cached_count = cached_metadata.get('num_entities', 0)
+                if cached_count == len(entity_names):
+                    # Load HNSW index
+                    hnsw_index = faiss.read_index(faiss_hnsw_cache)
+
+                    # Reconstruct embeddings from HNSW index
+                    num_vectors = hnsw_index.ntotal
+                    self.entity_embeddings = faiss.vector_to_array(hnsw_index.reconstruct_n(0, num_vectors))
+                    self.entity_embeddings = self.entity_embeddings.reshape(num_vectors, -1)
+
+                    # Build GPU flat index from embeddings
+                    embedding_dim = self.entity_embeddings.shape[1]
+                    cpu_index = faiss.IndexFlatIP(embedding_dim)
+                    embeddings_normalized = self.entity_embeddings.copy()
+                    faiss.normalize_L2(embeddings_normalized)
+                    cpu_index.add(embeddings_normalized)
+
+                    # Transfer to GPU
+                    self.faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+                    print(f"✅ Converted HNSW cache to GPU index with {num_vectors} embeddings")
+                    return
+                else:
+                    print("⚠️ Cache size mismatch, rebuilding...")
+
+            except Exception as e:
+                print(f"⚠️ Failed to load HNSW cache: {e}, rebuilding...")
+
         # Build embeddings from scratch
         print("Building embeddings from scratch...")
         batch_size = 500  # Increased from 100 to reduce API calls
         all_embeddings = []
-        
+
         for i in range(0, len(entity_names), batch_size):
             batch = entity_names[i:i + batch_size]
             batch_embeddings = self.embedding_model.embed_documents(batch)
             all_embeddings.extend(batch_embeddings)
-            
+
             # Progress update
             processed = min(i + batch_size, len(entity_names))
             if processed % 1000 == 0 or processed == len(entity_names):
                 print(f"  Embedded {processed}/{len(entity_names)} entities")
-        
+
         # Convert to numpy array
         self.entity_embeddings = np.array(all_embeddings, dtype=np.float32)
-        
+
         # Normalize embeddings for cosine similarity
         faiss.normalize_L2(self.entity_embeddings)
-        
-        # Save to cache
-        try:
-            np.save(embeddings_cache, self.entity_embeddings)
-            with open(metadata_cache, 'w') as f:
-                json.dump(self.embedding_metadata, f)
-            print(f"💾 Saved embeddings cache to {embeddings_cache}")
-        except Exception as e:
-            print(f"⚠️ Failed to save cache: {e}")
-        
-        # Create FAISS index
+
+        # Create FAISS GPU index
         embedding_dim = self.entity_embeddings.shape[1]
-        self.faiss_index = faiss.IndexFlatIP(embedding_dim)  # Inner product = cosine similarity after normalization
-        self.faiss_index.add(self.entity_embeddings)
-        
+        if self.gpu_resources is not None:
+            # Create CPU flat index for exact nearest neighbor search
+            cpu_index = faiss.IndexFlatIP(embedding_dim)
+            cpu_index.add(self.entity_embeddings)
+
+            # Transfer to GPU
+            self.faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+
+            # Save to cache (GPU format)
+            try:
+                # Transfer from GPU to CPU for saving
+                cpu_index_for_save = faiss.index_gpu_to_cpu(self.faiss_index)
+
+                # Save CPU FAISS index
+                faiss.write_index(cpu_index_for_save, faiss_index_cache)
+                print(f"💾 Saved FAISS GPU index to {faiss_index_cache}")
+
+                # Save metadata with entity count
+                metadata_with_count = {
+                    "num_entities": len(entity_names),
+                    "embedding_dim": embedding_dim
+                }
+                with open(metadata_cache, 'w') as f:
+                    json.dump(metadata_with_count, f)
+                print(f"💾 Saved metadata")
+            except Exception as e:
+                print(f"⚠️ Failed to save cache: {e}")
+        else:
+            # Fallback to CPU index if GPU not available
+            cpu_index = faiss.IndexFlatIP(embedding_dim)
+            cpu_index.add(self.entity_embeddings)
+            self.faiss_index = cpu_index
+            print("⚠️ GPU not available, using CPU index")
+
         print(f"✅ Embedding index built with {len(entity_names)} entities")
     
     def search_gsw(self, query: str, limit: int = 10) -> List[Dict[str, Any]]:

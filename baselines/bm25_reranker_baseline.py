@@ -615,7 +615,7 @@ def main(verbose: bool = False):
             cache_dir=".",
             rebuild_cache=False,
             verbose=verbose,
-            use_reranker=False,  # Set to True to enable reranking
+            use_reranker=True,  # Set to True to enable reranking
             reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)
         )
 

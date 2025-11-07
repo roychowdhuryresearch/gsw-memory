@@ -276,26 +276,32 @@ def generate_decompositions(decompose_inputs, model_name="gpt-5", output_path=No
     print(f"\nGenerating decompositions using {model_name}...")
     print(f"Processing {len(decompose_inputs)} questions...")
 
-    golden_question_decomposer = ChainQuestionDecomposer(
-        model_name=model_name,
-        # generation_params={"temperature": 0.0},
-        response_format=DecomposedQuestionList
-    )
+    # golden_question_decomposer = ChainQuestionDecomposer(
+    #     model_name=model_name,
+    #     # generation_params={"temperature": 0.0},
+    #     response_format=DecomposedQuestionList
+    # )
 
-    decomposition_dataset = golden_question_decomposer(decompose_inputs)
+    # decomposition_dataset = golden_question_decomposer(decompose_inputs)
 
-    decomposition_results = {
-        item["question_id"]: item
-        for item in decomposition_dataset.dataset
-    }
+    # decomposition_results = {
+    #     item["question_id"]: item
+    #     for item in decomposition_dataset.dataset
+    # }
 
-    print(f"Generated {len(decomposition_results)} decompositions")
+    # print(f"Generated {len(decomposition_results)} decompositions")
 
-    # Save if path provided
-    if output_path:
-        print(f"Saving decompositions to: {output_path}")
-        with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(decomposition_results, f, indent=4, ensure_ascii=False)
+    # # Save if path provided
+    # if output_path:
+    #     print(f"Saving decompositions to: {output_path}")
+    #     with open(output_path, 'w', encoding='utf-8') as f:
+    #         json.dump(decomposition_results, f, indent=4, ensure_ascii=False)
+    
+    # load the decompositions from the output path
+    with open("/home/yigit/codebase/gsw-memory/playground/question_decomp_local/q_decomp_training_5.json", 'r', encoding='utf-8') as f:
+        decomposition_results = json.load(f)
+
+    print(f"Loaded {len(decomposition_results)} decompositions")
 
     return decomposition_results
 
@@ -478,7 +484,7 @@ def create_training_dataset(decomposition_results):
     return training_dataset
 
 
-def load_non_thinking_template(template_path="/home/yigit/codebase/gsw-memory/qwen3_nonthinking.jinja"):
+def load_non_thinking_template(template_path="playground/question_decomp_local/qwen3_nonthinking.jinja"):
     """
     Load and fix the non-thinking chat template.
 
@@ -718,7 +724,7 @@ class ScriptArguments:
         metadata={"help": "Use the non-thinking chat template (removes <think> tags)."},
     )
     chat_template_path: str = field(
-        default="/home/yigit/codebase/gsw-memory/qwen3_nonthinking.jinja",
+        default="playground/question_decomp_local/qwen3_nonthinking.jinja",
         metadata={"help": "Path to custom chat template file."},
     )
 
@@ -732,7 +738,7 @@ def main():
     parser = argparse.ArgumentParser(description="LoRA Fine-Tuning for Question Decomposition")
 
     # Add arguments from ScriptArguments
-    parser.add_argument("--model_id", type=str, default="Qwen/Qwen3-8B",
+    parser.add_argument("--model_id", type=str, default="Qwen/Qwen3-0.6B",
                         help="Model ID from HuggingFace hub")
     parser.add_argument("--test_data_path", type=str,
                         default="/home/yigit/codebase/gsw-memory/playground_data/musique.json",

@@ -27,7 +27,7 @@ from pydantic import BaseModel
 
 import os 
 if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -74,7 +74,7 @@ class ChainFollowingMultiHopQA:
                  use_chain_reranker: bool = False, reranker_model_name: str = None,
                  reranker_instruction: str = "Given a question, score the chain of QA pairs based on how likely it is to lead to the answer",
                  reranker_endpoint_url: Optional[str] = None, reranker_http_timeout: float = 15.0,
-                 multi_dep_quality_threshold: float = 0.3):
+                 multi_dep_quality_threshold: float = 0.3, use_gpu_for_qa_index: bool = True):
         """Initialize the chain-following multi-hop QA system.
 
         Args:
@@ -83,6 +83,7 @@ class ChainFollowingMultiHopQA:
             show_prompt: Whether to show the full LLM prompt
             chain_top_k: Number of top chains to select after reranking
             chain_following_mode: How to score chains - "similarity" (cosine sim to original) or "cumulative" (product of QA scores)
+            use_gpu_for_qa_index: Whether to use GPU for Q&A FAISS index (default: False, uses CPU to save GPU memory)
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
@@ -120,11 +121,12 @@ class ChainFollowingMultiHopQA:
         
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
-            num_documents, 
-            cache_dir="/home/yigit/codebase/gsw-memory/.lveval_cache",
-            path_to_gsw_files="/home/yigit/codebase/gsw-memory/logs/lveval_qa_gsws/networks",
+            num_documents,
+            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_4_1_mini",
+            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
             verbose=False,  # Keep entity searcher quiet
-            use_bm25=self.use_bm25
+            use_bm25=self.use_bm25,
+            use_gpu_for_qa_index=use_gpu_for_qa_index
         )
         
         # Initialize OpenAI client

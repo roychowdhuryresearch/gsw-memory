@@ -15,7 +15,7 @@ import shutil
 from pathlib import Path
 
 # Configuration
-ORIGINAL_LOGS_DIR = "/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/logs/full_2wiki_corpus_20250710_202211"
+ORIGINAL_LOGS_DIR = "/home/yigit/codebase/gsw-memory/logs/full_2wiki_corpus_20251008_100959"
 OUTPUT_DIR = os.path.join(ORIGINAL_LOGS_DIR, "gsw_output_global_ids")
 BATCH_SIZE = 100
 
