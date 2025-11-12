@@ -2,11 +2,11 @@
 
 # Fixed vLLM request script
 
-curl -X POST "http://localhost:8787/v1/chat/completions" \
+curl -X POST "http://localhost:8000/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer token-abc123" \
   -d '{
-    "model": "yigitturali/qwen3-8b-qa-decomp-gsw",
+    "model": "yigitturali/qwen3-0.6b-qa-decomp-gsw-rank-128-gpt5-golden",
     "messages": [
       {
         "role": "user",

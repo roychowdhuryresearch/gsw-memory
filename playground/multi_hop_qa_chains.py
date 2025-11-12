@@ -122,8 +122,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents,
-            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_4_1_mini",
-            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
+            cache_dir="/mnt/SSD6/yigit/SM_GSW/musique/.gsw_cache_4_1_mini",
+            path_to_gsw_files="/mnt/SSD6/yigit/SM_GSW/musique/networks_4_1_mini",
             verbose=False,  # Keep entity searcher quiet
             use_bm25=self.use_bm25,
             use_gpu_for_qa_index=use_gpu_for_qa_index

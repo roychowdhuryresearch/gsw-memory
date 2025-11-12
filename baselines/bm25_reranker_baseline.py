@@ -428,10 +428,21 @@ Thought:
             data = json.load(f)
 
         questions_data = []
-        for item in data[:self.num_questions]:
-            question_id = item.get("_id", "unknown")
+        for i, item in enumerate(data[:self.num_questions]):
+            question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("answer", [])
+            gold_answers = item.get("reference", [])
+
+            # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
+            # Fix to always decode it if it is a string:
+            # if isinstance(gold_answers, str):
+            #     try:
+            #         gold_answers = json.loads(gold_answers)
+            #     except Exception:
+            #         gold_answers = [gold_answers]
+                
+            # else:
+            #     continue
 
             # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
@@ -467,42 +478,42 @@ Thought:
             for question_id, question, gold_answers in questions_data:
                 start_time = time.time()
 
-                try:
-                    # Retrieve documents
-                    retrieved_docs = self.retrieve_documents(question)
+                # try:
+                # Retrieve documents
+                retrieved_docs = self.retrieve_documents(question)
 
-                    # Generate answer
-                    predicted_answer, full_response, token_count = self.generate_answer(
-                        question, retrieved_docs
-                    )
+                # Generate answer
+                predicted_answer, full_response, token_count = self.generate_answer(
+                    question, retrieved_docs
+                )
 
-                    processing_time = time.time() - start_time
+                processing_time = time.time() - start_time
 
-                    result = BaselineEvaluationResult(
-                        question_id=question_id,
-                        question=question,
-                        predicted_answer=predicted_answer,
-                        full_response=full_response,
-                        gold_answers=gold_answers,
-                        processing_time=processing_time,
-                        retrieved_docs=retrieved_docs,
-                        token_count=token_count,
-                        error=None
-                    )
+                result = BaselineEvaluationResult(
+                    question_id=question_id,
+                    question=question,
+                    predicted_answer=predicted_answer,
+                    full_response=full_response,
+                    gold_answers=gold_answers,
+                    processing_time=processing_time,
+                    retrieved_docs=retrieved_docs,
+                    token_count=token_count,
+                    error=None
+                )
 
-                except Exception as e:
-                    console.print(f"[red]Error processing question {question_id}: {e}[/red]")
-                    result = BaselineEvaluationResult(
-                        question_id=question_id,
-                        question=question,
-                        predicted_answer="NA",
-                        full_response="",
-                        gold_answers=gold_answers,
-                        processing_time=0.0,
-                        retrieved_docs=[],
-                        token_count=0,
-                        error=str(e)
-                    )
+                # except Exception as e:
+                #     console.print(f"[red]Error processing question {question_id}: {e}[/red]")
+                #     result = BaselineEvaluationResult(
+                #         question_id=question_id,
+                #         question=question,
+                #         predicted_answer="NA",
+                #         full_response="",
+                #         gold_answers=gold_answers,
+                #         processing_time=0.0,
+                #         retrieved_docs=[],
+                #         token_count=0,
+                #         error=str(e)
+                #     )
 
                 results.append(result)
                 progress.update(task, advance=1)
@@ -608,14 +619,14 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = BM25RerankerBaseline(
-            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_corpus.json",
-            questions_path="/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa.json",
+            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/nq_rear_corpus.json",
+            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/nq_rear.json",
             num_questions=1000,
             top_k=5,
             cache_dir=".",
-            rebuild_cache=False,
+            rebuild_cache=True,
             verbose=verbose,
-            use_reranker=True,  # Set to True to enable reranking
+            use_reranker=False,  # Set to True to enable reranking
             reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)
         )
 

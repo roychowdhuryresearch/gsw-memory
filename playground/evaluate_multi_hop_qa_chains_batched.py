@@ -190,7 +190,11 @@ Output:
         """Parse the decomposition response."""
 
         # print(response)
-        questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
+        # breakpoint()
+        # convert string to json
+        response = json.loads(response)
+        questions = [{"question" : q["question"], "requires_retrieval" : q["requires_retrieval"]} for q in response["questions"]]
+        # questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
         
         return [{
             "question_id": input['question_id'],
@@ -356,7 +360,7 @@ class ChainBatchedMultiHopQAEvaluator:
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
-        self.data_dir = Path("/home/yigit/codebase/gsw-memory/playground_data/")
+        self.data_dir = Path("/mnt/SSD6/yigit/gsw-memory/playground_data/")
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
@@ -381,19 +385,20 @@ class ChainBatchedMultiHopQAEvaluator:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-5",
-                # model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-128-gpt5-golden",
-                # backend = "litellm",
-                # backend_params = {
-                #     "base_url": "http://localhost:8787/v1",
-                #     "request_timeout": 600.0,  
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #     "seconds_to_pause_on_rate_limit": 5,
-                # },
-                # generation_params={"temperature": 0.0}, 
-                response_format=DecomposedQuestionList
+                # model_name="gpt-5",
+                model_name="hosted_vllm/yigitturali/qwen3-0.6b-qa-decomp-gsw-rank-128-gpt5-golden",
+                backend = "litellm",
+                backend_params = {
+                    "base_url": "http://localhost:8000/v1",
+                    "request_timeout": 600.0,  
+                    "max_concurrent_requests": 32,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={"temperature": 0.0}, 
+                # response_format=DecomposedQuestionList
             )
             self.answer_generator = ChainAnswerGenerator(
                 model_name="gpt-4o-mini", 
@@ -529,8 +534,12 @@ class ChainBatchedMultiHopQAEvaluator:
             for question_id, question, _ in questions_data:
                 if self.verbose:
                     console.print(f"\n[dim]Processing: {question}[/dim]")
-                
-                decomposed = decomposition_results[question_id]["decomposed_questions"]
+                try:
+                    decomposed = decomposition_results[question_id]["decomposed_questions"]
+                except:
+                    print(f"Error: {question_id} not found in decomposition results") #TODO: Handle this error
+                    print("Skipping question...") #TODO: Handle this error
+                    continue
 
                 # Reuse the exact retrieval logic from ChainFollowingMultiHopQA
                 all_evidence, chains_info, _ = self.qa_system.collect_evidence(
@@ -666,26 +675,31 @@ class ChainBatchedMultiHopQAEvaluator:
         # Compile results
         results = []
         for question_id, question, gold_answers in questions_data:
-            decomposed = decomposition_results[question_id]["decomposed_questions"]
-            answer_data = answer_results[question_id]
-            chains_info = chains_info_by_question.get(question_id, {})
-            
-            result = ChainBatchedEvaluationResult(
-                question_id=question_id,
-                question=question,
-                predicted_answer=answer_data["predicted_answer"],
-                full_response=answer_data.get("full_response", ""),
-                gold_answers=gold_answers,
-                processing_time=0.0,  # Will be updated with total time
-                decomposed_questions=decomposed,
-                evidence_count=answer_data["evidence_count"],
-                evidence=answer_data.get("evidence", []),
-                chains_info=chains_info,
-                token_count=answer_data.get("token_count", 0),
-                final_prompt=answer_data.get("final_prompt", None),
-                error=None
-            )
-            results.append(result)
+            try:
+                decomposed = decomposition_results[question_id]["decomposed_questions"]
+                answer_data = answer_results[question_id]
+                chains_info = chains_info_by_question.get(question_id, {})
+                
+                result = ChainBatchedEvaluationResult(
+                    question_id=question_id,
+                    question=question,
+                    predicted_answer=answer_data["predicted_answer"],
+                    full_response=answer_data.get("full_response", ""),
+                    gold_answers=gold_answers,
+                    processing_time=0.0,  # Will be updated with total time
+                    decomposed_questions=decomposed,
+                    evidence_count=answer_data["evidence_count"],
+                    evidence=answer_data.get("evidence", []),
+                    chains_info=chains_info,
+                    token_count=answer_data.get("token_count", 0),
+                    final_prompt=answer_data.get("final_prompt", None),
+                    error=None
+                )
+                results.append(result)
+            except Exception as e:
+                print(f"Error: {question_id} not found in answer results") #TODO: Handle this error
+                print("Skipping question...") #TODO: Handle this error
+                continue
         
         total_elapsed = time.time() - total_start
         console.print(f"\n[bold green]✓ Evaluation complete in {total_elapsed:.1f}s ({total_elapsed/len(results):.2f}s per question)[/bold green]")

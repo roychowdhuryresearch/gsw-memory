@@ -646,10 +646,11 @@ class EntitySearcher:
 
                 # Transfer to GPU
                 self.entity_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
-
+                # breakpoint()
                 # Reconstruct embeddings array for compatibility
                 self.embeddings = cpu_index.reconstruct_n(0, cpu_index.ntotal)
                 self.embeddings = self.embeddings.reshape(cpu_index.ntotal, -1)
+                # breakpoint()
 
                 if self.verbose_init:
                     console.print(f"[green]✓ Loaded GPU FAISS index with {self.entity_faiss_index.ntotal} vectors on GPU {self.gpu_device}[/green]")

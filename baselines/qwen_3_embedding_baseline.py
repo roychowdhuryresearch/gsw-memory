@@ -22,7 +22,8 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,4'
+os.environ['OPENAI_API_KEY'] = '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'
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -143,9 +144,16 @@ class Qwen3EmbeddingBaseline:
         self.gpu_resources = None
         if FAISS_AVAILABLE:
             try:
+                # Validate GPU device exists
+                if gpu_device < 0:
+                    raise ValueError(f"Invalid GPU device ID: {gpu_device}")
+
                 self.gpu_resources = faiss.StandardGpuResources()
+                console.print(f"[green]✓ Initialized GPU resources for device {gpu_device}[/green]")
             except Exception as e:
-                console.print(f"[yellow]Warning: Could not initialize GPU resources: {e}[/yellow]")
+                console.print(f"[yellow]Warning: Could not initialize GPU {gpu_device}: {e}[/yellow]")
+                console.print(f"[yellow]Will fall back to CPU-only mode[/yellow]")
+                self.gpu_resources = None
 
         # Cache files (GPU format)
         self.doc_embedding_cache_file = self.cache_dir / "doc_embeddings_baseline_gpu.faiss"
@@ -183,6 +191,19 @@ class Qwen3EmbeddingBaseline:
 
         console.print(f"[bold green] Baseline initialized with {len(self.documents)} documents[/bold green]")
 
+    def __del__(self):
+        """Cleanup GPU resources to prevent memory leaks."""
+        try:
+            if hasattr(self, 'doc_faiss_index') and self.doc_faiss_index is not None:
+                del self.doc_faiss_index
+            if hasattr(self, 'gpu_resources') and self.gpu_resources is not None:
+                # Note: faiss.StandardGpuResources() automatically manages cleanup,
+                # but explicit deletion helps ensure timely resource release
+                del self.gpu_resources
+        except Exception:
+            # Silently ignore cleanup errors during object destruction
+            pass
+
     def _load_documents(self):
         """Load documents from corpus file."""
         console.print(f"[cyan]Loading documents from {self.corpus_path}...[/cyan]")
@@ -213,8 +234,11 @@ class Qwen3EmbeddingBaseline:
 
     def _load_or_generate_embeddings(self):
         """Load embeddings from cache or generate them."""
-        # Try to load from FAISS GPU cache first
-        if not self.rebuild_cache and FAISS_AVAILABLE and self.gpu_resources is not None and self.doc_embedding_cache_file.exists() and self.doc_metadata_cache_file.exists():
+        # Try to load from FAISS GPU cache first (requires both FAISS index and NPZ embeddings)
+        npz_cache_file = self.cache_dir / "doc_embeddings_baseline.npz"
+        if (not self.rebuild_cache and FAISS_AVAILABLE and self.gpu_resources is not None
+            and self.doc_embedding_cache_file.exists() and self.doc_metadata_cache_file.exists()
+            and npz_cache_file.exists()):
             console.print("[cyan]Loading embeddings from FAISS GPU cache...[/cyan]")
             try:
                 # Load metadata
@@ -223,50 +247,36 @@ class Qwen3EmbeddingBaseline:
                 cached_doc_count = metadata.get('doc_count', 0)
 
                 if cached_doc_count == len(self.documents):
-                    # Load CPU index from disk
+                    # Load UNNORMALIZED embeddings from NPZ (not from index!)
+                    npz_data = np.load(npz_cache_file, allow_pickle=True)
+                    self.doc_embeddings = npz_data['embeddings'].astype(np.float32)
+
+                    # Load CPU index from disk and validate it's a flat index
                     cpu_index = faiss.read_index(str(self.doc_embedding_cache_file))
 
-                    # Transfer to GPU
-                    self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                    # Validate index type
+                    if not isinstance(cpu_index, faiss.IndexFlat):
+                        console.print("[yellow]Warning: Loaded index is not IndexFlat, rebuilding...[/yellow]")
+                        raise ValueError("Expected IndexFlat")
 
-                    # Reconstruct embeddings from CPU index for compatibility
-                    num_vectors = cpu_index.ntotal
-                    self.doc_embeddings = faiss.vector_to_array(cpu_index.reconstruct_n(0, num_vectors))
-                    self.doc_embeddings = self.doc_embeddings.reshape(num_vectors, -1)
-
-                    console.print(f"[green]✓ Loaded FAISS GPU index with {num_vectors} document embeddings[/green]")
-                    return
+                    # Transfer to GPU with error handling
+                    try:
+                        self.doc_faiss_index = faiss.index_cpu_to_gpu(
+                            self.gpu_resources, self.gpu_device, cpu_index
+                        )
+                        num_vectors = cpu_index.ntotal
+                        console.print(f"[green]✓ Loaded FAISS GPU index with {num_vectors} document embeddings (unnormalized from NPZ)[/green]")
+                        return
+                    except Exception as gpu_error:
+                        console.print(f"[yellow]Warning: GPU transfer failed: {gpu_error}[/yellow]")
+                        console.print(f"[yellow]Keeping CPU index for search[/yellow]")
+                        self.doc_faiss_index = cpu_index
+                        self.gpu_resources = None  # Disable GPU for subsequent operations
+                        return
                 else:
                     console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
             except Exception as e:
-                console.print(f"[yellow]Could not load GPU cache: {e}, trying HNSW fallback[/yellow]")
-
-        # Fallback: Try to load from legacy HNSW cache and convert to GPU
-        if not self.rebuild_cache and FAISS_AVAILABLE and self.gpu_resources is not None and self.doc_embedding_hnsw_cache.exists():
-            console.print("[cyan]Loading embeddings from legacy HNSW cache...[/cyan]")
-            try:
-                # Load HNSW index
-                hnsw_index = faiss.read_index(str(self.doc_embedding_hnsw_cache))
-
-                # Reconstruct embeddings from HNSW index
-                num_vectors = hnsw_index.ntotal
-                self.doc_embeddings = faiss.vector_to_array(hnsw_index.reconstruct_n(0, num_vectors))
-                self.doc_embeddings = self.doc_embeddings.reshape(num_vectors, -1)
-
-                # Build GPU flat index from embeddings
-                embedding_dim = self.doc_embeddings.shape[1]
-                cpu_index = faiss.IndexFlatIP(embedding_dim)
-                embeddings_normalized = self.doc_embeddings.copy()
-                faiss.normalize_L2(embeddings_normalized)
-                cpu_index.add(embeddings_normalized)
-
-                # Transfer to GPU
-                self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
-
-                console.print(f"[green]✓ Converted HNSW cache to GPU index with {num_vectors} embeddings[/green]")
-                return
-            except Exception as e:
-                console.print(f"[yellow]Could not load HNSW cache: {e}, trying npz fallback[/yellow]")
+                console.print(f"[yellow]Could not load GPU cache: {e}, trying npz fallback[/yellow]")
 
         # Fallback: Try to load from NPZ cache and convert to GPU
         npz_cache_file = self.cache_dir / "doc_embeddings_baseline.npz"
@@ -281,16 +291,27 @@ class Qwen3EmbeddingBaseline:
 
                     # Build FAISS GPU index from loaded embeddings if FAISS is available
                     if FAISS_AVAILABLE and self.gpu_resources is not None:
-                        embedding_dim = self.doc_embeddings.shape[1]
-                        cpu_index = faiss.IndexFlatIP(embedding_dim)
-                        embeddings_normalized = self.doc_embeddings.copy()
-                        faiss.normalize_L2(embeddings_normalized)
-                        cpu_index.add(embeddings_normalized)
+                        try:
+                            embedding_dim = self.doc_embeddings.shape[1]
+                            cpu_index = faiss.IndexFlatIP(embedding_dim)
+                            embeddings_normalized = self.doc_embeddings.copy()
+                            faiss.normalize_L2(embeddings_normalized)
+                            cpu_index.add(embeddings_normalized)
 
-                        # Transfer to GPU
-                        self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
-
-                        console.print(f"[green]✓ Loaded npz cache and built FAISS GPU index with {len(self.doc_embeddings)} embeddings[/green]")
+                            # Transfer to GPU with error handling
+                            try:
+                                self.doc_faiss_index = faiss.index_cpu_to_gpu(
+                                    self.gpu_resources, self.gpu_device, cpu_index
+                                )
+                                console.print(f"[green]✓ Loaded npz cache and built FAISS GPU index with {len(self.doc_embeddings)} embeddings[/green]")
+                            except Exception as gpu_error:
+                                console.print(f"[yellow]Warning: GPU transfer failed: {gpu_error}[/yellow]")
+                                console.print(f"[yellow]Keeping CPU index for search[/yellow]")
+                                self.doc_faiss_index = cpu_index
+                                self.gpu_resources = None
+                        except Exception as index_error:
+                            console.print(f"[yellow]Warning: Could not build FAISS index: {index_error}[/yellow]")
+                            console.print(f"[yellow]Will use sklearn fallback for search[/yellow]")
                     else:
                         console.print(f"[green]✓ Loaded {len(self.doc_embeddings)} document embeddings from npz cache[/green]")
                     return
@@ -335,52 +356,77 @@ class Qwen3EmbeddingBaseline:
 
         # Build FAISS GPU index
         if FAISS_AVAILABLE and self.gpu_resources is not None:
-            embedding_dim = self.doc_embeddings.shape[1]
-            # Create CPU flat index for exact nearest neighbor search
-            cpu_index = faiss.IndexFlatIP(embedding_dim)
-            # Normalize embeddings for cosine similarity
-            embeddings_normalized = self.doc_embeddings.copy()
-            faiss.normalize_L2(embeddings_normalized)
-            cpu_index.add(embeddings_normalized)
+            try:
+                embedding_dim = self.doc_embeddings.shape[1]
+                # Create CPU flat index for exact nearest neighbor search
+                cpu_index = faiss.IndexFlatIP(embedding_dim)
+                # Normalize embeddings for cosine similarity
+                embeddings_normalized = self.doc_embeddings.copy()
+                faiss.normalize_L2(embeddings_normalized)
+                cpu_index.add(embeddings_normalized)
 
-            # Transfer to GPU
-            self.doc_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
-
-            console.print(f"[green]✓ Built FAISS GPU index with {self.doc_faiss_index.ntotal} vectors[/green]")
+                # Transfer to GPU with error handling
+                try:
+                    self.doc_faiss_index = faiss.index_cpu_to_gpu(
+                        self.gpu_resources, self.gpu_device, cpu_index
+                    )
+                    console.print(f"[green]✓ Built FAISS GPU index with {self.doc_faiss_index.ntotal} vectors[/green]")
+                except Exception as gpu_error:
+                    console.print(f"[yellow]Warning: GPU transfer failed: {gpu_error}[/yellow]")
+                    console.print(f"[yellow]Keeping CPU index for search[/yellow]")
+                    self.doc_faiss_index = cpu_index
+                    self.gpu_resources = None
+            except Exception as index_error:
+                console.print(f"[yellow]Warning: Could not build FAISS index: {index_error}[/yellow]")
+                console.print(f"[yellow]Will use sklearn fallback for search[/yellow]")
 
 
     def _save_embeddings(self):
-        """Save embeddings to cache using FAISS."""
+        """Save embeddings to cache. Always saves both FAISS index and NPZ for reliability."""
+        npz_file = self.cache_dir / "doc_embeddings_baseline.npz"
+
         try:
-            # Use FAISS if available
+            # ALWAYS save NPZ with unnormalized embeddings (required for loading)
+            np.savez_compressed(
+                npz_file,
+                embeddings=self.doc_embeddings,
+                doc_count=len(self.documents)
+            )
+            console.print(f"[green]✓ Saved unnormalized embeddings to {npz_file}[/green]")
+
+            # Save FAISS index if available (contains normalized embeddings)
             if FAISS_AVAILABLE and self.doc_faiss_index is not None:
-                # Transfer from GPU to CPU for saving
-                if self.gpu_resources is not None:
-                    cpu_index = faiss.index_gpu_to_cpu(self.doc_faiss_index)
-                else:
-                    cpu_index = self.doc_faiss_index
+                try:
+                    # Transfer from GPU to CPU for saving with error handling
+                    if self.gpu_resources is not None:
+                        try:
+                            cpu_index = faiss.index_gpu_to_cpu(self.doc_faiss_index)
+                        except Exception as gpu_error:
+                            console.print(f"[yellow]Warning: Could not transfer index from GPU to CPU: {gpu_error}[/yellow]")
+                            console.print(f"[yellow]FAISS cache not saved, but NPZ cache is available[/yellow]")
+                            return
+                    else:
+                        cpu_index = self.doc_faiss_index
 
-                # Save CPU FAISS index
-                faiss.write_index(cpu_index, str(self.doc_embedding_cache_file))
-                console.print(f"[green]✓ Saved FAISS index to {self.doc_embedding_cache_file}[/green]")
+                    # Validate it's a flat index before saving
+                    if not isinstance(cpu_index, faiss.IndexFlat):
+                        console.print(f"[yellow]Warning: Index is not IndexFlat, not saving FAISS cache[/yellow]")
+                    else:
+                        # Save CPU FAISS index
+                        faiss.write_index(cpu_index, str(self.doc_embedding_cache_file))
+                        console.print(f"[green]✓ Saved FAISS flat index to {self.doc_embedding_cache_file}[/green]")
 
-                # Save metadata separately
-                metadata = {
-                    "doc_count": len(self.documents),
-                    "embedding_dim": self.doc_embeddings.shape[1]
-                }
-                with open(self.doc_metadata_cache_file, 'w') as f:
-                    json.dump(metadata, f)
-                console.print(f"[green]✓ Saved metadata to {self.doc_metadata_cache_file}[/green]")
-            else:
-                # Fallback to npz if FAISS not available
-                npz_file = self.cache_dir / "doc_embeddings_baseline.npz"
-                np.savez_compressed(
-                    npz_file,
-                    embeddings=self.doc_embeddings,
-                    doc_count=len(self.documents)
-                )
-                console.print(f"[green]✓ Saved embeddings to {npz_file} (fallback)[/green]")
+                        # Save metadata separately
+                        metadata = {
+                            "doc_count": len(self.documents),
+                            "embedding_dim": self.doc_embeddings.shape[1]
+                        }
+                        with open(self.doc_metadata_cache_file, 'w') as f:
+                            json.dump(metadata, f)
+                        console.print(f"[green]✓ Saved metadata to {self.doc_metadata_cache_file}[/green]")
+                except Exception as save_error:
+                    console.print(f"[yellow]Warning: Could not save FAISS cache: {save_error}[/yellow]")
+                    console.print(f"[yellow]NPZ cache is still available for loading[/yellow]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save embeddings: {e}[/yellow]")
 
@@ -433,6 +479,9 @@ class Qwen3EmbeddingBaseline:
             if not SIMILARITY_AVAILABLE:
                 raise RuntimeError("Neither FAISS nor scikit-learn available for similarity search")
 
+            # Note: cosine_similarity handles normalization internally, so we use
+            # unnormalized embeddings here. This produces equivalent results to
+            # the FAISS path which uses normalized embeddings with IndexFlatIP.
             similarities = cosine_similarity(query_embedding, self.doc_embeddings)[0]
             top_indices = np.argsort(similarities)[::-1][:initial_k]
 
@@ -610,7 +659,19 @@ Thought:
         for item in data[:self.num_questions]:
             question_id = item.get("_id", "unknown")
             question = item["question"]
-            gold_answers = item.get("answer", [])
+            gold_answers = item.get("answers", [])
+            # gold_answers = item.get("reference", [])
+            
+            # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
+            # Fix to always decode it if it is a string:
+            # if isinstance(gold_answers, str):
+            #     try:
+            #         gold_answers = json.loads(gold_answers)
+            #     except Exception:
+            #         gold_answers = [gold_answers]
+                
+            # else:
+            #     continue
 
             # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
@@ -786,8 +847,8 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = Qwen3EmbeddingBaseline(
-            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_corpus.json",
-            questions_path="/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa.json",
+            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/lveval_corpus.json",
+            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/lveval.json",
             num_questions=1000,
             top_k=5,
             cache_dir=".",
