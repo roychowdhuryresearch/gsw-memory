@@ -24,6 +24,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
 os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['OPENAI_API_KEY'] = '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'
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -60,11 +61,133 @@ except ImportError:
     print("Warning: VoyageAI not available. Install with: pip install voyageai")
     VOYAGEAI_AVAILABLE = False
 
+try:
+    from bespokelabs import curator
+    CURATOR_AVAILABLE = True
+except ImportError:
+    print("Warning: Curator not available. Install with: pip install bespokelabs-curator")
+    CURATOR_AVAILABLE = False
+
 console = Console()
 
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
+
+
+if CURATOR_AVAILABLE:
+    class BM25AnswerGenerator(curator.LLM):
+        """Curator class for generating answers with oracle-style prompting in parallel."""
+
+        return_completions_object = True
+
+        def __init__(self, **kwargs):
+            """Initialize the answer generator."""
+            super().__init__(**kwargs)
+
+        def prompt(self, input):
+            """Create an oracle-style answer generation prompt."""
+            # Build evidence in Q&A format from retrieved docs
+            evidence_parts = []
+            for doc in input['retrieved_docs']:
+                evidence_parts.append(f"Q: What is {doc['title']}? A: {doc['text']}")
+
+            evidence_text = '\n'.join(evidence_parts)
+
+            # Build oracle-style prompt
+            prompt_text = f"""
+{evidence_text}
+
+Question: {input['question']}
+
+Thought:
+
+"""
+
+            # One-shot example with Q&A pairs format
+            one_shot_docs = (
+                """ Q: Who directed The Last Horse? A: Edgar Neville
+                    Q: When was The Last Horse released? A: 1950
+                    Q: When was the University of Southampton founded? A: 1862
+                    Q: Where is the University of Southampton located? A: Southampton
+                    Q: What is the population of Stanton Township? A: 505
+                    Q: Where is Stanton Township? A: Champaign County, Illinois
+                    Q: Who is Neville A. Stanton? A: British Professor of Human Factors and Ergonomics
+                    Q: Where does Neville A. Stanton work? A: University of Southampton
+                    Q: What is Neville A. Stanton's profession? A: Professor
+                    Q: Who directed Finding Nemo? A: Andrew Stanton
+                    Q: When was Finding Nemo released? A: 2003
+                    Q: What company produced Finding Nemo? A: Pixar Animation Studios"""
+            )
+
+            # System message
+            rag_qa_system = (
+                'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
+                'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
+                'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+                'If you don\'t know the answer, say "No Answer".'
+            )
+
+            # One-shot example input
+            one_shot_input = (
+                f"{one_shot_docs}"
+                "\n\nQuestion: "
+                "When was Neville A. Stanton's employer founded?"
+                '\nThought: '
+            )
+
+            # One-shot example output
+            one_shot_output = (
+                "From the QA pairs, the employer of Neville A. Stanton is University of Southampton. The University of Southampton was founded in 1862. "
+                "\nAnswer: 1862."
+            )
+
+            # Build message structure for OpenAI API
+            prompt_messages = [
+                {"role": "system", "content": rag_qa_system},
+                {"role": "user", "content": one_shot_input},
+                {"role": "assistant", "content": one_shot_output},
+                {"role": "user", "content": prompt_text}
+            ]
+
+            return prompt_messages
+
+        def parse(self, input, response):
+            """Parse the answer from the response with oracle-style format."""
+            answer_text = response["choices"][0]["message"]["content"]
+
+            # Parse answer with new format (Answer: format)
+            if 'Answer: ' in answer_text:
+                final_answer = answer_text.split('Answer: ')[-1].strip()
+                # Remove trailing period if it's just a number/date
+                if final_answer.endswith('.') and final_answer[:-1].replace(',', '').replace(' ', '').isdigit():
+                    final_answer = final_answer[:-1]
+            else:
+                # Fallback to full response if no "Answer:" found
+                final_answer = answer_text.strip()
+
+            # Compute token count over evidence text
+            evidence_parts = []
+            for doc in input['retrieved_docs']:
+                evidence_parts.append(f"Q: What is {doc['title']}? A: {doc['text']}")
+            evidence_text = '\n'.join(evidence_parts)
+
+            token_count = 0
+            try:
+                import tiktoken
+                encoding = tiktoken.encoding_for_model("gpt-4o-mini")
+                token_count = len(encoding.encode(evidence_text))
+            except Exception:
+                token_count = max(1, len(evidence_text) // 4)
+
+            return [{
+                "question_id": input['question_id'],
+                "question": input['question'],
+                "predicted_answer": final_answer,
+                "full_response": answer_text,
+                "retrieved_docs": input['retrieved_docs'],
+                "token_count": token_count
+            }]
 
 
 @dataclass
@@ -149,6 +272,30 @@ class BM25RerankerBaseline:
                 console.print("[green]✓ VoyageAI client initialized for reranking[/green]")
             else:
                 raise RuntimeError("VoyageAI is required when use_reranker=True. Install with: pip install voyageai")
+
+        # Initialize curator answer generator for batched processing
+        self.answer_generator = None
+        if CURATOR_AVAILABLE:
+            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+            self.answer_generator = BM25AnswerGenerator(
+                model_name="gpt-4o-mini",
+                generation_params={"temperature": 0},
+                # model_name="hosted_vllm/Qwen/Qwen3-4B",
+                # backend = "litellm",
+                # backend_params = {
+                #     "base_url": "http://127.0.0.1:6379/v1",
+                #     "request_timeout": 600.0,  
+                #     "max_concurrent_requests": 32,
+                #     "max_requests_per_minute": 120,
+                #     "max_tokens_per_minute": 200000,
+                #     "seconds_to_pause_on_rate_limit": 5,
+                #     "require_all_responses": False,
+                # },
+                # generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
+            )
+            console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
+        else:
+            console.print("[yellow]⚠ Curator not available - will use sequential processing[/yellow]")
 
         console.print(f"[bold green]✓ Baseline initialized with {len(self.documents)} documents[/bold green]")
 
@@ -431,7 +578,7 @@ Thought:
         for i, item in enumerate(data[:self.num_questions]):
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("reference", [])
+            gold_answers = item.get("answer", [])
 
             # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
             # Fix to always decode it if it is a string:
@@ -456,6 +603,43 @@ Thought:
         console.print(f"[green]✓ Loaded {len(questions_data)} questions[/green]")
         return questions_data
 
+    def run_batched_answer_generation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                      retrieved_docs_by_question: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Dict]:
+        """Run batched answer generation using curator.
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            retrieved_docs_by_question: Dictionary mapping question_id to retrieved docs
+
+        Returns:
+            Dictionary mapping question_id to answer results
+        """
+        console.print("\n[bold cyan]Running Batched Answer Generation[/bold cyan]")
+
+        # Prepare inputs for batched answer generation
+        answer_inputs = [
+            {
+                "question_id": qid,
+                "question": question,
+                "retrieved_docs": retrieved_docs_by_question.get(qid, [])
+            }
+            for qid, question, _ in questions_data
+        ]
+
+        console.print(f"[cyan]Generating answers for {len(answer_inputs)} questions in parallel...[/cyan]")
+        start_time = time.time()
+
+        # Run batched answer generation
+        answer_dataset = self.answer_generator(answer_inputs)
+
+        elapsed = time.time() - start_time
+        console.print(f"[green]✓ Answer generation complete in {elapsed:.1f}s ({elapsed/len(answer_inputs):.2f}s per question)[/green]")
+
+        # Convert to dictionary for easy lookup
+        answer_results = {item["question_id"]: item for item in answer_dataset.dataset}
+
+        return answer_results
+
     def run_evaluation(self) -> List[BaselineEvaluationResult]:
         """Run complete evaluation pipeline.
 
@@ -468,6 +652,83 @@ Thought:
         # Load questions
         questions_data = self.load_questions()
 
+        # Use batched processing if curator is available
+        if CURATOR_AVAILABLE and self.answer_generator is not None:
+            return self._run_batched_evaluation(questions_data, total_start)
+        else:
+            return self._run_sequential_evaluation(questions_data, total_start)
+
+    def _run_batched_evaluation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                 total_start: float) -> List[BaselineEvaluationResult]:
+        """Run evaluation with batched answer generation.
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            total_start: Start time for total elapsed calculation
+
+        Returns:
+            List of evaluation results
+        """
+        # Stage 1: Retrieve documents for all questions (sequential - BM25 is fast)
+        console.print("\n[bold cyan]Stage 1: Document Retrieval[/bold cyan]")
+        retrieved_docs_by_question = {}
+
+        with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+                     BarColumn(), console=console) as progress:
+            task = progress.add_task("Retrieving documents...", total=len(questions_data))
+
+            for question_id, question, _ in questions_data:
+                retrieved_docs = self.retrieve_documents(question)
+                retrieved_docs_by_question[question_id] = retrieved_docs
+                progress.update(task, advance=1)
+
+        console.print(f"[green]✓ Document retrieval complete for {len(questions_data)} questions[/green]")
+
+        # Stage 2: Batched answer generation
+        answer_results = self.run_batched_answer_generation(questions_data, retrieved_docs_by_question)
+
+        # Stage 3: Compile results
+        results = []
+        for question_id, question, gold_answers in questions_data:
+            answer_data = answer_results.get(question_id, {})
+            retrieved_docs = retrieved_docs_by_question.get(question_id, [])
+
+            result = BaselineEvaluationResult(
+                question_id=question_id,
+                question=question,
+                predicted_answer=answer_data.get("predicted_answer", "NA"),
+                full_response=answer_data.get("full_response", ""),
+                gold_answers=gold_answers,
+                processing_time=0.0,  # Will be updated with average
+                retrieved_docs=retrieved_docs,
+                token_count=answer_data.get("token_count", 0),
+                error=None
+            )
+            results.append(result)
+
+        total_elapsed = time.time() - total_start
+        console.print(f"\n[bold green]✓ Evaluation complete in {total_elapsed:.1f}s ({total_elapsed/len(results):.2f}s per question)[/bold green]")
+
+        # Update processing time with average
+        avg_time = total_elapsed / len(results) if results else 0
+        for result in results:
+            result.processing_time = avg_time
+
+        return results
+
+    def _run_sequential_evaluation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                    total_start: float) -> List[BaselineEvaluationResult]:
+        """Run evaluation with sequential processing (fallback when curator not available).
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            total_start: Start time for total elapsed calculation
+
+        Returns:
+            List of evaluation results
+        """
+        console.print("[yellow]Using sequential processing (curator not available)[/yellow]")
+
         # Process each question
         results = []
 
@@ -478,7 +739,6 @@ Thought:
             for question_id, question, gold_answers in questions_data:
                 start_time = time.time()
 
-                # try:
                 # Retrieve documents
                 retrieved_docs = self.retrieve_documents(question)
 
@@ -500,20 +760,6 @@ Thought:
                     token_count=token_count,
                     error=None
                 )
-
-                # except Exception as e:
-                #     console.print(f"[red]Error processing question {question_id}: {e}[/red]")
-                #     result = BaselineEvaluationResult(
-                #         question_id=question_id,
-                #         question=question,
-                #         predicted_answer="NA",
-                #         full_response="",
-                #         gold_answers=gold_answers,
-                #         processing_time=0.0,
-                #         retrieved_docs=[],
-                #         token_count=0,
-                #         error=str(e)
-                #     )
 
                 results.append(result)
                 progress.update(task, advance=1)
@@ -619,8 +865,8 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = BM25RerankerBaseline(
-            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/nq_rear_corpus.json",
-            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/nq_rear.json",
+            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_corpus.json",
+            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json",
             num_questions=1000,
             top_k=5,
             cache_dir=".",

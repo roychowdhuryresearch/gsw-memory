@@ -738,7 +738,7 @@ def main():
     parser = argparse.ArgumentParser(description="LoRA Fine-Tuning for Question Decomposition")
 
     # Add arguments from ScriptArguments
-    parser.add_argument("--model_id", type=str, default="Qwen/Qwen3-0.6B",
+    parser.add_argument("--model_id", type=str, default="Qwen/Qwen3-8B",
                         help="Model ID from HuggingFace hub")
     parser.add_argument("--test_data_path", type=str,
                         default="/home/yigit/codebase/gsw-memory/playground_data/musique.json",

@@ -24,8 +24,8 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2,3'
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,4'
+os.environ["OPENAI_API_KEY"] = "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"
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -189,8 +189,6 @@ Output:
     def parse(self, input, response: DecomposedQuestionList):
         """Parse the decomposition response."""
 
-        # print(response)
-        # breakpoint()
         # convert string to json
         response = json.loads(response)
         questions = [{"question" : q["question"], "requires_retrieval" : q["requires_retrieval"]} for q in response["questions"]]
@@ -256,6 +254,7 @@ class ChainAnswerGenerator(curator.LLM):
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            # 'If you don\'t know the answer, say "No Answer".'
             # 'You serve as an intelligent assistant, adept at facilitating users through complex, multi-hop reasoning across multiple documents. This task is illustrated through demonstrations, each consisting of a document set paired with a relevant question and its multi-hop reasoning thoughts. Your task is to generate one thought for current step, DON\'T generate the whole thoughts at once! If you reach what you believe to be the final step, conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations..'
             # '\n\n'
         )
@@ -385,11 +384,11 @@ class ChainBatchedMultiHopQAEvaluator:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.decomposer = ChainQuestionDecomposer(
-                # model_name="gpt-5",
-                model_name="hosted_vllm/yigitturali/qwen3-0.6b-qa-decomp-gsw-rank-128-gpt5-golden",
+                # model_name="gpt-4o",
+                model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
                 backend = "litellm",
                 backend_params = {
-                    "base_url": "http://localhost:8000/v1",
+                    "base_url": "http://127.0.0.1:8000/v1",
                     "request_timeout": 600.0,  
                     "max_concurrent_requests": 32,
                     "max_requests_per_minute": 120,
@@ -397,12 +396,24 @@ class ChainBatchedMultiHopQAEvaluator:
                     "seconds_to_pause_on_rate_limit": 5,
                     "require_all_responses": False,
                 },
-                generation_params={"temperature": 0.0}, 
+                generation_params={"temperature": 0}, 
                 # response_format=DecomposedQuestionList
             )
             self.answer_generator = ChainAnswerGenerator(
-                model_name="gpt-4o-mini", 
-                generation_params={"temperature": 0.0, "max_tokens": 1000}
+                # model_name="gpt-4o-mini", 
+                # generation_params={"temperature": 0},
+                model_name="hosted_vllm/Qwen/Qwen3-8B",
+                backend = "litellm",
+                backend_params = {
+                    "base_url": "http://127.0.0.1:6379/v1",
+                    "request_timeout": 600.0,  
+                    "max_concurrent_requests": 32,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
             )
             console.print("[green]✓ Curator initialized for parallel processing[/green]")
         else:
@@ -418,7 +429,7 @@ class ChainBatchedMultiHopQAEvaluator:
         """
         console.print("[cyan]Loading Musique questions...[/cyan]")
         
-        questions_file = self.data_dir / "musique.json"
+        questions_file = self.data_dir / "/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json"
         if not questions_file.exists():
             raise FileNotFoundError(f"Questions file not found: {questions_file}")
         
@@ -510,6 +521,7 @@ class ChainBatchedMultiHopQAEvaluator:
             for item in decomposition_dataset.dataset
         }
         
+
         return decomposition_results
     
     def run_chain_retrieval_stage(self, questions_data: List[Tuple[str, str, List[str]]], 

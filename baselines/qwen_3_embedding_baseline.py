@@ -74,6 +74,13 @@ except ImportError:
     print("Warning: FAISS not available. Install with: pip install faiss-cpu or faiss-gpu")
     FAISS_AVAILABLE = False
 
+try:
+    from bespokelabs import curator
+    CURATOR_AVAILABLE = True
+except ImportError:
+    print("Warning: Curator not available. Install with: pip install bespokelabs-curator")
+    CURATOR_AVAILABLE = False
+
 console = Console()
 
 # Setup logging
@@ -84,6 +91,120 @@ LOG_DIR.mkdir(exist_ok=True)
 def get_detailed_instruct(task_description: str, query: str) -> str:
     """Create instruction for Qwen embedding model."""
     return f'Instruct: {task_description}\nQuery: {query}'
+
+
+if CURATOR_AVAILABLE:
+    class Qwen3AnswerGenerator(curator.LLM):
+        """Curator class for generating answers with oracle-style prompting in parallel."""
+
+        return_completions_object = True
+
+        def __init__(self, **kwargs):
+            """Initialize the answer generator."""
+            super().__init__(**kwargs)
+
+        def prompt(self, input):
+            """Create an oracle-style answer generation prompt."""
+            # Build evidence in Q&A format from retrieved docs
+            evidence_parts = []
+            for doc in input['retrieved_docs']:
+                evidence_parts.append(f"Q: What is {doc['title']}? A: {doc['text']}")
+
+            evidence_text = '\n'.join(evidence_parts)
+
+            # Build oracle-style prompt
+            prompt_text = f"""
+{evidence_text}
+
+Question: {input['question']}
+
+Thought:
+
+"""
+
+            # One-shot example with Q&A pairs format
+            one_shot_docs = (
+                """ Q: Who directed The Last Horse? A: Edgar Neville
+                    Q: When was The Last Horse released? A: 1950
+                    Q: When was the University of Southampton founded? A: 1862
+                    Q: Where is the University of Southampton located? A: Southampton
+                    Q: What is the population of Stanton Township? A: 505
+                    Q: Where is Stanton Township? A: Champaign County, Illinois
+                    Q: Who is Neville A. Stanton? A: British Professor of Human Factors and Ergonomics
+                    Q: Where does Neville A. Stanton work? A: University of Southampton
+                    Q: What is Neville A. Stanton's profession? A: Professor
+                    Q: Who directed Finding Nemo? A: Andrew Stanton
+                    Q: When was Finding Nemo released? A: 2003
+                    Q: What company produced Finding Nemo? A: Pixar Animation Studios"""
+            )
+
+            # System message
+            rag_qa_system = (
+                'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
+                'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
+                'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            )
+
+            # One-shot example input
+            one_shot_input = (
+                f"{one_shot_docs}"
+                "\n\nQuestion: "
+                "When was Neville A. Stanton's employer founded?"
+                '\nThought: '
+            )
+
+            # One-shot example output
+            one_shot_output = (
+                "From the QA pairs, the employer of Neville A. Stanton is University of Southampton. The University of Southampton was founded in 1862. "
+                "\nAnswer: 1862."
+            )
+
+            # Build message structure for OpenAI API
+            prompt_messages = [
+                {"role": "system", "content": rag_qa_system},
+                {"role": "user", "content": one_shot_input},
+                {"role": "assistant", "content": one_shot_output},
+                {"role": "user", "content": prompt_text}
+            ]
+
+            return prompt_messages
+
+        def parse(self, input, response):
+            """Parse the answer from the response with oracle-style format."""
+            answer_text = response["choices"][0]["message"]["content"]
+
+            # Parse answer with new format (Answer: format)
+            if 'Answer: ' in answer_text:
+                final_answer = answer_text.split('Answer: ')[-1].strip()
+                # Remove trailing period if it's just a number/date
+                if final_answer.endswith('.') and final_answer[:-1].replace(',', '').replace(' ', '').isdigit():
+                    final_answer = final_answer[:-1]
+            else:
+                # Fallback to full response if no "Answer:" found
+                final_answer = answer_text.strip()
+
+            # Compute token count over evidence text
+            evidence_parts = []
+            for doc in input['retrieved_docs']:
+                evidence_parts.append(f"Q: What is {doc['title']}? A: {doc['text']}")
+            evidence_text = '\n'.join(evidence_parts)
+
+            token_count = 0
+            try:
+                import tiktoken
+                encoding = tiktoken.encoding_for_model("gpt-4o-mini")
+                token_count = len(encoding.encode(evidence_text))
+            except Exception:
+                token_count = max(1, len(evidence_text) // 4)
+
+            return [{
+                "question_id": input['question_id'],
+                "question": input['question'],
+                "predicted_answer": final_answer,
+                "full_response": answer_text,
+                "retrieved_docs": input['retrieved_docs'],
+                "token_count": token_count
+            }]
 
 
 @dataclass
@@ -106,7 +227,7 @@ class Qwen3EmbeddingBaseline:
     def __init__(self, corpus_path: str, questions_path: str, num_questions: int = 20,
                  top_k: int = 5, cache_dir: str = ".", rebuild_cache: bool = False,
                  verbose: bool = False, use_reranker: bool = False, reranker_top_k: int = 20,
-                 gpu_device: int = 3):
+                 gpu_device: int = 2):
         """Initialize the baseline system.
 
         Args:
@@ -189,7 +310,31 @@ class Qwen3EmbeddingBaseline:
             else:
                 raise RuntimeError("VoyageAI is required when use_reranker=True. Install with: pip install voyageai")
 
-        console.print(f"[bold green] Baseline initialized with {len(self.documents)} documents[/bold green]")
+        # Initialize curator answer generator for batched processing
+        self.answer_generator = None
+        if CURATOR_AVAILABLE:
+            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+            self.answer_generator = Qwen3AnswerGenerator(
+                model_name="gpt-4o-mini",
+                generation_params={"temperature": 0},
+                # model_name="hosted_vllm/Qwen/Qwen3-4B",
+                # backend="litellm",
+                # backend_params={
+                #     "base_url": "http://127.0.0.1:6379/v1",
+                #     "request_timeout": 600.0,
+                #     "max_concurrent_requests": 32,
+                #     "max_requests_per_minute": 120,
+                #     "max_tokens_per_minute": 200000,
+                #     "seconds_to_pause_on_rate_limit": 5,
+                #     "require_all_responses": False,
+                # },
+                # generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
+            )
+            console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
+        else:
+            console.print("[yellow]⚠ Curator not available - will use sequential processing[/yellow]")
+
+        console.print(f"[bold green]✓ Baseline initialized with {len(self.documents)} documents[/bold green]")
 
     def __del__(self):
         """Cleanup GPU resources to prevent memory leaks."""
@@ -591,6 +736,7 @@ Thought:
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            'If you don\'t know the answer, say "No Answer".'
         )
 
         # One-shot example input
@@ -659,7 +805,7 @@ Thought:
         for item in data[:self.num_questions]:
             question_id = item.get("_id", "unknown")
             question = item["question"]
-            gold_answers = item.get("answers", [])
+            gold_answers = item.get("answer", [])
             # gold_answers = item.get("reference", [])
             
             # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
@@ -847,15 +993,15 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = Qwen3EmbeddingBaseline(
-            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/lveval_corpus.json",
-            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/lveval.json",
+            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_corpus.json",
+            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json",
             num_questions=1000,
             top_k=5,
             cache_dir=".",
             rebuild_cache=False,
             verbose=verbose,
-            use_reranker=True,  # Set to True to enable reranking
-            reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)
+            use_reranker=False,  # Set to True to enable reranking
+            reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)c
         )
 
         # Run evaluation
