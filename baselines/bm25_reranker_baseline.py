@@ -68,6 +68,13 @@ except ImportError:
     print("Warning: Curator not available. Install with: pip install bespokelabs-curator")
     CURATOR_AVAILABLE = False
 
+try:
+    from bespokelabs import curator
+    CURATOR_AVAILABLE = True
+except ImportError:
+    print("Warning: Curator not available. Install with: pip install bespokelabs-curator")
+    CURATOR_AVAILABLE = False
+
 console = Console()
 
 # Setup logging
@@ -278,20 +285,20 @@ class BM25RerankerBaseline:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.answer_generator = BM25AnswerGenerator(
-                model_name="gpt-4o-mini",
-                generation_params={"temperature": 0},
-                # model_name="hosted_vllm/Qwen/Qwen3-4B",
-                # backend = "litellm",
-                # backend_params = {
-                #     "base_url": "http://127.0.0.1:6379/v1",
-                #     "request_timeout": 600.0,  
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #     "seconds_to_pause_on_rate_limit": 5,
-                #     "require_all_responses": False,
-                # },
-                # generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
+                # model_name="gpt-4o-mini",
+                # generation_params={"temperature": 0},
+                model_name="hosted_vllm/Qwen/Qwen3-8B",
+                backend = "litellm",
+                backend_params = {
+                    "base_url": "http://127.0.0.1:6379/v1",
+                    "request_timeout": 600.0,  
+                    "max_concurrent_requests": 32,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
             )
             console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
         else:
@@ -510,6 +517,7 @@ Thought:
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+            'If you don\'t know the answer, say "No Answer".'
         )
 
         # One-shot example input
@@ -579,7 +587,8 @@ Thought:
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
             gold_answers = item.get("answer", [])
-
+            # gold_answers = item.get("reference", [])
+            # gold_answers = item.get("possible_answers", [])
             # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
             # Fix to always decode it if it is a string:
             # if isinstance(gold_answers, str):
@@ -865,8 +874,8 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = BM25RerankerBaseline(
-            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_corpus.json",
-            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json",
+            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/musique_corpus.json",
+            questions_path="/home/yigit/codebase/gsw-memory/playground_data/musique_platinum.json",
             num_questions=1000,
             top_k=5,
             cache_dir=".",

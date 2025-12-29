@@ -22,7 +22,8 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
-os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,4'
+os.environ["CURATOR_DISABLE_CACHE"] = "1"
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 os.environ['OPENAI_API_KEY'] = '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'
 
 # Add parent directory to path
@@ -143,6 +144,7 @@ Thought:
                 'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
                 'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
                 'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
+                'If you don\'t know the answer, say "No Answer".'
             )
 
             # One-shot example input
@@ -227,7 +229,7 @@ class Qwen3EmbeddingBaseline:
     def __init__(self, corpus_path: str, questions_path: str, num_questions: int = 20,
                  top_k: int = 5, cache_dir: str = ".", rebuild_cache: bool = False,
                  verbose: bool = False, use_reranker: bool = False, reranker_top_k: int = 20,
-                 gpu_device: int = 2):
+                 gpu_device: int = 1):
         """Initialize the baseline system.
 
         Args:
@@ -315,20 +317,20 @@ class Qwen3EmbeddingBaseline:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.answer_generator = Qwen3AnswerGenerator(
-                model_name="gpt-4o-mini",
-                generation_params={"temperature": 0},
-                # model_name="hosted_vllm/Qwen/Qwen3-4B",
-                # backend="litellm",
-                # backend_params={
-                #     "base_url": "http://127.0.0.1:6379/v1",
-                #     "request_timeout": 600.0,
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #     "seconds_to_pause_on_rate_limit": 5,
-                #     "require_all_responses": False,
-                # },
-                # generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
+                # model_name="gpt-4o-mini",
+                # generation_params={"temperature": 0},
+                model_name="hosted_vllm/Qwen/Qwen3-8B",
+                backend="litellm",
+                backend_params={
+                    "base_url": "http://127.0.0.1:6379/v1",
+                    "request_timeout": 600.0,
+                    "max_concurrent_requests": 32,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
             )
             console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
         else:
@@ -583,7 +585,14 @@ class Qwen3EmbeddingBaseline:
 
         try:
             outputs = self.embedding_model.embed([instructed_query])
-            embedding = np.array(outputs[0].outputs.embedding)
+            embedding = np.array(outputs[0].outputs.embedding, dtype=np.float32)
+
+            # Debug logging to verify embeddings are changing
+            if self.verbose:
+                console.print(f"[dim]Query: {query[:100]}...[/dim]")
+                console.print(f"[dim]Embedding stats - Mean: {embedding.mean():.4f}, Std: {embedding.std():.4f}, Norm: {np.linalg.norm(embedding):.4f}[/dim]")
+                console.print(f"[dim]First 5 values: {embedding[:5]}[/dim]")
+
             return embedding
         except Exception as e:
             console.print(f"[red]Error embedding query: {e}[/red]")
@@ -611,6 +620,11 @@ class Qwen3EmbeddingBaseline:
             faiss.normalize_L2(query_embedding)
             # Search FAISS GPU index - returns (similarities, indices)
             similarities, indices = self.doc_faiss_index.search(query_embedding, initial_k)
+
+            # Debug logging
+            if self.verbose:
+                console.print(f"[dim]Retrieved doc indices: {indices[0][:10]}[/dim]")
+                console.print(f"[dim]Retrieved similarities: {similarities[0][:5]}[/dim]")
 
             # Build initial candidate list from FAISS results
             candidates = []
@@ -802,11 +816,12 @@ Thought:
             data = json.load(f)
 
         questions_data = []
-        for item in data[:self.num_questions]:
-            question_id = item.get("_id", "unknown")
+        for i, item in enumerate(data[:self.num_questions]):
+            question_id = item.get("_id", f"q_{i}")
             question = item["question"]
             gold_answers = item.get("answer", [])
             # gold_answers = item.get("reference", [])
+            # gold_answers = item.get("possible_answers", [])
             
             # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
             # Fix to always decode it if it is a string:
@@ -831,6 +846,43 @@ Thought:
         console.print(f"[green] Loaded {len(questions_data)} questions[/green]")
         return questions_data
 
+    def run_batched_answer_generation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                      retrieved_docs_by_question: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Dict]:
+        """Run batched answer generation using curator.
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            retrieved_docs_by_question: Dictionary mapping question_id to retrieved docs
+
+        Returns:
+            Dictionary mapping question_id to answer results
+        """
+        console.print("\n[bold cyan]Running Batched Answer Generation[/bold cyan]")
+
+        # Prepare inputs for batched answer generation
+        answer_inputs = [
+            {
+                "question_id": qid,
+                "question": question,
+                "retrieved_docs": retrieved_docs_by_question.get(qid, [])
+            }
+            for qid, question, _ in questions_data
+        ]
+
+        console.print(f"[cyan]Generating answers for {len(answer_inputs)} questions in parallel...[/cyan]")
+        start_time = time.time()
+
+        # Run batched answer generation
+        answer_dataset = self.answer_generator(answer_inputs)
+
+        elapsed = time.time() - start_time
+        console.print(f"[green]✓ Answer generation complete in {elapsed:.1f}s ({elapsed/len(answer_inputs):.2f}s per question)[/green]")
+
+        # Convert to dictionary for easy lookup
+        answer_results = {item["question_id"]: item for item in answer_dataset.dataset}
+
+        return answer_results
+
     def run_evaluation(self) -> List[BaselineEvaluationResult]:
         """Run complete evaluation pipeline.
 
@@ -842,6 +894,83 @@ Thought:
 
         # Load questions
         questions_data = self.load_questions()
+
+        # Use batched processing if curator is available
+        if CURATOR_AVAILABLE and self.answer_generator is not None:
+            return self._run_batched_evaluation(questions_data, total_start)
+        else:
+            return self._run_sequential_evaluation(questions_data, total_start)
+
+    def _run_batched_evaluation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                 total_start: float) -> List[BaselineEvaluationResult]:
+        """Run evaluation with batched answer generation.
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            total_start: Start time for total elapsed calculation
+
+        Returns:
+            List of evaluation results
+        """
+        # Stage 1: Retrieve documents for all questions (sequential - FAISS is fast)
+        console.print("\n[bold cyan]Stage 1: Document Retrieval[/bold cyan]")
+        retrieved_docs_by_question = {}
+
+        with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"),
+                     BarColumn(), console=console) as progress:
+            task = progress.add_task("Retrieving documents...", total=len(questions_data))
+
+            for question_id, question, _ in questions_data:
+                retrieved_docs = self.retrieve_documents(question)
+                retrieved_docs_by_question[question_id] = retrieved_docs
+                progress.update(task, advance=1)
+
+        console.print(f"[green]✓ Document retrieval complete for {len(questions_data)} questions[/green]")
+
+        # Stage 2: Batched answer generation
+        answer_results = self.run_batched_answer_generation(questions_data, retrieved_docs_by_question)
+
+        # Stage 3: Compile results
+        results = []
+        for question_id, question, gold_answers in questions_data:
+            answer_data = answer_results.get(question_id, {})
+            retrieved_docs = retrieved_docs_by_question.get(question_id, [])
+
+            result = BaselineEvaluationResult(
+                question_id=question_id,
+                question=question,
+                predicted_answer=answer_data.get("predicted_answer", "NA"),
+                full_response=answer_data.get("full_response", ""),
+                gold_answers=gold_answers,
+                processing_time=0.0,  # Will be updated with average
+                retrieved_docs=retrieved_docs,
+                token_count=answer_data.get("token_count", 0),
+                error=None
+            )
+            results.append(result)
+
+        total_elapsed = time.time() - total_start
+        console.print(f"\n[bold green]✓ Evaluation complete in {total_elapsed:.1f}s ({total_elapsed/len(results):.2f}s per question)[/bold green]")
+
+        # Update processing time with average
+        avg_time = total_elapsed / len(results) if results else 0
+        for result in results:
+            result.processing_time = avg_time
+
+        return results
+
+    def _run_sequential_evaluation(self, questions_data: List[Tuple[str, str, List[str]]],
+                                    total_start: float) -> List[BaselineEvaluationResult]:
+        """Run evaluation with sequential processing (fallback when curator not available).
+
+        Args:
+            questions_data: List of (question_id, question, gold_answers) tuples
+            total_start: Start time for total elapsed calculation
+
+        Returns:
+            List of evaluation results
+        """
+        console.print("[yellow]Using sequential processing (curator not available)[/yellow]")
 
         # Process each question
         results = []
@@ -993,14 +1122,14 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = Qwen3EmbeddingBaseline(
-            corpus_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_corpus.json",
-            questions_path="/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json",
+            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/musique_corpus.json",
+            questions_path="/home/yigit/codebase/gsw-memory/playground_data/musique_platinum.json",
             num_questions=1000,
             top_k=5,
-            cache_dir=".",
+            cache_dir="/home/yigit/codebase/gsw-memory/baselines/",
             rebuild_cache=False,
             verbose=verbose,
-            use_reranker=False,  # Set to True to enable reranking
+            use_reranker=True,  # Set to True to enable reranking
             reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)c
         )
 

@@ -38,7 +38,7 @@ print(importlib.metadata.version("bespokelabs-curator"))
 load_dotenv()
 
 # Configuration
-CORPUS_PATH = "/mnt/SSD1/nlp/gsw/lvevaldata/all_errors.jsonl"
+CORPUS_PATH = "/home/yigit/codebase/gsw-memory/playground_data/musique_corpus.json"
 BATCH_SIZE = 1000  # Process documents in batches to manage memory
 
 
@@ -106,7 +106,8 @@ def initialize_gsw_processor():
     print("=== Initializing GSW Processor ===")
     
     processor = GSWProcessor(
-        model_name="gpt-4.1-mini",
+        model_name="hosted_vllm/Qwen/Qwen3-8B",
+        vllm_base_url="http://127.0.0.1:6379/v1",
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
         chunk_size=1,               # Single chunk per document
@@ -654,7 +655,18 @@ Examples:
         default=0,
         help="Corpus offset used in original processing (e.g., 0 for documents[0:], 2000 for documents[2000:])"
     )
-
+    parser.add_argument(
+        "--model-name",
+        type=str,
+        default="hosted_vllm/Qwen/Qwen3-8B",
+        help="Model name to use for GSW generation"
+    )
+    parser.add_argument(
+        "--vllm-base-url",
+        type=str,
+        default="http://127.0.0.1:6379/v1",
+        help="VLLM base URL to use for GSW generation"
+    )
     args = parser.parse_args()
 
     # Recovery mode
@@ -675,7 +687,9 @@ Examples:
             successful_count = process_missing_documents(
                 missing_docs,
                 args.recover_missing,
-                args.corpus_offset
+                args.corpus_offset,
+                args.model_name,
+                args.vllm_base_url
             )
 
             # Verify recovery
