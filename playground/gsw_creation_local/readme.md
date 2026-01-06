@@ -1,0 +1,1 @@
+HF_HOME=/mnt/SSD3/chenda/gsw/cache uv run vllm serve Qwen/Qwen3-8B --reasoning-parser qwen3  --host 127.0.0.1 --port 6381  --dtype auto --trust-remote-code --api-key "token-abc123"

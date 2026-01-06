@@ -25,9 +25,7 @@ import numpy as np
 import voyageai
 from pydantic import BaseModel
 
-import os 
-if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1,2,3"
+import os
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -42,7 +40,8 @@ except Exception:
     _requests = None
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
-
+os.environ["VOYAGE_API_KEY"] = "pa-ZCNo-1-vVh_ILFkjuniMSThZyDStqhuM1YvCP4q1snN"
+os.environ["OPENAI_API_KEY"] = "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"
 # Import our enhanced entity searcher
 from playground.simple_entity_search import EntitySearcher
 
@@ -74,7 +73,8 @@ class ChainFollowingMultiHopQA:
                  use_chain_reranker: bool = False, reranker_model_name: str = None,
                  reranker_instruction: str = "Given a question, score the chain of QA pairs based on how likely it is to lead to the answer",
                  reranker_endpoint_url: Optional[str] = None, reranker_http_timeout: float = 15.0,
-                 multi_dep_quality_threshold: float = 0.3, use_gpu_for_qa_index: bool = True):
+                 multi_dep_quality_threshold: float = 0.3, use_gpu_for_qa_index: bool = True,
+                 cache_dir: str = None, gsw_path: str = None, rebuild_cache: bool = True):
         """Initialize the chain-following multi-hop QA system.
 
         Args:
@@ -84,6 +84,9 @@ class ChainFollowingMultiHopQA:
             chain_top_k: Number of top chains to select after reranking
             chain_following_mode: How to score chains - "similarity" (cosine sim to original) or "cumulative" (product of QA scores)
             use_gpu_for_qa_index: Whether to use GPU for Q&A FAISS index (default: False, uses CPU to save GPU memory)
+            cache_dir: Directory to store/load cached embeddings
+            gsw_path: Path to the GSW networks directory
+            rebuild_cache: Whether to rebuild the cache if it exists
         """
         self.verbose = verbose
         self.show_prompt = show_prompt
@@ -122,11 +125,12 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents,
-            cache_dir="/mnt/SSD6/yigit/SM_GSW/musique/.gsw_cache_4_1_mini",
-            path_to_gsw_files="/mnt/SSD6/yigit/SM_GSW/musique/networks_4_1_mini",
+            cache_dir=cache_dir,
+            path_to_gsw_files=gsw_path,
             verbose=False,  # Keep entity searcher quiet
             use_bm25=self.use_bm25,
-            use_gpu_for_qa_index=use_gpu_for_qa_index
+            use_gpu_for_qa_index=use_gpu_for_qa_index,
+            rebuild_cache=rebuild_cache
         )
         
         # Initialize OpenAI client
@@ -1800,18 +1804,119 @@ Question: "{question}"
 
 def main():
     """Main entry point."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Chain-Following Multi-Hop QA System",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Run with required paths
+  python multi_hop_qa_chains.py --gsw-path /path/to/networks --cache-dir /path/to/cache
+
+  # Run with specific GPU devices
+  python multi_hop_qa_chains.py --gsw-path /path/to/networks --cache-dir /path/to/cache --cuda-devices 0,1
+
+  # Skip cache rebuild
+  python multi_hop_qa_chains.py --gsw-path /path/to/networks --cache-dir /path/to/cache --no-rebuild-cache
+        """
+    )
+
+    parser.add_argument(
+        "--gsw-path",
+        type=str,
+        required=True,
+        help="Path to the GSW networks directory (e.g., .../flattened/networks)"
+    )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        required=True,
+        help="Directory to store/load cached embeddings"
+    )
+    parser.add_argument(
+        "--cuda-devices",
+        type=str,
+        default="0",
+        help="CUDA visible devices (e.g., '0,1,2' or '0'). Default: '0'"
+    )
+    parser.add_argument(
+        "--rebuild-cache",
+        action="store_true",
+        default=True,
+        help="Rebuild the cache even if it exists (default: True)"
+    )
+    parser.add_argument(
+        "--no-rebuild-cache",
+        action="store_true",
+        help="Do not rebuild the cache if it exists"
+    )
+    parser.add_argument(
+        "--num-documents",
+        type=int,
+        default=-1,
+        help="Number of documents to load (-1 for all). Default: -1"
+    )
+    parser.add_argument(
+        "--beam-width",
+        type=int,
+        default=5,
+        help="Beam width for chain search. Default: 5"
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        default=True,
+        help="Enable verbose output (default: True)"
+    )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Disable verbose output"
+    )
+
+    args = parser.parse_args()
+
+    # Set CUDA devices before importing torch/CUDA-dependent libraries
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda_devices
+
+    # Determine rebuild_cache value
+    rebuild_cache = not args.no_rebuild_cache
+
+    # Determine verbose value
+    verbose = not args.quiet
+
     console.print("\n[bold cyan]🔗 Chain-Following Multi-Hop QA System[/bold cyan]")
+    console.print(f"GSW Path: {args.gsw_path}")
+    console.print(f"Cache Dir: {args.cache_dir}")
+    console.print(f"CUDA Devices: {args.cuda_devices}")
+    console.print(f"Rebuild Cache: {rebuild_cache}")
     console.print("Initializing...")
-    
+
     try:
-        qa_system = ChainFollowingMultiHopQA(num_documents=-1, verbose=True, chain_following_mode="cumulative", beam_width=5, alpha=0.5, use_chain_reranker=True, reranker_model_name="voyage", multi_dep_quality_threshold=0.3, use_bm25=True)
+        qa_system = ChainFollowingMultiHopQA(
+            num_documents=args.num_documents,
+            verbose=verbose,
+            chain_following_mode="cumulative",
+            beam_width=args.beam_width,
+            alpha=0.5,
+            use_chain_reranker=True,
+            reranker_model_name="voyage",
+            multi_dep_quality_threshold=0.3,
+            use_bm25=True,
+            cache_dir=args.cache_dir,
+            gsw_path=args.gsw_path,
+            rebuild_cache=rebuild_cache
+        )
         qa_system.run_interactive_mode()
     except Exception as e:
         console.print(f"[red]Failed to initialize: {e}[/red]")
+        import traceback
+        traceback.print_exc()
         return 1
-    
+
     return 0
 
 
-if __name__ == "__main__":   
-     exit(main())
+if __name__ == "__main__":
+    exit(main())

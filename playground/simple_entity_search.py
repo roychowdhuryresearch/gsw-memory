@@ -361,7 +361,11 @@ class EntitySearcher:
         try:
             if self.verbose_init:
                 console.print("[cyan]Initializing Qwen3-Embedding-8B model...[/cyan]")
-            self.embedding_model = LLM(model="Qwen/Qwen3-Embedding-8B", task="embed")
+            self.embedding_model = LLM(
+                model="Qwen/Qwen3-Embedding-8B",
+                task="embed",
+                gpu_memory_utilization=0.85
+            )
             if self.verbose_init:
                 console.print("[green]✓ Qwen embedding model initialized[/green]")
         except Exception as e:

@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-Process Full 2wiki Corpus for Agentic Q&A
+Process Full Musique Corpus for Agentic Q&A
 
-This script processes the entire 2wiki corpus (6,119 documents) through the GSW pipeline
-to create a unified semantic workspace that can be used with the agentic Q&A system.
+This script processes the Musique corpus through the GSW pipeline using
+optimal generation parameters found via parameter search.
 
 Pipeline: Documents → GSWProcessor → GSW chunks → Reconciler → Unified GSW
 
-Key optimizations:
-- Skips aggregator step (using agentic tools instead)
-- Optimized for factual content processing
-- Handles large-scale corpus processing efficiently
+Optimal parameters (from param search):
+- temperature: 0.1
+- top_p: 0.9
+- top_k: 20
+- repetition_penalty: 1.1
 """
 
 import json
@@ -27,6 +28,7 @@ from dotenv import load_dotenv
 from gsw_memory import GSWProcessor, reconcile_gsw_outputs
 from gsw_memory.prompts.operator_prompts import PromptType
 os.environ["CURATOR_CACHE_DIR"] = "/mnt/SSD3/chenda/gsw/cache/curator"
+
 # Disable cache for clean processing
 # os.environ["CURATOR_DISABLE_CACHE"] = "true"
 
@@ -38,15 +40,15 @@ print(importlib.metadata.version("bespokelabs-curator"))
 load_dotenv()
 
 # Configuration
-CORPUS_PATH = "/mnt/SSD3/chenda/gsw/2wikimultihopqa_corpus.json"
-BATCH_SIZE = 10  # Process documents in batches to manage memory
+CORPUS_PATH = "/mnt/SSD3/chenda/gsw/musique.json"
+BATCH_SIZE = 1000  # Process documents in batches to manage memory
 
 
 def setup_logging():
     """Create timestamped log directory for full corpus processing."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_dir = os.path.join(
-        os.path.dirname(__file__), "..", "logs", f"full_2wiki_corpus_{timestamp}"
+        os.path.dirname(__file__), "..", "logs", f"full_musique_corpus_{timestamp}"
     )
     
     # Create directory structure
@@ -67,36 +69,49 @@ def setup_logging():
 
 
 def load_full_corpus(start_idx: int = 0, end_idx: int = None) -> tuple[List[str], List[str]]:
-    """Load the complete 2wiki corpus or a subset.
+    """Load the Musique corpus, extracting paragraphs as individual documents.
 
     Args:
-        start_idx: Starting index (inclusive)
-        end_idx: Ending index (exclusive). If None, load until the end.
+        start_idx: Starting index (inclusive) for paragraphs
+        end_idx: Ending index (exclusive). If None, load all paragraphs.
 
     Returns:
         Tuple of (documents, document_titles)
     """
-    print("=== Loading Full 2wiki Corpus ===")
-    
-    # if file is a jsonl file, convert it to a json file
+    print("=== Loading Musique Corpus ===")
+
+    # Load the raw data
     if CORPUS_PATH.endswith(".jsonl"):
         with open(CORPUS_PATH, "r") as f:
-            corpus_data = [json.loads(line) for line in f]
+            raw_data = [json.loads(line) for line in f]
     else:
         with open(CORPUS_PATH, "r") as f:
-            corpus_data = json.load(f)
+            raw_data = json.load(f)
 
-    print(f"Loaded {len(corpus_data)} documents from corpus")
+    print(f"Loaded {len(raw_data)} entries from corpus")
 
-    # Extract document texts and titles
-    documents = []
-    document_titles = []
+    # Extract paragraphs as individual documents
+    # Musique format: each entry has "paragraphs" list with "title" and "paragraph_text"
+    all_paragraphs = []
+    for entry in raw_data:
+        paragraphs = entry.get("paragraphs", [])
+        for paragraph in paragraphs:
+            all_paragraphs.append({
+                "global_id": f"{entry['id']}_{paragraph['idx']}",
+                "title": paragraph["title"],
+                "text": paragraph["title"] + "\n" + paragraph["paragraph_text"],
+            })
 
-    for doc in corpus_data[start_idx:end_idx]:
-        documents.append(doc["text"])
-        document_titles.append(doc.get("title", ""))
+    print(f"Extracted {len(all_paragraphs)} paragraphs total")
 
-    print(f"Prepared {len(documents)} documents for processing (range: {start_idx} to {end_idx or len(corpus_data)})")
+    # Apply slicing
+    selected_paragraphs = all_paragraphs[start_idx:end_idx]
+
+    # Extract documents and titles
+    documents = [p["text"] for p in selected_paragraphs]
+    document_titles = [p["title"] for p in selected_paragraphs]
+
+    print(f"Prepared {len(documents)} documents for processing (range: {start_idx} to {end_idx or len(all_paragraphs)})")
 
     return documents, document_titles
 
@@ -119,7 +134,7 @@ def initialize_gsw_processor():
 
     processor = GSWProcessor(
         model_name="hosted_vllm/Qwen/Qwen3-8B",
-        vllm_base_url="http://127.0.0.1:6383/v1",
+        vllm_base_url="http://127.0.0.1:6384/v1",
         generation_params=optimal_generation_params,
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
@@ -147,7 +162,7 @@ def process_corpus_in_batches(
     document_titles: List[str],
     log_dirs: Dict[str, str],
     resume_from_dir: str = None
-) -> List[Any]:
+) -> tuple[List[Any], str]:
     """Process documents in batches to manage memory and monitor progress.
 
     Args:
@@ -156,6 +171,9 @@ def process_corpus_in_batches(
         document_titles: List of document titles
         log_dirs: Dictionary of log directory paths
         resume_from_dir: If provided, resume from this existing output directory
+
+    Returns:
+        Tuple of (gsw_structures, output_base_dir)
     """
     print(f"\n=== Processing {len(documents)} Documents in Batches of {BATCH_SIZE} ===")
 
@@ -196,7 +214,7 @@ def process_corpus_in_batches(
             # Process this batch
             gsw_structures = processor.process_documents(
                 batch_docs,
-                output_dir=os.path.join(output_base_dir, f"batch_{batch_idx:04d}")
+                output_dir=batch_output_dir
             )
 
             # Count successful GSW structures
@@ -254,6 +272,7 @@ def process_corpus_in_batches(
 
     print(f"\n✅ Corpus processing completed!")
     print(f"   Total documents: {total_docs}")
+    print(f"   Batch size: {BATCH_SIZE}")
     print(f"   Batches skipped (already existed): {skipped_batches}")
     print(f"   Batches processed this run: {num_batches - skipped_batches}")
     print(f"   GSW structures generated this run: {len(all_gsw_structures)}")
@@ -674,20 +693,20 @@ def main():
     """Run the complete full corpus processing pipeline."""
     # Parse command line arguments
     parser = argparse.ArgumentParser(
-        description="Process 2wiki corpus through GSW pipeline",
+        description="Process Musique corpus through GSW pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   # Process full corpus
-  python process_full_2wiki_corpus.py
+  python process_full_musique_corpus.py
 
   # Resume from existing run (skips completed batches)
-  python process_full_2wiki_corpus.py --resume \\
-    /mnt/SSD3/chenda/gsw/gsw-memory/logs/full_2wiki_corpus_20260102_145007/gsw_output/corpus_20260102_145007
+  python process_full_musique_corpus.py --resume \\
+    /mnt/SSD3/chenda/gsw/gsw-memory/logs/full_musique_corpus_20260102_145007/gsw_output/corpus_20260102_145007
 
   # Recover missing documents from a previous run (document-level recovery)
-  python process_full_2wiki_corpus.py --recover-missing \\
-    /home/yigit/codebase/gsw-memory/logs/full_2wiki_corpus_20251031_144213/gsw_output/full_corpus_20251031_144213 \\
+  python process_full_musique_corpus.py --recover-missing \\
+    /path/to/logs/full_musique_corpus_TIMESTAMP/gsw_output/corpus_TIMESTAMP \\
     --corpus-offset 0
         """
     )
@@ -714,7 +733,7 @@ Examples:
     parser.add_argument(
         "--vllm-base-url",
         type=str,
-        default="http://127.0.0.1:6383/v1",
+        default="http://127.0.0.1:6384/v1",
         help="VLLM base URL to use for GSW generation"
     )
     parser.add_argument(
@@ -771,11 +790,12 @@ Examples:
 
     # Normal processing mode
     if args.resume:
-        print("🔄 Starting Full 2wiki Corpus Processing (RESUME MODE)")
+        print("🔄 Starting Full Musique Corpus Processing (RESUME MODE)")
         print(f"   Resuming from: {args.resume}")
     else:
-        print("🚀 Starting Full 2wiki Corpus Processing")
-    print("Processing 6,119 documents through GSW pipeline for agentic Q&A\n")
+        print("🚀 Starting Full Musique Corpus Processing")
+    print(f"Processing Musique corpus through GSW pipeline for agentic Q&A")
+    print(f"Batch size: {BATCH_SIZE}\n")
 
     processing_start_time = datetime.now()
 
@@ -783,16 +803,16 @@ Examples:
         # Setup logging - reuse existing directories when resuming
         if args.resume:
             # Derive log directories from resume path
-            # Expected structure: .../logs/full_2wiki_corpus_TIMESTAMP/gsw_output/corpus_TIMESTAMP
+            # Expected structure: .../logs/full_musique_corpus_TIMESTAMP/gsw_output/corpus_TIMESTAMP
             resume_path = Path(args.resume)
-            # Go up from corpus_TIMESTAMP -> gsw_output -> full_2wiki_corpus_TIMESTAMP
+            # Go up from corpus_TIMESTAMP -> gsw_output -> full_musique_corpus_TIMESTAMP
             base_dir = resume_path.parent.parent
             log_dirs = {
                 "base_dir": str(base_dir),
                 "gsw_output_dir": str(base_dir / "gsw_output"),
                 "reconciled_output_dir": str(base_dir / "reconciled_output"),
                 "processing_logs_dir": str(base_dir / "processing_logs"),
-                "timestamp": base_dir.name.replace("full_2wiki_corpus_", ""),
+                "timestamp": base_dir.name.replace("full_musique_corpus_", ""),
             }
             print(f"📂 Using existing log directory: {base_dir}")
         else:

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Process Full 2wiki Corpus for Agentic Q&A
+Process Full musique Corpus for Agentic Q&A
 
-This script processes the entire 2wiki corpus (6,119 documents) through the GSW pipeline
+This script processes the entire musique corpus (6,119 documents) through the GSW pipeline
 to create a unified semantic workspace that can be used with the agentic Q&A system.
 
 Pipeline: Documents → GSWProcessor → GSW chunks → Reconciler → Unified GSW
@@ -38,7 +38,8 @@ print(importlib.metadata.version("bespokelabs-curator"))
 load_dotenv()
 
 # Configuration
-CORPUS_PATH = "/mnt/SSD3/chenda/gsw/2wikimultihopqa_corpus.json"
+CORPUS_PATH = "/mnt/SSD3/chenda/gsw/musique_corpus.json"
+# CORPUS_PATH = "/mnt/SSD3/chenda/gsw/gsw-memory/playground_data/musique_corpus_50_q.json"
 BATCH_SIZE = 10  # Process documents in batches to manage memory
 
 
@@ -46,7 +47,7 @@ def setup_logging():
     """Create timestamped log directory for full corpus processing."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_dir = os.path.join(
-        os.path.dirname(__file__), "..", "logs", f"full_2wiki_corpus_{timestamp}"
+        os.path.dirname(__file__), "..", "logs", f"full_musique_corpus_{timestamp}"
     )
     
     # Create directory structure
@@ -67,7 +68,7 @@ def setup_logging():
 
 
 def load_full_corpus(start_idx: int = 0, end_idx: int = None) -> tuple[List[str], List[str]]:
-    """Load the complete 2wiki corpus or a subset.
+    """Load the complete musique corpus or a subset.
 
     Args:
         start_idx: Starting index (inclusive)
@@ -76,7 +77,7 @@ def load_full_corpus(start_idx: int = 0, end_idx: int = None) -> tuple[List[str]
     Returns:
         Tuple of (documents, document_titles)
     """
-    print("=== Loading Full 2wiki Corpus ===")
+    print("=== Loading Full musique Corpus ===")
     
     # if file is a jsonl file, convert it to a json file
     if CORPUS_PATH.endswith(".jsonl"):
@@ -119,7 +120,7 @@ def initialize_gsw_processor():
 
     processor = GSWProcessor(
         model_name="hosted_vllm/Qwen/Qwen3-8B",
-        vllm_base_url="http://127.0.0.1:6383/v1",
+        vllm_base_url="http://127.0.0.1:6384/v1",
         generation_params=optimal_generation_params,
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
@@ -347,7 +348,7 @@ def save_corpus_processing_summary(
         json.dump(summary, f, indent=2)
 
     # Create README
-    readme_content = f"""# Full 2wiki Corpus Processing - {log_dirs['timestamp']}
+    readme_content = f"""# Full musique Corpus Processing - {log_dirs['timestamp']}
 
 ## Summary
 - **Total Documents**: {total_docs:,}
@@ -368,7 +369,7 @@ def save_corpus_processing_summary(
 
 ## Next Steps
 1. Use the reconciled GSW with the agentic Q&A system
-2. Test on the full 1,000 question 2wiki dataset
+2. Test on the full 1,000 question musique dataset
 3. Compare performance with subset results
 
 ## Configuration Used
@@ -674,20 +675,20 @@ def main():
     """Run the complete full corpus processing pipeline."""
     # Parse command line arguments
     parser = argparse.ArgumentParser(
-        description="Process 2wiki corpus through GSW pipeline",
+        description="Process musique corpus through GSW pipeline",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   # Process full corpus
-  python process_full_2wiki_corpus.py
+  python process_full_musique_corpus.py
 
   # Resume from existing run (skips completed batches)
-  python process_full_2wiki_corpus.py --resume \\
-    /mnt/SSD3/chenda/gsw/gsw-memory/logs/full_2wiki_corpus_20260102_145007/gsw_output/corpus_20260102_145007
+  python process_full_musique_corpus.py --resume \\
+    /mnt/SSD3/chenda/gsw/gsw-memory/logs/full_musique_corpus_20260102_145007/gsw_output/corpus_20260102_145007
 
   # Recover missing documents from a previous run (document-level recovery)
-  python process_full_2wiki_corpus.py --recover-missing \\
-    /home/yigit/codebase/gsw-memory/logs/full_2wiki_corpus_20251031_144213/gsw_output/full_corpus_20251031_144213 \\
+  python process_full_musique_corpus.py --recover-missing \\
+    /home/yigit/codebase/gsw-memory/logs/full_musique_corpus_20251031_144213/gsw_output/full_corpus_20251031_144213 \\
     --corpus-offset 0
         """
     )
@@ -714,7 +715,7 @@ Examples:
     parser.add_argument(
         "--vllm-base-url",
         type=str,
-        default="http://127.0.0.1:6383/v1",
+        default="http://127.0.0.1:6384/v1",
         help="VLLM base URL to use for GSW generation"
     )
     parser.add_argument(
@@ -771,10 +772,10 @@ Examples:
 
     # Normal processing mode
     if args.resume:
-        print("🔄 Starting Full 2wiki Corpus Processing (RESUME MODE)")
+        print("🔄 Starting Full musique Corpus Processing (RESUME MODE)")
         print(f"   Resuming from: {args.resume}")
     else:
-        print("🚀 Starting Full 2wiki Corpus Processing")
+        print("🚀 Starting Full musique Corpus Processing")
     print("Processing 6,119 documents through GSW pipeline for agentic Q&A\n")
 
     processing_start_time = datetime.now()
@@ -783,16 +784,16 @@ Examples:
         # Setup logging - reuse existing directories when resuming
         if args.resume:
             # Derive log directories from resume path
-            # Expected structure: .../logs/full_2wiki_corpus_TIMESTAMP/gsw_output/corpus_TIMESTAMP
+            # Expected structure: .../logs/full_musique_corpus_TIMESTAMP/gsw_output/corpus_TIMESTAMP
             resume_path = Path(args.resume)
-            # Go up from corpus_TIMESTAMP -> gsw_output -> full_2wiki_corpus_TIMESTAMP
+            # Go up from corpus_TIMESTAMP -> gsw_output -> full_musique_corpus_TIMESTAMP
             base_dir = resume_path.parent.parent
             log_dirs = {
                 "base_dir": str(base_dir),
                 "gsw_output_dir": str(base_dir / "gsw_output"),
                 "reconciled_output_dir": str(base_dir / "reconciled_output"),
                 "processing_logs_dir": str(base_dir / "processing_logs"),
-                "timestamp": base_dir.name.replace("full_2wiki_corpus_", ""),
+                "timestamp": base_dir.name.replace("full_musique_corpus_", ""),
             }
             print(f"📂 Using existing log directory: {base_dir}")
         else:

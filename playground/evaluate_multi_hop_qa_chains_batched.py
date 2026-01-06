@@ -23,9 +23,12 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 from pydantic import BaseModel
 from typing import List
 
-import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '2,3,4'
-os.environ["OPENAI_API_KEY"] = "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"
+import os
+import argparse
+
+os.environ["OPENAI_API_KEY"] = "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"
+os.environ["VOYAGE_API_KEY"] = "pa-ZCNo-1-vVh_ILFkjuniMSThZyDStqhuM1YvCP4q1snN"
+os.environ["CURATOR_CACHE_DIR"] = "/mnt/SSD3/chenda/gsw/cache/curator"
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -44,11 +47,6 @@ except ImportError:
     CURATOR_AVAILABLE = False
 
 console = Console()
-
-# Setup logging
-LOG_DIR = Path("logs")
-LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / f"multihop_qa_chains_batched_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
 
 class DecomposedQuestion(BaseModel):
@@ -111,7 +109,7 @@ Format each decomposed question as follows:
 
 <decomposition>
 Question: [the question text]
-Requires retrieval: [true/false]
+Requires retrieval: [true/false]ƒ
 
 And provide the response in the following json format:
 {{
@@ -346,49 +344,68 @@ class ChainBatchedEvaluationResult:
 
 class ChainBatchedMultiHopQAEvaluator:
     """Batched evaluator for chain-following multi-hop QA using curator for parallel LLM calls."""
-    
+
     def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False,
-                 chain_top_k: int = 15, use_bm25: bool = False):
+                 chain_top_k: int = 15, use_bm25: bool = False,
+                 questions_file: str = None, output_dir: str = None,
+                 gsw_path: str = None, cache_dir: str = None, rebuild_cache: bool = False):
         """Initialize batched chain evaluator.
-        
+
         Args:
             num_documents: Number of documents to load
             num_questions: Number of questions to evaluate
             verbose: Whether to show detailed output
             chain_top_k: Number of top chains to select after reranking
+            use_bm25: Whether to use BM25 for retrieval
+            questions_file: Path to the questions JSON file
+            output_dir: Directory to save evaluation results
+            gsw_path: Path to the GSW networks directory
+            cache_dir: Directory to store/load cached embeddings
+            rebuild_cache: Whether to rebuild the cache (default: False)
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
-        self.data_dir = Path("/mnt/SSD6/yigit/gsw-memory/playground_data/")
+        self.questions_file = Path(questions_file) if questions_file else None
+        self.output_dir = Path(output_dir) if output_dir else Path("logs")
+        self.output_dir.mkdir(parents=True, exist_ok=True)
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
-        
+
         console.print("[bold blue]Initializing Chain-Based Batched Multi-Hop QA Evaluator...[/bold blue]")
         console.print(f"  Chain selection: Top {chain_top_k} chains")
-        
+        console.print(f"  Questions file: {self.questions_file}")
+        console.print(f"  Output dir: {self.output_dir}")
+        console.print(f"  GSW path: {gsw_path}")
+        console.print(f"  Cache dir: {cache_dir}")
+        console.print(f"  Rebuild cache: {rebuild_cache}")
+
         # Initialize the chain-following retrieval system (single instance for all questions)
         self.qa_system = ChainFollowingMultiHopQA(
-            num_documents=num_documents, 
-            verbose=False, 
+            num_documents=num_documents,
+            verbose=False,
             show_prompt=False,
             chain_top_k=chain_top_k,
-            chain_following_mode="cumulative", 
-            beam_width=5, 
+            chain_following_mode="cumulative",
+            beam_width=5,
             reranker_model_name="voyage",
             use_chain_reranker=True,
-            use_bm25=use_bm25
-
+            use_bm25=use_bm25,
+            gsw_path=gsw_path,
+            cache_dir=cache_dir,
+            rebuild_cache=rebuild_cache
         )
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
+            # Use OpenAI-compatible provider for both clients to avoid provider base_url collisions
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.decomposer = ChainQuestionDecomposer(
                 # model_name="gpt-4o",
-                model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
-                backend = "litellm",
+                model_name="yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+                backend = "openai",
                 backend_params = {
-                    "base_url": "http://127.0.0.1:8000/v1",
+                    "base_url": "http://127.0.0.1:8989/v1",
+                    "api_key": "token-abc123",
                     "request_timeout": 600.0,  
                     "max_concurrent_requests": 32,
                     "max_requests_per_minute": 120,
@@ -399,13 +416,16 @@ class ChainBatchedMultiHopQAEvaluator:
                 generation_params={"temperature": 0}, 
                 # response_format=DecomposedQuestionList
             )
+            # Use OpenAI-compatible provider for answerer (port 6379) to avoid provider base_url collisions
             self.answer_generator = ChainAnswerGenerator(
                 # model_name="gpt-4o-mini", 
                 # generation_params={"temperature": 0},
-                model_name="hosted_vllm/Qwen/Qwen3-8B",
-                backend = "litellm",
+                model_name="Qwen/Qwen3-8B",
+                backend = "openai",
                 backend_params = {
                     "base_url": "http://127.0.0.1:6379/v1",
+                    # Provide an API key explicitly so litellm does not fall back to real OpenAI env vars
+                    "api_key": "token-abc123",
                     "request_timeout": 600.0,  
                     "max_concurrent_requests": 32,
                     "max_requests_per_minute": 120,
@@ -422,18 +442,17 @@ class ChainBatchedMultiHopQAEvaluator:
         console.print(f"[cyan]Ready to evaluate {num_questions} questions on {num_documents} documents[/cyan]")
     
     def load_questions_and_answers(self) -> List[Tuple[str, str, List[str]]]:
-        """Load questions and gold answers from 2WikiMultihopQA dataset.
-        
+        """Load questions and gold answers from dataset.
+
         Returns:
             List of tuples: (question_id, question, gold_answers)
         """
-        console.print("[cyan]Loading Musique questions...[/cyan]")
-        
-        questions_file = self.data_dir / "/mnt/SSD6/yigit/gsw-memory/playground_data/musique_unanswerable.json"
-        if not questions_file.exists():
-            raise FileNotFoundError(f"Questions file not found: {questions_file}")
-        
-        with open(questions_file, 'r') as f:
+        console.print(f"[cyan]Loading questions from {self.questions_file}...[/cyan]")
+
+        if not self.questions_file or not self.questions_file.exists():
+            raise FileNotFoundError(f"Questions file not found: {self.questions_file}")
+
+        with open(self.questions_file, 'r') as f:
             data = json.load(f)
         
         # Extract first N questions
@@ -761,7 +780,7 @@ class ChainBatchedMultiHopQAEvaluator:
             overall_metrics: Overall performance metrics
             per_example_metrics: Per-question metrics
         """
-        output_file = LOG_DIR / f"multihop_qa_chains_batched_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        output_file = self.output_dir / f"multihop_qa_chains_batched_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         
         output_data = {
             "evaluation_info": {
@@ -830,62 +849,158 @@ class ChainBatchedMultiHopQAEvaluator:
             console.print("No chain-following results found (all used fallback)")
 
 
-def main(verbose: bool = False):
-    """Main evaluation function.
-    
-    Args:
-        verbose: Whether to show detailed output
-    """
-    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
+def main():
+    """Main evaluation function with argparse."""
+    parser = argparse.ArgumentParser(
+        description="Chain-Based Batched Multi-Hop QA Evaluation",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Run evaluation with required paths
+  python evaluate_multi_hop_qa_chains_batched.py \\
+    --gsw-path /path/to/flattened/networks \\
+    --cache-dir /path/to/cache \\
+    --questions-file /path/to/musique.json \\
+    --output-dir /path/to/output
+
+  # Run with specific GPU devices
+  python evaluate_multi_hop_qa_chains_batched.py \\
+    --gsw-path /path/to/networks \\
+    --cache-dir /path/to/cache \\
+    --questions-file /path/to/questions.json \\
+    --output-dir /path/to/output \\
+    --cuda-devices 0,1
+
+  # Rebuild cache (usually only needed once)
+  python evaluate_multi_hop_qa_chains_batched.py \\
+    --gsw-path /path/to/networks \\
+    --cache-dir /path/to/cache \\
+    --questions-file /path/to/questions.json \\
+    --output-dir /path/to/output \\
+    --rebuild-cache
+        """
+    )
+
+    parser.add_argument(
+        "--gsw-path",
+        type=str,
+        required=True,
+        help="Path to the GSW networks directory (e.g., .../flattened/networks)"
+    )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        required=True,
+        help="Directory to store/load cached embeddings"
+    )
+    parser.add_argument(
+        "--questions-file",
+        type=str,
+        required=True,
+        help="Path to the questions JSON file (e.g., musique.json, 2wiki.json)"
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="logs",
+        help="Directory to save evaluation results. Default: logs"
+    )
+    parser.add_argument(
+        "--cuda-devices",
+        type=str,
+        default="0",
+        help="CUDA visible devices (e.g., '0,1,2' or '0'). Default: '0'"
+    )
+    parser.add_argument(
+        "--rebuild-cache",
+        action="store_true",
+        default=False,
+        help="Rebuild the cache (default: False, use existing cache)"
+    )
+    parser.add_argument(
+        "--num-documents",
+        type=int,
+        default=-1,
+        help="Number of documents to load (-1 for all). Default: -1"
+    )
+    parser.add_argument(
+        "--num-questions",
+        type=int,
+        default=1000,
+        help="Number of questions to evaluate. Default: 1000"
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable verbose output"
+    )
+
+    args = parser.parse_args()
+
+    # Set CUDA devices before importing torch/CUDA-dependent libraries
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda_devices
+
+    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation[/bold cyan]")
     console.print("Using chain-following approach with oracle-style prompting")
     console.print("Parallel processing for decomposition and answer generation")
-    
+    console.print(f"\nCUDA Devices: {args.cuda_devices}")
+    console.print(f"GSW Path: {args.gsw_path}")
+    console.print(f"Cache Dir: {args.cache_dir}")
+    console.print(f"Questions File: {args.questions_file}")
+    console.print(f"Output Dir: {args.output_dir}")
+    console.print(f"Rebuild Cache: {args.rebuild_cache}")
+
     try:
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
-            num_documents=-1, 
-            num_questions=1000, 
-            verbose=verbose,
-            use_bm25=True
-       )
+            num_documents=args.num_documents,
+            num_questions=args.num_questions,
+            verbose=args.verbose,
+            use_bm25=True,
+            questions_file=args.questions_file,
+            output_dir=args.output_dir,
+            gsw_path=args.gsw_path,
+            cache_dir=args.cache_dir,
+            rebuild_cache=args.rebuild_cache
+        )
 
-        
         # Run batched evaluation
         results = evaluator.run_evaluation()
-        
+
         # Compute metrics
         overall_metrics, per_example_metrics = evaluator.compute_metrics(results)
-        
+
         # Display results
         console.print("\n" + "="*60)
         console.print("[bold green]Evaluation Results:[/bold green]")
         console.print(format_evaluation_report(overall_metrics, per_example_metrics, show_examples=5))
-        
+
         # Display chain statistics
         evaluator.display_chain_statistics(results)
-        
+
         # Display token usage summary
         console.print("\n[bold cyan]Token Usage Summary:[/bold cyan]")
         total_tokens = sum(r.token_count for r in results)
         avg_tokens = total_tokens / len(results) if results else 0
         min_tokens = min((r.token_count for r in results), default=0)
         max_tokens = max((r.token_count for r in results), default=0)
-        
+
         console.print(f"Total tokens: {total_tokens:,}")
         console.print(f"Average tokens per question: {avg_tokens:.0f}")
         console.print(f"Min tokens: {min_tokens:,}")
         console.print(f"Max tokens: {max_tokens:,}")
-        
+
         # Save results
         evaluator.save_results(results, overall_metrics, per_example_metrics)
-        
+
         console.print("\n[bold green]✓ Chain-based batched evaluation completed successfully![/bold green]")
-        
+
     except Exception as e:
         console.print(f"[bold red]Evaluation failed: {e}[/bold red]")
+        import traceback
+        traceback.print_exc()
         raise
 
 
 if __name__ == "__main__":
-    # Set verbose=True for detailed output during development
-    main(verbose=False)
+    main()

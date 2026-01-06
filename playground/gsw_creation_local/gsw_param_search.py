@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
 """
-GSW Playground Script - Convert notebook to runnable Python script
-Generates GSWs from Musique corpus and evaluates them using LLM-as-a-judge.
+GSW Parameter Search Script
+Searches over generation parameters (temperature, top_p, top_k, min_p) and
+evaluates each combination using LLM-as-a-judge to find optimal settings.
+
+Usage:
+    # Run with default parameter grid
+    uv run python playground/gsw_creation_local/gsw_param_search.py
+
+    # Run with custom parameters
+    uv run python playground/gsw_creation_local/gsw_param_search.py \
+        --temperatures 0.1 0.3 0.5 \
+        --top-ps 0.9 0.95 \
+        --num-samples 50
 """
 
 from openai import OpenAI
@@ -12,8 +23,9 @@ import sys
 import glob
 import re
 import argparse
+import itertools
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from pydantic import BaseModel, Field
 from tqdm import tqdm
 from pathlib import Path
@@ -25,7 +37,7 @@ from gsw_memory.memory.models import GSWStructure
 from gsw_memory.memory.operator_utils import parse_gsw, GSWOperator
 from gsw_memory.prompts.operator_prompts import PromptType, FactualExtractionPrompts
 os.environ["OPENAI_API_KEY"] = "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"
-
+os.environ["CURATOR_CACHE_DIR"] = "/mnt/SSD3/chenda/gsw/cache/curator"
 # ============================================================================
 # Pydantic Models for LLM-as-a-Judge
 # ============================================================================
@@ -79,9 +91,9 @@ class ExtraEntity(BaseModel):
 
 class FactDetail(BaseModel):
     """Details of a fact (subject, predicate, object triple)."""
-    subject: str = Field(description="Subject entity")
-    predicate: str = Field(description="Predicate/verb phrase")
-    object: str = Field(description="Object entity")
+    subject: Optional[str] = Field(description="Subject entity", default=None)
+    predicate: Optional[str] = Field(description="Predicate/verb phrase", default=None)
+    object: Optional[str] = Field(description="Object entity", default=None)
 
 
 class MissingFact(BaseModel):
@@ -412,9 +424,25 @@ def load_golden_gsws(musique_network_dir: str, num_docs: int = 100):
     return golden_gsws
 
 
-def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://127.0.0.1:6379/v1"):
-    """Generate predicted GSWs using GSWOperator."""
-    print("Generating predicted GSWs with GSWOperator...")
+def generate_pred_gsws(
+    corpus_sample: List[Dict],
+    vllm_base_url: str = "http://127.0.0.1:6379/v1",
+    generation_params: Dict = None
+):
+    """Generate predicted GSWs using GSWOperator with specified generation params."""
+    if generation_params is None:
+        generation_params = {
+            "temperature": 0.6,
+            "top_p": 0.95,
+            "top_k": 20,
+            "min_p": 0.0,
+            "max_tokens": 4096 * 3, 
+            "repetition_penalty": 1.1,
+            "presence_penalty": 0.3,
+            "frequency_penalty": 0.3
+        }
+
+    print(f"Generating predicted GSWs with params: {generation_params}")
 
     os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
 
@@ -429,12 +457,7 @@ def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://1
             "seconds_to_pause_on_rate_limit": 5,
             "require_all_responses": False,
         },
-        generation_params={
-            "temperature": 0.6,
-            "top_p": 0.95,
-            "top_k": 20,
-            "min_p": 0.0
-        },
+        generation_params=generation_params,
         prompt_type=PromptType.FACTUAL,
         backend="litellm",
         response_format=GSWStructure,
@@ -458,12 +481,11 @@ def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://1
             print(f"Error parsing GSW for chunk {response.get('global_id', 'unknown')}: {e}")
             continue
 
-    pred_gsws = list(all_documents_data.values())
-    print(f"Generated {len(pred_gsws)} predicted GSWs")
-    return pred_gsws
+    print(f"Generated {len(all_documents_data)} predicted GSWs")
+    return all_documents_data  # Return dict keyed by global_id for proper matching
 
 
-def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
+def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[Optional[GSWStructure]],
                   golden_gsws: List[GSWStructure], openai_api_key: str = None):
     """Evaluate predicted GSWs against golden GSWs using LLM-as-a-judge with Curator."""
     print("Evaluating GSWs with LLM-as-a-judge (Curator + GPT-4.1-mini)...")
@@ -471,8 +493,19 @@ def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
     # Prepare input dataset for Curator
     num_samples = min(len(corpus_sample), len(pred_gsws), len(golden_gsws))
     judge_inputs = []
+    skipped_samples = []
 
     for i in range(num_samples):
+        # Skip samples where prediction failed (None)
+        if pred_gsws[i] is None:
+            skipped_samples.append({
+                "sample_id": i,
+                "global_id": corpus_sample[i].get("global_id", f"sample_{i}"),
+                "error": "prediction_failed",
+                "overall_score": None
+            })
+            continue
+
         judge_inputs.append({
             "sample_id": i,
             "global_id": corpus_sample[i].get("global_id", f"sample_{i}"),
@@ -481,9 +514,17 @@ def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
             "pred_gsw_json": pred_gsws[i].model_dump_json(indent=2)
         })
 
+    if skipped_samples:
+        print(f"Skipped {len(skipped_samples)} samples due to failed predictions")
+
+    # If no valid predictions, return only skipped samples
+    if not judge_inputs:
+        print("No valid predictions to evaluate!")
+        return skipped_samples
+
     # Create judge with Curator
     judge = GSWJudge(
-        model_name="gpt-4.1-mini",
+        model_name="gpt-5-mini",
         response_format=Judge_Format,
         batch=False,
     )
@@ -512,6 +553,12 @@ def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
                 "overall_score": None
             })
 
+    # Include skipped samples in the results
+    all_judgements.extend(skipped_samples)
+
+    # Sort by sample_id to maintain original order
+    all_judgements.sort(key=lambda x: x.get("sample_id", 0))
+
     return all_judgements
 
 
@@ -526,13 +573,43 @@ def save_judgements(judgements: List[Dict], output_path: str):
     print(f"\nSaved judgements to {output_file}")
 
 
-def calculate_statistics(judgements: List[Dict]):
-    """Calculate and print statistics from judgements."""
+def save_pred_gsws(
+    corpus_sample: List[Dict],
+    pred_gsws_dict: Dict[str, GSWStructure],
+    golden_gsws: List[GSWStructure],
+    output_path: str
+):
+    """Save predicted GSWs with idx matching golden GSWs for easy comparison."""
+    output_file = Path(output_path)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    results = []
+    for idx, (sample, gold_gsw) in enumerate(zip(corpus_sample, golden_gsws)):
+        global_id = sample.get("global_id", f"sample_{idx}")
+        pred_gsw = pred_gsws_dict.get(global_id)
+
+        results.append({
+            "idx": idx,
+            "global_id": global_id,
+            "text": sample.get("text", ""),
+            "gold_gsw": gold_gsw.model_dump() if gold_gsw else None,
+            "pred_gsw": pred_gsw.model_dump() if pred_gsw else None
+        })
+
+    with open(output_file, 'w') as f:
+        json.dump(results, f, indent=2)
+
+    print(f"Saved predicted GSWs to {output_file}")
+
+
+def calculate_statistics(judgements: List[Dict], print_stats: bool = True) -> Dict:
+    """Calculate statistics from judgements and optionally print them."""
     scores = [j["overall_score"] for j in judgements if j["overall_score"] is not None]
 
     if not scores:
-        print("\nNo valid scores found!")
-        return
+        if print_stats:
+            print("\nNo valid scores found!")
+        return {"avg_score": 0, "min_score": 0, "max_score": 0, "usable_rate": 0}
 
     avg_score = sum(scores) / len(scores)
     min_score = min(scores)
@@ -541,18 +618,149 @@ def calculate_statistics(judgements: List[Dict]):
     usable_count = sum(1 for j in judgements
                       if j.get("judgement") and j["judgement"].get("usable_for_QA", False))
     total_count = len([j for j in judgements if "error" not in j])
+    usable_rate = usable_count / total_count * 100 if total_count > 0 else 0
 
-    print("\n" + "="*60)
-    print("EVALUATION STATISTICS")
-    print("="*60)
-    print(f"Total samples evaluated: {len(judgements)}")
-    print(f"Successful evaluations: {len(scores)}")
-    print(f"Failed evaluations: {len(judgements) - len(scores)}")
-    print(f"\nAverage overall score: {avg_score:.2f}")
-    print(f"Min score: {min_score:.2f}")
-    print(f"Max score: {max_score:.2f}")
-    print(f"\nUsable for QA: {usable_count}/{total_count} ({usable_count/total_count*100:.1f}%)")
-    print("="*60)
+    stats = {
+        "total_samples": len(judgements),
+        "successful_evals": len(scores),
+        "failed_evals": len(judgements) - len(scores),
+        "avg_score": avg_score,
+        "min_score": min_score,
+        "max_score": max_score,
+        "usable_count": usable_count,
+        "total_count": total_count,
+        "usable_rate": usable_rate
+    }
+
+    if print_stats:
+        print("\n" + "="*60)
+        print("EVALUATION STATISTICS")
+        print("="*60)
+        print(f"Total samples evaluated: {stats['total_samples']}")
+        print(f"Successful evaluations: {stats['successful_evals']}")
+        print(f"Failed evaluations: {stats['failed_evals']}")
+        print(f"\nAverage overall score: {stats['avg_score']:.2f}")
+        print(f"Min score: {stats['min_score']:.2f}")
+        print(f"Max score: {stats['max_score']:.2f}")
+        print(f"\nUsable for QA: {stats['usable_count']}/{stats['total_count']} ({stats['usable_rate']:.1f}%)")
+        print("="*60)
+
+    return stats
+
+
+# ============================================================================
+# Parameter Search Functions
+# ============================================================================
+
+def generate_param_grid(
+    temperatures: List[float],
+    top_ps: List[float],
+    top_ks: List[int],
+    min_ps: List[float]
+) -> List[Dict]:
+    """Generate all combinations of parameters."""
+    param_combinations = []
+    for temp, top_p, top_k, min_p in itertools.product(temperatures, top_ps, top_ks, min_ps):
+        param_combinations.append({
+            "temperature": temp,
+            "top_p": top_p,
+            "top_k": top_k,
+            "min_p": min_p,
+            "repetition_penalty": 1.1,
+            "presence_penalty": 0.3,
+            "frequency_penalty": 0.3,
+            "max_tokens": 4096 * 3,
+        })
+    return param_combinations
+
+
+def run_param_search(
+    corpus_sample: List[Dict],
+    golden_gsws: List[GSWStructure],
+    param_combinations: List[Dict],
+    vllm_url: str,
+    output_dir: str
+) -> List[Dict]:
+    """Run parameter search over all combinations."""
+    all_results = []
+
+    print(f"\n{'='*60}")
+    print(f"PARAMETER SEARCH: {len(param_combinations)} combinations")
+    print(f"{'='*60}\n")
+
+    for i, params in enumerate(param_combinations):
+        print(f"\n{'='*60}")
+        print(f"[{i+1}/{len(param_combinations)}] Testing: {params}")
+        print(f"{'='*60}")
+
+        # Generate GSWs with current params (returns dict keyed by global_id)
+        pred_gsws_dict = generate_pred_gsws(corpus_sample, vllm_url, params)
+
+        # Convert dict to list matching corpus_sample order for evaluation
+        pred_gsws_list = []
+        for sample in corpus_sample:
+            global_id = sample.get("global_id")
+            pred_gsw = pred_gsws_dict.get(global_id)
+            pred_gsws_list.append(pred_gsw)
+
+        # Evaluate
+        judgements = evaluate_gsws(
+            corpus_sample, pred_gsws_list, golden_gsws,
+            openai_api_key=os.environ.get("OPENAI_API_KEY")
+        )
+
+        # Calculate stats
+        stats = calculate_statistics(judgements, print_stats=True)
+
+        # Save individual results
+        param_str = f"t{params['temperature']}_p{params['top_p']}_k{params['top_k']}_m{params['min_p']}"
+        judgements_file = os.path.join(output_dir, f"judgements_{param_str}.json")
+        pred_gsws_file = os.path.join(output_dir, f"pred_gsws_{param_str}.json")
+
+        save_judgements(judgements, judgements_file)
+        save_pred_gsws(corpus_sample, pred_gsws_dict, golden_gsws, pred_gsws_file)
+
+        # Store result
+        result = {
+            "params": params,
+            "stats": stats,
+            "judgements_file": judgements_file,
+            "pred_gsws_file": pred_gsws_file
+        }
+        all_results.append(result)
+
+    return all_results
+
+
+def print_search_summary(results: List[Dict]):
+    """Print summary of parameter search results."""
+    print("\n" + "="*80)
+    print("PARAMETER SEARCH SUMMARY")
+    print("="*80)
+
+    # Sort by average score
+    valid_results = [r for r in results if "error" not in r]
+    sorted_results = sorted(valid_results, key=lambda x: x["stats"]["avg_score"], reverse=True)
+
+    print(f"\n{'Rank':<6} {'Temp':<8} {'Top-P':<8} {'Top-K':<8} {'Min-P':<8} {'Avg Score':<12} {'Usable %':<10}")
+    print("-" * 80)
+
+    for i, result in enumerate(sorted_results):
+        params = result["params"]
+        stats = result["stats"]
+        print(f"{i+1:<6} {params['temperature']:<8.2f} {params['top_p']:<8.2f} {params['top_k']:<8} {params['min_p']:<8.2f} {stats['avg_score']:<12.2f} {stats['usable_rate']:<10.1f}")
+
+    if sorted_results:
+        best = sorted_results[0]
+        print("\n" + "="*80)
+        print("BEST PARAMETERS:")
+        print(f"  temperature: {best['params']['temperature']}")
+        print(f"  top_p: {best['params']['top_p']}")
+        print(f"  top_k: {best['params']['top_k']}")
+        print(f"  min_p: {best['params']['min_p']}")
+        print(f"  Average Score: {best['stats']['avg_score']:.2f}")
+        print(f"  Usable for QA: {best['stats']['usable_rate']:.1f}%")
+        print("="*80)
 
 
 # ============================================================================
@@ -560,11 +768,29 @@ def calculate_statistics(judgements: List[Dict]):
 # ============================================================================
 
 def main():
-    parser = argparse.ArgumentParser(description="GSW Playground - Generate and evaluate GSWs")
-    parser.add_argument("--num-samples", type=int, default=100,
-                       help="Number of samples to process (default: 100)")
+    parser = argparse.ArgumentParser(
+        description="GSW Parameter Search - Find optimal generation parameters",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+    # Run with default parameter grid
+    uv run python playground/gsw_creation_local/gsw_param_search.py
+
+    # Run with custom temperatures and top_p values
+    uv run python playground/gsw_creation_local/gsw_param_search.py \\
+        --temperatures 0.1 0.3 0.5 \\
+        --top-ps 0.9 0.95
+
+    # Quick test with fewer samples
+    uv run python playground/gsw_creation_local/gsw_param_search.py \\
+        --num-samples 20 --temperatures 0.3 0.6
+        """
+    )
+
+    parser.add_argument("--num-samples", type=int, default=50,
+                       help="Number of samples to process (default: 50)")
     parser.add_argument("--musique-json", type=str,
-                       default="/home/yigit/codebase/gsw-memory/playground_data/musique.json",
+                       default="/mnt/SSD3/chenda/gsw/musique.json",
                        help="Path to musique.json")
     parser.add_argument("--golden-gsw-dir", type=str,
                        default="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
@@ -572,53 +798,79 @@ def main():
     parser.add_argument("--vllm-url", type=str,
                        default="http://127.0.0.1:6379/v1",
                        help="VLLM base URL")
-    parser.add_argument("--output", type=str,
+    parser.add_argument("--output-dir", type=str,
                        default=None,
-                       help="Output path for judgements JSON (default: judgements_output_TIMESTAMP.json)")
-    parser.add_argument("--skip-generation", action="store_true",
-                       help="Skip GSW generation (requires pre-saved GSWs)")
+                       help="Output directory for results (default: param_search_TIMESTAMP/)")
+
+    # Parameter grid arguments
+    parser.add_argument("--temperatures", type=float, nargs="+",
+                       default=[0.1, 0.3, 0.5, 0.7],
+                       help="Temperature values to search (default: 0.1 0.3 0.5 0.7)")
+    parser.add_argument("--top-ps", type=float, nargs="+",
+                       default=[0.9, 0.95],
+                       help="Top-p values to search (default: 0.9 0.95)")
+    parser.add_argument("--top-ks", type=int, nargs="+",
+                       default=[20],
+                       help="Top-k values to search (default: 20)")
+    parser.add_argument("--min-ps", type=float, nargs="+",
+                       default=[0.0],
+                       help="Min-p values to search (default: 0.0)")
 
     args = parser.parse_args()
 
-    # Set default output path with timestamp
-    if args.output is None:
+    # Set default output directory with timestamp
+    if args.output_dir is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        args.output = f"playground/gsw_creation_local/judgements_output_{timestamp}.json"
+        args.output_dir = f"playground/gsw_creation_local/param_search_{timestamp}"
+
+    # Create output directory
+    Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+
+    # Generate parameter grid
+    param_combinations = generate_param_grid(
+        args.temperatures, args.top_ps, args.top_ks, args.min_ps
+    )
 
     print("="*60)
-    print("GSW PLAYGROUND - EVALUATION PIPELINE")
+    print("GSW PARAMETER SEARCH")
     print("="*60)
     print(f"Number of samples: {args.num_samples}")
-    print(f"Output file: {args.output}")
+    print(f"Output directory: {args.output_dir}")
+    print(f"Parameter combinations: {len(param_combinations)}")
+    print(f"  Temperatures: {args.temperatures}")
+    print(f"  Top-p values: {args.top_ps}")
+    print(f"  Top-k values: {args.top_ks}")
+    print(f"  Min-p values: {args.min_ps}")
     print("="*60 + "\n")
 
-    # Load data
-    corpus_sample = load_musique_corpus(
-        args.musique_json,
-        args.num_samples
+    # Load data (once, reuse for all param combinations)
+    corpus_sample = load_musique_corpus(args.musique_json, args.num_samples)
+    golden_gsws = load_golden_gsws(args.golden_gsw_dir, args.num_samples)
+
+    # Run parameter search
+    results = run_param_search(
+        corpus_sample, golden_gsws, param_combinations,
+        args.vllm_url, args.output_dir
     )
 
-    golden_gsws = load_golden_gsws(
-        args.golden_gsw_dir,
-        args.num_samples
-    )
+    # Save overall results
+    summary_file = os.path.join(args.output_dir, "search_summary.json")
+    with open(summary_file, "w") as f:
+        json.dump({
+            "timestamp": datetime.now().isoformat(),
+            "num_samples": args.num_samples,
+            "param_grid": {
+                "temperatures": args.temperatures,
+                "top_ps": args.top_ps,
+                "top_ks": args.top_ks,
+                "min_ps": args.min_ps
+            },
+            "results": results
+        }, f, indent=2)
+    print(f"\nSaved search summary to {summary_file}")
 
-    # Generate or load predicted GSWs
-    if not args.skip_generation:
-        pred_gsws = generate_pred_gsws(corpus_sample, args.vllm_url)
-    else:
-        print("Skipping GSW generation (--skip-generation flag set)")
-        print("Note: You need to load pre-saved GSWs manually for this to work")
-        return
-
-    # Evaluate
-    judgements = evaluate_gsws(corpus_sample, pred_gsws, golden_gsws, openai_api_key=os.environ["OPENAI_API_KEY"])
-
-    # Save results
-    save_judgements(judgements, args.output)
-
-    # Print statistics
-    calculate_statistics(judgements)
+    # Print summary
+    print_search_summary(results)
 
 
 if __name__ == "__main__":
