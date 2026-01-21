@@ -44,7 +44,7 @@ except Exception:
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import our enhanced entity searcher
-from playground.simple_entity_search import EntitySearcher
+from simple_entity_search import EntitySearcher
 
 # OpenAI for question decomposition and final reasoning
 try:

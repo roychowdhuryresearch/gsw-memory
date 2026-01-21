@@ -1,13 +1,22 @@
 #!/usr/bin/env python3
 """
-Batched Chain-Following Multi-Hop Question Answering Evaluation Script
+ABLATION STUDY: BEAM WIDTH VARIATION
 
-Uses curator for parallel LLM calls with the chain-following approach.
-Implements smart chain following:
-1. Decomposes questions into sub-questions (batched)
-2. Processes retrieval with entity substitution and chain formation
-3. Reranks chains against original questions
-4. Generates answers using oracle-style prompting (batched)
+This script evaluates multi-hop QA with different beam widths.
+Allows testing the impact of beam search pruning on performance.
+
+ABLATION:
+- ✅ Question decomposition
+- ✅ Chain-following retrieval
+- ✅ Chain reranking
+- ✅ Q&A reranking
+- 🔧 Configurable beam width (command-line argument)
+- ✅ Oracle-style answer generation
+
+Usage:
+    python evaluate_beam_width_ablation.py --beam_width 3
+
+Comparison baseline: evaluate_multi_hop_qa_chains_batched.py
 """
 
 import re
@@ -15,6 +24,7 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 import sys
+import argparse
 from dataclasses import dataclass
 from datetime import datetime
 import time
@@ -24,14 +34,13 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
-
 # Add the parent directory to the path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 # Import our chain-following multi-hop QA system for retrieval
-from playground.multi_hop_qa_chains import ChainFollowingMultiHopQA
+from multi_hop_qa_chains import ChainFollowingMultiHopQA
 
 # Import evaluation utilities
 from src.gsw_memory.evaluation.hipporag_eval import evaluate_qa_batch, format_evaluation_report
@@ -49,7 +58,8 @@ console = Console()
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / f"multihop_qa_chains_batched_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+# Log file will be set dynamically in main() based on beam_width
+LOG_FILE = None
 
 
 class DecomposedQuestion(BaseModel):
@@ -145,66 +155,6 @@ Output:
     ]
 }}
 
-Input: "What is the country where Nissedal is located named after?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "In which country is Nissedal located?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What is <ENTITY_Q1> named after?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
- 
-Input: "What is the highest point in the country where Bugabula is found?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "In which country is Bugabula found?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What is the highest point in <ENTITY_Q1>?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "Who from the state with the Routzahn-Miller Farmstead signed the declaration of independence?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which U.S. state is the Routzahn\u2013Miller Farmstead located in?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Who from <ENTITY_Q1> signed the Declaration of Independence?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "The athlete that became the highest-paid went to manchester United when?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which athlete became the highest-paid?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "When did <ENTITY_Q1> join Manchester United?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
 Input: "Which film has the director who is older, Dune or The Dark Knight?"
 Output:
 {{
@@ -227,48 +177,6 @@ Output:
         }}
     ]
 }}
-
-Input: "The mangalyaan of the country where Goa is located was sent to the planet where Padus Vallis is located by launching what?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which country is Goa located in?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "On which planet is Padus Vallis located?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What launch vehicle was used to send the Mangalyaan of <ENTITY_Q1> to <ENTITY_Q2>?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "Who is the mother of the emperor under whom the empire conquering at around AD 43 the country carrying out the swallows experiment reached its greatest extent?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which country carried out the swallows experiment?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Which empire conquered <ENTITY_Q1> around AD 43?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Under which emperor did <ENTITY_Q2> reach its greatest territorial extent?",
-                "requires_retrieval": "true"    
-            }},
-            {{
-                "question": "Who was <ENTITY_Q3>'s mother?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
 
 
 IMPORTANT:
@@ -436,16 +344,17 @@ class ChainBatchedEvaluationResult:
 
 class ChainBatchedMultiHopQAEvaluator:
     """Batched evaluator for chain-following multi-hop QA using curator for parallel LLM calls."""
-    
+
     def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False,
-                 chain_top_k: int = 15, use_bm25: bool = False):
+                 chain_top_k: int = 15, use_bm25: bool = False, beam_width: int = 5):
         """Initialize batched chain evaluator.
-        
+
         Args:
             num_documents: Number of documents to load
             num_questions: Number of questions to evaluate
             verbose: Whether to show detailed output
             chain_top_k: Number of top chains to select after reranking
+            beam_width: Beam width for chain-following search (ABLATION PARAMETER)
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
@@ -453,18 +362,21 @@ class ChainBatchedMultiHopQAEvaluator:
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
-        
+        self.beam_width = beam_width  # ABLATION: Store beam width
+
         console.print("[bold blue]Initializing Chain-Based Batched Multi-Hop QA Evaluator...[/bold blue]")
         console.print(f"  Chain selection: Top {chain_top_k} chains")
-        
+        console.print(f"  [yellow]ABLATION: Beam width = {beam_width}[/yellow]")
+
         # Initialize the chain-following retrieval system (single instance for all questions)
+        # ABLATION: Use configurable beam_width
         self.qa_system = ChainFollowingMultiHopQA(
-            num_documents=num_documents, 
-            verbose=False, 
+            num_documents=num_documents,
+            verbose=False,
             show_prompt=False,
             chain_top_k=chain_top_k,
-            chain_following_mode="cumulative", 
-            beam_width=5, 
+            chain_following_mode="cumulative",
+            beam_width=beam_width,  # ABLATION: Configurable beam width
             reranker_model_name="voyage",
             use_chain_reranker=True,
             use_bm25=use_bm25
@@ -474,7 +386,7 @@ class ChainBatchedMultiHopQAEvaluator:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-4.1-mini",
+                model_name="gpt-4o",
                 # model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
                 # backend = "litellm",
                 # backend_params = {
@@ -860,8 +772,8 @@ class ChainBatchedMultiHopQAEvaluator:
             overall_metrics: Overall performance metrics
             per_example_metrics: Per-question metrics
         """
-        output_file = LOG_DIR / f"multihop_qa_chains_batched_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        
+        output_file = LOG_DIR / f"multihop_qa_BEAM_{self.beam_width}_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+
         output_data = {
             "evaluation_info": {
                 "num_documents": self.num_documents,
@@ -871,7 +783,10 @@ class ChainBatchedMultiHopQAEvaluator:
                 "batched": True,
                 "chain_following": True,
                 "oracle_prompting": True,
-                "curator_available": CURATOR_AVAILABLE
+                "curator_available": CURATOR_AVAILABLE,
+                "ablation": f"BEAM_WIDTH_{self.beam_width}",
+                "ablation_description": f"Testing beam width = {self.beam_width}",
+                "beam_width": self.beam_width
             },
             "overall_metrics": overall_metrics,
             "per_question_results": []
@@ -929,23 +844,25 @@ class ChainBatchedMultiHopQAEvaluator:
             console.print("No chain-following results found (all used fallback)")
 
 
-def main(verbose: bool = False):
+def main(verbose: bool = False, beam_width: int = 5):
     """Main evaluation function.
-    
+
     Args:
         verbose: Whether to show detailed output
+        beam_width: Beam width for chain-following (ABLATION PARAMETER)
     """
-    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
+    console.print(f"\n[bold cyan]🚀 ABLATION: Multi-Hop QA with Beam Width = {beam_width}[/bold cyan]")
+    console.print(f"[yellow]ABLATION: Testing beam width = {beam_width}[/yellow]")
     console.print("Using chain-following approach with oracle-style prompting")
-    console.print("Parallel processing for decomposition and answer generation")
-    
+
     try:
-        # Initialize evaluator
+        # Initialize evaluator with specified beam width
         evaluator = ChainBatchedMultiHopQAEvaluator(
-            num_documents=-1, 
-            num_questions=1000, 
+            num_documents=-1,
+            num_questions=1000,
             verbose=verbose,
-            use_bm25=True
+            use_bm25=True,
+            beam_width=beam_width  # ABLATION: Pass beam width
        )
 
         
@@ -986,5 +903,21 @@ def main(verbose: bool = False):
 
 
 if __name__ == "__main__":
-    # Set verbose=True for detailed output during development
-    main(verbose=False)
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Beam Width Ablation Study for Multi-Hop QA")
+    parser.add_argument(
+        "--beam_width",
+        type=int,
+        default=3,
+        help="Beam width for chain-following search (default: 5)"
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Show detailed output"
+    )
+
+    args = parser.parse_args()
+
+    # Run evaluation with specified beam width
+    main(verbose=args.verbose, beam_width=args.beam_width)

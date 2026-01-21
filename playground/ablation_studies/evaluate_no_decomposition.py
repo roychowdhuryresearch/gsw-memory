@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """
-Batched Chain-Following Multi-Hop Question Answering Evaluation Script
+ABLATION STUDY: NO QUESTION DECOMPOSITION
 
-Uses curator for parallel LLM calls with the chain-following approach.
-Implements smart chain following:
-1. Decomposes questions into sub-questions (batched)
-2. Processes retrieval with entity substitution and chain formation
-3. Reranks chains against original questions
-4. Generates answers using oracle-style prompting (batched)
+This script evaluates multi-hop QA WITHOUT question decomposition.
+Instead of breaking questions into sub-questions, it uses the original
+question directly for retrieval.
+
+ABLATION:
+- ❌ Question decomposition (Stage 1 skipped)
+- ✅ Chain-following retrieval (simplified)
+- ✅ Reranking (both chain and Q&A)
+- ✅ Oracle-style answer generation
+
+Comparison baseline: evaluate_multi_hop_qa_chains_batched.py
 """
 
 import re
@@ -24,14 +29,13 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,0'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
-
 # Add the parent directory to the path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 # Import our chain-following multi-hop QA system for retrieval
-from playground.multi_hop_qa_chains import ChainFollowingMultiHopQA
+from multi_hop_qa_chains import ChainFollowingMultiHopQA
 
 # Import evaluation utilities
 from src.gsw_memory.evaluation.hipporag_eval import evaluate_qa_batch, format_evaluation_report
@@ -49,262 +53,7 @@ console = Console()
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / f"multihop_qa_chains_batched_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-
-
-class DecomposedQuestion(BaseModel):
-    question: str
-    requires_retrieval: bool
-
-class DecomposedQuestionList(BaseModel):
-    questions: List[DecomposedQuestion]
-
-class ChainQuestionDecomposer(curator.LLM):
-    """Curator class for decomposing multi-hop questions in parallel."""
-    
-    # return_completions_object = True
-    
-    def __init__(self, **kwargs):
-        """Initialize the question decomposer."""
-        super().__init__(**kwargs)
-    
-    def prompt(self, input):
-        """Create a decomposition prompt for each question."""
-        decomposition_prompt = f"""Your task is to break down a complex multi-hop question into the most efficient sequence of single-hop, **atomic** questions.
-
-## Your Main Goal: Build Smart Bridges, Don't Just Collect Nouns
-The most critical skill is to convert complex logical clauses (like "despite," "the country where," "the year before") into a single, powerful **bridging question**. This question should use a known entity as context to find the next one. Avoid finding all the entities separately and then trying to figure out how they connect.
-
----
-## A Simple Analogy for Efficiency
-
-**Question:** "What is the phone number of the mother of the tallest player on the Lakers?"
-
-** Inefficient Path:**
-1.  Who are the players on the Lakers?
-2.  What are all their heights?
-3.  Who is the mother of the tallest player? *(This step is a logical leap)*
-
-** Efficient Path:**
-1.  Who is the tallest player on the Lakers?
-2.  Who is the mother of `<ENTITY_Q1>`?
-3.  What is the phone number of `<ENTITY_Q2>`?
-
----
-## How to Decompose a Question
-This process follows a logical flow from high-level analysis to the fine-tuning of your question chain.
-
-### 1. Analyze the Query's Components
-First, break down the original question into its fundamental building blocks. Identify the core **entities** (people, places, organizations), their **properties** (attributes like rank, location, date), and the **relationships** that connect them.
-
-### 2. Construct an Atomic Chain
-Next, formulate a sequence of questions where each question retrieves a single fact.
-* **Isolate Comparisons:** Don't ask "who is faster?" Ask for the specific rank or time of each person involved.
-* **Link with Placeholders:** Use `<ENTITY_Qn>` to pass the answer from a previous question (`Qn`) into the next one.
-
-### 3. Optimize for Efficiency and Precision
-Your final goal is the **shortest and most direct path** to the answer.
-* **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
-  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
-
-## Formatting
-Format each decomposed question as follows:
-
-
-Question: [the question text]
-Requires retrieval: [True/False]
-
-And provide the response in the following JSON format:
-{{
-  "questions": [
-    {{
-      "question": "the decomposed question text",
-      "requires_retrieval": "True/False"
-    }}
-  ]
-}}
-
-Examples:
-
-Input: "What is the birth year of the spouse of the director of Casablanca?"
-Output:
-{{
-    "questions": [
-        {{
-            "question": "Who directed Casablanca?",
-            "requires_retrieval": "true"
-        }},
-        {{
-            "question": "Who was <ENTITY_Q1>'s spouse?",
-            "requires_retrieval": "true"
-        }},
-        {{
-            "question": "What is <ENTITY_Q2>'s birth year?",
-            "requires_retrieval": "true"
-        }}
-    ]
-}}
-
-Input: "What is the country where Nissedal is located named after?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "In which country is Nissedal located?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What is <ENTITY_Q1> named after?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
- 
-Input: "What is the highest point in the country where Bugabula is found?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "In which country is Bugabula found?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What is the highest point in <ENTITY_Q1>?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "Who from the state with the Routzahn-Miller Farmstead signed the declaration of independence?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which U.S. state is the Routzahn\u2013Miller Farmstead located in?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Who from <ENTITY_Q1> signed the Declaration of Independence?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "The athlete that became the highest-paid went to manchester United when?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which athlete became the highest-paid?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "When did <ENTITY_Q1> join Manchester United?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "Which film has the director who is older, Dune or The Dark Knight?"
-Output:
-{{
-    "questions": [
-        {{
-            "question": "Who directed Dune?",
-            "requires_retrieval": "true"
-        }},
-        {{
-            "question": "Who directed The Dark Knight?",
-            "requires_retrieval": "true"
-        }},
-        {{
-            "question": "Who is older, <ENTITY_Q1> or <ENTITY_Q2>?",
-            "requires_retrieval": "true"
-        }},
-        {{
-            "question": "Who is older, <ENTITY_Q1> or <ENTITY_Q2>?",
-            "requires_retrieval": "false"
-        }}
-    ]
-}}
-
-Input: "The mangalyaan of the country where Goa is located was sent to the planet where Padus Vallis is located by launching what?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which country is Goa located in?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "On which planet is Padus Vallis located?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "What launch vehicle was used to send the Mangalyaan of <ENTITY_Q1> to <ENTITY_Q2>?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-Input: "Who is the mother of the emperor under whom the empire conquering at around AD 43 the country carrying out the swallows experiment reached its greatest extent?",
-Output:
-{{
-        "questions": [
-            {{
-                "question": "Which country carried out the swallows experiment?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Which empire conquered <ENTITY_Q1> around AD 43?",
-                "requires_retrieval": "true"
-            }},
-            {{
-                "question": "Under which emperor did <ENTITY_Q2> reach its greatest territorial extent?",
-                "requires_retrieval": "true"    
-            }},
-            {{
-                "question": "Who was <ENTITY_Q3>'s mother?",
-                "requires_retrieval": "true"
-            }}
-        ]
-    }}
-
-
-IMPORTANT:
-    AVOID over-decomposition like this:
-    DON'T break "Who is John Doe?" into:
-    1. Who is John Doe? → "English"
-    2. When was <ENTITY_Q1> born? → "When was English born?"
-
-    DO ask directly: "When was John Doe born?"
-
-Now decompose this question:
-Input: "{input['question']}"
-Output:
-"""
-        
-        return [
-            {"role": "system", "content": "You are a helpful assistant that breaks down complex questions into simple steps."},
-            {"role": "user", "content": decomposition_prompt}
-        ]
-    
-    def parse(self, input, response: DecomposedQuestionList):
-        """Parse the decomposition response."""
-
-        # convert string to json
-        # response = json.loads(response)
-        # questions = [{"question" : q["question"], "requires_retrieval" : q["requires_retrieval"]} for q in response["questions"]]
-        questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
-        
-        return [{
-            "question_id": input['question_id'],
-            "original_question": input['question'],
-            "decomposed_questions": questions,
-            # "raw_response": decomposition_text
-        }]
-
-
+LOG_FILE = LOG_DIR / f"multihop_qa_NO_DECOMP_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
 
 class ChainAnswerGenerator(curator.LLM):
@@ -473,22 +222,6 @@ class ChainBatchedMultiHopQAEvaluator:
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
-            self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-4.1-mini",
-                # model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
-                # backend = "litellm",
-                # backend_params = {
-                #     "base_url": "http://127.0.0.1:8989/v1",
-                #     "request_timeout": 600.0,  
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #     "seconds_to_pause_on_rate_limit": 5,
-                #     "require_all_responses": False,
-                # },
-                generation_params={"temperature": 0}, 
-                response_format=DecomposedQuestionList
-            )
             self.answer_generator = ChainAnswerGenerator(
                 model_name="gpt-4o-mini", 
                 generation_params={"temperature": 0},
@@ -528,7 +261,7 @@ class ChainBatchedMultiHopQAEvaluator:
         """
         console.print("[cyan]Loading Musique questions...[/cyan]")
         
-        questions_file = self.data_dir / "2wikimultihopqa.json"
+        questions_file = self.data_dir / "musique_multihopqa.json"
         if not questions_file.exists():
             raise FileNotFoundError(f"Questions file not found: {questions_file}")
         
@@ -571,56 +304,31 @@ class ChainBatchedMultiHopQAEvaluator:
         return questions_data
     
     def run_batched_decomposition(self, questions_data: List[Tuple[str, str, List[str]]]) -> Dict[str, Dict]:
-        """Run batched question decomposition using curator.
-        
+        """ABLATION: Skip decomposition and use original questions directly.
+
         Args:
             questions_data: List of (question_id, question, gold_answers)
-            
-        Returns:
-            Dictionary mapping question_id to decomposition results
-        """
-        console.print("\n[bold cyan]Stage 1: Batched Question Decomposition[/bold cyan]")
-        
-        if not CURATOR_AVAILABLE:
-            # Fallback to sequential processing
-            console.print("[yellow]Using sequential decomposition (curator not available)[/yellow]")
-            decomposition_results = {}
-            
-            with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), BarColumn(), console=console) as progress:
-                task = progress.add_task("Decomposing questions...", total=len(questions_data))
-                
-                for question_id, question, _ in questions_data:
-                    decomposed = self.qa_system.decompose_question(question)
-                    decomposition_results[question_id] = {
-                        "original_question": question,
-                        "decomposed_questions": decomposed
-                    }
-                    progress.update(task, advance=1)
-            
-            return decomposition_results
-        
-        # Prepare inputs for batched decomposition
-        decompose_inputs = [
-            {"question_id": qid, "question": question}
-            for qid, question, _ in questions_data
-        ]
-        
-        console.print(f"[cyan]Decomposing {len(decompose_inputs)} questions in parallel...[/cyan]")
-        start_time = time.time()
-        
-        # Run batched decomposition
-        decomposition_dataset = self.decomposer(decompose_inputs)
-        
-        elapsed = time.time() - start_time
-        console.print(f"[green]✓ Decomposition complete in {elapsed:.1f}s ({elapsed/len(decompose_inputs):.2f}s per question)[/green]")
-        
-        # Convert to dictionary for easy lookup
-        decomposition_results = {
-            item["question_id"]: item
-            for item in decomposition_dataset.dataset
-        }
-        
 
+        Returns:
+            Dictionary mapping question_id to "decomposition" results (just original question)
+        """
+        console.print("\n[bold yellow]Stage 1: SKIPPED - No Question Decomposition (Ablation)[/bold yellow]")
+        console.print("[dim]Using original questions directly without decomposition[/dim]")
+
+        # Create fake decomposition results with just the original question
+        decomposition_results = {}
+        for question_id, question, _ in questions_data:
+            decomposition_results[question_id] = {
+                "original_question": question,
+                "decomposed_questions": [
+                    {
+                        "question": question,
+                        "requires_retrieval": True
+                    }
+                ]
+            }
+
+        console.print(f"[green]✓ Prepared {len(decomposition_results)} questions (no decomposition)[/green]")
         return decomposition_results
     
     def run_chain_retrieval_stage(self, questions_data: List[Tuple[str, str, List[str]]], 
@@ -860,7 +568,7 @@ class ChainBatchedMultiHopQAEvaluator:
             overall_metrics: Overall performance metrics
             per_example_metrics: Per-question metrics
         """
-        output_file = LOG_DIR / f"multihop_qa_chains_batched_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        output_file = LOG_DIR / f"multihop_qa_NO_DECOMP_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         
         output_data = {
             "evaluation_info": {
@@ -871,7 +579,9 @@ class ChainBatchedMultiHopQAEvaluator:
                 "batched": True,
                 "chain_following": True,
                 "oracle_prompting": True,
-                "curator_available": CURATOR_AVAILABLE
+                "curator_available": CURATOR_AVAILABLE,
+                "ablation": "NO_DECOMPOSITION",
+                "ablation_description": "Questions are NOT decomposed; original question used directly"
             },
             "overall_metrics": overall_metrics,
             "per_question_results": []
@@ -931,13 +641,13 @@ class ChainBatchedMultiHopQAEvaluator:
 
 def main(verbose: bool = False):
     """Main evaluation function.
-    
+
     Args:
         verbose: Whether to show detailed output
     """
-    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
-    console.print("Using chain-following approach with oracle-style prompting")
-    console.print("Parallel processing for decomposition and answer generation")
+    console.print("\n[bold cyan]🚀 ABLATION: Multi-Hop QA WITHOUT Question Decomposition[/bold cyan]")
+    console.print("[yellow]ABLATION: Questions are used directly without decomposition[/yellow]")
+    console.print("Using simplified retrieval with oracle-style prompting")
     
     try:
         # Initialize evaluator

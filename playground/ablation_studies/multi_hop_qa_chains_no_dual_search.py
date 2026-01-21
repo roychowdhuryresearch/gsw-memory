@@ -122,8 +122,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents,
-            cache_dir="/mnt/SSD1/shreyas/SM_GSW/2wiki/.gsw_cache",
-            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/2wiki/networks",
+            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_4_1_mini",
+            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
             verbose=False,  # Keep entity searcher quiet
             use_bm25=self.use_bm25,
             rebuild_cache=False,
@@ -647,9 +647,9 @@ Output:
         return (substituted_questions, True) if substituted_questions else ([question_template], False)
     
     def search_and_collect_evidence(self, question: str, question_embedding: np.ndarray = None, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
-        """Search for a question and collect relevant Q&A pairs using dual search.
+        """ABLATION: Search using ONLY entity-based search (no dual search).
 
-        Uses both entity-based search and direct Q&A search, then merges and reranks results.
+        Uses only entity-based search, NOT direct Q&A search.
 
         Args:
             question: The question to search for
@@ -660,7 +660,10 @@ Output:
         Returns:
             List of relevant Q&A pairs with metadata
         """
-        # 1. Entity-based search (existing approach)
+        if self.verbose:
+            console.print(f"[yellow]ABLATION: Using entity-based search only (no dual search)[/yellow]")
+
+        # ABLATION: Only entity-based search (no direct Q&A search)
         search_results = self.entity_searcher.search(
             query=question,
             query_embedding=question_embedding,
@@ -669,7 +672,7 @@ Output:
         )
 
         # Extract Q&A pairs from entity search results
-        entity_qa_pairs = []
+        all_qa_pairs = []
         for entity, score in search_results:
             qa_pairs = entity.get('qa_pairs', [])
             for qa in qa_pairs:
@@ -678,51 +681,12 @@ Output:
                 qa_with_context['source_entity_id'] = entity['id']
                 qa_with_context['doc_id'] = entity['doc_id']
                 qa_with_context['entity_score'] = score
-                qa_with_context['search_question'] = question  # Track what question led to this
-                qa_with_context['source_method'] = 'entity_search'
-                entity_qa_pairs.append(qa_with_context)
-
-        # 2. Direct Q&A search (new approach)
-        direct_qa_pairs = []
-        if hasattr(self.entity_searcher, 'search_qa_pairs_direct'):
-            direct_results = self.entity_searcher.search_qa_pairs_direct(
-                query=question,
-                query_embedding=question_embedding,
-                top_k=top_k_qa,  # Get same number as final target
-                verbose=False
-            )
-
-            # Add context to direct Q&A results
-            for qa in direct_results:
-                qa_with_context = qa.copy()
                 qa_with_context['search_question'] = question
-                # Note: source_method is already set to 'direct_qa_search' in search_qa_pairs_direct
-                direct_qa_pairs.append(qa_with_context)
-
-            if self.verbose and direct_qa_pairs:
-                console.print(f"[cyan]Direct Q&A search found {len(direct_qa_pairs)} pairs[/cyan]")
-
-        # 3. Merge and deduplicate Q&A pairs
-        all_qa_pairs = []
-        seen_qa = set()  # Track (question, answer_names) to avoid duplicates
-
-        # Add entity-based Q&A pairs first
-        for qa in entity_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
-
-        # Add direct Q&A pairs that aren't duplicates
-        for qa in direct_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
+                qa_with_context['source_method'] = 'entity_search'
+                all_qa_pairs.append(qa_with_context)
 
         if self.verbose:
-            console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
-                         f"(entity: {len(entity_qa_pairs)}, direct: {len(direct_qa_pairs)})[/cyan]")
+            console.print(f"[cyan]Entity-based search found {len(all_qa_pairs)} Q&A pairs[/cyan]")
 
         # Rerank Q&A pairs if we have embedding capability
         if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
@@ -744,9 +708,6 @@ Output:
             all_qa_pairs = sorted(all_qa_pairs, key=lambda x: x['similarity_score'], reverse=True)
             reranked = all_qa_pairs[:top_k_qa]
             return reranked
-
-            # reranked = self.entity_searcher._rerank_qa_pairs(question, all_qa_pairs, top_k=top_k_qa)
-            # return reranked
 
         # Otherwise just return top k by entity score
         return all_qa_pairs[:top_k_qa]

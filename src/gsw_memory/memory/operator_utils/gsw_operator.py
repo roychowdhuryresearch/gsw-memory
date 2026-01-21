@@ -109,7 +109,6 @@ class GSWOperator(curator.LLM):
         """Parse the LLM response - already a validated GSWStructure Pydantic object!"""
         # Convert Pydantic object to dict for PyArrow serialization
         gsw_dict = response.model_dump() if response else None
-
         parsed_response = {
             "text": input["text"],
             "idx": input.get("idx", 0),

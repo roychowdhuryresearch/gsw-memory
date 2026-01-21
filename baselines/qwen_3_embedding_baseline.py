@@ -22,10 +22,8 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
-os.environ["CURATOR_DISABLE_CACHE"] = "1"
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
-os.environ['OPENAI_API_KEY'] = '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'
-
+# os.environ["CURATOR_DISABLE_CACHE"] = "1"
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -322,7 +320,7 @@ class Qwen3EmbeddingBaseline:
                 model_name="hosted_vllm/Qwen/Qwen3-8B",
                 backend="litellm",
                 backend_params={
-                    "base_url": "http://127.0.0.1:6379/v1",
+                    "base_url": "http://127.0.0.1:6380/v1",
                     "request_timeout": 600.0,
                     "max_concurrent_requests": 32,
                     "max_requests_per_minute": 120,
@@ -330,7 +328,16 @@ class Qwen3EmbeddingBaseline:
                     "seconds_to_pause_on_rate_limit": 5,
                     "require_all_responses": False,
                 },
-                generation_params={"temperature": 0.7, "top_p": 0.8, "top_k": 20, "min_p": 0, "max_tokens": 1000}
+                generation_params={
+                    "temperature": 0.6, 
+                    "top_p": 0.95, 
+                    "top_k": 20, 
+                    "min_p": 0, 
+                    "max_tokens": 4096, 
+                    "repetition_penalty": 1.1,
+                    "presence_penalty": 0.3,
+                    "frequency_penalty": 0.3
+                            }
             )
             console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
         else:
@@ -1122,14 +1129,14 @@ def main(verbose: bool = False):
     try:
         # Initialize baseline
         baseline = Qwen3EmbeddingBaseline(
-            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/musique_corpus.json",
-            questions_path="/home/yigit/codebase/gsw-memory/playground_data/musique_platinum.json",
+            corpus_path="/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_corpus.json",
+            questions_path="/home/yigit/codebase/gsw-memory/playground_data/2wiki_platinum.json",
             num_questions=1000,
             top_k=5,
             cache_dir="/home/yigit/codebase/gsw-memory/baselines/",
             rebuild_cache=False,
             verbose=verbose,
-            use_reranker=True,  # Set to True to enable reranking
+            use_reranker=False,  # Set to True to enable reranking
             reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)c
         )
 

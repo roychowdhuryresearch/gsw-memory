@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """
-Chain-Following Multi-Hop Question Answering System
+Chain-Following Multi-Hop Question Answering System - ONLY DIRECT Q&A SEARCH ABLATION
+
+ABLATION STUDY: Uses ONLY direct Q&A search (no entity-based search)
 
 An enhanced version that implements smart chain following:
-1. Decomposes questions into sub-questions  
+1. Decomposes questions into sub-questions
 2. Processes each question sequentially with entity substitution
 3. For terminal questions: Forms complete reasoning chains
 4. Reranks chains against the original query
 5. Selects top-k most coherent chains
 6. Extracts unique Q&A pairs from selected chains
 
-This addresses the exponential explosion problem by focusing on 
+This addresses the exponential explosion problem by focusing on
 semantically coherent reasoning paths.
 """
 
@@ -44,7 +46,7 @@ except Exception:
 sys.path.append(str(Path(__file__).parent.parent))
 
 # Import our enhanced entity searcher
-from playground.simple_entity_search import EntitySearcher
+from simple_entity_search import EntitySearcher
 
 # OpenAI for question decomposition and final reasoning
 try:
@@ -647,48 +649,29 @@ Output:
         return (substituted_questions, True) if substituted_questions else ([question_template], False)
     
     def search_and_collect_evidence(self, question: str, question_embedding: np.ndarray = None, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
-        """Search for a question and collect relevant Q&A pairs using dual search.
+        """ABLATION: Search using ONLY direct Q&A search (no entity-based search).
 
-        Uses both entity-based search and direct Q&A search, then merges and reranks results.
+        Uses only direct Q&A search, NOT entity-based search.
 
         Args:
             question: The question to search for
             question_embedding: The embedding of the question
-            top_k_entities: Number of top entities to retrieve
+            top_k_entities: Number of top entities to retrieve (unused in this ablation)
             top_k_qa: Number of top Q&A pairs to keep after reranking
 
         Returns:
             List of relevant Q&A pairs with metadata
         """
-        # 1. Entity-based search (existing approach)
-        search_results = self.entity_searcher.search(
-            query=question,
-            query_embedding=question_embedding,
-            top_k=top_k_entities,
-            verbose=False
-        )
+        if self.verbose:
+            console.print(f"[yellow]ABLATION: Using direct Q&A search only (no entity-based search)[/yellow]")
 
-        # Extract Q&A pairs from entity search results
-        entity_qa_pairs = []
-        for entity, score in search_results:
-            qa_pairs = entity.get('qa_pairs', [])
-            for qa in qa_pairs:
-                qa_with_context = qa.copy()
-                qa_with_context['source_entity'] = entity['name']
-                qa_with_context['source_entity_id'] = entity['id']
-                qa_with_context['doc_id'] = entity['doc_id']
-                qa_with_context['entity_score'] = score
-                qa_with_context['search_question'] = question  # Track what question led to this
-                qa_with_context['source_method'] = 'entity_search'
-                entity_qa_pairs.append(qa_with_context)
-
-        # 2. Direct Q&A search (new approach)
-        direct_qa_pairs = []
+        # ABLATION: Only direct Q&A search (no entity-based search)
+        all_qa_pairs = []
         if hasattr(self.entity_searcher, 'search_qa_pairs_direct'):
             direct_results = self.entity_searcher.search_qa_pairs_direct(
                 query=question,
                 query_embedding=question_embedding,
-                top_k=top_k_qa,  # Get same number as final target
+                top_k=top_k_qa * 3,  # Get more candidates for reranking
                 verbose=False
             )
 
@@ -697,36 +680,19 @@ Output:
                 qa_with_context = qa.copy()
                 qa_with_context['search_question'] = question
                 # Note: source_method is already set to 'direct_qa_search' in search_qa_pairs_direct
-                direct_qa_pairs.append(qa_with_context)
+                all_qa_pairs.append(qa_with_context)
 
-            if self.verbose and direct_qa_pairs:
-                console.print(f"[cyan]Direct Q&A search found {len(direct_qa_pairs)} pairs[/cyan]")
-
-        # 3. Merge and deduplicate Q&A pairs
-        all_qa_pairs = []
-        seen_qa = set()  # Track (question, answer_names) to avoid duplicates
-
-        # Add entity-based Q&A pairs first
-        for qa in entity_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
-
-        # Add direct Q&A pairs that aren't duplicates
-        for qa in direct_qa_pairs:
-            qa_key = (qa.get('question', ''), tuple(qa.get('answer_names', [])))
-            if qa_key not in seen_qa:
-                all_qa_pairs.append(qa)
-                seen_qa.add(qa_key)
-
-        if self.verbose:
-            console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
-                         f"(entity: {len(entity_qa_pairs)}, direct: {len(direct_qa_pairs)})[/cyan]")
+            if self.verbose:
+                console.print(f"[cyan]Direct Q&A search found {len(all_qa_pairs)} pairs[/cyan]")
+        else:
+            # Fallback if direct search not available
+            if self.verbose:
+                console.print(f"[red]Warning: Direct Q&A search not available, returning empty results[/red]")
+            return []
 
         # Rerank Q&A pairs if we have embedding capability
         if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
-            # Usage voyage reranker to rerank the qa pairs
+            # Use voyage reranker to rerank the qa pairs
 
             qa_texts = []
             for qa in all_qa_pairs:
@@ -745,10 +711,7 @@ Output:
             reranked = all_qa_pairs[:top_k_qa]
             return reranked
 
-            # reranked = self.entity_searcher._rerank_qa_pairs(question, all_qa_pairs, top_k=top_k_qa)
-            # return reranked
-
-        # Otherwise just return top k by entity score
+        # Otherwise just return top k
         return all_qa_pairs[:top_k_qa]
     
     def is_question_referenced_in_future(self, current_index: int, decomposed: List[Dict[str, Any]]) -> bool:

@@ -13,11 +13,37 @@ import glob
 import re
 import argparse
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from pydantic import BaseModel, Field
 from tqdm import tqdm
 from pathlib import Path
 from bespokelabs import curator
+
+# os.environ["CURATOR_DISABLE_CACHE"] = "1"
+
+# Display Curator cache configuration
+curator_cache_dir = os.environ.get('CURATOR_CACHE_DIR')
+if not curator_cache_dir:
+    # Curator default: ~/.cache/curator
+    curator_cache_dir = str(Path.home() / '.cache' / 'curator')
+
+cache_disabled = os.environ.get('CURATOR_DISABLE_CACHE', '0')
+
+print(f"{'='*60}")
+print(f"CURATOR CACHE CONFIGURATION")
+print(f"{'='*60}")
+print(f"Cache Directory: {curator_cache_dir}")
+print(f"Cache Disabled: {cache_disabled == '1'}")
+print(f"Cache Exists: {Path(curator_cache_dir).exists()}")
+if Path(curator_cache_dir).exists():
+    try:
+        num_cache_entries = len(list(Path(curator_cache_dir).glob('*')))
+        cache_size = sum(f.stat().st_size for f in Path(curator_cache_dir).rglob('*') if f.is_file()) / (1024**3)
+        print(f"Number of Cache Entries: {num_cache_entries}")
+        print(f"Total Cache Size: {cache_size:.2f} GB")
+    except Exception as e:
+        print(f"Could not calculate cache stats: {e}")
+print(f"{'='*60}\n")
 
 # Fix sys.path and import paths
 sys.path.append("/home/yigit/codebase/gsw-memory/src/gsw_memory/")
@@ -355,21 +381,63 @@ def sort_natural_key(s):
     return int(match.group(1)) if match else s
 
 
-def load_musique_corpus(musique_json_path: str, num_samples: int = 100):
-    """Load and sample Musique corpus data."""
-    print(f"Loading Musique data from {musique_json_path}...")
+def parse_thinking_trace(response_text: str) -> Tuple[str, str]:
+    """Parse thinking trace and content from model response.
 
-    # Load test data
-    with open(musique_json_path) as f:
-        test_musique = json.load(f)
+    Args:
+        response_text: Full model response potentially containing <think> tags
+
+    Returns:
+        Tuple of (thinking_trace, content_without_thinking)
+    """
+    # Match <think>...</think> tags (case insensitive, multiline)
+    thinking_match = re.search(r'<think>(.*?)</think>', response_text, re.DOTALL | re.IGNORECASE)
+
+    if thinking_match:
+        thinking_trace = thinking_match.group(1).strip()
+        # Remove the thinking tags from the content
+        content = re.sub(r'<think>.*?</think>', '', response_text, flags=re.DOTALL | re.IGNORECASE).strip()
+    else:
+        thinking_trace = ""
+        content = response_text.strip()
+
+    return thinking_trace, content
+
+
+def load_musique_corpus(musique_path: str, num_samples: int = 100, is_train: bool = False):
+    """Load and sample Musique corpus data.
+
+    Args:
+        musique_path: Path to musique JSON or JSONL file
+        num_samples: Number of samples to load
+        is_train: Whether this is training data (JSONL) or test data (JSON)
+
+    Returns:
+        List of document dictionaries
+    """
+    print(f"Loading Musique data from {musique_path}...")
+    print(f"  Source: {'Training set' if is_train else 'Test set'}")
+
+    # Load data based on format
+    if is_train:
+        # Load JSONL format for training data
+        musique_data = []
+        with open(musique_path) as f:
+            for line in f:
+                musique_data.append(json.loads(line))
+    else:
+        # Load JSON format for test data
+        with open(musique_path) as f:
+            musique_data = json.load(f)
 
     # Build corpus dictionaries
-    test_musique_corpus = {}
-    for data in test_musique:
+    corpus = {}
+    for data in musique_data:
         paragraphs = data["paragraphs"]
         for doc_idx, paragraph in enumerate(paragraphs):
-            test_musique_corpus[str(data["id"]) + "_" + str(paragraph["idx"])] = {
-                "global_id": f"{data['id']}_{paragraph['idx']}",
+            global_id = f"{data['id']}_{paragraph['idx']}"
+            corpus[global_id] = {
+                "global_id": global_id,
                 "title": paragraph["title"],
                 "text": paragraph["title"] + "\n" + paragraph["paragraph_text"],
                 "id": data["id"],
@@ -377,10 +445,10 @@ def load_musique_corpus(musique_json_path: str, num_samples: int = 100):
             }
 
     # Sample corpus
-    test_musique_corpus_sample = list(test_musique_corpus.values())[:num_samples]
+    corpus_sample = list(corpus.values())[:num_samples]
 
-    print(f"Loaded {len(test_musique_corpus_sample)} test samples")
-    return test_musique_corpus_sample
+    print(f"Loaded {len(corpus_sample)} samples")
+    return corpus_sample[:500]
 
 
 def load_golden_gsws(musique_network_dir: str, num_docs: int = 100):
@@ -412,14 +480,18 @@ def load_golden_gsws(musique_network_dir: str, num_docs: int = 100):
     return golden_gsws
 
 
-def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://127.0.0.1:6379/v1"):
-    """Generate predicted GSWs using GSWOperator."""
+def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://127.0.0.1:6380/v1"):
+    """Generate predicted GSWs using GSWOperator.
+
+    Returns:
+        List of dicts with format: {'global_id': str, 'gsw': GSWStructure, 'thinking_trace': str}
+    """
     print("Generating predicted GSWs with GSWOperator...")
 
     os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
 
     gsw_model = GSWOperator(
-        model_name="hosted_vllm/Qwen/Qwen3-8B",
+        model_name="hosted_vllm/Qwen/Qwen3-14B",
         backend_params={
             "base_url": vllm_base_url,
             "request_timeout": 600.0,
@@ -430,37 +502,189 @@ def generate_pred_gsws(corpus_sample: List[Dict], vllm_base_url: str = "http://1
             "require_all_responses": False,
         },
         generation_params={
-            "temperature": 0.6,
-            "top_p": 0.95,
-            "top_k": 20,
-            "min_p": 0.0
-        },
+                "temperature": 0.6,
+                "top_p": 0.95,
+                "top_k": 20,
+                "min_p": 0,
+                "max_tokens": 4096 * 3,
+                # "repetition_penalty": 1.1,
+                # "presence_penalty": 0.3,
+                # "frequency_penalty": 0.3,
+                            },
         prompt_type=PromptType.FACTUAL,
         backend="litellm",
         response_format=GSWStructure,
         batch=False,
     )
 
+    # Display GSWOperator cache information
+    print(f"\n{'='*60}")
+    print(f"GSWOperator Curator Instance Info:")
+    if hasattr(gsw_model, '_cache_dir'):
+        print(f"  Cache Directory: {gsw_model._cache_dir}")
+    elif hasattr(gsw_model, 'cache_dir'):
+        print(f"  Cache Directory: {gsw_model.cache_dir}")
+    else:
+        print(f"  Cache Directory: {Path.home() / '.cache' / 'curator'} (default)")
+    print(f"  Model: {gsw_model.model_name if hasattr(gsw_model, 'model_name') else 'Unknown'}")
+    print(f"  Backend: {gsw_model.backend if hasattr(gsw_model, 'backend') else 'Unknown'}")
+    print(f"{'='*60}\n")
+
+    # Capture cache directory before and after call to detect which is used
+    curator_cache_base = Path(curator_cache_dir)
+    # Only track directories, not files like metadata.db
+    before_cache_dirs = set(p for p in curator_cache_base.glob('*') if p.is_dir()) if curator_cache_base.exists() else set()
+
     gsw_response = gsw_model(corpus_sample)
 
-    # Parse responses
-    all_documents_data = {}
+    # Display the actual cache directory used for this run
+    print(f"\n{'='*60}")
+    print(f"ACTIVE CURATOR CACHE FOR THIS RUN:")
+    print(f"{'='*60}")
+
+    # Capture cache directory for return
+    detected_cache_dir = None
+
+    # Method 1: Try to get from response object
+    if hasattr(gsw_response, 'cache_dir') and gsw_response.cache_dir:
+        actual_cache_dir = gsw_response.cache_dir
+        detected_cache_dir = str(actual_cache_dir)
+        cache_hash = os.path.basename(actual_cache_dir)
+        print(f"Full Path: {actual_cache_dir}")
+        print(f"Cache Hash: {cache_hash}")
+        print(f"Exists: {Path(actual_cache_dir).exists()}")
+        if Path(actual_cache_dir).exists():
+            cache_files = list(Path(actual_cache_dir).glob('*'))
+            print(f"Files: {[f.name for f in cache_files[:10]]}")  # Show first 10 files
+    else:
+        # Method 2: Detect from filesystem changes (only directories)
+        after_cache_dirs = set(p for p in curator_cache_base.glob('*') if p.is_dir()) if curator_cache_base.exists() else set()
+        new_cache_dirs = after_cache_dirs - before_cache_dirs
+
+        if new_cache_dirs:
+            newest_cache = max(new_cache_dirs, key=lambda p: p.stat().st_mtime)
+            detected_cache_dir = str(newest_cache)
+            print(f"NEW Cache Created: {newest_cache}")
+            print(f"Cache Hash: {newest_cache.name}")
+        else:
+            # Using existing cache - show most recent directory only
+            all_cache_dirs = [p for p in curator_cache_base.glob('*') if p.is_dir()]
+            all_cache_dirs = sorted(all_cache_dirs,
+                                   key=lambda p: p.stat().st_mtime,
+                                   reverse=True)
+            if all_cache_dirs:
+                most_recent = all_cache_dirs[0]
+                detected_cache_dir = str(most_recent)
+                from datetime import datetime
+                print(f"EXISTING Cache Used: {most_recent}")
+                print(f"Cache Hash: {most_recent.name}")
+                print(f"Last Modified: {datetime.fromtimestamp(most_recent.stat().st_mtime)}")
+            else:
+                print("⚠️  Could not determine cache directory")
+
+    print(f"{'='*60}\n")
+
+    # Parse responses and extract thinking traces
+    pred_results = []
     for response in gsw_response.dataset:
         try:
+            # Extract GSW
             if response["gsw"]:
                 gsw_dict = response["gsw"]
                 gsw = GSWStructure(**gsw_dict)
             else:
                 gsw = parse_gsw(response["graph"])
+
             global_id = response["global_id"]
-            all_documents_data[global_id] = gsw
+
+            # Extract thinking trace from reasoning_content field
+            thinking_trace = response.get("reasoning_content", "")
+            raw_text = response.get("text", "")
+
+            pred_results.append({
+                "global_id": global_id,
+                "gsw": gsw,
+                "raw_text": raw_text,
+                "thinking_trace": thinking_trace
+            })
         except Exception as e:
             print(f"Error parsing GSW for chunk {response.get('global_id', 'unknown')}: {e}")
             continue
 
-    pred_gsws = list(all_documents_data.values())
-    print(f"Generated {len(pred_gsws)} predicted GSWs")
-    return pred_gsws
+    print(f"Generated {len(pred_results)} predicted GSWs")
+    return pred_results, detected_cache_dir
+
+
+def generate_pred_gsws_with_openai(corpus_sample: List[Dict], vllm_base_url: str = "http://127.0.0.1:6380/v1"):
+    """Generate predicted GSWs using OpenAI client directly (no Curator).
+
+    This approach uses the OpenAI client directly to maintain access to reasoning_content,
+    which contains the model's thinking traces. This is slower than Curator but guarantees
+    access to thinking traces.
+
+    Args:
+        corpus_sample: List of documents to process
+        vllm_base_url: Base URL for vLLM server
+
+    Returns:
+        List of dicts with format: {'global_id': str, 'gsw': GSWStructure, 'thinking_trace': str}
+    """
+    print("Generating predicted GSWs with OpenAI client (sequential, no batching)...")
+
+    # Initialize OpenAI client
+    client = OpenAI(base_url=vllm_base_url, api_key="token-abc123")
+
+    # Get prompts
+    SYSTEM_PROMPT = FactualExtractionPrompts.SYSTEM_PROMPT
+    USER_PROMPT_TEMPLATE = FactualExtractionPrompts.USER_PROMPT_TEMPLATE
+
+    # Process each document sequentially
+    pred_results = []
+
+    for doc in tqdm(corpus_sample, desc="Generating GSWs"):
+        try:
+            # Format prompt
+            user_prompt = USER_PROMPT_TEMPLATE.format(
+                input_text=doc["text"],
+                background_context=doc.get("context", "")
+            )
+
+            # Call OpenAI API with structured output
+            completion = client.chat.completions.parse(
+                model="Qwen/Qwen3-14B",
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=0.6,
+                response_format=GSWStructure,
+                extra_body={
+                    "top_p": 0.95,
+                    "top_k": 20,
+                    "min_p": 0,
+                    "max_tokens": 4096 * 3,
+                    # "repetition_penalty": 1.1,
+                    # "presence_penalty": 0.3,
+                    # "frequency_penalty": 0.3,
+                }
+            )
+
+            # Extract GSW and reasoning_content
+            gsw = completion.choices[0].message.parsed  # Already a GSWStructure object
+            reasoning_content = completion.choices[0].message.reasoning_content or ""
+
+            pred_results.append({
+                "global_id": doc["global_id"],
+                "gsw": gsw,
+                "thinking_trace": reasoning_content
+            })
+
+        except Exception as e:
+            print(f"\nError processing {doc.get('global_id', 'unknown')}: {e}")
+            continue
+
+    print(f"Generated {len(pred_results)} predicted GSWs")
+    return pred_results, None  # No cache directory for OpenAI client approach
 
 
 def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
@@ -515,6 +739,220 @@ def evaluate_gsws(corpus_sample: List[Dict], pred_gsws: List[GSWStructure],
     return all_judgements
 
 
+def save_pred_gsws(pred_results: List[Dict], output_path: str,
+                   save_format: str = "consolidated", metadata: Dict = None):
+    """Save predicted GSWs with thinking traces to file(s).
+
+    Args:
+        pred_results: List of dicts with format {'global_id': str, 'gsw': GSWStructure, 'thinking_trace': str}
+        output_path: Base output path
+        save_format: One of "individual", "consolidated", or "both"
+        metadata: Optional metadata to include (model, params, etc.)
+    """
+    print(f"\nSaving {len(pred_results)} predicted GSWs with thinking traces...")
+    print(f"  Format: {save_format}")
+
+    # Serialize results to dicts
+    results_dicts = []
+    for result in pred_results:
+        results_dicts.append({
+            "global_id": result["global_id"],
+            "raw_text": result["raw_text"],
+            "gsw": result["gsw"].model_dump(),
+            "thinking_trace": result["thinking_trace"]
+        })
+
+    if save_format in ["consolidated", "both"]:
+        # Save as single consolidated JSON file
+        output_file = Path(output_path)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+
+        data_to_save = {
+            "metadata": metadata or {},
+            "gsws": results_dicts
+        }
+
+        with open(output_file, 'w') as f:
+            json.dump(data_to_save, f, indent=2)
+
+        print(f"  ✓ Saved consolidated file: {output_file}")
+
+    if save_format in ["individual", "both"]:
+        # Save as individual files (like golden GSWs)
+        base_dir = Path(output_path).parent / "pred_gsws_individual"
+        base_dir.mkdir(parents=True, exist_ok=True)
+
+        for idx, result_dict in enumerate(results_dicts):
+            doc_dir = base_dir / f"doc_{idx}"
+            doc_dir.mkdir(exist_ok=True)
+
+            # Save GSW and thinking trace together
+            gsw_file = doc_dir / "gsw.json"
+            with open(gsw_file, 'w') as f:
+                json.dump(result_dict, f, indent=2)
+
+        print(f"  ✓ Saved individual files: {base_dir}/")
+
+    print(f"  Total: {len(pred_results)} GSWs saved")
+
+
+def load_pred_gsws(input_path: str) -> List[GSWStructure]:
+    """Load previously saved predicted GSWs.
+
+    Args:
+        input_path: Path to consolidated JSON file or directory of individual files
+
+    Returns:
+        List of GSWStructure objects (for backward compatibility, thinking traces are not returned)
+    """
+    print(f"\nLoading predicted GSWs from {input_path}...")
+    input_path = Path(input_path)
+
+    pred_gsws = []
+
+    if input_path.is_file():
+        # Load from consolidated JSON file
+        with open(input_path) as f:
+            data = json.load(f)
+
+        # Handle different formats
+        if isinstance(data, list):
+            # Old format: list of GSW dicts
+            gsws_dicts = data
+        elif isinstance(data, dict) and "gsws" in data:
+            # New format with metadata and potentially thinking traces
+            gsws_list = data["gsws"]
+            if "metadata" in data:
+                print(f"  Metadata: {json.dumps(data['metadata'], indent=2)}")
+
+            # Extract GSWs from new format (may have thinking_trace and global_id)
+            gsws_dicts = []
+            for item in gsws_list:
+                if isinstance(item, dict) and "gsw" in item:
+                    # New format: {'global_id': ..., 'gsw': {...}, 'thinking_trace': ...}
+                    gsws_dicts.append(item["gsw"])
+                else:
+                    # Old format: just the GSW dict
+                    gsws_dicts.append(item)
+        else:
+            raise ValueError(f"Invalid file format: {input_path}")
+
+        # Convert dicts to GSWStructure objects
+        for gsw_dict in gsws_dicts:
+            try:
+                pred_gsws.append(GSWStructure(**gsw_dict))
+            except Exception as e:
+                print(f"  Warning: Failed to load GSW: {e}")
+
+    elif input_path.is_dir():
+        # Load from individual files
+        doc_dirs = sorted(input_path.glob("doc_*"), key=lambda x: int(x.name.split("_")[1]))
+
+        for doc_dir in doc_dirs:
+            gsw_file = doc_dir / "gsw.json"
+            if gsw_file.exists():
+                try:
+                    with open(gsw_file) as f:
+                        data = json.load(f)
+
+                    # Handle new format with thinking traces
+                    if isinstance(data, dict) and "gsw" in data:
+                        gsw_dict = data["gsw"]
+                    else:
+                        gsw_dict = data
+
+                    pred_gsws.append(GSWStructure(**gsw_dict))
+                except Exception as e:
+                    print(f"  Warning: Failed to load {gsw_file}: {e}")
+
+    else:
+        raise FileNotFoundError(f"Input path not found: {input_path}")
+
+    print(f"  Loaded {len(pred_gsws)} predicted GSWs")
+    return pred_gsws
+
+
+def extract_thinking_traces_from_cache(cache_dir: str, output_file: str = None, corpus_sample: List[Dict] = None):
+    """Extract all thinking traces from Curator cache responses file.
+
+    Args:
+        cache_dir: Path to cache directory (e.g., ~/.cache/curator/<hash>)
+        output_file: Optional path to save extracted thinking traces as JSON
+        corpus_sample: Optional list of corpus samples to include raw input text
+
+    Returns:
+        List of dicts with format: {'index': int, 'raw_text': str, 'thinking_trace': str, 'gsw': dict, 'token_usage': dict}
+    """
+    cache_path = Path(cache_dir)
+    responses_file = cache_path / "responses_0.jsonl"
+
+    if not responses_file.exists():
+        print(f"\n❌ No responses file found at: {responses_file}")
+        print(f"   This cache may have been reused (hit) with no new responses saved.")
+        return []
+
+    thinking_traces = []
+
+    print(f"\nReading responses from: {responses_file}")
+    with open(responses_file, 'r') as f:
+        for idx, line in enumerate(f):
+            try:
+                response = json.loads(line)
+
+                # Extract reasoning_content from raw_response
+                raw_response = response.get('raw_response', {})
+                choices = raw_response.get('choices', [])
+                if choices:
+                    message = choices[0].get('message', {})
+                    reasoning_content = message.get('reasoning_content', '')
+
+                    # Also get the parsed GSW
+                    response_message = response.get('response_message', {})
+
+                    # Get raw input text if corpus_sample is provided
+                    raw_text = ""
+                    if corpus_sample and idx < len(corpus_sample):
+                        raw_text = corpus_sample[idx].get('text', '')
+
+                    thinking_traces.append({
+                        'index': idx,
+                        'raw_text': raw_text,
+                        'thinking_trace': reasoning_content,
+                        'gsw': response_message,
+                        'token_usage': response.get('token_usage', {})
+                    })
+
+                    if reasoning_content:
+                        print(f"  ✓ Entry {idx}: Found thinking trace ({len(reasoning_content)} chars)")
+                    else:
+                        print(f"  ⚠ Entry {idx}: No thinking trace")
+
+            except json.JSONDecodeError as e:
+                print(f"  ❌ Entry {idx}: Failed to parse JSON: {e}")
+            except Exception as e:
+                print(f"  ❌ Entry {idx}: Error: {e}")
+
+    print(f"\nExtracted {len(thinking_traces)} entries")
+    print(f"  With thinking traces: {sum(1 for t in thinking_traces if t['thinking_trace'])}")
+    print(f"  Without thinking traces: {sum(1 for t in thinking_traces if not t['thinking_trace'])}")
+
+    # Save to file if requested
+    if output_file:
+        output_path = Path(output_file)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(output_path, 'w') as f:
+            json.dump({
+                'cache_dir': str(cache_dir),
+                'num_entries': len(thinking_traces),
+                'entries': thinking_traces
+            }, f, indent=2)
+
+        print(f"\n✓ Saved to: {output_path}")
+
+    return thinking_traces
+
+
 def save_judgements(judgements: List[Dict], output_path: str):
     """Save judgements to JSON file."""
     output_file = Path(output_path)
@@ -561,64 +999,181 @@ def calculate_statistics(judgements: List[Dict]):
 
 def main():
     parser = argparse.ArgumentParser(description="GSW Playground - Generate and evaluate GSWs")
+
+    # Data source arguments
     parser.add_argument("--num-samples", type=int, default=100,
                        help="Number of samples to process (default: 100)")
+    parser.add_argument("--use-train-set", action="store_true",
+                       help="Use training set instead of test set")
     parser.add_argument("--musique-json", type=str,
                        default="/home/yigit/codebase/gsw-memory/playground_data/musique.json",
-                       help="Path to musique.json")
+                       help="Path to musique.json (test set)")
+    parser.add_argument("--train-jsonl", type=str,
+                       default="/home/yigit/codebase/gsw-memory/playground_data/musique_full_v1.0_train.jsonl",
+                       help="Path to musique train JSONL")
     parser.add_argument("--golden-gsw-dir", type=str,
                        default="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
                        help="Directory containing golden GSW networks")
+
+    # Generation arguments
     parser.add_argument("--vllm-url", type=str,
-                       default="http://127.0.0.1:6379/v1",
+                       default="http://127.0.0.1:6380/v1",
                        help="VLLM base URL")
+    parser.add_argument("--skip-generation", action="store_true",
+                       help="Skip GSW generation and load from file")
+    parser.add_argument("--load-pred-gsws", type=str,
+                       default=None,
+                       help="Path to pre-saved predicted GSWs (file or directory)")
+    parser.add_argument("--use-openai-client", action="store_true",
+                       help="Use OpenAI client directly instead of Curator (slower but guarantees thinking trace capture)")
+    parser.add_argument("--extract-thinking-traces", action="store_true",
+                       help="Extract thinking traces from Curator cache after generation (only applies when using Curator)")
+
+    # Output arguments
     parser.add_argument("--output", type=str,
                        default=None,
                        help="Output path for judgements JSON (default: judgements_output_TIMESTAMP.json)")
-    parser.add_argument("--skip-generation", action="store_true",
-                       help="Skip GSW generation (requires pre-saved GSWs)")
+    parser.add_argument("--pred-gsw-output", type=str,
+                       default=None,
+                       help="Output path for predicted GSWs (default: pred_gsws_TIMESTAMP.json)")
+    parser.add_argument("--save-format", type=str,
+                       choices=["individual", "consolidated", "both"],
+                       default="consolidated",
+                       help="Format for saving predicted GSWs (default: consolidated)")
+
+    # Evaluation arguments
+    parser.add_argument("--skip-evaluation", action="store_true",
+                       help="Skip LLM-as-a-judge evaluation")
 
     args = parser.parse_args()
 
-    # Set default output path with timestamp
+    # Set default output paths with timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    source = "train" if args.use_train_set else "test"
+
     if args.output is None:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         args.output = f"playground/gsw_creation_local/judgements_output_{timestamp}.json"
+    if args.pred_gsw_output is None:
+        args.pred_gsw_output = f"playground/gsw_creation_local/pred_gsws_{source}_{timestamp}.json"
+
+    # Determine musique data path
+    musique_path = args.train_jsonl if args.use_train_set else args.musique_json
 
     print("="*60)
     print("GSW PLAYGROUND - EVALUATION PIPELINE")
     print("="*60)
+    print(f"Data source: {'Training set' if args.use_train_set else 'Test set'}")
     print(f"Number of samples: {args.num_samples}")
-    print(f"Output file: {args.output}")
+    print(f"Pred GSW output: {args.pred_gsw_output}")
+    print(f"Save format: {args.save_format}")
+    if not args.skip_evaluation:
+        print(f"Judgements output: {args.output}")
     print("="*60 + "\n")
 
-    # Load data
+    # Load corpus data
     corpus_sample = load_musique_corpus(
-        args.musique_json,
-        args.num_samples
+        musique_path,
+        args.num_samples,
+        is_train=args.use_train_set
     )
 
+    # Load golden GSWs
     golden_gsws = load_golden_gsws(
         args.golden_gsw_dir,
         args.num_samples
     )
 
     # Generate or load predicted GSWs
-    if not args.skip_generation:
-        pred_gsws = generate_pred_gsws(corpus_sample, args.vllm_url)
+    if args.load_pred_gsws:
+        # Load pre-saved predicted GSWs
+        pred_gsws = load_pred_gsws(args.load_pred_gsws)
+
+        # Ensure we have the right number of samples
+        if len(pred_gsws) < args.num_samples:
+            print(f"Warning: Loaded {len(pred_gsws)} GSWs, but requested {args.num_samples}")
+            print(f"  Adjusting num_samples to {len(pred_gsws)}")
+            args.num_samples = len(pred_gsws)
+            corpus_sample = corpus_sample[:args.num_samples]
+            golden_gsws = golden_gsws[:args.num_samples]
+        elif len(pred_gsws) > args.num_samples:
+            pred_gsws = pred_gsws[:args.num_samples]
+
+    elif not args.skip_generation:
+        # Choose generation method based on flag
+        if args.use_openai_client:
+            print("\n*** Using OpenAI client (direct, sequential, guaranteed thinking traces) ***")
+            pred_results, cache_dir_used = generate_pred_gsws_with_openai(corpus_sample, args.vllm_url)
+            generation_method = "openai_client"
+        else:
+            print("\n*** Using Curator (batched, parallel, faster) ***")
+            pred_results, cache_dir_used = generate_pred_gsws(corpus_sample, args.vllm_url)
+            generation_method = "curator"
+
+        # Save predicted GSWs with thinking traces
+        metadata = {
+            "model": "Qwen/Qwen3-14B",
+            "generation_method": generation_method,
+            "timestamp": timestamp,
+            "num_samples": len(pred_results),
+            "source": source,
+            "vllm_url": args.vllm_url,
+            "generation_params": {
+                "temperature": 0.6,
+                "top_p": 0.95,
+                "top_k": 20,
+                "min_p": 0,
+                "max_tokens": 4096 * 3,
+                # "repetition_penalty": 1.1,
+                # "presence_penalty": 0.3,
+                # "frequency_penalty": 0.3,
+            }
+        }
+        save_pred_gsws(pred_results, args.pred_gsw_output, args.save_format, metadata)
+
+        # Extract thinking traces from cache if requested (only for Curator method)
+        if args.extract_thinking_traces and generation_method == "curator" and cache_dir_used:
+            print(f"\n{'='*60}")
+            print("EXTRACTING THINKING TRACES FROM CACHE")
+            print(f"{'='*60}")
+
+            # Construct output filename based on pred_gsw_output
+            if args.pred_gsw_output:
+                output_path = Path(args.pred_gsw_output)
+                thinking_traces_output = str(output_path.parent / f"{output_path.stem}_thinking_traces.json")
+            else:
+                thinking_traces_output = f"thinking_traces_{timestamp}.json"
+
+            # Extract and save thinking traces (including raw input text)
+            thinking_traces = extract_thinking_traces_from_cache(cache_dir_used, thinking_traces_output, corpus_sample)
+
+            if thinking_traces:
+                print(f"\n✓ Extracted {len(thinking_traces)} thinking traces")
+                print(f"✓ Saved to: {thinking_traces_output}")
+            else:
+                print(f"\n⚠ No thinking traces found in cache")
+        elif args.extract_thinking_traces and generation_method == "openai_client":
+            print("\n⚠ --extract-thinking-traces is not needed with --use-openai-client")
+            print("  Thinking traces are already included in the output when using OpenAI client")
+
+        # Extract GSWs for evaluation
+        pred_gsws = [result["gsw"] for result in pred_results]
+
     else:
-        print("Skipping GSW generation (--skip-generation flag set)")
-        print("Note: You need to load pre-saved GSWs manually for this to work")
+        print("ERROR: --skip-generation requires --load-pred-gsws")
+        print("  Please specify a path to load predicted GSWs from")
         return
 
-    # Evaluate
-    judgements = evaluate_gsws(corpus_sample, pred_gsws, golden_gsws, openai_api_key=os.environ["OPENAI_API_KEY"])
+    # Evaluate GSWs (if not skipped)
+    if not args.skip_evaluation:
+        judgements = evaluate_gsws(corpus_sample, pred_gsws, golden_gsws)
+        save_judgements(judgements, args.output)
+        calculate_statistics(judgements)
+    else:
+        print("\nSkipping evaluation (--skip-evaluation flag set)")
 
-    # Save results
-    save_judgements(judgements, args.output)
-
-    # Print statistics
-    calculate_statistics(judgements)
+    print("\n" + "="*60)
+    print("PIPELINE COMPLETE")
+    print("="*60)
 
 
 if __name__ == "__main__":

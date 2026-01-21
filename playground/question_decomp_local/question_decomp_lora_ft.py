@@ -13,6 +13,19 @@ Usage:
 
     # Use specific GPUs
     CUDA_VISIBLE_DEVICES=0,1 python question_decomp_lora_ft.py --model_id Qwen/Qwen3-8B
+
+    # Push to HuggingFace Hub after training
+    python question_decomp_lora_ft.py \
+        --model_id Qwen/Qwen3-8B \
+        --push_to_hub \
+        --hub_model_id username/qwen3-question-decomp
+
+    # Push to private HuggingFace Hub repository
+    python question_decomp_lora_ft.py \
+        --model_id Qwen/Qwen3-8B \
+        --push_to_hub \
+        --hub_model_id username/qwen3-question-decomp \
+        --hub_private_repo
 """
 
 import argparse
@@ -298,7 +311,7 @@ def generate_decompositions(decompose_inputs, model_name="gpt-5", output_path=No
     #         json.dump(decomposition_results, f, indent=4, ensure_ascii=False)
     
     # load the decompositions from the output path
-    with open("/home/yigit/codebase/gsw-memory/playground/question_decomp_local/q_decomp_training_5.json", 'r', encoding='utf-8') as f:
+    with open("/home/yigit/codebase/gsw-memory/playground/question_decomp_local/q_decomp_training_5_large.json", 'r', encoding='utf-8') as f:
         decomposition_results = json.load(f)
 
     print(f"Loaded {len(decomposition_results)} decompositions")
@@ -597,8 +610,8 @@ def train(model_id, tokenizer, dataset, training_args, chat_template=None):
     print("Configuring LoRA...")
     # LoRA configuration
     lora_config = LoraConfig(
-        r=128,
-        lora_alpha=256,
+        r=256,
+        lora_alpha=512,
         lora_dropout=0.05,
         target_modules=[
             "q_proj", "k_proj", "v_proj", "o_proj",
@@ -727,6 +740,22 @@ class ScriptArguments:
         default="playground/question_decomp_local/qwen3_nonthinking.jinja",
         metadata={"help": "Path to custom chat template file."},
     )
+    push_to_hub: bool = field(
+        default=False,
+        metadata={"help": "Push the trained model to HuggingFace Hub."},
+    )
+    hub_model_id: str = field(
+        default=None,
+        metadata={"help": "Model ID on HuggingFace Hub (e.g., 'username/model-name'). Required if push_to_hub is True."},
+    )
+    hub_token: str = field(
+        default=None,
+        metadata={"help": "HuggingFace API token. If not provided, will use HF_TOKEN environment variable or huggingface-cli login."},
+    )
+    hub_private_repo: bool = field(
+        default=False,
+        metadata={"help": "Create a private repository on HuggingFace Hub."},
+    )
 
 
 # =============================================================================
@@ -748,7 +777,7 @@ def main():
                         help="Path to train data JSONL")
     parser.add_argument("--output_dir", type=str, default="./question_decomp_lora",
                         help="Output directory for trained model")
-    parser.add_argument("--decomposition_output_path", type=str, default="./q_decomp_training_5.json",
+    parser.add_argument("--decomposition_output_path", type=str, default="./q_decomp_training_5_large_cleaned.json",
                         help="Path to save decomposition results")
     parser.add_argument("--samples_per_type", type=int, default=135,
                         help="Samples per question type")
@@ -774,8 +803,20 @@ def main():
                         help="Only test chat template without training")
     parser.add_argument("--skip_decomposition", action="store_true",
                         help="Skip decomposition generation and load from file")
+    parser.add_argument("--push_to_hub", action="store_true", default=False,
+                        help="Push the trained model to HuggingFace Hub")
+    parser.add_argument("--hub_model_id", type=str, default="yigitturali/qwen3-0.6b-gsw-q-decomp-lora-finetuned-large",
+                        help="Model ID on HuggingFace Hub (e.g., 'username/model-name')")
+    parser.add_argument("--hub_token", type=str, default=None,
+                        help="HuggingFace API token (optional, can use HF_TOKEN env var)")
+    parser.add_argument("--hub_private_repo", action="store_true",
+                        help="Create a private repository on HuggingFace Hub")
 
     args = parser.parse_args()
+
+    # Validate arguments
+    if args.push_to_hub and not args.hub_model_id:
+        parser.error("--hub_model_id is required when --push_to_hub is enabled")
 
     # Print GPU info
     print("="*60)
@@ -880,6 +921,10 @@ def main():
         optim="adamw_torch",
         logging_dir=os.path.join(args.output_dir, "logs"),
         report_to="wandb",
+        push_to_hub=args.push_to_hub,
+        hub_model_id=args.hub_model_id if args.push_to_hub else None,
+        hub_token=args.hub_token if args.push_to_hub else None,
+        hub_private_repo=args.hub_private_repo,
     )
 
     print(f"Training configuration:")
@@ -889,6 +934,11 @@ def main():
     print(f"  Gradient accumulation: {args.gradient_accumulation_steps}")
     print(f"  Learning rate: {args.learning_rate}")
     print(f"  Effective batch size: {args.per_device_train_batch_size * args.gradient_accumulation_steps * torch.cuda.device_count()}")
+    if args.push_to_hub:
+        print(f"\nHuggingFace Hub configuration:")
+        print(f"  Push to hub: Enabled")
+        print(f"  Hub model ID: {args.hub_model_id}")
+        print(f"  Repository type: {'Private' if args.hub_private_repo else 'Public'}")
 
     # Step 7: Train
     print("\n" + "="*60)
@@ -904,12 +954,44 @@ def main():
     print(f"Saving to: {final_output_path}")
     trainer.save_model(final_output_path)
 
+    # Step 9: Push to HuggingFace Hub (if requested)
+    if args.push_to_hub:
+        print("\n" + "="*60)
+        print("Step 9: Pushing Model to HuggingFace Hub")
+        print("="*60)
+        print(f"Target repository: {args.hub_model_id}")
+        print(f"Repository type: {'Private' if args.hub_private_repo else 'Public'}")
+
+        try:
+            # Push the model to the hub
+            print("\nPushing model... This may take a few minutes.")
+            trainer.push_to_hub(
+                commit_message="Training complete - LoRA fine-tuned model for question decomposition",
+                blocking=True,
+            )
+
+            print("\n✓ Model successfully pushed to HuggingFace Hub!")
+            print(f"  View at: https://huggingface.co/{args.hub_model_id}")
+
+        except Exception as e:
+            print(f"\n✗ Error pushing to HuggingFace Hub: {e}")
+            print("\nTroubleshooting tips:")
+            print("  1. Make sure you're logged in: huggingface-cli login")
+            print("  2. Check your HuggingFace token has write permissions")
+            print("  3. Verify the repository name is valid and available")
+            print(f"\nYou can manually push later using:")
+            print(f"  from transformers import AutoModelForCausalLM")
+            print(f"  model = AutoModelForCausalLM.from_pretrained('{final_output_path}')")
+            print(f"  model.push_to_hub('{args.hub_model_id}')")
+
     print("\n" + "="*60)
     print("Training Complete!")
     print("="*60)
     print(f"Model saved to: {final_output_path}")
     print(f"Checkpoints saved to: {args.output_dir}")
     print(f"Decomposition results saved to: {args.decomposition_output_path}")
+    if args.push_to_hub:
+        print(f"Model pushed to: https://huggingface.co/{args.hub_model_id}")
 
 
 if __name__ == "__main__":

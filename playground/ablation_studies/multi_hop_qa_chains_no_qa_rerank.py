@@ -122,8 +122,8 @@ class ChainFollowingMultiHopQA:
         # Initialize entity searcher
         self.entity_searcher = EntitySearcher(
             num_documents,
-            cache_dir="/mnt/SSD1/shreyas/SM_GSW/2wiki/.gsw_cache",
-            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/2wiki/networks",
+            cache_dir="/mnt/SSD1/shreyas/SM_GSW/musique/.gsw_cache_4_1_mini",
+            path_to_gsw_files="/mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini",
             verbose=False,  # Keep entity searcher quiet
             use_bm25=self.use_bm25,
             rebuild_cache=False,
@@ -724,31 +724,17 @@ Output:
             console.print(f"[cyan]Total unique Q&A pairs before reranking: {len(all_qa_pairs)} "
                          f"(entity: {len(entity_qa_pairs)}, direct: {len(direct_qa_pairs)})[/cyan]")
 
-        # Rerank Q&A pairs if we have embedding capability
-        if hasattr(self.entity_searcher, '_rerank_qa_pairs') and all_qa_pairs:
-            # Usage voyage reranker to rerank the qa pairs
+        # ABLATION: Q&A reranking disabled
+        # Just sort by existing scores (entity_score or similarity_score) and return top_k
+        if self.verbose:
+            console.print(f"[yellow]ABLATION: Skipping Q&A reranking, using original scores[/yellow]")
 
-            qa_texts = []
-            for qa in all_qa_pairs:
-                # Combine question and answer for embedding
-                answer_names = qa.get('answer_names', qa.get('answers', []))
-                answer_rolestates = qa.get('answer_rolestates', [])
-                qa_text = f"{qa['question']} {', '.join(answer_names)} {', '.join(answer_rolestates)}"
-                qa_texts.append(qa_text)
-
-            reranking = self.voyage_client.rerank(question, qa_texts, model="rerank-2.5", top_k=len(qa_texts))
-            for r in reranking.results:
-                all_qa_pairs[r.index]['similarity_score'] = r.relevance_score
-
-            # Sort by similarity score from list of dicts
-            all_qa_pairs = sorted(all_qa_pairs, key=lambda x: x['similarity_score'], reverse=True)
-            reranked = all_qa_pairs[:top_k_qa]
-            return reranked
-
-            # reranked = self.entity_searcher._rerank_qa_pairs(question, all_qa_pairs, top_k=top_k_qa)
-            # return reranked
-
-        # Otherwise just return top k by entity score
+        # Sort by the best available score (entity_score preferred, then similarity_score)
+        all_qa_pairs = sorted(
+            all_qa_pairs,
+            key=lambda x: x.get('entity_score', x.get('similarity_score', 0.0)),
+            reverse=True
+        )
         return all_qa_pairs[:top_k_qa]
     
     def is_question_referenced_in_future(self, current_index: int, decomposed: List[Dict[str, Any]]) -> bool:
