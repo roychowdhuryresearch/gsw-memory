@@ -179,14 +179,18 @@ python playground/test_qa_complete.py
 
 ## Citation
 
-If you use this package in your research, please cite:
+This is the official repository for the GSW framework. If you use this package in your research, please cite our AAAI-26 oral paper:
+
+**[Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces](https://arxiv.org/abs/2511.07587)**
 
 ```bibtex
-@unpublished{rajesh2025gsw,
-  title   = {Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces},
-  author  = {Rajesh, Shreyas and Holur, Pavan and Duan, Chenda and Chong, David and Roychowdhury, Vwani},
-  note    = {Under review at the AAAI Conference on Artificial Intelligence (AAAI-26)},
-  year    = {2025}
+@misc{rajesh2025factretrievalepisodicmemory,
+      title={Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces},
+      author={Shreyas Rajesh and Pavan Holur and Chenda Duan and David Chong and Vwani Roychowdhury},
+      year={2025},
+      eprint={2511.07587},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2511.07587},
 }
-
 ```
