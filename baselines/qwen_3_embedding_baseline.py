@@ -23,7 +23,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
+os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -82,6 +82,60 @@ except ImportError:
 
 console = Console()
 
+# Dataset configurations mapping
+DATASET_CONFIGS = {
+    "2wiki": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "2wiki_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "2wiki_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "musique_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "hotpotqa": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "popqa": {
+        "answer_field": "possible_answers",
+        "parse_json": True,
+        "allow_no_answer": False
+    },
+    "nq_rear": {
+        "answer_field": "reference",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "lveval": {
+        "answer_field": "answers",
+        "parse_json": False,
+        "allow_no_answer": False
+    }
+}
+
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
@@ -98,8 +152,13 @@ if CURATOR_AVAILABLE:
 
         return_completions_object = True
 
-        def __init__(self, **kwargs):
-            """Initialize the answer generator."""
+        def __init__(self, allow_no_answer: bool = False, **kwargs):
+            """Initialize the answer generator.
+
+            Args:
+                allow_no_answer: Whether to allow "No Answer" responses for unanswerable questions.
+            """
+            self.allow_no_answer = allow_no_answer
             super().__init__(**kwargs)
 
         def prompt(self, input):
@@ -142,8 +201,11 @@ Thought:
                 'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
                 'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
                 'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
-                'If you don\'t know the answer, say "No Answer".'
             )
+
+            # Add "No Answer" instruction if allow_no_answer is enabled
+            if self.allow_no_answer:
+                rag_qa_system += ' If you don\'t know the answer, say "No Answer".'
 
             # One-shot example input
             one_shot_input = (
@@ -227,7 +289,7 @@ class Qwen3EmbeddingBaseline:
     def __init__(self, corpus_path: str, questions_path: str, num_questions: int = 20,
                  top_k: int = 5, cache_dir: str = ".", rebuild_cache: bool = False,
                  verbose: bool = False, use_reranker: bool = False, reranker_top_k: int = 20,
-                 gpu_device: int = 1):
+                 gpu_device: int = 1, dataset_name: str = "2wiki"):
         """Initialize the baseline system.
 
         Args:
@@ -241,7 +303,15 @@ class Qwen3EmbeddingBaseline:
             use_reranker: If True, use VoyageAI reranker to rerank top-k documents
             reranker_top_k: Number of documents to retrieve before reranking (only used if use_reranker=True)
             gpu_device: GPU device ID for FAISS GPU acceleration (default: 3)
+            dataset_name: Name of the dataset (e.g., '2wiki', 'musique', 'popqa')
         """
+        # Get dataset configuration from DATASET_CONFIGS
+        dataset_config = DATASET_CONFIGS.get(dataset_name, DATASET_CONFIGS["2wiki"])
+        self.dataset_name = dataset_name
+        self.answer_field = dataset_config["answer_field"]
+        self.parse_json = dataset_config["parse_json"]
+        self.allow_no_answer = dataset_config["allow_no_answer"]
+
         self.corpus_path = Path(corpus_path)
         self.questions_path = Path(questions_path)
         self.num_questions = num_questions
@@ -315,29 +385,30 @@ class Qwen3EmbeddingBaseline:
         if CURATOR_AVAILABLE:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             self.answer_generator = Qwen3AnswerGenerator(
-                # model_name="gpt-4o-mini",
-                # generation_params={"temperature": 0},
-                model_name="hosted_vllm/Qwen/Qwen3-8B",
-                backend="litellm",
-                backend_params={
-                    "base_url": "http://127.0.0.1:6380/v1",
-                    "request_timeout": 600.0,
-                    "max_concurrent_requests": 32,
-                    "max_requests_per_minute": 120,
-                    "max_tokens_per_minute": 200000,
-                    "seconds_to_pause_on_rate_limit": 5,
-                    "require_all_responses": False,
-                },
-                generation_params={
-                    "temperature": 0.6, 
-                    "top_p": 0.95, 
-                    "top_k": 20, 
-                    "min_p": 0, 
-                    "max_tokens": 4096, 
-                    "repetition_penalty": 1.1,
-                    "presence_penalty": 0.3,
-                    "frequency_penalty": 0.3
-                            }
+                allow_no_answer=self.allow_no_answer,
+                model_name="gpt-4o-mini",
+                generation_params={"temperature": 0},
+                # model_name="hosted_vllm/Qwen/Qwen3-8B",
+                # backend="litellm",
+                # backend_params={
+                #     "base_url": "http://127.0.0.1:6380/v1",
+                #     "request_timeout": 600.0,
+                #     "max_concurrent_requests": 32,
+                #     "max_requests_per_minute": 120,
+                #     "max_tokens_per_minute": 200000,
+                #     "seconds_to_pause_on_rate_limit": 5,
+                #     "require_all_responses": False,
+                # },
+                # generation_params={
+                #     "temperature": 0.6, 
+                #     "top_p": 0.95, 
+                #     "top_k": 20, 
+                #     "min_p": 0, 
+                #     "max_tokens": 4096, 
+                #     "repetition_penalty": 1.1,
+                #     "presence_penalty": 0.3,
+                #     "frequency_penalty": 0.3
+                #             }
             )
             console.print("[green]✓ Curator initialized for parallel answer generation[/green]")
         else:
@@ -757,8 +828,11 @@ Thought:
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
-            'If you don\'t know the answer, say "No Answer".'
         )
+
+        # Add "No Answer" instruction if allow_no_answer is enabled
+        if self.allow_no_answer:
+            rag_qa_system += ' If you don\'t know the answer, say "No Answer".'
 
         # One-shot example input
         one_shot_input = (
@@ -826,27 +900,25 @@ Thought:
         for i, item in enumerate(data[:self.num_questions]):
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("answer", [])
-            # gold_answers = item.get("reference", [])
-            # gold_answers = item.get("possible_answers", [])
-            
-            # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
-            # Fix to always decode it if it is a string:
-            # if isinstance(gold_answers, str):
-            #     try:
-            #         gold_answers = json.loads(gold_answers)
-            #     except Exception:
-            #         gold_answers = [gold_answers]
-                
-            # else:
-            #     continue
+
+            # Use dataset-specific answer field
+            gold_answers = item.get(self.answer_field, [])
+
+            # Parse JSON if needed (for datasets like PopQA)
+            if self.parse_json and isinstance(gold_answers, str):
+                try:
+                    gold_answers = json.loads(gold_answers)
+                except Exception:
+                    gold_answers = [gold_answers]
 
             # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
                 gold_answers = [gold_answers]
-                gold_answers.extend(item.get("answer_aliases", []))
-            else:
-                gold_answers = gold_answers + item.get("answer_aliases", [])
+
+            # Add answer_aliases if available (for 2wiki datasets)
+            if "answer_aliases" in item:
+                if isinstance(item["answer_aliases"], list):
+                    gold_answers = list(gold_answers) + item["answer_aliases"]
 
             questions_data.append((question_id, question, gold_answers))
 
@@ -1122,8 +1194,13 @@ Thought:
         console.print(f"[green] Results saved to: {output_file}[/green]")
 
 
-def main(verbose: bool = False):
-    """Main evaluation function."""
+def main(verbose: bool = False, dataset_name: str = "2wiki_platinum"):
+    """Main evaluation function.
+
+    Args:
+        verbose: Show detailed output
+        dataset_name: Name of the dataset (e.g., '2wiki', 'musique', 'popqa')
+    """
     console.print("\n[bold cyan]=� Qwen-3 Embedding Baseline Evaluation[/bold cyan]")
 
     try:
@@ -1134,10 +1211,11 @@ def main(verbose: bool = False):
             num_questions=1000,
             top_k=5,
             cache_dir="/home/yigit/codebase/gsw-memory/baselines/",
-            rebuild_cache=False,
+            rebuild_cache=True,
             verbose=verbose,
             use_reranker=False,  # Set to True to enable reranking
-            reranker_top_k=20    # Number of docs to retrieve before reranking (when use_reranker=True)c
+            reranker_top_k=20,   # Number of docs to retrieve before reranking (when use_reranker=True)
+            dataset_name=dataset_name
         )
 
         # Run evaluation

@@ -558,22 +558,6 @@ class EntitySearcher:
             console.print(f"[red]Error embedding query: {e}[/red]")
             return None
 
-    def _embed_chain(self, chain: str) -> Optional[np.ndarray]:
-        """Embed a chain using the Qwen model."""
-        if not self.embedding_model:
-            return None
-        
-        task = 'Given a chain of questions and answer pairs, create an embedding that captures the semantic meaning captured across all question-answer pairs in the chain for similarity comparison with user queries.'
-        instructed_chain = get_detailed_instruct(task, chain)
-
-        try:
-            outputs = self.embedding_model.embed([instructed_chain])
-            embedding = np.array(outputs[0].outputs.embedding)
-            return embedding
-        except Exception as e:
-            console.print(f"[red]Error embedding chain: {e}[/red]")
-            return None
-    
     def _get_qa_text_hash(self, qa_text: str) -> str:
         """Generate a hash for Q&A text to use as cache key."""
         return hashlib.md5(qa_text.encode()).hexdigest()
@@ -1290,105 +1274,6 @@ class EntitySearcher:
             console.print(f"[yellow]Warning: Could not count tokens: {e}[/yellow]")
             return None
     
-    def _generate_llm_answer(self, query: str, results: List[Tuple[Dict[str, Any], float]], qa_top_k: int = 15) -> str:
-        """Generate an answer using LLM with reranked Q&A pairs as context.
-        
-        Args:
-            query: The user's query
-            results: Retrieved entity results
-            qa_top_k: Number of top Q&A pairs to pass to LLM after reranking
-        """
-        if not self.openai_client:
-            return "[yellow]LLM answer generation not available (OpenAI client not initialized)[/yellow]"
-        
-        if not results:
-            return "[yellow]No entities found to generate answer from.[/yellow]"
-        
-        # Collect all Q&A pairs
-        all_qa_pairs = []
-        for entity, _ in results:
-            qa_pairs = entity.get('qa_pairs', [])
-            for qa in qa_pairs:
-                # Use resolved answer names
-                answer_text = ', '.join(qa.get('answer_names', qa.get('answer_ids', ['Unknown'])))
-                all_qa_pairs.append({
-                    'entity': entity['name'],
-                    'question': qa['question'],
-                    'answers': answer_text,
-                    'verb_phrase': qa.get('verb_phrase', ''),
-                    'doc_id': entity['doc_id']
-                })
-        
-        if not all_qa_pairs:
-            return "[yellow]No Q&A pairs found in the retrieved entities.[/yellow]"
-        
-        # Rerank Q&A pairs based on similarity to the query
-        reranked_qa_pairs = self._rerank_qa_pairs(query, all_qa_pairs, top_k=qa_top_k)
-        
-        # Prepare context from reranked Q&A pairs
-        context_parts = []
-        context_parts.append("RELEVANT Q&A PAIRS FROM KNOWLEDGE BASE:")
-        for i, qa in enumerate(reranked_qa_pairs, 1):
-            context_parts.append(f"\n{i}. Question: {qa['question']}")
-            context_parts.append(f"   Answer: {qa['answers']}")
-        
-        context = "\n".join(context_parts)
-        
-        # Create prompt
-        prompt = f"""Based on the following Q&A pairs retrieved from a knowledge base, please answer this question:
-
-Question: {query}
-
-{context}
-
-It is likely that the answer to your question is present in the question, for example, 
-
-1. Question: What is Leo Messi Top Scorer of? 
-Context: Who is the top scorer of World Cup 2022?
-Answer: Lionel Messi
-
-In such cases, you should infer the answer from the question.
-
-Please provide your answer in the following format:
-
-<reasoning>
-Reasoning to arrive at the answer based on the provided QA pairs. 
-</reasoning>
-
-<answer>
-Only final answer, NA if you cannot find the answer.
-</answer>
-"""
-        # Count tokens if tiktoken is available
-        token_count = self._count_tokens(prompt, "gpt-4o-mini")
-        
-        # Display the context being sent to LLM (for debugging)
-        if self.show_llm_prompt:
-            console.print("\n[dim]Context being sent to LLM:[/dim]")
-            console.print(Panel(prompt, title="LLM Prompt", expand=False, border_style="dim"))
-        
-        # Display token count
-        if token_count:
-            console.print(f"\n[cyan]Token count: {token_count} tokens[/cyan]")
-        
-        try:
-            # Removed verbose generating message
-            response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant that answers questions based on provided Q&A pairs from a knowledge base."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.0,
-                max_tokens=500
-            )
-            
-            answer = response.choices[0].message.content
-            return answer
-            
-        except Exception as e:
-            return f"[red]Error generating answer: {str(e)}[/red]"
-    
     def show_entity_details(self, entity: Dict[str, Any]):
         """Display detailed information about an entity."""
         console.print(f"\n[bold yellow]Entity: {entity['name']}[/bold yellow]")
@@ -1542,12 +1427,6 @@ Only final answer, NA if you cannot find the answer.
         console.print(f"  Unique documents: {unique_docs}")
         console.print(f"  Unique chunks: {unique_chunks}")
         console.print(f"  Embeddings available: {'Yes' if self.embeddings is not None else 'No'}")
-    
-    def save_cache(self):
-        """Save all caches to disk."""
-        self._save_entity_embeddings_cache()
-        self._save_qa_embeddings_cache()
-        console.print(f"[green]✓ Cache saved (hits: {self.cache_hits}, misses: {self.cache_misses})[/green]")
     
     def _run_test_queries(self, top_k: int):
         """Run predefined test queries."""

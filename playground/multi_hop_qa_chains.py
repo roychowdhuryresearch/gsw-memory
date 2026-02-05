@@ -26,8 +26,11 @@ import voyageai
 from pydantic import BaseModel
 
 import os 
+
+
+
 if "CUDA_VISIBLE_DEVICES" not in os.environ:
-    os.environ["CUDA_VISIBLE_DEVICES"] = "1,2"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 
 from rich.console import Console
 from rich.prompt import Prompt
@@ -163,87 +166,6 @@ class ChainFollowingMultiHopQA:
                 parts.append(f"Q: {q_text} A: {a_text} {r_text}")
         return " | ".join(parts) if parts else ""
 
-    def _rerank_states(self, original_question: str, states: List[Dict[str, Any]]) -> None:
-        """Use cross-encoder reranker to set state['chain_score'] in [0,1].
-
-        No fusion: reranker score replaces existing chain_score for pruning.
-        Safe no-op if reranker is unavailable or states empty.
-        """
-        if not self.use_chain_reranker or not states:
-            return
-
-        # Build chain texts
-        chain_texts = [self._format_chain_text_from_state(s) for s in states]
-        valid = [i for i, t in enumerate(chain_texts) if t]
-        if not valid:
-            return
-
-        # Prefer HTTP reranker when endpoint is configured
-        if self.reranker_model_name == "voyage":
-            docs_payload = [chain_texts[i] for i in valid]
-            reranking = self.voyage_client.rerank(original_question, docs_payload, model="rerank-2.5", top_k=len(valid))
-            for r in reranking.results:
-                states[r.index]["chain_score"] = r.relevance_score
-
-        elif self.reranker_endpoint_url:
-            docs_payload = [chain_texts[i] for i in valid]
-            payload = {
-                "model": self.reranker_model_name or "tomaarsen/Qwen3-Reranker-8B-seq-cls",
-                "query": original_question,
-                "documents": docs_payload,
-            }
-            try:
-                if _requests is not None:
-                    resp = _requests.post(
-                        self.reranker_endpoint_url,
-                        headers={"accept": "application/json", "Content-Type": "application/json"},
-                        json=payload,
-                        timeout=self.reranker_http_timeout,
-                    )
-                    if resp.status_code == 200:
-                        data = resp.json()
-                    else:
-                        raise RuntimeError(f"HTTP {resp.status_code}: {resp.text[:200]}")
-                else:
-                    from urllib import request as _urlreq
-                    req = _urlreq.Request(
-                        self.reranker_endpoint_url,
-                        data=json.dumps(payload).encode("utf-8"),
-                        headers={"accept": "application/json", "Content-Type": "application/json"},
-                        method="POST",
-                    )
-                    with _urlreq.urlopen(req, timeout=self.reranker_http_timeout) as r:
-                        data = json.loads(r.read().decode("utf-8"))
-
-                results = data.get("results", [])
-                for item in results:
-                    try:
-                        idx_in_batch = int(item.get("index", -1))
-                        score = float(item.get("relevance_score", 0.0))
-                        if 0 <= idx_in_batch < len(valid):
-                            states[valid[idx_in_batch]]["chain_score"] = score
-                    except Exception:
-                        continue
-            except Exception as e:
-                if self.verbose:
-                    console.print(f"[yellow]HTTP rerank failed; keeping existing scores: {e}[/yellow]")
-        elif self._reranker is not None:
-            raise ValueError("Reranker is currently not served, serve as http endpoint")
-
-    def _rerank_evidence(self, question: str, all_evidence: List[Dict[str, Any]], top_k: int = 5) -> List[Dict[str, Any]]:
-        """Rerank the evidence using the chain reranker."""
-        if not self.use_chain_reranker or not all_evidence:
-            return all_evidence
-        
-        # Build chain texts
-
-        reranking = self.voyage_client.rerank(question, all_evidence, model="rerank-2.5", top_k=top_k) # For simple fallback hardcode to 1.
-        reranked_evidence = []
-        for r in reranking.results:
-            reranked_evidence.append(r.document)
-
-        return reranked_evidence
-
     def _compute_similarity_score(self, state: Dict[str, Any], orig_emb: np.ndarray) -> float:
         """Compute similarity-based score between chain text and original question.
 
@@ -366,10 +288,12 @@ class ChainFollowingMultiHopQA:
         """
         if self.chain_following_mode == "cumulative":
             state['chain_score'] = self._compute_cumulative_score(state)
-        # elif self.chain_following_mode == "similarity":
-        #     state['chain_score'] = self._compute_similarity_score(state, orig_emb)
-        # elif self.chain_following_mode == "combined":
-        #     state['chain_score'] = self._compute_combined_score(state, orig_emb, self.alpha)
+        elif self.chain_following_mode == "similarity":
+            state['chain_score'] = self._compute_similarity_score(state, orig_emb)
+        elif self.chain_following_mode == "combined":
+            state['chain_score'] = self._compute_combined_score(state, orig_emb, self.alpha)
+        elif self.chain_following_mode == "none":
+            state['chain_score'] = 1.0
         else:
             raise ValueError(f"Invalid chain following mode: {self.chain_following_mode}")
 
@@ -430,25 +354,6 @@ class ChainFollowingMultiHopQA:
 
         return candidates[:beam_width]
 
-    def _extract_top_entities_from_qa(self, qa_pairs: List[Dict[str, Any]], max_entities: int) -> List[Tuple[str, Dict[str, Any]]]:
-        """From reranked QA pairs, pick top unique answer entities with their source QA pair.
-
-        Returns list of (entity_name, qa_pair_used) up to max_entities.
-        """
-        unique: List[Tuple[str, Dict[str, Any]]] = []
-        seen = set()
-        for qa in qa_pairs:
-            answer_names = qa.get('answer_names', qa.get('answers', []))
-            if isinstance(answer_names, str):
-                answer_names = [answer_names]
-            for name in answer_names:
-                if name and name not in seen:
-                    unique.append((name, qa))
-                    seen.add(name)
-                    if len(unique) >= max_entities:
-                        return unique
-        return unique
-    
     def decompose_question(self, question: str) -> List[Dict[str, Any]]:
         """Decompose a multi-hop question into single-hop questions.
         
@@ -602,50 +507,6 @@ Output:
                 console.print(f"[red]Error in decomposition: {e}[/red]")
             return [{"question": question, "requires_retrieval": True}]
     
-    def substitute_entities(self, question_template: str, entities_by_question: Dict[str, List[str]]) -> List[str]:
-        """Substitute entity placeholders with actual entity names.
-        
-        Args:
-            question_template: Question with placeholders like <ENTITY> or <ENTITY_Q1>
-            entities_by_question: Dict mapping Q1, Q2, etc. to entity names
-            
-        Returns:
-            List of substituted questions (one per entity combination)
-        """
-        if "<ENTITY" not in question_template:
-            return ([question_template], False)
-        
-        substituted_questions = []
-        
-        # Handle simple <ENTITY> placeholder (use most recent question's entities)
-        if "<ENTITY>" in question_template:
-            # Find the most recent question number
-            if entities_by_question:
-                last_q = max(entities_by_question.keys(), key=lambda x: int(x[1:]))
-                entities = entities_by_question.get(last_q, [])
-                
-                for entity_name in entities:
-                    q = question_template.replace("<ENTITY>", entity_name)
-                    substituted_questions.append(q)
-        
-        # Handle indexed placeholders like <ENTITY_Q1>, <ENTITY_Q2>
-        else:
-            # Find all entity references
-            refs = re.findall(r'<ENTITY_Q(\d+)>', question_template)
-            if refs:
-                # For now, just substitute with the first entity from each referenced question
-                # (In a more complex version, we could do cartesian product)
-                q = question_template
-                for ref in refs:
-                    q_key = f"Q{ref}"
-                    if q_key in entities_by_question and entities_by_question[q_key]:
-                        # Use the first entity from this question
-                        for entity in entities_by_question[q_key]:
-                            q = question_template.replace(f"<ENTITY_Q{ref}>", entity)
-                            substituted_questions.append(q)
-        
-        return (substituted_questions, True) if substituted_questions else ([question_template], False)
-    
     def search_and_collect_evidence(self, question: str, question_embedding: np.ndarray = None, top_k_entities: int = 10, top_k_qa: int = 15) -> List[Dict[str, Any]]:
         """Search for a question and collect relevant Q&A pairs using dual search.
 
@@ -750,31 +611,6 @@ Output:
 
         # Otherwise just return top k by entity score
         return all_qa_pairs[:top_k_qa]
-    
-    def is_question_referenced_in_future(self, current_index: int, decomposed: List[Dict[str, Any]]) -> bool:
-        """Check if the current question index is referenced in any future questions.
-        
-        Args:
-            current_index: Current question index (0-based)
-            decomposed: List of all decomposed questions
-            
-        Returns:
-            True if any future question references this one with <ENTITY_Q{}>
-        """
-        current_q_ref = f"<ENTITY_Q{current_index + 1}>"  # Q1 is index 0, so add 1
-        
-        # Check all subsequent questions (only those that require retrieval)
-        for future_index in range(current_index + 1, len(decomposed)):
-            future_q_info = decomposed[future_index]
-            # Skip non-retrieval questions when checking for references
-            if not future_q_info.get("requires_retrieval", True):
-                continue
-            
-            future_question = future_q_info.get("question", "")
-            if current_q_ref in future_question:
-                return True
-        
-        return False
     
     def identify_reasoning_chains(self, decomposed: List[Dict[str, Any]]) -> List[List[int]]:
         """Identify which questions belong to which reasoning chains.
@@ -907,12 +743,13 @@ Output:
             chain_questions = [decomposed[i]['question'] for i in chain_indices]
             console.print(f"  [cyan]Processing chain: {' → '.join(chain_questions)}[/cyan]")
 
-        # Pre-compute embedding for the original question to use in chain-level reranking
-        # orig_emb = None
-        # try:
-        #     orig_emb = self.entity_searcher._embed_query(original_question)
-        # except Exception:
-        #     orig_emb = None
+        orig_emb = None
+        if self.chain_following_mode == "similarity" or self.chain_following_mode == "combined":
+            # Pre-compute embedding for the original question to use in chain-level reranking
+            try:
+                orig_emb = self.entity_searcher._embed_query([original_question])[0]
+            except Exception:
+                orig_emb = None
 
         # Build dependency map for this chain
         dependencies = {}
@@ -1034,9 +871,12 @@ Output:
                     for qa_used in qa_pairs:
                         # Create new state with QA pair
                         new_state = self._create_expansion_state(state, qa_used, q_idx, is_last_hop=True)
+                        
                         # Score the chain
-                        # new_state = self._score_chain_state(new_state, orig_emb)
-                        new_state = self._score_chain_state(new_state)
+                        if self.chain_following_mode == "similarity" or self.chain_following_mode == "combined":
+                            new_state = self._score_chain_state(new_state, orig_emb)
+                        else:
+                            new_state = self._score_chain_state(new_state)
                         candidate_expansions.append(new_state)
                 else:
                     # Non-final hop: entity-by-best-QA selection
@@ -1062,8 +902,11 @@ Output:
                             # Create and score new state
                             new_state = self._create_expansion_state(state, qa_used, q_idx)
                             new_state['entities_by_qidx'][q_idx] = ent_name  # Override with specific entity
-                            # new_state = self._score_chain_state(new_state, orig_emb)
-                            new_state = self._score_chain_state(new_state)
+                            
+                            if self.chain_following_mode == "similarity" or self.chain_following_mode == "combined":
+                                new_state = self._score_chain_state(new_state, orig_emb)
+                            else:   
+                                new_state = self._score_chain_state(new_state)
 
                             # Keep best scoring chain for each entity
                             prev = per_entity_best.get(ent_key)
@@ -1078,15 +921,8 @@ Output:
                 completed_questions[q_idx] = []
                 continue
 
-            # Rerank candidates with cross-encoder (no fusion), then prune
-            # self._rerank_states(original_question, candidate_expansions)
-            if not is_final_hop:
-                beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
-                
-            # Final rerank before evidence extraction only for final hop
-            if is_final_hop:
-                # self._rerank_states(original_question, candidate_expansions)
-                beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
+            # Rerank and prune candidates with cross-encoder for both final and non-final hops
+            beams = self._prune_to_beam_width(candidate_expansions, self.beam_width)
                 
             if self.verbose:
                 console.print(f"      Expanded to {len(candidate_expansions)} beams → kept top {len(beams)}")
@@ -1126,39 +962,6 @@ Output:
         if self.verbose:
             console.print(f"      Final evidence: {len(evidence)} unique Q&A pairs")
         return evidence
-    
-    def extract_entities_from_qa_pairs(self, qa_pairs: List[Dict[str, Any]], max_entities: int = 5) -> Tuple[List[str], List[str]]:
-        """Extract unique entity names from Q&A pairs.
-        
-        Args:
-            qa_pairs: List of Q&A pairs with answer information
-            max_entities: Maximum number of unique entities to extract
-            
-        Returns:
-            Tuple of (unique entity names, evidence strings used)
-        """
-        unique_entities = []
-        qa_pair_used = []
-        seen = set()
-        
-        for qa in qa_pairs:
-            # Get answer names (could be a list or string)
-            answer_names = qa.get('answer_names', qa.get('answers', []))
-            if isinstance(answer_names, str):
-                answer_names = [answer_names]
-            
-            for name in answer_names:
-                if name and name not in seen:
-                    unique_entities.append(name)
-                    answer_text = ', '.join(qa.get('answer_names', qa.get('answer_ids', [])))
-                    answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-                    qa_pair_used.append(f"Q: {qa['question']} A: {answer_text} {answer_rolestates}")
-                    seen.add(name)
-                    if len(unique_entities) >= max_entities:
-                        return unique_entities, qa_pair_used
-        
-        return unique_entities, qa_pair_used
-
     
     def process_multihop_question(self, question: str, final_topk: int = 10) -> Dict[str, Any]:
         """Process a multi-hop question with chain-following approach.
@@ -1283,57 +1086,6 @@ Output:
             chains_info = {"fallback": True}
             return all_evidence, chains_info, decomposed
 
-
-            # if self.verbose:
-            #     console.print("[yellow]No reasoning chains detected, using simple fallback retrieval[/yellow]")
-
-            # all_evidence: List[str] = []
-            # entities_by_question: Dict[str, List[str]] = {}
-
-            # for i, q_info in enumerate(decomposed):
-            #     if not q_info.get("requires_retrieval", True):
-            #         continue
-
-            #     question_template = q_info.get("question", "")
-            #     is_referenced = self.is_question_referenced_in_future(i, decomposed)
-
-            #     actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-
-            #     actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
-
-            #     for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
-            #         qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=self.entity_top_k, top_k_qa=self.qa_rerank_top_k)
-
-            #         if is_referenced:
-            #             entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-            #             entities_by_question[f"Q{i+1}"] = list(dict.fromkeys(entities))
-            #             all_evidence.extend(qa_pair_used)
-            #         else:
-            #             # Format as evidence strings
-            #             for qa in qa_pairs[:5]: # Limit to number of QA pairs per non chain question.
-            #                 q_text = qa.get('question', '')
-            #                 answer_names = qa.get('answer_names', qa.get('answers', []))
-            #                 if isinstance(answer_names, str):
-            #                     answer_names = [answer_names]
-            #                 answer_text = ', '.join(str(name) for name in answer_names if name)
-            #                 answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-            #                 if q_text and answer_text:
-            #                     all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-
-            # # Deduplicate while preserving order
-            # seen = set()
-            # unique_evidence: List[str] = []
-            # for ev in all_evidence:
-            #     if ev not in seen:
-            #         seen.add(ev)
-            #         unique_evidence.append(ev)
-
-            # # Rerank the evidence
-            # unique_evidence = self._rerank_evidence(question=question, all_evidence=unique_evidence, top_k=5)
-
-            # chains_info = {"fallback": True}
-            # return unique_evidence, chains_info, decomposed
-
         # Process each identified chain independently using beam search
         all_evidence: List[str] = []
         for chain_indices in chains:
@@ -1389,90 +1141,6 @@ Output:
             "entities_found": entities_by_question,
             "chains_info": {"fallback": True}
         }
-
-
-        # questions_to_collect_evidence = [q["question"] for q in decomposed if q["requires_retrieval"]]
-        # query_embeddings = self.entity_searcher._embed_query(questions_to_collect_evidence)
-
-        # for question, query_embedding in zip(questions_to_collect_evidence, query_embeddings):
-        #     qa_pairs = self.search_and_collect_evidence(question, query_embedding, top_k_entities=20)
-
-        #     for qa in qa_pairs:
-        #         q_text = qa.get('question', '')
-        #         answer_names = qa.get('answer_names', qa.get('answers', []))
-        #         if isinstance(answer_names, str):
-        #             answer_names = [answer_names]
-        #         answer_text = ', '.join(str(name) for name in answer_names if name)
-        #         answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-        #         if q_text and answer_text:
-        #             all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-
-        # all_evidence = list(set(all_evidence))
-
-        # # Rerank the evidence
-        # all_evidence = self._rerank_evidence(question=question, all_evidence=all_evidence, top_k=5)
-
-        # return {
-        #     "question": question,
-        #     "answer": answer,
-        #     "evidence_count": len(all_evidence),
-        #     "decomposed_questions": decomposed,
-        #     "entities_found": entities_by_question,
-        #     "chains_info": {"fallback": True}
-        # }
-        
-        # for i, q_info in enumerate(decomposed):
-        #     if not q_info["requires_retrieval"]:
-        #         continue
-                
-        #     question_template = q_info["question"]
-        #     is_referenced = self.is_question_referenced_in_future(i, decomposed)
-            
-        #     actual_questions, _ = self.substitute_entities(question_template, entities_by_question)
-
-        #     actual_question_embeddings = self.entity_searcher._embed_query(actual_questions)
-
-        #     for actual_q, actual_q_embedding in zip(actual_questions, actual_question_embeddings):
-        #         qa_pairs = self.search_and_collect_evidence(actual_q, actual_q_embedding, top_k_entities=20)
-                
-        #         if is_referenced:
-        #             entities, qa_pair_used = self.extract_entities_from_qa_pairs(qa_pairs)
-        #             entities_by_question[f"Q{i+1}"] = list(set(entities))
-        #             all_evidence.extend(qa_pair_used)
-        #         else:
-        #             # Format as evidence strings
-        #             for qa in qa_pairs:
-        #                 q_text = qa.get('question', '')
-        #                 answer_names = qa.get('answer_names', qa.get('answers', []))
-        #                 if isinstance(answer_names, str):
-        #                     answer_names = [answer_names]
-        #                 answer_text = ', '.join(str(name) for name in answer_names if name)
-        #                 answer_rolestates = ', '.join(qa.get('answer_rolestates', []))
-        #                 if q_text and answer_text:
-        #                     all_evidence.append(f"Q: {q_text} A: {answer_text} {answer_rolestates}")
-        
-        # # Remove duplicates while preserving order
-        # seen = set()
-        # unique_evidence = []
-        # for evidence in all_evidence:
-        #     if evidence not in seen:
-        #         seen.add(evidence)
-        #         unique_evidence.append(evidence)
-        # all_evidence = unique_evidence
-
-        # # Rerank the evidence
-        # all_evidence = self._rerank_evidence(question=question, all_evidence=all_evidence, top_k=5)
-
-        # answer = self.generate_answer(question, all_evidence, decomposed)
-        
-        # return {
-        #     "question": question,
-        #     "answer": answer,
-        #     "evidence_count": len(all_evidence),
-        #     "decomposed_questions": decomposed,
-        #     "entities_found": entities_by_question,
-        #     "chains_info": {"fallback": True}
-        # }
     
     def generate_answer(self, original_question: str, all_evidence: List[str], 
                        decomposed_questions: List[Dict[str, Any]] = None) -> str:

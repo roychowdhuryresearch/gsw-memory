@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 """
-ABLATION STUDY: NO CHAIN RERANKING
+Batched Chain-Following Multi-Hop Question Answering Evaluation Script
 
-This script evaluates multi-hop QA WITHOUT chain reranking.
-Chain scores are computed using only cumulative QA scores, without
-cross-encoder reranking.
-
-ABLATION:
-- ✅ Question decomposition
-- ✅ Chain-following retrieval
-- ❌ Chain reranking (voyage reranker disabled)
-- ✅ Q&A reranking
-- ✅ Oracle-style answer generation
-
-Comparison baseline: evaluate_multi_hop_qa_chains_batched.py
+Uses curator for parallel LLM calls with the chain-following approach.
+Implements smart chain following:
+1. Decomposes questions into sub-questions (batched)
+2. Processes retrieval with entity substitution and chain formation
+3. Reranks chains against original questions
+4. Generates answers using oracle-style prompting (batched)
 """
 
 import re
@@ -30,13 +24,14 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,2'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,0'
+
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
 # Add the parent directory to the path
-sys.path.append(str(Path(__file__).parent.parent.parent))
+sys.path.append(str(Path(__file__).parent.parent))
 
 # Import our chain-following multi-hop QA system for retrieval
-from multi_hop_qa_chains import ChainFollowingMultiHopQA
+from playground.multi_hop_qa_chains import ChainFollowingMultiHopQA
 
 # Import evaluation utilities
 from src.gsw_memory.evaluation.hipporag_eval import evaluate_qa_batch, format_evaluation_report
@@ -51,10 +46,64 @@ except ImportError:
 
 console = Console()
 
+# Dataset configurations mapping
+DATASET_CONFIGS = {
+    "2wiki": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "2wiki_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "2wiki_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "musique_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "hotpotqa": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "popqa": {
+        "answer_field": "possible_answers",
+        "parse_json": True,
+        "allow_no_answer": False
+    },
+    "nq_rear": {
+        "answer_field": "reference",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "lveval": {
+        "answer_field": "answers",
+        "parse_json": False,
+        "allow_no_answer": False
+    }
+}
+
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / f"multihop_qa_NO_CHAIN_RERANK_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+LOG_FILE = LOG_DIR / f"multihop_qa_chains_batched_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
 
 class DecomposedQuestion(BaseModel):
@@ -66,12 +115,18 @@ class DecomposedQuestionList(BaseModel):
 
 class ChainQuestionDecomposer(curator.LLM):
     """Curator class for decomposing multi-hop questions in parallel."""
-    
+
     # return_completions_object = True
-    
-    def __init__(self, **kwargs):
-        """Initialize the question decomposer."""
+
+    def __init__(self, model_mode='closedsource', **kwargs):
+        """Initialize the question decomposer.
+
+        Args:
+            model_mode: 'opensource' or 'closedsource' - determines response parsing strategy
+            **kwargs: Additional arguments passed to curator.LLM
+        """
         super().__init__(**kwargs)
+        self.model_mode = model_mode
     
     def prompt(self, input):
         """Create a decomposition prompt for each question."""
@@ -193,18 +248,29 @@ Output:
         ]
     
     def parse(self, input, response: DecomposedQuestionList):
-        """Parse the decomposition response."""
+        """Parse the decomposition response.
 
-        # convert string to json
-        # response = json.loads(response)
-        # questions = [{"question" : q["question"], "requires_retrieval" : q["requires_retrieval"]} for q in response["questions"]]
-        questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
-        
+        Handles both open-source (raw JSON string) and closed-source (Pydantic object) responses.
+        """
+
+        if self.model_mode == 'opensource':
+            # Open-source models return raw JSON strings that need manual parsing
+            response_dict = json.loads(response) if isinstance(response, str) else response
+            questions = [
+                {"question": q["question"], "requires_retrieval": q["requires_retrieval"]}
+                for q in response_dict["questions"]
+            ]
+        else:
+            # Closed-source models return Pydantic objects via response_format parameter
+            questions = [
+                {"question": q.question, "requires_retrieval": q.requires_retrieval}
+                for q in response.questions
+            ]
+
         return [{
             "question_id": input['question_id'],
             "original_question": input['question'],
             "decomposed_questions": questions,
-            # "raw_response": decomposition_text
         }]
 
 
@@ -212,12 +278,18 @@ Output:
 
 class ChainAnswerGenerator(curator.LLM):
     """Curator class for generating answers with oracle-style prompting in parallel."""
-    
+
     return_completions_object = True
-    
-    def __init__(self, **kwargs):
-        """Initialize the answer generator."""
+
+    def __init__(self, allow_no_answer: bool = False, **kwargs):
+        """Initialize the answer generator.
+
+        Args:
+            allow_no_answer: Whether to allow "No Answer" responses for unanswerable questions
+            **kwargs: Additional arguments passed to curator.LLM
+        """
         super().__init__(**kwargs)
+        self.allow_no_answer = allow_no_answer
     
     def prompt(self, input):
         """Create an oracle-style answer generation prompt."""
@@ -255,8 +327,11 @@ class ChainAnswerGenerator(curator.LLM):
             'As an advanced reading comprehension assistant, your task is to analyze precise QA pairs extracted from the documents and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
-            # 'If you don\'t know the answer, say "No Answer".'
         )
+
+        # Add "No Answer" instruction for unanswerable question datasets
+        if self.allow_no_answer:
+            rag_qa_system += ' If you don\'t know the answer, say "No Answer".'
         
         # One-shot example input
         one_shot_input = (
@@ -339,16 +414,97 @@ class ChainBatchedEvaluationResult:
 
 class ChainBatchedMultiHopQAEvaluator:
     """Batched evaluator for chain-following multi-hop QA using curator for parallel LLM calls."""
-    
-    def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False,
-                 chain_top_k: int = 15, use_bm25: bool = False):
+
+    @staticmethod
+    def _get_default_model_config(mode: str, component: str) -> Dict[str, Any]:
+        """Get default model configuration based on mode and component.
+
+        Args:
+            mode: "closedsource" or "opensource"
+            component: "decomposer" or "answerer"
+
+        Returns:
+            Dictionary with model configuration
+        """
+        configs = {
+            "decomposer": {
+                "closedsource": {
+                    "model_name": "gpt-4o",
+                    "generation_params": {"temperature": 0}
+                },
+                "opensource": {
+                    "model_name": "hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "base_url": "http://127.0.0.1:8989/v1",
+                        "request_timeout": 600.0,
+                        "max_concurrent_requests": 32,
+                        "max_requests_per_minute": 120,
+                        "max_tokens_per_minute": 200000,
+                        "seconds_to_pause_on_rate_limit": 5,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {"temperature": 0}
+                }
+            },
+            "answerer": {
+                "closedsource": {
+                    "model_name": "gpt-4o-mini",
+                    "generation_params": {"temperature": 0}
+                },
+                "opensource": {
+                    "model_name": "hosted_vllm/Qwen/Qwen3-8B",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "base_url": "http://127.0.0.1:6380/v1",
+                        "request_timeout": 600.0,
+                        "max_concurrent_requests": 32,
+                        "max_requests_per_minute": 120,
+                        "max_tokens_per_minute": 200000,
+                        "seconds_to_pause_on_rate_limit": 5,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {
+                        "temperature": 0.6,
+                        "top_p": 0.95,
+                        "top_k": 20,
+                        "min_p": 0,
+                        "max_tokens": 4096,
+                        "repetition_penalty": 1.1,
+                        "presence_penalty": 0.3,
+                        "frequency_penalty": 0.3,
+                    }
+                }
+            }
+        }
+
+        return configs[component][mode]
+
+    def __init__(self,
+                 num_documents: int = 200,
+                 num_questions: int = 20,
+                 verbose: bool = False,
+                 chain_top_k: int = 15,
+                 use_bm25: bool = False,
+                 dataset_name: str = "2wiki",
+                 decomposer_mode: str = "closedsource",
+                 decomposer_model: str = None,
+                 answerer_mode: str = "closedsource",
+                 answerer_model: str = None):
         """Initialize batched chain evaluator.
-        
+
         Args:
             num_documents: Number of documents to load
             num_questions: Number of questions to evaluate
             verbose: Whether to show detailed output
             chain_top_k: Number of top chains to select after reranking
+            use_bm25: Whether to use BM25 retrieval
+            dataset_name: Name of the dataset (e.g., '2wiki', 'musique', '2wiki_platinum')
+                         Dataset config (answer_field, parse_json, allow_no_answer) is auto-loaded from DATASET_CONFIGS
+            decomposer_mode: "closedsource" or "opensource" for question decomposer
+            decomposer_model: Model name override (auto-selects based on mode if None)
+            answerer_mode: "closedsource" or "opensource" for answer generator
+            answerer_model: Model name override (auto-selects based on mode if None)
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
@@ -356,12 +512,34 @@ class ChainBatchedMultiHopQAEvaluator:
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
-        
+
+        # Get dataset configuration from DATASET_CONFIGS
+        dataset_config = DATASET_CONFIGS.get(dataset_name, DATASET_CONFIGS["2wiki"])
+        self.dataset_name = dataset_name
+        self.answer_field = dataset_config["answer_field"]
+        self.parse_json = dataset_config["parse_json"]
+        self.allow_no_answer = dataset_config["allow_no_answer"]
+
         console.print("[bold blue]Initializing Chain-Based Batched Multi-Hop QA Evaluator...[/bold blue]")
         console.print(f"  Chain selection: Top {chain_top_k} chains")
-        
-        # Initialize the chain-following retrieval system (single instance for all questions)
-        # ABLATION: Disable chain reranking (use_chain_reranker=False)
+        console.print(f"  Dataset: {dataset_name}")
+        console.print(f"  Answer field: '{self.answer_field}' (parse_json={self.parse_json}, allow_no_answer={self.allow_no_answer})")
+
+        # Store model configuration
+        self.decomposer_mode = decomposer_mode
+        self.answerer_mode = answerer_mode
+
+        # Get default configs
+        decomposer_config = self._get_default_model_config(decomposer_mode, "decomposer")
+        answerer_config = self._get_default_model_config(answerer_mode, "answerer")
+
+        # Override model names if provided
+        if decomposer_model:
+            decomposer_config["model_name"] = decomposer_model
+        if answerer_model:
+            answerer_config["model_name"] = answerer_model
+
+        # Initialize the chain-following retrieval system
         self.qa_system = ChainFollowingMultiHopQA(
             num_documents=num_documents,
             verbose=False,
@@ -369,108 +547,107 @@ class ChainBatchedMultiHopQAEvaluator:
             chain_top_k=chain_top_k,
             chain_following_mode="cumulative",
             beam_width=5,
-            reranker_model_name=None,
-            use_chain_reranker=False,  # ABLATION: Chain reranker disabled
+            reranker_model_name="voyage",
+            use_chain_reranker=True,
             use_bm25=use_bm25
-
         )
+
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
-            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
-            self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-4o",
-                # model_name="hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
-                # backend = "litellm",
-                # backend_params = {
-                #     "base_url": "http://127.0.0.1:8989/v1",
-                #     "request_timeout": 600.0,  
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #     "seconds_to_pause_on_rate_limit": 5,
-                #     "require_all_responses": False,
-                # },
-                generation_params={"temperature": 0}, 
-                response_format=DecomposedQuestionList
-            )
-            self.answer_generator = ChainAnswerGenerator(
-                model_name="gpt-4o-mini", 
-                generation_params={"temperature": 0},
-                # model_name="hosted_vllm/Qwen/Qwen3-8B",
-                # backend = "litellm",
-                # backend_params = {
-                #     "base_url": "http://127.0.0.1:6380/v1",
-                #     "request_timeout": 600.0,  
-                #     "max_concurrent_requests": 32,
-                #     "max_requests_per_minute": 120,
-                #     "max_tokens_per_minute": 200000,
-                #    "seconds_to_pause_on_rate_limit": 5,
-                #     "require_all_responses": False,
-                # },
-                # generation_params={
-                #     "temperature": 0.6, 
-                #     "top_p": 0.95, 
-                #     "top_k": 20, 
-                #     "min_p": 0, 
-                #     "max_tokens": 4096, 
-                #     "repetition_penalty": 1.1,
-                #     "presence_penalty": 0.3,
-                #     "frequency_penalty": 0.3
-                #             }
-            )
+            os.environ["HOSTED_VLLM_API_KEY"] = os.getenv("VLLM_API_KEY", "token-abc123")
+
+            # Initialize decomposer
+            console.print(f"[cyan]Decomposer mode: {decomposer_mode}[/cyan]")
+            console.print(f"[cyan]  Model: {decomposer_config['model_name']}[/cyan]")
+
+            decomposer_kwargs = {
+                "model_mode": decomposer_mode,
+                "model_name": decomposer_config["model_name"],
+                "generation_params": decomposer_config["generation_params"],
+                "response_format": DecomposedQuestionList
+            }
+
+            # Add backend params for opensource models
+            if decomposer_mode == "opensource":
+                decomposer_kwargs["backend"] = decomposer_config["backend"]
+                decomposer_kwargs["backend_params"] = decomposer_config["backend_params"]
+
+            self.decomposer = ChainQuestionDecomposer(**decomposer_kwargs)
+
+            # Initialize answerer
+            console.print(f"[cyan]Answerer mode: {answerer_mode}[/cyan]")
+            console.print(f"[cyan]  Model: {answerer_config['model_name']}[/cyan]")
+
+            if self.allow_no_answer:
+                console.print('[cyan]  "No Answer" responses enabled[/cyan]')
+
+            answerer_kwargs = {
+                "allow_no_answer": self.allow_no_answer,
+                "model_name": answerer_config["model_name"],
+                "generation_params": answerer_config["generation_params"]
+            }
+
+            # Add backend params for opensource models
+            if answerer_mode == "opensource":
+                answerer_kwargs["backend"] = answerer_config["backend"]
+                answerer_kwargs["backend_params"] = answerer_config["backend_params"]
+
+            self.answer_generator = ChainAnswerGenerator(**answerer_kwargs)
+
             console.print("[green]✓ Curator initialized for parallel processing[/green]")
         else:
-            console.print("[yellow]⚠ Curator not available - will fall back to sequential processing[/yellow]")
-        
+            console.print("[yellow]⚠ Curator not available[/yellow]")
+
         console.print(f"[cyan]Ready to evaluate {num_questions} questions on {num_documents} documents[/cyan]")
     
     def load_questions_and_answers(self) -> List[Tuple[str, str, List[str]]]:
-        """Load questions and gold answers from 2WikiMultihopQA dataset.
-        
+        """Load questions and gold answers from configured dataset.
+
         Returns:
             List of tuples: (question_id, question, gold_answers)
         """
-        console.print("[cyan]Loading Musique questions...[/cyan]")
-        
-        questions_file = self.data_dir / "musique.json"
+        console.print(f"[cyan]Loading {self.dataset_name} questions...[/cyan]")
+
+        # Try to find dataset file
+        questions_file = self.data_dir / f"{self.dataset_name}.json"
         if not questions_file.exists():
-            raise FileNotFoundError(f"Questions file not found: {questions_file}")
-        
+            # Fallback to 2wikimultihopqa.json for 2wiki dataset
+            questions_file = self.data_dir / "2wikimultihopqa.json"
+            if not questions_file.exists():
+                raise FileNotFoundError(f"Questions file not found: {questions_file}")
+
         with open(questions_file, 'r') as f:
             data = json.load(f)
-        
-        # Extract first N questions
+
+        console.print(f"[cyan]  Using answer field: '{self.answer_field}' (parse_json={self.parse_json})[/cyan]")
+
+        # Extract questions
         questions_data = []
         for i, item in enumerate(data[:self.num_questions]):
-            # if "2hop" in item["id"] or "3hop1" in item["id"]:
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("answer", [])
-            # gold_answers = item.get("gold_ans", [])
-            # gold_answers = item.get("reference", [])
-            # gold_answers = item.get("possible_answers", [])
-            # In the dataset, possible_answers is a JSON-encoded string for lists; e.g., '["cartoonist", "graphic artist", "animator", "illustrator"]'
-            # Fix to always decode it if it is a string:
-            # if isinstance(gold_answers, str):
-            #     try:
-            #         gold_answers = json.loads(gold_answers)
-            #     except Exception:
-            #         gold_answers = [gold_answers]
-                
-            # else:
-            #     continue
-            
-            # Ensure gold_answers is a list and add aliases
+
+            # Extract gold answers based on configuration
+            gold_answers = item.get(self.answer_field, [])
+
+            # Parse JSON if needed (for PopQA)
+            if self.parse_json and isinstance(gold_answers, str):
+                try:
+                    gold_answers = json.loads(gold_answers)
+                except Exception:
+                    gold_answers = [gold_answers]
+
+            # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
                 gold_answers = [gold_answers]
-                gold_answers.extend(item.get("answer_aliases", []))
-            else:
-                # answer is already a list, still need to add aliases
+
+            # Add answer aliases ONLY for standard 'answer' field (not for platinum/unanswerable)
+            if self.answer_field == 'answer':
                 answer_aliases = item.get("answer_aliases", [])
                 gold_answers = gold_answers + answer_aliases
-            
+
             questions_data.append((question_id, question, gold_answers))
-        
+
         console.print(f"[green]✓ Loaded {len(questions_data)} questions[/green]")
         return questions_data
     
@@ -764,8 +941,8 @@ class ChainBatchedMultiHopQAEvaluator:
             overall_metrics: Overall performance metrics
             per_example_metrics: Per-question metrics
         """
-        output_file = LOG_DIR / f"multihop_qa_NO_CHAIN_RERANK_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-
+        output_file = LOG_DIR / f"multihop_qa_chains_batched_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
         output_data = {
             "evaluation_info": {
                 "num_documents": self.num_documents,
@@ -775,9 +952,7 @@ class ChainBatchedMultiHopQAEvaluator:
                 "batched": True,
                 "chain_following": True,
                 "oracle_prompting": True,
-                "curator_available": CURATOR_AVAILABLE,
-                "ablation": "NO_CHAIN_RERANKING",
-                "ablation_description": "Chain reranker (voyage) is disabled; only cumulative QA scores used"
+                "curator_available": CURATOR_AVAILABLE
             },
             "overall_metrics": overall_metrics,
             "per_question_results": []
@@ -837,19 +1012,19 @@ class ChainBatchedMultiHopQAEvaluator:
 
 def main(verbose: bool = False):
     """Main evaluation function.
-
+    
     Args:
         verbose: Whether to show detailed output
     """
-    console.print("\n[bold cyan]🚀 ABLATION: Multi-Hop QA WITHOUT Chain Reranking[/bold cyan]")
-    console.print("[yellow]ABLATION: Chain reranker disabled; only cumulative QA scores used[/yellow]")
+    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
     console.print("Using chain-following approach with oracle-style prompting")
+    console.print("Parallel processing for decomposition and answer generation")
     
     try:
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=1000, 
+            num_questions=10, 
             verbose=verbose,
             use_bm25=True
        )

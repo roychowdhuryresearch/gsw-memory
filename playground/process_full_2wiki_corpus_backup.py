@@ -27,6 +27,7 @@ from dotenv import load_dotenv
 from gsw_memory import GSWProcessor, reconcile_gsw_outputs
 from gsw_memory.prompts.operator_prompts import PromptType
 
+
 # Disable cache for clean processing
 # os.environ["CURATOR_DISABLE_CACHE"] = "true"
 
@@ -38,7 +39,7 @@ print(importlib.metadata.version("bespokelabs-curator"))
 load_dotenv()
 
 # Configuration
-CORPUS_PATH = "/home/yigit/codebase/gsw-memory/playground_data/musique_corpus.json"
+CORPUS_PATH = "/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_corpus.json"
 BATCH_SIZE = 1000  # Process documents in batches to manage memory
 
 
@@ -106,8 +107,8 @@ def initialize_gsw_processor():
     print("=== Initializing GSW Processor ===")
     
     processor = GSWProcessor(
-        model_name="hosted_vllm/Qwen/Qwen3-8B",
-        vllm_base_url="http://127.0.0.1:6379/v1",
+        model_name="gpt-4.1-mini",
+        vllm_base_url="None",
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
         chunk_size=1,               # Single chunk per document
@@ -185,23 +186,6 @@ def process_corpus_in_batches(
     )
     with open(gsw_log_file, "w") as f:
         json.dump(batch_log, f, indent=2)
-    
-    # except Exception as e:
-    #     print(f"   ❌ Error processing full corpus: {str(e)}")
-    #     print(f"   Continuing with next batch...")
-        
-    #     # Log error
-    #     error_log = {
-    #         "batch_num": "full_corpus",
-    #         "error": str(e),
-    #         "timestamp": datetime.now().isoformat()
-    #     }
-    #     error_log_file = os.path.join(
-    #         log_dirs["processing_logs_dir"], 
-    #         f"full_corpus_error.json"
-    #     )
-    #     with open(error_log_file, "w") as f:
-    #         json.dump(error_log, f, indent=2)
     
     print(f"\n✅ Corpus processing completed!")
     print(f"   Total documents processed: {processed_docs}")
@@ -658,13 +642,13 @@ Examples:
     parser.add_argument(
         "--model-name",
         type=str,
-        default="hosted_vllm/Qwen/Qwen3-8B",
+        default="gpt-4.1-mini",
         help="Model name to use for GSW generation"
     )
     parser.add_argument(
         "--vllm-base-url",
         type=str,
-        default="http://127.0.0.1:6379/v1",
+        default="None",
         help="VLLM base URL to use for GSW generation"
     )
     args = parser.parse_args()
