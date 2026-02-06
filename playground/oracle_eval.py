@@ -94,6 +94,7 @@ class OracleAnswerGenerator(curator.LLM):
             'As an advanced reading comprehension assistant, your task is to analyze text passages and corresponding questions meticulously. '
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present a concise, definitive response, devoid of additional elaborations.'
+            'DO NOT USE ANY EXTERNAL SOURCES. ONLY USE THE PROVIDED DOCUMENTS.'
         )
 
         one_shot_rag_qa_input = (
@@ -185,7 +186,7 @@ class OracleEvaluator:
         self.num_questions = num_questions
         self.include_titles = include_titles
         self.supporting_only = supporting_only
-        self.dataset_file = Path("/home/shreyas/NLP/SM/gensemworkspaces/HippoRAG/reproduce/dataset/2wikimultihopqa.json")
+        self.dataset_file = Path("/home/yigit/codebase/gsw-memory/playground_data/nq_rear.json")
         
         console.print(f"[cyan]Oracle Evaluation with model: {model_name}[/cyan]")
         console.print(f"[cyan]Include document titles: {include_titles}[/cyan]")
@@ -226,8 +227,8 @@ class OracleEvaluator:
                 
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("answer", [])
-            context = item.get("context", [])
+            gold_answers = item.get("", [])
+            context = item.get("contexts", [])
             supporting_facts = item.get("supporting_facts", [])
             
             # Ensure gold_answers is a list
@@ -252,7 +253,54 @@ class OracleEvaluator:
         
         console.print(f"[green]✓ Loaded {len(questions_data)} questions with oracle context[/green]")
         return questions_data
-    
+
+    def load_musique_dataset(self) -> List[Dict[str, Any]]:
+        """Load questions and ground truth context from musique.json.
+
+        Returns:
+            List of question dictionaries with oracle context
+        """
+        console.print(f"[cyan]Loading Musique dataset...[/cyan]")
+
+        with open(self.dataset_file, 'r') as f:
+            data = json.load(f)
+
+        # Process questions and extract oracle context
+        questions_data = []
+        for i, item in enumerate(data):
+            if self.num_questions and i >= self.num_questions:
+                break
+
+            question_id = item.get("id", f"q_{i}")
+            question = item["question"]
+            gold_answers = item.get("reference", [])
+            paragraphs = item.get("contexts", [])
+
+            # Ensure gold_answers is a list
+            if isinstance(gold_answers, str):
+                gold_answers = [gold_answers]
+
+            # Format oracle context based on supporting_only flag
+            if self.supporting_only:
+                # Filter to only supporting paragraphs
+                supporting_paragraphs = [p for p in paragraphs if p.get("is_supporting", False)]
+                oracle_context = self._format_musique_context(supporting_paragraphs)
+                num_docs = len(supporting_paragraphs)
+            else:
+                oracle_context = self._format_musique_context(paragraphs)
+                num_docs = len(paragraphs)
+
+            questions_data.append({
+                "question_id": question_id,
+                "question": question,
+                "gold_answers": gold_answers,
+                "oracle_context": oracle_context,
+                "num_documents": num_docs
+            })
+
+        console.print(f"[green]✓ Loaded {len(questions_data)} questions with oracle context[/green]")
+        return questions_data
+
     def _format_oracle_context(self, context: List[List[Any]]) -> str:
         """Format the ground truth context documents.
         
@@ -285,7 +333,32 @@ class OracleEvaluator:
             formatted_docs.append(formatted_doc)
         
         return "\n\n".join(formatted_docs)
-    
+
+    def _format_musique_context(self, paragraphs: List[Dict[str, Any]]) -> str:
+        """Format the ground truth context from Musique paragraphs.
+
+        Args:
+            paragraphs: List of paragraph dictionaries from Musique dataset
+
+        Returns:
+            Formatted context string
+        """
+        formatted_docs = []
+
+        for para in paragraphs:
+            title = para.get("title", "")
+            text = para.get("text", "")
+
+            # Format with or without title based on flag
+            if self.include_titles and title:
+                formatted_doc = f"Title: {title}\n{text}"
+            else:
+                formatted_doc = text
+
+            formatted_docs.append(formatted_doc)
+
+        return "\n\n".join(formatted_docs)
+
     def _format_supporting_context(self, context: List[List[Any]], supporting_facts: List[List[Any]]) -> str:
         """Format only the supporting facts context.
         
@@ -343,7 +416,7 @@ class OracleEvaluator:
             List of result dictionaries
         """
         # Load dataset
-        questions_data = self.load_2wiki_dataset()
+        questions_data = self.load_musique_dataset()
         
         console.print(f"\n[bold cyan]🔮 Running Oracle Evaluation on {len(questions_data)} questions[/bold cyan]")
         

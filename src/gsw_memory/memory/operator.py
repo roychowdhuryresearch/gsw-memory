@@ -27,6 +27,7 @@ class GSWProcessor:
     def __init__(
         self,
         model_name: str = "gpt-4o",
+        vllm_base_url: str = "http://127.0.0.1:6379/v1",
         generation_params: Optional[Dict] = None,
         enable_coref: bool = True,
         enable_chunking: bool = True,
@@ -37,9 +38,11 @@ class GSWProcessor:
         enable_visualization: bool = False,
         prompt_type: PromptType = PromptType.EPISODIC,
         batched: bool = False,
+        batch_size: Optional[int] = 100,
     ):
         """Initialize the GSW processor with configuration options."""
         self.model_name = model_name
+        self.vllm_base_url = vllm_base_url
         self.generation_params = generation_params or {"temperature": 0.0}
         self.enable_coref = enable_coref
         self.enable_chunking = enable_chunking
@@ -50,6 +53,7 @@ class GSWProcessor:
         self.enable_visualization = enable_visualization
         self.prompt_type = prompt_type
         self.batched = batched
+        self.batch_size = batch_size
         # Check if visualization is requested but NetworkX is not available
         if self.enable_visualization:
             try:
@@ -267,15 +271,52 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-
-        gsw_model = GSWOperator(
-            model_name=self.model_name,
-            generation_params=self.generation_params,
-            prompt_type=self.prompt_type,
-            backend="openai",
-            response_format=GSWStructure,  # Use constrained decoding
-            batch=self.batched
-        )
+        if  "hosted_vllm" in self.model_name:
+            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+            gsw_model = GSWOperator(
+                model_name=self.model_name,
+                backend_params={
+                    "base_url": self.vllm_base_url,
+                    "request_timeout": 3600.0,
+                    "max_concurrent_requests": 64,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={
+                    "temperature": 0.6,
+                    "top_p": 0.95,
+                    "top_k": 20,
+                    "min_p": 0.0,
+                    "max_tokens": 8092,
+                },
+                prompt_type=PromptType.FACTUAL,
+                backend="litellm",
+                response_format=GSWStructure,
+            )
+        else:
+            if self.batched:
+                gsw_model = GSWOperator(
+                    model_name=self.model_name,
+                    generation_params=self.generation_params,
+                    prompt_type=self.prompt_type,
+                    backend="openai",
+                    response_format=GSWStructure,  # Use constrained decoding
+                    batch=self.batched,
+                    backend_params={"batch_size": self.batch_size,
+                                    "require_all_responses": False},
+                )
+            else:
+                gsw_model = GSWOperator(
+                    model_name=self.model_name,
+                    generation_params=self.generation_params,
+                    prompt_type=self.prompt_type,
+                    backend="openai",
+                    response_format=GSWStructure,  # Use constrained decoding
+                    batch=self.batched,
+                    backend_params={"require_all_responses": False},
+                )
 
         # Prepare GSW inputs from all chunks across all documents
         gsw_inputs = []
@@ -297,7 +338,7 @@ class GSWProcessor:
 
         for response in gsw_response.dataset: #TODO: Check if this is correct
             try:
-                if response["gsw"]:
+                if response["gsw"] is not None:
                     gsw_dict = response["gsw"]
                     gsw = GSWStructure(**gsw_dict)
                 else:

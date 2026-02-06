@@ -553,19 +553,33 @@ class ExactMatchStrategy(MatchingStrategy):
 class EmbeddingEntityIndex(EntityIndex):
     """Maintains an index of entity embeddings for efficient similarity search."""
 
-    def __init__(self, embedding_dim: int = 1024):
+    def __init__(self, embedding_dim: int = 1024, gpu_device: int = 0):
+        """Initialize the embedding index.
+
+        Args:
+            embedding_dim: Dimension of the embeddings (default: 1024)
+            gpu_device: GPU device ID for FAISS GPU acceleration (default: 0)
+        """
         if not EMBEDDING_AVAILABLE:
             raise ImportError(
                 "Embedding dependencies not available. Install with: "
-                "pip install faiss-cpu langchain-voyageai"
+                "pip install faiss-gpu langchain-voyageai"
             )
 
         self.embedding_dim = embedding_dim
+        self.gpu_device = gpu_device
         self.entity_to_id: Dict[str, int] = {}
         self.id_to_entity: Dict[int, EntityNode] = {}
         self.embeddings: Optional[np.ndarray] = None
         self.index: Optional[faiss.Index] = None
         self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
+
+        # Initialize GPU resources for FAISS
+        self.gpu_resources = None
+        try:
+            self.gpu_resources = faiss.StandardGpuResources()
+        except Exception as e:
+            print(f"⚠️ Warning: Could not initialize GPU resources: {e}")
 
     def add_entities(self, entities: List[EntityNode], batch_size: int = 32):
         """Add new entities to the index."""
@@ -600,13 +614,32 @@ class EmbeddingEntityIndex(EntityIndex):
             self.entity_to_id[entity.id] = idx
             self.id_to_entity[idx] = entity
 
-        # Update FAISS index
+        # Update FAISS GPU index
         if self.index is None:
-            self.index = faiss.IndexFlatIP(self.embedding_dim)
-            if self.embeddings is not None:
-                self.index.add(self.embeddings)
+            if self.gpu_resources is not None:
+                # Create CPU flat index for exact nearest neighbor search
+                cpu_index = faiss.IndexFlatIP(self.embedding_dim)
+                if self.embeddings is not None:
+                    cpu_index.add(self.embeddings)
+                cpu_index.add(new_embeddings)
 
-        self.index.add(new_embeddings)
+                # Transfer to GPU
+                self.index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+            else:
+                # Fallback to CPU index if GPU not available
+                self.index = faiss.IndexFlatIP(self.embedding_dim)
+                if self.embeddings is not None:
+                    self.index.add(self.embeddings)
+                self.index.add(new_embeddings)
+        else:
+            # For existing GPU index, we need to transfer to CPU, add, then transfer back
+            if self.gpu_resources is not None:
+                cpu_index = faiss.index_gpu_to_cpu(self.index)
+                cpu_index.add(new_embeddings)
+                self.index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+            else:
+                # CPU index, just add directly
+                self.index.add(new_embeddings)
 
         # Update embeddings array
         if self.embeddings is None:

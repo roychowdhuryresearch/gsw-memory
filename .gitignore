@@ -15,6 +15,9 @@ playground/logs
 playground/test_reconciler.py
 playground/test_reconciler_integration.py
 playground/misc/*
+playground/gsw_creation_local/pred_gsws_individual/
+gsw_nonthinking_lora_outputs/*
+gsw_nonthinking_merged/*
 # CLAUDE.md
 # logs
 logs/*
@@ -28,3 +31,30 @@ CLAUDE.md
 .curator_config/
 chain_debug/
 factual_prompt_test_results/
+playground/question_decomp_local/wandb/
+playground/question_decomp_local/q_decomp_training_4o.json
+playground/question_decomp_local/q_decomp_training_5.json
+doc_embeddings_baseline.npz
+q_decomp_training_4o.json
+playground/question_decomp_local/qwen3_nonthinking.jinja
+
+# Embedding cache files (NPZ legacy and FAISS GPU)
+*.npz
+*_gpu.faiss
+*_embeddings_*.npz
+*_embeddings_*_gpu.faiss
+doc_embeddings_baseline_gpu.faiss
+doc_embeddings_baseline.npz
+doc_metadata_baseline.json
+gsw_embeddings_gpu.faiss
+gsw_metadata.json
+entity_embeddings_*docs_gpu.faiss
+qa_embeddings_*docs_gpu.faiss
+embedding_metadata_*docs.json
+qa_metadata_*docs.json
+
+bm25_corpus_baseline.pkl
+bm25_index_baseline.pkl
+
+# Panini folder (clean copy of playground)
+Panini/

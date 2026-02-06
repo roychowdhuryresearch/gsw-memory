@@ -31,6 +31,14 @@ except ImportError:
     print("Warning: scikit-learn not available. Install with: pip install scikit-learn")
     SIMILARITY_AVAILABLE = False
 
+# FAISS for vector search
+try:
+    import faiss
+    FAISS_AVAILABLE = True
+except ImportError:
+    print("Warning: FAISS not available. Install with: pip install faiss-cpu or faiss-gpu")
+    FAISS_AVAILABLE = False
+
 # VLLM for embeddings
 try:
     from vllm import LLM
@@ -78,13 +86,16 @@ def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tu
     
     # base_dir = "/mnt/SSD1/shreyas/SM_GSW/2wiki/networks"
     if not path_to_gsw_files:
-        base_dir = "/mnt/SSD1/shreyas/SM_GSW/musique/networks"
+        base_dir = "/mnt/SSD1/shreyas/SM_GSW/musique/normalized_networks"
     else:
         base_dir = path_to_gsw_files
     
-    # Get first N document directories
-    doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
-                      key=lambda x: int(Path(x).name.replace("doc_", "")))[:num_documents]
+    if num_documents == -1:
+        doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
+                          key=lambda x: int(Path(x).name.replace("doc_", "")))
+    else:
+        doc_dirs = sorted(glob.glob(os.path.join(base_dir, "doc_*")), 
+                          key=lambda x: int(Path(x).name.replace("doc_", "")))[:num_documents]
     
     gsw_structures = []
     doc_ids = []
@@ -108,17 +119,32 @@ def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tu
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True, use_bm25: bool = False):
+    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True, use_bm25: bool = False, gpu_device: int = 1, use_gpu_for_qa_index: bool = True):
         """Initialize the entity searcher.
-        
+
         Args:
             num_documents: Number of documents to load from GSW corpus
             path_to_gsw_files: Path to the GSW files
             cache_dir: Directory to store/load embedding caches (default: current dir)
             rebuild_cache: If True, force regenerate all embeddings even if cache exists
             verbose: If True, show initialization messages
+            use_bm25: If True, use BM25 for entity search instead of embeddings
+            gpu_device: GPU device ID to use (0-3 for RTX A6000s, default: 0)
+            use_gpu_for_qa_index: If True, transfer Q&A FAISS index to GPU (requires significant GPU memory, default: False)
         """
         self.verbose_init = verbose
+        self.gpu_device = gpu_device
+        self.use_gpu_for_qa_index = use_gpu_for_qa_index
+
+        # Initialize GPU resources for FAISS
+        if FAISS_AVAILABLE:
+            self.gpu_resources = faiss.StandardGpuResources()
+            if self.verbose_init:
+                console.print(f"[cyan]Initialized FAISS GPU resources on device {gpu_device}[/cyan]")
+                if not use_gpu_for_qa_index:
+                    console.print(f"[cyan]Q&A embeddings will use CPU (set use_gpu_for_qa_index=True to use GPU)[/cyan]")
+        else:
+            self.gpu_resources = None
         self.entities = []
         self.entity_texts = []
         self.embeddings = None
@@ -134,9 +160,16 @@ class EntitySearcher:
         self.qa_metadata_cache = {}  # Maps qa_text_hash to Q&A metadata for direct search
         self.qa_embeddings_matrix = None  # Numpy matrix of all Q&A embeddings for fast similarity search
         self.qa_hash_to_idx = {}  # Maps qa_text_hash to index in embeddings matrix
-        self.entity_embedding_cache_file = self.cache_dir / f"entity_embeddings_{num_documents}docs.npz"
-        self.qa_embedding_cache_file = self.cache_dir / f"qa_embeddings_{num_documents}docs.npz"
+        # FAISS GPU indexes for vector search
+        self.entity_faiss_index = None  # FAISS GPU index for entity embeddings
+        self.qa_faiss_index = None  # FAISS GPU index for Q&A embeddings
+        self.entity_embedding_cache_file = self.cache_dir / f"entity_embeddings_{num_documents}docs_gpu.faiss"
+        self.qa_embedding_cache_file = self.cache_dir / f"qa_embeddings_{num_documents}docs_gpu.faiss"
         self.cache_metadata_file = self.cache_dir / f"embedding_metadata_{num_documents}docs.json"
+        self.qa_metadata_file = self.cache_dir / f"qa_metadata_{num_documents}docs.json"
+        # Legacy HNSW cache path for backward compatibility
+        self.entity_embedding_hnsw_cache = self.cache_dir / f"entity_embeddings_{num_documents}docs_hnsw.faiss"
+        self.qa_embedding_hnsw_cache = self.cache_dir / f"qa_embeddings_{num_documents}docs_hnsw.faiss"
         self.cache_hits = 0
         self.cache_misses = 0
         self.use_bm25 = use_bm25
@@ -384,14 +417,28 @@ class EntitySearcher:
                 batch_embeddings = [o.outputs.embedding for o in outputs]
                 all_embeddings.extend(batch_embeddings)
             
-            self.embeddings = np.array(all_embeddings)
+            self.embeddings = np.array(all_embeddings, dtype=np.float32)
             if self.verbose_init:
                 console.print(f"Generated embeddings with shape: {self.embeddings.shape}")
-            
+
+            # Build FAISS GPU index
+            if FAISS_AVAILABLE and self.gpu_resources is not None:
+                embedding_dim = self.embeddings.shape[1]
+                # Create CPU index first
+                cpu_index = faiss.IndexFlatIP(embedding_dim)
+                # Normalize embeddings for cosine similarity
+                faiss.normalize_L2(self.embeddings)
+                cpu_index.add(self.embeddings)
+                # Transfer to GPU
+                self.entity_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                if self.verbose_init:
+                    console.print(f"Built FAISS GPU index with {self.entity_faiss_index.ntotal} vectors on GPU {self.gpu_device}")
+
         except Exception as e:
             if self.verbose_init:
                 console.print(f"[red]Error generating embeddings: {e}[/red]")
             self.embeddings = None
+            self.entity_faiss_index = None
     
     def _precompute_qa_embeddings(self):
         """Precompute embeddings for all Q&A pairs in the GSW structures."""
@@ -511,122 +558,264 @@ class EntitySearcher:
             console.print(f"[red]Error embedding query: {e}[/red]")
             return None
 
-    def _embed_chain(self, chain: str) -> Optional[np.ndarray]:
-        """Embed a chain using the Qwen model."""
-        if not self.embedding_model:
-            return None
-        
-        task = 'Given a chain of questions and answer pairs, create an embedding that captures the semantic meaning captured across all question-answer pairs in the chain for similarity comparison with user queries.'
-        instructed_chain = get_detailed_instruct(task, chain)
-
-        try:
-            outputs = self.embedding_model.embed([instructed_chain])
-            embedding = np.array(outputs[0].outputs.embedding)
-            return embedding
-        except Exception as e:
-            console.print(f"[red]Error embedding chain: {e}[/red]")
-            return None
-    
     def _get_qa_text_hash(self, qa_text: str) -> str:
         """Generate a hash for Q&A text to use as cache key."""
         return hashlib.md5(qa_text.encode()).hexdigest()
     
     def _save_entity_embeddings_cache(self):
-        """Save entity embeddings to disk."""
+        """Save entity embeddings to disk using FAISS (transfer from GPU to CPU first)."""
         if self.embeddings is None:
             return
-        
+
         try:
-            # Save embeddings and metadata
-            np.savez_compressed(
-                self.entity_embedding_cache_file,
-                embeddings=self.embeddings,
-                entity_texts=self.entity_texts
-            )
-            if self.verbose_init:
-                console.print(f"[green]✓ Saved entity embeddings to {self.entity_embedding_cache_file}[/green]")
+            # Use FAISS if available, otherwise fall back to npz
+            if FAISS_AVAILABLE and self.entity_faiss_index is not None:
+                # Transfer from GPU to CPU
+                cpu_index = faiss.index_gpu_to_cpu(self.entity_faiss_index)
+                # Save CPU index
+                faiss.write_index(cpu_index, str(self.entity_embedding_cache_file))
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved entity FAISS GPU index to {self.entity_embedding_cache_file}[/green]")
+
+                # Save metadata separately
+                metadata = {
+                    "entity_texts": self.entity_texts,
+                    "num_entities": len(self.entity_texts)
+                }
+                with open(self.cache_metadata_file, 'w') as f:
+                    json.dump(metadata, f)
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved entity metadata to {self.cache_metadata_file}[/green]")
+            else:
+                # Fallback to old npz format if FAISS not available
+                npz_file = self.cache_dir / f"entity_embeddings_-1docs.npz"
+                np.savez_compressed(
+                    npz_file,
+                    embeddings=self.embeddings,
+                    entity_texts=self.entity_texts
+                )
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved entity embeddings to {npz_file} (fallback)[/green]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save entity embeddings cache: {e}[/yellow]")
     
     def _load_entity_embeddings_cache(self) -> bool:
-        """Load entity embeddings from disk cache.
-        
+        """Load entity embeddings from disk cache and transfer to GPU.
+
         Returns:
             True if cache was loaded successfully, False otherwise
         """
-        if not self.entity_embedding_cache_file.exists():
-            return False
-        
-        try:
-            data = np.load(self.entity_embedding_cache_file, allow_pickle=True)
-            cached_texts = data['entity_texts']
-            
-            # Verify that cached texts match current entity texts
-            if len(cached_texts) != len(self.entity_texts):
-                console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
+        # Try loading GPU FAISS cache first
+        if FAISS_AVAILABLE and self.gpu_resources and self.entity_embedding_cache_file.exists() and self.cache_metadata_file.exists():
+            try:
+                # Load metadata
+                with open(self.cache_metadata_file, 'r') as f:
+                    metadata = json.load(f)
+                cached_texts = metadata.get('entity_texts', [])
+
+                # Verify that cached texts match current entity texts
+                if len(cached_texts) != len(self.entity_texts):
+                    if self.verbose_init:
+                        console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
+                    return False
+
+                # Check if texts are the same (order matters)
+                if not all(ct == et for ct, et in zip(cached_texts, self.entity_texts)):
+                    if self.verbose_init:
+                        console.print("[yellow]Entity texts changed, regenerating embeddings[/yellow]")
+                    return False
+
+                # Load CPU index
+                cpu_index = faiss.read_index(str(self.entity_embedding_cache_file))
+
+                # Transfer to GPU
+                self.entity_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                # breakpoint()
+                # Reconstruct embeddings array for compatibility
+                self.embeddings = cpu_index.reconstruct_n(0, cpu_index.ntotal)
+                self.embeddings = self.embeddings.reshape(cpu_index.ntotal, -1)
+                # breakpoint()
+
+                if self.verbose_init:
+                    console.print(f"[green]✓ Loaded GPU FAISS index with {self.entity_faiss_index.ntotal} vectors on GPU {self.gpu_device}[/green]")
+                return True
+            except Exception as e:
+                if self.verbose_init:
+                    console.print(f"[yellow]Could not load GPU cache: {e}, trying HNSW fallback[/yellow]")
+
+        # Try loading legacy HNSW cache and convert to GPU
+        if FAISS_AVAILABLE and self.gpu_resources and self.entity_embedding_hnsw_cache.exists() and self.cache_metadata_file.exists():
+            try:
+                if self.verbose_init:
+                    console.print("[cyan]Found legacy HNSW cache, converting to GPU...[/cyan]")
+
+                # Load metadata
+                with open(self.cache_metadata_file, 'r') as f:
+                    metadata = json.load(f)
+                cached_texts = metadata.get('entity_texts', [])
+
+                if len(cached_texts) == len(self.entity_texts) and all(ct == et for ct, et in zip(cached_texts, self.entity_texts)):
+                    # Load HNSW index
+                    cpu_index = faiss.read_index(str(self.entity_embedding_hnsw_cache))
+
+                    # Reconstruct embeddings
+                    self.embeddings = cpu_index.reconstruct_n(0, cpu_index.ntotal)
+                    self.embeddings = self.embeddings.reshape(cpu_index.ntotal, -1).astype(np.float32)
+
+                    # Create new flat index and transfer to GPU
+                    embedding_dim = self.embeddings.shape[1]
+                    new_cpu_index = faiss.IndexFlatIP(embedding_dim)
+                    # Embeddings from HNSW should already be normalized
+                    faiss.normalize_L2(self.embeddings)
+                    new_cpu_index.add(self.embeddings)
+                    self.entity_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, new_cpu_index)
+
+                    if self.verbose_init:
+                        console.print(f"[green]✓ Converted HNSW to GPU with {self.entity_faiss_index.ntotal} vectors[/green]")
+
+                    # Save as GPU cache for next time
+                    self._save_entity_embeddings_cache()
+                    return True
+            except Exception as e:
+                if self.verbose_init:
+                    console.print(f"[yellow]Could not convert HNSW cache: {e}[/yellow]")
+
+        # Fallback: Try loading NPZ format and convert to GPU
+        npz_file = self.cache_dir / f"entity_embeddings_-1docs.npz"
+        if npz_file.exists():
+            try:
+                data = np.load(npz_file, allow_pickle=True)
+                cached_texts = data['entity_texts']
+
+                # Verify that cached texts match current entity texts
+                if len(cached_texts) != len(self.entity_texts):
+                    console.print("[yellow]Cache size mismatch, regenerating embeddings[/yellow]")
+                    return False
+
+                # Check if texts are the same (order matters)
+                if not all(ct == et for ct, et in zip(cached_texts, self.entity_texts)):
+                    console.print("[yellow]Entity texts changed, regenerating embeddings[/yellow]")
+                    return False
+
+                self.embeddings = data['embeddings'].astype(np.float32)
+
+                # Build FAISS GPU index from loaded embeddings if FAISS is available
+                if FAISS_AVAILABLE and self.gpu_resources:
+                    embedding_dim = self.embeddings.shape[1]
+                    cpu_index = faiss.IndexFlatIP(embedding_dim)
+                    # Normalize embeddings for cosine similarity
+                    faiss.normalize_L2(self.embeddings)
+                    cpu_index.add(self.embeddings)
+                    # Transfer to GPU
+                    self.entity_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                    if self.verbose_init:
+                        console.print(f"[green]✓ Loaded npz cache and built FAISS GPU index[/green]")
+                return True
+            except Exception as e:
+                console.print(f"[yellow]Could not load entity embeddings cache: {e}[/yellow]")
                 return False
-            
-            # Check if texts are the same (order matters)
-            if not all(ct == et for ct, et in zip(cached_texts, self.entity_texts)):
-                console.print("[yellow]Entity texts changed, regenerating embeddings[/yellow]")
-                return False
-            
-            self.embeddings = data['embeddings']
-            return True
-        except Exception as e:
-            console.print(f"[yellow]Could not load entity embeddings cache: {e}[/yellow]")
-            return False
+
+        return False
     
     def _save_qa_embeddings_cache(self):
-        """Save Q&A embeddings cache to disk."""
+        """Save Q&A embeddings cache to disk using FAISS."""
         if not self.qa_embedding_cache:
             return
-        
+
         try:
-            # Prepare data for saving
-            qa_texts = []
-            qa_hashes = []
-            qa_embeddings = []
-            
-            for qa_hash, embedding in self.qa_embedding_cache.items():
-                qa_hashes.append(qa_hash)
-                qa_embeddings.append(embedding)
-            
-            np.savez_compressed(
-                self.qa_embedding_cache_file,
-                hashes=qa_hashes,
-                embeddings=np.array(qa_embeddings)
-            )
-            if self.verbose_init:
-                console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A embeddings to cache[/green]")
+            # Use FAISS if available
+            if FAISS_AVAILABLE and self.qa_faiss_index is not None:
+                # Transfer from GPU to CPU first (matches entity embeddings pattern)
+                cpu_index = faiss.index_gpu_to_cpu(self.qa_faiss_index)
+                # Save CPU index
+                faiss.write_index(cpu_index, str(self.qa_embedding_cache_file))
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved Q&A FAISS index to {self.qa_embedding_cache_file}[/green]")
+
+                # Save metadata separately (hash to index mapping and metadata)
+                metadata = {
+                    "qa_hash_to_idx": self.qa_hash_to_idx,
+                    "num_qa_pairs": len(self.qa_embedding_cache)
+                }
+                with open(self.qa_metadata_file, 'w') as f:
+                    json.dump(metadata, f)
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A metadata[/green]")
+            else:
+                # Fallback to old npz format if FAISS not available
+                qa_hashes = []
+                qa_embeddings = []
+
+                for qa_hash, embedding in self.qa_embedding_cache.items():
+                    qa_hashes.append(qa_hash)
+                    qa_embeddings.append(embedding)
+
+                npz_file = self.cache_dir / f"qa_embeddings_-1docs.npz"
+                np.savez_compressed(
+                    npz_file,
+                    hashes=qa_hashes,
+                    embeddings=np.array(qa_embeddings)
+                )
+                if self.verbose_init:
+                    console.print(f"[green]✓ Saved {len(self.qa_embedding_cache)} Q&A embeddings to {npz_file} (fallback)[/green]")
         except Exception as e:
             console.print(f"[yellow]Warning: Could not save Q&A embeddings cache: {e}[/yellow]")
     
     def _load_qa_embeddings_cache(self) -> bool:
-        """Load Q&A embeddings from disk cache.
-        
+        """Load Q&A embeddings from disk cache (FAISS or npz fallback).
+
         Returns:
             True if cache was loaded successfully, False otherwise
         """
-        if not self.qa_embedding_cache_file.exists():
-            return False
-        
-        try:
-            data = np.load(self.qa_embedding_cache_file, allow_pickle=True)
-            qa_hashes = data['hashes']
-            qa_embeddings = data['embeddings']
-            
-            # Rebuild the cache dictionary
-            self.qa_embedding_cache = {}
-            for qa_hash, embedding in zip(qa_hashes, qa_embeddings):
-                self.qa_embedding_cache[qa_hash] = embedding
-            
-            if self.verbose_init:
-                console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
-            return True
-        except Exception as e:
-            console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
-            return False
+        # Try loading FAISS index first
+        if FAISS_AVAILABLE and self.qa_embedding_cache_file.exists() and self.qa_metadata_file.exists():
+            try:
+                # Load metadata
+                with open(self.qa_metadata_file, 'r') as f:
+                    metadata = json.load(f)
+                self.qa_hash_to_idx = metadata.get('qa_hash_to_idx', {})
+
+                # Load FAISS index
+                self.qa_faiss_index = faiss.read_index(str(self.qa_embedding_cache_file))
+
+                # Reconstruct embeddings from FAISS index
+                num_vectors = self.qa_faiss_index.ntotal
+                embeddings = self.qa_faiss_index.reconstruct_n(0, num_vectors)
+                embeddings = embeddings.reshape(num_vectors, -1)
+
+                # Rebuild the cache dictionary
+                self.qa_embedding_cache = {}
+                for qa_hash, idx in self.qa_hash_to_idx.items():
+                    self.qa_embedding_cache[qa_hash] = embeddings[idx]
+
+                if self.verbose_init:
+                    console.print(f"[green]✓ Loaded FAISS index with {num_vectors} Q&A embeddings[/green]")
+                return True
+            except Exception as e:
+                if self.verbose_init:
+                    console.print(f"[yellow]Could not load Q&A FAISS cache: {e}, trying npz fallback[/yellow]")
+
+        # Fallback: Try loading old npz format
+        npz_file = self.cache_dir / f"qa_embeddings_-1docs.npz"
+        if npz_file.exists():
+            try:
+                data = np.load(npz_file, allow_pickle=True)
+                qa_hashes = data['hashes']
+                qa_embeddings = data['embeddings']
+
+                # Rebuild the cache dictionary
+                self.qa_embedding_cache = {}
+                for qa_hash, embedding in zip(qa_hashes, qa_embeddings):
+                    self.qa_embedding_cache[qa_hash] = embedding
+
+                if self.verbose_init:
+                    console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from npz cache[/green]")
+                return True
+            except Exception as e:
+                console.print(f"[yellow]Could not load Q&A embeddings cache: {e}[/yellow]")
+                return False
+
+        return False
 
     def _build_qa_embeddings_matrix(self):
         """Build a matrix of all Q&A embeddings for fast similarity search."""
@@ -642,16 +831,42 @@ class EntitySearcher:
             qa_embeddings.append(embedding)
 
         # Convert to numpy array for fast similarity computation
-        self.qa_embeddings_matrix = np.array(qa_embeddings)
+        self.qa_embeddings_matrix = np.array(qa_embeddings, dtype=np.float32)
 
         # Create hash to index mapping
         self.qa_hash_to_idx = {qa_hash: idx for idx, qa_hash in enumerate(qa_hashes)}
 
-        if self.verbose_init:
+        # Build FAISS index (GPU or CPU based on configuration)
+        if FAISS_AVAILABLE and len(qa_embeddings) > 0:
+            embedding_dim = self.qa_embeddings_matrix.shape[1]
+            # Create CPU index for Q&A embeddings
+            cpu_index = faiss.IndexFlatIP(embedding_dim)
+            # Normalize embeddings for cosine similarity
+            embeddings_normalized = self.qa_embeddings_matrix.copy()
+            faiss.normalize_L2(embeddings_normalized)
+            cpu_index.add(embeddings_normalized)
+
+            # Transfer to GPU only if enabled and GPU resources available
+            if self.use_gpu_for_qa_index and self.gpu_resources:
+                try:
+                    self.qa_faiss_index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                    if self.verbose_init:
+                        console.print(f"[green]✓ Built Q&A FAISS GPU index with {self.qa_faiss_index.ntotal} vectors on GPU {self.gpu_device}[/green]")
+                except Exception as e:
+                    if self.verbose_init:
+                        console.print(f"[yellow]Warning: Could not transfer Q&A index to GPU: {e}[/yellow]")
+                        console.print(f"[yellow]Falling back to CPU index[/yellow]")
+                    self.qa_faiss_index = cpu_index
+            else:
+                # Use CPU index
+                self.qa_faiss_index = cpu_index
+                if self.verbose_init:
+                    console.print(f"[green]✓ Built Q&A FAISS CPU index with {self.qa_faiss_index.ntotal} vectors[/green]")
+        elif self.verbose_init:
             console.print(f"[green]✓ Built Q&A embeddings matrix with shape {self.qa_embeddings_matrix.shape}[/green]")
 
     def search_qa_pairs_direct(self, query: str, query_embedding: np.ndarray = None, top_k: int = 10, verbose: bool = False) -> List[Dict[str, Any]]:
-        """Search directly for Q&A pairs matching the query using embeddings.
+        """Search directly for Q&A pairs matching the query using FAISS GPU.
 
         Args:
             query: Search query
@@ -661,44 +876,68 @@ class EntitySearcher:
         Returns:
             List of Q&A pair dictionaries with similarity scores
         """
-        if not self.embedding_model or self.qa_embeddings_matrix is None or not SIMILARITY_AVAILABLE:
+        if not self.embedding_model or self.qa_embeddings_matrix is None:
             if verbose:
                 console.print("[yellow]Q&A embeddings not available for direct search[/yellow]")
             return []
 
         # Embed the query
         if query_embedding is not None:
-            query_embedding = query_embedding.reshape(1, -1)
+            query_embedding = query_embedding.reshape(1, -1).astype(np.float32)
         else:
-            query_embedding = self._embed_query(query)
-        if query_embedding is None:
-            return []
+            embeddings = self._embed_query(query)
+            if embeddings is None:
+                return []
+            query_embedding = embeddings[0].reshape(1, -1).astype(np.float32)
 
-        # Calculate similarities with all Q&A pairs
-        query_embedding = query_embedding.reshape(1, -1)
-        similarities = cosine_similarity(query_embedding, self.qa_embeddings_matrix)[0]
+        # Use FAISS GPU search if available, otherwise fall back to cosine_similarity
+        if FAISS_AVAILABLE and self.qa_faiss_index is not None:
+            # Normalize query for cosine similarity
+            faiss.normalize_L2(query_embedding)
+            # Search FAISS GPU index - exact search, no efSearch parameter
+            similarities, indices = self.qa_faiss_index.search(query_embedding, top_k)
 
-        # Get top-k results
-        top_indices = np.argsort(similarities)[::-1][:top_k]
+            # Build results from FAISS search
+            results = []
+            # Create reverse mapping from index to hash
+            idx_to_hash = {idx: qa_hash for qa_hash, idx in self.qa_hash_to_idx.items()}
 
-        results = []
-        for idx in top_indices:
-            # Find the hash for this index
-            qa_hash = None
-            for h, i in self.qa_hash_to_idx.items():
-                if i == idx:
-                    qa_hash = h
-                    break
+            for idx, similarity in zip(indices[0], similarities[0]):
+                if idx >= 0 and idx in idx_to_hash:
+                    qa_hash = idx_to_hash[idx]
+                    if qa_hash in self.qa_metadata_cache:
+                        metadata = self.qa_metadata_cache[qa_hash].copy()
+                        metadata['similarity_score'] = float(similarity)
+                        metadata['source_method'] = 'direct_qa_search_gpu'
+                        results.append(metadata)
+        else:
+            # Fallback to cosine_similarity
+            if not SIMILARITY_AVAILABLE:
+                if verbose:
+                    console.print("[yellow]Neither FAISS nor scikit-learn available[/yellow]")
+                return []
 
-            if qa_hash and qa_hash in self.qa_metadata_cache:
-                metadata = self.qa_metadata_cache[qa_hash].copy()
-                metadata['similarity_score'] = float(similarities[idx])
-                # Add a source indicator for tracking
-                metadata['source_method'] = 'direct_qa_search'
-                results.append(metadata)
+            similarities = cosine_similarity(query_embedding, self.qa_embeddings_matrix)[0]
+            top_indices = np.argsort(similarities)[::-1][:top_k]
+
+            results = []
+            for idx in top_indices:
+                # Find the hash for this index
+                qa_hash = None
+                for h, i in self.qa_hash_to_idx.items():
+                    if i == idx:
+                        qa_hash = h
+                        break
+
+                if qa_hash and qa_hash in self.qa_metadata_cache:
+                    metadata = self.qa_metadata_cache[qa_hash].copy()
+                    metadata['similarity_score'] = float(similarities[idx])
+                    metadata['source_method'] = 'direct_qa_search'
+                    results.append(metadata)
 
         if verbose:
-            console.print(f"[cyan]Direct Q&A search found {len(results)} pairs[/cyan]")
+            search_method = "GPU" if (FAISS_AVAILABLE and self.qa_faiss_index is not None) else "cosine similarity"
+            console.print(f"[cyan]Direct Q&A search ({search_method}) found {len(results)} pairs[/cyan]")
             if results:
                 console.print(f"[dim]Top score: {results[0]['similarity_score']:.3f}[/dim]")
 
@@ -741,31 +980,43 @@ class EntitySearcher:
         return enriched_results
     
     def _search_with_embeddings(self, query: str, top_k: int, verbose: bool, query_embedding: np.ndarray = None) -> List[Tuple[Dict[str, Any], float]]:
-        """Search using embedding similarity."""
+        """Search using FAISS GPU index for exact nearest neighbor search."""
         # Get query embedding
         if query_embedding is not None:
-            query_embedding = query_embedding.reshape(1, -1)
+            query_embedding = query_embedding.reshape(1, -1).astype(np.float32)
         else:
-            query_embedding = self._embed_query(query)
-        
-        if query_embedding is None:
-            console.print("[yellow]Warning: Could not embed query, using text search[/yellow]")
-            return self._search_with_text(query, top_k, verbose)
-        
-        # Calculate similarities
-        query_embedding = query_embedding.reshape(1, -1)
-        similarities = cosine_similarity(query_embedding, self.embeddings)[0]
-        
-        # Get top-k results
-        top_indices = np.argsort(similarities)[::-1][:top_k]
-        
-        results = []
-        for idx in top_indices:
-            results.append((self.entities[idx], float(similarities[idx])))
-        
+            embeddings = self._embed_query(query)
+            if embeddings is None:
+                console.print("[yellow]Warning: Could not embed query, using text search[/yellow]")
+                return self._search_with_text(query, top_k, verbose)
+            query_embedding = embeddings[0].reshape(1, -1).astype(np.float32)
+
+        # Use FAISS GPU search if available, otherwise fall back to cosine_similarity
+        if FAISS_AVAILABLE and self.entity_faiss_index is not None:
+            # Normalize query for cosine similarity
+            faiss.normalize_L2(query_embedding)
+            # Search FAISS GPU index - returns (similarities, indices) - exact search, no efSearch needed
+            similarities, indices = self.entity_faiss_index.search(query_embedding, top_k)
+
+            # Build results from FAISS search
+            results = []
+            for idx, similarity in zip(indices[0], similarities[0]):
+                if idx >= 0 and idx < len(self.entities):  # Valid index
+                    results.append((self.entities[idx], float(similarity)))
+        else:
+            # Fallback to cosine_similarity if FAISS not available
+            if not SIMILARITY_AVAILABLE:
+                console.print("[yellow]Warning: Neither FAISS nor scikit-learn available, using text search[/yellow]")
+                return self._search_with_text(query, top_k, verbose)
+
+            similarities = cosine_similarity(query_embedding, self.embeddings)[0]
+            top_indices = np.argsort(similarities)[::-1][:top_k]
+            results = [(self.entities[idx], float(similarities[idx])) for idx in top_indices]
+
         if verbose:
-            self._display_search_results(results, "Embedding-based Search")
-        
+            search_method = "FAISS GPU Search" if (FAISS_AVAILABLE and self.entity_faiss_index is not None) else "Embedding-based Search"
+            self._display_search_results(results, search_method)
+
         return results
     
     def _search_with_text(self, query: str, top_k: int, verbose: bool) -> List[Tuple[Dict[str, Any], float]]:
@@ -1023,105 +1274,6 @@ class EntitySearcher:
             console.print(f"[yellow]Warning: Could not count tokens: {e}[/yellow]")
             return None
     
-    def _generate_llm_answer(self, query: str, results: List[Tuple[Dict[str, Any], float]], qa_top_k: int = 15) -> str:
-        """Generate an answer using LLM with reranked Q&A pairs as context.
-        
-        Args:
-            query: The user's query
-            results: Retrieved entity results
-            qa_top_k: Number of top Q&A pairs to pass to LLM after reranking
-        """
-        if not self.openai_client:
-            return "[yellow]LLM answer generation not available (OpenAI client not initialized)[/yellow]"
-        
-        if not results:
-            return "[yellow]No entities found to generate answer from.[/yellow]"
-        
-        # Collect all Q&A pairs
-        all_qa_pairs = []
-        for entity, _ in results:
-            qa_pairs = entity.get('qa_pairs', [])
-            for qa in qa_pairs:
-                # Use resolved answer names
-                answer_text = ', '.join(qa.get('answer_names', qa.get('answer_ids', ['Unknown'])))
-                all_qa_pairs.append({
-                    'entity': entity['name'],
-                    'question': qa['question'],
-                    'answers': answer_text,
-                    'verb_phrase': qa.get('verb_phrase', ''),
-                    'doc_id': entity['doc_id']
-                })
-        
-        if not all_qa_pairs:
-            return "[yellow]No Q&A pairs found in the retrieved entities.[/yellow]"
-        
-        # Rerank Q&A pairs based on similarity to the query
-        reranked_qa_pairs = self._rerank_qa_pairs(query, all_qa_pairs, top_k=qa_top_k)
-        
-        # Prepare context from reranked Q&A pairs
-        context_parts = []
-        context_parts.append("RELEVANT Q&A PAIRS FROM KNOWLEDGE BASE:")
-        for i, qa in enumerate(reranked_qa_pairs, 1):
-            context_parts.append(f"\n{i}. Question: {qa['question']}")
-            context_parts.append(f"   Answer: {qa['answers']}")
-        
-        context = "\n".join(context_parts)
-        
-        # Create prompt
-        prompt = f"""Based on the following Q&A pairs retrieved from a knowledge base, please answer this question:
-
-Question: {query}
-
-{context}
-
-It is likely that the answer to your question is present in the question, for example, 
-
-1. Question: What is Leo Messi Top Scorer of? 
-Context: Who is the top scorer of World Cup 2022?
-Answer: Lionel Messi
-
-In such cases, you should infer the answer from the question.
-
-Please provide your answer in the following format:
-
-<reasoning>
-Reasoning to arrive at the answer based on the provided QA pairs. 
-</reasoning>
-
-<answer>
-Only final answer, NA if you cannot find the answer.
-</answer>
-"""
-        # Count tokens if tiktoken is available
-        token_count = self._count_tokens(prompt, "gpt-4o-mini")
-        
-        # Display the context being sent to LLM (for debugging)
-        if self.show_llm_prompt:
-            console.print("\n[dim]Context being sent to LLM:[/dim]")
-            console.print(Panel(prompt, title="LLM Prompt", expand=False, border_style="dim"))
-        
-        # Display token count
-        if token_count:
-            console.print(f"\n[cyan]Token count: {token_count} tokens[/cyan]")
-        
-        try:
-            # Removed verbose generating message
-            response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "You are a helpful assistant that answers questions based on provided Q&A pairs from a knowledge base."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.0,
-                max_tokens=500
-            )
-            
-            answer = response.choices[0].message.content
-            return answer
-            
-        except Exception as e:
-            return f"[red]Error generating answer: {str(e)}[/red]"
-    
     def show_entity_details(self, entity: Dict[str, Any]):
         """Display detailed information about an entity."""
         console.print(f"\n[bold yellow]Entity: {entity['name']}[/bold yellow]")
@@ -1275,12 +1427,6 @@ Only final answer, NA if you cannot find the answer.
         console.print(f"  Unique documents: {unique_docs}")
         console.print(f"  Unique chunks: {unique_chunks}")
         console.print(f"  Embeddings available: {'Yes' if self.embeddings is not None else 'No'}")
-    
-    def save_cache(self):
-        """Save all caches to disk."""
-        self._save_entity_embeddings_cache()
-        self._save_qa_embeddings_cache()
-        console.print(f"[green]✓ Cache saved (hits: {self.cache_hits}, misses: {self.cache_misses})[/green]")
     
     def _run_test_queries(self, top_k: int):
         """Run predefined test queries."""

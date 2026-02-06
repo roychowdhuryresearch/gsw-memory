@@ -24,8 +24,9 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1,0'
 
+# os.environ["CURATOR_DISABLE_CACHE"] = "1"
 # Add the parent directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -45,6 +46,60 @@ except ImportError:
 
 console = Console()
 
+# Dataset configurations mapping
+DATASET_CONFIGS = {
+    "2wiki": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "2wiki_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "2wiki_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "musique_platinum": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "musique_unanswerable": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": True
+    },
+    "hotpotqa": {
+        "answer_field": "answer",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "popqa": {
+        "answer_field": "possible_answers",
+        "parse_json": True,
+        "allow_no_answer": False
+    },
+    "nq_rear": {
+        "answer_field": "reference",
+        "parse_json": False,
+        "allow_no_answer": False
+    },
+    "lveval": {
+        "answer_field": "answers",
+        "parse_json": False,
+        "allow_no_answer": False
+    }
+}
+
 # Setup logging
 LOG_DIR = Path("logs")
 LOG_DIR.mkdir(exist_ok=True)
@@ -60,34 +115,71 @@ class DecomposedQuestionList(BaseModel):
 
 class ChainQuestionDecomposer(curator.LLM):
     """Curator class for decomposing multi-hop questions in parallel."""
-    
+
     # return_completions_object = True
-    
-    def __init__(self, **kwargs):
-        """Initialize the question decomposer."""
+
+    def __init__(self, model_mode='closedsource', **kwargs):
+        """Initialize the question decomposer.
+
+        Args:
+            model_mode: 'opensource' or 'closedsource' - determines response parsing strategy
+            **kwargs: Additional arguments passed to curator.LLM
+        """
         super().__init__(**kwargs)
+        self.model_mode = model_mode
     
     def prompt(self, input):
         """Create a decomposition prompt for each question."""
-        decomposition_prompt = f"""Break down this multi-hop question into a sequence of single-hop questions.
-The FIRST question should keep the original specific entity/information from the question.
-SUBSEQUENT questions should use <ENTITY> as a placeholder if it requires answers from the previous step to form the question.
+        decomposition_prompt = f"""Your task is to break down a complex multi-hop question into the most efficient sequence of single-hop, **atomic** questions.
 
-IMPORTANT: Avoid over-decomposition. Each question should extract meaningful entities (proper nouns like names, places), not single-word descriptors. Keep questions at an appropriate granularity level.
+## Your Main Goal: Build Smart Bridges, Don't Just Collect Nouns
+The most critical skill is to convert complex logical clauses (like "despite," "the country where," "the year before") into a single, powerful **bridging question**. This question should use a known entity as context to find the next one. Avoid finding all the entities separately and then trying to figure out how they connect.
 
-For each question, indicate whether it requires retrieval from the knowledge base, any question that requires factual information MUST require retrieval.
-The only case where retreival is not required is if the question just requires comparison of responses from previous questions.
+---
+## A Simple Analogy for Efficiency
 
-Format each decomposed question as:
+**Question:** "What is the phone number of the mother of the tallest player on the Lakers?"
+
+** Inefficient Path:**
+1.  Who are the players on the Lakers?
+2.  What are all their heights?
+3.  Who is the mother of the tallest player? *(This step is a logical leap)*
+
+** Efficient Path:**
+1.  Who is the tallest player on the Lakers?
+2.  Who is the mother of `<ENTITY_Q1>`?
+3.  What is the phone number of `<ENTITY_Q2>`?
+
+---
+## How to Decompose a Question
+This process follows a logical flow from high-level analysis to the fine-tuning of your question chain.
+
+### 1. Analyze the Query's Components
+First, break down the original question into its fundamental building blocks. Identify the core **entities** (people, places, organizations), their **properties** (attributes like rank, location, date), and the **relationships** that connect them.
+
+### 2. Construct an Atomic Chain
+Next, formulate a sequence of questions where each question retrieves a single fact.
+* **Isolate Comparisons:** Don't ask "who is faster?" Ask for the specific rank or time of each person involved.
+* **Link with Placeholders:** Use `<ENTITY_Qn>` to pass the answer from a previous question (`Qn`) into the next one.
+
+### 3. Optimize for Efficiency and Precision
+Your final goal is the **shortest and most direct path** to the answer.
+* **Embed Constraints to Build Bridges:** If a piece of information is only a filter (like a date or location), embed it as a constraint in the next question instead of asking for it directly.
+  **Important note for bridges:** There can be no `<ENTITY_Qn>` in the first question if the nth question DOES NOT require retrieval.
+
+## Formatting
+Format each decomposed question as follows:
+
+
 Question: [the question text]
-Requires retrieval: [true/false]
+Requires retrieval: [True/False]
 
-And provide the response in the following json format:
+And provide the response in the following JSON format:
 {{
   "questions": [
     {{
       "question": "the decomposed question text",
-      "requires_retrieval": "true/false"
+      "requires_retrieval": "True/False"
     }}
   ]
 }}
@@ -156,16 +248,29 @@ Output:
         ]
     
     def parse(self, input, response: DecomposedQuestionList):
-        """Parse the decomposition response."""
+        """Parse the decomposition response.
 
-        print(response)
-        questions = [{"question" : q.question, "requires_retrieval" : q.requires_retrieval} for q in response.questions]
-        
+        Handles both open-source (raw JSON string) and closed-source (Pydantic object) responses.
+        """
+
+        if self.model_mode == 'opensource':
+            # Open-source models return raw JSON strings that need manual parsing
+            response_dict = json.loads(response) if isinstance(response, str) else response
+            questions = [
+                {"question": q["question"], "requires_retrieval": q["requires_retrieval"]}
+                for q in response_dict["questions"]
+            ]
+        else:
+            # Closed-source models return Pydantic objects via response_format parameter
+            questions = [
+                {"question": q.question, "requires_retrieval": q.requires_retrieval}
+                for q in response.questions
+            ]
+
         return [{
             "question_id": input['question_id'],
             "original_question": input['question'],
             "decomposed_questions": questions,
-            # "raw_response": decomposition_text
         }]
 
 
@@ -173,12 +278,18 @@ Output:
 
 class ChainAnswerGenerator(curator.LLM):
     """Curator class for generating answers with oracle-style prompting in parallel."""
-    
+
     return_completions_object = True
-    
-    def __init__(self, **kwargs):
-        """Initialize the answer generator."""
+
+    def __init__(self, allow_no_answer: bool = False, **kwargs):
+        """Initialize the answer generator.
+
+        Args:
+            allow_no_answer: Whether to allow "No Answer" responses for unanswerable questions
+            **kwargs: Additional arguments passed to curator.LLM
+        """
         super().__init__(**kwargs)
+        self.allow_no_answer = allow_no_answer
     
     def prompt(self, input):
         """Create an oracle-style answer generation prompt."""
@@ -209,7 +320,7 @@ class ChainAnswerGenerator(curator.LLM):
                 Q: Who directed Finding Nemo? A: Andrew Stanton
                 Q: When was Finding Nemo released? A: 2003
                 Q: What company produced Finding Nemo? A: Pixar Animation Studios"""
-        )
+            )
         
         # System message for advanced reading comprehension
         rag_qa_system = (
@@ -217,6 +328,10 @@ class ChainAnswerGenerator(curator.LLM):
             'Your response start after "Thought: ", where you will methodically break down the reasoning process, illustrating how you arrive at conclusions. '
             'Conclude with "Answer: " to present only a concise, definitive response, devoid of additional elaborations.'
         )
+
+        # Add "No Answer" instruction for unanswerable question datasets
+        if self.allow_no_answer:
+            rag_qa_system += ' If you don\'t know the answer, say "No Answer".'
         
         # One-shot example input
         one_shot_input = (
@@ -299,86 +414,240 @@ class ChainBatchedEvaluationResult:
 
 class ChainBatchedMultiHopQAEvaluator:
     """Batched evaluator for chain-following multi-hop QA using curator for parallel LLM calls."""
-    
-    def __init__(self, num_documents: int = 200, num_questions: int = 20, verbose: bool = False,
-                 chain_top_k: int = 15, use_bm25: bool = False):
+
+    @staticmethod
+    def _get_default_model_config(mode: str, component: str) -> Dict[str, Any]:
+        """Get default model configuration based on mode and component.
+
+        Args:
+            mode: "closedsource" or "opensource"
+            component: "decomposer" or "answerer"
+
+        Returns:
+            Dictionary with model configuration
+        """
+        configs = {
+            "decomposer": {
+                "closedsource": {
+                    "model_name": "gpt-4o",
+                    "generation_params": {"temperature": 0}
+                },
+                "opensource": {
+                    "model_name": "hosted_vllm/yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "base_url": "http://127.0.0.1:8989/v1",
+                        "request_timeout": 600.0,
+                        "max_concurrent_requests": 32,
+                        "max_requests_per_minute": 120,
+                        "max_tokens_per_minute": 200000,
+                        "seconds_to_pause_on_rate_limit": 5,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {"temperature": 0}
+                }
+            },
+            "answerer": {
+                "closedsource": {
+                    "model_name": "gpt-4o-mini",
+                    "generation_params": {"temperature": 0}
+                },
+                "opensource": {
+                    "model_name": "hosted_vllm/Qwen/Qwen3-8B",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "base_url": "http://127.0.0.1:6380/v1",
+                        "request_timeout": 600.0,
+                        "max_concurrent_requests": 32,
+                        "max_requests_per_minute": 120,
+                        "max_tokens_per_minute": 200000,
+                        "seconds_to_pause_on_rate_limit": 5,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {
+                        "temperature": 0.6,
+                        "top_p": 0.95,
+                        "top_k": 20,
+                        "min_p": 0,
+                        "max_tokens": 4096,
+                        "repetition_penalty": 1.1,
+                        "presence_penalty": 0.3,
+                        "frequency_penalty": 0.3,
+                    }
+                }
+            }
+        }
+
+        return configs[component][mode]
+
+    def __init__(self,
+                 num_documents: int = 200,
+                 num_questions: int = 20,
+                 verbose: bool = False,
+                 chain_top_k: int = 15,
+                 use_bm25: bool = False,
+                 dataset_name: str = "2wiki",
+                 decomposer_mode: str = "closedsource",
+                 decomposer_model: str = None,
+                 answerer_mode: str = "closedsource",
+                 answerer_model: str = None):
         """Initialize batched chain evaluator.
-        
+
         Args:
             num_documents: Number of documents to load
             num_questions: Number of questions to evaluate
             verbose: Whether to show detailed output
             chain_top_k: Number of top chains to select after reranking
+            use_bm25: Whether to use BM25 retrieval
+            dataset_name: Name of the dataset (e.g., '2wiki', 'musique', '2wiki_platinum')
+                         Dataset config (answer_field, parse_json, allow_no_answer) is auto-loaded from DATASET_CONFIGS
+            decomposer_mode: "closedsource" or "opensource" for question decomposer
+            decomposer_model: Model name override (auto-selects based on mode if None)
+            answerer_mode: "closedsource" or "opensource" for answer generator
+            answerer_model: Model name override (auto-selects based on mode if None)
         """
         self.num_documents = num_documents
         self.num_questions = num_questions
-        self.data_dir = Path("/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/playground/.data/2wiki")
+        self.data_dir = Path("/home/yigit/codebase/gsw-memory/playground_data")
         self.verbose = verbose
         self.chain_top_k = chain_top_k
         self.use_bm25 = use_bm25
-        
+
+        # Get dataset configuration from DATASET_CONFIGS
+        dataset_config = DATASET_CONFIGS.get(dataset_name, DATASET_CONFIGS["2wiki"])
+        self.dataset_name = dataset_name
+        self.answer_field = dataset_config["answer_field"]
+        self.parse_json = dataset_config["parse_json"]
+        self.allow_no_answer = dataset_config["allow_no_answer"]
+
         console.print("[bold blue]Initializing Chain-Based Batched Multi-Hop QA Evaluator...[/bold blue]")
         console.print(f"  Chain selection: Top {chain_top_k} chains")
-        
-        # Initialize the chain-following retrieval system (single instance for all questions)
+        console.print(f"  Dataset: {dataset_name}")
+        console.print(f"  Answer field: '{self.answer_field}' (parse_json={self.parse_json}, allow_no_answer={self.allow_no_answer})")
+
+        # Store model configuration
+        self.decomposer_mode = decomposer_mode
+        self.answerer_mode = answerer_mode
+
+        # Get default configs
+        decomposer_config = self._get_default_model_config(decomposer_mode, "decomposer")
+        answerer_config = self._get_default_model_config(answerer_mode, "answerer")
+
+        # Override model names if provided
+        if decomposer_model:
+            decomposer_config["model_name"] = decomposer_model
+        if answerer_model:
+            answerer_config["model_name"] = answerer_model
+
+        # Initialize the chain-following retrieval system
         self.qa_system = ChainFollowingMultiHopQA(
-            num_documents=num_documents, 
-            verbose=False, 
+            num_documents=num_documents,
+            verbose=False,
             show_prompt=False,
             chain_top_k=chain_top_k,
-            chain_following_mode="cumulative", 
-            beam_width=5, 
+            chain_following_mode="cumulative",
+            beam_width=5,
             reranker_model_name="voyage",
             use_chain_reranker=True,
             use_bm25=use_bm25
-
         )
-        
+
         # Initialize curator classes if available
         if CURATOR_AVAILABLE:
-            self.decomposer = ChainQuestionDecomposer(
-                model_name="gpt-4o", 
-                generation_params={"temperature": 0.0}, 
-                response_format=DecomposedQuestionList
-            )
-            self.answer_generator = ChainAnswerGenerator(
-                model_name="gpt-4o-mini", 
-                generation_params={"temperature": 0.0, "max_tokens": 1000}
-            )
+            os.environ["HOSTED_VLLM_API_KEY"] = os.getenv("VLLM_API_KEY", "token-abc123")
+
+            # Initialize decomposer
+            console.print(f"[cyan]Decomposer mode: {decomposer_mode}[/cyan]")
+            console.print(f"[cyan]  Model: {decomposer_config['model_name']}[/cyan]")
+
+            decomposer_kwargs = {
+                "model_mode": decomposer_mode,
+                "model_name": decomposer_config["model_name"],
+                "generation_params": decomposer_config["generation_params"],
+                "response_format": DecomposedQuestionList
+            }
+
+            # Add backend params for opensource models
+            if decomposer_mode == "opensource":
+                decomposer_kwargs["backend"] = decomposer_config["backend"]
+                decomposer_kwargs["backend_params"] = decomposer_config["backend_params"]
+
+            self.decomposer = ChainQuestionDecomposer(**decomposer_kwargs)
+
+            # Initialize answerer
+            console.print(f"[cyan]Answerer mode: {answerer_mode}[/cyan]")
+            console.print(f"[cyan]  Model: {answerer_config['model_name']}[/cyan]")
+
+            if self.allow_no_answer:
+                console.print('[cyan]  "No Answer" responses enabled[/cyan]')
+
+            answerer_kwargs = {
+                "allow_no_answer": self.allow_no_answer,
+                "model_name": answerer_config["model_name"],
+                "generation_params": answerer_config["generation_params"]
+            }
+
+            # Add backend params for opensource models
+            if answerer_mode == "opensource":
+                answerer_kwargs["backend"] = answerer_config["backend"]
+                answerer_kwargs["backend_params"] = answerer_config["backend_params"]
+
+            self.answer_generator = ChainAnswerGenerator(**answerer_kwargs)
+
             console.print("[green]✓ Curator initialized for parallel processing[/green]")
         else:
-            console.print("[yellow]⚠ Curator not available - will fall back to sequential processing[/yellow]")
-        
+            console.print("[yellow]⚠ Curator not available[/yellow]")
+
         console.print(f"[cyan]Ready to evaluate {num_questions} questions on {num_documents} documents[/cyan]")
     
     def load_questions_and_answers(self) -> List[Tuple[str, str, List[str]]]:
-        """Load questions and gold answers from 2WikiMultihopQA dataset.
-        
+        """Load questions and gold answers from configured dataset.
+
         Returns:
             List of tuples: (question_id, question, gold_answers)
         """
-        console.print("[cyan]Loading 2WikiMultihopQA questions...[/cyan]")
-        
-        questions_file = self.data_dir / "2wikimultihopqa.json"
+        console.print(f"[cyan]Loading {self.dataset_name} questions...[/cyan]")
+
+        # Try to find dataset file
+        questions_file = self.data_dir / f"{self.dataset_name}.json"
         if not questions_file.exists():
-            raise FileNotFoundError(f"Questions file not found: {questions_file}")
-        
+            # Fallback to 2wikimultihopqa.json for 2wiki dataset
+            questions_file = self.data_dir / "2wikimultihopqa.json"
+            if not questions_file.exists():
+                raise FileNotFoundError(f"Questions file not found: {questions_file}")
+
         with open(questions_file, 'r') as f:
             data = json.load(f)
-        
-        # Extract first N questions
+
+        console.print(f"[cyan]  Using answer field: '{self.answer_field}' (parse_json={self.parse_json})[/cyan]")
+
+        # Extract questions
         questions_data = []
         for i, item in enumerate(data[:self.num_questions]):
             question_id = item.get("_id", f"q_{i}")
             question = item["question"]
-            gold_answers = item.get("answer", [])
-            
+
+            # Extract gold answers based on configuration
+            gold_answers = item.get(self.answer_field, [])
+
+            # Parse JSON if needed (for PopQA)
+            if self.parse_json and isinstance(gold_answers, str):
+                try:
+                    gold_answers = json.loads(gold_answers)
+                except Exception:
+                    gold_answers = [gold_answers]
+
             # Ensure gold_answers is a list
             if isinstance(gold_answers, str):
                 gold_answers = [gold_answers]
-            
+
+            # Add answer aliases ONLY for standard 'answer' field (not for platinum/unanswerable)
+            if self.answer_field == 'answer':
+                answer_aliases = item.get("answer_aliases", [])
+                gold_answers = gold_answers + answer_aliases
+
             questions_data.append((question_id, question, gold_answers))
-        
+
         console.print(f"[green]✓ Loaded {len(questions_data)} questions[/green]")
         return questions_data
     
@@ -432,6 +701,7 @@ class ChainBatchedMultiHopQAEvaluator:
             for item in decomposition_dataset.dataset
         }
         
+
         return decomposition_results
     
     def run_chain_retrieval_stage(self, questions_data: List[Tuple[str, str, List[str]]], 
@@ -456,8 +726,12 @@ class ChainBatchedMultiHopQAEvaluator:
             for question_id, question, _ in questions_data:
                 if self.verbose:
                     console.print(f"\n[dim]Processing: {question}[/dim]")
-                
-                decomposed = decomposition_results[question_id]["decomposed_questions"]
+                try:
+                    decomposed = decomposition_results[question_id]["decomposed_questions"]
+                except:
+                    print(f"Error: {question_id} not found in decomposition results") #TODO: Handle this error
+                    print("Skipping question...") #TODO: Handle this error
+                    continue
 
                 # Reuse the exact retrieval logic from ChainFollowingMultiHopQA
                 all_evidence, chains_info, _ = self.qa_system.collect_evidence(
@@ -593,26 +867,31 @@ class ChainBatchedMultiHopQAEvaluator:
         # Compile results
         results = []
         for question_id, question, gold_answers in questions_data:
-            decomposed = decomposition_results[question_id]["decomposed_questions"]
-            answer_data = answer_results[question_id]
-            chains_info = chains_info_by_question.get(question_id, {})
-            
-            result = ChainBatchedEvaluationResult(
-                question_id=question_id,
-                question=question,
-                predicted_answer=answer_data["predicted_answer"],
-                full_response=answer_data.get("full_response", ""),
-                gold_answers=gold_answers,
-                processing_time=0.0,  # Will be updated with total time
-                decomposed_questions=decomposed,
-                evidence_count=answer_data["evidence_count"],
-                evidence=answer_data.get("evidence", []),
-                chains_info=chains_info,
-                token_count=answer_data.get("token_count", 0),
-                final_prompt=answer_data.get("final_prompt", None),
-                error=None
-            )
-            results.append(result)
+            try:
+                decomposed = decomposition_results[question_id]["decomposed_questions"]
+                answer_data = answer_results[question_id]
+                chains_info = chains_info_by_question.get(question_id, {})
+                
+                result = ChainBatchedEvaluationResult(
+                    question_id=question_id,
+                    question=question,
+                    predicted_answer=answer_data["predicted_answer"],
+                    full_response=answer_data.get("full_response", ""),
+                    gold_answers=gold_answers,
+                    processing_time=0.0,  # Will be updated with total time
+                    decomposed_questions=decomposed,
+                    evidence_count=answer_data["evidence_count"],
+                    evidence=answer_data.get("evidence", []),
+                    chains_info=chains_info,
+                    token_count=answer_data.get("token_count", 0),
+                    final_prompt=answer_data.get("final_prompt", None),
+                    error=None
+                )
+                results.append(result)
+            except Exception as e:
+                print(f"Error: {question_id} not found in answer results") #TODO: Handle this error
+                print("Skipping question...") #TODO: Handle this error
+                continue
         
         total_elapsed = time.time() - total_start
         console.print(f"\n[bold green]✓ Evaluation complete in {total_elapsed:.1f}s ({total_elapsed/len(results):.2f}s per question)[/bold green]")
@@ -625,29 +904,32 @@ class ChainBatchedMultiHopQAEvaluator:
     
     def compute_metrics(self, results: List[ChainBatchedEvaluationResult]) -> Tuple[Dict[str, float], List[Dict[str, Any]]]:
         """Compute evaluation metrics.
-        
+
         Args:
             results: List of evaluation results
-            
+
         Returns:
             Tuple of (overall_metrics, per_example_metrics)
         """
         console.print("\n[cyan]Computing evaluation metrics...[/cyan]")
-        
+
         # Filter out error cases
         valid_results = [r for r in results if r.error is None]
-        
+
         if not valid_results:
             console.print("[red]No valid results to evaluate![/red]")
             return {}, []
-        
+
         # Prepare data for evaluation
         gold_answers_list = [r.gold_answers for r in valid_results]
         predicted_answers = [r.predicted_answer for r in valid_results]
-        
-        # Compute metrics
-        overall_metrics, per_example_metrics = evaluate_qa_batch(gold_answers_list, predicted_answers)
-        
+
+        # Compute metrics with substring matching enabled
+        overall_metrics, per_example_metrics = evaluate_qa_batch(
+            gold_answers_list,
+            predicted_answers,
+        )
+
         return overall_metrics, per_example_metrics
     
     def save_results(self, results: List[ChainBatchedEvaluationResult], overall_metrics: Dict[str, float], 
@@ -745,7 +1027,7 @@ def main(verbose: bool = False):
             num_questions=10, 
             verbose=verbose,
             use_bm25=True
-        )
+       )
 
         
         # Run batched evaluation
