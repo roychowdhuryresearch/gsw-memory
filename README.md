@@ -199,10 +199,10 @@ If you use this codebase, please cite the relevant paper(s):
       url={https://arxiv.org/abs/2511.07587},
 }
 
-@misc{rajesh2025panini,
+@misc{rajesh2026paninicontinuallearningtoken,
       title={Panini: Continual Learning in Token Space via Structured Memory},
       author={Shreyas Rajesh and Pavan Holur and Mehmet Yigit Turali and Chenda Duan and Vwani Roychowdhury},
-      year={2025},
+      year={2026},
       eprint={2602.15156},
       archivePrefix={arXiv},
       primaryClass={cs.AI},
