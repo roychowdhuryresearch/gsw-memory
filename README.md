@@ -3,7 +3,7 @@
 Official repository for the **Generative Semantic Workspaces (GSW)** framework. This codebase supports two papers:
 
 1. **[Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces](https://arxiv.org/abs/2511.07587)** (AAAI-26 Oral)
-2. **[Panini: Continual Learning in Token Space via Structured Memory](https://arxiv.org/abs/2602.15156)** (ICML 2026)
+2. **[Panini: Continual Learning in Token Space via Structured Memory](https://arxiv.org/abs/2602.15156)** (Under review, ICML 2026)
 
 A Python package for building structured memory systems using Generative Semantic Workspaces (GSW). The first paper introduces the GSW framework for episodic memory and entity-centric reasoning over long narratives. The second paper extends GSW to non-parametric continual learning, introducing Panini --- a chain-following retrieval system (RICR) for multi-hop question answering over structured QA-pair memories built at write time.
 
