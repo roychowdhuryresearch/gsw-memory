@@ -186,7 +186,7 @@ python playground/test_qa_complete.py
 
 ## Citation
 
-If you use this codebase, please cite the relevant paper(s):
+If you use this codebase, please cite the relevant paper(s) and consider starring the repo to help others find it:
 
 ```bibtex
 @misc{rajesh2025factretrievalepisodicmemory,
