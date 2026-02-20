@@ -1,0 +1,19 @@
+# veRL interaction config for GSW multi-turn tool execution.
+#
+# Loaded by rollout.multi_turn.interaction_config_path in grpo_lora_qwen3.yaml.
+# The agent loop calls GSWInteraction.generate_response() after each assistant
+# turn, which executes the tool call against the real GSW files and returns the
+# result as a user message.
+#
+# extra_info["interaction_kwargs"] in each parquet row must contain:
+#   name:             "gsw"         ← must match the name below
+#   ground_truth:     "<answer>"
+#   gsw_dirs:         ["/path/doc_1", "/path/doc_2"]
+#   answer_aliases:   ["alias1", ...]
+#   decomposition:    [{...}, ...]
+
+interaction:
+  - class_name: gsw_memory.sleep_time.gsw_interaction.GSWInteraction
+    name: gsw
+    config:
+      max_turns: 30

@@ -1,0 +1,131 @@
+# veRL GRPO + LoRA config for Qwen3-30B-A3B-Thinking
+#
+# Run with (--config-dir ADDS to Hydra search path; --config-path would replace it):
+#   python3 -m verl.trainer.main_ppo \
+#       --config-dir /home/yigit/codebase/gsw-memory/conf/rl \
+#       --config-name grpo_lora_qwen3
+#
+# Prepare data first:
+#   python -m gsw_memory.sleep_time.data_prep \
+#       --musique playground_data/musique.json \
+#       --gsw_path /mnt/SSD1/shreyas/SM_GSW/musique/networks_4_1_mini \
+#       --output data/rl_training/index.json
+#
+#   python -m gsw_memory.sleep_time.make_parquet \
+#       --index data/rl_training/index.json \
+#       --output data/rl_training/
+#
+# Hardware: 4× A6000 48GB (192 GB total VRAM)
+
+# Inherit ALL veRL defaults, then apply our overrides below.
+# veRL's config dir is already in Hydra's search path (provider=main), so
+# plain name resolves correctly when launched with --config-dir.
+defaults:
+  - ppo_trainer
+  - _self_
+
+# ---------------------------------------------------------------------------
+# Model + LoRA
+# ---------------------------------------------------------------------------
+actor_rollout_ref:
+  model:
+    # Download goes to HF_HOME — run with HF_HOME=/mnt/SSD1/huggingface_cache
+    path: Qwen/Qwen3-30B-A3B-Thinking-2507
+    # LoRA — high rank for complex multi-step tool-use reasoning
+    lora_rank: 256
+    lora_alpha: 512
+    target_modules: all-linear
+    trust_remote_code: true
+    # use_shm: false — copying 60+ GB dense model to /dev/shm would exhaust RAM
+    use_shm: false
+    override_config:
+      attn_implementation: flash_attention_2
+
+  # vLLM rollout — name is required (no default in base config)
+  rollout:
+    name: vllm
+    load_format: safetensors
+    tensor_model_parallel_size: 4
+    # 47.4 GB total - ~29 GB FSDP weights = ~18 GB free; 0.35 × 47.4 ≈ 16.6 GB for KV cache
+    gpu_memory_utilization: 0.35
+    max_model_len: 16384
+    # GRPO group size — 4 on A6000s (increase to 8 if VRAM allows)
+    n: 4
+    temperature: 0.6
+    top_p: 0.95
+    top_k: 20
+    do_sample: true
+    # log_prob pass micro-batch size (required when use_dynamic_bsz=false)
+    log_prob_micro_batch_size_per_gpu: 1
+    # Multi-turn: real GSW tool execution via GSWInteraction
+    multi_turn:
+      enable: true
+      interaction_config_path: /home/yigit/codebase/gsw-memory/conf/rl/gsw_interaction.yaml
+      max_assistant_turns: 30
+      # GSW tool responses can be verbose; increase from default 256
+      max_tool_response_length: 2048
+      tool_response_truncate_side: right
+
+  actor:
+    # veRL validates: train_batch_size >= ppo_mini_batch_size (both in prompts,
+    # not responses). Set equal to train_batch_size so one mini-batch covers all
+    # prompts per PPO epoch.
+    # ppo_micro_batch_size_per_gpu: per-GPU gradient chunk; lower to 1 if OOM.
+    ppo_mini_batch_size: 16
+    ppo_micro_batch_size_per_gpu: 1
+    fsdp_config:
+      model_dtype: bfloat16    # load actor in bf16 — required for flash-attention 2
+    optim:
+      lr: 1.0e-5
+      weight_decay: 0.01
+    clip_ratio: 0.2
+    use_kl_loss: true
+    kl_loss_coef: 0.001
+    kl_loss_type: low_var_kl
+
+  ref:
+    # log_prob pass micro-batch size (required when use_dynamic_bsz=false)
+    log_prob_micro_batch_size_per_gpu: 1
+    fsdp_config:
+      param_offload: true
+
+# ---------------------------------------------------------------------------
+# Algorithm — GRPO
+# ---------------------------------------------------------------------------
+algorithm:
+  adv_estimator: grpo
+  kl_ctrl:
+    type: fixed
+    kl_coef: 0.001
+
+# ---------------------------------------------------------------------------
+# Data
+# ---------------------------------------------------------------------------
+data:
+  train_files: data/rl_training/train.parquet
+  val_files: data/rl_training/val.parquet
+  train_batch_size: 16
+  max_prompt_length: 4096
+  max_response_length: 8192
+
+# ---------------------------------------------------------------------------
+# Reward: provided by GSWInteraction.calculate_score() at episode end.
+# custom_reward_function is NOT used — reward comes from the interaction class.
+# ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# Trainer
+# ---------------------------------------------------------------------------
+trainer:
+  total_epochs: 1
+  n_gpus_per_node: 4
+  nnodes: 1
+  save_freq: 200
+  val_before_train: false
+  project_name: gsw-rlvr
+  experiment_name: qwen3-30b-a3b-grpo-lora
+  logger:
+    - console
+    - wandb
+  default_hdfs_dir: null
+  default_local_dir: logs/rl_training
