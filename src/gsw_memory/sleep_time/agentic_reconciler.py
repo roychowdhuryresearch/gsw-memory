@@ -31,19 +31,23 @@ class AgenticReconciler:
         budget: Optional[Dict[str, int]] = None,
         verbose: bool = True,
         output_callback: Optional[Any] = None,
-        reasoning_effort: str = "high"
+        reasoning_effort: str = "high",
+        base_url: Optional[str] = None
     ):
         """
         Initialize agentic reconciler.
 
         Args:
             entity_searcher: Initialized EntitySearcher with loaded GSWs
-            model_name: Model name - OpenAI (gpt-4o, gpt-4o-mini) or Together AI (openai/gpt-oss-120b, meta-llama/...)
+            model_name: Model name - OpenAI (gpt-4o, gpt-4o-mini), Together AI (openai/gpt-oss-120b, meta-llama/...),
+                        or any model name when base_url is provided (local vllm server)
             budget: Dict with "max_entities" and/or "max_tokens" limits
             verbose: Print progress messages
             output_callback: Optional callback function for interactive display
                             Format: callback(event_type: str, data: Dict[str, Any])
             reasoning_effort: Reasoning effort for Together AI models: "low", "medium", or "high" (default: "high")
+            base_url: Base URL for OpenAI-compatible API server (e.g. "http://127.0.0.1:6379/v1" for vllm).
+                      When set, the OpenAI client is used regardless of model name format.
         """
         self.entity_searcher = entity_searcher
         self.tools = GSWTools(entity_searcher)
@@ -51,6 +55,7 @@ class AgenticReconciler:
         self.verbose = verbose
         self.output_callback = output_callback  # Callback for interactive display
         self.reasoning_effort = reasoning_effort
+        self.base_url = base_url
 
         # Budget tracking
         self.budget = budget or {"max_entities": 20, "max_tokens": 1_000_000}
@@ -64,7 +69,7 @@ class AgenticReconciler:
             logger.info(f"Valid document range: doc_0 to doc_{max([int(d.split('_')[1]) for d in self._valid_doc_ids if d.startswith('doc_')])}")
 
         # Initialize appropriate client based on model name
-        self._initialize_client(model_name)
+        self._initialize_client(model_name, base_url)
 
         # Tool definitions in OpenAI format
         self.tool_definitions = self._create_tool_definitions()
@@ -76,15 +81,27 @@ class AgenticReconciler:
             print(f"  Budget: {self.budget}")
             print(f"  GSWs loaded: {len(self.entity_searcher.gsw_by_doc_id)}")
 
-    def _initialize_client(self, model_name: str):
+    def _initialize_client(self, model_name: str, base_url: Optional[str] = None):
         """
-        Initialize the appropriate LLM client based on model name.
+        Initialize the appropriate LLM client based on model name or base_url.
 
         OpenAI models: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo
         Together AI models: Contains '/' like openai/gpt-oss-120b, meta-llama/...
+        vllm / local OpenAI-compatible: any model name when base_url is provided
         """
-        # Detect provider
-        if model_name.startswith("gpt-"):
+        # Detect provider — vllm/local takes priority if base_url is given
+        if base_url is not None:
+            self.provider = "vllm"
+            try:
+                from openai import OpenAI
+                self.client = OpenAI(
+                    api_key="EMPTY",   # vllm does not require a real key
+                    base_url=base_url,
+                )
+            except ImportError:
+                raise ImportError("OpenAI package not installed. Run: pip install openai")
+
+        elif model_name.startswith("gpt-"):
             self.provider = "openai"
             api_key = os.getenv("OPENAI_API_KEY")
             if not api_key:
@@ -112,7 +129,8 @@ class AgenticReconciler:
         else:
             raise ValueError(
                 f"Unknown model provider for '{model_name}'. "
-                "Expected OpenAI model (gpt-4o, gpt-4o-mini) or Together AI model (contains '/')"
+                "Expected OpenAI model (gpt-4o, gpt-4o-mini), Together AI model (contains '/'), "
+                "or provide --base_url for a local vllm / OpenAI-compatible server."
             )
 
     def _create_tool_definitions(self) -> List[Dict[str, Any]]:
@@ -480,16 +498,27 @@ class AgenticReconciler:
                 "messages": messages,
                 "tools": self.tool_definitions,
                 "tool_choice": "auto",
-                "temperature": 0.6,          # Focused reasoning (was 0.7)
-                "top_p": 0.95,               # Reduce long-tail tokens (was 1.0)
-                "top_k": 20,                 # Limit vocabulary per step for conciseness
-                "presence_penalty": 0.8,     # Reduce repetitive reasoning patterns
-                "max_tokens": 32768          # API limit for most Together AI models
+                "temperature": 0.6,   # Focused reasoning
+                "top_p": 0.95,        # Nucleus sampling
+                "max_tokens": 32768,
             }
 
-            # Add reasoning_effort only for GPT-OSS models (not all Together AI models support it)
-            if self.provider == "together" and "gpt-oss" in self.model_name.lower():
-                api_params["reasoning_effort"] = self.reasoning_effort
+            # vLLM-specific parameters (OpenAI-compatible server supports these extra sampling params)
+            if self.provider == "vllm":
+                api_params["presence_penalty"] = 0.4  # Reduce endless repetitions (0–2 range); SDK knows this param
+                api_params["extra_body"] = {          # vLLM extensions — must go via extra_body (not in OpenAI SDK signature)
+                    "top_k": 20,                      # Limit vocabulary per step for conciseness
+                    "min_p": 0.0,                     # Minimum probability threshold
+                }
+
+            # Together AI-specific parameters (not supported by OpenAI)
+            elif self.provider == "together":
+                api_params["top_k"] = 20              # Limit vocabulary per step for conciseness
+                api_params["presence_penalty"] = 0.8  # Reduce repetitive reasoning patterns
+
+                # Add reasoning_effort only for GPT-OSS models
+                if "gpt-oss" in self.model_name.lower():
+                    api_params["reasoning_effort"] = self.reasoning_effort
 
             response = self.client.chat.completions.create(**api_params)
 

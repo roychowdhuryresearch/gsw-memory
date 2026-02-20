@@ -449,13 +449,17 @@ class SleepTimeRunner:
                 },
                 verbose=False,  # Suppress default verbose - we use callback
                 output_callback=output_callback,
-                reasoning_effort=self.args.reasoning_effort
+                reasoning_effort=self.args.reasoning_effort,
+                base_url=getattr(self.args, 'base_url', None)
             )
 
             console.print(f"[green]✓ Agent initialized[/green]")
-            if hasattr(agent, 'provider') and agent.provider == "together":
-                console.print(f"  [dim]Reasoning effort: {self.args.reasoning_effort}[/dim]")
-            self.logger.info(f"Agent initialized with model: {self.args.model} (reasoning_effort: {self.args.reasoning_effort})")
+            if hasattr(agent, 'provider'):
+                if agent.provider == "together":
+                    console.print(f"  [dim]Reasoning effort: {self.args.reasoning_effort}[/dim]")
+                elif agent.provider == "vllm":
+                    console.print(f"  [dim]vllm base URL: {self.args.base_url}[/dim]")
+            self.logger.info(f"Agent initialized with model: {self.args.model} (provider: {getattr(agent, 'provider', 'unknown')}, reasoning_effort: {self.args.reasoning_effort})")
 
             return agent
 
@@ -909,8 +913,10 @@ def main():
                         help="Filter out generic entities (nationalities, years)")
 
     # Model configuration
-    parser.add_argument("--model", type=str, default="Qwen/Qwen3-235B-A22B-Thinking-2507",
-                        help="Model name (OpenAI: gpt-4o, gpt-4o-mini | Together AI: Qwen/Qwen3-235B-A22B-Thinking-2507, openai/gpt-oss-120b, meta-llama/...)")
+    parser.add_argument("--model", type=str, default="Qwen3-30B-A3B-Thinking-2507",
+                        help="Model name (OpenAI: gpt-4o, gpt-4o-mini | Together AI: Qwen/Qwen3-235B-A22B-Thinking-2507, openai/gpt-oss-120b, meta-llama/... | vllm: any name when --base_url is set)")
+    parser.add_argument("--base_url", type=str, default="http://127.0.0.1:6379/v1",
+                        help="Base URL for OpenAI-compatible API server (e.g. http://127.0.0.1:6379/v1 for a local vllm instance). When set, the OpenAI client is used regardless of model name.")
     parser.add_argument("--max_tokens", type=int, default=500_000,
                         help="Maximum token budget")
     parser.add_argument("--max_iterations", type=int, default=30,
