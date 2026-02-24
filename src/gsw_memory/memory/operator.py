@@ -18,6 +18,7 @@ from .operator_utils import (
     chunk_text,
     parse_gsw,
 )
+from .operator_utils.spacetime import apply_spacetime_to_gsw
 from ..prompts.operator_prompts import PromptType
 
 
@@ -417,14 +418,19 @@ class GSWProcessor:
                 # Process all spacetime linking in parallel
                 spacetime_responses = spacetime_model(spacetime_inputs)
 
-                # Update chunk data with spacetime results
+                # Update chunk data with spacetime results and apply nodes/edges to GSW
                 for resp in spacetime_responses.dataset:
                     doc_idx = resp["doc_idx"]
                     global_id = resp["global_id"]
+                    links = resp.get("spatio_temporal_links", [])
                     all_documents_data[doc_idx][global_id]["spacetime"] = {
-                        "spatio_temporal_links": resp.get("spatio_temporal_links", []),
+                        "spatio_temporal_links": links,
                         "full_response": resp.get("full_response", ""),
                     }
+                    # Apply spacetime nodes/edges directly onto the GSWStructure
+                    gsw = all_documents_data[doc_idx][global_id].get("gsw")
+                    if gsw is not None and links:
+                        apply_spacetime_to_gsw(gsw, links, chunk_id=global_id)
 
         # Step 7: Save outputs if requested
         if output_dir:

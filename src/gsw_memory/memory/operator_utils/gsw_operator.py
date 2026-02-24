@@ -8,7 +8,12 @@ Workspaces from text using sophisticated semantic role extraction.
 from bespokelabs import curator
 
 
-from ...prompts.operator_prompts import FactualExtractionPrompts, OperatorPrompts, PromptType
+from ...prompts.operator_prompts import (
+    ConversationalOperatorPrompts,
+    FactualExtractionPrompts,
+    OperatorPrompts,
+    PromptType,
+)
 from ..models import GSWStructure
 
 
@@ -89,20 +94,27 @@ class GSWOperator(curator.LLM):
             self.prompt_class = OperatorPrompts
         elif prompt_type == PromptType.FACTUAL:
             self.prompt_class = FactualExtractionPrompts
+        elif prompt_type == PromptType.CONVERSATIONAL:
+            self.prompt_class = ConversationalOperatorPrompts
         else:
             raise ValueError(f"Unsupported prompt type: {prompt_type}")
 
     def prompt(self, input):
         """Create a prompt for the LLM to generate a GSW."""
+        if self.prompt_type == PromptType.CONVERSATIONAL:
+            user_content = self.prompt_class.USER_PROMPT_TEMPLATE.format(
+                speaker_context=input.get("speaker_context", ""),
+                input_text=input["text"],
+                background_context=input.get("context", ""),
+            )
+        else:
+            user_content = self.prompt_class.USER_PROMPT_TEMPLATE.format(
+                input_text=input["text"],
+                background_context=input.get("context", ""),
+            )
         return [
             {"role": "system", "content": self.prompt_class.SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": self.prompt_class.USER_PROMPT_TEMPLATE.format(
-                    input_text=input["text"],
-                    background_context=input.get("context", "")
-                ),
-            },
+            {"role": "user", "content": user_content},
         ]
 
     def parse(self, input, response: GSWStructure):

@@ -21,6 +21,16 @@ class Role(BaseModel):
     chunk_id: Optional[str] = Field(
         default=None, description="A global identifier for the chunk"
     )
+    speaker_id: Optional[str] = Field(
+        default=None, description="Speaker who performed/stated this role (personal memory)"
+    )
+    conversation_id: Optional[str] = Field(
+        default=None, description="Conversation this role was extracted from (personal memory)"
+    )
+    evidence_turn_ids: List[str] = Field(
+        default_factory=list,
+        description="Dialogue turn IDs supporting this role, e.g. ['D1:3', 'D4:7'] (personal memory)",
+    )
 
 
 class EntityNode(BaseModel):
@@ -38,6 +48,12 @@ class EntityNode(BaseModel):
         default=None,
         description="An entity focussed summary detailing the entity's involvement.",
     )
+    speaker_id: Optional[str] = Field(
+        default=None, description="Primary speaker associated with this entity (personal memory)"
+    )
+    conversation_id: Optional[str] = Field(
+        default=None, description="Conversation this entity was extracted from (personal memory)"
+    )
 
 
 class Question(BaseModel):
@@ -50,6 +66,16 @@ class Question(BaseModel):
     )
     chunk_id: Optional[str] = Field(
         default=None, description="A global identifier for the chunk"
+    )
+    speaker_id: Optional[str] = Field(
+        default=None, description="Speaker this question is about (personal memory)"
+    )
+    conversation_id: Optional[str] = Field(
+        default=None, description="Conversation this question was extracted from (personal memory)"
+    )
+    evidence_turn_ids: List[str] = Field(
+        default_factory=list,
+        description="Dialogue turn IDs supporting this question's answer (personal memory)",
     )
 
 
@@ -126,23 +152,23 @@ class GSWStructure(BaseModel):
     verb_phrase_nodes: List[VerbPhraseNode] = Field(
         default_factory=list, description="All verb phrases"
     )
-    # space_nodes: List[SpaceNode] = Field(
-    #     default_factory=list, description="All spatial locations"
-    # )
-    # time_nodes: List[TimeNode] = Field(
-    #     default_factory=list, description="All temporal contexts"
-    # )
+    space_nodes: List[SpaceNode] = Field(
+        default_factory=list, description="All spatial locations"
+    )
+    time_nodes: List[TimeNode] = Field(
+        default_factory=list, description="All temporal contexts"
+    )
 
-    # # Relationship edges
-    # similarity_edges: List[Tuple[str, str]] = Field(
-    #     default_factory=list, description="Entity similarity connections"
-    # )
-    # space_edges: List[Tuple[str, str]] = Field(
-    #     default_factory=list, description="Entity-space connections"
-    # )
-    # time_edges: List[Tuple[str, str]] = Field(
-    #     default_factory=list, description="Entity-time connections"
-    # )
+    # Relationship edges (List[str] pairs: [entity_id, node_id])
+    similarity_edges: List[List[str]] = Field(
+        default_factory=list, description="Entity similarity connections"
+    )
+    space_edges: List[List[str]] = Field(
+        default_factory=list, description="Entity-space connections"
+    )
+    time_edges: List[List[str]] = Field(
+        default_factory=list, description="Entity-time connections"
+    )
 
     @classmethod
     def from_json(cls, json_data: dict) -> "GSWStructure":
@@ -241,13 +267,13 @@ class GSWStructure(BaseModel):
     # Edge management
     def add_space_edge(self, entity_node_id: str, space_node_id: str) -> None:
         """Add a space edge between a space node and an entity node."""
-        edge = (entity_node_id, space_node_id)
+        edge = [entity_node_id, space_node_id]
         if edge not in self.space_edges:
             self.space_edges.append(edge)
 
     def add_time_edge(self, entity_node_id: str, time_node_id: str) -> None:
         """Add a time edge between a time node and an entity node."""
-        edge = (entity_node_id, time_node_id)
+        edge = [entity_node_id, time_node_id]
         if edge not in self.time_edges:
             self.time_edges.append(edge)
 
@@ -283,7 +309,7 @@ class GSWStructure(BaseModel):
         # Combine roles from external_entity into target_entity
         for role in external_entity.roles:
             if not any(
-                r.role == role.role and r.chunk_id == role.chunk_id
+                r.role == role.role and frozenset(r.states) == frozenset(role.states)
                 for r in target_entity.roles
             ):
                 target_entity.roles.append(role)
@@ -331,7 +357,7 @@ class GSWStructure(BaseModel):
 
         # Redirect edges from source to target
         self.space_edges = [
-            (edge[0], target_id) if edge[1] == source_id else edge
+            [edge[0], target_id] if edge[1] == source_id else list(edge)
             for edge in self.space_edges
         ]
 
@@ -368,7 +394,7 @@ class GSWStructure(BaseModel):
 
         # Redirect edges from source to target
         self.time_edges = [
-            (edge[0], target_id) if edge[1] == source_id else edge
+            [edge[0], target_id] if edge[1] == source_id else list(edge)
             for edge in self.time_edges
         ]
 

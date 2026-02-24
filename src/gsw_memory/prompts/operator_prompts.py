@@ -9,6 +9,7 @@ class PromptType(Enum):
     """Enum for different types of operator prompts."""
     EPISODIC = "episodic"
     FACTUAL = "factual"
+    CONVERSATIONAL = "conversational"
 
 
 class CorefPrompts:
@@ -3537,9 +3538,39 @@ Your task is to link entities that share a spatio-temporal relationship."""
     {operator_output_json}
     ```
 
+**Session Context:**
+{session_context}
+
 **Task:**
 
 Read the `Text Chunk` and examine the entities in the `Operator Output`. Identify groups of entity IDs that share the same location (spatial context) or the same time/date (temporal context) based on the events described.
+
+**CRITICAL — Temporal Resolution Rules:**
+
+Only create temporal links for EVENT DATES — when something actually happened or will happen. Do NOT create a temporal link for the session/conversation date itself. The session date is provided ONLY as reference for resolving relative expressions.
+
+Temporal links to extract:
+- Explicit event dates in the text: use as-is (e.g., "on March 5th" → "March 5th")
+- Relative event dates: resolve using the session date as reference
+  * "yesterday" → resolved concrete date
+  * "last summer" → resolved approximate season/year
+  * "two years ago" → resolved approximate date
+- Ongoing/habitual: "every weekend" → create link with the pattern description
+
+Do NOT create temporal links for:
+- The session/conversation date itself (when the conversation took place)
+- General present tense statements with no specific time reference
+
+Resolution examples (assuming session date is "15 November, 2019"):
+- "I went there yesterday" → "14 November, 2019" (event date, resolved from session date)
+- "last week" → "~8 November, 2019"
+- "last year" → "2018"
+- "last month" → "October 2019"
+- "a few months ago" → "~August 2019"
+- "two years ago" → "~November 2017"
+- "last summer" → "Summer 2019"
+
+`tag_value` must NEVER be null for temporal links — always provide your best approximation. Use "~" prefix for approximate dates.
 
 The entities have the following attributes:
 
@@ -3556,8 +3587,8 @@ Return a JSON object with a single key "spatio_temporal_links". The value should
 * `linked_entities`: (List of Strings) Entity IDs sharing the context (e.g., `["e1", "e2", "e3"]`).
 * `tag_type`: (String) Either "spatial" or "temporal".
 * `tag_value`: (String or Null)
-    * If the specific location/time/date is mentioned in the `Text Chunk` for this group, extract it.
-    * Otherwise, use `null`.
+    * For **temporal** links: ALWAYS provide a resolved date — never null. Use "~" prefix for approximations.
+    * For **spatial** links: extract the location if mentioned, otherwise use `null`.
 
 **Example Output Structure:**
 
@@ -3575,6 +3606,411 @@ Return a JSON object with a single key "spatio_temporal_links". The value should
     "tag_value": "December 25th 2025"
     }}
 ]
+}}
+```
+"""
+
+
+class ConversationalOperatorPrompts:
+    """Prompts for GSW generation from conversational / dialogue text.
+
+    Identical in structure to OperatorPrompts (all six tasks) but extended
+    with speaker attribution: every extracted Role and Question carries a
+    `speaker_id` and `evidence_turn_ids` field so that downstream adversarial
+    question handling and cross-session reconciliation can verify who said what.
+    """
+
+    SYSTEM_PROMPT = """You are an expert linguist focused on semantic role extraction and relationship mapping from conversational dialogues. Your primary task is to analyze a dialogue chunk and create structured semantic networks anchored by verb phrases, ensuring ALL semantically relevant questions are captured. We will call this task the operator extraction.
+
+This is a CONVERSATIONAL version of the operator. The input text is a dialogue between two named speakers. Two critical differences from document extraction:
+1. **Speaker attribution**: every Role you assign to an entity and every Question you generate must record which speaker asserted or performed it via a `speaker_id` field.
+2. **Evidence turns**: every Role and Question must list the specific dialogue turn IDs that support the extraction (e.g. "D1:3", "D4:7") via an `evidence_turn_ids` field.
+
+Dialogue is informal — handle contractions ("gonna", "I'd"), colloquialisms, and incomplete sentences gracefully. Extract the underlying meaning, not the surface form."""
+
+    USER_PROMPT_TEMPLATE = """
+Given the following:
+1. Speaker context — who is speaking in this dialogue
+
+<speaker_context>
+{speaker_context}
+</speaker_context>
+
+2. Input chunk from a conversational dialogue (turns are prefixed with their speaker name and turn ID)
+
+<input_text>
+{input_text}
+</input_text>
+
+3. Background context situating this chunk within the overall conversation
+
+<background_context>
+{background_context}
+</background_context>
+
+You are required to perform the operator extraction. Follow the steps below:
+
+Task 1: Actor Identification
+
+Identify all actors from the dialogue chunk. An actor can be:
+1. A person (e.g., the speakers themselves, people they mention)
+2. An organization (e.g., employers, schools, clubs)
+3. A place (e.g., cities, venues, countries)
+4. A creative work (e.g., films, books, songs)
+5. A temporal entity (dates, years, time references)
+6. A physical object or item (e.g., artifacts, products)
+7. An abstract entity (e.g., awards, concepts that function as actors)
+
+Guidelines for Actor Extraction:
+- Include the speakers themselves as actors (e.g., "Yigit", "Mark")
+- Include all mentioned dates and time references as temporal entities
+- Do not include phrases or complete sentences
+- Extract each actor only once, even if mentioned multiple times
+
+Example:
+Dialogue: "[D1:2] Yigit: I presented my paper at NeurIPS last week, it went really well."
+Actors:
+- Yigit (person)
+- NeurIPS (organization / event)
+- last week (temporal entity)
+- paper (creative work)
+
+Generate a list of all actors from the dialogue chunk.
+
+
+Task 2: Role Assignment
+
+A role is a situation-relevant descriptor (noun phrase) describing how an actor functions within this conversation. Roles define potential relationships between actors.
+
+Guidelines for Role Assignment (same as standard operator, plus):
+- For people: include conversational roles (e.g., "speaker", "presenter") as well as stated life roles
+- Assign roles based on what the speakers actually say — informal phrasing counts
+
+Example:
+Dialogue: "[D1:2] Yigit: I presented my paper at NeurIPS last week."
+Role Assignment:
+- Yigit: "researcher", "conference presenter"
+- NeurIPS: "academic conference"
+- paper: "research paper"
+
+For each actor from Task 1, list all applicable roles mentioned in the dialogue.
+
+
+Task 3: State Identification
+
+A state characterizes how an actor exists in their role at a specific moment. Extract states from what the speakers say, not from inference.
+
+Key Rules (same as standard operator):
+- States must be extracted from the context, not inferred
+- States describe the role, not the actor directly
+- Multiple states for the same role are possible
+- Do NOT include actor names in states except for temporal entities
+
+Example:
+Dialogue: "[D1:2] Yigit: I presented my paper at NeurIPS last week, it went really well."
+State Assignment:
+- Yigit
+  * Role: conference presenter → State: "presented at NeurIPS", "presentation went well"
+- NeurIPS
+  * Role: academic conference → State: "held last week"
+
+For each role from Task 2, list all applicable states from the dialogue.
+
+
+Task 4: Explicit Verb Phrase Identification
+
+Identify key verb phrases (base form) explicitly stated in the `<input_text>` that connect actors from Task 1.
+
+Guidelines:
+- Scan for main verbs where actors serve as subject, object, or are linked via prepositions
+- Use the base form (e.g., "present", "attend", "work on")
+- Only include verbs explicitly present in the text
+
+Example:
+Dialogue: "[D1:2] Yigit: I presented my paper at NeurIPS last week."
+Explicit Verbs: "present at"
+
+
+Task 4.5: Implicit Action Phrase Inference
+
+Infer additional action phrases implied by actor roles and context, but not captured by explicit verbs.
+
+Guidelines:
+- Only infer phrases strongly suggested by role combinations
+- Example: "researcher" + "paper" → "write", "author"
+
+Generate a list of inferred action phrases from actor roles and context.
+
+
+Task 5: Prototypical Semantic Role Question Generation (Checklist)
+
+For each verb phrase instance identified in Task 4 (Explicit Verbs) and Task 4.5 (Implicit Actions), generate a comprehensive set of **generic, prototypical questions** by explicitly attempting to formulate a question for each potential semantic role listed below. These questions act as placeholders (valences).
+
+Instructions:
+
+1.  **Generate Questions via Checklist:** For the given verb phrase, attempt to generate a generic question for each of the following core roles. If a role is clearly nonsensical or grammatically impossible for the verb phrase, you may omit the question for that specific role.
+    * **Agent Role:** Generate a "Who/What [verb phrase base form]...?" question. (e.g., Who presented?)
+    * **Patient/Theme Role:** Generate a "What/Who was [verb phrase past participle]...?" or similar question capturing the entity directly affected by the verb. (e.g., What was presented?)
+    * **Location Role:** Generate a "Where did ... [verb phrase]...?" question. (e.g., Where was [something] presented?)
+    * **Time Role:** Generate a "When did ... [verb phrase]...?" question. (e.g., When was [something] presented?)
+2.  **Consider Other Relevant Roles:** Also consider if other common roles are relevant to the verb phrase's typical meaning. If so, generate appropriate generic questions:
+    * **Manner Role:** (If applicable) Generate a "How did ... [verb phrase]...?" question.
+    * **Purpose Role:** (If applicable) Generate a "Why did ... [verb phrase]...?" question.
+    * *(Consider others like Instrument, Source, Goal only if they seem highly relevant to the verb's core meaning)*
+3.  **Generality and Format:**
+    * All generated questions MUST remain generic. Do **NOT** contextualize them with specific actors from the text in this Task. Use placeholders like "[something]" or "[someone]" if needed for grammatical sense, but avoid specific names/entities from the context.
+    * It is expected that many questions will be answered `None` or `TEXT:` in Task 6. The goal here is comprehensive question generation based on the verb's potential arguments.
+    * Use natural phrasing for questions. List the generated questions for the verb phrase.
+
+Example (Conceptual for verb phrase "present"):
+- Agent Question: "Who presented?"
+- Patient/Theme Question: "What was presented?"
+- Location Question: "Where was [something] presented?"
+- Time Question: "When was [something] presented?"
+- Manner Question: (Potentially applicable) "How was [something] presented?"
+- Purpose Question: (Potentially applicable) "Why was [something] presented?"
+
+Generate the complete set of applicable generic prototypical questions for each verb phrase instance from Task 4 and Task 4.5 based on this checklist approach.
+
+
+Task 6: Answer Mapping and Actor Connection
+
+For each question from Task 5, provide answers by consulting the `<input_text>`.
+
+Answer options:
+- Actor ID (e.g., `["e1"]`) if the answer maps to an identified actor
+- `["TEXT:direct quote"]` if the answer exists in text but isn't an actor
+- `["None"]` if the answer is not in the text
+
+Do not infer answers not supported by the dialogue.
+
+Example (assuming the text mentions Yigit presented a paper at NeurIPS, but time is not stated):
+Verb: "present at"
+- "Who presented [something]?" → `["e1"]` (Yigit)
+- "What was presented?" → `["e2"]` (paper)
+- "Where did [someone] present [something]?" → `["e3"]` (NeurIPS)
+- "When did [someone] present [something]?" → `["None"]`
+
+
+Show all your reasoning task by task within <semantic_construction></semantic_construction>, then output the final answer in the following JSON format.
+
+IMPORTANT: The conversational format adds `speaker_id` and `evidence_turn_ids` to every Role and Question. Use the speaker names from `<speaker_context>`. For `evidence_turn_ids`, list the turn IDs from `<input_text>` (e.g. "D1:3") that directly support the extraction. Use `null` if attribution is genuinely ambiguous.
+
+```json
+{{
+  "entity_nodes": [
+    {{
+      "id": "e1",
+      "name": "<entity>",
+      "roles": [
+        {{
+          "role": "<role>",
+          "states": ["<state1>", "<state2>"],
+          "speaker_id": "<speaker_name or null>",
+          "evidence_turn_ids": ["<turn_id1>", "<turn_id2>"]
+        }}
+      ]
+    }}
+  ],
+  "verb_phrase_nodes": [
+    {{
+      "id": "v1",
+      "phrase": "<verb_phrase>",
+      "questions": [
+        {{
+          "id": "q1",
+          "text": "<generic_question>",
+          "answers": ["<entity_id>"],
+          "speaker_id": "<speaker_name or null>",
+          "evidence_turn_ids": ["<turn_id>"]
+        }},
+        {{
+          "id": "q2",
+          "text": "<generic_question_2>",
+          "answers": ["None"],
+          "speaker_id": null,
+          "evidence_turn_ids": []
+        }},
+        {{
+          "id": "q3",
+          "text": "<generic_question_3>",
+          "answers": ["TEXT:answer from text"],
+          "speaker_id": "<speaker_name or null>",
+          "evidence_turn_ids": ["<turn_id>"]
+        }}
+      ]
+    }}
+  ]
+}}
+```
+
+Worked Example:
+
+<speaker_context>
+Speaker A: Yigit
+Speaker B: Mark
+</speaker_context>
+
+<input_text>
+[D1:2] Yigit: I just got back from NeurIPS — presented my new paper on memory agents, it went really well.
+[D1:5] Mark: That's amazing! Did you get a lot of good feedback?
+[D1:6] Yigit: Yeah, a few people from Google DeepMind came up to me afterwards, super encouraging.
+[D1:9] Mark: I submitted to ICML last month, still waiting to hear back.
+</input_text>
+
+Expected output (abbreviated):
+```json
+{{
+  "entity_nodes": [
+    {{
+      "id": "e1",
+      "name": "Yigit",
+      "roles": [
+        {{
+          "role": "researcher",
+          "states": ["presented paper at NeurIPS", "received positive feedback"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2", "D1:6"]
+        }},
+        {{
+          "role": "conference presenter",
+          "states": ["presented at NeurIPS"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2"]
+        }}
+      ]
+    }},
+    {{
+      "id": "e2",
+      "name": "Mark",
+      "roles": [
+        {{
+          "role": "researcher",
+          "states": ["submitted to ICML", "awaiting decision"],
+          "speaker_id": "Mark",
+          "evidence_turn_ids": ["D1:9"]
+        }}
+      ]
+    }},
+    {{
+      "id": "e3",
+      "name": "NeurIPS",
+      "roles": [
+        {{
+          "role": "academic conference",
+          "states": ["venue of Yigit's presentation"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2"]
+        }}
+      ]
+    }},
+    {{
+      "id": "e4",
+      "name": "paper on memory agents",
+      "roles": [
+        {{
+          "role": "research paper",
+          "states": ["presented at NeurIPS", "received positive feedback"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2", "D1:6"]
+        }}
+      ]
+    }},
+    {{
+      "id": "e5",
+      "name": "Google DeepMind researchers",
+      "roles": [
+        {{
+          "role": "audience",
+          "states": ["gave encouraging feedback"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:6"]
+        }}
+      ]
+    }},
+    {{
+      "id": "e6",
+      "name": "ICML",
+      "roles": [
+        {{
+          "role": "academic conference",
+          "states": ["submission destination for Mark"],
+          "speaker_id": "Mark",
+          "evidence_turn_ids": ["D1:9"]
+        }}
+      ]
+    }}
+  ],
+  "verb_phrase_nodes": [
+    {{
+      "id": "v1",
+      "phrase": "present at",
+      "questions": [
+        {{
+          "id": "q1",
+          "text": "Who presented [something]?",
+          "answers": ["e1"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2"]
+        }},
+        {{
+          "id": "q2",
+          "text": "What was presented?",
+          "answers": ["e4"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2"]
+        }},
+        {{
+          "id": "q3",
+          "text": "Where did [someone] present [something]?",
+          "answers": ["e3"],
+          "speaker_id": "Yigit",
+          "evidence_turn_ids": ["D1:2"]
+        }},
+        {{
+          "id": "q4",
+          "text": "When did [someone] present [something]?",
+          "answers": ["None"],
+          "speaker_id": null,
+          "evidence_turn_ids": []
+        }}
+      ]
+    }},
+    {{
+      "id": "v2",
+      "phrase": "submit to",
+      "questions": [
+        {{
+          "id": "q5",
+          "text": "Who submitted [something]?",
+          "answers": ["e2"],
+          "speaker_id": "Mark",
+          "evidence_turn_ids": ["D1:9"]
+        }},
+        {{
+          "id": "q6",
+          "text": "What was submitted?",
+          "answers": ["None"],
+          "speaker_id": null,
+          "evidence_turn_ids": []
+        }},
+        {{
+          "id": "q7",
+          "text": "Where was [something] submitted?",
+          "answers": ["e6"],
+          "speaker_id": "Mark",
+          "evidence_turn_ids": ["D1:9"]
+        }},
+        {{
+          "id": "q8",
+          "text": "When was [something] submitted?",
+          "answers": ["TEXT:last month"],
+          "speaker_id": "Mark",
+          "evidence_turn_ids": ["D1:9"]
+        }}
+      ]
+    }}
+  ]
 }}
 ```
 """

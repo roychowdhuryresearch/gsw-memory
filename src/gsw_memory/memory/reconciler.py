@@ -44,6 +44,7 @@ class Reconciler:
         )
 
         self.global_memory = None
+        self._last_entity_merge_map: Dict[str, str] = {}
 
     @classmethod
     def with_strategy(
@@ -63,6 +64,7 @@ class Reconciler:
         reconciler.matching_strategy = matching_strategy
         reconciler.entity_index = entity_index
         reconciler.global_memory = None
+        reconciler._last_entity_merge_map = {}
         return reconciler
 
     def reconcile(
@@ -103,6 +105,7 @@ class Reconciler:
         entity_merge_map, space_merge_map, time_merge_map = self._merge_entities(
             verified_entity_pairs, new_gsw
         )
+        self._last_entity_merge_map = entity_merge_map
 
         # Step 5: Add unmerged entities to global memory
         self._add_unmerged_entities(new_gsw, entity_merge_map)
@@ -232,7 +235,7 @@ class Reconciler:
                 merged_new_entity_ids.add(new_entity.id)
                 entity_merge_map[new_entity.id] = old_entity.id
 
-                # Handle space/time node associations
+                # Handle space/time node associations — only merge if same value
                 if self.global_memory.space_edges and new_gsw.space_edges:
                     old_space_id = None
                     new_space_id = None
@@ -246,7 +249,13 @@ class Reconciler:
                             new_space_id = space_id
 
                     if old_space_id and new_space_id:
-                        space_merge_map[new_space_id] = old_space_id
+                        old_space_node = self.global_memory.get_space_node_by_id(old_space_id)
+                        new_space_node = next(
+                            (s for s in new_gsw.space_nodes if s.id == new_space_id), None
+                        )
+                        if (old_space_node and new_space_node
+                                and old_space_node.current_name == new_space_node.current_name):
+                            space_merge_map[new_space_id] = old_space_id
 
                 if self.global_memory.time_edges and new_gsw.time_edges:
                     old_time_id = None
@@ -261,7 +270,13 @@ class Reconciler:
                             new_time_id = time_id
 
                     if old_time_id and new_time_id:
-                        time_merge_map[new_time_id] = old_time_id
+                        old_time_node = self.global_memory.get_time_node_by_id(old_time_id)
+                        new_time_node = next(
+                            (t for t in new_gsw.time_nodes if t.id == new_time_id), None
+                        )
+                        if (old_time_node and new_time_node
+                                and old_time_node.current_name == new_time_node.current_name):
+                            time_merge_map[new_time_id] = old_time_id
 
         return entity_merge_map, space_merge_map, time_merge_map
 
@@ -310,7 +325,7 @@ class Reconciler:
     ):
         """Update space and time edges with final IDs."""
         # Update space edges
-        existing_global_space_edges = set(self.global_memory.space_edges)
+        existing_global_space_edges = set(tuple(e) for e in self.global_memory.space_edges)
         for original_entity_id, original_space_id in new_gsw.space_edges:
             final_entity_id = entity_merge_map.get(
                 original_entity_id, original_entity_id
@@ -323,7 +338,7 @@ class Reconciler:
                 existing_global_space_edges.add(final_space_edge)
 
         # Update time edges
-        existing_global_time_edges = set(self.global_memory.time_edges)
+        existing_global_time_edges = set(tuple(e) for e in self.global_memory.time_edges)
         for original_entity_id, original_time_id in new_gsw.time_edges:
             final_entity_id = entity_merge_map.get(
                 original_entity_id, original_entity_id
