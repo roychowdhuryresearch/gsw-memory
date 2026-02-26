@@ -1,4 +1,4 @@
-# veRL GRPO + LoRA config for Qwen3-30B-A3B-Thinking
+# veRL GRPO + LoRA config for Qwen3-8B (dense)
 #
 # Run with (--config-dir ADDS to Hydra search path; --config-path would replace it):
 #   python3 -m verl.trainer.main_ppo \
@@ -30,13 +30,11 @@ defaults:
 actor_rollout_ref:
   model:
     # Download goes to HF_HOME — run with HF_HOME=/mnt/SSD1/huggingface_cache
-    path: Qwen/Qwen3-30B-A3B-Thinking-2507
-    # LoRA — high rank for complex multi-step tool-use reasoning
+    path: Qwen/Qwen3-8B
     lora_rank: 256
     lora_alpha: 512
     target_modules: all-linear
     trust_remote_code: true
-    # use_shm: false — copying 60+ GB dense model to /dev/shm would exhaust RAM
     use_shm: false
     override_config:
       attn_implementation: flash_attention_2
@@ -45,11 +43,10 @@ actor_rollout_ref:
   rollout:
     name: vllm
     load_format: safetensors
-    tensor_model_parallel_size: 4
-    # 47.4 GB total - ~29 GB FSDP weights = ~18 GB free; 0.35 × 47.4 ≈ 16.6 GB for KV cache
-    gpu_memory_utilization: 0.35
-    max_model_len: 16384
-    # GRPO group size — 4 on A6000s (increase to 8 if VRAM allows)
+    tensor_model_parallel_size: 2
+    gpu_memory_utilization: 0.6
+
+    # GRPO group size
     n: 4
     temperature: 0.6
     top_p: 0.95
@@ -57,10 +54,10 @@ actor_rollout_ref:
     do_sample: true
     # log_prob pass micro-batch size (required when use_dynamic_bsz=false)
     log_prob_micro_batch_size_per_gpu: 1
-    # Multi-turn: real GSW tool execution via GSWInteraction
+    # Multi-turn: real GSW tool execution via native veRL tools
     multi_turn:
       enable: true
-      interaction_config_path: /home/yigit/codebase/gsw-memory/conf/rl/gsw_interaction.yaml
+      tool_config_path: /home/yigit/codebase/gsw-memory/conf/rl/gsw_tool_config.yaml
       max_assistant_turns: 30
       # GSW tool responses can be verbose; increase from default 256
       max_tool_response_length: 2048
@@ -109,8 +106,8 @@ data:
   max_response_length: 8192
 
 # ---------------------------------------------------------------------------
-# Reward: provided by GSWInteraction.calculate_score() at episode end.
-# custom_reward_function is NOT used — reward comes from the interaction class.
+# Reward: tool_reward from GSWBaseTool.execute() (bridge-F1 on terminal step)
+# + EM reward from NaiveRewardManager (searchR1_musique)
 # ---------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------
@@ -123,7 +120,7 @@ trainer:
   save_freq: 200
   val_before_train: false
   project_name: gsw-rlvr
-  experiment_name: qwen3-30b-a3b-grpo-lora
+  experiment_name: qwen3-8b-grpo-lora
   logger:
     - console
     - wandb

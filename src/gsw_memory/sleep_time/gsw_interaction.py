@@ -250,11 +250,7 @@ class GSWInteraction(BaseInteraction):
         """Build a GSWEnvironment from a list of GSW directory paths."""
         from .environment import GSWEnvironment
 
-        # Import EntitySearcher here to avoid top-level circular imports
-        try:
-            from gsw_memory.qa.agentic_agent import EntitySearcher  # type: ignore
-        except ImportError:
-            from gsw_memory.sleep_time.tools import EntitySearcher  # type: ignore
+        from gsw_memory.sleep_time.entity_search import EntitySearcher
 
         # Use the first gsw_dir as the primary search path.
         # GSWTools / EntitySearcher can be pointed at a parent directory

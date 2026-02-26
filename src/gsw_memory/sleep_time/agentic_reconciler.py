@@ -500,7 +500,6 @@ class AgenticReconciler:
                 "tool_choice": "auto",
                 "temperature": 0.6,   # Focused reasoning
                 "top_p": 0.95,        # Nucleus sampling
-                "max_tokens": 32768,
             }
 
             # vLLM-specific parameters (OpenAI-compatible server supports these extra sampling params)
@@ -509,6 +508,7 @@ class AgenticReconciler:
                 api_params["extra_body"] = {          # vLLM extensions — must go via extra_body (not in OpenAI SDK signature)
                     "top_k": 20,                      # Limit vocabulary per step for conciseness
                     "min_p": 0.0,                     # Minimum probability threshold
+                    "enable_reasoning": True,         # Return <think> content in reasoning_content field
                 }
 
             # Together AI-specific parameters (not supported by OpenAI)
@@ -530,9 +530,11 @@ class AgenticReconciler:
             messages.append(assistant_message)
 
             # Callback: Agent thinking (chain-of-thought reasoning)
-            # For GPT-OSS models, reasoning is in a separate 'reasoning' field
+            # vLLM returns thinking in 'reasoning_content', Together AI in 'reasoning'
             reasoning_content = None
-            if hasattr(assistant_message, 'reasoning') and assistant_message.reasoning:
+            if hasattr(assistant_message, 'reasoning_content') and assistant_message.reasoning_content:
+                reasoning_content = assistant_message.reasoning_content
+            elif hasattr(assistant_message, 'reasoning') and assistant_message.reasoning:
                 reasoning_content = assistant_message.reasoning
             elif assistant_message.content:
                 reasoning_content = assistant_message.content

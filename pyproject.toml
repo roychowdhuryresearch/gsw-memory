@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "Shreyas Rajesh", email = "shreyasrajesh38@g.ucla.edu" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.14"
 dependencies = [
     "bespokelabs-curator>=0.1.25",
     "editables>=0.5",
@@ -22,8 +22,9 @@ dependencies = [
     "numpy==1.26.4",
     "omegaconf>=2.3.0",
     "openai>=1.82.0",
+    "openpipe-art[backend]>=0.5.4",
     "pandas>=2.2.2",
-    "peft>=0.17.1",
+    "peft==0.17.1",
     "plotly>=6.5.2",
     "pyarrow>=21.0.0",
     "pydantic>=2.11.5",
@@ -38,6 +39,7 @@ dependencies = [
     "tqdm>=4.67.1",
     "trl>=0.25.0",
     "unsloth>=2025.9.9",
+    "unsloth-zoo>=2025.10.3",
     "verl>=0.7.0",
     "vllm>=0.10.0",
     "wandb>=0.22.3",
@@ -49,6 +51,14 @@ gsw-memory = "gsw_memory:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.uv]
+override-dependencies = [
+    "litellm>=1.71.1",
+    "trl>=0.25.0",
+    "wandb>=0.22.3",
+    "transformers>=4.56.1",
+]
 
 [dependency-groups]
 dev = [

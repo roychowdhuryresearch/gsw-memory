@@ -109,7 +109,7 @@ def main():
             gsw_dirs = ex.get("gsw_dirs", [])
             answer_aliases = ex.get("answer_aliases", [])
             decomposition = ex.get("decomposition", [])
-            extra_info = json.dumps({
+            extra_info = {
                 # veRL tool_agent_loop reads interaction_kwargs from here and
                 # passes them verbatim to GSWInteraction.start_interaction()
                 "interaction_kwargs": {
@@ -124,12 +124,17 @@ def main():
                 "decomposition": decomposition,
                 "gsw_dirs": gsw_dirs,
                 "support_doc_indices": ex.get("support_doc_indices", []),
-            })
+            }
             rows.append({
                 "prompt": json.dumps(prompt),   # serialized chat messages
                 "ground_truth": ex["answer"],
-                "data_source": "musique",
+                "data_source": "searchR1_musique",
                 "extra_info": extra_info,
+                # veRL NaiveRewardManager reads ground_truth from
+                # non_tensor_batch["reward_model"]["ground_truth"];
+                # top-level parquet columns become non_tensor_batch keys.
+                # search_r1_like_qa_em.compute_score expects ground_truth={"target": ...}
+                "reward_model": {"ground_truth": {"target": ex["answer"]}},
                 # Metadata (not used by veRL directly, useful for analysis)
                 "id": ex["id"],
                 "num_hops": ex.get("num_hops", 2),

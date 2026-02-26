@@ -42,7 +42,7 @@ load_dotenv()
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from playground.simple_entity_search import EntitySearcher
+from gsw_memory.sleep_time.entity_search import EntitySearcher
 from src.gsw_memory.sleep_time.tools import GSWTools
 from src.gsw_memory.sleep_time.agentic_reconciler import AgenticReconciler
 
@@ -913,7 +913,7 @@ def main():
                         help="Filter out generic entities (nationalities, years)")
 
     # Model configuration
-    parser.add_argument("--model", type=str, default="Qwen3-30B-A3B-Thinking-2507",
+    parser.add_argument("--model", type=str, default="Qwen/Qwen3-32B",
                         help="Model name (OpenAI: gpt-4o, gpt-4o-mini | Together AI: Qwen/Qwen3-235B-A22B-Thinking-2507, openai/gpt-oss-120b, meta-llama/... | vllm: any name when --base_url is set)")
     parser.add_argument("--base_url", type=str, default="http://127.0.0.1:6379/v1",
                         help="Base URL for OpenAI-compatible API server (e.g. http://127.0.0.1:6379/v1 for a local vllm instance). When set, the OpenAI client is used regardless of model name.")

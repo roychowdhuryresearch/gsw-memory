@@ -344,9 +344,7 @@ def train(cfg: TrainConfig):
     from peft import LoraConfig, get_peft_model, TaskType
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    # Lazy import EntitySearcher
-    sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "playground"))
-    from simple_entity_search import EntitySearcher  # type: ignore
+    from gsw_memory.sleep_time.entity_search import EntitySearcher
 
     output_dir = Path(cfg.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)

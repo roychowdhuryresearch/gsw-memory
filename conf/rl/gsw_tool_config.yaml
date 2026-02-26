@@ -1,0 +1,202 @@
+# veRL native tool config for GSW exploration tools.
+#
+# Each tool uses the same GSWBaseTool class; the tool name is set by
+# tool_schema.function.name. All tools share a GSWEnvironment per episode.
+#
+# Referenced by: rollout.multi_turn.tool_config_path in grpo_lora_qwen3.yaml
+
+tools:
+  # ---- Discovery ----
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: get_entity_documents
+        description: "Get list of document IDs that mention this entity."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity to search for"
+          required: [entity_name]
+
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: get_document_entities
+        description: "Get list of entities mentioned in this document."
+        parameters:
+          type: object
+          properties:
+            doc_id:
+              type: string
+              description: "Document ID (e.g., 'doc_3')"
+          required: [doc_id]
+
+  # ---- Context ----
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: get_entity_context
+        description: "Get all QA pairs, roles, states, and relationships for an entity. Pass doc_id as a string for single doc, or omit for merged context from all docs."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity to get context for"
+            doc_id:
+              type: string
+              description: "Optional document ID (e.g., 'doc_4'). Omit for merged context from all docs."
+          required: [entity_name]
+
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: reconcile_entity_across_docs
+        description: "Merge all information about an entity from all documents into unified view. Use this to see complete picture of an entity."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity to reconcile"
+          required: [entity_name]
+
+  # ---- Bridges ----
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: create_bridge_qa
+        description: "Create a bridge QA pair connecting information across documents."
+        parameters:
+          type: object
+          properties:
+            question:
+              type: string
+              description: "Bridge question"
+            answer:
+              type: string
+              description: "Bridge answer"
+            source_docs:
+              type: array
+              items:
+                type: string
+              description: "List of source document IDs"
+            reasoning:
+              type: string
+              description: "How this bridge was derived"
+            confidence:
+              type: number
+              description: "Confidence score (0-1, default 0.9)"
+            entities_involved:
+              type: array
+              items:
+                type: string
+              description: "Entities mentioned in bridge"
+          required: [question, answer, source_docs, reasoning]
+
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: get_bridge_statistics
+        description: "Get statistics on bridges created so far (total, coverage, quality)."
+        parameters:
+          type: object
+          properties: {}
+
+  # ---- Strategy ----
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: mark_entity_explored
+        description: "Mark an entity as explored. Call this when done exploring an entity."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity that was explored"
+            num_bridges_created:
+              type: integer
+              description: "Number of bridges created for this entity"
+          required: [entity_name]
+
+  # ---- Exploration Tracking ----
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: plan_entity_exploration
+        description: "Create exploration plan for entity showing all relationships to check. Call ONCE after reconcile_entity_across_docs."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity being explored"
+            relationships:
+              type: object
+              description: "merged_relationships dict from reconcile_entity_across_docs output"
+          required: [entity_name, relationships]
+
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: mark_relationship_explored
+        description: "Mark a relationship as explored after checking all its documents. Returns updated checklist."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Main entity being explored"
+            relationship_name:
+              type: string
+              description: "Name of the related entity just explored"
+            bridges_created:
+              type: integer
+              description: "Number of bridges created for this relationship"
+          required: [entity_name, relationship_name]
+
+  - class_name: gsw_memory.sleep_time.verl_tools.GSWBaseTool
+    config:
+      type: native
+    tool_schema:
+      type: function
+      function:
+        name: get_exploration_status
+        description: "Check which relationships explored vs pending. Use before mark_entity_explored to verify completeness."
+        parameters:
+          type: object
+          properties:
+            entity_name:
+              type: string
+              description: "Entity to check status for"
+          required: [entity_name]
