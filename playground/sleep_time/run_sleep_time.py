@@ -40,7 +40,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Add parent directory to path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from playground.simple_entity_search import EntitySearcher
 from src.gsw_memory.sleep_time.tools import GSWTools
@@ -540,31 +540,17 @@ class SleepTimeRunner:
 
     def explore_entities(self):
         """Main exploration loop."""
-        # Determine which entities to explore
+        # Check if seed entities are provided — if not, let agent discover autonomously
+        if not getattr(self.args, 'seed_entities_file', None):
+            return self._explore_corpus_autonomous()
+
+        # Seed file provided — use entity-by-entity exploration
         tools = GSWTools(self.entity_searcher)
 
-        # Get candidate entities
-        if self.args.filter_generic:
-            # Filter out generic entities (nationalities, years, single words)
-            all_entities = tools.browse_entities(
-                sort_by="degree",
-                min_docs=self.args.min_docs,
-                limit=self.args.num_entities * 3  # Get more to filter
-            )
-
-            # Filter logic: exclude single words that are likely generic
-            generic_terms = {"american", "british", "australian", "english", "french", "german"}
-            filtered_entities = [
-                e for e in all_entities
-                if e["name"] not in generic_terms and not e["name"].isdigit()
-            ]
-            entities_to_explore = filtered_entities[:self.args.num_entities]
-        else:
-            entities_to_explore = tools.browse_entities(
-                sort_by="degree",
-                min_docs=self.args.min_docs,
-                limit=self.args.num_entities
-            )
+        with open(self.args.seed_entities_file) as f:
+            seed_names = json.load(f)
+        entities_to_explore = [{"name": name} for name in seed_names]
+        console.print(f"[cyan]Loaded {len(entities_to_explore)} seed entities from {self.args.seed_entities_file}[/cyan]")
 
         # Filter out already explored entities
         entities_to_explore = [
@@ -704,6 +690,44 @@ class SleepTimeRunner:
 
         console.print(f"\n[green]✓ Exploration complete[/green]")
         self.logger.info(f"Exploration complete: {len(self.explored_entities)} entities explored")
+
+    def _explore_corpus_autonomous(self):
+        """Let agent discover and explore entities autonomously."""
+        console.print(f"\n[bold cyan]Agent will discover entities using discovery tools[/bold cyan]")
+
+        # Suppress curator progress bars in verbose mode
+        if self.args.verbose:
+            os.environ["CURATOR_DISABLE_PROGRESS"] = "1"
+
+        if self.args.verbose:
+            display = InteractiveDisplay(console, show_thinking=self.args.show_thinking)
+            self.agent = self.initialize_agent(display)
+
+        try:
+            result = self.agent.explore_entity(max_iterations=self.args.max_iterations)
+
+            self.all_bridges = self.agent.get_all_bridges()
+            self.explored_entities = list(self.agent.tools.explored_entities)
+
+            self.logger.info(
+                f"Autonomous exploration complete: {result['iterations']} iterations, "
+                f"{result['tool_calls']} tool calls, {len(self.all_bridges)} bridges, "
+                f"{len(self.explored_entities)} entities explored"
+            )
+
+            self._save_checkpoint(entity_count=len(self.explored_entities))
+
+        except Exception as e:
+            self.logger.error(f"Autonomous exploration failed: {e}", exc_info=True)
+            self.error_logger.error(f"Autonomous exploration | Error: {e}\n{traceback.format_exc()}")
+            self.errors.append({
+                "entity": "corpus",
+                "error": str(e),
+                "timestamp": datetime.now().isoformat()
+            })
+
+        console.print(f"\n[green]✓ Exploration complete[/green]")
+        self.logger.info(f"Exploration complete: {len(self.all_bridges)} bridges created")
 
     def _explore_entity_with_timeout(self, entity_name: str, timeout: int = 300) -> Dict[str, Any]:
         """
@@ -911,11 +935,13 @@ def main():
                         help="Minimum documents an entity must appear in")
     parser.add_argument("--filter_generic", action="store_true",
                         help="Filter out generic entities (nationalities, years)")
+    parser.add_argument("--seed_entities_file", type=str, default=None,
+                        help="JSON file with seed entity names (list of strings). Overrides browse_entities.")
 
     # Model configuration
     parser.add_argument("--model", type=str, default="Qwen3-30B-A3B-Thinking-2507",
                         help="Model name (OpenAI: gpt-4o, gpt-4o-mini | Together AI: Qwen/Qwen3-235B-A22B-Thinking-2507, openai/gpt-oss-120b, meta-llama/... | vllm: any name when --base_url is set)")
-    parser.add_argument("--base_url", type=str, default="http://127.0.0.1:6379/v1",
+    parser.add_argument("--base_url", type=str, default=None,
                         help="Base URL for OpenAI-compatible API server (e.g. http://127.0.0.1:6379/v1 for a local vllm instance). When set, the OpenAI client is used regardless of model name.")
     parser.add_argument("--max_tokens", type=int, default=500_000,
                         help="Maximum token budget")

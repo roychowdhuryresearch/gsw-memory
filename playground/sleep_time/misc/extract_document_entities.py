@@ -4,30 +4,33 @@ Extract important named entities from each document using the GSW entity list
 and document text as context for an LLM call.
 
 For each document the script:
-1. Reads the raw document text from a corpus JSON file (indexed by doc position).
+1. Reads the raw document text from a corpus JSON file (indexed by doc position)
+   OR from individual article .txt files (FRAMES mode).
 2. Reads the GSW entity list (names + roles) from the networks/ directory.
 3. Sends both to an LLM and asks it to identify the most important/distinctive
    named entities (people, places, organisations).
 4. Saves the structured result to an output JSON file.
 
 Usage:
+    # Corpus mode (2wiki, musique, etc.)
     python extract_document_entities.py \
         --gsw_path /mnt/SSD1/shreyas/SM_GSW/2wiki/networks \
         --corpus_path playground_data/2wikimultihopqa_corpus.json \
         --num_docs 50 \
         --output doc_entities.json
 
-    # All docs, gpt-4o-mini (default):
+    # FRAMES mode (individual article .txt files + title mapping)
     python extract_document_entities.py \
-        --gsw_path /mnt/SSD1/shreyas/SM_GSW/musique/networks \
-        --corpus_path playground_data/musique_corpus.json
+        --source frames \
+        --gsw_path data/sleep_time/frames/networks_output/frames_20260228_222500/networks \
+        --output doc_entities_frames.json
 """
 
 import argparse
 import json
 import math
+import re
 import sys
-from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
@@ -36,6 +39,13 @@ from rich.console import Console
 from rich.table import Table
 
 load_dotenv()
+
+# ---------------------------------------------------------------------------
+# FRAMES defaults
+# ---------------------------------------------------------------------------
+FRAMES_DATA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "sleep_time" / "frames"
+FRAMES_ARTICLES_DIR = FRAMES_DATA_DIR / "articles" / "individual"
+FRAMES_TITLE_MAPPING = FRAMES_DATA_DIR / "title_to_doc_idx.json"
 
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -158,6 +168,63 @@ def load_corpus(corpus_path: str) -> List[Dict[str, str]]:
     return data
 
 
+def _sanitize_filename(title: str) -> str:
+    """Convert article title to a safe filename (matches generate_gsws_frames.py)."""
+    name = re.sub(r'[<>:"/\\|?*]', '_', title)
+    name = name.strip('. ')
+    return name[:200]
+
+
+def load_frames_corpus(
+    gsw_path: str,
+    articles_dir: Path = FRAMES_ARTICLES_DIR,
+    title_mapping_path: Path = FRAMES_TITLE_MAPPING,
+    num_docs: int = -1,
+) -> List[Dict[str, str]]:
+    """Load FRAMES articles from individual .txt files using title_to_doc_idx.json.
+
+    Returns a list aligned by doc index (same format as load_corpus).
+    """
+    if not title_mapping_path.exists():
+        console.print(f"[red]Title mapping not found: {title_mapping_path}[/red]")
+        sys.exit(1)
+    with open(title_mapping_path) as f:
+        title_to_idx: Dict[str, int] = json.load(f)
+
+    # Invert: doc_idx -> title
+    idx_to_title = {v: k for k, v in title_to_idx.items()}
+
+    # Discover which doc indices exist in the GSW path
+    base = Path(gsw_path)
+    doc_dirs = sorted(base.glob("doc_*"), key=lambda p: int(p.name.replace("doc_", "")))
+    if num_docs != -1:
+        doc_dirs = doc_dirs[:num_docs]
+    max_idx = max(int(d.name.replace("doc_", "")) for d in doc_dirs) if doc_dirs else 0
+
+    # Build corpus list aligned by index
+    corpus: List[Dict[str, str]] = [{"title": "", "text": ""} for _ in range(max_idx + 1)]
+    loaded = 0
+    missing = 0
+    for doc_dir in doc_dirs:
+        idx = int(doc_dir.name.replace("doc_", ""))
+        title = idx_to_title.get(idx, "")
+        if not title:
+            console.print(f"[yellow]Warning: no title mapping for doc_{idx}[/yellow]")
+            missing += 1
+            continue
+        txt_path = articles_dir / (_sanitize_filename(title) + ".txt")
+        if txt_path.exists():
+            text = txt_path.read_text(encoding="utf-8")
+            corpus[idx] = {"title": title, "text": text}
+            loaded += 1
+        else:
+            console.print(f"[yellow]Warning: article file not found for '{title}': {txt_path}[/yellow]")
+            missing += 1
+
+    console.print(f"[green]✓ Loaded FRAMES corpus: {loaded} articles (from {len(doc_dirs)} doc dirs, {missing} missing)[/green]")
+    return corpus
+
+
 def load_gsw_entities_per_doc(
     gsw_path: str,
     num_docs: int = -1,
@@ -165,9 +232,10 @@ def load_gsw_entities_per_doc(
     """
     Collect entities from all GSW chunk files under each doc_* directory.
     Deduplicates by entity name, merging roles across chunks.
+    Counts VP question-answer references per entity for bridge scoring.
 
     Returns:
-        {doc_id: [{"name": str, "roles": [str]}, ...]}
+        {doc_id: [{"name": str, "roles": [str], "vp_count": int}, ...]}
     """
     base = Path(gsw_path)
     if not base.exists():
@@ -186,15 +254,21 @@ def load_gsw_entities_per_doc(
     for doc_dir in doc_dirs:
         doc_id = doc_dir.name
         seen: Dict[str, List[str]] = {}  # name -> roles (deduplicated)
+        id_to_name: Dict[str, str] = {}  # entity id -> name
+        vp_counts: Dict[str, int] = {}   # entity name -> VP answer count
 
         for gsw_file in sorted(doc_dir.glob("gsw_*.json")):
             try:
                 with open(gsw_file) as f:
                     data = json.load(f)
+
+                # Pass 1: collect entities and build id->name map
                 for entity in data.get("entity_nodes", []):
                     name = entity.get("name", "").strip()
                     if not name:
                         continue
+                    eid = entity.get("id", "")
+                    id_to_name[eid] = name
                     roles = [
                         r.get("role", "")
                         for r in entity.get("roles", [])
@@ -202,13 +276,25 @@ def load_gsw_entities_per_doc(
                     ]
                     if name not in seen:
                         seen[name] = roles
+                        vp_counts[name] = 0
                     else:
-                        # Merge roles across chunks
                         seen[name] = list(set(seen[name] + roles))
+
+                # Pass 2: count VP question-answer references
+                for vp in data.get("verb_phrase_nodes", []):
+                    for question in vp.get("questions", []):
+                        for answer_id in question.get("answers", []):
+                            ename = id_to_name.get(answer_id, "")
+                            if ename and ename in vp_counts:
+                                vp_counts[ename] += 1
+
             except Exception as e:
                 console.print(f"[yellow]Warning: could not read {gsw_file}: {e}[/yellow]")
 
-        result[doc_id] = [{"name": n, "roles": r} for n, r in seen.items()]
+        result[doc_id] = [
+            {"name": n, "roles": r, "vp_count": vp_counts.get(n, 0)}
+            for n, r in seen.items()
+        ]
 
     console.print(f"[green]✓ Loaded GSW entities for {len(result)} documents[/green]")
     return result
@@ -254,45 +340,54 @@ def build_inputs(
 
 
 # ---------------------------------------------------------------------------
-# IDF reranking
+# Bridge scoring: DF × avg VP connections
 # ---------------------------------------------------------------------------
 
-def compute_idf(results: Dict[str, Any]) -> Dict[str, float]:
+def compute_entity_df(
+    gsw_entities: Dict[str, List[Dict[str, Any]]],
+) -> Dict[str, int]:
     """
-    Compute IDF score for each entity name across all documents.
+    Compute document frequency for each entity name.
 
-    idf(entity) = log(N / df(entity))
-
-    Entities that appear in many documents (like "Japan", "United States")
-    get a low IDF; rare/distinctive entities get a high IDF.
+    Returns:
+        {entity_name: number_of_documents_containing_entity}
     """
-    N = len(results)
-    if N == 0:
-        return {}
-    df: Counter = Counter()
-    for entry in results.values():
-        for e in entry["entities"]:
-            df[e["name"]] += 1
-    return {name: math.log(N / count) for name, count in df.items()}
+    df: Dict[str, int] = {}
+    for entities in gsw_entities.values():
+        for e in entities:
+            name = e["name"]
+            df[name] = df.get(name, 0) + 1
+    return df
 
 
-def apply_idf_reranking(
+def apply_bridge_reranking(
     results: Dict[str, Any],
-    idf: Dict[str, float],
+    entity_df: Dict[str, int],
     top_k: int,
+    min_df: int = 2,
 ) -> Dict[str, Any]:
     """
-    Rerank entities within each document by final_score = importance × idf.
+    Rerank entities within each document by bridge_score = log2(DF+1) × local_vp_count.
 
-    Adds "idf" and "final_score" fields to each entity dict, then re-sorts
-    and trims to top_k.
+    - Filters out entities with df < min_df (can't bridge if only in 1 doc)
+    - log2(DF+1) dampens ultra-common entities (e.g. "England" df=144)
+    - local_vp_count rewards entities that are semantically rich in THIS document
     """
+    total_before = 0
+    total_after = 0
     for entry in results.values():
+        total_before += len(entry["entities"])
         for e in entry["entities"]:
-            e["idf"] = round(idf.get(e["name"], 0.0), 3)
-            e["final_score"] = round(e["importance"] * e["idf"], 3)
-        entry["entities"].sort(key=lambda x: x["final_score"], reverse=True)
+            df = entity_df.get(e["name"], 0)
+            local_vp = e.get("vp_count", 0)
+            e["df"] = df
+            e["bridge_score"] = round(math.log2(df + 1) * local_vp, 2)
+        # Filter: only keep entities appearing in min_df+ documents
+        entry["entities"] = [e for e in entry["entities"] if e["df"] >= min_df]
+        entry["entities"].sort(key=lambda x: x["bridge_score"], reverse=True)
         entry["entities"] = entry["entities"][:top_k]
+        total_after += len(entry["entities"])
+    console.print(f"  Filtered df<{min_df}: {total_before} → {total_after} entities ({total_before - total_after} removed)")
     return results
 
 
@@ -305,23 +400,23 @@ def print_summary(results: Dict[str, Any]) -> None:
     table = Table(title="Extracted Entities — Sample", show_lines=True)
     table.add_column("Doc", style="cyan", width=7)
     table.add_column("Title", style="white", width=22)
-    table.add_column("Total", style="green", width=6)
-    table.add_column("Top People", style="yellow", width=35)
-    table.add_column("Top Places", style="magenta", width=25)
+    table.add_column("#", style="green", width=3)
+    table.add_column("Top Entities (score | vp | df)", style="yellow", width=65)
 
     shown = 0
     for doc_id, entry in sorted(results.items(), key=lambda x: int(x[0].replace("doc_", ""))):
         if shown >= 20:
             break
         entities = entry.get("entities", [])
-        people = [e["name"] for e in entities if e["type"] == "PERSON"][:3]
-        places = [e["name"] for e in entities if e["type"] == "PLACE"][:2]
+        top3 = [
+            f"{e['name']} ({e.get('bridge_score', 0):.0f}|vp={e.get('vp_count', 0)}|df={e.get('df', 0)})"
+            for e in entities[:3]
+        ]
         table.add_row(
             doc_id,
             entry.get("title", "")[:22],
             str(len(entities)),
-            ", ".join(people) or "-",
-            ", ".join(places) or "-",
+            ", ".join(top3) or "-",
         )
         shown += 1
 
@@ -339,12 +434,24 @@ def parse_args() -> argparse.Namespace:
         description="Extract important named entities per document using GSW + LLM"
     )
     parser.add_argument(
+        "--source", choices=["corpus", "frames"], default="corpus",
+        help="Data source: 'corpus' (JSON list) or 'frames' (individual .txt articles). Default: corpus"
+    )
+    parser.add_argument(
         "--gsw_path", required=True,
         help="Path to networks/ directory containing doc_*/gsw_*.json files"
     )
     parser.add_argument(
-        "--corpus_path", required=True,
-        help="Path to corpus JSON: list of {title, text} dicts aligned by index"
+        "--corpus_path", default=None,
+        help="Path to corpus JSON: list of {title, text} dicts aligned by index (required for --source corpus)"
+    )
+    parser.add_argument(
+        "--articles_dir", default=None,
+        help=f"FRAMES: path to individual article .txt files (default: {FRAMES_ARTICLES_DIR})"
+    )
+    parser.add_argument(
+        "--title_mapping", default=None,
+        help=f"FRAMES: path to title_to_doc_idx.json (default: {FRAMES_TITLE_MAPPING})"
     )
     parser.add_argument(
         "--num_docs", type=int, default=-1,
@@ -363,75 +470,129 @@ def parse_args() -> argparse.Namespace:
         help="Output JSON file path (default: doc_entities.json)"
     )
     parser.add_argument(
-        "--idf_top_k", type=int, default=None,
+        "--rerank_top_k", type=int, default=None,
         help=(
-            "After IDF reranking, keep only this many entities per document. "
+            "After bridge-score reranking, keep only this many entities per document. "
             "Defaults to --top_k if not set."
         ),
     )
-    return parser.parse_args()
+    parser.add_argument(
+        "--no_llm", action="store_true",
+        help="Skip LLM extraction; use all GSW entities directly (type=OTHER, importance=3)"
+    )
+    args = parser.parse_args()
+
+    # Validate: corpus mode requires --corpus_path
+    if args.source == "corpus" and args.corpus_path is None:
+        parser.error("--corpus_path is required when --source=corpus")
+
+    return args
+
+
+def build_results_without_llm(
+    gsw_entities: Dict[str, List[Dict[str, Any]]],
+    corpus: List[Dict[str, str]],
+) -> Dict[str, Any]:
+    """Build results directly from GSW entities without LLM classification."""
+    results: Dict[str, Any] = {}
+    for doc_id, entities in gsw_entities.items():
+        idx = int(doc_id.replace("doc_", ""))
+        title = corpus[idx]["title"] if idx < len(corpus) else ""
+        results[doc_id] = {
+            "title": title,
+            "entities": [
+                {
+                    "name": e["name"],
+                    "type": "OTHER",
+                    "importance": 3,
+                    "vp_count": e.get("vp_count", 0),
+                }
+                for e in entities
+            ],
+        }
+    return results
 
 
 def main():
     args = parse_args()
 
-    idf_top_k = args.idf_top_k if args.idf_top_k is not None else args.top_k
+    rerank_top_k = args.rerank_top_k if args.rerank_top_k is not None else args.top_k
 
     console.print("\n[bold cyan]Document Entity Extraction[/bold cyan]")
+    console.print(f"  Source:     {args.source}")
     console.print(f"  GSW path:   {args.gsw_path}")
-    console.print(f"  Corpus:     {args.corpus_path}")
+    if args.source == "corpus":
+        console.print(f"  Corpus:     {args.corpus_path}")
+    else:
+        articles_dir = Path(args.articles_dir) if args.articles_dir else FRAMES_ARTICLES_DIR
+        title_mapping = Path(args.title_mapping) if args.title_mapping else FRAMES_TITLE_MAPPING
+        console.print(f"  Articles:   {articles_dir}")
+        console.print(f"  Mapping:    {title_mapping}")
     console.print(f"  Model:      {args.model}")
     console.print(f"  Top-K:      {args.top_k}  (LLM candidates)")
-    console.print(f"  IDF Top-K:  {idf_top_k}  (after TF-IDF reranking)")
+    console.print(f"  Rerank K:   {rerank_top_k}  (after bridge-score reranking)")
     console.print(f"  Num docs:   {'all' if args.num_docs == -1 else args.num_docs}")
     console.print(f"  Output:     {args.output}\n")
 
     # 1. Load data
-    corpus = load_corpus(args.corpus_path)
+    if args.source == "frames":
+        corpus = load_frames_corpus(
+            gsw_path=args.gsw_path,
+            articles_dir=articles_dir,
+            title_mapping_path=title_mapping,
+            num_docs=args.num_docs,
+        )
+    else:
+        corpus = load_corpus(args.corpus_path)
     gsw_entities = load_gsw_entities_per_doc(args.gsw_path, args.num_docs)
 
-    # 2. Build LLM inputs (one dict per document)
-    inputs = build_inputs(corpus, gsw_entities)
-    console.print(f"[cyan]Built {len(inputs)} document inputs[/cyan]")
+    if args.no_llm:
+        # Skip LLM — use raw GSW entities directly
+        console.print("[yellow]LLM disabled (--no_llm): using raw GSW entities[/yellow]")
+        results = build_results_without_llm(gsw_entities, corpus)
+    else:
+        # 2. Build LLM inputs (one dict per document)
+        inputs = build_inputs(corpus, gsw_entities)
+        console.print(f"[cyan]Built {len(inputs)} document inputs[/cyan]")
 
-    if not inputs:
-        console.print(
-            "[red]No documents to process. "
-            "Check that --gsw_path and --corpus_path are aligned (doc_i → corpus[i]).[/red]"
+        if not inputs:
+            console.print(
+                "[red]No documents to process. "
+                "Check that --gsw_path and --corpus_path are aligned (doc_i → corpus[i]).[/red]"
+            )
+            sys.exit(1)
+
+        # 3. Run LLM extraction via curator (parallelised automatically)
+        console.print(f"\n[bold]Running LLM entity extraction with {args.model}...[/bold]")
+
+        extractor = EntityExtractor(
+            top_k=args.top_k,
+            model_name=args.model,
+            response_format=DocEntities,   # structured output — same as GSWOperator
+            backend="openai",
         )
-        sys.exit(1)
 
-    # 3. Run LLM extraction via curator (parallelised automatically)
-    console.print(f"\n[bold]Running LLM entity extraction with {args.model}...[/bold]")
+        dataset = extractor(inputs)
 
-    extractor = EntityExtractor(
-        top_k=args.top_k,
-        model_name=args.model,
-        response_format=DocEntities,   # structured output — same as GSWOperator
-        backend="openai",
-    )
+        # 4. Collect results from .dataset iterator
+        results: Dict[str, Any] = {}
+        for row in dataset.dataset:
+            doc_id = row["doc_id"]
+            results[doc_id] = {
+                "title": row["title"],
+                "entities": row["entities"],
+            }
 
-    dataset = extractor(inputs)
+    # 5. Bridge scoring — reward cross-document entities with rich local VP connections
+    console.print("[cyan]Computing bridge scores: log2(DF+1) × local_vp...[/cyan]")
+    entity_df = compute_entity_df(gsw_entities)
+    results = apply_bridge_reranking(results, entity_df, top_k=rerank_top_k)
 
-    # 4. Collect results from .dataset iterator
-    results: Dict[str, Any] = {}
-    for row in dataset.dataset:
-        doc_id = row["doc_id"]
-        results[doc_id] = {
-            "title": row["title"],
-            "entities": row["entities"],
-        }
-
-    # 5. IDF reranking — penalise entities common across many docs
-    console.print("[cyan]Applying IDF reranking...[/cyan]")
-    idf = compute_idf(results)
-    results = apply_idf_reranking(results, idf, top_k=idf_top_k)
-
-    # Log the most penalised (common) entities so the user can verify
-    penalised = sorted(idf.items(), key=lambda x: x[1])[:10]
-    console.print("  Most common entities (lowest IDF, penalised most):")
-    for name, score in penalised:
-        console.print(f"    idf={score:.2f}  {name}")
+    # Log highest DF entities for reference
+    top_df = sorted(entity_df.items(), key=lambda x: x[1], reverse=True)[:10]
+    console.print("  Most cross-document entities (highest DF):")
+    for name, df in top_df:
+        console.print(f"    df={df:>4}  log2(df+1)={math.log2(df+1):.1f}  {name}")
 
     # 6. Write output
     output_path = Path(args.output)
@@ -443,8 +604,8 @@ def main():
 
     total_entities = sum(len(v["entities"]) for v in results.values())
     avg = total_entities / len(results) if results else 0
-    console.print(f"  Total entities (after IDF reranking) : {total_entities}")
-    console.print(f"  Average per document                 : {avg:.1f}")
+    console.print(f"  Total entities (after bridge reranking) : {total_entities}")
+    console.print(f"  Average per document                    : {avg:.1f}")
 
     print_summary(results)
 

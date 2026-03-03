@@ -271,7 +271,19 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-        if  "hosted_vllm" in self.model_name:
+        if "together_ai/" in self.model_name:
+            gsw_model = GSWOperator(
+                model_name=self.model_name,
+                backend="litellm",
+                backend_params={
+                    "require_all_responses": False,
+                    "max_tokens_per_minute": 200_000,
+                },
+                generation_params=self.generation_params,
+                prompt_type=self.prompt_type,
+                response_format=GSWStructure,
+            )
+        elif "hosted_vllm" in self.model_name:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             gsw_model = GSWOperator(
                 model_name=self.model_name,

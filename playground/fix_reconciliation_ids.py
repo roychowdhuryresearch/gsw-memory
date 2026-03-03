@@ -21,7 +21,7 @@ from gsw_memory.memory.models import GSWStructure
 load_dotenv()
 
 # Configuration
-GLOBAL_GSW_FILE = "/home/shreyas/NLP/SM/gensemworkspaces/gsw-memory/logs/full_2wiki_corpus_20250710_202211/gsw_output_global_ids/all_gsw_global_ids.json"
+GLOBAL_GSW_FILE = "/home/yigit/codebase/gsw-memory/data/sleep_time/frames/networks_output/frames_20260228_222500/gsw_output_global_ids/all_gsw_global_ids.json"
 
 
 def setup_corrected_logging():

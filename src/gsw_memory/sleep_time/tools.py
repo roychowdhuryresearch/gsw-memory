@@ -1,13 +1,14 @@
 """
 Tool implementations for agentic sleep-time GSW exploration.
 
-Provides 7 tools that enable an agent to freely explore GSW structures,
+Provides 11 tools that enable an agent to freely explore GSW structures,
 find implicit multi-hop connections, and create bridge QA pairs.
 
 Tools:
-- Discovery (2): get_entity_documents, get_document_entities
+- Discovery (4): get_entity_documents, get_document_entities, get_document_overlap_matrix, preview_cross_doc_connections
 - Context (2): get_entity_context, reconcile_entity_across_docs
 - Bridges (2): create_bridge_qa (supports batch creation), get_bridge_statistics
+- Planning (2): set_exploration_targets, get_exploration_targets
 - Strategy (1): mark_entity_explored
 """
 
@@ -38,6 +39,9 @@ class GSWTools:
 
         # Exploration tracking for systematic relationship coverage
         self.exploration_plans: Dict[str, Dict[str, Any]] = {}  # entity -> plan
+
+        # High-level exploration queue: which entities to explore and why
+        self.exploration_targets: List[Dict[str, Any]] = []
 
         # Build entity_to_docs mapping from entity_searcher.entities
         # entity_searcher.entities is a flat list where each entry has 'name' and 'doc_id'
@@ -219,6 +223,275 @@ class GSWTools:
 
         return neighbors
 
+    def get_document_overlap_matrix(self, min_shared: int = 1) -> Dict[str, Any]:
+        """
+        Show entity overlap between document pairs.
+
+        Returns doc pairs that share entities, sorted by overlap count descending.
+        Gives the agent structural awareness of how documents relate.
+
+        Args:
+            min_shared: Minimum shared entities to include a pair (default 1)
+
+        Returns:
+            Dict with num_docs, doc_pairs (sorted by shared_count desc),
+            and isolated_docs (docs sharing no entities with others).
+        """
+        # Build doc -> entity set mapping
+        doc_entity_sets: Dict[str, Set[str]] = {}
+        for entity_name, doc_ids in self.entity_to_docs.items():
+            for doc_id in doc_ids:
+                if doc_id not in doc_entity_sets:
+                    doc_entity_sets[doc_id] = set()
+                doc_entity_sets[doc_id].add(entity_name)
+
+        doc_ids = sorted(doc_entity_sets.keys())
+        connected_docs: Set[str] = set()
+        doc_pairs = []
+
+        for i in range(len(doc_ids)):
+            for j in range(i + 1, len(doc_ids)):
+                da, db = doc_ids[i], doc_ids[j]
+                shared = doc_entity_sets[da] & doc_entity_sets[db]
+                if len(shared) >= min_shared:
+                    doc_pairs.append({
+                        "doc_a": da,
+                        "doc_b": db,
+                        "shared_count": len(shared),
+                        "shared_entities": sorted(shared),
+                    })
+                    connected_docs.add(da)
+                    connected_docs.add(db)
+
+        doc_pairs.sort(key=lambda x: x["shared_count"], reverse=True)
+
+        all_docs = set(self.entity_searcher.gsw_by_doc_id.keys())
+        isolated = sorted(all_docs - connected_docs)
+
+        return {
+            "num_docs": len(all_docs),
+            "num_pairs": len(doc_pairs),
+            "doc_pairs": doc_pairs,
+            "isolated_docs": isolated,
+        }
+
+    def preview_cross_doc_connections(self, entity_name: str) -> Dict[str, Any]:
+        """
+        Quick preview of an entity's role in each document it appears in.
+
+        Much cheaper than reconcile_entity_across_docs. Shows key verb-phrase
+        relationships per doc so the agent can decide if deep exploration is worthwhile.
+
+        Args:
+            entity_name: Entity to preview
+
+        Returns:
+            Dict with per-doc relationship summaries and bridge_potential rating.
+        """
+        entity_normalized = entity_name.strip().lower()
+        docs = self.get_entity_documents(entity_name)
+
+        if not docs:
+            return {
+                "entity": entity_name,
+                "num_docs": 0,
+                "per_doc_preview": [],
+                "unique_relationships_across_docs": 0,
+                "bridge_potential": "none",
+            }
+
+        per_doc = []
+        all_relationships: Set[str] = set()
+        relationship_docs: Dict[str, Set[str]] = {}  # relationship -> set of doc_ids
+
+        for doc_id in docs:
+            if doc_id not in self.entity_searcher.gsw_by_doc_id:
+                continue
+
+            gsw = self.entity_searcher.gsw_by_doc_id[doc_id]
+
+            # Find entity node
+            entity_node = None
+            for e in gsw.entity_nodes:
+                if e.name.lower() == entity_normalized:
+                    entity_node = e
+                    break
+
+            if not entity_node:
+                continue
+
+            # Extract verb phrase relationships involving this entity
+            doc_relationships = []
+            num_qa = 0
+            for vp in gsw.verb_phrase_nodes:
+                for q in vp.questions:
+                    if entity_normalized in q.text.lower() or entity_node.id in q.answers:
+                        num_qa += 1
+                        # Build readable relationship string
+                        other_entities = []
+                        for ans_id in q.answers:
+                            for e in gsw.entity_nodes:
+                                if e.id == ans_id and e.name.lower() != entity_normalized:
+                                    other_entities.append(e.name)
+                        if other_entities:
+                            rel = f"{vp.phrase} {', '.join(other_entities)}"
+                            doc_relationships.append(rel)
+                            all_relationships.add(rel)
+                            if rel not in relationship_docs:
+                                relationship_docs[rel] = set()
+                            relationship_docs[rel].add(doc_id)
+
+            # Deduplicate and limit
+            unique_rels = list(dict.fromkeys(doc_relationships))[:5]
+            per_doc.append({
+                "doc_id": doc_id,
+                "key_relationships": unique_rels,
+                "num_qa_pairs": num_qa,
+            })
+
+        # Assess bridge potential
+        # High: diverse relationships that appear in different docs
+        unique_across = len(all_relationships)
+        docs_with_unique_rels = sum(
+            1 for rel, doc_set in relationship_docs.items()
+            if len(doc_set) == 1
+        )
+        if len(docs) >= 2 and docs_with_unique_rels >= 2:
+            potential = "high"
+        elif len(docs) >= 2:
+            potential = "medium"
+        else:
+            potential = "low"
+
+        return {
+            "entity": entity_name,
+            "num_docs": len(docs),
+            "per_doc_preview": per_doc,
+            "unique_relationships_across_docs": unique_across,
+            "bridge_potential": potential,
+        }
+
+    # ========== PLANNING TOOLS (2) ==========
+
+    def set_exploration_targets(self, targets: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Register entities to explore after discovery phase.
+
+        Call after get_document_overlap_matrix + preview_cross_doc_connections
+        to lock in which entities to pursue. If called again, replaces the queue.
+
+        Args:
+            targets: List of dicts, each with:
+                - entity_name (str, required): Entity to explore
+                - reason (str, required): Why this entity is promising
+                - priority (str, optional): "high", "medium", "low" (default: "medium")
+
+        Returns:
+            Dict with targets_set count and the queue
+
+        Example:
+            >>> tools.set_exploration_targets([
+            ...     {"entity_name": "Diego Maradona", "reason": "high bridge_potential, diverse roles across 3 docs", "priority": "high"},
+            ...     {"entity_name": "FC Barcelona", "reason": "shared across doc_0 and doc_5, different relationships", "priority": "medium"},
+            ... ])
+            {
+                "targets_set": 2,
+                "queue": [
+                    {"entity_name": "Diego Maradona", "reason": "...", "priority": "high", "status": "pending"},
+                    {"entity_name": "FC Barcelona", "reason": "...", "priority": "medium", "status": "pending"}
+                ]
+            }
+        """
+        validated = []
+        for t in targets:
+            if "entity_name" not in t or "reason" not in t:
+                return {"error": "Each target must have 'entity_name' and 'reason' fields."}
+            validated.append({
+                "entity_name": t["entity_name"],
+                "reason": t["reason"],
+                "priority": t.get("priority", "medium"),
+                "status": "pending",
+                "bridges_created": 0,
+            })
+
+        self.exploration_targets = validated
+
+        return {
+            "targets_set": len(validated),
+            "queue": [
+                {"entity_name": t["entity_name"], "reason": t["reason"],
+                 "priority": t["priority"], "status": t["status"]}
+                for t in validated
+            ],
+        }
+
+    def get_exploration_targets(self) -> Dict[str, Any]:
+        """
+        Get current exploration queue with progress.
+
+        Call after mark_entity_explored to see what's next, or anytime
+        to check remaining targets.
+
+        Returns:
+            Dict with completed/in_progress/pending lists and next_target
+
+        Example:
+            >>> tools.get_exploration_targets()
+            {
+                "completed": [{"entity_name": "X", "reason": "...", "bridges_created": 3}],
+                "in_progress": [{"entity_name": "Y", "reason": "..."}],
+                "pending": [{"entity_name": "Z", "reason": "...", "priority": "high"}],
+                "total": 3,
+                "completed_count": 1,
+                "next_target": {"entity_name": "Z", "reason": "...", "priority": "high"}
+            }
+        """
+        if not self.exploration_targets:
+            return {
+                "error": "No exploration targets set. Call set_exploration_targets first.",
+                "total": 0,
+            }
+
+        completed = []
+        in_progress = []
+        pending = []
+
+        for t in self.exploration_targets:
+            entry = {
+                "entity_name": t["entity_name"],
+                "reason": t["reason"],
+                "priority": t["priority"],
+            }
+            if t["status"] == "completed":
+                entry["bridges_created"] = t["bridges_created"]
+                completed.append(entry)
+            elif t["status"] == "in_progress":
+                in_progress.append(entry)
+            else:
+                pending.append(entry)
+
+        # Next target: first pending entry
+        next_target = pending[0] if pending else None
+
+        return {
+            "completed": completed,
+            "in_progress": in_progress,
+            "pending": pending,
+            "total": len(self.exploration_targets),
+            "completed_count": len(completed),
+            "next_target": next_target,
+        }
+
+    def _update_target_status(self, entity_name: str, status: str, bridges_created: int = 0) -> None:
+        """Internal helper to update a target's status."""
+        entity_key = entity_name.lower()
+        for t in self.exploration_targets:
+            if t["entity_name"].lower() == entity_key:
+                t["status"] = status
+                if bridges_created > 0:
+                    t["bridges_created"] = bridges_created
+                break
+
     # ========== CONTEXT TOOLS (3) ==========
 
     def get_entity_context(
@@ -344,9 +617,16 @@ class GSWTools:
                                     if e.name.lower() != entity_normalized:
                                         relationships[vp.phrase].append(e.name)
 
+                        answer_refs = []
+                        for ans_id in q.answers:
+                            for e in gsw.entity_nodes:
+                                if e.id == ans_id:
+                                    answer_refs.append(f"{doc}::{ans_id}")
+
                         qa_pairs.append({
                             "question": q.text,
                             "answer": ", ".join(answer_names) if answer_names else "Unknown",
+                            "answer_refs": answer_refs,
                             "doc_id": doc
                         })
 
@@ -410,6 +690,7 @@ class GSWTools:
                 merged_qa_pairs.append({
                     "question": qa["question"],
                     "answer": qa["answer"],
+                    "answer_refs": qa.get("answer_refs", []),
                     "source": doc_id
                 })
 
@@ -544,10 +825,36 @@ class GSWTools:
 
     # ========== BRIDGE TOOLS (3) ==========
 
+    def _validate_entity_refs(self, refs: List[str], source_docs: set) -> tuple:
+        """Validate doc_x::ey entity references. Returns (valid, resolved, errors)."""
+        resolved = []
+        errors = []
+        for ref in refs:
+            if "::" not in ref:
+                errors.append(f"'{ref}' is not in doc_x::ey format")
+                continue
+            doc_id, entity_id = ref.split("::", 1)
+            if doc_id not in source_docs:
+                errors.append(f"'{ref}': doc '{doc_id}' not in source_docs")
+                continue
+            gsw = self.entity_searcher.gsw_by_doc_id.get(doc_id)
+            if not gsw:
+                errors.append(f"'{ref}': doc '{doc_id}' not found")
+                continue
+            entity = gsw.get_entity_by_id(entity_id)
+            if not entity:
+                valid_ids = [f"{doc_id}::{e.id} ({e.name})" for e in gsw.entity_nodes[:10]]
+                errors.append(f"'{ref}': entity '{entity_id}' not found in {doc_id}. Valid: {valid_ids}")
+                continue
+            resolved.append({"ref": ref, "name": entity.name, "doc_id": doc_id})
+        return len(errors) == 0, resolved, errors
+
     def create_bridge_qa(
         self,
         question: Optional[str] = None,
-        answer: Optional[str] = None,
+        answers: Optional[List[str]] = None,
+        reverse_question: Optional[str] = None,
+        reverse_answers: Optional[List[str]] = None,
         source_docs: Optional[List[str]] = None,
         reasoning: Optional[str] = None,
         confidence: float = 0.9,
@@ -555,22 +862,29 @@ class GSWTools:
         bridges: Optional[List[Dict[str, Any]]] = None
     ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         """
-        Create one or more bridge QA pairs with automatic validation.
+        Create one or more two-ended bridge QA pairs with automatic validation.
+
+        Each bridge has a forward question and a reverse question (QA inversion),
+        mirroring how GSW verb phrases generate bidirectional QA pairs.
 
         Can be used in two modes:
-        1. Single bridge mode: Pass question, answer, source_docs, reasoning
-        2. Multiple bridge mode: Pass bridges list with 1-5 bridge specifications
+        1. Single bridge mode: Pass question, answers, reverse_question, reverse_answers, source_docs, reasoning
+        2. Multiple bridge mode: Pass bridges list
 
         Args:
-            question: Bridge question (single mode)
-            answer: Bridge answer (single mode)
+            question: Forward bridge question (single mode)
+            answers: Entity names that answer the forward question (single mode)
+            reverse_question: Reverse question viewing relationship from opposite side (single mode)
+            reverse_answers: Entity names that answer the reverse question (single mode)
             source_docs: List of source document IDs (single mode)
             reasoning: How this bridge was derived (single mode)
             confidence: Confidence score (0-1) (single mode)
             entities_involved: Entities mentioned in bridge (single mode)
             bridges: List of bridge specifications (multiple mode). Each must contain:
-                - question (str): The bridge question
-                - answer (str): The answer
+                - question (str): Forward question
+                - answers (List[str]): Entity names answering forward question
+                - reverse_question (str): Reverse question
+                - reverse_answers (List[str]): Entity names answering reverse question
                 - source_docs (List[str]): Source document IDs
                 - reasoning (str): Explanation
                 - confidence (float, optional): Confidence score (default 0.9)
@@ -584,7 +898,9 @@ class GSWTools:
             Single bridge:
             >>> result = tools.create_bridge_qa(
             ...     question="Where did Robert of Alsace's father die?",
-            ...     answer="Strasbourg",
+            ...     answers=["Strasbourg"],
+            ...     reverse_question="Whose father died in Strasbourg?",
+            ...     reverse_answers=["Robert of Alsace"],
             ...     source_docs=["doc_12", "doc_28"],
             ...     reasoning="Robert's father was Duke William (doc_12). Duke William died in Strasbourg (doc_28)."
             ... )
@@ -594,18 +910,14 @@ class GSWTools:
             >>> results = tools.create_bridge_qa(bridges=[
             ...     {
             ...         "question": "Where did Robert of Alsace's father die?",
-            ...         "answer": "Strasbourg",
+            ...         "answers": ["Strasbourg"],
+            ...         "reverse_question": "Whose father died in Strasbourg?",
+            ...         "reverse_answers": ["Robert of Alsace"],
             ...         "source_docs": ["doc_12", "doc_28"],
             ...         "reasoning": "Robert's father was Duke William (doc_12). Duke William died in Strasbourg (doc_28)."
-            ...     },
-            ...     {
-            ...         "question": "Who was Robert of Alsace's grandfather?",
-            ...         "answer": "Count Philip",
-            ...         "source_docs": ["doc_12", "doc_34"],
-            ...         "reasoning": "Robert's father was Duke William (doc_12). William's father was Count Philip (doc_34)."
             ...     }
             ... ])
-            [{"success": True, "bridge_id": "bridge_12345", ...}, {"success": True, "bridge_id": "bridge_67890", ...}]
+            [{"success": True, "bridge_id": "bridge_12345", ...}]
         """
         # Multiple bridge mode
         if bridges is not None:
@@ -616,17 +928,17 @@ class GSWTools:
                     "validation": {"valid": False, "confidence": 0.0}
                 }]
 
-            if len(bridges) > 5:
+            if len(bridges) > 20:
                 return [{
                     "success": False,
-                    "error": f"Too many bridges ({len(bridges)}). Maximum is 5 bridges per call to avoid timeouts.",
+                    "error": f"Too many bridges ({len(bridges)}). Maximum is 20 bridges per call.",
                     "validation": {"valid": False, "confidence": 0.0}
                 }]
 
             results = []
             for i, bridge_spec in enumerate(bridges):
                 # Validate required fields
-                required_fields = ["question", "answer", "source_docs", "reasoning"]
+                required_fields = ["question", "answers", "reverse_question", "reverse_answers", "source_docs", "reasoning"]
                 missing_fields = [field for field in required_fields if field not in bridge_spec]
 
                 if missing_fields:
@@ -640,7 +952,9 @@ class GSWTools:
                 # Recursively call single bridge mode
                 result = self.create_bridge_qa(
                     question=bridge_spec["question"],
-                    answer=bridge_spec["answer"],
+                    answers=bridge_spec["answers"],
+                    reverse_question=bridge_spec["reverse_question"],
+                    reverse_answers=bridge_spec["reverse_answers"],
                     source_docs=bridge_spec["source_docs"],
                     reasoning=bridge_spec["reasoning"],
                     confidence=bridge_spec.get("confidence", 0.9),
@@ -651,10 +965,10 @@ class GSWTools:
             return results
 
         # Single bridge mode - validate required parameters
-        if question is None or answer is None or source_docs is None or reasoning is None:
+        if question is None or answers is None or reverse_question is None or reverse_answers is None or source_docs is None or reasoning is None:
             return {
                 "success": False,
-                "error": "Single bridge mode requires question, answer, source_docs, and reasoning parameters.",
+                "error": "Single bridge mode requires question, answers, reverse_question, reverse_answers, source_docs, and reasoning parameters.",
                 "validation": {"valid": False, "confidence": 0.0}
             }
 
@@ -709,59 +1023,44 @@ class GSWTools:
                 }
             }
 
-        # STEP 4: Validate answer is grounded in source documents
-        # Collect all QA pairs from source docs
-        source_qa_pairs = []
-        for doc_id in source_docs:
-            gsw = self.entity_searcher.gsw_by_doc_id[doc_id]
-            for vp in gsw.verb_phrase_nodes:
-                for q in vp.questions:
-                    answer_names = []
-                    for ans_id in q.answers:
-                        for e in gsw.entity_nodes:
-                            if e.id == ans_id:
-                                answer_names.append(e.name)
+        # STEP 4: Validate entity references (doc_x::ey format)
+        source_docs_set = set(source_docs)
+        ans_valid, ans_resolved, ans_errors = self._validate_entity_refs(answers, source_docs_set)
+        rev_valid, rev_resolved, rev_errors = self._validate_entity_refs(reverse_answers, source_docs_set)
 
-                    source_qa_pairs.append({
-                        "doc": doc_id,
-                        "question": q.text,
-                        "answer": ", ".join(answer_names) if answer_names else "Unknown"
-                    })
-
-        # Check if answer appears in source QAs
-        answer_normalized = answer.strip().lower()
-        answer_found = False
-        supporting_qa = []
-
-        for qa in source_qa_pairs:
-            if answer_normalized in qa["answer"].lower():
-                answer_found = True
-                supporting_qa.append(qa)
-
-        # Validation failed: answer not grounded
-        if not answer_found or len(supporting_qa) == 0:
+        all_errors = ans_errors + rev_errors
+        if all_errors:
             return {
                 "success": False,
-                "error": f"Answer '{answer}' not found in source documents. Bridges must be grounded in source QA pairs.",
-                "hint": "Search through the source documents to find QA pairs that actually contain this answer.",
+                "error": f"Invalid entity references: {all_errors}",
+                "hint": "Use doc_x::ey format (e.g. 'doc_21::e5'). Check get_entity_context output for entity IDs.",
                 "validation": {
                     "valid": False,
-                    "confidence": 0.3,
+                    "confidence": 0.0,
                     "evidence": [],
-                    "reasoning": f"Answer '{answer}' not found in source QA pairs",
-                    "answer_found_in_source": False
+                    "reasoning": f"Entity reference validation failed: {all_errors}"
                 }
             }
 
-        # STEP 5: Validation passed - create the bridge
+        # STEP 5: Check for duplicate question
         bridge_id = f"bridge_{hashlib.md5(question.encode()).hexdigest()[:8]}"
+        if any(b["bridge_id"] == bridge_id for b in self.bridges_created):
+            return {
+                "success": False,
+                "error": f"Duplicate bridge — a bridge with this question already exists (id: {bridge_id}).",
+                "hint": "This exact question was already created. Try a different angle or move on.",
+                "validation": {"valid": False, "confidence": 0.0}
+            }
 
-        # Calculate final confidence based on supporting evidence
-        final_confidence = min(0.9, 0.7 + 0.1 * len(supporting_qa))
+        # STEP 6: Validation passed - create the bridge
+        all_resolved = ans_resolved + rev_resolved
+        final_confidence = min(0.9, 0.7 + 0.1 * len(all_resolved))
 
         bridge_data = {
             "question": question,
-            "answer": answer,
+            "answers": answers,
+            "reverse_question": reverse_question,
+            "reverse_answers": reverse_answers,
             "source": "sleep_time_agent",
             "source_docs": source_docs,
             "reasoning": reasoning,
@@ -775,19 +1074,17 @@ class GSWTools:
         # Store bridge
         self.bridges_created.append(bridge_data)
 
-        # TODO: Add to FAISS index (requires embedding)
-        # For now, just store in memory
-
         return {
             "success": True,
             "bridge_id": bridge_id,
-            "message": f"Bridge created successfully with {len(supporting_qa)} supporting QA pairs",
+            "message": f"Bridge created successfully",
+            "resolved_entities": {
+                "answers": [{"ref": r["ref"], "name": r["name"]} for r in ans_resolved],
+                "reverse_answers": [{"ref": r["ref"], "name": r["name"]} for r in rev_resolved],
+            },
             "validation": {
                 "valid": True,
                 "confidence": final_confidence,
-                "evidence": supporting_qa,
-                "reasoning": f"Answer '{answer}' found in source QA pairs",
-                "answer_found_in_source": True
             }
         }
 
@@ -990,6 +1287,8 @@ class GSWTools:
             num_bridges_created: Number of bridges created for this entity
         """
         self.explored_entities.add(entity_name)
+        # Auto-update exploration targets queue
+        self._update_target_status(entity_name, "completed", num_bridges_created)
 
     def plan_entity_exploration(
         self,
@@ -1027,16 +1326,20 @@ class GSWTools:
         """
         entity_key = entity_name.lower()
 
-        # Build relationship list
+        # Build relationship list (deduplicated by entity name)
         relationships_list = []
+        seen_names = set()
         for rel_type, entities in relationships.items():
             for related_entity in entities:
-                relationships_list.append({
-                    "name": related_entity,
-                    "type": rel_type,
-                    "status": "pending",
-                    "bridges_created": 0
-                })
+                name_key = related_entity.lower()
+                if name_key not in seen_names:
+                    seen_names.add(name_key)
+                    relationships_list.append({
+                        "name": related_entity,
+                        "type": rel_type,
+                        "status": "pending",
+                        "bridges_created": 0
+                    })
 
         plan = {
             "entity": entity_name,
@@ -1048,6 +1351,9 @@ class GSWTools:
 
         # Store plan
         self.exploration_plans[entity_key] = plan
+
+        # Auto-update exploration targets queue
+        self._update_target_status(entity_name, "in_progress")
 
         return plan
 

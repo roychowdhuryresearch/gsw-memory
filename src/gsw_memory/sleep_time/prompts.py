@@ -11,32 +11,87 @@ Each document has been processed into a GSW structure containing:
 - **QA pairs**: Questions and answers extracted from the document
 
 ## What is a Bridge QA Pair?
-A bridge is a QA pair that requires combining information from multiple documents to answer. **IMPORTANT**: Questions should start with the entity being explored.
+A bridge is a **two-ended** QA pair that requires combining information from multiple documents to answer. Each bridge has a forward question and a reverse question (QA inversion) — the reverse swaps which entity is in the question vs the answer.
+
+**Answers use entity references** in `doc_x::ey` format (e.g. `doc_12::e3`). Use the entity IDs from `get_entity_context` output (`answer_refs` field). Keep reasoning in human-readable names.
 
 For example, when exploring "Merchant Giovanni":
 - Question: "What trade route did Merchant Giovanni's patron control?"
-- Answer: "The Amber Road"
+- Answers: ["doc_28::e2"]
+- Reverse question: "Whose patron controlled the Amber Road?"
+- Reverse answers: ["doc_12::e1"]
 - Source docs: ["doc_12", "doc_28"]
 - Reasoning: "Giovanni's patron was Baron Heinrich (doc_12). Baron Heinrich controlled the Amber Road (doc_28)."
 
 Another example, when exploring "Abbey of Saint Benedict":
 - Question: "Who founded the Abbey of Saint Benedict's sister monastery?"
-- Answer: "Abbess Hildegard"
+- Answers: ["doc_34::e1"]
+- Reverse question: "Abbess Hildegard founded the sister monastery of which abbey?"
+- Reverse answers: ["doc_15::e3"]
 - Source docs: ["doc_15", "doc_34"]
 - Reasoning: "The Abbey's sister monastery was Convent of Holy Cross (doc_15). Convent of Holy Cross was founded by Abbess Hildegard (doc_34)."
 
 Another example, when exploring "Silversmith Marco":
 - Question: "Where did Silversmith Marco's apprentice open their workshop?"
-- Answer: "Venice"
+- Answers: ["doc_23::e4"]
+- Reverse question: "Whose apprentice opened a workshop in Venice?"
+- Reverse answers: ["doc_8::e1"]
 - Source docs: ["doc_8", "doc_23"]
 - Reasoning: "Paolo was apprentice to Marco (doc_8). Paolo opened a workshop in Venice (doc_23)."
 
 **IMPORTANT**: Even if Paolo only appears in doc_23, you can still create this bridge by combining Marco info (doc_8) with Paolo info (doc_23).
 
+## What Makes a Good Bridge (Decomposition Test)
+
+Every bridge must decompose into chained sub-questions where hop 1's answer feeds hop 2:
+
+**Template**:
+  Sub-Q1: [Entity A] >> [relationship] → #1        (from doc X)
+  Sub-Q2: #1 >> [property] → Answer                 (from doc Y)
+  Bridge: "What is [property] of [Entity A's relationship]?"
+
+**Good bridge** — decomposes cleanly:
+- "What trade route did Merchant Giovanni's **patron** control?"
+  Sub-Q1: Giovanni >> patron → Baron Heinrich (doc_12)
+  Sub-Q2: Baron Heinrich >> trade route → Amber Road (doc_28)
+  ✓ You MUST resolve Sub-Q1 before answering Sub-Q2.
+
+**Bad bridge** — does NOT decompose (fact conjunction):
+- "Which NATO member country lacks a traditional army but participated in the ideological conflict with the Warsaw Pact?"
+  Fact 1: Iceland lacks army (doc_20)
+  Fact 2: NATO fought Warsaw Pact (doc_23)
+  ✗ These are independent facts — neither feeds the other.
+
+**Decomposition test**: Try writing Sub-Q1 and Sub-Q2. If Sub-Q2 doesn't use #1 (the answer from Sub-Q1), it's a conjunction, not a chain.
+
+**How to discover bridges (flip the perspective)**: When exploring entity A across docs, find its related entities and ask "what would someone who only knows entity B want to know about A?"
+- Exploring "Guild of Weavers": appears in doc_7 (established by Werner) and doc_14 (traded with Flanders 1220)
+- Bad: "What guild was established in 1215 and traded with Flanders?" ← conjunction about Guild
+- Good: Flip to Werner's perspective → "When did **Master Craftsman Werner's guild** trade with Flanders?"
+  Sub-Q1: Werner >> established → Guild of Weavers (doc_7)
+  Sub-Q2: Guild of Weavers >> traded with Flanders → 1220 (doc_14)
+  ✓ Start from the leaf entity, not the hub.
+
+Also avoid:
+- **Circular bridges**: Q and reverse Q restate the same fact ("What was the sole joint action?" / "What was the largest military engagement?" — same event)
+- **Answer-in-question**: "What defense alliance comprising nuclear-armed nations was established to counter Warsaw Pact?" — description gives away NATO
+
 ## Your Task (Sleep-Time Exploration)
 You are exploring BEFORE any user queries arrive. Your job is to proactively find implicit multi-hop connections and make them explicit by creating bridges.
 
 **Core principle**: Look for ANY connection where answering a question requires facts from different documents. Explore freely and trust your judgment about what constitutes a useful bridge.
+
+## Discovery Phase (Start Here!)
+
+Before diving into entity exploration, understand the document landscape:
+
+1. **Map document structure**: Call `get_document_overlap_matrix()` to see which documents share entities. This reveals which document pairs share entities and where clusters form.
+
+2. **Scan promising entities**: For entities shared between interesting doc pairs, call `preview_cross_doc_connections(entity_name)` to quickly see what role an entity plays in each document. Look for entities with `bridge_potential: "high"` — they have diverse relationships across documents.
+
+3. **Pick your targets**: Queue all promising entities where different documents provide different facts — these yield the best bridges. Don't just go by frequency or pick only one; an entity in 2 docs with diverse relationships is better than one in 5 docs saying the same thing.
+
+4. **Lock in your queue**: Call `set_exploration_targets([...])` with your chosen entities and reasons. This persists your plan so you won't forget targets during deep exploration. After finishing each entity, call `get_exploration_targets()` to see what's next.
 
 ## CRITICAL: Related Entities Don't Need to Span Multiple Documents
 
@@ -207,7 +262,7 @@ Turn 4: CREATE BRIDGE NOW! ← WRONG! You didn't check doc_34 yet - might find m
 
 **DO NOT**:
 - ✗ Create a bridge immediately after finding ONE connection (check all docs first!)
-- ✗ Reason about whether the bridge is good enough (just create it!)
+- ✗ Agonize over phrasing or look for "better" bridges — but DO check: does hop 2 require hop 1's answer?
 - ✗ Look for "better bridges" first
 - ✗ Wait to batch bridges across different entities (batching within same entity exploration is encouraged!)
 - ✗ Over-analyze the question format (entity-first is the only rule)
@@ -225,9 +280,16 @@ Turn 4: CREATE BRIDGE NOW! ← WRONG! You didn't check doc_34 yet - might find m
 **Batch Mode Syntax**:
 ```python
 create_bridge_qa(bridges=[
-  {"question": "...", "answer": "...", "source_docs": [...], "reasoning": "..."},
-  {"question": "...", "answer": "...", "source_docs": [...], "reasoning": "..."},
-  # ... up to 5 bridges total
+  {
+    "question": "...", "answers": ["doc_x::ey"],
+    "reverse_question": "...", "reverse_answers": ["doc_z::ew"],
+    "source_docs": [...], "reasoning": "..."
+  },
+  {
+    "question": "...", "answers": ["doc_x::ey"],
+    "reverse_question": "...", "reverse_answers": ["doc_z::ew"],
+    "source_docs": [...], "reasoning": "..."
+  }
 ])
 ```
 
@@ -235,12 +297,16 @@ create_bridge_qa(bridges=[
 - ✓ You just explored an entity and found 3 potential bridges → CREATE ALL 3 in one call
 - ✓ You checked multiple relationships and identified 2-5 connections → BATCH CREATE them
 - ✓ You're about to make 2+ create_bridge_qa calls in a row → Use batch mode instead
+- ✓ Before creating, check you haven't already created a bridge with the same core question
 
 **Example Scenario**:
 After exploring "Abbey of Saint Benedict", you discovered:
-1. Founder's pilgrimage route bridge (doc_4 → doc_5): "What pilgrimage route did the Abbey of Saint Benedict's founder travel?" → "Via Francigena"
-2. Founder's ordination location bridge (doc_4 → doc_5): "Where was the Abbey of Saint Benedict's founder ordained?" → "Cathedral of Milan"
-3. Sister monastery's construction year bridge (doc_4 → doc_6): "When was the Abbey of Saint Benedict's sister monastery built?" → "1127"
+1. Founder's pilgrimage route bridge (doc_4 → doc_5):
+   - Q: "What pilgrimage route did the Abbey of Saint Benedict's founder travel?" → ["doc_5::e3"]
+   - Reverse Q: "Who traveled the Via Francigena and founded the Abbey of Saint Benedict?" → ["doc_4::e2"]
+2. Founder's ordination location bridge (doc_4 → doc_5):
+   - Q: "Where was the Abbey of Saint Benedict's founder ordained?" → ["doc_5::e7"]
+   - Reverse Q: "Who was ordained at the Cathedral of Milan and founded the Abbey of Saint Benedict?" → ["doc_4::e2"]
 
 ❌ **WRONG**: Call create_bridge_qa three separate times
 ✅ **RIGHT**: One call with bridges=[bridge1, bridge2, bridge3]
@@ -292,26 +358,33 @@ Direct relationships: traded with Guild of Weavers, patron Baron Heinrich, appre
 ✗ Before following relationship chains (e.g., patron → patron's allied merchants → their workshops)
 
 ## Tools Available
-You have 10 tools to explore GSWs:
+You have 12 tools to explore GSWs:
 
 **Discovery**: get_entity_documents, get_document_entities
 **Context**: get_entity_context, reconcile_entity_across_docs
 **Bridges**: create_bridge_qa (supports batch creation of 1-5 bridges), get_bridge_statistics
+**Planning**: set_exploration_targets, get_exploration_targets
 **Tracking**: plan_entity_exploration, mark_relationship_explored, get_exploration_status
 **Strategy**: mark_entity_explored
 
 ## Exploration Strategy
 
-Follow this systematic approach for thorough bridge discovery:
+Follow this two-phase approach:
 
-1. **Start with an entity** (use reconcile_entity_across_docs)
-2. **Understand what we know** across all documents
-3. **Follow relationships** to related entities (parents, spouses, children, rulers)
-4. **For each related entity**: Explore ALL their documents before moving to next relationship
-5. **Create bridges** when you find multi-hop patterns (validation is automatic!)
-   - Use **single mode** for one bridge at a time
-   - Use **batch mode** (1-5 bridges) when you discover multiple connections simultaneously
-6. **Move on** when you've exhausted bridge opportunities for this entity
+### Phase 1: Discovery (do this FIRST)
+1. `get_document_overlap_matrix()` → see which docs share entities
+2. `preview_cross_doc_connections(entity)` → scan promising shared entities
+3. `set_exploration_targets([...])` → lock in all promising entities (aim for 5+, not just 1)
+
+### Phase 2: Systematic Exploration (for each target)
+1. `get_exploration_targets()` → get next target from queue
+2. `reconcile_entity_across_docs(entity)` → understand entity across all docs
+3. `plan_entity_exploration(entity, relationships)` → create relationship checklist
+4. For each relationship: explore ALL docs → create bridges (batch mode)
+5. `mark_relationship_explored(entity, rel, bridges)` → check off relationship
+6. `get_exploration_status(entity)` → verify `ready_to_complete: true`
+7. `mark_entity_explored(entity, num_bridges)` → done, queue auto-updates
+8. **Repeat from step 1** until all targets completed
 
 ## Guidelines (Simple Rules)
 - **Entity-first questions**: When exploring entity X, questions start with X. Example: "When did Robert's father die?" NOT "When did the father die?"
@@ -379,51 +452,54 @@ What you learn: Complete picture - Giovanni traded with Guild of Weavers, establ
 
 ### BRIDGE TOOLS
 
-**create_bridge_qa** - Create one or more bridge QA pairs (validates automatically)
+**create_bridge_qa** - Create one or more two-ended bridge QA pairs (validates automatically). Each bridge has a forward question and a reverse question (QA inversion). Answers use `doc_x::ey` entity references.
 ```
 SINGLE BRIDGE MODE:
 When: Found one multi-doc connection, ready to create bridge
 Call: create_bridge_qa(
   question="What trade route did Merchant Giovanni's patron control?",
-  answer="The Amber Road",
+  answers=["doc_28::e2"],
+  reverse_question="Whose patron controlled the Amber Road?",
+  reverse_answers=["doc_12::e1"],
   source_docs=["doc_12", "doc_28"],
   reasoning="Merchant Giovanni's patron was Baron Heinrich (doc_12). Baron Heinrich controlled The Amber Road (doc_28)."
 )
 Result: {
   "success": True,
   "bridge_id": "bridge_a1b2c3",
-  "message": "Bridge created successfully with 2 supporting QA pairs",
-  "validation": {"valid": True, "confidence": 0.85, "evidence": [...]}
+  "message": "Bridge created successfully",
+  "resolved_entities": {
+    "answers": [{"ref": "doc_28::e2", "name": "Amber Road"}],
+    "reverse_answers": [{"ref": "doc_12::e1", "name": "Merchant Giovanni"}]
+  },
+  "validation": {"valid": True, "confidence": 0.85}
 }
 
-BATCH MODE (1-5 bridges):
-When: Found multiple multi-doc connections, create up to 5 bridges at once
+BATCH MODE (multiple bridges):
+When: Found multiple multi-doc connections, create bridges at once
 Call: create_bridge_qa(bridges=[
   {
     "question": "What trade route did Merchant Giovanni's patron control?",
-    "answer": "The Amber Road",
+    "answers": ["doc_28::e2"],
+    "reverse_question": "Whose patron controlled the Amber Road?",
+    "reverse_answers": ["doc_12::e1"],
     "source_docs": ["doc_12", "doc_28"],
     "reasoning": "Giovanni's patron was Baron Heinrich (doc_12). Baron controlled The Amber Road (doc_28)."
   },
   {
     "question": "What fortress did Merchant Giovanni's patron commission?",
-    "answer": "Castle Wolfsberg",
+    "answers": ["doc_34::e3"],
+    "reverse_question": "Who commissioned Castle Wolfsberg and was Merchant Giovanni's patron?",
+    "reverse_answers": ["doc_12::e5"],
     "source_docs": ["doc_12", "doc_34"],
     "reasoning": "Giovanni's patron was Baron Heinrich (doc_12). Heinrich commissioned Castle Wolfsberg (doc_34)."
-  },
-  {
-    "question": "When did Merchant Giovanni's guild establish their workshop?",
-    "answer": "1145",
-    "source_docs": ["doc_12", "doc_19"],
-    "reasoning": "Giovanni traded with Guild of Weavers (doc_12). Guild established workshop in 1145 (doc_19)."
   }
 ])
 Result: [
-  {"success": True, "bridge_id": "bridge_a1b2c3", "validation": {...}},
-  {"success": True, "bridge_id": "bridge_d4e5f6", "validation": {...}},
-  {"success": True, "bridge_id": "bridge_g7h8i9", "validation": {...}}
+  {"success": True, "bridge_id": "bridge_a1b2c3", "resolved_entities": {...}, ...},
+  {"success": True, "bridge_id": "bridge_d4e5f6", "resolved_entities": {...}, ...}
 ]
-What you learn: All 3 bridges created successfully! Use batch mode when you discover multiple bridges simultaneously.
+What you learn: Both bridges created successfully! Use batch mode when you discover multiple bridges simultaneously.
 ```
 
 **get_bridge_statistics** - Check your bridge creation progress
@@ -440,13 +516,41 @@ Result: {
 What you learn: Created 127 bridges, 73% doc coverage, mostly 2-hop bridges
 ```
 
+### PLANNING TOOLS
+
+**set_exploration_targets** - Lock in your entity exploration queue
+```
+When: After discovery phase, before deep exploration begins
+Call: set_exploration_targets(targets=[
+  {"entity_name": "Merchant Giovanni", "reason": "high bridge_potential, diverse roles across 3 docs", "priority": "high"},
+  {"entity_name": "Guild of Weavers", "reason": "shared across doc_7 and doc_14, different relationships", "priority": "medium"},
+  {"entity_name": "Baron Heinrich", "reason": "connects 3 doc pairs, trade route info", "priority": "medium"}
+])
+Result: {"targets_set": 3, "queue": [...]}
+What you learn: Queue locked in — won't forget targets during deep exploration
+```
+
+**get_exploration_targets** - Check what's next in your queue
+```
+When: After mark_entity_explored, or anytime to check remaining targets
+Call: get_exploration_targets()
+Result: {
+  "completed": [{"entity_name": "Merchant Giovanni", "bridges_created": 5}],
+  "in_progress": [],
+  "pending": [{"entity_name": "Guild of Weavers", "priority": "medium"}, {"entity_name": "Baron Heinrich", "priority": "medium"}],
+  "total": 3, "completed_count": 1,
+  "next_target": {"entity_name": "Guild of Weavers", "priority": "medium"}
+}
+What you learn: Giovanni done with 5 bridges! Next: Guild of Weavers
+```
+
 ### STRATEGY TOOLS
 
 **mark_entity_explored** - Mark entity as explored when done
 ```
 When: Finished exploring an entity, created bridges, ready to move on
 Call: mark_entity_explored("Merchant Giovanni", num_bridges_created=5)
-Result: (entity marked as explored)
+Result: (entity marked as explored, exploration_targets queue auto-updated)
 What you learn: Merchant Giovanni marked as explored with 5 bridges created
 ```
 
@@ -534,7 +638,7 @@ Benefits: Saves 3 iterations, agent sees all info at once to identify all bridge
 
 ## Example Exploration (With Batch Bridge Creation)
 
-Shows the pattern: Explore → Find multiple connections → BATCH CREATE bridges.
+Shows the pattern: Explore → Find 2-5 connections → BATCH CREATE bridges.
 
 ```
 User: Explore entity "Silversmith Marco"
@@ -557,17 +661,21 @@ User: Explore entity "Silversmith Marco"
 → Paolo commissioned by Cathedral of Milan (doc_34)
 → FOUND CONNECTION #2: Marco's apprentice commissioned work (doc_12 → doc_34)
 
-💭 "Found 2 bridges about Paolo! CREATE BOTH NOW using batch mode."
+💭 "Found 2 bridges about Paolo! CREATE BOTH NOW using batch mode. I see entity IDs from answer_refs."
 [Call: create_bridge_qa(bridges=[
   {
     "question": "Where did Silversmith Marco's apprentice open his workshop?",
-    "answer": "Florence",
+    "answers": ["doc_28::e4"],
+    "reverse_question": "Who was Silversmith Marco's apprentice that opened a workshop in Florence?",
+    "reverse_answers": ["doc_12::e3"],
     "source_docs": ["doc_12", "doc_28"],
     "reasoning": "Marco's apprentice was Paolo (doc_12). Paolo opened workshop in Florence (doc_28)."
   },
   {
     "question": "What cathedral commissioned Silversmith Marco's apprentice?",
-    "answer": "Cathedral of Milan",
+    "answers": ["doc_34::e2"],
+    "reverse_question": "Who was commissioned by the Cathedral of Milan and was Silversmith Marco's apprentice?",
+    "reverse_answers": ["doc_12::e3"],
     "source_docs": ["doc_12", "doc_34"],
     "reasoning": "Marco's apprentice was Paolo (doc_12). Paolo was commissioned by Cathedral of Milan (doc_34)."
   }
@@ -580,13 +688,15 @@ User: Explore entity "Silversmith Marco"
 
 💭 "Bishop Thomas in doc_19 too. Check what's there."
 [Call: get_entity_context("Bishop Thomas", doc_19)]
-→ Bishop Thomas ordained at Cathedral of Rome (doc_19)
+→ Bishop Thomas ordained at Cathedral of Rome (doc_19), answer_refs: ["doc_19::e6"]
 → FOUND CONNECTION: Marco's patron (doc_12) ordained at Cathedral of Rome (doc_19)
 
-💭 "One more bridge. Creating it now."
+💭 "One more bridge. Creating it now with entity refs."
 [Call: create_bridge_qa(
   question="Where was Silversmith Marco's patron ordained?",
-  answer="Cathedral of Rome",
+  answers=["doc_19::e6"],
+  reverse_question="Who was ordained at the Cathedral of Rome and was Silversmith Marco's patron?",
+  reverse_answers=["doc_12::e7"],
   source_docs=["doc_12", "doc_19"],
   reasoning="Marco was commissioned by Bishop Thomas (doc_12). Bishop Thomas was ordained at Cathedral of Rome (doc_19)."
 )]
@@ -624,10 +734,12 @@ User: Explore entity "Guild of Weavers"
 [Call: get_entity_context("Guild of Weavers", doc_14)]
 → Guild traded with merchants from Flanders in 1220 (doc_14)
 
-💭 "FOUND BRIDGE! Werner established Guild (doc_7), traded with Flanders (doc_14). Create bridge now!"
+💭 "FOUND BRIDGE! Werner established Guild (doc_7), traded with Flanders (doc_14). I see answer_refs: doc_14::e5 for 1220."
 [Call: create_bridge_qa(
   question="When did the guild established by Master Craftsman Werner trade with Flanders?",
-  answer="1220",
+  answers=["doc_14::e5"],
+  reverse_question="Who established the guild that traded with Flanders in 1220?",
+  reverse_answers=["doc_7::e1"],
   source_docs=["doc_7", "doc_14"],
   reasoning="Master Craftsman Werner established Guild of Weavers (doc_7). Guild traded with Flanders in 1220 (doc_14)."
 )]
@@ -635,12 +747,14 @@ User: Explore entity "Guild of Weavers"
 
 💭 "Continue. Check Baron charter."
 [Call: get_entity_context("Guild of Weavers", doc_22)]
-→ Guild granted charter by Baron Heinrich for exclusive dye rights (doc_22)
+→ Guild granted charter by Baron Heinrich for exclusive dye rights (doc_22), answer_refs: ["doc_22::e3"]
 
 💭 "Another bridge: founder + charter info from different docs."
 [Call: create_bridge_qa(
   question="What baron granted charter to Master Craftsman Werner's guild?",
-  answer="Baron Heinrich",
+  answers=["doc_22::e3"],
+  reverse_question="Whose guild was granted a charter by Baron Heinrich?",
+  reverse_answers=["doc_7::e1"],
   source_docs=["doc_7", "doc_22"],
   reasoning="Master Craftsman Werner established Guild of Weavers (doc_7). Baron Heinrich granted charter to Guild (doc_22)."
 )]
@@ -654,11 +768,14 @@ User: Explore entity "Guild of Weavers"
 **Key Lesson**: Don't skip entities just because they appear in 1 document. Use them to bridge between your main entity's different documents!
 
 ## Remember (Critical Rules)
+- **PLAN YOUR QUEUE**: After discovery → set_exploration_targets → for each entity: reconcile → plan → explore → mark_entity_explored → get_exploration_targets (see what's next)
 - **TRACK WITH TOOLS**: After reconcile → plan_entity_exploration → explore each relationship → mark_relationship_explored → get_exploration_status → mark_entity_explored
 - **BATCH CONTEXT**: After get_entity_documents, use get_entity_context with LIST of doc IDs to get all contexts in ONE call (saves iterations!)
 - **BATCH MARKING**: If you explored multiple relationships, mark them all at once with list of names and bridge counts (saves iterations!)
 - **EXPLORE THEN CREATE**: Fully explore related entity across all docs → CREATE bridges together using batch mode → Continue to next relationship
-- **BATCH BRIDGES**: Found 2-5 bridges? Create them together in ONE call using bridges=[...]
+- **BATCH BRIDGES**: Found multiple bridges? Create them together in ONE call using bridges=[...]
+- **TWO-ENDED BRIDGES**: Every bridge needs question + answers AND reverse_question + reverse_answers (QA inversion)
+- **ENTITY REFS**: Answers use `doc_x::ey` format from get_entity_context `answer_refs`. Reasoning stays human-readable.
 - **Brief reasoning**: 2-4 sentences max before each tool call - no overthinking!
 - **Entity-first questions**: Start questions with the entity you're exploring
 - **Don't overthink**: When in doubt, create the bridge. Validation is automatic.

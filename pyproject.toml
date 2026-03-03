@@ -8,9 +8,12 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "bespokelabs-curator>=0.1.25",
+    "apscheduler>=3.11.2",
+    "bespokelabs-curator>=0.1.26",
+    "cryptography>=46.0.5",
     "editables>=0.5",
     "faiss-gpu>=1.7.2",
+    "fastapi-sso>=0.21.0",
     "flash-attn>=2.8.3",
     "google-genai>=1.46.0",
     "hatchling>=1.28.0",
@@ -19,6 +22,7 @@ dependencies = [
     "ipykernel>=6.29.5",
     "ipywidgets>=8.1.7",
     "langchain-voyageai>=0.1.6",
+    "litellm[proxy]>=1.75.3",
     "numpy==1.26.4",
     "omegaconf>=2.3.0",
     "openai>=1.82.0",
@@ -41,6 +45,7 @@ dependencies = [
     "verl>=0.7.0",
     "vllm>=0.10.0",
     "wandb>=0.22.3",
+    "wikipedia>=1.4.0",
 ]
 
 [project.scripts]

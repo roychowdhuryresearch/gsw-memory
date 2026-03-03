@@ -225,17 +225,27 @@ class AgenticReconciler:
                 "type": "function",
                 "function": {
                     "name": "create_bridge_qa",
-                    "description": "Create one or more bridge QA pairs. Can be used in two modes: (1) Single bridge: pass question, answer, source_docs, reasoning. (2) Multiple bridges (1-5): pass bridges array. Validation is performed automatically.",
+                    "description": "Create one or more two-ended bridge QA pairs (QA inversion). Each bridge has a forward question and a reverse question that swap entity roles. Can be used in two modes: (1) Single bridge: pass question, answers, reverse_question, reverse_answers, source_docs, reasoning. (2) Multiple bridges: pass bridges array. Validation is performed automatically.",
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "question": {
                                 "type": "string",
-                                "description": "Bridge question (single bridge mode)"
+                                "description": "Forward bridge question (single bridge mode)"
                             },
-                            "answer": {
+                            "answers": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "Entity references in doc_x::ey format that answer the forward question (e.g. ['doc_21::e5'])"
+                            },
+                            "reverse_question": {
                                 "type": "string",
-                                "description": "Bridge answer (single bridge mode)"
+                                "description": "Reverse question viewing the relationship from the answer's perspective (single bridge mode)"
+                            },
+                            "reverse_answers": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "Entity references in doc_x::ey format that answer the reverse question (e.g. ['doc_23::e2'])"
                             },
                             "source_docs": {
                                 "type": "array",
@@ -258,12 +268,20 @@ class AgenticReconciler:
                             },
                             "bridges": {
                                 "type": "array",
-                                "description": "Array of bridge specifications for batch creation (multiple bridges mode). Each bridge must have: question, answer, source_docs, reasoning. Optional: confidence, entities_involved. Maximum 5 bridges per call.",
+                                "description": "Array of two-ended bridge specifications for batch creation. Each bridge must have: question, answers, reverse_question, reverse_answers, source_docs, reasoning. Maximum 20 bridges per call.",
                                 "items": {
                                     "type": "object",
                                     "properties": {
                                         "question": {"type": "string"},
-                                        "answer": {"type": "string"},
+                                        "answers": {
+                                            "type": "array",
+                                            "items": {"type": "string"}
+                                        },
+                                        "reverse_question": {"type": "string"},
+                                        "reverse_answers": {
+                                            "type": "array",
+                                            "items": {"type": "string"}
+                                        },
                                         "source_docs": {
                                             "type": "array",
                                             "items": {"type": "string"}
@@ -275,10 +293,10 @@ class AgenticReconciler:
                                             "items": {"type": "string"}
                                         }
                                     },
-                                    "required": ["question", "answer", "source_docs", "reasoning"]
+                                    "required": ["question", "answers", "reverse_question", "reverse_answers", "source_docs", "reasoning"]
                                 },
                                 "minItems": 1,
-                                "maxItems": 5
+                                "maxItems": 20
                             }
                         },
                         "required": []
@@ -409,6 +427,92 @@ class AgenticReconciler:
                         "required": ["entity_name"]
                     }
                 }
+            },
+            # Discovery / structural awareness tools
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_document_overlap_matrix",
+                    "description": "Show which document pairs share entities. Returns pairs sorted by overlap count. Use this FIRST to understand document structure and identify where bridges are likely.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "min_shared": {
+                                "type": "integer",
+                                "description": "Minimum shared entities to include a pair (default 1)",
+                                "default": 1
+                            }
+                        },
+                        "required": []
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "preview_cross_doc_connections",
+                    "description": "Quick preview of an entity's role in each document. Shows key relationships per doc and bridge_potential rating. Much cheaper than reconcile_entity_across_docs — use for scanning candidates.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "entity_name": {
+                                "type": "string",
+                                "description": "Entity to preview"
+                            }
+                        },
+                        "required": ["entity_name"]
+                    }
+                }
+            },
+            # Planning tools
+            {
+                "type": "function",
+                "function": {
+                    "name": "set_exploration_targets",
+                    "description": "Register entities to explore after discovery phase. Call after scanning with get_document_overlap_matrix and preview_cross_doc_connections to lock in your exploration queue. If called again, replaces the queue.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "targets": {
+                                "type": "array",
+                                "description": "List of target entities to explore",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entity_name": {
+                                            "type": "string",
+                                            "description": "Entity to explore"
+                                        },
+                                        "reason": {
+                                            "type": "string",
+                                            "description": "Why this entity is promising for bridges"
+                                        },
+                                        "priority": {
+                                            "type": "string",
+                                            "enum": ["high", "medium", "low"],
+                                            "description": "Exploration priority (default: medium)",
+                                            "default": "medium"
+                                        }
+                                    },
+                                    "required": ["entity_name", "reason"]
+                                }
+                            }
+                        },
+                        "required": ["targets"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_exploration_targets",
+                    "description": "Get current exploration queue showing completed, in-progress, and pending targets. Call after mark_entity_explored to see what's next.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {},
+                        "required": []
+                    }
+                }
             }
         ]
 
@@ -456,25 +560,41 @@ class AgenticReconciler:
                 "arguments": arguments
             }
 
-    def explore_entity(self, entity_name: str, max_iterations: int = 10) -> Dict[str, Any]:
+    def explore_entity(self, entity_name: Optional[str] = None, max_iterations: int = 1000) -> Dict[str, Any]:
         """
-        Let agent explore a single entity and create bridges.
+        Let agent explore and create bridges.
+
+        When entity_name is provided, explores that specific entity.
+        When entity_name is None, agent runs discovery phase first to find
+        its own targets, then explores them autonomously.
 
         Args:
-            entity_name: Entity to explore
+            entity_name: Entity to explore, or None for autonomous discovery
             max_iterations: Max tool calling rounds
 
         Returns:
             Summary of exploration (bridges created, tool calls, etc.)
         """
+        label = entity_name or "corpus"
         if self.verbose:
             print(f"\n{'='*80}")
-            print(f"Exploring entity: {entity_name}")
+            print(f"Exploring: {label}")
             print('='*80)
+
+        if entity_name:
+            user_msg = f"Explore the entity '{entity_name}' and create any useful bridge QA pairs you find by combining information across documents."
+        else:
+            user_msg = (
+                "Explore this corpus of documents and create bridge QA pairs. "
+                "Start with the Discovery Phase: use get_document_overlap_matrix() to map document structure, "
+                "then preview_cross_doc_connections() to scan promising entities, "
+                "then set_exploration_targets() to lock in your queue. "
+                "After that, systematically explore each target entity."
+            )
 
         messages = [
             {"role": "system", "content": SLEEP_TIME_SYSTEM_PROMPT},
-            {"role": "user", "content": f"Explore the entity '{entity_name}' and create any useful bridge QA pairs you find by combining information across documents."}
+            {"role": "user", "content": user_msg}
         ]
 
         tool_calls_made = []
@@ -484,7 +604,7 @@ class AgenticReconciler:
             # Callback: Iteration start
             if self.output_callback:
                 self.output_callback("iteration_start", {
-                    "entity": entity_name,
+                    "entity": label,
                     "iteration": iteration + 1,
                     "max_iterations": max_iterations
                 })
@@ -600,12 +720,13 @@ class AgenticReconciler:
                     "content": json.dumps(result)
                 })
 
-        # Mark entity as explored
-        self.tools.mark_entity_explored(entity_name, bridges_created)
+        # Mark entity as explored (only when exploring a specific entity)
+        if entity_name:
+            self.tools.mark_entity_explored(entity_name, bridges_created)
         self.entities_explored += 1
 
         return {
-            "entity": entity_name,
+            "entity": label,
             "iterations": iteration + 1,
             "tool_calls": len(tool_calls_made),
             "bridges_created": bridges_created,
