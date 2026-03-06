@@ -1,15 +1,16 @@
 """
 Tool implementations for agentic sleep-time GSW exploration.
 
-Provides 11 tools that enable an agent to freely explore GSW structures,
+Provides tools that enable an agent to freely explore GSW structures,
 find implicit multi-hop connections, and create bridge QA pairs.
 
-Tools:
-- Discovery (4): get_entity_documents, get_document_entities, get_document_overlap_matrix, preview_cross_doc_connections
-- Context (2): get_entity_context, reconcile_entity_across_docs
-- Bridges (2): create_bridge_qa (supports batch creation), get_bridge_statistics
-- Planning (2): set_exploration_targets, get_exploration_targets
-- Strategy (1): mark_entity_explored
+Active tools (14, registered in AgenticReconciler):
+- Discovery (3): get_document_entities, get_entity_documents, search_entities
+- Graph Walk (1): find_entity_neighbors
+- Context (1): get_entity_context
+- Bridges (2): create_bridge_qa (batch), get_bridge_statistics
+- Planning (6): plan_document_exploration, begin_neighbor_focus, plan_neighbor_doc_coverage, plan_corpus_exploration, mark_neighbor_explored, get_doc_exploration_status
+- Tracking (1): mark_document_explored
 """
 
 from typing import List, Dict, Any, Optional, Set, Union
@@ -18,9 +19,66 @@ import numpy as np
 from pathlib import Path
 import json
 import hashlib
+import logging
+import re
 from datetime import datetime
 
 from ..memory.models import GSWStructure
+
+logger = logging.getLogger(__name__)
+
+
+TEXT_SIMILARITY_STOPWORDS = {
+    "a",
+    "an",
+    "the",
+    "of",
+    "in",
+    "on",
+    "at",
+    "for",
+    "to",
+    "from",
+    "and",
+    "or",
+    "is",
+    "are",
+    "was",
+    "were",
+}
+
+
+def normalize_similarity_text(value: Any) -> str:
+    """Normalize free-form text for semantic dedupe/matching."""
+    text = str(value or "").strip().strip("\"'`")
+    text = text.replace("_", " ")
+    text = re.sub(r"[^a-zA-Z0-9\s]", " ", text)
+    text = re.sub(r"\s+", " ", text).strip().lower()
+    return text
+
+
+def tokenize_similarity_text(value: Any) -> Set[str]:
+    """Tokenize normalized text with lightweight stopword filtering."""
+    normalized = normalize_similarity_text(value)
+    if not normalized:
+        return set()
+    return {
+        token
+        for token in normalized.split()
+        if token and token not in TEXT_SIMILARITY_STOPWORDS
+    }
+
+
+def jaccard_similarity(a: Set[str], b: Set[str]) -> float:
+    """Jaccard similarity in [0,1]."""
+    if not a and not b:
+        return 1.0
+    if not a or not b:
+        return 0.0
+    union = a | b
+    if not union:
+        return 0.0
+    return len(a & b) / len(union)
 
 
 class GSWTools:
@@ -35,10 +93,15 @@ class GSWTools:
         """
         self.entity_searcher = entity_searcher
         self.explored_entities: Set[str] = set()
+        self.explored_documents: Set[str] = set()
         self.bridges_created: List[Dict[str, Any]] = []
 
         # Exploration tracking for systematic relationship coverage
         self.exploration_plans: Dict[str, Dict[str, Any]] = {}  # entity -> plan
+        self.doc_exploration_plans: Dict[str, Dict[str, Any]] = {}  # doc_id -> plan
+        self.active_neighbor_focus: Optional[Dict[str, str]] = None  # one active edge focus lock
+        # (doc_id, entity_name, neighbor_name, relationship) -> coverage state
+        self.neighbor_doc_coverage_plans: Dict[tuple, Dict[str, Any]] = {}
 
         # High-level exploration queue: which entities to explore and why
         self.exploration_targets: List[Dict[str, Any]] = []
@@ -59,6 +122,95 @@ class GSWTools:
             entity: len(docs)
             for entity, docs in self.entity_to_docs.items()
         }
+
+    def _edge_key(
+        self,
+        doc_id: str,
+        entity_name: str,
+        neighbor_name: str,
+        relationship: str
+    ) -> tuple:
+        """Create canonical key for one source edge."""
+        return (
+            str(doc_id).strip().lower(),
+            str(entity_name).strip().lower(),
+            str(neighbor_name).strip().lower(),
+            str(relationship).strip().lower(),
+        )
+
+    def _active_focus_edge_key(self) -> Optional[tuple]:
+        """Return canonical edge key for the active focus lock."""
+        if not self.active_neighbor_focus:
+            return None
+        f = self.active_neighbor_focus
+        return self._edge_key(
+            f["doc_id"],
+            f["entity_name"],
+            f["neighbor_name"],
+            f["relationship"],
+        )
+
+    def _build_neighbor_doc_coverage_snapshot(self, state: Dict[str, Any]) -> Dict[str, Any]:
+        """Convert internal coverage state to stable response payload."""
+        mandatory_docs = sorted(set(state.get("mandatory_docs", [])))
+        explored_mandatory_docs = sorted(set(state.get("explored_mandatory_docs", [])))
+        pending_mandatory_docs = [d for d in mandatory_docs if d not in set(explored_mandatory_docs)]
+        optional_fuzzy_docs = state.get("optional_fuzzy_docs", [])
+
+        return {
+            "doc_id": state["doc_id"],
+            "entity_name": state["entity_name"],
+            "neighbor_name": state["neighbor_name"],
+            "relationship": state["relationship"],
+            "mandatory_docs": mandatory_docs,
+            "optional_fuzzy_docs": optional_fuzzy_docs,
+            "explored_mandatory_docs": explored_mandatory_docs,
+            "pending_mandatory_docs": pending_mandatory_docs,
+            "ready_to_close": len(pending_mandatory_docs) == 0,
+        }
+
+    def get_neighbor_doc_coverage_status(
+        self,
+        doc_id: str,
+        entity_name: str,
+        neighbor_name: str,
+        relationship: str
+    ) -> Optional[Dict[str, Any]]:
+        """Get current per-edge doc coverage snapshot, if it exists."""
+        key = self._edge_key(doc_id, entity_name, neighbor_name, relationship)
+        state = self.neighbor_doc_coverage_plans.get(key)
+        if state is None:
+            return None
+        return self._build_neighbor_doc_coverage_snapshot(state)
+
+    def _mark_focus_mandatory_doc_explored(
+        self,
+        entity_name: str,
+        doc_id: Optional[str]
+    ) -> None:
+        """
+        Track mandatory doc coverage progress when context is read under active lock.
+        """
+        if not self.active_neighbor_focus or not doc_id or not isinstance(doc_id, str):
+            return
+
+        focus = self.active_neighbor_focus
+        if entity_name.strip().lower() != focus["neighbor_name"].strip().lower():
+            return
+
+        key = self._active_focus_edge_key()
+        if key is None:
+            return
+        state = self.neighbor_doc_coverage_plans.get(key)
+        if state is None:
+            return
+
+        doc_value = doc_id.strip()
+        if doc_value in set(state.get("mandatory_docs", [])):
+            explored = set(state.get("explored_mandatory_docs", []))
+            if doc_value not in explored:
+                explored.add(doc_value)
+                state["explored_mandatory_docs"] = sorted(explored)
 
     # ========== DISCOVERY TOOLS (4) ==========
 
@@ -137,25 +289,120 @@ class GSWTools:
         docs = self.entity_to_docs.get(entity_normalized, set())
         return sorted(list(docs))
 
-    def get_document_entities(self, doc_id: str) -> List[str]:
+    def search_entities(
+        self,
+        query: str,
+        top_k: int = 10,
+        exclude_doc_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
-        Get list of entities mentioned in this document.
+        Search for entities across all documents using BM25/embedding similarity.
+
+        Use when exact name matching (get_entity_documents) finds nothing — discovers
+        fuzzy matches like "Rare" → "Rare Ltd" in other documents.
+
+        Args:
+            query: Entity name or description to search for
+            top_k: Number of results to return
+            exclude_doc_id: Optional doc_id to exclude from results (current document)
+
+        Returns:
+            List of dicts with name, doc_id, roles, states, score
+        """
+        results = self.entity_searcher.search(query, top_k=top_k * 2, verbose=False)
+
+        # Deduplicate by (name_lower, doc_id) keeping highest score
+        seen = {}
+        for entity_dict, score in results:
+            doc_id = entity_dict.get("doc_id", "")
+            if exclude_doc_id and doc_id == exclude_doc_id:
+                continue
+            key = (entity_dict["name"].lower(), doc_id)
+            if key not in seen or score > seen[key]["score"]:
+                # Extract roles/states from entity_dict
+                roles = []
+                states = entity_dict.get("all_states", [])
+                for role_info in entity_dict.get("roles", []):
+                    if isinstance(role_info, dict):
+                        roles.append(role_info.get("role", ""))
+                    elif isinstance(role_info, str):
+                        roles.append(role_info)
+                seen[key] = {
+                    "name": entity_dict["name"],
+                    "doc_id": doc_id,
+                    "roles": sorted(set(r for r in roles if r)),
+                    "states": sorted(set(s for s in states if s)),
+                    "score": round(float(score), 4)
+                }
+
+        # Sort by score descending and limit to top_k
+        results_list = sorted(seen.values(), key=lambda x: x["score"], reverse=True)
+        return results_list[:top_k]
+
+    def get_document_entities(self, doc_id: str) -> List[Dict[str, Any]]:
+        """
+        Get entities in a document with their relationships and neighbor info.
+
+        Returns entities sorted by total neighbors (most connected first).
 
         Args:
             doc_id: Document ID (e.g., "doc_3")
 
         Returns:
-            List of entity names
-
-        Example:
-            >>> tools.get_document_entities("doc_3")
-            ["Lothair II", "Ermengarde of Tours", "Lotharingia"]
+            List of dicts with name, roles, states, neighbors, and counts.
         """
         if doc_id not in self.entity_searcher.gsw_by_doc_id:
             return []
 
         gsw = self.entity_searcher.gsw_by_doc_id[doc_id]
-        return [entity.name for entity in gsw.entity_nodes]
+        result = []
+
+        for entity_node in gsw.entity_nodes:
+            # Extract roles and states
+            roles = []
+            states = []
+            for role in entity_node.roles:
+                roles.append(role.role)
+                states.extend(role.states)
+
+            # Build neighbor map with QA pairs (deduplicated by entity+vp)
+            neighbor_map = {}  # key: (entity_name_lower, vp_phrase_lower)
+
+            for vp in gsw.verb_phrase_nodes:
+                for q in vp.questions:
+                    if entity_node.id in q.answers:
+                        for e in gsw.entity_nodes:
+                            if e.name.lower() in q.text.lower() and e.id != entity_node.id:
+                                key = (e.name.lower(), vp.phrase.lower())
+                                answer_refs = [f"{doc_id}::{aid}" for aid in q.answers]
+                                qa_entry = {"question": q.text, "answer_refs": answer_refs}
+
+                                if key not in neighbor_map:
+                                    other_docs = [d for d in self.get_entity_documents(e.name) if d != doc_id]
+                                    neighbor_map[key] = {
+                                        "entity": e.name,
+                                        "relationship": vp.phrase,
+                                        "cross_doc": len(other_docs) > 0,
+                                        "other_docs": other_docs,
+                                        "qa_pairs": [qa_entry]
+                                    }
+                                else:
+                                    neighbor_map[key]["qa_pairs"].append(qa_entry)
+
+            neighbors = list(neighbor_map.values())
+            cross_doc_count = len([n for n in neighbors if n["cross_doc"]])
+            result.append({
+                "name": entity_node.name,
+                "roles": sorted(set(roles)),
+                "states": sorted(set(states)),
+                "neighbors": neighbors,
+                "cross_doc_neighbors": cross_doc_count,
+                "total_neighbors": len(neighbors)
+            })
+
+        # Sort by total_neighbors descending so most connected entities are first
+        result.sort(key=lambda x: x["total_neighbors"], reverse=True)
+        return result
 
     def find_entity_neighbors(
         self,
@@ -163,7 +410,7 @@ class GSWTools:
         relationship_types: Optional[List[str]] = None
     ) -> List[Dict[str, Any]]:
         """
-        Find entities connected to this entity via verb phrases.
+        Find entities connected to this entity via verb phrases, with QA pairs.
 
         Args:
             entity_name: Entity to find neighbors for
@@ -171,16 +418,23 @@ class GSWTools:
                                If None, returns all relationships
 
         Returns:
-            List of neighbor dicts with entity, relationship, doc_id
+            List of neighbor dicts with entity, relationship, doc_id, qa_pairs
 
         Example:
-            >>> tools.find_entity_neighbors("Lothair II", relationship_types=["mother", "spouse"])
+            >>> tools.find_entity_neighbors("Master Aldric")
             [
-                {"entity": "Ermengarde of Tours", "relationship": "mother of", "doc_id": "doc_3"},
-                {"entity": "Teutberga", "relationship": "married to", "doc_id": "doc_3"}
+                {
+                    "entity": "Lady Margaux",
+                    "relationship": "commissioned by",
+                    "doc_id": "doc_5",
+                    "qa_pairs": [
+                        {"question": "Who commissioned Master Aldric?", "answer_refs": ["doc_5::e2"]}
+                    ]
+                }
             ]
         """
-        neighbors = []
+        # Use dict to deduplicate and merge qa_pairs for same (entity, vp, doc)
+        neighbor_map = {}  # key: (entity_name_lower, vp_phrase_lower, doc_id)
         entity_normalized = entity_name.strip().lower()
         docs = self.get_entity_documents(entity_name)
 
@@ -203,25 +457,30 @@ class GSWTools:
             # Find verb phrases involving this entity
             for vp in gsw.verb_phrase_nodes:
                 for q in vp.questions:
-                    # Check if this question involves our entity
                     if entity_id in q.answers:
-                        # Find the other entity in the question
                         for e in gsw.entity_nodes:
                             if e.name.lower() in q.text.lower() and e.name.lower() != entity_normalized:
                                 relationship = vp.phrase
 
-                                # Filter by relationship type if specified
                                 if relationship_types:
                                     if not any(rt in relationship.lower() for rt in relationship_types):
                                         continue
 
-                                neighbors.append({
-                                    "entity": e.name,
-                                    "relationship": relationship,
-                                    "doc_id": doc_id
-                                })
+                                key = (e.name.lower(), vp.phrase.lower(), doc_id)
+                                answer_refs = [f"{doc_id}::{aid}" for aid in q.answers]
+                                qa_entry = {"question": q.text, "answer_refs": answer_refs}
 
-        return neighbors
+                                if key not in neighbor_map:
+                                    neighbor_map[key] = {
+                                        "entity": e.name,
+                                        "relationship": relationship,
+                                        "doc_id": doc_id,
+                                        "qa_pairs": [qa_entry]
+                                    }
+                                else:
+                                    neighbor_map[key]["qa_pairs"].append(qa_entry)
+
+        return list(neighbor_map.values())
 
     def get_document_overlap_matrix(self, min_shared: int = 1) -> Dict[str, Any]:
         """
@@ -535,11 +794,13 @@ class GSWTools:
         if isinstance(doc_id, list):
             results = []
             for d in doc_id:
+                self._mark_focus_mandatory_doc_explored(entity_name, d)
                 result = self._get_single_doc_context(entity_name, d)
                 results.append(result)
             return results
 
         # SINGLE DOC MODE or MERGED MODE
+        self._mark_focus_mandatory_doc_explored(entity_name, doc_id)
         return self._get_single_doc_context(entity_name, doc_id)
 
     def _get_single_doc_context(
@@ -972,6 +1233,13 @@ class GSWTools:
                 "validation": {"valid": False, "confidence": 0.0}
             }
 
+        if not answers or not reverse_answers:
+            return {
+                "success": False,
+                "error": "answers and reverse_answers must be non-empty lists.",
+                "validation": {"valid": False, "confidence": 0.0}
+            }
+
         # Continue with single bridge creation logic...
         # STEP 1: Validate that bridge spans multiple documents
         if len(source_docs) < 2:
@@ -1042,8 +1310,50 @@ class GSWTools:
                 }
             }
 
-        # STEP 5: Check for duplicate question
-        bridge_id = f"bridge_{hashlib.md5(question.encode()).hexdigest()[:8]}"
+        # STEP 5: Hard cross-doc ref gate (answers must actually touch >=2 docs)
+        docs_from_refs = {
+            item["doc_id"]
+            for item in (ans_resolved + rev_resolved)
+            if isinstance(item, dict) and item.get("doc_id")
+        }
+        if len(docs_from_refs) < 2:
+            return {
+                "success": False,
+                "error": (
+                    "Bridge refs are not cross-document. "
+                    "answers + reverse_answers must resolve to at least 2 distinct docs."
+                ),
+                "hint": (
+                    "Use refs grounded in at least two source docs. "
+                    "Do not rely on source_docs list alone."
+                ),
+                "validation": {
+                    "valid": False,
+                    "confidence": 0.0,
+                    "evidence": [],
+                    "reasoning": f"Resolved refs only touch docs={sorted(docs_from_refs)}",
+                    "stage": "tool_validation",
+                    "failure_codes": ["DOC_MISMATCH", "NOT_CHAIN"],
+                }
+            }
+
+        # Canonicalize source_docs to only documents actually used by grounded refs.
+        canonical_source_docs: List[str] = []
+        seen_docs: Set[str] = set()
+        for doc_id in source_docs:
+            normalized_doc = str(doc_id).strip()
+            if normalized_doc in docs_from_refs and normalized_doc not in seen_docs:
+                canonical_source_docs.append(normalized_doc)
+                seen_docs.add(normalized_doc)
+        # Defensive fallback: include any resolved ref docs omitted by caller ordering.
+        for doc_id in sorted(docs_from_refs):
+            if doc_id not in seen_docs:
+                canonical_source_docs.append(doc_id)
+                seen_docs.add(doc_id)
+        source_docs = canonical_source_docs
+
+        # STEP 6: Check for duplicate question
+        bridge_id = f"bridge_{hashlib.md5((question + '||' + reverse_question).encode()).hexdigest()[:8]}"
         if any(b["bridge_id"] == bridge_id for b in self.bridges_created):
             return {
                 "success": False,
@@ -1052,7 +1362,36 @@ class GSWTools:
                 "validation": {"valid": False, "confidence": 0.0}
             }
 
-        # STEP 6: Validation passed - create the bridge
+        # STEP 7: Semantic similarity signal (non-blocking, verifier decides)
+        similarity_hits: List[Dict[str, Any]] = []
+        source_doc_set = set(source_docs)
+        forward_tokens = tokenize_similarity_text(question)
+        reverse_tokens = tokenize_similarity_text(reverse_question)
+        for existing in self.bridges_created:
+            existing_docs = set(existing.get("source_docs", []))
+            shared_docs = sorted(source_doc_set & existing_docs)
+            if len(shared_docs) < 2:
+                continue
+
+            existing_forward_tokens = tokenize_similarity_text(existing.get("question", ""))
+            existing_reverse_tokens = tokenize_similarity_text(existing.get("reverse_question", ""))
+            sim_forward = jaccard_similarity(forward_tokens, existing_forward_tokens)
+            sim_reverse = jaccard_similarity(reverse_tokens, existing_reverse_tokens)
+            max_similarity = max(sim_forward, sim_reverse)
+            if max_similarity >= 0.70:
+                similarity_hits.append(
+                    {
+                        "bridge_id": existing.get("bridge_id"),
+                        "max_similarity": round(max_similarity, 4),
+                        "forward_similarity": round(sim_forward, 4),
+                        "reverse_similarity": round(sim_reverse, 4),
+                        "shared_docs": shared_docs,
+                    }
+                )
+
+        similarity_hits.sort(key=lambda item: item.get("max_similarity", 0.0), reverse=True)
+
+        # STEP 8: Validation passed - create the bridge
         all_resolved = ans_resolved + rev_resolved
         final_confidence = min(0.9, 0.7 + 0.1 * len(all_resolved))
 
@@ -1064,17 +1403,19 @@ class GSWTools:
             "source": "sleep_time_agent",
             "source_docs": source_docs,
             "reasoning": reasoning,
-            "confidence": confidence,
+            "confidence": final_confidence,
             "entities_involved": entities_involved or [],
             "bridge_id": bridge_id,
             "timestamp": datetime.now().isoformat(),
             "hop_count": len(source_docs)
         }
+        if similarity_hits:
+            bridge_data["similarity_signal"] = similarity_hits[:3]
 
         # Store bridge
         self.bridges_created.append(bridge_data)
 
-        return {
+        result = {
             "success": True,
             "bridge_id": bridge_id,
             "message": f"Bridge created successfully",
@@ -1087,6 +1428,9 @@ class GSWTools:
                 "confidence": final_confidence,
             }
         }
+        if similarity_hits:
+            result["validation"]["similarity_signal"] = similarity_hits[:3]
+        return result
 
     def validate_bridge(
         self,
@@ -1289,6 +1633,573 @@ class GSWTools:
         self.explored_entities.add(entity_name)
         # Auto-update exploration targets queue
         self._update_target_status(entity_name, "completed", num_bridges_created)
+
+    def mark_document_explored(self, doc_id: str, num_bridges_created: int = 0) -> Dict[str, Any]:
+        """
+        Mark a document as fully explored.
+
+        Args:
+            doc_id: Document ID (e.g., "doc_3")
+            num_bridges_created: Number of bridges created from this document
+
+        Returns:
+            Dict with exploration progress
+        """
+        self.explored_documents.add(doc_id)
+        all_docs = set(self.entity_searcher.gsw_by_doc_id.keys())
+        remaining = sorted(all_docs - self.explored_documents)
+        return {
+            "doc_id": doc_id,
+            "bridges_created": num_bridges_created,
+            "total_explored": len(self.explored_documents),
+            "total_docs": len(all_docs),
+            "remaining_docs": remaining
+        }
+
+    # ========== DOCUMENT-LEVEL PLANNING TOOLS ==========
+
+    def plan_document_exploration(self, doc_id: str) -> Dict[str, Any]:
+        """
+        Auto-build an exploration checklist for a document's entities and ALL their neighbors.
+
+        Call this after get_document_entities to create a structured TODO list.
+        Includes ALL entities with neighbors — use search_entities to find fuzzy cross-doc matches.
+
+        Args:
+            doc_id: Document ID (e.g., "doc_5")
+
+        Returns:
+            Dict with entities_to_explore checklist, each with pending neighbors.
+        """
+        entities_data = self.get_document_entities(doc_id)
+        if not entities_data:
+            return {"error": f"No entities found in {doc_id} or document does not exist."}
+
+        entities_to_explore = []
+        total_neighbors = 0
+
+        for entity in entities_data:
+            neighbors = []
+            for neighbor in entity.get("neighbors", []):
+                neighbors.append({
+                    "entity": neighbor["entity"],
+                    "relationship": neighbor["relationship"],
+                    "other_docs": neighbor.get("other_docs", []),
+                    "status": "pending"
+                })
+
+            if neighbors:
+                entities_to_explore.append({
+                    "name": entity["name"],
+                    "roles": entity.get("roles", []),
+                    "neighbors": neighbors,
+                    "status": "pending"
+                })
+                total_neighbors += len(neighbors)
+
+        plan = {
+            "doc_id": doc_id,
+            "entities_to_explore": entities_to_explore,
+            "total_neighbors_to_explore": total_neighbors,
+            "explored_count": 0,
+            "pending_count": total_neighbors
+        }
+
+        # Store the plan keyed by doc_id
+        self.doc_exploration_plans[doc_id] = plan
+
+        return plan
+
+    def begin_neighbor_focus(
+        self,
+        doc_id: str,
+        entity_name: str,
+        neighbor_name: str,
+        relationship: str
+    ) -> Dict[str, Any]:
+        """
+        Begin strict focus on one source-entity -> neighbor edge.
+
+        Only one focus lock can be active at a time.
+        """
+        if doc_id not in self.doc_exploration_plans:
+            return {"error": f"No exploration plan for '{doc_id}'. Call plan_document_exploration first."}
+
+        if self.active_neighbor_focus is not None:
+            return {
+                "error": "Another neighbor focus is already active.",
+                "active_focus": self.active_neighbor_focus,
+                "hint": "Finish current edge and call mark_neighbor_explored to release the lock."
+            }
+
+        plan = self.doc_exploration_plans[doc_id]
+        entity_key = entity_name.strip().lower()
+        neighbor_key = neighbor_name.strip().lower()
+        relationship_key = relationship.strip().lower()
+
+        entity_plan = None
+        for ep in plan["entities_to_explore"]:
+            if ep["name"].lower() == entity_key:
+                entity_plan = ep
+                break
+        if entity_plan is None:
+            return {"error": f"Entity '{entity_name}' not found in plan for {doc_id}."}
+
+        target_neighbor = None
+        for nb in entity_plan["neighbors"]:
+            if (
+                nb["entity"].lower() == neighbor_key
+                and nb["relationship"].lower() == relationship_key
+                and nb["status"] == "pending"
+            ):
+                target_neighbor = nb
+                break
+
+        if target_neighbor is None:
+            return {
+                "error": (
+                    f"Pending edge not found for entity='{entity_name}', "
+                    f"neighbor='{neighbor_name}', relationship='{relationship}'."
+                ),
+                "hint": "Use get_doc_exploration_status to inspect pending edges exactly."
+            }
+
+        self.active_neighbor_focus = {
+            "doc_id": doc_id,
+            "entity_name": entity_plan["name"],
+            "neighbor_name": target_neighbor["entity"],
+            "relationship": target_neighbor["relationship"],
+        }
+        logger.info(
+            "Neighbor focus lock acquired [doc=%s entity=%s neighbor=%s relationship=%s]",
+            doc_id,
+            entity_plan["name"],
+            target_neighbor["entity"],
+            target_neighbor["relationship"],
+        )
+
+        return {
+            "success": True,
+            "active_focus": dict(self.active_neighbor_focus),
+            "message": "Neighbor focus lock acquired."
+        }
+
+    def plan_neighbor_doc_coverage(
+        self,
+        doc_id: str,
+        entity_name: str,
+        neighbor_name: str,
+        relationship: str,
+        include_fuzzy: bool = True,
+        top_k: int = 10
+    ) -> Dict[str, Any]:
+        """
+        Build per-edge doc coverage plan for one active source edge.
+
+        Mandatory docs come from exact entity-name matches. Fuzzy docs are optional hints.
+        """
+        if self.active_neighbor_focus is None:
+            return {
+                "error": "No active neighbor focus lock.",
+                "stage": "focus_guard",
+                "hint": "Call begin_neighbor_focus first."
+            }
+
+        focus = self.active_neighbor_focus
+        focus_key = self._edge_key(
+            focus["doc_id"],
+            focus["entity_name"],
+            focus["neighbor_name"],
+            focus["relationship"],
+        )
+        requested_key = self._edge_key(doc_id, entity_name, neighbor_name, relationship)
+        if requested_key != focus_key:
+            return {
+                "error": "Coverage plan can only be created for the active focused edge.",
+                "stage": "focus_guard",
+                "active_focus": dict(focus),
+                "hint": "Use active focus tuple exactly."
+            }
+
+        if doc_id not in self.doc_exploration_plans:
+            return {"error": f"No exploration plan for '{doc_id}'. Call plan_document_exploration first."}
+
+        if top_k < 1:
+            top_k = 1
+
+        mandatory_docs = [
+            d for d in self.get_entity_documents(neighbor_name)
+            if d != doc_id
+        ]
+        mandatory_docs = sorted(set(mandatory_docs))
+
+        optional_fuzzy_docs: List[Dict[str, Any]] = []
+        if include_fuzzy:
+            fuzzy_results = self.search_entities(
+                query=neighbor_name,
+                top_k=top_k,
+                exclude_doc_id=doc_id,
+            )
+            best_by_doc: Dict[str, Dict[str, Any]] = {}
+            for item in fuzzy_results:
+                fuzzy_doc_id = item.get("doc_id")
+                if not fuzzy_doc_id or fuzzy_doc_id in mandatory_docs:
+                    continue
+                prev = best_by_doc.get(fuzzy_doc_id)
+                if prev is None or float(item.get("score", 0.0)) > float(prev.get("score", 0.0)):
+                    best_by_doc[fuzzy_doc_id] = {
+                        "doc_id": fuzzy_doc_id,
+                        "name": item.get("name", ""),
+                        "score": float(item.get("score", 0.0)),
+                    }
+            optional_fuzzy_docs = sorted(
+                best_by_doc.values(),
+                key=lambda x: (-x["score"], x["doc_id"])
+            )
+
+        existing = self.neighbor_doc_coverage_plans.get(requested_key, {})
+        explored_existing = set(existing.get("explored_mandatory_docs", []))
+        explored_mandatory_docs = sorted(
+            d for d in explored_existing
+            if d in set(mandatory_docs)
+        )
+
+        state = {
+            "doc_id": doc_id,
+            "entity_name": focus["entity_name"],
+            "neighbor_name": focus["neighbor_name"],
+            "relationship": focus["relationship"],
+            "mandatory_docs": mandatory_docs,
+            "optional_fuzzy_docs": optional_fuzzy_docs,
+            "explored_mandatory_docs": explored_mandatory_docs,
+            "include_fuzzy": bool(include_fuzzy),
+            "top_k": int(top_k),
+        }
+        self.neighbor_doc_coverage_plans[requested_key] = state
+        return self._build_neighbor_doc_coverage_snapshot(state)
+
+    def plan_corpus_exploration(
+        self,
+        strategy: str = "max_pending_neighbors",
+        limit: int = 20,
+        include_completed: bool = False
+    ) -> Dict[str, Any]:
+        """
+        Build global document queue from existing per-doc plans and completion state.
+        """
+        def _doc_sort_key(doc_value: str) -> tuple:
+            if "_" in doc_value:
+                parts = doc_value.split("_", 1)
+                if len(parts) == 2 and parts[1].isdigit():
+                    return (0, int(parts[1]), doc_value)
+            return (1, 0, doc_value)
+
+        all_docs = sorted(self.entity_searcher.gsw_by_doc_id.keys(), key=_doc_sort_key)
+        if limit < 1:
+            limit = 1
+
+        queue = []
+        for doc_id in all_docs:
+            plan = self.doc_exploration_plans.get(doc_id)
+            is_completed = doc_id in self.explored_documents
+
+            if is_completed:
+                status = "completed"
+            elif plan is None:
+                status = "unplanned"
+            else:
+                status = "in_progress"
+
+            pending_neighbors = int(plan.get("pending_count", 0)) if plan else 0
+            pending_entities = (
+                sum(1 for ep in plan.get("entities_to_explore", []) if ep.get("status") != "completed")
+                if plan else 0
+            )
+            suggested_next_entity = None
+            if plan:
+                for ep in plan.get("entities_to_explore", []):
+                    if ep.get("status") != "completed":
+                        suggested_next_entity = ep.get("name")
+                        break
+
+            entry = {
+                "doc_id": doc_id,
+                "status": status,
+                "pending_neighbors": pending_neighbors,
+                "pending_entities": pending_entities,
+                "suggested_next_entity": suggested_next_entity,
+                "ready_to_complete": bool(plan and pending_neighbors == 0 and not is_completed),
+            }
+            if include_completed or status != "completed":
+                queue.append(entry)
+
+        if strategy != "max_pending_neighbors":
+            strategy = "max_pending_neighbors"
+
+        next_doc = None
+        candidates = [q for q in queue if q["status"] != "completed"]
+        if candidates:
+            if any(c["status"] == "in_progress" and c["pending_neighbors"] > 0 for c in candidates):
+                in_progress = [c for c in candidates if c["status"] == "in_progress"]
+                next_doc = sorted(
+                    in_progress,
+                    key=lambda x: (-x["pending_neighbors"], x["doc_id"])
+                )[0]
+            elif any(c["status"] == "unplanned" for c in candidates):
+                next_doc = sorted([c for c in candidates if c["status"] == "unplanned"], key=lambda x: x["doc_id"])[0]
+            else:
+                next_doc = sorted(candidates, key=lambda x: x["doc_id"])[0]
+
+        queue_sorted = sorted(
+            queue,
+            key=lambda x: (
+                0 if x["status"] == "in_progress" else (1 if x["status"] == "unplanned" else 2),
+                -x["pending_neighbors"],
+                x["doc_id"],
+            ),
+        )
+
+        return {
+            "strategy": strategy,
+            "total_docs": len(all_docs),
+            "returned_docs": min(limit, len(queue_sorted)),
+            "queue": queue_sorted[:limit],
+            "next_doc": next_doc,
+            "active_focus": dict(self.active_neighbor_focus) if self.active_neighbor_focus else None,
+        }
+
+    def mark_neighbor_explored(
+        self,
+        doc_id: str,
+        entity_name: str,
+        neighbor_name: Union[str, List[str]],
+        relationship: Optional[Union[str, List[str]]] = None,
+        bridges_created: Union[int, List[int]] = 0
+    ) -> Dict[str, Any]:
+        """
+        Mark one or more cross-doc neighbors as explored in a document's plan.
+
+        Args:
+            doc_id: Document ID the plan belongs to
+            entity_name: Entity in the document whose neighbor was explored
+            neighbor_name: Single neighbor name (str) or list of names (batch mode)
+            relationship: Optional relationship for disambiguating repeated neighbor names.
+                         Required when the same neighbor appears multiple times for an entity.
+            bridges_created: Bridge count(s) — int for single/uniform, list for individual counts
+
+        Returns:
+            Updated status with remaining/explored counts.
+        """
+        if doc_id not in self.doc_exploration_plans:
+            return {"error": f"No exploration plan for '{doc_id}'. Call plan_document_exploration first."}
+
+        plan = self.doc_exploration_plans[doc_id]
+        entity_key = entity_name.strip().lower()
+
+        # Find the entity in the plan
+        entity_plan = None
+        for ep in plan["entities_to_explore"]:
+            if ep["name"].lower() == entity_key:
+                entity_plan = ep
+                break
+
+        if entity_plan is None:
+            return {"error": f"Entity '{entity_name}' not found in plan for {doc_id}."}
+
+        # Normalize to list for uniform handling
+        names = neighbor_name if isinstance(neighbor_name, list) else [neighbor_name]
+        rels = relationship if isinstance(relationship, list) else [relationship] * len(names)
+
+        # Under an active lock, relationship is required to disambiguate the edge tuple.
+        if self.active_neighbor_focus is not None:
+            if relationship is None:
+                return {
+                    "error": (
+                        "relationship is required while a neighbor focus lock is active."
+                    ),
+                    "hint": "Pass relationship exactly as returned by begin_neighbor_focus."
+                }
+            if isinstance(neighbor_name, list):
+                return {
+                    "error": "Batch mark is not allowed while a neighbor focus lock is active.",
+                    "hint": "Mark the active edge with a single neighbor_name and relationship."
+                }
+            if not isinstance(relationship, str) or not relationship.strip():
+                return {
+                    "error": "relationship must be a non-empty string while focus lock is active."
+                }
+
+        # Relationship disambiguation for batch mode
+        if isinstance(relationship, list) and len(relationship) != len(names):
+            return {"error": f"relationship length ({len(relationship)}) must match neighbor_name length ({len(names)})"}
+
+        if isinstance(bridges_created, list):
+            if len(bridges_created) != len(names):
+                return {"error": f"bridges_created length ({len(bridges_created)}) must match neighbor_name length ({len(names)})"}
+            counts = bridges_created
+        else:
+            counts = [bridges_created] * len(names)
+
+        marked = []
+        not_found = []
+        for name, rel, count in zip(names, rels, counts):
+            name_key = name.strip().lower()
+            rel_key = rel.strip().lower() if isinstance(rel, str) and rel.strip() else None
+            found = False
+            candidates = [
+                nb for nb in entity_plan["neighbors"]
+                if nb["entity"].lower() == name_key and nb["status"] == "pending"
+            ]
+
+            if rel_key is None and len(candidates) > 1:
+                not_found.append(name)
+                continue
+
+            for nb in entity_plan["neighbors"]:
+                if nb["entity"].lower() != name_key or nb["status"] != "pending":
+                    continue
+                if rel_key is not None and nb["relationship"].lower() != rel_key:
+                    continue
+
+                # If focus lock is active for this doc/entity, only matching edge can be marked.
+                if self.active_neighbor_focus is not None:
+                    f = self.active_neighbor_focus
+                    if (
+                        f["doc_id"] != doc_id
+                        or f["entity_name"].lower() != entity_key
+                        or f["neighbor_name"].lower() != nb["entity"].lower()
+                        or f["relationship"].lower() != nb["relationship"].lower()
+                    ):
+                        continue
+
+                    # Coverage gate: focused edge can close only after all mandatory docs are explored.
+                    coverage = self.get_neighbor_doc_coverage_status(
+                        doc_id=f["doc_id"],
+                        entity_name=f["entity_name"],
+                        neighbor_name=f["neighbor_name"],
+                        relationship=f["relationship"],
+                    )
+                    if coverage is None:
+                        return {
+                            "error": (
+                                "Neighbor doc coverage plan missing for active edge. "
+                                "Call plan_neighbor_doc_coverage first."
+                            ),
+                            "stage": "coverage_guard",
+                            "active_focus": dict(f),
+                        }
+                    if coverage["pending_mandatory_docs"]:
+                        return {
+                            "error": (
+                                "Cannot mark active edge explored before mandatory neighbor docs are covered."
+                            ),
+                            "stage": "coverage_guard",
+                            "pending_mandatory_docs": coverage["pending_mandatory_docs"],
+                            "active_focus": dict(f),
+                            "hint": "Read each pending mandatory doc with get_entity_context(neighbor, 'doc_x').",
+                        }
+
+                nb["status"] = "explored"
+                nb["bridges_created"] = count
+                marked.append(name)
+                found = True
+
+                # Successful mark of focused edge releases the lock.
+                if self.active_neighbor_focus is not None:
+                    logger.info(
+                        "Neighbor focus lock released [doc=%s entity=%s neighbor=%s relationship=%s]",
+                        doc_id,
+                        entity_name,
+                        nb["entity"],
+                        nb["relationship"],
+                    )
+                    self.active_neighbor_focus = None
+                break
+
+            if not found:
+                not_found.append(name)
+
+        # Update entity status if all neighbors explored
+        all_explored = all(nb["status"] == "explored" for nb in entity_plan["neighbors"])
+        if all_explored:
+            entity_plan["status"] = "completed"
+
+        # Recount plan-level totals
+        explored = sum(
+            1 for ep in plan["entities_to_explore"]
+            for nb in ep["neighbors"]
+            if nb["status"] == "explored"
+        )
+        pending = plan["total_neighbors_to_explore"] - explored
+        plan["explored_count"] = explored
+        plan["pending_count"] = pending
+
+        result = {
+            "doc_id": doc_id,
+            "entity": entity_name,
+            "marked": marked,
+            "explored_count": explored,
+            "pending_count": pending,
+        }
+        if not_found:
+            result["not_found"] = not_found
+            if relationship is None:
+                result["hint"] = "Add relationship to disambiguate repeated neighbor names."
+        return result
+
+    def get_doc_exploration_status(self, doc_id: str) -> Dict[str, Any]:
+        """
+        Get current exploration status for a document's plan.
+
+        Shows which cross-doc neighbors have been explored vs still pending.
+
+        Args:
+            doc_id: Document ID to check
+
+        Returns:
+            Dict with per-entity explored/pending breakdown and overall counts.
+        """
+        if doc_id not in self.doc_exploration_plans:
+            return {"error": f"No exploration plan for '{doc_id}'. Call plan_document_exploration first."}
+
+        plan = self.doc_exploration_plans[doc_id]
+
+        entities_status = []
+        for ep in plan["entities_to_explore"]:
+            explored = [
+                {"entity": nb["entity"], "relationship": nb["relationship"], "bridges": nb.get("bridges_created", 0)}
+                for nb in ep["neighbors"] if nb["status"] == "explored"
+            ]
+            pending = [
+                {"entity": nb["entity"], "relationship": nb["relationship"], "other_docs": nb["other_docs"]}
+                for nb in ep["neighbors"] if nb["status"] == "pending"
+            ]
+            entities_status.append({
+                "name": ep["name"],
+                "status": ep["status"],
+                "explored": explored,
+                "pending": pending
+            })
+
+        return {
+            "doc_id": doc_id,
+            "entities": entities_status,
+            "explored_count": plan["explored_count"],
+            "pending_count": plan["pending_count"],
+            "total_neighbors_to_explore": plan["total_neighbors_to_explore"],
+            "ready_to_complete": plan["pending_count"] == 0,
+            "active_focus": dict(self.active_neighbor_focus) if self.active_neighbor_focus else None,
+            "active_focus_coverage": (
+                self.get_neighbor_doc_coverage_status(
+                    self.active_neighbor_focus["doc_id"],
+                    self.active_neighbor_focus["entity_name"],
+                    self.active_neighbor_focus["neighbor_name"],
+                    self.active_neighbor_focus["relationship"],
+                )
+                if self.active_neighbor_focus and self.active_neighbor_focus.get("doc_id") == doc_id
+                else None
+            ),
+        }
 
     def plan_entity_exploration(
         self,

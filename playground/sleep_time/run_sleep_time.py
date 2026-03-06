@@ -86,6 +86,9 @@ class AgentOutputParser:
 
         # Clean up for display
         cleaned = content
+        # Strip <think> tags (closed and unclosed) from display
+        cleaned = re.sub(r'<think>.*?</think>', '', cleaned, flags=re.DOTALL)
+        cleaned = re.sub(r'<think>.*', '', cleaned, flags=re.DOTALL)
         # Remove 'assistant' tags
         cleaned = re.sub(r'assistant(?:commentary|analysis|final)?', '\n', cleaned, flags=re.IGNORECASE)
         # Remove function call artifacts
@@ -154,10 +157,14 @@ class InteractiveDisplay:
         is_valid = result.get('valid', False)
         confidence = result.get('confidence', 0)
         reasoning = result.get('reasoning', 'N/A')
+        stage = result.get('stage', 'tool')
+        failure_codes = result.get('failure_codes', [])
+        codes_text = ", ".join(failure_codes) if failure_codes else "None"
 
         if is_valid:
             self.console.print(Panel(
                 f"[bold green]✅ VALIDATION PASSED[/bold green]\n"
+                f"Stage: {stage}\n"
                 f"Confidence: {confidence:.2f}\n"
                 f"Reasoning: {reasoning}",
                 border_style="green",
@@ -166,19 +173,22 @@ class InteractiveDisplay:
         else:
             self.console.print(Panel(
                 f"[bold red]❌ VALIDATION FAILED[/bold red]\n"
+                f"Stage: {stage}\n"
                 f"Confidence: {confidence:.2f}\n"
+                f"Failure codes: {codes_text}\n"
                 f"Reasoning: {reasoning}",
                 border_style="red",
                 title="Validation"
             ))
 
-    def show_bridge_created(self, bridge_id: str, question: str, answer: str):
+    def show_bridge_created(self, bridge_id: str, question: str, answers):
         """Display bridge creation success."""
+        answers_str = ", ".join(answers) if isinstance(answers, list) else str(answers)
         self.console.print(Panel(
             f"[bold magenta]🎉 BRIDGE CREATED[/bold magenta]\n"
             f"ID: {bridge_id}\n"
             f"Q: {question}\n"
-            f"A: {answer}",
+            f"A: {answers_str}",
             border_style="magenta",
             title="Bridge"
         ))
@@ -211,12 +221,13 @@ class InteractiveDisplay:
             ))
 
     def show_progress_summary(self, entities_done: int, total: int,
-                             bridges: int, tokens: int):
+                             bridges: int, tokens: int,
+                             input_tokens: int = 0, output_tokens: int = 0):
         """Show progress summary."""
         self.console.print(f"\n[dim]{'─'*70}[/dim]")
         self.console.print(
             f"[cyan]Progress:[/cyan] {entities_done}/{total} entities | "
-            f"{bridges} bridges | {tokens:,} tokens"
+            f"{bridges} bridges | {input_tokens:,} in / {output_tokens:,} out tokens"
         )
         self.console.print(f"[dim]{'─'*70}[/dim]\n")
 
@@ -346,10 +357,33 @@ class SleepTimeRunner:
                     display.show_bridge_created(
                         data["bridge_id"],
                         data["question"],
-                        data["answer"]
+                        data.get("answers", data.get("answer", ""))
                     )
                 elif event_type == "agent_thinking":
                     display.show_agent_thinking(data["content"])
+                elif event_type == "rlm_edge_summary":
+                    edge = data.get("edge", {})
+                    display.show_tool_result(
+                        {
+                            "edge": edge,
+                            "accepted": data.get("accepted", 0),
+                            "attempted": data.get("attempted", 0),
+                            "rejected": data.get("rejected", 0),
+                            "edge_tokens": data.get("edge_tokens", 0),
+                            "budget_exhausted": data.get("budget_exhausted", False),
+                        },
+                        tool_name="rlm_edge_summary",
+                    )
+                elif event_type == "rlm_doc_summary":
+                    display.show_tool_result(
+                        {
+                            "doc_id": data.get("entity"),
+                            "bridges_created": data.get("bridges_created", 0),
+                            "pending_edges": data.get("pending_edges", 0),
+                            "edges": len(data.get("edge_results", [])),
+                        },
+                        tool_name="rlm_doc_summary",
+                    )
 
             # Always log to trace file with visual separators
             if event_type == "iteration_start":
@@ -370,6 +404,10 @@ class SleepTimeRunner:
             elif event_type == "validation":
                 self.trace_logger.info(f"\n>>> VALIDATION <<<")
                 self.trace_logger.info(f"Valid: {data.get('valid')} | Confidence: {data.get('confidence')}")
+                if 'stage' in data:
+                    self.trace_logger.info(f"  Stage: {data['stage']}")
+                if 'failure_codes' in data:
+                    self.trace_logger.info(f"  Failure codes: {data['failure_codes']}")
                 if 'invalid_docs' in data:
                     self.trace_logger.warning(f"  Invalid docs: {data['invalid_docs']}")
                     self.trace_logger.info(f"  Hint: {data.get('hint', 'N/A')}")
@@ -380,7 +418,9 @@ class SleepTimeRunner:
                 self.trace_logger.info(f"\n{'*'*80}")
                 self.trace_logger.info(f"✓ BRIDGE CREATED: {data['bridge_id']}")
                 self.trace_logger.info(f"  Q: {data['question']}")
-                self.trace_logger.info(f"  A: {data['answer']}")
+                answers = data.get("answers", data.get("answer", ""))
+                answers_str = ", ".join(answers) if isinstance(answers, list) else str(answers)
+                self.trace_logger.info(f"  A: {answers_str}")
                 self.trace_logger.info(f"{'*'*80}")
 
             elif event_type == "agent_thinking":
@@ -398,6 +438,10 @@ class SleepTimeRunner:
                 self.trace_logger.info(f"\n{'='*80}")
                 self.trace_logger.info(f"✓ Agent finished exploration")
                 self.trace_logger.info(f"{'='*80}\n")
+            elif event_type == "rlm_edge_summary":
+                self.trace_logger.info(f"\n[rlm_edge] {json.dumps(data, ensure_ascii=False)}")
+            elif event_type == "rlm_doc_summary":
+                self.trace_logger.info(f"\n[rlm_doc] {json.dumps(data, ensure_ascii=False)}")
 
         return callback
 
@@ -445,12 +489,24 @@ class SleepTimeRunner:
                 model_name=self.args.model,
                 budget={
                     "max_entities": self.args.num_entities,
+                    "max_documents": self.args.num_docs,
                     "max_tokens": self.args.max_tokens
                 },
                 verbose=False,  # Suppress default verbose - we use callback
                 output_callback=output_callback,
                 reasoning_effort=self.args.reasoning_effort,
-                base_url=getattr(self.args, 'base_url', None)
+                base_url=getattr(self.args, 'base_url', None),
+                bridge_verifier_enabled=not self.args.disable_bridge_verifier,
+                bridge_verifier_threshold=self.args.bridge_verifier_threshold,
+                bridge_verifier_fail_open=self.args.bridge_verifier_fail_open,
+                bridge_verifier_model=self.args.bridge_verifier_model,
+                pipeline_mode=self.args.pipeline_mode,
+                root_model=self.args.root_model,
+                worker_model=self.args.worker_model,
+                edge_max_depth=self.args.edge_max_depth,
+                edge_max_calls=self.args.edge_max_calls,
+                edge_max_tokens=self.args.edge_max_tokens,
+                max_optional_docs_per_edge=self.args.max_optional_docs_per_edge,
             )
 
             console.print(f"[green]✓ Agent initialized[/green]")
@@ -459,7 +515,32 @@ class SleepTimeRunner:
                     console.print(f"  [dim]Reasoning effort: {self.args.reasoning_effort}[/dim]")
                 elif agent.provider == "vllm":
                     console.print(f"  [dim]vllm base URL: {self.args.base_url}[/dim]")
-            self.logger.info(f"Agent initialized with model: {self.args.model} (provider: {getattr(agent, 'provider', 'unknown')}, reasoning_effort: {self.args.reasoning_effort})")
+            console.print(
+                f"  [dim]Bridge verifier: {'off' if self.args.disable_bridge_verifier else 'on'} "
+                f"(model: {self.args.bridge_verifier_model or self.args.model}, "
+                f"threshold: {self.args.bridge_verifier_threshold:.2f})[/dim]"
+            )
+            console.print(
+                f"  [dim]Pipeline: {self.args.pipeline_mode} "
+                f"(root={self.args.root_model or self.args.model}, "
+                f"worker={self.args.worker_model or self.args.model})[/dim]"
+            )
+            self.logger.info(
+                f"Agent initialized with model: {self.args.model} "
+                f"(provider: {getattr(agent, 'provider', 'unknown')}, "
+                f"reasoning_effort: {self.args.reasoning_effort}, "
+                f"bridge_verifier_enabled: {not self.args.disable_bridge_verifier}, "
+                f"bridge_verifier_model: {self.args.bridge_verifier_model or self.args.model}, "
+                f"bridge_verifier_threshold: {self.args.bridge_verifier_threshold}, "
+                f"bridge_verifier_fail_open: {self.args.bridge_verifier_fail_open}, "
+                f"pipeline_mode: {self.args.pipeline_mode}, "
+                f"root_model: {self.args.root_model or self.args.model}, "
+                f"worker_model: {self.args.worker_model or self.args.model}, "
+                f"edge_max_depth: {self.args.edge_max_depth}, "
+                f"edge_max_calls: {self.args.edge_max_calls}, "
+                f"edge_max_tokens: {self.args.edge_max_tokens}, "
+                f"max_optional_docs_per_edge: {self.args.max_optional_docs_per_edge})"
+            )
 
             return agent
 
@@ -490,6 +571,9 @@ class SleepTimeRunner:
                 "explored_entity_list": self.explored_entities,
                 "bridges_created": len(self.all_bridges),
                 "tokens_used": self.agent.tokens_used if self.agent else 0,
+                "input_tokens": self.agent.input_tokens if self.agent else 0,
+                "output_tokens": self.agent.output_tokens if self.agent else 0,
+                "rlm_metrics": self.agent.rlm_metrics if self.agent else {},
                 "duration_seconds": time.time() - self.start_time
             },
             "bridges": self.all_bridges,
@@ -608,7 +692,8 @@ class SleepTimeRunner:
                     # Show progress summary
                     display.show_progress_summary(
                         i, len(entities_to_explore),
-                        len(self.all_bridges), self.agent.tokens_used
+                        len(self.all_bridges), self.agent.tokens_used,
+                        self.agent.input_tokens, self.agent.output_tokens
                     )
 
                 except Exception as e:
@@ -672,7 +757,7 @@ class SleepTimeRunner:
                             advance=1,
                             description=f"[cyan]{len(self.explored_entities)}/{len(entities_to_explore)} entities | "
                                         f"{len(self.all_bridges)} bridges | "
-                                        f"{self.agent.tokens_used:,} tokens"
+                                        f"{self.agent.input_tokens:,} in / {self.agent.output_tokens:,} out"
                         )
 
                     except Exception as e:
@@ -692,8 +777,27 @@ class SleepTimeRunner:
         self.logger.info(f"Exploration complete: {len(self.explored_entities)} entities explored")
 
     def _explore_corpus_autonomous(self):
-        """Let agent discover and explore entities autonomously."""
-        console.print(f"\n[bold cyan]Agent will discover entities using discovery tools[/bold cyan]")
+        """Explore documents one by one, feeding each doc_id to the agent."""
+        if self.args.pipeline_mode == "rlm":
+            console.print("\n[bold cyan]Exploring corpus with deterministic RLM scheduler[/bold cyan]")
+            if self.args.verbose:
+                display = InteractiveDisplay(console, show_thinking=self.args.show_thinking)
+                self.agent = self.initialize_agent(display)
+            result = self.agent.explore_entity(doc_id=None, max_iterations=self.args.max_iterations)
+            self.all_bridges = self.agent.get_all_bridges()
+            self.explored_entities = list(self.agent.tools.explored_documents)
+            self.logger.info(
+                "RLM corpus exploration complete: docs=%s bridges=%s mode=%s",
+                result.get("documents_explored", len(self.explored_entities)),
+                len(self.all_bridges),
+                result.get("mode"),
+            )
+            self._save_checkpoint(entity_count=len(self.explored_entities))
+            console.print(f"\n[green]✓ Exploration complete[/green]")
+            return
+
+        doc_ids = sorted(self.entity_searcher.gsw_by_doc_id.keys())
+        console.print(f"\n[bold cyan]Exploring {len(doc_ids)} documents one by one[/bold cyan]")
 
         # Suppress curator progress bars in verbose mode
         if self.args.verbose:
@@ -703,31 +807,38 @@ class SleepTimeRunner:
             display = InteractiveDisplay(console, show_thinking=self.args.show_thinking)
             self.agent = self.initialize_agent(display)
 
-        try:
-            result = self.agent.explore_entity(max_iterations=self.args.max_iterations)
+        for i, doc_id in enumerate(doc_ids, 1):
+            if self.interrupted:
+                break
 
-            self.all_bridges = self.agent.get_all_bridges()
-            self.explored_entities = list(self.agent.tools.explored_entities)
+            console.print(f"\n[bold magenta]═══ Document {i}/{len(doc_ids)}: {doc_id} ═══[/bold magenta]")
+            self.logger.info(f"Starting exploration of document {i}/{len(doc_ids)}: {doc_id}")
 
-            self.logger.info(
-                f"Autonomous exploration complete: {result['iterations']} iterations, "
-                f"{result['tool_calls']} tool calls, {len(self.all_bridges)} bridges, "
-                f"{len(self.explored_entities)} entities explored"
-            )
+            try:
+                result = self.agent.explore_entity(doc_id=doc_id, max_iterations=self.args.max_iterations)
 
-            self._save_checkpoint(entity_count=len(self.explored_entities))
+                self.all_bridges = self.agent.get_all_bridges()
+                self.explored_entities = list(self.agent.tools.explored_documents)
 
-        except Exception as e:
-            self.logger.error(f"Autonomous exploration failed: {e}", exc_info=True)
-            self.error_logger.error(f"Autonomous exploration | Error: {e}\n{traceback.format_exc()}")
-            self.errors.append({
-                "entity": "corpus",
-                "error": str(e),
-                "timestamp": datetime.now().isoformat()
-            })
+                self.logger.info(
+                    f"Completed {doc_id}: {result['iterations']} iterations, "
+                    f"{result['tool_calls']} tool calls, {len(self.all_bridges)} total bridges"
+                )
+
+                self._save_checkpoint(entity_count=len(self.explored_entities))
+
+            except Exception as e:
+                self.logger.error(f"Failed to explore document {doc_id}: {e}", exc_info=True)
+                self.error_logger.error(f"Document: {doc_id} | Error: {e}\n{traceback.format_exc()}")
+                self.errors.append({
+                    "entity": doc_id,
+                    "error": str(e),
+                    "timestamp": datetime.now().isoformat()
+                })
+                continue
 
         console.print(f"\n[green]✓ Exploration complete[/green]")
-        self.logger.info(f"Exploration complete: {len(self.all_bridges)} bridges created")
+        self.logger.info(f"Exploration complete: {len(self.all_bridges)} bridges created across {len(doc_ids)} documents")
 
     def _explore_entity_with_timeout(self, entity_name: str, timeout: int = 300) -> Dict[str, Any]:
         """
@@ -776,6 +887,9 @@ class SleepTimeRunner:
                 "valid_bridges": len(valid_bridges),
                 "invalid_bridges": len(invalid_bridges),
                 "tokens_used": self.agent.tokens_used if self.agent else 0,
+                "input_tokens": self.agent.input_tokens if self.agent else 0,
+                "output_tokens": self.agent.output_tokens if self.agent else 0,
+                "rlm_metrics": self.agent.rlm_metrics if self.agent else {},
                 "avg_confidence": round(avg_confidence, 3),
                 "avg_bridges_per_entity": round(len(self.all_bridges) / len(self.explored_entities), 2) if self.explored_entities else 0,
                 "hop_distribution": hop_counts,
@@ -804,14 +918,17 @@ class SleepTimeRunner:
             import csv
             with open(bridges_csv, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=[
-                    "bridge_id", "question", "answer", "source_docs", "confidence", "hop_count", "entities_involved"
+                    "bridge_id", "question", "answers", "reverse_question", "reverse_answers",
+                    "source_docs", "confidence", "hop_count", "entities_involved"
                 ])
                 writer.writeheader()
                 for bridge in self.all_bridges:
                     writer.writerow({
                         "bridge_id": bridge.get("bridge_id", ""),
                         "question": bridge.get("question", ""),
-                        "answer": bridge.get("answer", ""),
+                        "answers": ";".join(bridge.get("answers", [])),
+                        "reverse_question": bridge.get("reverse_question", ""),
+                        "reverse_answers": ";".join(bridge.get("reverse_answers", [])),
                         "source_docs": ";".join(bridge.get("source_docs", [])),
                         "confidence": bridge.get("confidence", 0),
                         "hop_count": bridge.get("hop_count", 0),
@@ -832,8 +949,25 @@ class SleepTimeRunner:
             f.write(f"  Valid: {report['summary']['valid_bridges']}\n")
             f.write(f"  Invalid: {report['summary']['invalid_bridges']}\n")
             f.write(f"Avg Confidence: {report['summary']['avg_confidence']:.3f}\n")
-            f.write(f"Tokens Used: {report['summary']['tokens_used']:,}\n")
+            f.write(f"Input Tokens: {report['summary']['input_tokens']:,}\n")
+            f.write(f"Output Tokens: {report['summary']['output_tokens']:,}\n")
             f.write(f"Errors: {report['summary']['total_errors']}\n\n")
+            rlm_metrics = report['summary'].get('rlm_metrics', {})
+            if rlm_metrics:
+                f.write("RLM Metrics:\n")
+                for key in [
+                    "root_calls",
+                    "worker_calls",
+                    "verifier_calls",
+                    "edges_explored",
+                    "edges_with_bridges",
+                    "recursive_invocations",
+                    "docs_attempted",
+                    "docs_completed",
+                ]:
+                    if key in rlm_metrics:
+                        f.write(f"  {key}: {rlm_metrics[key]}\n")
+                f.write("\n")
             f.write(f"Hop Distribution:\n")
             for hop, count in sorted(report['summary']['hop_distribution'].items()):
                 f.write(f"  {hop}-hop: {count}\n")
@@ -863,7 +997,13 @@ class SleepTimeRunner:
         table.add_row("  ✗ Invalid", str(report['summary']['invalid_bridges']), style="red")
         table.add_row("Avg Confidence", f"{report['summary']['avg_confidence']:.3f}")
         table.add_row("Avg Bridges/Entity", f"{report['summary']['avg_bridges_per_entity']:.2f}")
-        table.add_row("Tokens Used", f"{report['summary']['tokens_used']:,}")
+        table.add_row("Input Tokens", f"{report['summary']['input_tokens']:,}")
+        table.add_row("Output Tokens", f"{report['summary']['output_tokens']:,}")
+        rlm_metrics = report['summary'].get('rlm_metrics', {})
+        if rlm_metrics:
+            table.add_row("RLM Edge Count", str(rlm_metrics.get("edges_explored", 0)))
+            table.add_row("RLM Recursions", str(rlm_metrics.get("recursive_invocations", 0)))
+            table.add_row("RLM Worker Calls", str(rlm_metrics.get("worker_calls", 0)))
         table.add_row("Errors", str(report['summary']['total_errors']), style="yellow" if report['summary']['total_errors'] > 0 else "green")
 
         console.print(table)
@@ -883,8 +1023,13 @@ class SleepTimeRunner:
                 # Load config from checkpoint
                 self.entity_searcher = self.load_gsws()
                 self.agent = self.initialize_agent()
-                # Restore token count
+                # Restore token counts
                 self.agent.tokens_used = checkpoint["progress"]["tokens_used"]
+                self.agent.input_tokens = checkpoint["progress"].get("input_tokens", 0)
+                self.agent.output_tokens = checkpoint["progress"].get("output_tokens", 0)
+                saved_rlm = checkpoint["progress"].get("rlm_metrics")
+                if isinstance(saved_rlm, dict):
+                    self.agent.rlm_metrics.update(saved_rlm)
             else:
                 self.entity_searcher = self.load_gsws()
                 self.agent = self.initialize_agent()
@@ -930,7 +1075,7 @@ def main():
 
     # Exploration configuration
     parser.add_argument("--num_entities", type=int, default=2,
-                        help="Number of entities to explore")
+                        help="Number of entities to explore (legacy mode). In RLM mode, corpus breadth is controlled by --num_docs.")
     parser.add_argument("--min_docs", type=int, default=2,
                         help="Minimum documents an entity must appear in")
     parser.add_argument("--filter_generic", action="store_true",
@@ -950,6 +1095,28 @@ def main():
     parser.add_argument("--reasoning_effort", type=str, default="medium",
                         choices=["low", "medium", "high"],
                         help="Reasoning effort for Together AI models (low/medium/high) - higher = better reasoning but slower. Default: medium for balance.")
+    parser.add_argument("--disable_bridge_verifier", action="store_true",
+                        help="Disable bridge verifier subagent gate for create_bridge_qa.")
+    parser.add_argument("--bridge_verifier_threshold", type=float, default=0.75,
+                        help="Minimum verifier score (0-1) needed to keep a created bridge.")
+    parser.add_argument("--bridge_verifier_fail_open", action="store_true",
+                        help="If set, bridge verifier API/parse errors won't block bridge creation.")
+    parser.add_argument("--bridge_verifier_model", type=str, default=None,
+                        help="Optional model for verifier subagent. Defaults to --model.")
+    parser.add_argument("--pipeline_mode", type=str, default="legacy", choices=["legacy", "rlm"],
+                        help="Exploration pipeline mode: legacy tool-calling loop or deterministic RLM scheduler.")
+    parser.add_argument("--root_model", type=str, default=None,
+                        help="Optional root-stage model for RLM mode. Defaults to --model.")
+    parser.add_argument("--worker_model", type=str, default=None,
+                        help="Optional worker-stage model for RLM mode. Defaults to --model.")
+    parser.add_argument("--edge_max_depth", type=int, default=1,
+                        help="Maximum recursion depth per edge in RLM mode.")
+    parser.add_argument("--edge_max_calls", type=int, default=2,
+                        help="Maximum worker invocations per edge in RLM mode.")
+    parser.add_argument("--edge_max_tokens", type=int, default=3000,
+                        help="Per-edge token budget in RLM mode.")
+    parser.add_argument("--max_optional_docs_per_edge", type=int, default=2,
+                        help="Maximum optional fuzzy docs included per edge packet in RLM mode.")
 
     # Output configuration
     parser.add_argument("--output_dir", type=str, default="logs/sleep_time",
@@ -970,11 +1137,19 @@ def main():
     args = parser.parse_args()
 
     # Print configuration
+    scope_line = (
+        f"Documents: {args.num_docs}\n"
+        if args.pipeline_mode == "rlm"
+        else f"Documents: {args.num_docs}\nEntities: {args.num_entities}\n"
+    )
+
     console.print(Panel.fit(
         f"[bold cyan]Agentic Sleep-Time Exploration[/bold cyan]\n\n"
-        f"Documents: {args.num_docs}\n"
-        f"Entities: {args.num_entities}\n"
+        f"{scope_line}"
         f"Model: {args.model}\n"
+        f"Pipeline: {args.pipeline_mode}\n"
+        f"Bridge verifier: {'off' if args.disable_bridge_verifier else 'on'} "
+        f"(threshold={args.bridge_verifier_threshold:.2f})\n"
         f"Output: {args.output_dir}",
         border_style="cyan",
         box=box.DOUBLE

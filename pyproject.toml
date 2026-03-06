@@ -9,7 +9,8 @@ authors = [
 requires-python = ">=3.10"
 dependencies = [
     "apscheduler>=3.11.2",
-    "bespokelabs-curator>=0.1.26",
+    "bespokelabs-curator>=0.1.18.post1",
+    "boto3>=1.42.60",
     "cryptography>=46.0.5",
     "editables>=0.5",
     "faiss-gpu>=1.7.2",
@@ -22,7 +23,7 @@ dependencies = [
     "ipykernel>=6.29.5",
     "ipywidgets>=8.1.7",
     "langchain-voyageai>=0.1.6",
-    "litellm[proxy]>=1.75.3",
+    "litellm>=1.82.0",
     "numpy==1.26.4",
     "omegaconf>=2.3.0",
     "openai>=1.82.0",
@@ -31,6 +32,7 @@ dependencies = [
     "plotly>=6.5.2",
     "pyarrow>=21.0.0",
     "pydantic>=2.11.5",
+    "pytest>=9.0.1",
     "python-dotenv>=1.1.0",
     "pyyaml>=6.0.2",
     "rank-bm25>=0.2.2",
