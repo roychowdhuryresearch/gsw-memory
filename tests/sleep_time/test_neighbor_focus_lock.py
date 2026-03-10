@@ -211,6 +211,92 @@ def test_mandatory_coverage_progression_updates_on_get_entity_context():
     assert after["ready_to_close"] is True
 
 
+def test_get_entity_context_uses_optional_doc_alias_under_active_focus(monkeypatch, caplog):
+    tools = _new_tools()
+    tools.active_neighbor_focus = {
+        "doc_id": "doc_9",
+        "entity_name": "Bertha",
+        "neighbor_name": "Hugh of Italy",
+        "relationship": "had children",
+    }
+    edge_key = tools._active_focus_edge_key()
+    tools.neighbor_doc_coverage_plans[edge_key] = {
+        "doc_id": "doc_9",
+        "entity_name": "Bertha",
+        "neighbor_name": "Hugh of Italy",
+        "relationship": "had children",
+        "mandatory_docs": [],
+        "optional_fuzzy_docs": [
+            {"doc_id": "doc_2", "name": "Hugh, King of Italy", "score": 7.1434},
+        ],
+        "explored_mandatory_docs": [],
+        "include_fuzzy": True,
+        "top_k": 10,
+    }
+
+    calls = []
+
+    def _fake_single_context(entity_name, doc_id):
+        calls.append((entity_name, doc_id))
+        if entity_name == "Hugh, King of Italy" and doc_id == "doc_2":
+            return {
+                "entity": entity_name,
+                "doc_id": doc_id,
+                "qa_pairs": [{"question": "Who ruled Italy?", "answer": "Hugh", "answer_refs": ["doc_2::e1"], "doc_id": doc_id}],
+                "roles": ["person"],
+                "states": [],
+                "relationships": {"ruled": ["Italy"]},
+            }
+        return {
+            "entity": entity_name,
+            "doc_id": doc_id,
+            "qa_pairs": [],
+            "roles": [],
+            "states": [],
+            "relationships": {},
+        }
+
+    monkeypatch.setattr(tools, "_get_single_doc_context", _fake_single_context)
+
+    with caplog.at_level("INFO"):
+        context = tools.get_entity_context("Hugh of Italy", "doc_2")
+
+    assert context["qa_pairs"]
+    assert calls == [("Hugh of Italy", "doc_2"), ("Hugh, King of Italy", "doc_2")]
+    assert any("Optional-doc alias fallback used" in rec.message for rec in caplog.records)
+
+
+def test_get_entity_context_does_not_use_optional_alias_without_active_focus(monkeypatch):
+    tools = _new_tools()
+    calls = []
+
+    def _fake_single_context(entity_name, doc_id):
+        calls.append((entity_name, doc_id))
+        if entity_name == "Hugh, King of Italy" and doc_id == "doc_2":
+            return {
+                "entity": entity_name,
+                "doc_id": doc_id,
+                "qa_pairs": [{"question": "Who ruled Italy?", "answer": "Hugh", "answer_refs": ["doc_2::e1"], "doc_id": doc_id}],
+                "roles": ["person"],
+                "states": [],
+                "relationships": {"ruled": ["Italy"]},
+            }
+        return {
+            "entity": entity_name,
+            "doc_id": doc_id,
+            "qa_pairs": [],
+            "roles": [],
+            "states": [],
+            "relationships": {},
+        }
+
+    monkeypatch.setattr(tools, "_get_single_doc_context", _fake_single_context)
+    context = tools.get_entity_context("Hugh of Italy", "doc_2")
+
+    assert context["qa_pairs"] == []
+    assert calls == [("Hugh of Italy", "doc_2")]
+
+
 def test_mark_neighbor_explored_blocked_when_mandatory_docs_pending():
     tools = _new_tools()
     begin = tools.begin_neighbor_focus("doc_5", "Master Aldric", "Lady Margaux", "commissioned by")

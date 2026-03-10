@@ -152,6 +152,62 @@ class InteractiveDisplay:
 
         self.console.print()  # Blank line
 
+    def show_planner_decision(self, decision: Dict[str, Any]):
+        """Display compact planner decision details in verbose mode."""
+        decision_type = str(decision.get("decision_type", "unknown"))
+        source = str(decision.get("source", "unknown"))
+        reason = str(decision.get("reason", "")).strip()
+        fallback_reason = str(decision.get("fallback_reason", "")).strip()
+        attempt = str(decision.get("attempt", "")).strip()
+
+        parts = [
+            f"decision_type={decision_type}",
+            f"source={source}",
+        ]
+        if attempt:
+            parts.append(f"attempt={attempt}")
+        if reason:
+            parts.append(f"reason={reason}")
+        if fallback_reason:
+            parts.append(f"fallback_reason={fallback_reason}")
+
+        self.console.print(
+            f"[yellow]🧭 Planner:[/yellow] [dim]{' | '.join(parts)}[/dim]"
+        )
+        self.console.print()
+
+    def show_worker_event(self, event_type: str, payload: Dict[str, Any]):
+        """Display compact worker lifecycle events in verbose mode."""
+        if event_type == "rlm_worker_call":
+            parts = [
+                f"call={payload.get('call_index')}",
+                f"depth={payload.get('depth')}",
+                f"optional={payload.get('include_optional')}",
+                f"planner_action={payload.get('planner_action')}",
+                f"planner_source={payload.get('planner_source')}",
+                f"invoked={payload.get('worker_invoked')}",
+            ]
+            reason = str(payload.get("planner_reason", "")).strip()
+            if reason:
+                parts.append(f"reason={reason}")
+            self.console.print(f"[cyan]⚙️  Worker Call:[/cyan] [dim]{' | '.join(parts)}[/dim]")
+            self.console.print()
+            return
+
+        parts = [
+            f"call={payload.get('call_index')}",
+            f"candidates={payload.get('candidates_count')}",
+            f"accepted_delta={payload.get('accepted_delta')}",
+            f"rejected_delta={payload.get('rejected_delta')}",
+            f"parse_stage={payload.get('parse_stage')}",
+            f"need_recursion={payload.get('need_recursion')}",
+        ]
+        notes = str(payload.get("worker_notes", "")).strip()
+        if notes:
+            parts.append(f"notes={notes}")
+        self.console.print(f"[cyan]🧾 Worker Result:[/cyan] [dim]{' | '.join(parts)}[/dim]")
+        self.console.print()
+
     def show_validation_result(self, result: Dict[str, Any]):
         """Special display for validation results."""
         is_valid = result.get('valid', False)
@@ -384,6 +440,10 @@ class SleepTimeRunner:
                         },
                         tool_name="rlm_doc_summary",
                     )
+                elif event_type == "hybrid_planner_decision":
+                    display.show_planner_decision(data)
+                elif event_type in {"rlm_worker_call", "rlm_worker_result"}:
+                    display.show_worker_event(event_type, data)
 
             # Always log to trace file with visual separators
             if event_type == "iteration_start":
@@ -442,6 +502,42 @@ class SleepTimeRunner:
                 self.trace_logger.info(f"\n[rlm_edge] {json.dumps(data, ensure_ascii=False)}")
             elif event_type == "rlm_doc_summary":
                 self.trace_logger.info(f"\n[rlm_doc] {json.dumps(data, ensure_ascii=False)}")
+            elif event_type == "hybrid_planner_decision":
+                self.trace_logger.info(f"\n[planner] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "hybrid_planner_decision",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type == "rlm_worker_call":
+                self.trace_logger.info(f"\n[worker_call] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "rlm_worker_call",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type == "rlm_worker_result":
+                self.trace_logger.info(f"\n[worker_result] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "rlm_worker_result",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
 
         return callback
 
@@ -501,6 +597,7 @@ class SleepTimeRunner:
                 bridge_verifier_fail_open=self.args.bridge_verifier_fail_open,
                 bridge_verifier_model=self.args.bridge_verifier_model,
                 pipeline_mode=self.args.pipeline_mode,
+                hybrid_scope=self.args.hybrid_scope,
                 root_model=self.args.root_model,
                 worker_model=self.args.worker_model,
                 edge_max_depth=self.args.edge_max_depth,
@@ -534,6 +631,7 @@ class SleepTimeRunner:
                 f"bridge_verifier_threshold: {self.args.bridge_verifier_threshold}, "
                 f"bridge_verifier_fail_open: {self.args.bridge_verifier_fail_open}, "
                 f"pipeline_mode: {self.args.pipeline_mode}, "
+                f"hybrid_scope: {self.args.hybrid_scope}, "
                 f"root_model: {self.args.root_model or self.args.model}, "
                 f"worker_model: {self.args.worker_model or self.args.model}, "
                 f"edge_max_depth: {self.args.edge_max_depth}, "
@@ -778,8 +876,9 @@ class SleepTimeRunner:
 
     def _explore_corpus_autonomous(self):
         """Explore documents one by one, feeding each doc_id to the agent."""
-        if self.args.pipeline_mode == "rlm":
-            console.print("\n[bold cyan]Exploring corpus with deterministic RLM scheduler[/bold cyan]")
+        if self.args.pipeline_mode in {"rlm", "hybrid"}:
+            mode_label = "deterministic RLM scheduler" if self.args.pipeline_mode == "rlm" else f"hybrid scheduler ({self.args.hybrid_scope})"
+            console.print(f"\n[bold cyan]Exploring corpus with {mode_label}[/bold cyan]")
             if self.args.verbose:
                 display = InteractiveDisplay(console, show_thinking=self.args.show_thinking)
                 self.agent = self.initialize_agent(display)
@@ -787,10 +886,11 @@ class SleepTimeRunner:
             self.all_bridges = self.agent.get_all_bridges()
             self.explored_entities = list(self.agent.tools.explored_documents)
             self.logger.info(
-                "RLM corpus exploration complete: docs=%s bridges=%s mode=%s",
+                "Corpus exploration complete: docs=%s bridges=%s mode=%s scope=%s",
                 result.get("documents_explored", len(self.explored_entities)),
                 len(self.all_bridges),
                 result.get("mode"),
+                result.get("hybrid_scope", self.args.hybrid_scope),
             )
             self._save_checkpoint(entity_count=len(self.explored_entities))
             console.print(f"\n[green]✓ Exploration complete[/green]")
@@ -962,6 +1062,10 @@ class SleepTimeRunner:
                     "edges_explored",
                     "edges_with_bridges",
                     "recursive_invocations",
+                    "edges_skipped_no_path",
+                    "planner_actions_overridden",
+                    "calls_blocked_no_progress",
+                    "alias_resolution_hits",
                     "docs_attempted",
                     "docs_completed",
                 ]:
@@ -1004,6 +1108,8 @@ class SleepTimeRunner:
             table.add_row("RLM Edge Count", str(rlm_metrics.get("edges_explored", 0)))
             table.add_row("RLM Recursions", str(rlm_metrics.get("recursive_invocations", 0)))
             table.add_row("RLM Worker Calls", str(rlm_metrics.get("worker_calls", 0)))
+            table.add_row("RLM No-Path Skips", str(rlm_metrics.get("edges_skipped_no_path", 0)))
+            table.add_row("RLM Action Overrides", str(rlm_metrics.get("planner_actions_overridden", 0)))
         table.add_row("Errors", str(report['summary']['total_errors']), style="yellow" if report['summary']['total_errors'] > 0 else "green")
 
         console.print(table)
@@ -1103,8 +1209,11 @@ def main():
                         help="If set, bridge verifier API/parse errors won't block bridge creation.")
     parser.add_argument("--bridge_verifier_model", type=str, default=None,
                         help="Optional model for verifier subagent. Defaults to --model.")
-    parser.add_argument("--pipeline_mode", type=str, default="legacy", choices=["legacy", "rlm"],
-                        help="Exploration pipeline mode: legacy tool-calling loop or deterministic RLM scheduler.")
+    parser.add_argument("--pipeline_mode", type=str, default="legacy", choices=["legacy", "rlm", "hybrid"],
+                        help="Exploration pipeline mode: legacy, deterministic RLM scheduler, or hybrid self-controller.")
+    parser.add_argument("--hybrid_scope", type=str, default="doc_edge",
+                        choices=["edge", "doc_edge", "corpus_doc_edge"],
+                        help="Hybrid autonomy scope: edge-only, doc+edge, or corpus+doc+edge.")
     parser.add_argument("--root_model", type=str, default=None,
                         help="Optional root-stage model for RLM mode. Defaults to --model.")
     parser.add_argument("--worker_model", type=str, default=None,
@@ -1139,7 +1248,7 @@ def main():
     # Print configuration
     scope_line = (
         f"Documents: {args.num_docs}\n"
-        if args.pipeline_mode == "rlm"
+        if args.pipeline_mode in {"rlm", "hybrid"}
         else f"Documents: {args.num_docs}\nEntities: {args.num_entities}\n"
     )
 
@@ -1148,6 +1257,7 @@ def main():
         f"{scope_line}"
         f"Model: {args.model}\n"
         f"Pipeline: {args.pipeline_mode}\n"
+        f"Hybrid scope: {args.hybrid_scope}\n"
         f"Bridge verifier: {'off' if args.disable_bridge_verifier else 'on'} "
         f"(threshold={args.bridge_verifier_threshold:.2f})\n"
         f"Output: {args.output_dir}",

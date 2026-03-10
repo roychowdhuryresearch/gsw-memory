@@ -6,6 +6,8 @@ from gsw_memory.sleep_time.rlm_pipeline import (
     EdgeKey,
     EdgePacket,
     EdgeRunResult,
+    HybridScheduler,
+    PLANNER_PROMPT_VERSION,
     RenderInput,
     RecursiveEdgeWorker,
     RootScheduler,
@@ -73,6 +75,14 @@ class _FakeReconciler:
             "recursive_invocations": 0,
             "low_signal_edges": 0,
             "repeated_failure_stops": 0,
+            "edges_skipped_no_path": 0,
+            "planner_actions_overridden": 0,
+            "prefilter_reject_count": 0,
+            "alias_resolution_hits": 0,
+            "calls_blocked_no_progress": 0,
+            "planner_decisions": 0,
+            "planner_fallbacks": 0,
+            "planner_stop_actions": 0,
             "docs_attempted": 0,
             "docs_completed": 0,
         }
@@ -358,6 +368,87 @@ def test_packet_construction_includes_source_context_and_docs():
     assert packet.source_context["doc_id"] == "doc_0"
 
 
+def test_scheduler_collects_optional_context_via_alias_fallback(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=2000,
+        max_optional_docs_per_edge=2,
+    )
+
+    reconciler.tools.active_neighbor_focus = {
+        "doc_id": "doc_0",
+        "entity_name": "Source",
+        "neighbor_name": "Neighbor",
+        "relationship": "related to",
+    }
+    edge_key = reconciler.tools._active_focus_edge_key()
+    reconciler.tools.neighbor_doc_coverage_plans[edge_key] = {
+        "doc_id": "doc_0",
+        "entity_name": "Source",
+        "neighbor_name": "Neighbor",
+        "relationship": "related to",
+        "mandatory_docs": [],
+        "optional_fuzzy_docs": [{"doc_id": "doc_3", "name": "Neighbor alt", "score": 0.91}],
+        "explored_mandatory_docs": [],
+        "include_fuzzy": True,
+        "top_k": 10,
+    }
+
+    calls = []
+
+    def _fake_single_context(entity_name, doc_id):
+        calls.append((entity_name, doc_id))
+        if entity_name == "Neighbor alt" and doc_id == "doc_3":
+            return {
+                "entity": entity_name,
+                "doc_id": doc_id,
+                "qa_pairs": [{"question": "When was Neighbor alt born?", "answer": "795", "answer_refs": ["doc_3::e1"]}],
+                "roles": ["person"],
+                "states": ["historical figure"],
+                "relationships": {"born in": ["795"]},
+            }
+        return {
+            "entity": entity_name,
+            "doc_id": doc_id,
+            "qa_pairs": [],
+            "roles": [],
+            "states": [],
+            "relationships": {},
+        }
+
+    monkeypatch.setattr(reconciler.tools, "_get_single_doc_context", _fake_single_context)
+
+    original_execute_tool = reconciler._execute_tool
+
+    def _patched_execute_tool(tool_name, arguments):
+        if tool_name == "get_entity_context":
+            return reconciler.tools.get_entity_context(**arguments)
+        return original_execute_tool(tool_name, arguments)
+
+    monkeypatch.setattr(reconciler, "_execute_tool", _patched_execute_tool)
+
+    optional_contexts = scheduler._collect_contexts_for_docs("Neighbor", ["doc_3"], source_doc="doc_0")
+    assert len(optional_contexts) == 1
+    assert optional_contexts[0]["qa_pairs"]
+    assert calls == [("Neighbor", "doc_3"), ("Neighbor alt", "doc_3")]
+
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+    packet = scheduler._build_edge_packet(
+        edge=edge,
+        coverage={"mandatory_docs": [], "optional_fuzzy_docs": [{"doc_id": "doc_3", "name": "Neighbor alt", "score": 0.91}]},
+        source_context=reconciler.context_map["doc_0"],
+        mandatory_contexts=[],
+        optional_contexts=optional_contexts,
+    )
+    proofs = scheduler._mine_path_proofs(packet, include_optional=True)
+    assert proofs
+
+
 def test_scheduler_enforces_edge_token_budget():
     reconciler = _FakeReconciler(token_increment=220)
     reconciler.stage_payloads["worker"] = [
@@ -407,8 +498,8 @@ def test_scheduler_repairs_non_id_entity_refs_before_create_bridge(monkeypatch):
             {
                 "question": "When did Source's neighbor die?",
                 "answers": ["doc_1::20 March 851"],
-                "reverse_question": "Whose neighbor died on 20 March 851?",
-                "reverse_answers": ["20 March 851"],
+                "reverse_question": "Who is Source related to?",
+                "reverse_answers": ["Neighbor"],
                 "source_docs": ["doc_0", "doc_1"],
                 "reasoning": "Sub-Q1 ... Sub-Q2 ...",
             }
@@ -418,7 +509,7 @@ def test_scheduler_repairs_non_id_entity_refs_before_create_bridge(monkeypatch):
     assert accepted == 1
     assert rejected == 0
     assert captured["bridge"]["answers"] == ["doc_1::e2"]
-    assert captured["bridge"]["reverse_answers"] == ["doc_1::e2"]
+    assert captured["bridge"]["reverse_answers"] == ["doc_0::e1"]
 
 
 def test_scheduler_drops_unresolved_entity_refs_before_create_bridge(monkeypatch):
@@ -603,9 +694,10 @@ def test_worker_prompt_contains_rich_legacy_examples():
     assert f"Prompt version: {WORKER_PROMPT_VERSION}" in system_prompt
     assert "GOOD #1" in system_prompt
     assert "GOOD #4" in system_prompt
-    assert "BAD #1 (NOT_CHAIN conjunction)" in system_prompt
-    assert "BAD #2 (parallel hub facts / NOT_CHAIN + REVERSE_INVALID)" in system_prompt
-    assert "Forward question requires resolving hop-1 output" in system_prompt
+    assert "BAD #1 (REVERSE_INVALID independent reverse)" in system_prompt
+    assert "BAD #4 (CIRCULAR reverse)" in system_prompt
+    assert "Forward chain dependency" in system_prompt
+    assert "Forward target variable = X" in system_prompt
 
 
 def test_render_prompt_contains_rich_legacy_examples_and_grounding_rule():
@@ -618,7 +710,7 @@ def test_render_prompt_contains_rich_legacy_examples_and_grounding_rule():
 
     assert f"Prompt version: {WORKER_PROMPT_VERSION}" in system_prompt
     assert "GOOD #2" in system_prompt
-    assert "BAD #4 (ANSWER_LEAK / TOO_TRIVIAL)" in system_prompt
+    assert "BAD #4 (CIRCULAR reverse)" in system_prompt
     assert "Render mode grounding rule" in system_prompt
     assert "Use ONLY the provided path_proofs" in system_prompt
 
@@ -668,8 +760,8 @@ def test_scheduler_dedupes_identical_candidates_before_create_bridge(monkeypatch
     dup_candidate = {
         "question": "When did Source's neighbor die?",
         "answers": ["doc_1::20 March 851"],
-        "reverse_question": "Whose neighbor died on 20 March 851?",
-        "reverse_answers": ["20 March 851"],
+        "reverse_question": "Who is Source related to?",
+        "reverse_answers": ["Neighbor"],
         "source_docs": ["doc_0", "doc_1"],
         "reasoning": "Sub-Q1 ... Sub-Q2 ...",
     }
@@ -822,3 +914,444 @@ def test_rlm_edge_summary_includes_worker_prompt_version():
     edge_events = [e for e in events if e["event"] == "rlm_edge_summary"]
     assert edge_events
     assert edge_events[0]["data"]["worker_prompt_version"] == WORKER_PROMPT_VERSION
+    assert edge_events[0]["data"]["close_reason"] == "no_candidates_no_progression"
+    assert edge_events[0]["data"]["worker_calls_made"] == 1
+    assert edge_events[0]["data"]["close_detail"]
+
+    worker_call_events = [e for e in events if e["event"] == "rlm_worker_call"]
+    worker_result_events = [e for e in events if e["event"] == "rlm_worker_result"]
+    assert len(worker_call_events) == 1
+    assert len(worker_result_events) == 1
+    assert worker_call_events[0]["data"]["planner_action"] == "run_worker"
+    assert worker_call_events[0]["data"]["worker_invoked"] is True
+    assert worker_result_events[0]["data"]["candidates_count"] == 0
+
+
+def test_hybrid_stop_edge_emits_non_invoked_worker_event_and_close_reason(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=0, max_calls=1, edge_max_tokens=1000)
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=0,
+        edge_max_calls=1,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="edge",
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+
+    original_call_tool = scheduler._call_tool
+
+    def _patched_call_tool(tool_name, arguments, doc_id=None):
+        if tool_name == "plan_neighbor_doc_coverage":
+            return {
+                "doc_id": "doc_0",
+                "entity_name": "Source",
+                "neighbor_name": "Neighbor",
+                "relationship": "related to",
+                "mandatory_docs": [],
+                "optional_fuzzy_docs": [],
+                "explored_mandatory_docs": [],
+                "pending_mandatory_docs": [],
+                "ready_to_close": True,
+            }
+        return original_call_tool(tool_name, arguments, doc_id=doc_id)
+
+    def _always_stop(*_args, **_kwargs):
+        return {"action": "stop_edge", "source": "planner", "reason": "No reliable cross-doc evidence."}
+
+    monkeypatch.setattr(scheduler, "_call_tool", _patched_call_tool)
+    monkeypatch.setattr(scheduler, "_plan_edge_action", _always_stop)
+
+    edge_result = scheduler._run_edge(edge)
+
+    assert edge_result.accepted == 0
+    assert reconciler.rlm_metrics["worker_calls"] == 0
+
+    worker_call_events = [e for e in events if e["event"] == "rlm_worker_call"]
+    assert worker_call_events
+    assert worker_call_events[0]["data"]["worker_invoked"] is False
+    assert worker_call_events[0]["data"]["planner_action"] == "stop_edge"
+
+    edge_events = [e for e in events if e["event"] == "rlm_edge_summary"]
+    assert edge_events
+    assert edge_events[0]["data"]["close_reason"] == "planner_stop"
+    assert "Planner stop accepted" in edge_events[0]["data"]["close_detail"]
+
+
+def test_rlm_parse_error_propagates_into_close_detail():
+    reconciler = _FakeReconciler(token_increment=20)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    reconciler.stage_payloads["worker"] = ["not-json", "still-not-json"]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=0, max_calls=1, edge_max_tokens=1000)
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=0,
+        edge_max_calls=1,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+    )
+
+    scheduler.run_document("doc_0")
+
+    edge_events = [e for e in events if e["event"] == "rlm_edge_summary"]
+    assert edge_events
+    edge_data = edge_events[0]["data"]
+    assert edge_data["close_reason"] == "no_candidates_no_progression"
+    assert "parse_stage=repair_retry" in edge_data["close_detail"]
+    assert "Worker parse error" in edge_data["close_detail"]
+
+    worker_result_events = [e for e in events if e["event"] == "rlm_worker_result"]
+    assert worker_result_events
+    assert worker_result_events[0]["data"]["parse_stage"] == "repair_retry"
+    assert worker_result_events[0]["data"]["rejected_delta"] == 0
+
+
+def test_hybrid_doc_scope_uses_planner_edge_choice():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+    )
+
+    edges = [
+        EdgeKey("doc_0", "SourceA", "NeighborA", "relA"),
+        EdgeKey("doc_0", "SourceB", "NeighborB", "relB"),
+    ]
+    reconciler.stage_payloads["root"] = [json.dumps({"edge_index": 1, "reason": "Edge 1 has higher cross-doc signal."})]
+
+    selected = scheduler._choose_edge_for_doc("doc_0", edges)
+    assert selected == edges[1]
+    assert reconciler.rlm_metrics["planner_decisions"] >= 1
+    assert reconciler.rlm_metrics["planner_fallbacks"] == 0
+
+
+def test_hybrid_planner_prompts_include_version_examples_and_checklist():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+    )
+
+    corpus_messages = scheduler._build_planner_messages("corpus_doc_selection", {"candidates": []})
+    doc_edge_messages = scheduler._build_planner_messages("doc_edge_selection", {"candidates": []})
+    edge_action_messages = scheduler._build_planner_messages("edge_action", {"state": {"max_depth": 1}})
+
+    corpus_system = corpus_messages[0]["content"]
+    doc_edge_system = doc_edge_messages[0]["content"]
+    edge_action_system = edge_action_messages[0]["content"]
+
+    assert PLANNER_PROMPT_VERSION in corpus_system
+    assert "Planner checklist" in corpus_system
+    assert "Decision: corpus_doc_selection" in corpus_system
+    assert "GOOD #1" in corpus_system and "BAD #2" in corpus_system
+    assert "Decision: doc_edge_selection" in doc_edge_system
+    assert "Decision: edge_action" in edge_action_system
+    assert "repeated reverse-invalid style failures" in edge_action_system
+    assert "BAD #3 (wasteful continuation after unchanged failures)" in edge_action_system
+
+
+def test_hybrid_edge_scope_keeps_deterministic_edge_choice():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="edge",
+    )
+
+    edges = [
+        EdgeKey("doc_0", "SourceA", "NeighborA", "relA"),
+        EdgeKey("doc_0", "SourceB", "NeighborB", "relB"),
+    ]
+    reconciler.stage_payloads["root"] = [json.dumps({"edge_index": 1, "reason": "Selecting second edge."})]
+
+    selected = scheduler._choose_edge_for_doc("doc_0", edges)
+    assert selected == edges[0]
+    assert reconciler.rlm_metrics["planner_decisions"] == 0
+
+
+def test_hybrid_invalid_edge_choice_falls_back_deterministic():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+    )
+
+    edges = [
+        EdgeKey("doc_0", "SourceA", "NeighborA", "relA"),
+        EdgeKey("doc_0", "SourceB", "NeighborB", "relB"),
+    ]
+    reconciler.stage_payloads["root"] = [json.dumps({"edge_index": 99, "reason": "Invalid index for fallback test."})]
+
+    selected = scheduler._choose_edge_for_doc("doc_0", edges)
+    assert selected == edges[0]
+    assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
+
+
+def test_hybrid_missing_reason_falls_back_deterministic():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+    )
+
+    edges = [
+        EdgeKey("doc_0", "SourceA", "NeighborA", "relA"),
+        EdgeKey("doc_0", "SourceB", "NeighborB", "relB"),
+    ]
+    reconciler.stage_payloads["root"] = [
+        json.dumps({"edge_index": 1}),
+        json.dumps({"edge_index": 1}),
+    ]
+
+    selected = scheduler._choose_edge_for_doc("doc_0", edges)
+    assert selected == edges[0]
+    assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
+
+
+def test_hybrid_corpus_scope_uses_planner_doc_choice():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="corpus_doc_edge",
+    )
+
+    plan = {
+        "next_doc": {"doc_id": "doc_0", "status": "unplanned"},
+        "queue": [
+            {"doc_id": "doc_0", "status": "unplanned", "pending_neighbors": 1, "pending_entities": 1},
+            {"doc_id": "doc_1", "status": "in_progress", "pending_neighbors": 5, "pending_entities": 3},
+        ],
+    }
+    reconciler.stage_payloads["root"] = [json.dumps({"doc_id": "doc_1", "reason": "Highest pending neighbors."})]
+
+    selected = scheduler._choose_doc_for_corpus(plan)
+    assert selected == "doc_1"
+
+
+def test_hybrid_planner_repair_retry_applies_valid_second_attempt():
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+    )
+    edges = [
+        EdgeKey("doc_0", "SourceA", "NeighborA", "relA"),
+        EdgeKey("doc_0", "SourceB", "NeighborB", "relB"),
+    ]
+    reconciler.stage_payloads["root"] = [
+        "not-json",
+        json.dumps({"edge_index": 1, "reason": "Edge 1 has stronger pending signal."}),
+    ]
+
+    selected = scheduler._choose_edge_for_doc("doc_0", edges)
+    assert selected == edges[1]
+    assert reconciler.rlm_metrics["planner_fallbacks"] == 0
+    assert reconciler.rlm_metrics["root_calls"] == 2
+
+    planner_events = [e for e in events if e["event"] == "hybrid_planner_decision"]
+    assert planner_events
+    latest = planner_events[-1]["data"]
+    assert latest["source"] == "planner"
+    assert latest["attempt"] == "repair_retry"
+    assert latest["planner_prompt_version"] == PLANNER_PROMPT_VERSION
+
+
+def test_hybrid_invalid_edge_action_falls_back_to_deterministic():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="edge",
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+    reconciler.stage_payloads["root"] = [
+        json.dumps({"action": "run_worker", "depth": 99, "include_optional": False, "reason": "Try unsupported deep step."})
+    ]
+
+    decision = scheduler._plan_edge_action(
+        edge=edge,
+        current_depth=0,
+        current_include_optional=False,
+        call_count=0,
+        remaining_edge_tokens=1000,
+        accepted_total=0,
+        attempted_total=0,
+        rejected_total=0,
+        no_candidate_calls=0,
+        has_optional_contexts=False,
+    )
+    assert decision["action"] == "run_worker"
+    assert decision["depth"] == 0
+    assert decision["source"] == "deterministic"
+    assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
+
+
+def test_hybrid_planner_retry_failure_emits_deterministic_fallback_event():
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="corpus_doc_edge",
+    )
+
+    plan = {
+        "next_doc": {"doc_id": "doc_0", "status": "unplanned"},
+        "queue": [
+            {"doc_id": "doc_0", "status": "unplanned", "pending_neighbors": 1, "pending_entities": 1},
+            {"doc_id": "doc_1", "status": "in_progress", "pending_neighbors": 5, "pending_entities": 3},
+        ],
+    }
+    reconciler.stage_payloads["root"] = ["not-json", "still-not-json"]
+
+    selected = scheduler._choose_doc_for_corpus(plan)
+    assert selected == "doc_0"
+    assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
+
+    fallback_events = [
+        e["data"]
+        for e in events
+        if e["event"] == "hybrid_planner_decision" and e["data"].get("source") == "deterministic_fallback"
+    ]
+    assert fallback_events
+    assert fallback_events[-1]["fallback_reason"] == "planner_unresolved_after_retry"
+    assert fallback_events[-1]["planner_prompt_version"] == PLANNER_PROMPT_VERSION
+
+
+def test_hybrid_stop_action_blocked_by_pending_mandatory_docs_falls_back_to_worker(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.stage_payloads["worker"] = [
+        json.dumps({"status": "ok", "candidates": [], "need_recursion": False, "notes": "none"})
+    ]
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=0, max_calls=1, edge_max_tokens=2000)
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=0,
+        edge_max_calls=1,
+        edge_max_tokens=2000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="edge",
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+
+    coverage_calls = {"count": 0}
+    original_call_tool = scheduler._call_tool
+
+    def _patched_call_tool(tool_name, arguments, doc_id=None):
+        if tool_name == "plan_neighbor_doc_coverage":
+            coverage_calls["count"] += 1
+            if coverage_calls["count"] == 1:
+                return {
+                    "doc_id": "doc_0",
+                    "entity_name": "Source",
+                    "neighbor_name": "Neighbor",
+                    "relationship": "related to",
+                    "mandatory_docs": [],
+                    "optional_fuzzy_docs": [],
+                    "explored_mandatory_docs": [],
+                    "pending_mandatory_docs": [],
+                    "ready_to_close": True,
+                }
+            return {
+                "doc_id": "doc_0",
+                "entity_name": "Source",
+                "neighbor_name": "Neighbor",
+                "relationship": "related to",
+                "mandatory_docs": ["doc_1"],
+                "optional_fuzzy_docs": [],
+                "explored_mandatory_docs": [],
+                "pending_mandatory_docs": ["doc_1"],
+                "ready_to_close": False,
+            }
+        return original_call_tool(tool_name, arguments, doc_id=doc_id)
+
+    def _always_stop(*_args, **_kwargs):
+        return {"action": "stop_edge", "source": "planner"}
+
+    monkeypatch.setattr(scheduler, "_call_tool", _patched_call_tool)
+    monkeypatch.setattr(scheduler, "_plan_edge_action", _always_stop)
+
+    edge_result = scheduler._run_edge(edge)
+
+    assert edge_result.attempted == 0
+    assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
+    assert reconciler.rlm_metrics["worker_calls"] == 0
+    assert reconciler.rlm_metrics["edges_skipped_no_path"] >= 1

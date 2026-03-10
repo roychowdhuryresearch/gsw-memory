@@ -212,6 +212,65 @@ class GSWTools:
                 explored.add(doc_value)
                 state["explored_mandatory_docs"] = sorted(explored)
 
+    @staticmethod
+    def _is_empty_context_payload(context: Any) -> bool:
+        """Return True when context has no usable facts."""
+        if not isinstance(context, dict):
+            return True
+        return not (
+            context.get("qa_pairs")
+            or context.get("roles")
+            or context.get("states")
+            or context.get("relationships")
+        )
+
+    def _resolve_optional_doc_alias_for_active_focus(
+        self,
+        entity_name: str,
+        doc_id: Optional[str],
+    ) -> Optional[str]:
+        """
+        Resolve a doc-scoped alias from optional fuzzy coverage for the active edge.
+
+        This is intentionally strict: only active focus edge + optional docs + same
+        requested neighbor name are eligible.
+        """
+        if not isinstance(doc_id, str) or not doc_id.strip():
+            return None
+        if not self.active_neighbor_focus:
+            return None
+
+        focus = self.active_neighbor_focus
+        requested_name = str(entity_name).strip().lower()
+        focus_neighbor = str(focus.get("neighbor_name", "")).strip().lower()
+        if requested_name != focus_neighbor:
+            return None
+
+        key = self._active_focus_edge_key()
+        if key is None:
+            return None
+
+        state = self.neighbor_doc_coverage_plans.get(key)
+        if not isinstance(state, dict):
+            return None
+
+        doc_value = doc_id.strip()
+        mandatory_docs = set(state.get("mandatory_docs", []) or [])
+        if doc_value in mandatory_docs:
+            return None
+
+        for item in state.get("optional_fuzzy_docs", []) or []:
+            if not isinstance(item, dict):
+                continue
+            if str(item.get("doc_id", "")).strip() != doc_value:
+                continue
+            alias_name = str(item.get("name", "")).strip()
+            if alias_name and alias_name.lower() != requested_name:
+                return alias_name
+            return None
+
+        return None
+
     # ========== DISCOVERY TOOLS (4) ==========
 
     def browse_entities(
@@ -801,7 +860,28 @@ class GSWTools:
 
         # SINGLE DOC MODE or MERGED MODE
         self._mark_focus_mandatory_doc_explored(entity_name, doc_id)
-        return self._get_single_doc_context(entity_name, doc_id)
+        context = self._get_single_doc_context(entity_name, doc_id)
+        if not isinstance(doc_id, str) or not doc_id.strip():
+            return context
+        if not self._is_empty_context_payload(context):
+            return context
+
+        alias_name = self._resolve_optional_doc_alias_for_active_focus(entity_name, doc_id)
+        if not alias_name:
+            return context
+
+        alias_context = self._get_single_doc_context(alias_name, doc_id)
+        if self._is_empty_context_payload(alias_context):
+            return context
+
+        logger.info(
+            "Optional-doc alias fallback used [edge=%s doc=%s requested=%s alias=%s]",
+            self._active_focus_edge_key(),
+            doc_id,
+            entity_name,
+            alias_name,
+        )
+        return alias_context
 
     def _get_single_doc_context(
         self,

@@ -159,7 +159,7 @@ For document exploration mode, you MUST finish one edge at a time:
 2. `plan_neighbor_doc_coverage(doc_id, entity_name, neighbor_name, relationship)`
 3. `search_entities(query=neighbor_name, exclude_doc_id=current_doc)` (optional fuzzy hints)
 4. Read ALL mandatory docs one-by-one: `get_entity_context(neighbor_name, "doc_x")`
-5. Optional: inspect fuzzy docs if useful
+5. Optional: inspect fuzzy docs if useful. Keep calling `get_entity_context(neighbor_name, "doc_x")` — for optional fuzzy docs the tool may auto-resolve doc-scoped alias names from coverage hints.
 6. `create_bridge_qa(...)` for valid chains
 7. `mark_neighbor_explored(doc_id, entity_name, neighbor_name, relationship, bridges_created)` to release lock
 
@@ -179,7 +179,7 @@ You are given a specific document to explore. Your job is to walk ALL its entiti
    a. `begin_neighbor_focus(doc_id, entity_name, neighbor_name, relationship)` → acquire edge lock
    b. `plan_neighbor_doc_coverage(doc_id, entity_name, neighbor_name, relationship)` → mandatory docs + optional fuzzy docs
    c. Read mandatory docs one-by-one with `get_entity_context(neighbor_name, "doc_x")`
-   d. Optionally inspect fuzzy docs if useful
+   d. Optionally inspect fuzzy docs if useful (same call shape: `get_entity_context(neighbor_name, "doc_x")`; optional-doc alias resolution is handled internally)
    e. Look for chains: source_entity → relationship → neighbor (doc_A) → new_fact (doc_B)
    f. `create_bridge_qa(...)` when chain found
    g. `mark_neighbor_explored(doc_id, entity_name, neighbor_name, relationship, bridges_created)` → release lock + update checklist

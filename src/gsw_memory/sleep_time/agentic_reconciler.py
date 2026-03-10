@@ -39,6 +39,7 @@ class AgenticReconciler:
         bridge_verifier_fail_open: bool = False,
         bridge_verifier_model: Optional[str] = None,
         pipeline_mode: str = "legacy",
+        hybrid_scope: str = "doc_edge",
         root_model: Optional[str] = None,
         worker_model: Optional[str] = None,
         edge_max_depth: int = 1,
@@ -64,7 +65,9 @@ class AgenticReconciler:
             bridge_verifier_threshold: Minimum verifier score (0-1) required to keep a created bridge.
             bridge_verifier_fail_open: If True, verifier API errors do not block bridge creation.
             bridge_verifier_model: Optional model for verifier subagent (defaults to model_name).
-            pipeline_mode: Exploration mode. "legacy" uses tool-calling chat loop, "rlm" uses deterministic root + edge workers.
+            pipeline_mode: Exploration mode. "legacy" uses tool-calling chat loop, "rlm" uses deterministic root + edge workers,
+                           "hybrid" uses planner-guided self-controller within hard guards.
+            hybrid_scope: Hybrid autonomy scope. "edge" | "doc_edge" | "corpus_doc_edge".
             root_model: Optional model for root-stage calls (defaults to model_name).
             worker_model: Optional model for recursive edge workers (defaults to model_name).
             edge_max_depth: Maximum recursion depth per edge in RLM mode.
@@ -83,7 +86,8 @@ class AgenticReconciler:
         self.bridge_verifier_threshold = max(0.0, min(1.0, bridge_verifier_threshold))
         self.bridge_verifier_fail_open = bridge_verifier_fail_open
         self.bridge_verifier_model = bridge_verifier_model or model_name
-        self.pipeline_mode = pipeline_mode if pipeline_mode in {"legacy", "rlm"} else "legacy"
+        self.pipeline_mode = pipeline_mode if pipeline_mode in {"legacy", "rlm", "hybrid"} else "legacy"
+        self.hybrid_scope = hybrid_scope if hybrid_scope in {"edge", "doc_edge", "corpus_doc_edge"} else "doc_edge"
         self.root_model = root_model or model_name
         self.worker_model = worker_model or model_name
         self.edge_max_depth = max(0, int(edge_max_depth))
@@ -113,6 +117,14 @@ class AgenticReconciler:
             "recursive_invocations": 0,
             "low_signal_edges": 0,
             "repeated_failure_stops": 0,
+            "edges_skipped_no_path": 0,
+            "planner_actions_overridden": 0,
+            "prefilter_reject_count": 0,
+            "alias_resolution_hits": 0,
+            "calls_blocked_no_progress": 0,
+            "planner_decisions": 0,
+            "planner_fallbacks": 0,
+            "planner_stop_actions": 0,
             "docs_attempted": 0,
             "docs_completed": 0,
         }
@@ -139,12 +151,13 @@ class AgenticReconciler:
                 f"  Bridge verifier: {'enabled' if self.bridge_verifier_enabled else 'disabled'} "
                 f"(model={self.bridge_verifier_model}, threshold={self.bridge_verifier_threshold:.2f})"
             )
-            if self.pipeline_mode == "rlm":
+            if self.pipeline_mode in {"rlm", "hybrid"}:
                 print(
-                    "  RLM config: "
+                    "  Pipeline config: "
                     f"root_model={self.root_model}, worker_model={self.worker_model}, "
                     f"depth={self.edge_max_depth}, calls={self.edge_max_calls}, "
-                    f"edge_tokens={self.edge_max_tokens}, optional_docs={self.max_optional_docs_per_edge}"
+                    f"edge_tokens={self.edge_max_tokens}, optional_docs={self.max_optional_docs_per_edge}, "
+                    f"hybrid_scope={self.hybrid_scope}"
                 )
             print(f"  GSWs loaded: {len(self.entity_searcher.gsw_by_doc_id)}")
 
@@ -1573,6 +1586,27 @@ class AgenticReconciler:
             max_optional_docs_per_edge=self.max_optional_docs_per_edge,
         )
 
+    def _create_hybrid_scheduler(self):
+        """Build planner-guided hybrid scheduler + recursive edge worker."""
+        from .rlm_pipeline import HybridScheduler, RecursiveEdgeWorker
+
+        worker = RecursiveEdgeWorker(
+            reconciler=self,
+            model_name=self.worker_model,
+            max_depth=self.edge_max_depth,
+            max_calls=self.edge_max_calls,
+            edge_max_tokens=self.edge_max_tokens,
+        )
+        return HybridScheduler(
+            reconciler=self,
+            worker=worker,
+            edge_max_depth=self.edge_max_depth,
+            edge_max_calls=self.edge_max_calls,
+            edge_max_tokens=self.edge_max_tokens,
+            max_optional_docs_per_edge=self.max_optional_docs_per_edge,
+            hybrid_scope=self.hybrid_scope,
+        )
+
     def run_rlm_document(self, doc_id: str) -> Dict[str, Any]:
         """Run deterministic RLM exploration for one document."""
         scheduler = self._create_rlm_scheduler()
@@ -1584,6 +1618,19 @@ class AgenticReconciler:
         max_docs = self.budget.get("max_documents")
         if max_docs is None:
             # Backward compatibility for older callers.
+            max_docs = self.budget.get("max_entities")
+        return scheduler.run_corpus(max_documents=max_docs)
+
+    def run_hybrid_document(self, doc_id: str) -> Dict[str, Any]:
+        """Run hybrid planner-guided exploration for one document."""
+        scheduler = self._create_hybrid_scheduler()
+        return scheduler.run_document(doc_id)
+
+    def run_hybrid_corpus(self) -> Dict[str, Any]:
+        """Run hybrid planner-guided exploration across corpus queue."""
+        scheduler = self._create_hybrid_scheduler()
+        max_docs = self.budget.get("max_documents")
+        if max_docs is None:
             max_docs = self.budget.get("max_entities")
         return scheduler.run_corpus(max_documents=max_docs)
 
@@ -1611,6 +1658,14 @@ class AgenticReconciler:
                 return self.run_rlm_corpus()
             # For explicit entity exploration, keep legacy behavior to preserve compatibility.
             logger.info("RLM mode received entity-level request; falling back to legacy loop for entity=%s", entity_name)
+        elif self.pipeline_mode == "hybrid":
+            # Hybrid mode uses the same doc/corpus entry points with planner-guided control.
+            if doc_id:
+                return self.run_hybrid_document(doc_id)
+            if entity_name is None:
+                return self.run_hybrid_corpus()
+            # Preserve explicit entity behavior for compatibility.
+            logger.info("Hybrid mode received entity-level request; falling back to legacy loop for entity=%s", entity_name)
 
         label = doc_id or entity_name or "corpus"
         if self.verbose:
@@ -1827,6 +1882,8 @@ class AgenticReconciler:
         """
         if self.pipeline_mode == "rlm":
             return self.run_rlm_corpus()
+        if self.pipeline_mode == "hybrid":
+            return self.run_hybrid_corpus()
 
         if num_entities is None:
             num_entities = self.budget.get("max_entities", 20)

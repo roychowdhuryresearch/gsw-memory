@@ -260,6 +260,7 @@ def run_question(
             "--max_tokens", str(args.max_tokens),
             "--reasoning_effort", args.reasoning_effort,
             "--pipeline_mode", args.pipeline_mode,
+            "--hybrid_scope", args.hybrid_scope,
         ]
 
         if args.base_url:
@@ -291,7 +292,7 @@ def run_question(
         cmd.extend(["--cache_dir", cache_dir])
 
         console.print(
-            "  RLM knobs: "
+            "  Pipeline knobs: "
             f"depth={args.edge_max_depth}, calls={args.edge_max_calls}, "
             f"edge_tokens={args.edge_max_tokens}, optional_docs={args.max_optional_docs_per_edge}"
         )
@@ -374,8 +375,11 @@ def main():
     parser.add_argument("--reasoning_effort", type=str, default="medium",
                         choices=["low", "medium", "high"])
     parser.add_argument("--pipeline_mode", type=str, default="legacy",
-                        choices=["legacy", "rlm"],
+                        choices=["legacy", "rlm", "hybrid"],
                         help="Exploration pipeline for run_sleep_time.py")
+    parser.add_argument("--hybrid_scope", type=str, default="doc_edge",
+                        choices=["edge", "doc_edge", "corpus_doc_edge"],
+                        help="Hybrid autonomy scope when pipeline_mode=hybrid")
     parser.add_argument("--root_model", type=str, default=None,
                         help="Optional root-stage model in RLM mode")
     parser.add_argument("--worker_model", type=str, default=None,
@@ -451,6 +455,8 @@ def main():
             "schema": schema,
             "model": args.model,
             "max_iterations": args.max_iterations,
+            "pipeline_mode": args.pipeline_mode,
+            "hybrid_scope": args.hybrid_scope,
         },
         "results": all_results,
     }
