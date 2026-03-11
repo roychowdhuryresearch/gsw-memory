@@ -8,7 +8,11 @@ Workspaces from text using sophisticated semantic role extraction.
 from bespokelabs import curator
 
 
-from ...prompts.operator_prompts import FactualExtractionPrompts, OperatorPrompts, PromptType
+from ...prompts.operator_prompts import (
+    FactualExtractionPrompts,
+    OperatorPrompts,
+    PromptType,
+)
 from ..models import GSWStructure
 
 
@@ -19,14 +23,14 @@ from ..models import GSWStructure
 
 #     def __init__(self, prompt_type: PromptType = PromptType.EPISODIC, **kwargs):
 #         """Initialize GSWOperator with specified prompt type.
-        
+
 #         Args:
 #             prompt_type: Type of prompts to use (EPISODIC or FACTUAL)
 #             **kwargs: Additional arguments passed to curator.LLM
 #         """
 #         super().__init__(**kwargs)
 #         self.prompt_type = prompt_type
-        
+
 #         # Select appropriate prompt class based on type
 #         if prompt_type == PromptType.EPISODIC:
 #             self.prompt_class = OperatorPrompts
@@ -58,7 +62,7 @@ from ..models import GSWStructure
 #             "doc_idx": input.get("doc_idx", input["idx"]),
 #             "global_id": input.get("global_id", "unknown"),
 #         }
-        
+
 #         # Include sentence indices if available
 #         if "start_sentence" in input:
 #             parsed_response["start_sentence"] = input["start_sentence"]
@@ -68,7 +72,7 @@ from ..models import GSWStructure
 #         return parsed_response
 
 
-#Uncomment for structured outputs
+# Uncomment for structured outputs
 class GSWOperator(curator.LLM):
     """Curator class for generating GSWs using sophisticated semantic role extraction."""
 
@@ -100,7 +104,7 @@ class GSWOperator(curator.LLM):
                 "role": "user",
                 "content": self.prompt_class.USER_PROMPT_TEMPLATE.format(
                     input_text=input["text"],
-                    background_context=input.get("context", "")
+                    background_context=input.get("context", ""),
                 ),
             },
         ]

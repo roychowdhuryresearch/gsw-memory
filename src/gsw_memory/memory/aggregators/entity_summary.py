@@ -26,12 +26,12 @@ class GSWEntitySummarizer(curator.LLM):
     def prompt(self, input_data):
         """Create the prompt for the LLM summarizer."""
         include_space_time = input_data.get("include_space_time", False)
-        
+
         system_prompt = EntitySummaryPrompts.get_system_prompt(include_space_time)
         user_prompt = EntitySummaryPrompts.get_user_prompt(
             entity_name=input_data["entity_name"],
             formatted_data=input_data["formatted_data"],
-            include_space_time=include_space_time
+            include_space_time=include_space_time,
         )
 
         return [
@@ -157,20 +157,22 @@ class EntitySummaryAggregator(BaseAggregator):
                 return self._precomputed_summaries
             else:
                 # Return subset for specific entity IDs
-                return {eid: self._precomputed_summaries[eid] 
-                       for eid in entity_ids 
-                       if eid in self._precomputed_summaries}
-        
+                return {
+                    eid: self._precomputed_summaries[eid]
+                    for eid in entity_ids
+                    if eid in self._precomputed_summaries
+                }
+
         # Otherwise generate new summaries
         if entity_ids is None:
             entity_ids = [entity.id for entity in self.gsw.entity_nodes]
 
         summaries = self._generate_summaries(entity_ids, include_space_time)
-        
+
         # Cache the results if we generated summaries for all entities
         if entity_ids == [entity.id for entity in self.gsw.entity_nodes]:
             self._precomputed_summaries = summaries
-        
+
         return summaries
 
     def _extract_entities_from_query(self, query: str) -> List[str]:
@@ -266,10 +268,10 @@ class EntitySummaryAggregator(BaseAggregator):
         # Convert results to dictionary format
         summary_map = {}
         failed_entities = []
-        
+
         for result in summarization_results.dataset:
             entity_id = result["entity_id"]
-            
+
             # Check if we got a valid summary
             if "summary" in result and result["summary"]:
                 summary_map[entity_id] = {
@@ -288,9 +290,13 @@ class EntitySummaryAggregator(BaseAggregator):
                 }
 
         if failed_entities:
-            print(f"Warning: Failed to generate summaries for {len(failed_entities)} entities")
-            
-        print(f"Generated {len(summary_map)} summaries ({len(summary_map) - len(failed_entities)} successful)")
+            print(
+                f"Warning: Failed to generate summaries for {len(failed_entities)} entities"
+            )
+
+        print(
+            f"Generated {len(summary_map)} summaries ({len(summary_map) - len(failed_entities)} successful)"
+        )
         return summary_map
 
     def _get_entity_by_id(self, entity_id: str) -> Optional[EntityNode]:

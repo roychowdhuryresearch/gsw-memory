@@ -31,9 +31,9 @@ class TulvingBenchJudge(BaseJudge, curator.LLM):
         user_prompt = f"""
 You are an expert judge evaluating the accuracy of an AI-generated answer against a known groundtruth. Questions can probe for different types or aspects, like what actions or events took place, what people were involved, what were the dates, or what were the locations or spaces.
 
-Question type: {input_data['retrieval_type']}
-Groundtruth: {input_data['correct_answer']}
-AI-generated answer: {input_data['answer_to_evaluate']}
+Question type: {input_data["retrieval_type"]}
+Groundtruth: {input_data["correct_answer"]}
+AI-generated answer: {input_data["answer_to_evaluate"]}
 
 Your task:
 - Identify all unique items in the AI-generated answer that are relevant to the question type. Answer an empty list [] for this field in case of at least one negative information (e.g., when the answer begins by telling there is no information, or cannot answer)
@@ -109,10 +109,13 @@ Provide your evaluation in the following JSON format:
         }
 
     def _calculate_tulving_metrics(
-        self, matching_score: List[Dict[str, str]], num_gt_items: int, num_pred_items: int
+        self,
+        matching_score: List[Dict[str, str]],
+        num_gt_items: int,
+        num_pred_items: int,
     ) -> Dict[str, Optional[float]]:
         """Calculate Tulving Bench specific precision, recall, and F1 score."""
-        
+
         # Case 1: No ground truth items
         if num_gt_items == 0:
             if num_pred_items == 0:
@@ -175,7 +178,7 @@ Provide your evaluation in the following JSON format:
         answers_to_evaluate: List[str],
         retrieval_types: List[str] = None,
         answer_types: List[str] = None,
-        **kwargs
+        **kwargs,
     ) -> List[Dict[str, Any]]:
         """Evaluate a batch of Q&A responses using Tulving Bench methodology."""
         if retrieval_types is None:
@@ -185,16 +188,30 @@ Provide your evaluation in the following JSON format:
 
         # Prepare input data for curator
         evaluation_inputs = []
-        for i, (question, correct_answer, answer_to_eval, retrieval_type, answer_type) in enumerate(
-            zip(questions, correct_answers, answers_to_evaluate, retrieval_types, answer_types)
+        for i, (
+            question,
+            correct_answer,
+            answer_to_eval,
+            retrieval_type,
+            answer_type,
+        ) in enumerate(
+            zip(
+                questions,
+                correct_answers,
+                answers_to_evaluate,
+                retrieval_types,
+                answer_types,
+            )
         ):
-            evaluation_inputs.append({
-                "question": question,
-                "correct_answer": correct_answer,
-                "answer_to_evaluate": answer_to_eval,
-                "retrieval_type": retrieval_type,
-                "answer_type": answer_type,
-            })
+            evaluation_inputs.append(
+                {
+                    "question": question,
+                    "correct_answer": correct_answer,
+                    "answer_to_evaluate": answer_to_eval,
+                    "retrieval_type": retrieval_type,
+                    "answer_type": answer_type,
+                }
+            )
 
         # Run evaluation
         results = self(evaluation_inputs)
@@ -207,15 +224,21 @@ Provide your evaluation in the following JSON format:
         answer_to_evaluate: str,
         retrieval_type: str = "unknown",
         answer_type: str = "unknown",
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """Evaluate a single Q&A response using Tulving Bench methodology."""
         results = self.evaluate_answers(
-            [question], [correct_answer], [answer_to_evaluate], [retrieval_type], [answer_type]
+            [question],
+            [correct_answer],
+            [answer_to_evaluate],
+            [retrieval_type],
+            [answer_type],
         )
         return results[0]
 
-    def calculate_aggregate_metrics(self, evaluation_results: List[Dict[str, Any]]) -> Dict[str, float]:
+    def calculate_aggregate_metrics(
+        self, evaluation_results: List[Dict[str, Any]]
+    ) -> Dict[str, float]:
         """Calculate aggregate Tulving Bench metrics across multiple evaluation results."""
         if not evaluation_results:
             return {"precision": 0, "recall": 0, "f1": 0}
@@ -224,7 +247,9 @@ Provide your evaluation in the following JSON format:
         precision_values = [
             e["precision"] for e in evaluation_results if e["precision"] is not None
         ]
-        recall_values = [e["recall"] for e in evaluation_results if e["recall"] is not None]
+        recall_values = [
+            e["recall"] for e in evaluation_results if e["recall"] is not None
+        ]
         f1_values = [e["f1"] for e in evaluation_results if e["f1"] is not None]
 
         # Calculate averages

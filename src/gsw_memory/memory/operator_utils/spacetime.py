@@ -6,7 +6,6 @@ relationships between entities in GSW structures using LLM-based processing.
 """
 
 import json
-from typing import Dict
 
 from bespokelabs import curator
 
@@ -16,8 +15,8 @@ from ...prompts.operator_prompts import SpaceTimePrompts
 class SpaceTimeLinker(curator.LLM):
     """
     Curator Class for Space-Time linking of GSW instances.
-    
-    Identifies groups of entity IDs that share the same location (spatial context) 
+
+    Identifies groups of entity IDs that share the same location (spatial context)
     or the same time/date (temporal context) based on the events described.
     """
 
@@ -30,9 +29,9 @@ class SpaceTimeLinker(curator.LLM):
             {
                 "role": "user",
                 "content": SpaceTimePrompts.USER_PROMPT_TEMPLATE.format(
-                    text_chunk_content=input_data['text_chunk_content'],
-                    operator_output_json=input_data['operator_output_json']
-                )
+                    text_chunk_content=input_data["text_chunk_content"],
+                    operator_output_json=input_data["operator_output_json"],
+                ),
             },
         ]
 
@@ -56,7 +55,9 @@ class SpaceTimeLinker(curator.LLM):
             # Return the parsed content and original answer
             return [
                 {
-                    "spatio_temporal_links": parsed_links.get("spatio_temporal_links", []),
+                    "spatio_temporal_links": parsed_links.get(
+                        "spatio_temporal_links", []
+                    ),
                     "full_response": answer_text,
                     "chunk_id": input_data.get("chunk_id", "unknown_chunk"),
                     "idx": input_data.get("idx", 0),

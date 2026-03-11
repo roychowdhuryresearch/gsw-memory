@@ -14,36 +14,37 @@ from tqdm import tqdm
 
 class ToolCall(BaseModel):
     """Represents a tool call the agent wants to make."""
+
     tool_name: str = Field(description="Name of the tool to call")
     arguments: Dict[str, Any] = Field(description="Arguments for the tool")
 
 
 class AgentResponse(BaseModel):
     """Response from the agentic agent."""
+
     answer: str = Field(description="The final answer to the question")
     reasoning: str = Field(description="Step-by-step reasoning process")
     tool_calls_made: List[Dict[str, Any]] = Field(
-        default_factory=list, 
-        description="List of tool calls made during reasoning"
+        default_factory=list, description="List of tool calls made during reasoning"
     )
 
 
 class AgenticAnsweringAgent:
     """
     Agent that can use GSW tools to answer questions through exploration.
-    
+
     Uses OpenAI Responses API tool calling to dynamically query the GSW structure.
     """
-    
+
     def __init__(
-        self, 
+        self,
         model_name: str = "gpt-4o",
         generation_params: Optional[Dict[str, Any]] = None,
-        max_iterations: int = 10
+        max_iterations: int = 10,
     ):
         """
         Initialize the agentic answering agent.
-        
+
         Args:
             model_name: LLM model to use
             generation_params: Parameters for generation (temperature, etc.)
@@ -53,7 +54,7 @@ class AgenticAnsweringAgent:
         self.generation_params = generation_params or {"temperature": 0.0}
         self.max_iterations = max_iterations
         self.client = OpenAI()
-        
+
         # Tool definitions for OpenAI function calling
         self.tool_definitions_newformat = [
             # {
@@ -85,16 +86,16 @@ class AgenticAnsweringAgent:
                     "properties": {
                         "query": {
                             "type": "string",
-                            "description": "Search query string"
+                            "description": "Search query string",
                         },
                         "limit": {
                             "type": "integer",
                             "description": "Maximum number of results (recommend 10-15 for embeddings)",
-                            "default": 10
-                        }
+                            "default": 10,
+                        },
                     },
-                    "required": ["query"]
-                }
+                    "required": ["query"],
+                },
             },
             {
                 "type": "function",
@@ -105,30 +106,26 @@ class AgenticAnsweringAgent:
                     "properties": {
                         "entity_ids": {
                             "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
+                            "items": {"type": "string"},
                             "description": "List of entity global_ids from search results (max 5 recommended)",
-                            "maxItems": 10
+                            "maxItems": 10,
                         }
                     },
-                    "required": ["entity_ids"]
-                }
+                    "required": ["entity_ids"],
+                },
             },
         ]
-            
+
     def answer_question(
-        self, 
-        question: str, 
-        tools: Dict[str, Callable]
+        self, question: str, tools: Dict[str, Callable]
     ) -> AgentResponse:
         """
         Answer a question using GSW tools.
-        
+
         Args:
             question: The question to answer
             tools: Dict mapping tool names to callable functions
-            
+
         Returns:
             AgentResponse with answer, reasoning, and tool calls
         """
@@ -178,27 +175,26 @@ Your final response should be:
 Do NOT include phrases like "The answer is" or "Based on my search" in the answer field."""
 
         # Build Responses API input list and iterate with tool calls
-        input_list = [
-            {"role": "user", "content": f"Question: {question}"}
-        ]
-        
+        input_list = [{"role": "user", "content": f"Question: {question}"}]
+
         tool_calls_made = []
         iterations = 0
-        
+
         while iterations < self.max_iterations:
             iterations += 1
-            
+
             try:
                 response = self.client.responses.create(
                     model=self.model_name,
                     tools=self.tool_definitions_newformat,
                     input=input_list,
                     instructions=system_prompt,
-                    **self.generation_params
+                    **self.generation_params,
                 )
             except Exception as e:
                 # Write debug info to file
                 import datetime
+
                 timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                 debug_file = f"debug_context_overflow_{timestamp}.txt"
                 with open(debug_file, "w") as f:
@@ -209,13 +205,13 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
                     f.write(f"Number of input items: {len(input_list)}\n")
                 print(f"Debug info written to: {debug_file}")
                 raise e
-            
+
             # Append the model output items back to the running input list
             try:
                 input_list += response.output  # type: ignore[attr-defined]
             except Exception:
                 pass
-            
+
             # Collect function calls from the output
             function_calls = []
             try:
@@ -224,52 +220,66 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
                         function_calls.append(item)
             except Exception:
                 function_calls = []
-            
+
             if function_calls:
                 for fc in function_calls:
                     function_name = getattr(fc, "name", None)
                     arguments_raw = getattr(fc, "arguments", "{}")
                     call_id = getattr(fc, "call_id", None)
                     try:
-                        function_args = json.loads(arguments_raw) if arguments_raw else {}
+                        function_args = (
+                            json.loads(arguments_raw) if arguments_raw else {}
+                        )
                     except Exception:
                         function_args = {}
-                    
+
                     if function_name in tools:
                         result = tools[function_name](**function_args)
-                        tool_calls_made.append({
-                            "tool": function_name,
-                            "arguments": function_args,
-                            "result": result
-                        })
-                        input_list.append({
-                            "type": "function_call_output",
-                            "call_id": call_id,
-                            "output": json.dumps(result)
-                        })
+                        tool_calls_made.append(
+                            {
+                                "tool": function_name,
+                                "arguments": function_args,
+                                "result": result,
+                            }
+                        )
+                        input_list.append(
+                            {
+                                "type": "function_call_output",
+                                "call_id": call_id,
+                                "output": json.dumps(result),
+                            }
+                        )
                     else:
-                        input_list.append({
-                            "type": "function_call_output",
-                            "call_id": call_id,
-                            "output": json.dumps({"error": f"Tool {function_name} not found"})
-                        })
+                        input_list.append(
+                            {
+                                "type": "function_call_output",
+                                "call_id": call_id,
+                                "output": json.dumps(
+                                    {"error": f"Tool {function_name} not found"}
+                                ),
+                            }
+                        )
                 # Continue to next iteration so model can consume tool outputs
                 continue
-            
+
             # If no function calls were returned, treat response as final
             content = getattr(response, "output_text", "")
             if not content:
                 # Try to fallback to the last message item
                 try:
-                    message_items = [it for it in response.output if getattr(it, "type", None) == "message"]  # type: ignore[attr-defined]
+                    message_items = [
+                        it
+                        for it in response.output
+                        if getattr(it, "type", None) == "message"
+                    ]  # type: ignore[attr-defined]
                     if message_items:
                         content = getattr(message_items[-1], "content", "") or ""
                 except Exception:
                     content = ""
-            
+
             try:
-                json_start = content.find('{')
-                json_end = content.rfind('}') + 1
+                json_start = content.find("{")
+                json_end = content.rfind("}") + 1
                 if json_start != -1 and json_end > json_start:
                     json_str = content[json_start:json_end]
                     response_data = json.loads(json_str)
@@ -281,32 +291,30 @@ Do NOT include phrases like "The answer is" or "Based on my search" in the answe
             except json.JSONDecodeError:
                 answer_part = content
                 reasoning_part = "See tool calls for reasoning process"
-            
+
             return AgentResponse(
                 answer=answer_part,
                 reasoning=reasoning_part,
-                tool_calls_made=tool_calls_made
+                tool_calls_made=tool_calls_made,
             )
-        
+
         # Reached max iterations
         return AgentResponse(
             answer="Unable to find answer within iteration limit",
             reasoning=f"Reached maximum of {self.max_iterations} iterations",
-            tool_calls_made=tool_calls_made
+            tool_calls_made=tool_calls_made,
         )
-    
+
     def answer_batch(
-        self, 
-        questions: List[str], 
-        tools: Dict[str, Callable]
+        self, questions: List[str], tools: Dict[str, Callable]
     ) -> List[AgentResponse]:
         """
         Answer multiple questions (processes sequentially for now).
-        
+
         Args:
             questions: List of questions to answer
             tools: Dict mapping tool names to callable functions
-            
+
         Returns:
             List of AgentResponse objects
         """

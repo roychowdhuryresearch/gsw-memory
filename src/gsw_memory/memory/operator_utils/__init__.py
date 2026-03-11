@@ -13,7 +13,7 @@ from .utils import chunk_text, extract_json_from_output, parse_gsw
 
 __all__ = [
     "CorefOperator",
-    "ContextGenerator", 
+    "ContextGenerator",
     "GSWOperator",
     "SpaceTimeLinker",
     "chunk_text",

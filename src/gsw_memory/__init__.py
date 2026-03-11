@@ -6,7 +6,7 @@ for building semantic memory systems from text.
 
 This package provides:
 - GSW generation from text documents
-- Entity reconciliation across documents  
+- Entity reconciliation across documents
 - Entity summary aggregation
 - Question-answering system using GSW structures
 
@@ -38,7 +38,7 @@ qa_system = GSWQuestionAnswerer(reconciled_gsws, aggregators, llm_config)
 answer = qa_system.ask("Who is the main character?")
 ```
 
-## Single Unified Q&A (Global Strategy)  
+## Single Unified Q&A (Global Strategy)
 For merging all documents into one unified GSW:
 
 ```python
@@ -74,7 +74,12 @@ from .memory.models import GSWStructure, EntityNode, VerbPhraseNode, Role, Quest
 from .memory.aggregators import EntitySummaryAggregator
 
 # Q&A system
-from .qa import GSWQuestionAnswerer, QuestionEntityExtractor, EntityMatcher, SummaryReranker
+from .qa import (
+    GSWQuestionAnswerer,
+    QuestionEntityExtractor,
+    EntityMatcher,
+    SummaryReranker,
+)
 
 # Evaluation — guarded because benchmarks may have extra deps
 try:
@@ -92,24 +97,20 @@ __version__ = "0.1.0"
 __all__ = [
     # Core processing
     "GSWProcessor",
-    "reconcile_gsw_outputs", 
-    
+    "reconcile_gsw_outputs",
     # Data models
     "GSWStructure",
-    "EntityNode", 
+    "EntityNode",
     "VerbPhraseNode",
     "Role",
     "Question",
-    
     # Aggregators
     "EntitySummaryAggregator",
-    
     # Q&A system
     "GSWQuestionAnswerer",
     "QuestionEntityExtractor",
-    "EntityMatcher", 
+    "EntityMatcher",
     "SummaryReranker",
-    
     # Evaluation
     "TulvingBenchEvaluator",
     "hipporag_eval",

@@ -19,7 +19,7 @@ class BaseJudge(ABC):
         questions: List[str],
         correct_answers: List[List[str]],
         answers_to_evaluate: List[str],
-        **kwargs
+        **kwargs,
     ) -> List[Dict[str, Any]]:
         """
         Evaluate a batch of Q&A responses.
@@ -41,7 +41,7 @@ class BaseJudge(ABC):
         question: str,
         correct_answer: List[str],
         answer_to_evaluate: str,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Evaluate a single Q&A response.
@@ -58,7 +58,9 @@ class BaseJudge(ABC):
         pass
 
     @abstractmethod
-    def calculate_aggregate_metrics(self, evaluation_results: List[Dict[str, Any]]) -> Dict[str, float]:
+    def calculate_aggregate_metrics(
+        self, evaluation_results: List[Dict[str, Any]]
+    ) -> Dict[str, float]:
         """
         Calculate aggregate metrics across multiple evaluation results.
 

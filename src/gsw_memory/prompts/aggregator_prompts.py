@@ -5,11 +5,11 @@ Prompt templates for GSW Aggregator components.
 
 class EntitySummaryPrompts:
     """Prompts for entity summary generation."""
-    
+
     SYSTEM_PROMPT = """You are an expert narrative summarizer. Your task is to create a concise, chronological summary paragraph about a single entity based on structured information extracted from a text. Focus on creating a coherent story of the entity's involvement and changes based *only* on the provided timeline."""
-    
+
     SYSTEM_PROMPT_WITH_SPACETIME = """You are an expert narrative summarizer. Your task is to create a concise, chronological summary paragraph about a single entity based on structured information extracted from a text. Focus on creating a coherent story of the entity's involvement and changes based *only* on the provided timeline. Include relevant spatial and temporal context to enrich the narrative when this information is available."""
-    
+
     USER_PROMPT_TEMPLATE = """ENTITY NAME: {entity_name}
 
 INFORMATION TIMELINE (by Chunk ID):
@@ -48,17 +48,15 @@ Based *only* on the information provided above:
         if include_space_time:
             return cls.SYSTEM_PROMPT_WITH_SPACETIME
         return cls.SYSTEM_PROMPT
-        
+
     @classmethod
-    def get_user_prompt(cls, entity_name: str, formatted_data: str, 
-                       include_space_time: bool = False) -> str:
+    def get_user_prompt(
+        cls, entity_name: str, formatted_data: str, include_space_time: bool = False
+    ) -> str:
         """Get the formatted user prompt with entity data."""
         if include_space_time:
             template = cls.USER_PROMPT_WITH_SPACETIME_TEMPLATE
         else:
             template = cls.USER_PROMPT_TEMPLATE
-            
-        return template.format(
-            entity_name=entity_name,
-            formatted_data=formatted_data
-        )
+
+        return template.format(entity_name=entity_name, formatted_data=formatted_data)

@@ -10,6 +10,6 @@ from .entity_summary import EntitySummaryAggregator
 
 __all__ = [
     "BaseAggregator",
-    "AggregatedView", 
+    "AggregatedView",
     "EntitySummaryAggregator",
 ]

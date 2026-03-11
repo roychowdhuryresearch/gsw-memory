@@ -5,9 +5,9 @@ Prompt templates for GSW Reconciler components.
 
 class QuestionResolutionPrompts:
     """Prompts for resolving unanswered questions using new chunk text."""
-    
+
     SYSTEM_PROMPT = """You are an expert question answering system. Analyze the provided text and answer the specified questions based ONLY on the text. Provide answers in the specified JSON format."""
-    
+
     USER_PROMPT_TEMPLATE = """Given the following text chunk, the entities introduced within it, and a list of currently unanswered questions from a knowledge graph:
 
 Text Chunk:
@@ -43,9 +43,9 @@ If no questions can be answered from the text, respond with an empty JSON list: 
 
 class EntityVerificationPrompts:
     """Prompts for verifying entity similarity."""
-    
+
     SYSTEM_PROMPT = """You are a semantic verification system. Respond only with the required JSON format."""
-    
+
     USER_PROMPT_TEMPLATE = """Determine if each of the following entity pairs refers to the same real-world entity or strongly related entities.
 For each pair, consider:
 1. Are they referring to the same real-world entity?
