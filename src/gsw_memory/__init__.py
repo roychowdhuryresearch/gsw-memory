@@ -76,9 +76,16 @@ from .memory.aggregators import EntitySummaryAggregator
 # Q&A system
 from .qa import GSWQuestionAnswerer, QuestionEntityExtractor, EntityMatcher, SummaryReranker
 
-# Evaluation system
-from .evaluation.benchmarks.tulving_bench.evaluator import TulvingBenchEvaluator
-from .evaluation import hipporag_eval
+# Evaluation — guarded because benchmarks may have extra deps
+try:
+    from .evaluation.benchmarks.tulving_bench.evaluator import TulvingBenchEvaluator
+except ImportError:
+    TulvingBenchEvaluator = None  # type: ignore[assignment,misc]
+
+try:
+    from .evaluation import hipporag_eval
+except ImportError:
+    hipporag_eval = None  # type: ignore[assignment]
 
 __version__ = "0.1.0"
 
