@@ -97,13 +97,7 @@ def sample_gsw():
                 Question(
                     id="q_1",
                     text="Who investigated the case?",
-                    answers=["entity_1"],
-                    chunk_id="0_0",
-                ),
-                Question(
-                    id="q_2",
-                    text="Who was the suspect in the investigation?",
-                    answers=["entity_2"],
+                    answers=["entity_1", "entity_2"],
                     chunk_id="0_0",
                 ),
             ],
