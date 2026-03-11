@@ -10,7 +10,7 @@ This module provides the main evaluator for Tulving Bench that supports:
 
 import json
 import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
@@ -20,7 +20,7 @@ from .judge import TulvingBenchJudge
 class TulvingBenchEvaluator:
     """
     Main evaluator for Tulving Bench with flexible interface.
-    
+
     Supports single-system or comparative evaluation with automatic
     format detection and comprehensive metrics reporting.
     """
@@ -67,11 +67,11 @@ class TulvingBenchEvaluator:
         if qa_results is not None and ground_truth is not None:
             # Single system evaluation (new format)
             return self._evaluate_single_system(qa_results, ground_truth)
-        
+
         elif gsw_results is not None or baseline_results is not None:
             # Comparative evaluation or single system (original format)
             return self._evaluate_comparative(gsw_results, baseline_results)
-        
+
         else:
             raise ValueError(
                 "Must provide either (qa_results + ground_truth) or (gsw_results/baseline_results)"
@@ -83,22 +83,26 @@ class TulvingBenchEvaluator:
         """Evaluate a single Q&A system against ground truth."""
         # Merge qa_results with ground_truth
         merged_data = []
-        
+
         # Create a lookup for ground truth by question
         gt_lookup = {item["question"]: item for item in ground_truth}
-        
+
         for result in qa_results:
             question = result["question"]
             if question in gt_lookup:
                 gt_item = gt_lookup[question]
-                merged_data.append({
-                    "question": question,
-                    "answer": result["answer"],
-                    "correct_answer": gt_item["correct_answer"],
-                    "retrieval_type": gt_item.get("retrieval_type", "unknown"),
-                    "chapters_hit": result.get("matched_entities", []),  # Adapt field names
-                    "correct_chapters": gt_item.get("correct_answer_chapters", []),
-                })
+                merged_data.append(
+                    {
+                        "question": question,
+                        "answer": result["answer"],
+                        "correct_answer": gt_item["correct_answer"],
+                        "retrieval_type": gt_item.get("retrieval_type", "unknown"),
+                        "chapters_hit": result.get(
+                            "matched_entities", []
+                        ),  # Adapt field names
+                        "correct_chapters": gt_item.get("correct_answer_chapters", []),
+                    }
+                )
 
         # Evaluate using judge
         questions = [item["question"] for item in merged_data]
@@ -142,7 +146,9 @@ class TulvingBenchEvaluator:
             # Baseline only
             data = baseline_results
         else:
-            raise ValueError("Must provide at least one of gsw_results or baseline_results")
+            raise ValueError(
+                "Must provide at least one of gsw_results or baseline_results"
+            )
 
         # Auto-detect format and extract evaluation data
         evaluation_data = self._extract_evaluation_data(data)
@@ -179,27 +185,31 @@ class TulvingBenchEvaluator:
     ) -> List[Dict[str, Any]]:
         """Merge GSW and baseline results for comparative evaluation."""
         merged = []
-        
+
         # Create lookup for baseline results
         baseline_lookup = {item["question"]: item for item in baseline_results}
-        
+
         for gsw_item in gsw_results:
             question = gsw_item["question"]
             if question in baseline_lookup:
                 baseline_item = baseline_lookup[question]
-                merged.append({
-                    "question": question,
-                    "correct_answer": gsw_item["correct_answer"],
-                    "GSW_answer": gsw_item.get("answer", ""),
-                    "baseline_answer": baseline_item.get("answer", ""),
-                    "retrieval_type": gsw_item.get("retrieval_type", "unknown"),
-                    "chapters_hit": gsw_item.get("chapters_hit", []),
-                    "correct_chapters": gsw_item.get("correct_chapters", []),
-                })
-        
+                merged.append(
+                    {
+                        "question": question,
+                        "correct_answer": gsw_item["correct_answer"],
+                        "GSW_answer": gsw_item.get("answer", ""),
+                        "baseline_answer": baseline_item.get("answer", ""),
+                        "retrieval_type": gsw_item.get("retrieval_type", "unknown"),
+                        "chapters_hit": gsw_item.get("chapters_hit", []),
+                        "correct_chapters": gsw_item.get("correct_chapters", []),
+                    }
+                )
+
         return merged
 
-    def _extract_evaluation_data(self, data: List[Dict[str, Any]]) -> Dict[str, Dict[str, List]]:
+    def _extract_evaluation_data(
+        self, data: List[Dict[str, Any]]
+    ) -> Dict[str, Dict[str, List]]:
         """Extract and organize data for judge evaluation."""
         evaluation_data = {}
 
@@ -259,15 +269,27 @@ class TulvingBenchEvaluator:
 
         # Calculate averages
         avg_metrics = {
-            "precision": np.mean([m["precision"] for m in chapter_metrics_list]) if chapter_metrics_list else 0,
-            "recall": np.mean([m["recall"] for m in chapter_metrics_list]) if chapter_metrics_list else 0,
-            "f1": np.mean([m["f1"] for m in chapter_metrics_list]) if chapter_metrics_list else 0,
+            "precision": np.mean([m["precision"] for m in chapter_metrics_list])
+            if chapter_metrics_list
+            else 0,
+            "recall": np.mean([m["recall"] for m in chapter_metrics_list])
+            if chapter_metrics_list
+            else 0,
+            "f1": np.mean([m["f1"] for m in chapter_metrics_list])
+            if chapter_metrics_list
+            else 0,
         }
 
         avg_non_empty_metrics = {
-            "precision": np.mean([m["precision"] for m in non_empty_chapter_metrics]) if non_empty_chapter_metrics else 0,
-            "recall": np.mean([m["recall"] for m in non_empty_chapter_metrics]) if non_empty_chapter_metrics else 0,
-            "f1": np.mean([m["f1"] for m in non_empty_chapter_metrics]) if non_empty_chapter_metrics else 0,
+            "precision": np.mean([m["precision"] for m in non_empty_chapter_metrics])
+            if non_empty_chapter_metrics
+            else 0,
+            "recall": np.mean([m["recall"] for m in non_empty_chapter_metrics])
+            if non_empty_chapter_metrics
+            else 0,
+            "f1": np.mean([m["f1"] for m in non_empty_chapter_metrics])
+            if non_empty_chapter_metrics
+            else 0,
         }
 
         return {
@@ -288,8 +310,11 @@ class TulvingBenchEvaluator:
 
         return {
             "f1_difference": gsw_metrics["f1"] - baseline_metrics["f1"],
-            "f1_improvement_percent": f1_improvement if f1_improvement != float("inf") else None,
-            "precision_difference": gsw_metrics["precision"] - baseline_metrics["precision"],
+            "f1_improvement_percent": f1_improvement
+            if f1_improvement != float("inf")
+            else None,
+            "precision_difference": gsw_metrics["precision"]
+            - baseline_metrics["precision"],
             "recall_difference": gsw_metrics["recall"] - baseline_metrics["recall"],
         }
 
@@ -306,7 +331,9 @@ class TulvingBenchEvaluator:
     def print_summary(self, results: Dict[str, Any]) -> None:
         """Print a summary of the evaluation results."""
         print("\n" + "=" * 50)
-        print(f"TULVING BENCH EVALUATION SUMMARY ({results.get('num_questions', 0)} questions)")
+        print(
+            f"TULVING BENCH EVALUATION SUMMARY ({results.get('num_questions', 0)} questions)"
+        )
         print("=" * 50)
 
         # Print single system metrics
@@ -352,7 +379,9 @@ class TulvingBenchEvaluator:
 
             if results["chapter_metrics"]["num_questions_with_chapters"] > 0:
                 non_empty = results["chapter_metrics"]["questions_with_chapters"]
-                print(f"\nCHAPTER RETRIEVAL (QUESTIONS WITH CHAPTERS, n={results['chapter_metrics']['num_questions_with_chapters']}):")
+                print(
+                    f"\nCHAPTER RETRIEVAL (QUESTIONS WITH CHAPTERS, n={results['chapter_metrics']['num_questions_with_chapters']}):"
+                )
                 print(f"  Precision: {non_empty['precision']:.4f}")
                 print(f"  Recall:    {non_empty['recall']:.4f}")
                 print(f"  F1 Score:  {non_empty['f1']:.4f}")

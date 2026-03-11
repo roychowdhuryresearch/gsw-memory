@@ -1,41 +1,56 @@
 [project]
 name = "gsw-memory"
 version = "0.1.0"
-description = "Add your description here"
+description = "Generative Semantic Workspaces — structured memory for LLM-powered reasoning and retrieval"
 readme = "README.md"
 authors = [
     { name = "Shreyas Rajesh", email = "shreyasrajesh38@g.ucla.edu" }
 ]
 requires-python = ">=3.10"
+
+# Core dependencies — everything needed for Operator + Reconciler + Aggregator + QA
 dependencies = [
     "bespokelabs-curator>=0.1.25",
-    "faiss-gpu>=1.7.2",
-    "google-genai>=1.46.0",
-    "hdbscan>=0.8.40",
-    "hydra-core>=1.3.2",
-    "ipykernel>=6.29.5",
-    "ipywidgets>=8.1.7",
+    "faiss-cpu>=1.7.2",
     "langchain-voyageai>=0.1.6",
-    "numpy==1.26.4",
-    "omegaconf>=2.3.0",
+    "numpy>=1.26.4",
     "openai>=1.82.0",
     "pandas>=2.2.2",
-    "peft>=0.17.1",
+    "pyarrow>=21.0.0",
     "pydantic>=2.11.5",
     "python-dotenv>=1.1.0",
     "pyyaml>=6.0.2",
     "rank-bm25>=0.2.2",
     "rich>=13.9.4",
     "scikit-learn>=1.6.1",
-    "streamlit>=1.50.0",
     "together>=1.5.26",
-    "torch>=2.7.1",
     "tqdm>=4.67.1",
+]
+
+[project.optional-dependencies]
+# Training / RL / sleep-time agent research
+training = [
+    "flash-attn>=2.8.3",
+    "hydra-core>=1.3.2",
+    "omegaconf>=2.3.0",
+    "peft>=0.17.1",
+    "torch>=2.7.1",
     "trl>=0.25.0",
     "unsloth>=2025.9.9",
     "vllm>=0.10.0",
     "wandb>=0.22.3",
 ]
+
+# Visualization and interactive exploration
+viz = [
+    "ipykernel>=6.29.5",
+    "ipywidgets>=8.1.7",
+    "plotly>=6.5.2",
+    "streamlit>=1.50.0",
+]
+
+# Everything (for GPU FAISS, install faiss-gpu in place of faiss-cpu)
+all = ["gsw-memory[training,viz]"]
 
 [project.scripts]
 gsw-memory = "gsw_memory:main"

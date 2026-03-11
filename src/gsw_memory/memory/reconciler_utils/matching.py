@@ -624,7 +624,9 @@ class EmbeddingEntityIndex(EntityIndex):
                 cpu_index.add(new_embeddings)
 
                 # Transfer to GPU
-                self.index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                self.index = faiss.index_cpu_to_gpu(
+                    self.gpu_resources, self.gpu_device, cpu_index
+                )
             else:
                 # Fallback to CPU index if GPU not available
                 self.index = faiss.IndexFlatIP(self.embedding_dim)
@@ -636,7 +638,9 @@ class EmbeddingEntityIndex(EntityIndex):
             if self.gpu_resources is not None:
                 cpu_index = faiss.index_gpu_to_cpu(self.index)
                 cpu_index.add(new_embeddings)
-                self.index = faiss.index_cpu_to_gpu(self.gpu_resources, self.gpu_device, cpu_index)
+                self.index = faiss.index_cpu_to_gpu(
+                    self.gpu_resources, self.gpu_device, cpu_index
+                )
             else:
                 # CPU index, just add directly
                 self.index.add(new_embeddings)

@@ -7,10 +7,11 @@ and export them to Cytoscape format for interactive visualization.
 
 import colorsys
 import json
-from typing import Dict, Optional
+from typing import Dict
 
 try:
     import networkx as nx
+
     NETWORKX_AVAILABLE = True
 except ImportError:
     NETWORKX_AVAILABLE = False
@@ -19,7 +20,9 @@ except ImportError:
 from ..memory.models import GSWStructure
 
 
-def get_color_gradient(num_chunks: int, min_hue: float = 0.1, max_hue: float = 0.3) -> str:
+def get_color_gradient(
+    num_chunks: int, min_hue: float = 0.1, max_hue: float = 0.3
+) -> str:
     """Generate a color based on number of chunks contributing to an entity's roles.
 
     Args:
@@ -50,13 +53,13 @@ def get_color_gradient(num_chunks: int, min_hue: float = 0.1, max_hue: float = 0
 
 def create_bipartite_graph(semantic_rep: GSWStructure):
     """Create a NetworkX bipartite graph from a GSW structure.
-    
+
     Args:
         semantic_rep: GSWStructure object to convert to graph
-        
+
     Returns:
         NetworkX Graph object
-        
+
     Raises:
         ImportError: If NetworkX is not available
     """
@@ -65,7 +68,7 @@ def create_bipartite_graph(semantic_rep: GSWStructure):
             "NetworkX is required for graph visualization. Install with: "
             "pip install networkx"
         )
-    
+
     G = nx.Graph()
 
     # First, create a lookup of entity IDs to actual entity objects for quick reference
@@ -192,7 +195,9 @@ def create_bipartite_graph(semantic_rep: GSWStructure):
     if hasattr(semantic_rep, "space_nodes") and semantic_rep.space_nodes:
         for space_node in semantic_rep.space_nodes:
             short_label = space_node.current_name or space_node.id
-            short_label = short_label[:20] + "..." if len(short_label) > 20 else short_label
+            short_label = (
+                short_label[:20] + "..." if len(short_label) > 20 else short_label
+            )
             G.add_node(
                 space_node.id,
                 bipartite=2,
@@ -207,7 +212,9 @@ def create_bipartite_graph(semantic_rep: GSWStructure):
     if hasattr(semantic_rep, "time_nodes") and semantic_rep.time_nodes:
         for time_node in semantic_rep.time_nodes:
             short_label = time_node.current_name or time_node.id
-            short_label = short_label[:20] + "..." if len(short_label) > 20 else short_label
+            short_label = (
+                short_label[:20] + "..." if len(short_label) > 20 else short_label
+            )
             G.add_node(
                 time_node.id,
                 bipartite=2,
@@ -235,10 +242,10 @@ def create_bipartite_graph(semantic_rep: GSWStructure):
 
 def visualize_bipartite_graph(G) -> Dict:
     """Convert networkx bipartite graph to cytoscape JSON format.
-    
+
     Args:
         G: NetworkX Graph object
-        
+
     Returns:
         Dictionary in Cytoscape JSON format
     """
@@ -254,10 +261,6 @@ def visualize_bipartite_graph(G) -> Dict:
         chunk_id = attr.get("chunk_id")
         if chunk_id:
             all_chunk_ids.add(chunk_id)
-
-    # Sort chunk IDs to create a consistent order
-    chunk_id_list = sorted(list(all_chunk_ids))
-    chunk_id_to_index = {chunk_id: i for i, chunk_id in enumerate(chunk_id_list)}
 
     # Create initial cytoscape data structure with enhanced metadata
     cyjs_data = {
@@ -353,7 +356,7 @@ def visualize_bipartite_graph(G) -> Dict:
     # Convert nodes
     for node_id, attr in G.nodes(data=True):
         node_type = attr.get("type", "unknown")
-        
+
         # Determine node label based on type
         if node_type == "entity":
             label = attr.get("name", node_id)
@@ -361,32 +364,32 @@ def visualize_bipartite_graph(G) -> Dict:
             roles = attr.get("roles", [])
             unique_chunks = set()
             for role in roles:
-                if hasattr(role, 'chunk_id') and role.chunk_id:
+                if hasattr(role, "chunk_id") and role.chunk_id:
                     unique_chunks.add(role.chunk_id)
             has_temporal_evolution = len(unique_chunks) > 1
-            
+
             # Create detailed tooltip information
             roles_info = []
             for role in roles:
                 role_text = f"Role: {role.role if hasattr(role, 'role') else 'N/A'}"
-                if hasattr(role, 'states') and role.states:
+                if hasattr(role, "states") and role.states:
                     role_text += f" | States: {', '.join(role.states)}"
-                if hasattr(role, 'chunk_id') and role.chunk_id:
+                if hasattr(role, "chunk_id") and role.chunk_id:
                     role_text += f" | Chunk: {role.chunk_id}"
                 roles_info.append(role_text)
-            
+
             tooltip = f"Entity: {label}\n" + "\n".join(roles_info)
-            
+
         elif node_type == "verb_phrase":
             label = attr.get("phrase", node_id)
             tooltip = f"Verb Phrase: {label}\nChunk: {attr.get('chunk_id', 'N/A')}"
             has_temporal_evolution = False
-            
+
         elif node_type in ["space", "time"]:
             label = attr.get("label", attr.get("full_name", node_id))
             tooltip = f"{node_type.title()}: {attr.get('full_name', 'N/A')}\nHistory: {attr.get('history', 'N/A')}"
             has_temporal_evolution = False
-            
+
         else:
             label = attr.get("name", node_id)
             tooltip = f"Node: {label}"
@@ -405,7 +408,7 @@ def visualize_bipartite_graph(G) -> Dict:
                 "is_unresolved": attr.get("is_unresolved", False),
             }
         }
-        
+
         cyjs_data["elements"]["nodes"].append(node_data)
 
     # Convert edges
@@ -423,7 +426,7 @@ def visualize_bipartite_graph(G) -> Dict:
                 "is_unresolved": attr.get("is_unresolved", False),
             }
         }
-        
+
         cyjs_data["elements"]["edges"].append(edge_data)
 
     return cyjs_data
@@ -431,7 +434,7 @@ def visualize_bipartite_graph(G) -> Dict:
 
 def create_and_save_gsw_visualization(gsw: GSWStructure, output_path: str) -> None:
     """Create a GSW visualization and save it to a file.
-    
+
     Args:
         gsw: GSWStructure to visualize
         output_path: Path to save the Cytoscape JSON file
@@ -441,13 +444,13 @@ def create_and_save_gsw_visualization(gsw: GSWStructure, output_path: str) -> No
             "NetworkX is required for graph visualization. Install with: "
             "pip install networkx"
         )
-    
+
     # Create bipartite graph
     graph = create_bipartite_graph(gsw)
-    
+
     # Convert to Cytoscape format
     cytoscape_data = visualize_bipartite_graph(graph)
-    
+
     # Save to file
-    with open(output_path, 'w') as f:
+    with open(output_path, "w") as f:
         json.dump(cytoscape_data, f, indent=2)

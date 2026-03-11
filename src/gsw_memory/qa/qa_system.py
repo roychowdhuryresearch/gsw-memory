@@ -83,7 +83,9 @@ class GSWQuestionAnswerer:
         # Cache for precomputed summaries from all aggregators
         self._summaries_cache: Optional[Dict[str, Dict[str, str]]] = None
 
-    def ask(self, question: str, max_summaries: int = 17, include_connected: bool = False) -> Dict[str, Any]:
+    def ask(
+        self, question: str, max_summaries: int = 17, include_connected: bool = False
+    ) -> Dict[str, Any]:
         """
         Simple interface: ask a question and get an answer.
 
@@ -99,7 +101,10 @@ class GSWQuestionAnswerer:
         return results[0]
 
     def ask_batch(
-        self, questions: List[str], max_summaries: int = 17, include_connected: bool = False
+        self,
+        questions: List[str],
+        max_summaries: int = 17,
+        include_connected: bool = False,
     ) -> List[Dict[str, Any]]:
         """
         Batch interface: ask multiple questions efficiently using curator batching.
@@ -121,7 +126,9 @@ class GSWQuestionAnswerer:
             # Steps 2-4: Process each question individually
             # (these steps are fast and don't need batching)
             entities = all_entities[i]
-            matches_with_source = self.find_matching_entities(entities, include_connected)
+            matches_with_source = self.find_matching_entities(
+                entities, include_connected
+            )
             summaries = self.get_entity_summaries(matches_with_source)
             ranked_summaries = self.rerank_summaries(summaries, question, max_summaries)
             context_to_answering_agent = []

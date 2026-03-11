@@ -130,7 +130,12 @@ class GSWProcessor:
 
             # Prepare coref inputs - one per document
             coref_inputs = [
-                {"text": document, "idx": batch_size * (batch_idx - 1) + doc_idx if batch_size is not None else doc_idx}
+                {
+                    "text": document,
+                    "idx": batch_size * (batch_idx - 1) + doc_idx
+                    if batch_size is not None
+                    else doc_idx,
+                }
                 for doc_idx, document in enumerate(documents)
             ]
 
@@ -142,7 +147,10 @@ class GSWProcessor:
                 resp["idx"]: resp["text"] for resp in coref_responses.dataset
             }
         else:
-            resolved_documents = {batch_size * (batch_idx - 1) + idx: doc for idx, doc in enumerate(documents)}
+            resolved_documents = {
+                batch_size * (batch_idx - 1) + idx: doc
+                for idx, doc in enumerate(documents)
+            }
 
         # Step 2: Chunking and Initialize Chunk Data Structure
         print("--- Chunking Documents and Initializing Data Structure ---")
@@ -258,7 +266,7 @@ class GSWProcessor:
         #     backend = "litellm",
         #     backend_params = {
         #         "base_url": "http://localhost:8501/v1",
-        #         "request_timeout": 600.0,  
+        #         "request_timeout": 600.0,
         #         "max_concurrent_requests": 32,
         #         "max_requests_per_minute": 120,
         #         "max_tokens_per_minute": 200000,
@@ -271,7 +279,7 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-        if  "hosted_vllm" in self.model_name:
+        if "hosted_vllm" in self.model_name:
             os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
             gsw_model = GSWOperator(
                 model_name=self.model_name,
@@ -304,8 +312,10 @@ class GSWProcessor:
                     backend="openai",
                     response_format=GSWStructure,  # Use constrained decoding
                     batch=self.batched,
-                    backend_params={"batch_size": self.batch_size,
-                                    "require_all_responses": False},
+                    backend_params={
+                        "batch_size": self.batch_size,
+                        "require_all_responses": False,
+                    },
                 )
             else:
                 gsw_model = GSWOperator(
@@ -336,7 +346,7 @@ class GSWProcessor:
         # Generate all GSWs in parallel
         gsw_response = gsw_model(gsw_inputs)
 
-        for response in gsw_response.dataset: #TODO: Check if this is correct
+        for response in gsw_response.dataset:  # TODO: Check if this is correct
             try:
                 if response["gsw"] is not None:
                     gsw_dict = response["gsw"]
@@ -533,13 +543,17 @@ class GSWProcessor:
 
         # Convert all_documents_data to JSON-serializable format
         for doc_idx, doc_chunks in enumerate(all_documents_data):
-            combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"] = {} # Fixed doc_idx to account for batching
+            combined_data["documents"][
+                f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"
+            ] = {}  # Fixed doc_idx to account for batching
             for chunk_id, chunk_data in doc_chunks.items():
                 # Convert GSW structure to dict if it exists
                 chunk_export = chunk_data.copy()
                 if chunk_export["gsw"] is not None:
                     chunk_export["gsw"] = chunk_export["gsw"].model_dump(mode="json")
-                combined_data["documents"][f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"][chunk_id] = chunk_export # Fixed doc_idx to account for batching
+                combined_data["documents"][
+                    f"doc_{doc_idx + len(all_documents_data) * (batch_idx - 1)}"
+                ][chunk_id] = chunk_export  # Fixed doc_idx to account for batching
 
         with open(combined_file, "w") as f:
             json.dump(combined_data, f, indent=2)

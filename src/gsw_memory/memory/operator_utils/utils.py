@@ -31,7 +31,7 @@ def parse_gsw(text: str) -> GSWStructure:
     else:
         # Try to find JSON structure
         text = text.rsplit("}", 1)[0] + "}"
-    
+
     try:
         # Extract JSON part
         data = extract_json_from_output(text.strip())
@@ -43,11 +43,11 @@ def parse_gsw(text: str) -> GSWStructure:
                 roles = [Role(**r) for r in e.get("roles", [])]
                 entities.append(
                     EntityNode(
-                        id=e["id"], 
-                        name=e["name"], 
+                        id=e["id"],
+                        name=e["name"],
                         roles=roles,
                         chunk_id=e.get("chunk_id"),
-                        summary=e.get("summary")
+                        summary=e.get("summary"),
                     )
                 )
 
@@ -61,7 +61,7 @@ def parse_gsw(text: str) -> GSWStructure:
                         id=v["id"],
                         phrase=v["phrase"],
                         questions=questions,
-                        chunk_id=v.get("chunk_id")
+                        chunk_id=v.get("chunk_id"),
                     )
                 )
 

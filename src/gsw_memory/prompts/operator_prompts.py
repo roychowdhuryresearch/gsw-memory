@@ -7,15 +7,16 @@ from enum import Enum
 
 class PromptType(Enum):
     """Enum for different types of operator prompts."""
+
     EPISODIC = "episodic"
     FACTUAL = "factual"
 
 
 class CorefPrompts:
     """Prompts for coreference resolution."""
-    
+
     SYSTEM_PROMPT = """You are a helpful assistant that performs coreference resolution. Your task is to replace all pronouns and references with their full names or explicit references. Maintain the original flow and readability of the text."""
-    
+
     USER_PROMPT_TEMPLATE = """Please perform coreference resolution on the following text. Replace all pronouns and references with their full names or explicit references:
 
 {text}"""
@@ -23,9 +24,9 @@ class CorefPrompts:
 
 class ContextPrompts:
     """Prompts for context generation."""
-    
+
     SYSTEM_PROMPT = """You are a helpful assistant. Your task is to provide a brief context that explains how a given text chunk fits within the larger document it comes from. Be concise and focus on the information needed to understand the chunk's place in the narrative or argument."""
-    
+
     USER_PROMPT_TEMPLATE = """<document>
 {doc_text}
 </document>
@@ -38,9 +39,9 @@ Please give a short succinct context to situate this chunk within the overall do
 
 class OperatorPrompts:
     """Prompts for GSW generation - Episodic version with sophisticated semantic role extraction."""
-    
+
     SYSTEM_PROMPT = """You are an expert linguist focused on semantic role extraction and relationship mapping given documents in a certain situation. Your primary task is to analyze text to create structured semantic networks anchored by verb phrases, ensuring ALL semantically relevant questions are captured. We will call this task the operator extraction."""
-    
+
     USER_PROMPT_TEMPLATE = """
 Given the following:
 1. Input chunk from a document
@@ -319,9 +320,9 @@ Show all your reasoning and task by task breakdown within <semantic_construction
 
 class FactualExtractionPrompts:
     """Prompts for factual GSW generation - optimized for Wikipedia-style content and 2wiki QA."""
-    
+
     SYSTEM_PROMPT = """You are an expert linguist focused on extracting factual relationships and attributes from Wikipedia-style content. Your primary task is to analyze text to create structured semantic networks that capture key factual information such as dates, places, nationalities, and other attributes needed for multi-hop question answering."""
-    
+
     USER_PROMPT_TEMPLATE = """
     Given the following text, extract factual relationships and attributes following this structure:
   <input_text>
@@ -1920,11 +1921,12 @@ class FactualExtractionPrompts:
   - Keep roles/states general since detailed facts are captured in verb phrase questions
   """
 
+
 class FactualExtractionPromptsNew:
     """Prompts for factual GSW generation - optimized for Wikipedia-style content and 2wiki QA."""
-    
+
     SYSTEM_PROMPT = """You are an expert linguist focused on extracting factual relationships and attributes from Wikipedia-style content. Your primary task is to analyze text to create structured semantic networks that capture key factual information such as dates, places, nationalities, and other attributes needed for multi-hop question answering."""
-    
+
     USER_PROMPT_TEMPLATE = """
 Given the following text, extract factual relationships and attributes following this structure:
 
@@ -3514,15 +3516,16 @@ Now extract the factual relationships from the given input text STRICTLY followi
 - Keep roles/states general since detailed facts are captured in verb phrase questions
 """
 
+
 class SpaceTimePrompts:
     """Prompts for space-time linking."""
-    
+
     SYSTEM_PROMPT = """You are a helpful assistant that is an expert at understanding spatio-temporal relationships between entities. 
 
 You will be given a list of entities along with the context of the narrative in which they appear. 
 
 Your task is to link entities that share a spatio-temporal relationship."""
-    
+
     USER_PROMPT_TEMPLATE = """
 **Analyze the Text and Semantic Map for Shared Time/Place**
 

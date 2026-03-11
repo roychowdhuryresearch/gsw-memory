@@ -6,17 +6,17 @@ supporting both exact match and embedding-based approaches.
 """
 
 from .matching import (
-    ExactMatchStrategy, 
+    ExactMatchStrategy,
     EmbeddingMatchStrategy,
     ExactMatchEntityIndex,
     EmbeddingEntityIndex,
     create_matching_components,
     MatchingStrategy,
-    EntityIndex
+    EntityIndex,
 )
 
 __all__ = [
-    "ExactMatchStrategy", 
+    "ExactMatchStrategy",
     "EmbeddingMatchStrategy",
     "ExactMatchEntityIndex",
     "EmbeddingEntityIndex",
