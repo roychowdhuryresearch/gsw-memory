@@ -10,6 +10,7 @@ class PromptType(Enum):
 
     EPISODIC = "episodic"
     FACTUAL = "factual"
+    CONVERSATIONAL = "conversational"
 
 
 class CorefPrompts:
@@ -3581,3 +3582,129 @@ Return a JSON object with a single key "spatio_temporal_links". The value should
 }}
 ```
 """
+
+
+class ConversationalStage1Prompts:
+    """Stage 1 prompts for conversational InformationNode extraction.
+
+    Identifies discrete information units from a conversation session.
+    """
+
+    SYSTEM_PROMPT = """You are an expert at analyzing conversations to identify distinct pieces of information that were communicated. Your task is to break a conversation into discrete information units — each representing a coherent fact, event, plan, emotion, or piece of knowledge that was shared."""
+
+    USER_PROMPT_TEMPLATE = """Analyze the following conversation session and identify each discrete piece of information that was communicated.
+
+<session>
+{session_text}
+</session>
+
+{entity_context_block}
+
+For each information unit, provide:
+- **id**: A unique identifier (e.g., "info_1", "info_2")
+- **description**: A brief summary of what was communicated (e.g., "Caroline's necklace — gift from Swedish grandma")
+- **relevant_turns**: The dialogue turn IDs that contain this information (e.g., ["D4:3"])
+- **speaker**: Who communicated this information
+
+Guidelines:
+1. Each unit should be a coherent, self-contained piece of information
+2. One turn may contain multiple information units (e.g., someone mentions their job AND their family)
+3. Information that spans multiple turns (e.g., Q&A exchange) should be a single unit
+4. EXCLUDE: greetings, small talk ("How are you?"), filler ("Yeah", "Right"), and repetitions
+5. INCLUDE: facts about people/places/events, plans, opinions, emotions with specific content, relationships, temporal information
+6. If entity context is provided, note when information updates or contradicts known entity states
+
+Output ONLY valid JSON:
+```json
+{{
+    "information_units": [
+        {{
+            "id": "info_1",
+            "description": "...",
+            "relevant_turns": ["..."],
+            "speaker": "..."
+        }}
+    ]
+}}
+```"""
+
+
+class ConversationalStage2Prompts:
+    """Stage 2 prompts for conversational InformationNode extraction.
+
+    Extracts entities, roles, states, and QA pairs for a single information unit.
+    """
+
+    SYSTEM_PROMPT = """You are an expert at extracting structured knowledge from conversations. Given a specific piece of information from a conversation, you extract the entities involved, their roles and states, and generate QA pairs that would help retrieve this information later."""
+
+    USER_PROMPT_TEMPLATE = """Extract entities and generate QA pairs for the following information unit from a conversation.
+
+<information_unit>
+ID: {info_id}
+Description: {info_description}
+Speaker: {info_speaker}
+Relevant turns: {info_turns}
+</information_unit>
+
+<source_turns>
+{source_turn_text}
+</source_turns>
+
+<full_session>
+{session_text}
+</full_session>
+
+{entity_context_block}
+
+Perform two tasks:
+
+**Task 1: Entity Extraction**
+Identify all entities involved in this information unit. For each entity:
+- Assign a unique ID (e.g., "e1", "e2") — if the entity appears in the entity context, REUSE its existing ID
+- Provide the entity name
+- Assign a context-specific role (how this entity functions in THIS information unit)
+- List context-specific states (conditions/descriptions in THIS context)
+
+Entity types: persons, organizations, places, objects, abstract concepts, temporal entities.
+
+**Task 2: QA Pair Generation**
+Generate QA pairs that capture this information for later retrieval.
+
+Rules:
+- **Basics always covered**: Generate at least one question each for who, what, when, where (if applicable)
+- **Model-generated additions**: Generate any further questions that would help someone retrieve this specific information later. Think about what questions a user might ask months from now.
+- Questions must be specific and natural (e.g., "What country is Caroline's grandma from?" NOT "Who is from?")
+- Answers should reference entity IDs for entity answers (e.g., "e1") or use "TEXT:" prefix for text answers (e.g., "TEXT:love, faith, strength")
+- Each QA pair should include the speaker_id (who communicated this) and evidence_turn_ids
+- Questions should be standalone — understandable without seeing the conversation
+
+Output ONLY valid JSON:
+```json
+{{
+    "entity_nodes": [
+        {{
+            "id": "e1",
+            "name": "...",
+            "roles": [{{"role": "...", "states": ["..."]}}]
+        }}
+    ],
+    "information_nodes": [
+        {{
+            "id": "{info_id}",
+            "description": "{info_description}",
+            "entity_mentions": [
+                {{"entity_id": "e1", "role": "...", "states": ["..."]}}
+            ],
+            "questions": [
+                {{
+                    "id": "q1",
+                    "text": "...",
+                    "answers": ["e1"],
+                    "speaker_id": "...",
+                    "evidence_turn_ids": ["..."]
+                }}
+            ]
+        }}
+    ]
+}}
+```"""
