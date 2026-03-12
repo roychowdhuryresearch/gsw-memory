@@ -1,8 +1,10 @@
 """GSW Memory core components."""
 
 from .models import (
+    EntityMention,
     EntityNode,
     GSWStructure,
+    InformationNode,
     Question,
     Role,
     SpaceNode,
@@ -27,8 +29,10 @@ __all__ = [
     # Core data models
     "Role",
     "EntityNode",
+    "EntityMention",
     "Question",
     "VerbPhraseNode",
+    "InformationNode",
     "SpaceNode",
     "TimeNode",
     "GSWStructure",
