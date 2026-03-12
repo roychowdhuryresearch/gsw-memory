@@ -1,0 +1,319 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Changed It",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "single"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Nicki Minaj",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "Trinidadian-American",
+                        "rapper",
+                        "singer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Lil Wayne",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "American",
+                        "rapper"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Motiv",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Detail",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Sidney Swift",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "March 10, 2017",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Young Money Entertainment",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "record label"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Cash Money Records",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "record label"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Republic Records",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "record label"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "No Frauds",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "single"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Regret in Your Tears",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "single"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "performed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who performed 'Changed It'?",
+                    "answers": [
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Nicki Minaj and Lil Wayne perform?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who produced 'Changed It'?",
+                    "answers": [
+                        "e4",
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Motiv, Detail, and Sidney Swift produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'Changed It' released?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was released on March 10, 2017?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which labels released 'Changed It'?",
+                    "answers": [
+                        "e8",
+                        "e9",
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song did Young Money Entertainment, Cash Money Records, and Republic Records release?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "released with",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What songs were released with 'Changed It'?",
+                    "answers": [
+                        "e11",
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "With which song was 'No Frauds' released?",
+                    "answers": [
+                        "e1",
+                        "e12"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

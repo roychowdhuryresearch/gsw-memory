@@ -551,24 +551,33 @@ class GSWTools:
         for vp in gsw.verb_phrase_nodes:
             for question in vp.questions:
                 if actual_entity_id in question.answers:
-                    # Get all other entities in this same question
+                    # Collect connected entities from ALL questions in this
+                    # verb phrase (sibling questions encode the relationship
+                    # between different entities, e.g. "Who is X's mother?"
+                    # and "Who is the child of Y?" in the same VP).
                     other_entities = []
-                    for answer_id in question.answers:
-                        if answer_id != actual_entity_id and answer_id != "None":
-                            other_entity = gsw.get_entity_by_id(answer_id)
-                            if other_entity:
-                                other_entities.append(
-                                    {
-                                        "entity_id": answer_id,
-                                        "global_id": f"{source_file}::{answer_id}",
-                                        "entity_name": other_entity.name,
-                                    }
-                                )
-                            else:
-                                # Handle non-entity answers
-                                other_entities.append(
-                                    {"entity_id": answer_id, "entity_name": answer_id}
-                                )
+                    seen_ids = set()
+                    for sibling_q in vp.questions:
+                        for answer_id in sibling_q.answers:
+                            if (
+                                answer_id != actual_entity_id
+                                and answer_id != "None"
+                                and answer_id not in seen_ids
+                            ):
+                                seen_ids.add(answer_id)
+                                other_entity = gsw.get_entity_by_id(answer_id)
+                                if other_entity:
+                                    other_entities.append(
+                                        {
+                                            "entity_id": answer_id,
+                                            "global_id": f"{source_file}::{answer_id}",
+                                            "entity_name": other_entity.name,
+                                        }
+                                    )
+                                else:
+                                    other_entities.append(
+                                        {"entity_id": answer_id, "entity_name": answer_id}
+                                    )
 
                     context["questions"].append(
                         {
