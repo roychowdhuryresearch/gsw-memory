@@ -5,7 +5,7 @@ This module contains the primary data structures that represent the semantic
 workspace, including entities, roles, states, and their relationships.
 """
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from pydantic import BaseModel, Field
 
@@ -41,7 +41,7 @@ class EntityNode(BaseModel):
 
 
 class Question(BaseModel):
-    """Class to represent questions associated with a verb phrase in the GSW, note that these"""
+    """Class to represent questions associated with a verb phrase or information node."""
 
     id: str = Field(description="Unique identifier for the question")
     text: str = Field(description="The question text")
@@ -50,6 +50,13 @@ class Question(BaseModel):
     )
     chunk_id: Optional[str] = Field(
         default=None, description="A global identifier for the chunk"
+    )
+    speaker_id: Optional[str] = Field(
+        default=None, description="Who communicated this information"
+    )
+    evidence_turn_ids: List[str] = Field(
+        default_factory=list,
+        description="Dialogue turn IDs that support this QA pair",
     )
 
 
@@ -63,6 +70,43 @@ class VerbPhraseNode(BaseModel):
     )
     chunk_id: Optional[str] = Field(
         default=None, description="A global identifier for the chunk"
+    )
+
+
+class EntityMention(BaseModel):
+    """A reference to an entity within an InformationNode, with context-specific role/state."""
+
+    entity_id: str = Field(description="Pointer to EntityNode.id")
+    role: Optional[str] = Field(
+        default=None, description="Context-specific role of the entity"
+    )
+    states: List[str] = Field(
+        default_factory=list,
+        description="Context-specific states of the entity",
+    )
+
+
+class InformationNode(BaseModel):
+    """A coherent information exchange: an entity clique + QA pairs grounded in what was communicated."""
+
+    id: str = Field(description="Unique identifier for the information node")
+    description: str = Field(description="Summary of the information exchange")
+    entity_mentions: List[EntityMention] = Field(
+        default_factory=list,
+        description="Entities involved in this information exchange",
+    )
+    questions: List[Question] = Field(
+        default_factory=list,
+        description="QA pairs capturing this information",
+    )
+    session_id: Optional[str] = Field(
+        default=None, description="Session this information came from"
+    )
+    chunk_id: Optional[str] = Field(
+        default=None, description="A global identifier for the chunk"
+    )
+    timestamp: Optional[str] = Field(
+        default=None, description="When this information was communicated"
     )
 
 
@@ -126,6 +170,9 @@ class GSWStructure(BaseModel):
     verb_phrase_nodes: List[VerbPhraseNode] = Field(
         default_factory=list, description="All verb phrases"
     )
+    information_nodes: List[InformationNode] = Field(
+        default_factory=list, description="All information nodes (conversational)"
+    )
     space_nodes: List[SpaceNode] = Field(
         default_factory=list, description="All spatial locations"
     )
@@ -154,6 +201,7 @@ class GSWStructure(BaseModel):
         return GSWStructure(
             entity_nodes=self.entity_nodes.copy(),
             verb_phrase_nodes=self.verb_phrase_nodes.copy(),
+            information_nodes=self.information_nodes.copy(),
             space_nodes=self.space_nodes.copy(),
             time_nodes=self.time_nodes.copy(),
             similarity_edges=self.similarity_edges.copy(),
@@ -201,14 +249,43 @@ class GSWStructure(BaseModel):
                 return vp
         return None
 
+    # Information node management
+    def add_information_node(self, info_node: InformationNode) -> None:
+        """Add a new information node to the GSW structure."""
+        composite_id = (
+            f"{info_node.chunk_id}_{info_node.id}"
+            if info_node.chunk_id
+            else info_node.id
+        )
+        existing_composite_ids = [
+            f"{n.chunk_id}_{n.id}" if n.chunk_id else n.id
+            for n in self.information_nodes
+        ]
+        if composite_id in existing_composite_ids:
+            return
+        self.information_nodes.append(info_node)
+
+    def get_information_node_by_id(
+        self, info_node_id: str
+    ) -> Optional[InformationNode]:
+        """Find an information node by its global ID."""
+        for node in self.information_nodes:
+            if node.id == info_node_id:
+                return node
+        return None
+
     def get_question_by_id(
         self, question_id: str
-    ) -> Optional[Tuple[VerbPhraseNode, Question]]:
-        """Find a question node (and its parent VP) by its global ID."""
+    ) -> Optional[Tuple[Union[VerbPhraseNode, InformationNode], Question]]:
+        """Find a question node (and its parent VP or InformationNode) by its global ID."""
         for vp in self.verb_phrase_nodes:
             for question in vp.questions:
                 if question.id == question_id:
                     return vp, question
+        for info_node in self.information_nodes:
+            for question in info_node.questions:
+                if question.id == question_id:
+                    return info_node, question
         return None
 
     # Space-time management
@@ -291,6 +368,17 @@ class GSWStructure(BaseModel):
         # Update verb phrase references
         for verb in self.verb_phrase_nodes:
             for question in verb.questions:
+                question.answers = [
+                    target_entity_id if answer == external_entity.id else answer
+                    for answer in question.answers
+                ]
+
+        # Update information node references
+        for info_node in self.information_nodes:
+            for mention in info_node.entity_mentions:
+                if mention.entity_id == external_entity.id:
+                    mention.entity_id = target_entity_id
+            for question in info_node.questions:
                 question.answers = [
                     target_entity_id if answer == external_entity.id else answer
                     for answer in question.answers
@@ -395,6 +483,12 @@ class GSWStructure(BaseModel):
                         and not (isinstance(answer, str) and answer.startswith("TEXT:"))
                     ):
                         entity_connections[answer] += 1
+
+        # Count connections from information nodes
+        for info_node in self.information_nodes:
+            for mention in info_node.entity_mentions:
+                if mention.entity_id in entity_connections:
+                    entity_connections[mention.entity_id] += 1
 
         # Count connections from similarity edges
         for entity1_id, entity2_id in self.similarity_edges:
