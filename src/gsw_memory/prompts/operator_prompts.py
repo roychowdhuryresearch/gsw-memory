@@ -3635,9 +3635,14 @@ class ConversationalStage2Prompts:
     Extracts entities, roles, states, and QA pairs for a single information unit.
     """
 
-    SYSTEM_PROMPT = """You are an expert at extracting structured knowledge from conversations. Given a specific piece of information from a conversation, you extract the entities involved, their roles and states, and generate QA pairs that would help retrieve this information later."""
+    SYSTEM_PROMPT = """You are an expert at extracting structured knowledge from conversations. Given a specific piece of information from a conversation, you extract the entities involved, their roles and states, and generate QA pairs that would help retrieve this information later.
 
-    USER_PROMPT_TEMPLATE = """Extract entities and generate QA pairs for the following information unit from a conversation.
+CRITICAL RULES:
+- ONLY extract entities that are DIRECTLY mentioned or involved in the given source turns. Do NOT pull in entities from other parts of the conversation.
+- Every answer must EITHER be an entity ID from your entity_nodes list OR a "TEXT:" prefixed string. Never use an entity ID to represent something that entity is not.
+- If an answer is a descriptive phrase, date, quantity, or anything that is not one of your extracted entities, use "TEXT:" prefix."""
+
+    USER_PROMPT_TEMPLATE = """Extract entities and generate QA pairs for the following information unit.
 
 <information_unit>
 ID: {info_id}
@@ -3650,17 +3655,16 @@ Relevant turns: {info_turns}
 {source_turn_text}
 </source_turns>
 
-<full_session>
-{session_text}
-</full_session>
+{known_entities_block}
 
 {entity_context_block}
 
-Perform two tasks:
-
 **Task 1: Entity Extraction**
-Identify all entities involved in this information unit. For each entity:
-- Assign a unique ID (e.g., "e1", "e2") — if the entity appears in the entity context, REUSE its existing ID
+Extract ONLY entities that appear in the <source_turns> above. Do NOT extract entities from other parts of the conversation.
+
+For each entity:
+- If the entity already exists in <known_entities>, REUSE its exact ID
+- For NEW entities not in <known_entities>, assign a new unique ID that does NOT collide with existing IDs (e.g., if e1-e7 exist, start new ones at e8)
 - Provide the entity name
 - Assign a context-specific role (how this entity functions in THIS information unit)
 - List context-specific states (conditions/descriptions in THIS context)
@@ -3668,14 +3672,15 @@ Identify all entities involved in this information unit. For each entity:
 Entity types: persons, organizations, places, objects, abstract concepts, temporal entities.
 
 **Task 2: QA Pair Generation**
-Generate QA pairs that capture this information for later retrieval.
+Generate QA pairs that capture the information in <source_turns> for later retrieval.
 
 Rules:
-- **Basics always covered**: Generate at least one question each for who, what, when, where (if applicable)
+- **Basics always covered**: Generate at least one question each for who, what, when, where (if applicable to this info unit)
 - **Model-generated additions**: Generate any further questions that would help someone retrieve this specific information later. Think about what questions a user might ask months from now.
 - Questions must be specific and natural (e.g., "What country is Caroline's grandma from?" NOT "Who is from?")
-- Answers should reference entity IDs for entity answers (e.g., "e1") or use "TEXT:" prefix for text answers (e.g., "TEXT:love, faith, strength")
-- Each QA pair should include the speaker_id (who communicated this) and evidence_turn_ids
+- **Answer format**: Use an entity ID (e.g., "e1") ONLY if the answer IS that entity. For all other answers (descriptions, dates, quantities, lists), use "TEXT:" prefix (e.g., "TEXT:love, faith, strength", "TEXT:last Friday", "TEXT:ten years old")
+- speaker_id: the name of the person who communicated this (e.g., "Caroline", "Melanie")
+- evidence_turn_ids: the turn IDs from <source_turns>
 - Questions should be standalone — understandable without seeing the conversation
 
 Output ONLY valid JSON:
