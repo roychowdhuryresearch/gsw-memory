@@ -5,7 +5,7 @@ Provides Pydantic models for question decomposition, QA pair results,
 and chain-following results used across the pipeline.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from pydantic import BaseModel
 
