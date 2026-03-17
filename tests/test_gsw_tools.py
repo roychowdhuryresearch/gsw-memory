@@ -8,7 +8,9 @@ from gsw_memory.qa.gsw_tools import GSWTools
 
 def _build_bm25_only(tools):
     """Build only the BM25 index, skipping embeddings (no API key needed)."""
-    with patch.object(tools, "_build_embedding_index"):
+    with patch.object(tools, "_build_embedding_index"), patch.object(
+        tools, "build_qa_index"
+    ):
         tools.build_index()
 
 
@@ -41,7 +43,9 @@ class TestGSWToolsBM25:
     def test_lazy_index_build(self, gsw_json_file):
         tools = GSWTools(gsw_json_file)
         assert not tools._index_built
-        with patch.object(tools, "_build_embedding_index"):
+        with patch.object(tools, "_build_embedding_index"), patch.object(
+            tools, "build_qa_index"
+        ):
             results = tools.search_gsw_bm25("John", limit=5)
         assert tools._index_built
 
