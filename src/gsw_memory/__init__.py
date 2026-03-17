@@ -89,6 +89,13 @@ from .qa import (
     SummaryReranker,
 )
 
+# Chain-following multi-hop QA — guarded because voyageai may not be installed
+try:
+    from .qa import ChainFollowingQA, ChainFollowingResult
+except ImportError:
+    ChainFollowingQA = None  # type: ignore[assignment,misc]
+    ChainFollowingResult = None  # type: ignore[assignment,misc]
+
 # Evaluation — guarded because benchmarks may have extra deps
 try:
     from .evaluation.benchmarks.tulving_bench.evaluator import TulvingBenchEvaluator
@@ -121,6 +128,9 @@ __all__ = [
     "QuestionEntityExtractor",
     "EntityMatcher",
     "SummaryReranker",
+    # Chain-following QA
+    "ChainFollowingQA",
+    "ChainFollowingResult",
     # Evaluation
     "TulvingBenchEvaluator",
     "hipporag_eval",
