@@ -7,6 +7,18 @@ Official repository for the **Generative Semantic Workspaces (GSW)** framework. 
 
 A Python package for building structured memory systems using Generative Semantic Workspaces (GSW). The first paper introduces the GSW framework for episodic memory and entity-centric reasoning over long narratives. The second paper extends GSW to non-parametric continual learning, introducing Panini --- a chain-following retrieval system (RICR) for multi-hop question answering over structured QA-pair memories built at write time.
 
+## Benchmark Data
+
+Extracted GSW networks and curated evaluation splits from the [Panini paper](https://arxiv.org/abs/2602.15156) are available on HuggingFace for ease of replication and future research:
+
+**[roychowdhuryresearch/Panini-Benchmarks](https://huggingface.co/datasets/roychowdhuryresearch/Panini-Benchmarks)**
+
+Includes:
+- **GSW Networks** for 5 datasets: 2WikiMultihopQA, MuSiQue, HotpotQA, Natural Questions, PopQA (45,824 documents total)
+- **Platinum Evaluation Splits** for 2Wiki and MuSiQue with answerable/unanswerable labels
+
+All evaluation corpora follow the [HippoRAG v2](https://huggingface.co/datasets/osunlp/HippoRAG_2) splits.
+
 ## Features
 
 - **Document Processing**: Convert text documents into structured semantic workspaces
