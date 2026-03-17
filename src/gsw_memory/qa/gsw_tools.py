@@ -6,10 +6,12 @@ direct access to query and explore the GSW structure dynamically.
 """
 
 import json
+import logging
 import os
-from typing import Dict, List, Any, Union
-from rank_bm25 import BM25Okapi
+from typing import Dict, List, Any, Optional, Union
+
 import numpy as np
+from rank_bm25 import BM25Okapi
 
 try:
     import faiss
@@ -20,7 +22,18 @@ except ImportError:
     EMBEDDING_AVAILABLE = False
     faiss = None
     VoyageAIEmbeddings = None
+
+try:
+    import voyageai as _voyageai
+
+    VOYAGEAI_AVAILABLE = True
+except ImportError:
+    VOYAGEAI_AVAILABLE = False
+    _voyageai = None
+
 from ..memory.models import GSWStructure
+
+logger = logging.getLogger(__name__)
 
 
 class GSWTools:
@@ -56,13 +69,18 @@ class GSWTools:
         self.entity_embeddings = []
         self.embedding_metadata = []  # Same structure as entity_metadata
 
+        # QA-pair search components
+        self.qa_faiss_index = None
+        self.qa_metadata: List[Dict[str, Any]] = []
+        self._qa_index_built = False
+
         # Initialize GPU resources for FAISS
         self.gpu_resources = None
         if EMBEDDING_AVAILABLE and faiss is not None:
             try:
                 self.gpu_resources = faiss.StandardGpuResources()
             except Exception as e:
-                print(f"⚠️ Warning: Could not initialize GPU resources: {e}")
+                print(f"Warning: Could not initialize GPU resources: {e}")
 
         # Cache directory for embeddings
         self.cache_dir = ".gsw_cache"
@@ -142,9 +160,13 @@ class GSWTools:
         elif not EMBEDDING_AVAILABLE:
             print("⚠️  Embedding search not available (missing dependencies)")
 
+        # Build QA-pair index if embedding available
+        if EMBEDDING_AVAILABLE and total_entities > 0:
+            self.build_qa_index()
+
         self._index_built = True
         print(
-            f"✅ Search index built successfully! {total_entities} entities indexed from {processed_files} files."
+            f"Search index built successfully! {total_entities} entities indexed from {processed_files} files."
         )
 
     def _build_search_index(self):
@@ -679,3 +701,227 @@ class GSWTools:
             contexts.append(context)
 
         return contexts
+
+    # ------------------------------------------------------------------
+    # QA-pair search
+    # ------------------------------------------------------------------
+
+    def build_qa_index(self) -> None:
+        """Build a FAISS index over all QA pairs extracted from GSW files.
+
+        Iterates every GSW file, extracts (question, answer_names, rolestates,
+        verb_phrase) tuples, embeds them via VoyageAI, and stores a FAISS
+        IndexFlatIP index.  Results are cached to ``<cache_dir>/qa_embeddings_gpu.faiss``
+        and ``<cache_dir>/qa_metadata.json``.
+        """
+        if self._qa_index_built:
+            return
+        if not EMBEDDING_AVAILABLE:
+            logger.warning(
+                "Embedding dependencies not available; skipping QA index build"
+            )
+            return
+
+        # Ensure embedding model is initialised
+        if self.embedding_model is None:
+            self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
+
+        print("Building QA-pair index...")
+
+        # ------ 1. Collect all QA pairs from GSW files ------
+        all_qa_texts: List[str] = []
+        all_qa_meta: List[Dict[str, Any]] = []
+        seen_qa: set = set()
+
+        for file_path in self.gsw_files:
+            try:
+                with open(file_path, "r") as f:
+                    gsw_data = json.load(f)
+                gsw = GSWStructure.from_json(gsw_data)
+            except Exception as e:
+                logger.warning("Failed to load GSW file %s: %s", file_path, e)
+                continue
+
+            # Build id→name and id→rolestate maps for this file
+            id_to_name: Dict[str, str] = {}
+            id_to_rolestate: Dict[str, str] = {}
+            for entity_node in gsw.entity_nodes:
+                id_to_name[entity_node.id] = entity_node.name
+                id_to_rolestate[entity_node.id] = " | ".join(
+                    f"{role.role}: {', '.join(role.states)}"
+                    for role in entity_node.roles
+                )
+
+            for vp in gsw.verb_phrase_nodes:
+                for question in vp.questions:
+                    if not question.answers:
+                        continue
+
+                    answer_names = [
+                        id_to_name.get(aid, aid) for aid in question.answers
+                    ]
+                    answer_rolestates = [
+                        id_to_rolestate.get(aid, "") for aid in question.answers
+                    ]
+                    answers_joined = ", ".join(answer_names)
+
+                    qa_text = f"{question.text} {answers_joined}"
+
+                    # Deduplicate
+                    qa_key = (question.text, tuple(answer_names))
+                    if qa_key in seen_qa:
+                        continue
+                    seen_qa.add(qa_key)
+
+                    all_qa_texts.append(qa_text)
+                    all_qa_meta.append(
+                        {
+                            "question": question.text,
+                            "answer_ids": question.answers,
+                            "answer_names": answer_names,
+                            "answer_rolestates": answer_rolestates,
+                            "verb_phrase": vp.phrase,
+                            "source_file": file_path,
+                        }
+                    )
+
+        if not all_qa_texts:
+            logger.warning("No QA pairs found in GSW files; QA index not built")
+            return
+
+        print(f"  Found {len(all_qa_texts)} unique QA pairs")
+
+        # ------ 2. Try loading from cache ------
+        faiss_cache = os.path.join(self.cache_dir, "qa_embeddings_gpu.faiss")
+        meta_cache = os.path.join(self.cache_dir, "qa_metadata.json")
+
+        if os.path.exists(faiss_cache) and os.path.exists(meta_cache):
+            try:
+                with open(meta_cache, "r") as f:
+                    cached = json.load(f)
+                if cached.get("num_qa_pairs") == len(all_qa_texts):
+                    cpu_index = faiss.read_index(faiss_cache)
+                    if self.gpu_resources is not None:
+                        self.qa_faiss_index = faiss.index_cpu_to_gpu(
+                            self.gpu_resources, self.gpu_device, cpu_index
+                        )
+                    else:
+                        self.qa_faiss_index = cpu_index
+                    self.qa_metadata = all_qa_meta
+                    self._qa_index_built = True
+                    print(f"  Loaded cached QA index ({cpu_index.ntotal} vectors)")
+                    return
+                else:
+                    print("  QA cache size mismatch, rebuilding...")
+            except Exception as e:
+                logger.warning("Failed to load QA cache: %s", e)
+
+        # ------ 3. Embed QA texts via VoyageAI ------
+        print("  Embedding QA pairs via VoyageAI...")
+        batch_size = 500
+        all_embeddings: List[List[float]] = []
+
+        for i in range(0, len(all_qa_texts), batch_size):
+            batch = all_qa_texts[i : i + batch_size]
+            batch_embeddings = self.embedding_model.embed_documents(batch)
+            all_embeddings.extend(batch_embeddings)
+
+            processed = min(i + batch_size, len(all_qa_texts))
+            if processed % 2000 == 0 or processed == len(all_qa_texts):
+                print(f"    Embedded {processed}/{len(all_qa_texts)} QA pairs")
+
+        embeddings_array = np.array(all_embeddings, dtype=np.float32)
+        faiss.normalize_L2(embeddings_array)
+
+        # ------ 4. Build FAISS index ------
+        embedding_dim = embeddings_array.shape[1]
+        cpu_index = faiss.IndexFlatIP(embedding_dim)
+        cpu_index.add(embeddings_array)
+
+        if self.gpu_resources is not None:
+            self.qa_faiss_index = faiss.index_cpu_to_gpu(
+                self.gpu_resources, self.gpu_device, cpu_index
+            )
+        else:
+            self.qa_faiss_index = cpu_index
+
+        self.qa_metadata = all_qa_meta
+        self._qa_index_built = True
+
+        # ------ 5. Save cache ------
+        try:
+            save_index = (
+                faiss.index_gpu_to_cpu(self.qa_faiss_index)
+                if self.gpu_resources is not None
+                else self.qa_faiss_index
+            )
+            faiss.write_index(save_index, faiss_cache)
+            with open(meta_cache, "w") as f:
+                json.dump(
+                    {"num_qa_pairs": len(all_qa_texts), "embedding_dim": embedding_dim},
+                    f,
+                )
+            print(f"  Saved QA index cache ({len(all_qa_texts)} vectors)")
+        except Exception as e:
+            logger.warning("Failed to save QA cache: %s", e)
+
+        print(f"  QA-pair index built with {len(all_qa_texts)} pairs")
+
+    def search_qa_pairs(self, query: str, limit: int = 15) -> List[Dict[str, Any]]:
+        """Search QA pairs by semantic similarity to *query*.
+
+        Args:
+            query: Natural-language search query.
+            limit: Maximum results to return.
+
+        Returns:
+            List of dicts with keys: question, answer_names, answer_ids,
+            answer_rolestates, verb_phrase, source_file, similarity_score.
+        """
+        if not self._qa_index_built or self.qa_faiss_index is None:
+            return []
+
+        query_emb = self.embed_query(query)
+        if query_emb is None:
+            return []
+
+        query_emb = query_emb.reshape(1, -1)
+        faiss.normalize_L2(query_emb)
+
+        similarities, indices = self.qa_faiss_index.search(query_emb, limit)
+
+        results: List[Dict[str, Any]] = []
+        for idx, sim in zip(indices[0], similarities[0]):
+            if 0 <= idx < len(self.qa_metadata):
+                meta = self.qa_metadata[idx].copy()
+                meta["similarity_score"] = float(sim)
+                meta["source_method"] = "direct_qa_search"
+                results.append(meta)
+
+        return results
+
+    # ------------------------------------------------------------------
+    # Thin embedding helpers (used by ChainFollowingQA for scoring)
+    # ------------------------------------------------------------------
+
+    def embed_query(self, text: str) -> Optional[np.ndarray]:
+        """Embed a single query string and return L2-normalised vector."""
+        if not EMBEDDING_AVAILABLE:
+            return None
+        if self.embedding_model is None:
+            self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
+        raw = self.embedding_model.embed_query(text)
+        vec = np.array(raw, dtype=np.float32).reshape(1, -1)
+        faiss.normalize_L2(vec)
+        return vec.squeeze(0)
+
+    def embed_texts(self, texts: List[str]) -> Optional[np.ndarray]:
+        """Embed a batch of texts and return L2-normalised matrix (N x D)."""
+        if not EMBEDDING_AVAILABLE or not texts:
+            return None
+        if self.embedding_model is None:
+            self.embedding_model = VoyageAIEmbeddings(model="voyage-3")
+        raw = self.embedding_model.embed_documents(texts)
+        mat = np.array(raw, dtype=np.float32)
+        faiss.normalize_L2(mat)
+        return mat
