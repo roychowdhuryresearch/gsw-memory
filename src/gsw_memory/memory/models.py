@@ -106,7 +106,10 @@ class InformationNode(BaseModel):
         default=None, description="A global identifier for the chunk"
     )
     timestamp: Optional[str] = Field(
-        default=None, description="When this information was communicated"
+        default=None, description="Resolved absolute timestamp of when this situation occurred"
+    )
+    location: Optional[str] = Field(
+        default=None, description="Resolved location where this situation occurred"
     )
 
 
