@@ -23,7 +23,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
 
 # GPU selection
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
-os.environ['CUDA_VISIBLE_DEVICES'] = '0,1'
+os.environ['CUDA_VISIBLE_DEVICES'] = '2,3'
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 

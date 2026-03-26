@@ -614,14 +614,55 @@ SLEEP_TIME_BRIDGE_VERIFIER_PROMPT = """You are a strict bridge QA verifier.
 
 Evaluate whether a proposed two-ended bridge is a real multi-hop chain and whether the reverse question is valid.
 Input may include optional `similarity_signal` with highly similar existing bridges.
-If present, compare carefully and decide whether this candidate is meaningfully distinct or too trivial/duplicative.
+Each hit may include `existing_question_snippet` and `existing_reverse_question_snippet`.
+If present, compare the candidate against those snippets and decide whether it is meaningfully distinct or too trivial/duplicative.
+If `similarity_signal` shows high overlap (around 0.70 or higher), be strict:
+- emit `NEAR_DUPLICATE` when the candidate is effectively the same bridge,
+- emit `CIRCULAR` when forward/reverse collapse into the same mapping,
+- emit `REVERSE_INVALID` when reverse does not truly invert.
+
+High-similarity duplicate examples (aggressive policy):
+GOOD (distinct, should not get NEAR_DUPLICATE):
+1) Different target variable
+Candidate: "When did Captain Rowan's mother die?"
+Existing snippet: "Who did Captain Rowan's mother marry?"
+Why distinct: same intermediate entity, but forward asks different target variable (date vs spouse).
+
+2) Different reverse inversion target
+Candidate reverse: "Who was the child of the person buried in North Abbey?"
+Existing reverse snippet: "Who was the child of the person who died in 912?"
+Why distinct: inversion target differs (burial place path vs death-date path).
+
+3) Different evidence scope that changes information value
+Candidate: "Where was Captain Rowan's mother buried?"
+Existing snippet: "When did Captain Rowan's mother die?"
+Why distinct: different second-hop relation (buried at vs died on), not a wording tweak.
+
+BAD (near-duplicate, should emit NEAR_DUPLICATE):
+1) Wording-only forward paraphrase
+Candidate: "Who was the father of the husband of Mira?"
+Existing snippet: "Who was the father of Mira's husband?"
+Why duplicate: same mapping and same evidence intent.
+
+2) Wording-only reverse paraphrase
+Candidate reverse: "Who was married to the son of Emperor Alaric?"
+Existing reverse snippet: "Whose spouse was the son of Emperor Alaric?"
+Why duplicate: same inversion target and same evidence intent.
+
+3) Superficial lexical change only
+Candidate: "When did Mira's husband begin his reign?"
+Existing snippet: "When did Mira's husband start his reign?"
+Why duplicate: only synonym swap; mapping unchanged.
 
 Return ONLY one JSON object with this exact schema:
 {
   "pass": true or false,
   "score": 0.0 to 1.0,
   "failure_codes": ["OPTIONAL_CODE", "..."],
-  "notes": "short explanation"
+  "notes": "short explanation",
+  "retryable": true or false,
+  "retry_hint": "fix_reverse_inversion|change_mapping|strengthen_multihop_chain|remove_answer_leak|use_different_path_proof|stop_edge",
+  "retry_reason": "short retry instruction"
 }
 
 Scoring guidance:
@@ -634,8 +675,25 @@ Pass criteria:
 - `pass=true` only if it is a true chain (Sub-Q2 depends on Sub-Q1 output),
   reverse question truly inverts the forward direction, and no major leakage/triviality.
 
+Similarity checklist (required when similarity_signal is present):
+- Compare semantic mapping, not wording style.
+- Compare forward target variable against prior snippets.
+- Compare reverse inversion target variable against prior snippets.
+- If mapping + evidence intent are unchanged, emit `NEAR_DUPLICATE`.
+- Do not treat punctuation, tense, casing, or trivial synonym changes as meaningfully distinct.
+
+Retry guidance checklist:
+- Set `retryable=true` only when this same edge likely has a better bridge if the worker changes mapping, reverse inversion, or path proof choice.
+- Use `fix_reverse_inversion` for weak reverse questions that can be repaired on the same facts.
+- Use `change_mapping` when the bridge is too similar or chooses the wrong target variable.
+- Use `strengthen_multihop_chain` when the chain is too trivial but same-edge evidence may support a stronger target.
+- Use `remove_answer_leak` when the question can be repaired without changing the edge.
+- Use `use_different_path_proof` when the current proof is weak / conjunctive and a different proof on the same relationship is more promising.
+- Use `stop_edge` when the relationship itself appears exhausted, structurally invalid, or the evidence is unlikely to support a better bridge.
+
 Failure codes (use one or more when relevant):
 - NOT_CHAIN: Facts are independent conjunction, not dependency chain.
+- NEAR_DUPLICATE: Semantically same as an existing bridge in similarity_signal; not meaningfully distinct.
 - CIRCULAR: Forward/reverse ask effectively same fact with no inversion value.
 - REVERSE_INVALID: Reverse question does not correctly invert the forward mapping.
 - ANSWER_LEAK: Question text leaks answer directly or near-directly.
@@ -645,4 +703,5 @@ Failure codes (use one or more when relevant):
 - REASONING_WEAK: Reasoning missing or decomposition not defensible.
 
 Keep notes concise (1-3 sentences). Do not include markdown or extra keys.
+Keep retry_reason concise (1 sentence). If retryable is false, set retry_hint to stop_edge unless a better same-edge retry is genuinely plausible.
 """

@@ -8,7 +8,7 @@ Workspaces from text using sophisticated semantic role extraction.
 from bespokelabs import curator
 
 
-from ...prompts.operator_prompts import FactualExtractionPrompts, OperatorPrompts, PromptType
+from ...prompts.operator_prompts import FactualExtractionPrompts, FactualExtractionPromptsGPT_OSS, OperatorPrompts, PromptType
 from ..models import GSWStructure
 
 
@@ -89,6 +89,8 @@ class GSWOperator(curator.LLM):
             self.prompt_class = OperatorPrompts
         elif prompt_type == PromptType.FACTUAL:
             self.prompt_class = FactualExtractionPrompts
+        elif prompt_type == PromptType.FACTUAL_GPT_OSS:
+            self.prompt_class = FactualExtractionPromptsGPT_OSS
         else:
             raise ValueError(f"Unsupported prompt type: {prompt_type}")
 

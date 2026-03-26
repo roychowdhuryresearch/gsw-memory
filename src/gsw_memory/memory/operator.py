@@ -271,7 +271,23 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-        if "together_ai/" in self.model_name:
+        if self.model_name.startswith("bedrock/"):
+            bedrock_model = self.model_name
+            if not bedrock_model.startswith("bedrock/converse/"):
+                bedrock_model = bedrock_model.replace("bedrock/", "bedrock/converse/", 1)
+            gsw_model = GSWOperator(
+                model_name=bedrock_model,
+                backend="litellm",
+                backend_params={
+                    "require_all_responses": False,
+                    "max_requests_per_minute": 200,
+                    "max_tokens_per_minute": 200_000,
+                },
+                generation_params={**self.generation_params, "max_tokens": 16384},
+                prompt_type=self.prompt_type,
+                response_format=GSWStructure,
+            )
+        elif "together_ai/" in self.model_name:
             gsw_model = GSWOperator(
                 model_name=self.model_name,
                 backend="litellm",
@@ -303,7 +319,7 @@ class GSWProcessor:
                     "min_p": 0.0,
                     "max_tokens": 8092,
                 },
-                prompt_type=PromptType.FACTUAL,
+                prompt_type=self.prompt_type,
                 backend="litellm",
                 response_format=GSWStructure,
             )
@@ -348,7 +364,8 @@ class GSWProcessor:
         # Generate all GSWs in parallel
         gsw_response = gsw_model(gsw_inputs)
 
-        for response in gsw_response.dataset: #TODO: Check if this is correct
+        dataset = gsw_response.dataset if hasattr(gsw_response, 'dataset') else gsw_response
+        for response in dataset:
             try:
                 if response["gsw"] is not None:
                     gsw_dict = response["gsw"]

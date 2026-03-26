@@ -8,14 +8,54 @@ import json
 import os
 import logging
 import re
+import threading
 import traceback
+import hashlib
 from typing import List, Dict, Any, Optional, Tuple
 
-from .tools import GSWTools
+from .tools import GSWTools, normalize_similarity_text
 from .prompts import SLEEP_TIME_SYSTEM_PROMPT, SLEEP_TIME_BRIDGE_VERIFIER_PROMPT
+from .rlm_pipeline import VerifierOutputSchema
 
 # Setup logger for this module
 logger = logging.getLogger(__name__)
+
+_CACHEABLE_VERIFIER_FAILURE_CODES = {
+    "NOT_CHAIN",
+    "REVERSE_INVALID",
+    "TOO_TRIVIAL",
+    "CIRCULAR",
+    "ANSWER_LEAK",
+    "NEAR_DUPLICATE",
+}
+
+_HIGH_SIMILARITY_THRESHOLD = 0.70
+_HIGH_SIMILARITY_BLOCKING_CODES = {
+    "NEAR_DUPLICATE",
+    "CIRCULAR",
+    "REVERSE_INVALID",
+    "TOO_TRIVIAL",
+    "NOT_CHAIN",
+    "ANSWER_LEAK",
+}
+
+_VALID_RETRY_HINTS = {
+    "fix_reverse_inversion",
+    "change_mapping",
+    "strengthen_multihop_chain",
+    "remove_answer_leak",
+    "use_different_path_proof",
+    "stop_edge",
+}
+
+_RETRYABLE_VERIFIER_FAILURE_HINTS = {
+    "REVERSE_INVALID": "fix_reverse_inversion",
+    "NEAR_DUPLICATE": "change_mapping",
+    "TOO_TRIVIAL": "strengthen_multihop_chain",
+    "ANSWER_LEAK": "remove_answer_leak",
+    "NOT_CHAIN": "use_different_path_proof",
+    "CIRCULAR": "use_different_path_proof",
+}
 
 
 class AgenticReconciler:
@@ -46,6 +86,13 @@ class AgenticReconciler:
         edge_max_calls: int = 2,
         edge_max_tokens: int = 3000,
         max_optional_docs_per_edge: int = 2,
+        edge_parallel_enabled: bool = False,
+        edge_parallel_workers: int = 1,
+        verifier_parallel_workers: int = 4,
+        edge_max_accepted_bridges: int = 10,
+        parallel_progress_heartbeat_seconds: float = 10.0,
+        parallel_stuck_warning_seconds: float = 60.0,
+        curriculum_guidance: Optional[Dict[str, Any]] = None,
     ):
         """
         Initialize agentic reconciler.
@@ -74,6 +121,13 @@ class AgenticReconciler:
             edge_max_calls: Maximum worker calls per edge in RLM mode.
             edge_max_tokens: Token budget per edge in RLM mode.
             max_optional_docs_per_edge: Optional fuzzy docs to include per edge in RLM mode.
+            edge_parallel_enabled: Enable doc-local batched parallel worker generation in hybrid mode.
+            edge_parallel_workers: Number of parallel worker threads per hybrid batch.
+            verifier_parallel_workers: Number of parallel verifier calls per edge commit.
+            edge_max_accepted_bridges: Maximum accepted bridges committed per edge.
+            parallel_progress_heartbeat_seconds: Heartbeat interval for parallel batch progress events.
+            parallel_stuck_warning_seconds: In-flight age threshold for warning-only stuck worker events.
+            curriculum_guidance: Optional batch-level demand/feedback/exemplar guidance injected into worker prompts.
         """
         self.entity_searcher = entity_searcher
         self.tools = GSWTools(entity_searcher)
@@ -94,6 +148,13 @@ class AgenticReconciler:
         self.edge_max_calls = max(1, int(edge_max_calls))
         self.edge_max_tokens = max(512, int(edge_max_tokens))
         self.max_optional_docs_per_edge = max(0, int(max_optional_docs_per_edge))
+        self.edge_parallel_enabled = bool(edge_parallel_enabled)
+        self.edge_parallel_workers = max(1, int(edge_parallel_workers))
+        self.verifier_parallel_workers = max(1, int(verifier_parallel_workers))
+        self.edge_max_accepted_bridges = max(1, int(edge_max_accepted_bridges))
+        self.parallel_progress_heartbeat_seconds = max(0.1, float(parallel_progress_heartbeat_seconds))
+        self.parallel_stuck_warning_seconds = max(0.1, float(parallel_stuck_warning_seconds))
+        self.curriculum_guidance = curriculum_guidance if isinstance(curriculum_guidance, dict) else None
 
         # Budget tracking
         self.budget = budget or {"max_entities": 20, "max_tokens": 1_000_000}
@@ -102,6 +163,8 @@ class AgenticReconciler:
         self.output_tokens = 0
         self.entities_explored = 0
         self._current_doc_exploration_doc_id: Optional[str] = None
+        self._usage_lock = threading.Lock()
+        self._rejected_bridge_cache: Dict[Tuple[Any, ...], Dict[str, Any]] = {}
         self.rlm_metrics: Dict[str, Any] = {
             "root_calls": 0,
             "worker_calls": 0,
@@ -127,6 +190,25 @@ class AgenticReconciler:
             "planner_stop_actions": 0,
             "docs_attempted": 0,
             "docs_completed": 0,
+            "parallel_batches": 0,
+            "parallel_workers_used": 0,
+            "commit_queue_size_peak": 0,
+            "stale_edge_skipped": 0,
+            "parallel_generation_seconds": 0.0,
+            "serial_commit_seconds": 0.0,
+            "pre_verifier_cache_hits": 0,
+            "verifier_parallel_workers_used": 0,
+            "parallel_verifier_seconds": 0.0,
+            "edge_accept_cap_hits": 0,
+            "guided_retry_scheduled": 0,
+            "guided_retry_started": 0,
+            "guided_retry_succeeded": 0,
+            "guided_retry_exhausted": 0,
+            "guided_retry_blocked_no_progress": 0,
+            "worker_parse_recovery_success": 0,
+            "worker_parse_recovery_fail": 0,
+            "verifier_parse_recovery_success": 0,
+            "verifier_parse_recovery_fail": 0,
         }
 
         # Safety: Cache valid document IDs for reference
@@ -157,7 +239,12 @@ class AgenticReconciler:
                     f"root_model={self.root_model}, worker_model={self.worker_model}, "
                     f"depth={self.edge_max_depth}, calls={self.edge_max_calls}, "
                     f"edge_tokens={self.edge_max_tokens}, optional_docs={self.max_optional_docs_per_edge}, "
-                    f"hybrid_scope={self.hybrid_scope}"
+                    f"hybrid_scope={self.hybrid_scope}, "
+                    f"parallel_enabled={self.edge_parallel_enabled}, parallel_workers={self.edge_parallel_workers}, "
+                    f"verifier_parallel_workers={self.verifier_parallel_workers}, "
+                    f"edge_accept_cap={self.edge_max_accepted_bridges}, "
+                    f"parallel_heartbeat_s={self.parallel_progress_heartbeat_seconds}, "
+                    f"parallel_stuck_warn_s={self.parallel_stuck_warning_seconds}"
                 )
             print(f"  GSWs loaded: {len(self.entity_searcher.gsw_by_doc_id)}")
 
@@ -170,7 +257,12 @@ class AgenticReconciler:
         Bedrock models: bedrock/qwen.qwen3-235b-... (via LiteLLM)
         vllm / local OpenAI-compatible: any model name when base_url is provided
         """
-        self.litellm = None  # Only set for bedrock provider
+        # Always import litellm for structured output support across all providers
+        try:
+            import litellm
+            self.litellm = litellm
+        except ImportError:
+            raise ImportError("LiteLLM package not installed. Run: pip install litellm")
 
         # Detect provider — vllm/local takes priority if base_url is given
         if base_url is not None:
@@ -202,11 +294,6 @@ class AgenticReconciler:
             # Ensure converse API is used (required for tool calling)
             if not model_name.startswith("bedrock/converse/"):
                 self.model_name = model_name.replace("bedrock/", "bedrock/converse/", 1)
-            try:
-                import litellm
-                self.litellm = litellm
-            except ImportError:
-                raise ImportError("LiteLLM package not installed. Run: pip install litellm")
 
         elif "/" in model_name:
             self.provider = "together"
@@ -226,6 +313,15 @@ class AgenticReconciler:
                 "Expected OpenAI model (gpt-4o), Together AI model (contains '/'), "
                 "Bedrock model (bedrock/...), or provide --base_url for vllm."
             )
+
+    def _to_litellm_model(self, model_name: str) -> str:
+        """Convert internal model name to litellm-compatible model name."""
+        if self.provider == "together":
+            return f"together_ai/{model_name}" if not model_name.startswith("together_ai/") else model_name
+        if self.provider == "vllm":
+            return f"openai/{model_name}" if not model_name.startswith("openai/") else model_name
+        # openai and bedrock names pass through as-is
+        return model_name
 
     def _create_tool_definitions(self) -> List[Dict[str, Any]]:
         """Create OpenAI-format tool definitions for graph-walk exploration."""
@@ -636,12 +732,13 @@ class AgenticReconciler:
 
     def _record_stage_call(self, stage: str) -> None:
         """Track stage-level call counts for RLM/verification metrics."""
-        if stage == "root":
-            self.rlm_metrics["root_calls"] += 1
-        elif stage == "worker":
-            self.rlm_metrics["worker_calls"] += 1
-        elif stage == "verifier":
-            self.rlm_metrics["verifier_calls"] += 1
+        with self._usage_lock:
+            if stage == "root":
+                self.rlm_metrics["root_calls"] += 1
+            elif stage == "worker":
+                self.rlm_metrics["worker_calls"] += 1
+            elif stage == "verifier":
+                self.rlm_metrics["verifier_calls"] += 1
 
     def _consume_usage(self, response: Any, stage: str = "legacy") -> None:
         """Aggregate token usage into global and stage-level counters."""
@@ -656,19 +753,29 @@ class AgenticReconciler:
             total_tokens = prompt_tokens + completion_tokens
         total_tokens = int(total_tokens or 0)
 
-        self.tokens_used += total_tokens
-        self.input_tokens += prompt_tokens
-        self.output_tokens += completion_tokens
+        with self._usage_lock:
+            self.tokens_used += total_tokens
+            self.input_tokens += prompt_tokens
+            self.output_tokens += completion_tokens
 
-        if stage == "root":
-            self.rlm_metrics["root_input_tokens"] += prompt_tokens
-            self.rlm_metrics["root_output_tokens"] += completion_tokens
-        elif stage == "worker":
-            self.rlm_metrics["worker_input_tokens"] += prompt_tokens
-            self.rlm_metrics["worker_output_tokens"] += completion_tokens
-        elif stage == "verifier":
-            self.rlm_metrics["verifier_input_tokens"] += prompt_tokens
-            self.rlm_metrics["verifier_output_tokens"] += completion_tokens
+            if stage == "root":
+                self.rlm_metrics["root_input_tokens"] += prompt_tokens
+                self.rlm_metrics["root_output_tokens"] += completion_tokens
+            elif stage == "worker":
+                self.rlm_metrics["worker_input_tokens"] += prompt_tokens
+                self.rlm_metrics["worker_output_tokens"] += completion_tokens
+            elif stage == "verifier":
+                self.rlm_metrics["verifier_input_tokens"] += prompt_tokens
+                self.rlm_metrics["verifier_output_tokens"] += completion_tokens
+
+    @staticmethod
+    def _is_pydantic_model(obj) -> bool:
+        """Check if obj is a Pydantic BaseModel class (not instance)."""
+        try:
+            from pydantic import BaseModel as _PydanticBase
+            return isinstance(obj, type) and issubclass(obj, _PydanticBase)
+        except ImportError:
+            return False
 
     def _call_model_for_stage(
         self,
@@ -677,12 +784,17 @@ class AgenticReconciler:
         max_tokens: int = 1024,
         temperature: float = 0.2,
         stage: str = "worker",
-        response_format: Optional[Dict[str, Any]] = None,
+        response_format: Optional[Any] = None,
         tools: Optional[List[Dict[str, Any]]] = None,
         tool_choice: Optional[str] = None,
+        return_usage: bool = False,
     ) -> Any:
         """
         Unified provider call wrapper for stage-routed model calls.
+
+        When response_format is a Pydantic BaseModel class, routes through
+        litellm.completion() for native structured output across all providers.
+        Otherwise uses the existing provider-specific SDK clients.
 
         Returns:
             Assistant message object from the first choice.
@@ -691,6 +803,8 @@ class AgenticReconciler:
         if self.provider == "bedrock" and selected_model.startswith("bedrock/") and not selected_model.startswith("bedrock/converse/"):
             selected_model = selected_model.replace("bedrock/", "bedrock/converse/", 1)
         self._record_stage_call(stage)
+
+        use_litellm_structured = self._is_pydantic_model(response_format)
 
         api_params: Dict[str, Any] = {
             "model": selected_model,
@@ -702,13 +816,21 @@ class AgenticReconciler:
             api_params["tools"] = tools
         if tool_choice is not None:
             api_params["tool_choice"] = tool_choice
-        if response_format is not None and self.provider in {"openai", "vllm"}:
+
+        if use_litellm_structured:
+            # Route through litellm for Pydantic structured output (all providers)
+            api_params["response_format"] = response_format
+            api_params["model"] = self._to_litellm_model(selected_model)
+            if self.provider == "vllm":
+                api_params["api_base"] = str(self.client.base_url)
+        elif response_format is not None and self.provider in {"openai", "vllm"}:
             api_params["response_format"] = response_format
 
         # Provider-specific knobs.
         if self.provider == "vllm":
-            api_params["presence_penalty"] = 0.2
-            api_params["extra_body"] = {"top_k": 20, "min_p": 0.0}
+            if not use_litellm_structured:
+                api_params["presence_penalty"] = 0.2
+                api_params["extra_body"] = {"top_k": 20, "min_p": 0.0}
         elif self.provider == "bedrock":
             api_params["reasoning_effort"] = self.reasoning_effort
             allowed_params = ["reasoning_effort"]
@@ -718,32 +840,63 @@ class AgenticReconciler:
             # Bedrock computes dynamic limits; removing hard max avoids overflow on smaller contexts.
             api_params.pop("max_tokens", None)
         elif self.provider == "together":
-            api_params["top_k"] = 20
-            api_params["presence_penalty"] = 0.6
+            if not use_litellm_structured:
+                api_params["top_k"] = 20
+                api_params["presence_penalty"] = 0.6
             if "gpt-oss" in selected_model.lower():
                 api_params["reasoning_effort"] = self.reasoning_effort
 
         try:
             try:
-                if self.provider == "bedrock":
+                if use_litellm_structured or self.provider == "bedrock":
                     response = self.litellm.completion(**api_params)
                 else:
                     response = self.client.chat.completions.create(**api_params)
             except Exception:
                 if "response_format" in api_params:
                     fallback_params = dict(api_params)
-                    fallback_params.pop("response_format", None)
-                    if self.provider == "bedrock":
+                    rf = fallback_params.get("response_format")
+                    if self._is_pydantic_model(rf):
+                        # Pydantic structured output failed — fall back to json_object via litellm
+                        fallback_params["response_format"] = {"type": "json_object"}
+                        fallback_params["model"] = self._to_litellm_model(selected_model)
+                        if self.provider == "vllm":
+                            fallback_params.setdefault("api_base", str(self.client.base_url))
                         response = self.litellm.completion(**fallback_params)
+                    elif isinstance(rf, dict) and rf.get("type") == "json_schema":
+                        fallback_params["response_format"] = {"type": "json_object"}
+                        if self.provider == "bedrock":
+                            response = self.litellm.completion(**fallback_params)
+                        else:
+                            response = self.client.chat.completions.create(**fallback_params)
                     else:
-                        response = self.client.chat.completions.create(**fallback_params)
+                        fallback_params.pop("response_format", None)
+                        if self.provider == "bedrock":
+                            response = self.litellm.completion(**fallback_params)
+                        else:
+                            response = self.client.chat.completions.create(**fallback_params)
                 else:
                     raise
         except Exception:
             raise
 
+        usage = getattr(response, "usage", None)
+        prompt_tokens = int(getattr(usage, "prompt_tokens", 0) or 0) if usage else 0
+        completion_tokens = int(getattr(usage, "completion_tokens", 0) or 0) if usage else 0
+        total_tokens = getattr(usage, "total_tokens", None) if usage else None
+        if total_tokens is None:
+            total_tokens = prompt_tokens + completion_tokens
+        total_tokens = int(total_tokens or 0)
+
         self._consume_usage(response, stage=stage)
-        return response.choices[0].message
+        message = response.choices[0].message
+        if return_usage:
+            return message, {
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": total_tokens,
+            }
+        return message
 
     def _coerce_to_text(self, value: Any) -> str:
         """Convert provider-specific text payloads to a plain string."""
@@ -960,36 +1113,199 @@ class AgenticReconciler:
             pass_flag = raw.get("valid", False)
 
         notes = raw.get("notes") or raw.get("reasoning") or raw.get("explanation") or ""
+        retryable, retry_hint, retry_reason = self._normalize_verifier_retry_guidance(
+            failure_codes=failure_codes,
+            raw_retryable=raw.get("retryable"),
+            raw_retry_hint=raw.get("retry_hint"),
+            raw_retry_reason=raw.get("retry_reason"),
+            notes=str(notes),
+        )
 
         return {
             "pass": bool(pass_flag),
             "score": score,
             "failure_codes": failure_codes,
             "notes": str(notes),
+            "retryable": retryable,
+            "retry_hint": retry_hint,
+            "retry_reason": retry_reason,
             "raw": raw,
         }
 
-    def _call_verifier_model(self, messages: List[Dict[str, str]]) -> Tuple[str, str]:
+    def _normalize_verifier_retry_guidance(
+        self,
+        failure_codes: List[str],
+        raw_retryable: Any,
+        raw_retry_hint: Any,
+        raw_retry_reason: Any,
+        notes: str,
+    ) -> Tuple[bool, str, str]:
+        """Normalize verifier retry guidance with deterministic fallback from failure codes."""
+        retry_hint = str(raw_retry_hint or "").strip()
+        retry_reason = str(raw_retry_reason or "").strip()
+
+        if retry_hint not in _VALID_RETRY_HINTS:
+            retry_hint = ""
+
+        retryable: Optional[bool]
+        if isinstance(raw_retryable, bool):
+            retryable = raw_retryable
+        else:
+            retryable = None
+
+        if not retry_hint or retryable is None:
+            retryable, retry_hint, fallback_reason = self._fallback_retry_guidance(failure_codes, notes)
+            if not retry_reason:
+                retry_reason = fallback_reason
+            return retryable, retry_hint, retry_reason
+
+        if retry_hint == "stop_edge":
+            retryable = False
+        elif retryable is None:
+            retryable = True
+
+        if not retry_reason:
+            retry_reason = notes or ("Same-edge retry is allowed." if retryable else "Stop this edge.")
+        return bool(retryable), retry_hint, retry_reason
+
+    @staticmethod
+    def _fallback_retry_guidance(failure_codes: List[str], notes: str) -> Tuple[bool, str, str]:
+        """Derive retry guidance when verifier omits structured retry fields."""
+        normalized_codes = [str(code).strip().upper() for code in failure_codes if str(code).strip()]
+        for code in normalized_codes:
+            if code.startswith("VERIFIER_"):
+                return False, "stop_edge", notes or "Verifier/system failure should not trigger a same-edge retry."
+
+        for code, hint in _RETRYABLE_VERIFIER_FAILURE_HINTS.items():
+            if code in normalized_codes:
+                default_reason = {
+                    "fix_reverse_inversion": "Keep the same edge but repair the reverse inversion.",
+                    "change_mapping": "Keep the same edge but choose a different target mapping.",
+                    "strengthen_multihop_chain": "Keep the same edge but use a stronger two-hop target.",
+                    "remove_answer_leak": "Keep the same edge but remove answer leakage.",
+                    "use_different_path_proof": "Keep the same edge but use a different path proof.",
+                }[hint]
+                return True, hint, notes or default_reason
+
+        if normalized_codes:
+            return True, "change_mapping", notes or "Keep the same edge but try a materially different bridge."
+        return False, "stop_edge", notes or "Stop this edge."
+
+    def _bridge_signature(self, bridge_spec: Dict[str, Any]) -> Tuple[Any, ...]:
+        """Canonical exact signature for run-local reject cache."""
+        question = normalize_similarity_text(bridge_spec.get("question", ""))
+        reverse_question = normalize_similarity_text(bridge_spec.get("reverse_question", ""))
+        answers = tuple(
+            sorted(
+                str(v).strip().lower()
+                for v in bridge_spec.get("answers", [])
+                if str(v).strip()
+            )
+        )
+        reverse_answers = tuple(
+            sorted(
+                str(v).strip().lower()
+                for v in bridge_spec.get("reverse_answers", [])
+                if str(v).strip()
+            )
+        )
+        source_docs = tuple(
+            sorted(
+                str(v).strip().lower()
+                for v in bridge_spec.get("source_docs", [])
+                if str(v).strip()
+            )
+        )
+        return (question, reverse_question, answers, reverse_answers, source_docs)
+
+    def _lookup_rejected_bridge_cache(self, bridge_spec: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        signature = self._bridge_signature(bridge_spec)
+        with self._usage_lock:
+            cached = self._rejected_bridge_cache.get(signature)
+        if not cached:
+            return None
+        return dict(cached)
+
+    def _cache_rejected_bridge(self, bridge_spec: Dict[str, Any], verdict: Dict[str, Any]) -> None:
+        codes = {
+            str(code).strip().upper()
+            for code in verdict.get("failure_codes", []) or []
+            if str(code).strip()
+        }
+        if not (codes & _CACHEABLE_VERIFIER_FAILURE_CODES):
+            return
+        signature = self._bridge_signature(bridge_spec)
+        cached_payload = {
+            "signature_hash": hashlib.md5(repr(signature).encode()).hexdigest()[:12],
+            "failure_codes": sorted(codes),
+            "notes": str(verdict.get("notes", "")),
+            "score": float(verdict.get("score", 0.0) or 0.0),
+        }
+        with self._usage_lock:
+            self._rejected_bridge_cache[signature] = cached_payload
+
+    def _emit_pre_verifier_cache_hit(self, bridge_spec: Dict[str, Any], cached: Dict[str, Any]) -> None:
+        with self._usage_lock:
+            self.rlm_metrics["pre_verifier_cache_hits"] = int(self.rlm_metrics.get("pre_verifier_cache_hits", 0)) + 1
+        if self.output_callback:
+            self.output_callback(
+                "pre_verifier_cache_hit",
+                {
+                    "question": bridge_spec.get("question", ""),
+                    "reverse_question": bridge_spec.get("reverse_question", ""),
+                    "failure_codes": cached.get("failure_codes", []),
+                    "signature_hash": cached.get("signature_hash", ""),
+                },
+            )
+
+    def _pre_verifier_cache_rejection(self, bridge_spec: Dict[str, Any], cached: Dict[str, Any]) -> Dict[str, Any]:
+        self._emit_pre_verifier_cache_hit(bridge_spec, cached)
+        return {
+            "success": False,
+            "error": "Skipped candidate due to cached verifier rejection.",
+            "validation": {
+                "valid": False,
+                "confidence": float(cached.get("score", 0.0) or 0.0),
+                "reasoning": cached.get("notes") or "Cached verifier rejection.",
+                "failure_codes": cached.get("failure_codes", ["VERIFIER_REJECTED"]),
+                "stage": "pre_verifier_cache",
+            },
+        }
+
+    def _call_verifier_model(self, messages: List[Dict[str, str]], use_structured: bool = True) -> Tuple[str, str]:
         """Call verifier model once and return raw text with source field."""
+        response_format = VerifierOutputSchema if use_structured else {"type": "json_object"}
         verifier_message = self._call_model_for_stage(
             messages=messages,
             model_name=self.bridge_verifier_model,
             max_tokens=900,
             temperature=0.0,
             stage="verifier",
-            response_format={"type": "json_object"},
+            response_format=response_format,
         )
         raw_text, source_field = self._extract_message_content_with_source(verifier_message)
         return raw_text, source_field
 
     def _verify_bridge_candidate(self, bridge_spec: Dict[str, Any]) -> Dict[str, Any]:
         """Run LLM verifier subagent for a proposed bridge candidate."""
+        def _metric_inc(metric_key: str, amount: int = 1) -> None:
+            with self._usage_lock:
+                base = self.rlm_metrics.get(metric_key, 0)
+                try:
+                    base_int = int(base)
+                except (TypeError, ValueError):
+                    base_int = 0
+                self.rlm_metrics[metric_key] = base_int + int(amount)
+
         if not self.bridge_verifier_enabled:
             return {
                 "pass": True,
                 "score": 1.0,
                 "failure_codes": [],
                 "notes": "Verifier disabled.",
+                "retryable": False,
+                "retry_hint": "stop_edge",
+                "retry_reason": "Verifier disabled.",
                 "raw": {},
             }
 
@@ -1031,9 +1347,32 @@ class AgenticReconciler:
 
         try:
             parsed = self._extract_json_from_text(raw_text)
-            verdict = self._normalize_verifier_output(parsed)
-            verdict["source_field"] = source_field
-            verdict["parse_stage"] = "initial"
+            result = VerifierOutputSchema.model_validate(parsed)
+            verdict = {
+                "pass": result.pass_field,
+                "score": result.score,
+                "failure_codes": result.failure_codes,
+                "notes": result.notes,
+                "retryable": result.retryable,
+                "retry_hint": result.retry_hint,
+                "retry_reason": result.retry_reason,
+                "raw": parsed,
+                "source_field": source_field,
+                "parse_stage": "initial",
+                "parse_attempts": 1,
+                "final_parse_stage": "initial",
+                "parse_recovery_used": False,
+            }
+            # Apply retry hint normalization
+            verdict["retryable"], verdict["retry_hint"], verdict["retry_reason"] = (
+                self._normalize_verifier_retry_guidance(
+                    failure_codes=verdict["failure_codes"],
+                    raw_retryable=verdict["retryable"],
+                    raw_retry_hint=verdict["retry_hint"],
+                    raw_retry_reason=verdict["retry_reason"],
+                    notes=verdict["notes"],
+                )
+            )
             return verdict
         except Exception as initial_error:
             logger.warning(
@@ -1045,7 +1384,7 @@ class AgenticReconciler:
                 self._preview_text(raw_text),
             )
 
-        # One strict repair attempt with the same model.
+        # One strict repair attempt with the same model (uses json_object fallback).
         repair_messages = messages + [
             {"role": "assistant", "content": raw_text or "[empty_response]"},
             {
@@ -1053,25 +1392,30 @@ class AgenticReconciler:
                 "content": (
                     "Your previous reply was not parseable JSON. "
                     "Re-output ONLY one valid JSON object with keys: "
-                    "pass (bool), score (0..1 number), failure_codes (array of strings), notes (string). "
+                    "pass (bool), score (0..1 number), failure_codes (array of strings), notes (string), "
+                    "retryable (bool), retry_hint (string), retry_reason (string). "
                     "Do not include markdown, prose, or extra keys."
                 ),
             },
         ]
 
         try:
-            repaired_text, repaired_source = self._call_verifier_model(repair_messages)
+            repaired_text, repaired_source = self._call_verifier_model(repair_messages, use_structured=False)
             repaired_parsed = self._extract_json_from_text(repaired_text)
             repaired_verdict = self._normalize_verifier_output(repaired_parsed)
+            _metric_inc("verifier_parse_recovery_success", 1)
             repaired_verdict["source_field"] = repaired_source
             repaired_verdict["parse_stage"] = "repair_retry"
+            repaired_verdict["parse_attempts"] = 2
+            repaired_verdict["final_parse_stage"] = "repair_retry"
+            repaired_verdict["parse_recovery_used"] = True
             repaired_verdict["raw"] = {
                 "initial_text": raw_text,
                 "repaired_text": repaired_text,
             }
             return repaired_verdict
         except Exception as retry_error:
-            logger.error(
+            logger.warning(
                 "Verifier parse failed [stage=repair_retry provider=%s model=%s source=%s] error=%s preview=%s",
                 self.provider,
                 self.bridge_verifier_model,
@@ -1080,32 +1424,166 @@ class AgenticReconciler:
                 self._preview_text(repaired_text if "repaired_text" in locals() else ""),
             )
 
+        regenerate_messages = messages + [
+            {
+                "role": "user",
+                "content": (
+                    "Return ONLY one valid JSON object with keys exactly: "
+                    "pass (bool), score (0..1 number), failure_codes (array of strings), notes (string), "
+                    "retryable (bool), retry_hint (string), retry_reason (string). "
+                    "No markdown or prose."
+                ),
+            },
+        ]
+
+        regenerated_text = ""
+        regenerated_source = source_field
+        try:
+            regenerated_text, regenerated_source = self._call_verifier_model(regenerate_messages)
+            regenerated_parsed = self._extract_json_from_text(regenerated_text)
+            regenerated_verdict = self._normalize_verifier_output(regenerated_parsed)
+            _metric_inc("verifier_parse_recovery_success", 1)
+            regenerated_verdict["source_field"] = regenerated_source
+            regenerated_verdict["parse_stage"] = "regenerate_retry"
+            regenerated_verdict["parse_attempts"] = 3
+            regenerated_verdict["final_parse_stage"] = "regenerate_retry"
+            regenerated_verdict["parse_recovery_used"] = True
+            regenerated_verdict["raw"] = {
+                "initial_text": raw_text,
+                "repair_text": repaired_text if "repaired_text" in locals() else "",
+                "regenerated_text": regenerated_text,
+            }
+            return regenerated_verdict
+        except Exception as regenerate_error:
+            logger.error(
+                "Verifier parse failed [stage=regenerate_retry provider=%s model=%s source=%s] error=%s preview=%s",
+                self.provider,
+                self.bridge_verifier_model,
+                regenerated_source,
+                regenerate_error,
+                self._preview_text(regenerated_text),
+            )
+            _metric_inc("verifier_parse_recovery_fail", 1)
+
             if self.bridge_verifier_fail_open:
                 return {
                     "pass": True,
                     "score": 1.0,
                     "failure_codes": ["VERIFIER_PARSE_ERROR_FAIL_OPEN"],
-                    "notes": f"Verifier parse error ignored due to fail-open policy: {retry_error}",
+                    "notes": f"Verifier parse error ignored due to fail-open policy: {regenerate_error}",
                     "raw": {
                         "initial_text": raw_text,
-                        "retry_text": repaired_text if "repaired_text" in locals() else "",
+                        "repair_text": repaired_text if "repaired_text" in locals() else "",
+                        "regenerated_text": regenerated_text,
                     },
                     "source_field": source_field,
-                    "parse_stage": "repair_retry",
+                    "parse_stage": "regenerate_retry",
+                    "parse_attempts": 3,
+                    "final_parse_stage": "regenerate_retry",
+                    "parse_recovery_used": True,
                 }
 
             return {
                 "pass": False,
                 "score": 0.0,
                 "failure_codes": ["VERIFIER_PARSE_ERROR"],
-                "notes": f"Verifier parse error: {retry_error}",
+                "notes": f"Verifier parse error: {regenerate_error}",
                 "raw": {
                     "initial_text": raw_text,
-                    "retry_text": repaired_text if "repaired_text" in locals() else "",
+                    "repair_text": repaired_text if "repaired_text" in locals() else "",
+                    "regenerated_text": regenerated_text,
                 },
                 "source_field": source_field,
-                "parse_stage": "repair_retry",
+                "parse_stage": "regenerate_retry",
+                "parse_attempts": 3,
+                "final_parse_stage": "regenerate_retry",
+                "parse_recovery_used": True,
             }
+
+    @staticmethod
+    def _max_similarity_from_signal(similarity_signal: Any) -> float:
+        if not isinstance(similarity_signal, list):
+            return 0.0
+        max_similarity = 0.0
+        for hit in similarity_signal:
+            if not isinstance(hit, dict):
+                continue
+            try:
+                score = float(hit.get("max_similarity", 0.0) or 0.0)
+            except (TypeError, ValueError):
+                continue
+            if score > max_similarity:
+                max_similarity = score
+        return max(0.0, min(1.0, max_similarity))
+
+    def verify_bridge_candidate_gate(self, bridge_spec: Dict[str, Any]) -> Tuple[Dict[str, Any], bool]:
+        """Run verifier and evaluate threshold gate; cache structural rejects."""
+        verdict = self._verify_bridge_candidate(bridge_spec)
+
+        similarity_signal = bridge_spec.get("similarity_signal", [])
+        similarity_max = self._max_similarity_from_signal(similarity_signal)
+        similarity_gate_applied = similarity_max >= _HIGH_SIMILARITY_THRESHOLD
+
+        verdict_codes = {
+            str(code).strip().upper()
+            for code in verdict.get("failure_codes", []) or []
+            if str(code).strip()
+        }
+        similarity_gate_blocked_by = (
+            sorted(verdict_codes & _HIGH_SIMILARITY_BLOCKING_CODES)
+            if similarity_gate_applied
+            else []
+        )
+
+        passes_base_gate = (
+            bool(verdict.get("pass"))
+            and float(verdict.get("score", 0.0) or 0.0) >= self.bridge_verifier_threshold
+        )
+        passes_gate = passes_base_gate and not similarity_gate_blocked_by
+
+        verdict["similarity_gate_applied"] = similarity_gate_applied
+        verdict["similarity_max"] = round(similarity_max, 4)
+        verdict["similarity_gate_blocked_by"] = similarity_gate_blocked_by
+
+        self._emit_verifier_result(bridge_spec, verdict, passes_gate)
+
+        if not passes_gate:
+            self._cache_rejected_bridge(bridge_spec, verdict)
+        return verdict, passes_gate
+
+    def _emit_verifier_result(
+        self,
+        bridge_spec: Dict[str, Any],
+        verdict: Dict[str, Any],
+        passes_gate: bool,
+    ) -> None:
+        """Emit a compact verifier result event for traceability."""
+        if not self.output_callback:
+            return
+
+        payload = {
+            "question": str(bridge_spec.get("question", "") or ""),
+            "reverse_question": str(bridge_spec.get("reverse_question", "") or ""),
+            "source_docs": list(bridge_spec.get("source_docs", []) or []),
+            "verifier_pass": bool(passes_gate),
+            "verifier_raw_pass": bool(verdict.get("pass")),
+            "score": float(verdict.get("score", 0.0) or 0.0),
+            "failure_codes": list(verdict.get("failure_codes", []) or []),
+            "notes": str(verdict.get("notes", "") or ""),
+            "similarity_gate_applied": bool(verdict.get("similarity_gate_applied", False)),
+            "similarity_max": float(verdict.get("similarity_max", 0.0) or 0.0),
+            "similarity_gate_blocked_by": list(verdict.get("similarity_gate_blocked_by", []) or []),
+            "retryable": bool(verdict.get("retryable", False)),
+            "retry_hint": str(verdict.get("retry_hint", "") or ""),
+            "retry_reason": str(verdict.get("retry_reason", "") or ""),
+            "source_field": verdict.get("source_field"),
+            "parse_stage": verdict.get("parse_stage"),
+            "parse_attempts": verdict.get("parse_attempts"),
+            "parse_recovery_used": bool(verdict.get("parse_recovery_used", False)),
+            "verifier_model": self.bridge_verifier_model,
+            "verifier_threshold": self.bridge_verifier_threshold,
+        }
+        self.output_callback("verifier_result", payload)
 
     def _rollback_bridge(self, bridge_id: Optional[str]) -> bool:
         """Remove a bridge by id from in-memory storage."""
@@ -1127,7 +1605,7 @@ class AgenticReconciler:
         if isinstance(validation, dict) and validation.get("similarity_signal"):
             verifier_bridge_spec["similarity_signal"] = validation.get("similarity_signal", [])
 
-        verdict = self._verify_bridge_candidate(verifier_bridge_spec)
+        verdict, passes_gate = self.verify_bridge_candidate_gate(verifier_bridge_spec)
         validation = result.setdefault("validation", {})
         validation["verifier_score"] = verdict["score"]
         validation["verifier_failure_codes"] = verdict["failure_codes"]
@@ -1139,8 +1617,17 @@ class AgenticReconciler:
             validation["verifier_source_field"] = verdict["source_field"]
         if verdict.get("parse_stage"):
             validation["verifier_parse_stage"] = verdict["parse_stage"]
+        if verdict.get("parse_attempts") is not None:
+            validation["verifier_parse_attempts"] = verdict.get("parse_attempts")
+        if verdict.get("parse_recovery_used") is not None:
+            validation["verifier_parse_recovery_used"] = bool(verdict.get("parse_recovery_used"))
+        validation["similarity_gate_applied"] = bool(verdict.get("similarity_gate_applied", False))
+        validation["similarity_max"] = float(verdict.get("similarity_max", 0.0) or 0.0)
+        validation["similarity_gate_blocked_by"] = list(verdict.get("similarity_gate_blocked_by", []) or [])
+        validation["verifier_retryable"] = bool(verdict.get("retryable", False))
+        validation["verifier_retry_hint"] = str(verdict.get("retry_hint", "") or "")
+        validation["verifier_retry_reason"] = str(verdict.get("retry_reason", "") or "")
 
-        passes_gate = verdict["pass"] and verdict["score"] >= self.bridge_verifier_threshold
         validation["verifier_pass"] = passes_gate
 
         if passes_gate:
@@ -1175,6 +1662,14 @@ class AgenticReconciler:
                 "verifier_threshold": self.bridge_verifier_threshold,
                 "verifier_source_field": verdict.get("source_field"),
                 "verifier_parse_stage": verdict.get("parse_stage"),
+                "verifier_parse_attempts": verdict.get("parse_attempts"),
+                "verifier_parse_recovery_used": verdict.get("parse_recovery_used"),
+                "similarity_gate_applied": bool(verdict.get("similarity_gate_applied", False)),
+                "similarity_max": float(verdict.get("similarity_max", 0.0) or 0.0),
+                "similarity_gate_blocked_by": list(verdict.get("similarity_gate_blocked_by", []) or []),
+                "verifier_retryable": bool(verdict.get("retryable", False)),
+                "verifier_retry_hint": str(verdict.get("retry_hint", "") or ""),
+                "verifier_retry_reason": str(verdict.get("retry_reason", "") or ""),
             }
         }
 
@@ -1216,24 +1711,47 @@ class AgenticReconciler:
 
     def _execute_create_bridge_tool(self, tool_method: Any, arguments: Dict[str, Any]) -> Any:
         """Execute create_bridge_qa with post-create verifier gating."""
-        bridges_arg = arguments.get("bridges")
+        call_arguments = dict(arguments or {})
+        preverified = bool(call_arguments.pop("__preverified", False))
+        bridges_arg = call_arguments.get("bridges")
 
         # Single bridge mode
         if bridges_arg is None:
-            result = tool_method(**arguments)
-            result = self._apply_verifier_to_bridge_result(result, arguments)
-            self._emit_create_bridge_callbacks(result, arguments)
+            if not preverified:
+                cached = self._lookup_rejected_bridge_cache(call_arguments)
+                if cached is not None:
+                    result = self._pre_verifier_cache_rejection(call_arguments, cached)
+                    self._emit_create_bridge_callbacks(result, call_arguments)
+                    return result
+
+            result = tool_method(**call_arguments)
+            if preverified:
+                if isinstance(result, dict) and result.get("success"):
+                    validation = result.setdefault("validation", {})
+                    validation["preverified"] = True
+                    validation["verifier_pass"] = True
+            else:
+                result = self._apply_verifier_to_bridge_result(result, call_arguments)
+            self._emit_create_bridge_callbacks(result, call_arguments)
             return result
 
         # Preserve existing tool-level batch validation behavior
         if not isinstance(bridges_arg, list) or len(bridges_arg) == 0 or len(bridges_arg) > 20:
-            result = tool_method(**arguments)
-            self._emit_create_bridge_callbacks(result, arguments)
+            result = tool_method(**call_arguments)
+            self._emit_create_bridge_callbacks(result, call_arguments)
             return result
 
         # Process each batch item independently so verifier can reject selectively
         final_results = []
         for bridge_spec in bridges_arg:
+            if not preverified:
+                cached = self._lookup_rejected_bridge_cache(bridge_spec)
+                if cached is not None:
+                    single_result = self._pre_verifier_cache_rejection(bridge_spec, cached)
+                    final_results.append(single_result)
+                    self._emit_create_bridge_callbacks(single_result, bridge_spec)
+                    continue
+
             raw_result = tool_method(bridges=[bridge_spec])
             if isinstance(raw_result, list):
                 single_result = raw_result[0] if raw_result else {
@@ -1245,7 +1763,13 @@ class AgenticReconciler:
                 single_result = raw_result
 
             if isinstance(single_result, dict):
-                single_result = self._apply_verifier_to_bridge_result(single_result, bridge_spec)
+                if preverified:
+                    if single_result.get("success"):
+                        validation = single_result.setdefault("validation", {})
+                        validation["preverified"] = True
+                        validation["verifier_pass"] = True
+                else:
+                    single_result = self._apply_verifier_to_bridge_result(single_result, bridge_spec)
             final_results.append(single_result)
             self._emit_create_bridge_callbacks(single_result, bridge_spec)
 
@@ -1605,6 +2129,10 @@ class AgenticReconciler:
             edge_max_tokens=self.edge_max_tokens,
             max_optional_docs_per_edge=self.max_optional_docs_per_edge,
             hybrid_scope=self.hybrid_scope,
+            edge_parallel_enabled=self.edge_parallel_enabled,
+            edge_parallel_workers=self.edge_parallel_workers,
+            parallel_progress_heartbeat_seconds=self.parallel_progress_heartbeat_seconds,
+            parallel_stuck_warning_seconds=self.parallel_stuck_warning_seconds,
         )
 
     def run_rlm_document(self, doc_id: str) -> Dict[str, Any]:

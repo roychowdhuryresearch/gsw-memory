@@ -81,6 +81,15 @@ def jaccard_similarity(a: Set[str], b: Set[str]) -> float:
     return len(a & b) / len(union)
 
 
+def _truncate_similarity_snippet(value: Any, max_len: int = 140) -> str:
+    """Build a compact snippet for verifier-side duplicate arbitration."""
+    text = str(value or "").strip()
+    text = re.sub(r"\s+", " ", text)
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 3].rstrip() + "..."
+
+
 class GSWTools:
     """Collection of tools for agentic GSW exploration."""
 
@@ -1190,6 +1199,225 @@ class GSWTools:
             resolved.append({"ref": ref, "name": entity.name, "doc_id": doc_id})
         return len(errors) == 0, resolved, errors
 
+    def _prepare_bridge_candidate(
+        self,
+        *,
+        question: Optional[str],
+        answers: Optional[List[str]],
+        reverse_question: Optional[str],
+        reverse_answers: Optional[List[str]],
+        source_docs: Optional[List[str]],
+        reasoning: Optional[str],
+        confidence: float = 0.9,
+        entities_involved: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """Validate/canonicalize a bridge candidate without mutating storage."""
+        if question is None or answers is None or reverse_question is None or reverse_answers is None or source_docs is None or reasoning is None:
+            return {
+                "success": False,
+                "error": "Single bridge mode requires question, answers, reverse_question, reverse_answers, source_docs, and reasoning parameters.",
+                "validation": {"valid": False, "confidence": 0.0}
+            }
+
+        if not answers or not reverse_answers:
+            return {
+                "success": False,
+                "error": "answers and reverse_answers must be non-empty lists.",
+                "validation": {"valid": False, "confidence": 0.0}
+            }
+
+        # STEP 1: Validate that bridge spans multiple documents
+        if len(source_docs) < 2:
+            return {
+                "success": False,
+                "error": "A bridge MUST involve at least 2 documents. Single-document QA pairs are not bridges.",
+                "hint": "Bridges combine information across multiple documents. Ensure your question requires facts from at least 2 different source documents.",
+                "validation": {
+                    "valid": False,
+                    "confidence": 0.0,
+                    "evidence": [],
+                    "reasoning": "Bridge must span multiple documents"
+                }
+            }
+
+        # STEP 2: Check for duplicate documents
+        if len(source_docs) != len(set(source_docs)):
+            return {
+                "success": False,
+                "error": "Duplicate documents in source_docs list. Each document should appear only once.",
+                "hint": "Remove duplicate document IDs from your source_docs list.",
+                "validation": {
+                    "valid": False,
+                    "confidence": 0.0,
+                    "evidence": [],
+                    "reasoning": "Duplicate documents detected"
+                }
+            }
+
+        # STEP 3: Validate entity references (doc_x::ey format)
+        source_docs_set = set(source_docs)
+        _ans_valid, ans_resolved, ans_errors = self._validate_entity_refs(answers, source_docs_set)
+        _rev_valid, rev_resolved, rev_errors = self._validate_entity_refs(reverse_answers, source_docs_set)
+
+        all_errors = ans_errors + rev_errors
+        if all_errors:
+            return {
+                "success": False,
+                "error": f"Invalid entity references: {all_errors}",
+                "hint": "Use doc_x::ey format (e.g. 'doc_21::e5'). Check get_entity_context output for entity IDs.",
+                "validation": {
+                    "valid": False,
+                    "confidence": 0.0,
+                    "evidence": [],
+                    "reasoning": f"Entity reference validation failed: {all_errors}"
+                }
+            }
+
+        # STEP 4: Hard cross-doc ref gate (answers must actually touch >=2 docs)
+        docs_from_refs = {
+            item["doc_id"]
+            for item in (ans_resolved + rev_resolved)
+            if isinstance(item, dict) and item.get("doc_id")
+        }
+        if len(docs_from_refs) < 2:
+            return {
+                "success": False,
+                "error": (
+                    "Bridge refs are not cross-document. "
+                    "answers + reverse_answers must resolve to at least 2 distinct docs."
+                ),
+                "hint": (
+                    "Use refs grounded in at least two source docs. "
+                    "Do not rely on source_docs list alone."
+                ),
+                "validation": {
+                    "valid": False,
+                    "confidence": 0.0,
+                    "evidence": [],
+                    "reasoning": f"Resolved refs only touch docs={sorted(docs_from_refs)}",
+                    "stage": "tool_validation",
+                    "failure_codes": ["DOC_MISMATCH", "NOT_CHAIN"],
+                }
+            }
+
+        # Canonicalize source_docs to only documents actually used by grounded refs.
+        canonical_source_docs: List[str] = []
+        seen_docs: Set[str] = set()
+        for doc_id in source_docs:
+            normalized_doc = str(doc_id).strip()
+            if normalized_doc in docs_from_refs and normalized_doc not in seen_docs:
+                canonical_source_docs.append(normalized_doc)
+                seen_docs.add(normalized_doc)
+        for doc_id in sorted(docs_from_refs):
+            if doc_id not in seen_docs:
+                canonical_source_docs.append(doc_id)
+                seen_docs.add(doc_id)
+        source_docs = canonical_source_docs
+
+        # STEP 5: Check for duplicate question
+        bridge_id = f"bridge_{hashlib.md5((question + '||' + reverse_question).encode()).hexdigest()[:8]}"
+        if any(b["bridge_id"] == bridge_id for b in self.bridges_created):
+            return {
+                "success": False,
+                "error": f"Duplicate bridge — a bridge with this question already exists (id: {bridge_id}).",
+                "hint": "This exact question was already created. Try a different angle or move on.",
+                "validation": {"valid": False, "confidence": 0.0}
+            }
+
+        # STEP 6: Semantic similarity signal (non-blocking, verifier decides)
+        similarity_hits: List[Dict[str, Any]] = []
+        source_doc_set = set(source_docs)
+        forward_tokens = tokenize_similarity_text(question)
+        reverse_tokens = tokenize_similarity_text(reverse_question)
+        for existing in self.bridges_created:
+            existing_docs = set(existing.get("source_docs", []))
+            shared_docs = sorted(source_doc_set & existing_docs)
+            if len(shared_docs) < 2:
+                continue
+
+            existing_forward_tokens = tokenize_similarity_text(existing.get("question", ""))
+            existing_reverse_tokens = tokenize_similarity_text(existing.get("reverse_question", ""))
+            sim_forward = jaccard_similarity(forward_tokens, existing_forward_tokens)
+            sim_reverse = jaccard_similarity(reverse_tokens, existing_reverse_tokens)
+            max_similarity = max(sim_forward, sim_reverse)
+            if max_similarity >= 0.70:
+                similarity_hits.append(
+                    {
+                        "bridge_id": existing.get("bridge_id"),
+                        "max_similarity": round(max_similarity, 4),
+                        "forward_similarity": round(sim_forward, 4),
+                        "reverse_similarity": round(sim_reverse, 4),
+                        "shared_docs": shared_docs,
+                        "existing_question_snippet": _truncate_similarity_snippet(existing.get("question", "")),
+                        "existing_reverse_question_snippet": _truncate_similarity_snippet(existing.get("reverse_question", "")),
+                    }
+                )
+
+        similarity_hits.sort(key=lambda item: item.get("max_similarity", 0.0), reverse=True)
+
+        all_resolved = ans_resolved + rev_resolved
+        final_confidence = min(0.9, 0.7 + 0.1 * len(all_resolved))
+
+        prepared = {
+            "success": True,
+            "bridge_id": bridge_id,
+            "question": question,
+            "answers": list(answers),
+            "reverse_question": reverse_question,
+            "reverse_answers": list(reverse_answers),
+            "source_docs": list(source_docs),
+            "reasoning": reasoning,
+            "confidence": final_confidence,
+            "entities_involved": list(entities_involved or []),
+            "resolved_entities": {
+                "answers": [{"ref": r["ref"], "name": r["name"]} for r in ans_resolved],
+                "reverse_answers": [{"ref": r["ref"], "name": r["name"]} for r in rev_resolved],
+            },
+            "validation": {
+                "valid": True,
+                "confidence": final_confidence,
+            },
+        }
+        if similarity_hits:
+            prepared["similarity_signal"] = similarity_hits[:3]
+            prepared["validation"]["similarity_signal"] = similarity_hits[:3]
+        return prepared
+
+    def prevalidate_bridge_qa(self, bridge_spec: Dict[str, Any]) -> Dict[str, Any]:
+        """Pre-validate one bridge spec without mutating bridge storage."""
+        prepared = self._prepare_bridge_candidate(
+            question=bridge_spec.get("question"),
+            answers=bridge_spec.get("answers"),
+            reverse_question=bridge_spec.get("reverse_question"),
+            reverse_answers=bridge_spec.get("reverse_answers"),
+            source_docs=bridge_spec.get("source_docs"),
+            reasoning=bridge_spec.get("reasoning"),
+            confidence=bridge_spec.get("confidence", 0.9),
+            entities_involved=bridge_spec.get("entities_involved"),
+        )
+        if not prepared.get("success"):
+            return {"valid": False, "result": prepared}
+
+        canonical_spec = {
+            "question": prepared["question"],
+            "answers": prepared["answers"],
+            "reverse_question": prepared["reverse_question"],
+            "reverse_answers": prepared["reverse_answers"],
+            "source_docs": prepared["source_docs"],
+            "reasoning": prepared["reasoning"],
+            "confidence": prepared["confidence"],
+            "entities_involved": prepared["entities_involved"],
+        }
+        if prepared.get("similarity_signal"):
+            canonical_spec["similarity_signal"] = prepared["similarity_signal"]
+        return {
+            "valid": True,
+            "bridge_id": prepared["bridge_id"],
+            "bridge_spec": canonical_spec,
+            "resolved_entities": prepared["resolved_entities"],
+            "validation": prepared["validation"],
+        }
+
     def create_bridge_qa(
         self,
         question: Optional[str] = None,
@@ -1305,212 +1533,46 @@ class GSWTools:
 
             return results
 
-        # Single bridge mode - validate required parameters
-        if question is None or answers is None or reverse_question is None or reverse_answers is None or source_docs is None or reasoning is None:
-            return {
-                "success": False,
-                "error": "Single bridge mode requires question, answers, reverse_question, reverse_answers, source_docs, and reasoning parameters.",
-                "validation": {"valid": False, "confidence": 0.0}
-            }
-
-        if not answers or not reverse_answers:
-            return {
-                "success": False,
-                "error": "answers and reverse_answers must be non-empty lists.",
-                "validation": {"valid": False, "confidence": 0.0}
-            }
-
-        # Continue with single bridge creation logic...
-        # STEP 1: Validate that bridge spans multiple documents
-        if len(source_docs) < 2:
-            return {
-                "success": False,
-                "error": "A bridge MUST involve at least 2 documents. Single-document QA pairs are not bridges.",
-                "hint": "Bridges combine information across multiple documents. Ensure your question requires facts from at least 2 different source documents.",
-                "validation": {
-                    "valid": False,
-                    "confidence": 0.0,
-                    "evidence": [],
-                    "reasoning": "Bridge must span multiple documents"
-                }
-            }
-
-        # STEP 2: Check for duplicate documents
-        if len(source_docs) != len(set(source_docs)):
-            return {
-                "success": False,
-                "error": "Duplicate documents in source_docs list. Each document should appear only once.",
-                "hint": "Remove duplicate document IDs from your source_docs list.",
-                "validation": {
-                    "valid": False,
-                    "confidence": 0.0,
-                    "evidence": [],
-                    "reasoning": "Duplicate documents detected"
-                }
-            }
-
-        # STEP 3: Check if all source documents exist
-        invalid_docs = [doc_id for doc_id in source_docs
-                        if doc_id not in self.entity_searcher.gsw_by_doc_id]
-
-        if invalid_docs:
-            valid_docs = sorted(list(self.entity_searcher.gsw_by_doc_id.keys()))
-            max_doc_num = max([int(d.split('_')[1]) for d in valid_docs if d.startswith('doc_')])
-
-            return {
-                "success": False,
-                "error": f"Invalid source documents: {invalid_docs}. These documents do not exist in the corpus.",
-                "invalid_docs": invalid_docs,
-                "valid_range": f"doc_0 to doc_{max_doc_num}",
-                "hint": "Use get_entity_documents(entity_name) to find which documents actually contain the entities.",
-                "validation": {
-                    "valid": False,
-                    "confidence": 0.0,
-                    "evidence": [],
-                    "reasoning": f"Invalid documents: {invalid_docs}"
-                }
-            }
-
-        # STEP 4: Validate entity references (doc_x::ey format)
-        source_docs_set = set(source_docs)
-        ans_valid, ans_resolved, ans_errors = self._validate_entity_refs(answers, source_docs_set)
-        rev_valid, rev_resolved, rev_errors = self._validate_entity_refs(reverse_answers, source_docs_set)
-
-        all_errors = ans_errors + rev_errors
-        if all_errors:
-            return {
-                "success": False,
-                "error": f"Invalid entity references: {all_errors}",
-                "hint": "Use doc_x::ey format (e.g. 'doc_21::e5'). Check get_entity_context output for entity IDs.",
-                "validation": {
-                    "valid": False,
-                    "confidence": 0.0,
-                    "evidence": [],
-                    "reasoning": f"Entity reference validation failed: {all_errors}"
-                }
-            }
-
-        # STEP 5: Hard cross-doc ref gate (answers must actually touch >=2 docs)
-        docs_from_refs = {
-            item["doc_id"]
-            for item in (ans_resolved + rev_resolved)
-            if isinstance(item, dict) and item.get("doc_id")
-        }
-        if len(docs_from_refs) < 2:
-            return {
-                "success": False,
-                "error": (
-                    "Bridge refs are not cross-document. "
-                    "answers + reverse_answers must resolve to at least 2 distinct docs."
-                ),
-                "hint": (
-                    "Use refs grounded in at least two source docs. "
-                    "Do not rely on source_docs list alone."
-                ),
-                "validation": {
-                    "valid": False,
-                    "confidence": 0.0,
-                    "evidence": [],
-                    "reasoning": f"Resolved refs only touch docs={sorted(docs_from_refs)}",
-                    "stage": "tool_validation",
-                    "failure_codes": ["DOC_MISMATCH", "NOT_CHAIN"],
-                }
-            }
-
-        # Canonicalize source_docs to only documents actually used by grounded refs.
-        canonical_source_docs: List[str] = []
-        seen_docs: Set[str] = set()
-        for doc_id in source_docs:
-            normalized_doc = str(doc_id).strip()
-            if normalized_doc in docs_from_refs and normalized_doc not in seen_docs:
-                canonical_source_docs.append(normalized_doc)
-                seen_docs.add(normalized_doc)
-        # Defensive fallback: include any resolved ref docs omitted by caller ordering.
-        for doc_id in sorted(docs_from_refs):
-            if doc_id not in seen_docs:
-                canonical_source_docs.append(doc_id)
-                seen_docs.add(doc_id)
-        source_docs = canonical_source_docs
-
-        # STEP 6: Check for duplicate question
-        bridge_id = f"bridge_{hashlib.md5((question + '||' + reverse_question).encode()).hexdigest()[:8]}"
-        if any(b["bridge_id"] == bridge_id for b in self.bridges_created):
-            return {
-                "success": False,
-                "error": f"Duplicate bridge — a bridge with this question already exists (id: {bridge_id}).",
-                "hint": "This exact question was already created. Try a different angle or move on.",
-                "validation": {"valid": False, "confidence": 0.0}
-            }
-
-        # STEP 7: Semantic similarity signal (non-blocking, verifier decides)
-        similarity_hits: List[Dict[str, Any]] = []
-        source_doc_set = set(source_docs)
-        forward_tokens = tokenize_similarity_text(question)
-        reverse_tokens = tokenize_similarity_text(reverse_question)
-        for existing in self.bridges_created:
-            existing_docs = set(existing.get("source_docs", []))
-            shared_docs = sorted(source_doc_set & existing_docs)
-            if len(shared_docs) < 2:
-                continue
-
-            existing_forward_tokens = tokenize_similarity_text(existing.get("question", ""))
-            existing_reverse_tokens = tokenize_similarity_text(existing.get("reverse_question", ""))
-            sim_forward = jaccard_similarity(forward_tokens, existing_forward_tokens)
-            sim_reverse = jaccard_similarity(reverse_tokens, existing_reverse_tokens)
-            max_similarity = max(sim_forward, sim_reverse)
-            if max_similarity >= 0.70:
-                similarity_hits.append(
-                    {
-                        "bridge_id": existing.get("bridge_id"),
-                        "max_similarity": round(max_similarity, 4),
-                        "forward_similarity": round(sim_forward, 4),
-                        "reverse_similarity": round(sim_reverse, 4),
-                        "shared_docs": shared_docs,
-                    }
-                )
-
-        similarity_hits.sort(key=lambda item: item.get("max_similarity", 0.0), reverse=True)
-
-        # STEP 8: Validation passed - create the bridge
-        all_resolved = ans_resolved + rev_resolved
-        final_confidence = min(0.9, 0.7 + 0.1 * len(all_resolved))
+        prepared = self._prepare_bridge_candidate(
+            question=question,
+            answers=answers,
+            reverse_question=reverse_question,
+            reverse_answers=reverse_answers,
+            source_docs=source_docs,
+            reasoning=reasoning,
+            confidence=confidence,
+            entities_involved=entities_involved,
+        )
+        if not prepared.get("success"):
+            return prepared
 
         bridge_data = {
-            "question": question,
-            "answers": answers,
-            "reverse_question": reverse_question,
-            "reverse_answers": reverse_answers,
+            "question": prepared["question"],
+            "answers": prepared["answers"],
+            "reverse_question": prepared["reverse_question"],
+            "reverse_answers": prepared["reverse_answers"],
             "source": "sleep_time_agent",
-            "source_docs": source_docs,
-            "reasoning": reasoning,
-            "confidence": final_confidence,
-            "entities_involved": entities_involved or [],
-            "bridge_id": bridge_id,
+            "source_docs": prepared["source_docs"],
+            "reasoning": prepared["reasoning"],
+            "confidence": prepared["confidence"],
+            "entities_involved": prepared["entities_involved"],
+            "resolved_entities": prepared["resolved_entities"],
+            "bridge_id": prepared["bridge_id"],
             "timestamp": datetime.now().isoformat(),
-            "hop_count": len(source_docs)
+            "hop_count": len(prepared["source_docs"]),
         }
-        if similarity_hits:
-            bridge_data["similarity_signal"] = similarity_hits[:3]
+        if prepared.get("similarity_signal"):
+            bridge_data["similarity_signal"] = prepared["similarity_signal"]
 
-        # Store bridge
         self.bridges_created.append(bridge_data)
 
-        result = {
+        return {
             "success": True,
-            "bridge_id": bridge_id,
-            "message": f"Bridge created successfully",
-            "resolved_entities": {
-                "answers": [{"ref": r["ref"], "name": r["name"]} for r in ans_resolved],
-                "reverse_answers": [{"ref": r["ref"], "name": r["name"]} for r in rev_resolved],
-            },
-            "validation": {
-                "valid": True,
-                "confidence": final_confidence,
-            }
+            "bridge_id": prepared["bridge_id"],
+            "message": "Bridge created successfully",
+            "resolved_entities": prepared["resolved_entities"],
+            "validation": dict(prepared["validation"]),
         }
-        if similarity_hits:
-            result["validation"]["similarity_signal"] = similarity_hits[:3]
-        return result
 
     def validate_bridge(
         self,
@@ -1863,6 +1925,42 @@ class GSWTools:
             "active_focus": dict(self.active_neighbor_focus),
             "message": "Neighbor focus lock acquired."
         }
+
+    def release_neighbor_focus_internal(
+        self,
+        doc_id: Optional[str] = None,
+        entity_name: Optional[str] = None,
+        neighbor_name: Optional[str] = None,
+        relationship: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Internal scheduler-only focus release primitive.
+
+        This method is intentionally not exposed as an LLM tool definition.
+        If edge fields are provided, they must match the active lock.
+        """
+        if self.active_neighbor_focus is None:
+            return {"success": True, "released": False, "reason": "no_active_focus"}
+
+        active = dict(self.active_neighbor_focus)
+        if doc_id is not None and str(doc_id).strip().lower() != str(active.get("doc_id", "")).strip().lower():
+            return {"error": "Active focus doc_id mismatch.", "active_focus": active}
+        if entity_name is not None and str(entity_name).strip().lower() != str(active.get("entity_name", "")).strip().lower():
+            return {"error": "Active focus entity_name mismatch.", "active_focus": active}
+        if neighbor_name is not None and str(neighbor_name).strip().lower() != str(active.get("neighbor_name", "")).strip().lower():
+            return {"error": "Active focus neighbor_name mismatch.", "active_focus": active}
+        if relationship is not None and str(relationship).strip().lower() != str(active.get("relationship", "")).strip().lower():
+            return {"error": "Active focus relationship mismatch.", "active_focus": active}
+
+        self.active_neighbor_focus = None
+        logger.info(
+            "Neighbor focus lock released by internal scheduler primitive [doc=%s entity=%s neighbor=%s relationship=%s]",
+            active.get("doc_id"),
+            active.get("entity_name"),
+            active.get("neighbor_name"),
+            active.get("relationship"),
+        )
+        return {"success": True, "released": True, "released_focus": active}
 
     def plan_neighbor_doc_coverage(
         self,

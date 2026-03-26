@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Process Full 2wiki Corpus for Agentic Q&A
+Process corpus documents through the GSW pipeline for Agentic Q&A.
 
-This script processes the entire 2wiki corpus (6,119 documents) through the GSW pipeline
-to create a unified semantic workspace that can be used with the agentic Q&A system.
+Supports two corpus types:
+- 2wiki: 2WikiMultiHopQA corpus (default)
+- frames: FRAMES Wikipedia articles (from cached articles)
 
 Pipeline: Documents → GSWProcessor → GSW chunks → Reconciler → Unified GSW
 
@@ -39,11 +40,12 @@ CORPUS_PATH = "/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_c
 BATCH_SIZE = 1000  # Process documents in batches to manage memory
 
 
-def setup_logging():
+def setup_logging(corpus_type: str = "2wiki"):
     """Create timestamped log directory for full corpus processing."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    prefix = "frames_gsw" if corpus_type == "frames" else "full_2wiki_corpus"
     log_dir = os.path.join(
-        os.path.dirname(__file__), "..", "logs", f"full_2wiki_corpus_{timestamp}"
+        os.path.dirname(__file__), "..", "logs", f"{prefix}_{timestamp}"
     )
     
     # Create directory structure
@@ -98,6 +100,64 @@ def load_full_corpus(start_idx: int = 0, end_idx: int = None) -> tuple[List[str]
     return documents, document_titles
 
 
+def load_frames_corpus(
+    frames_dir: str,
+    dev: bool = False,
+    limit: int = 0,
+) -> tuple[List[str], List[str]]:
+    """Load FRAMES Wikipedia articles from cached articles.
+
+    Args:
+        frames_dir: Path to the frames data directory (contains articles/, frames_dev.json, etc.)
+        dev: If True, filter to dev subset articles only.
+        limit: If > 0, limit to first N articles.
+
+    Returns:
+        Tuple of (documents, document_titles)
+    """
+    print("=== Loading FRAMES Corpus ===")
+    frames_path = Path(frames_dir)
+
+    # Load article cache
+    cache_file = frames_path / "articles" / "articles_cache.json"
+    if not cache_file.exists():
+        raise FileNotFoundError(
+            f"No article cache found at {cache_file}. "
+            "Run generate_gsws_frames.py without --skip_fetch first."
+        )
+
+    with open(cache_file) as f:
+        cache: dict = json.load(f)
+    print(f"  Loaded {len(cache)} articles from cache")
+
+    # Filter to dev subset if requested
+    if dev:
+        dev_path = frames_path / "frames_dev.json"
+        if not dev_path.exists():
+            raise FileNotFoundError(f"--dev flag requires {dev_path}")
+        with open(dev_path) as f:
+            dev_questions = json.load(f)
+        dev_titles = set()
+        for q in dev_questions:
+            for a in q["articles"]:
+                dev_titles.add(a["title"])
+        cache = {t: text for t, text in cache.items() if t in dev_titles and text}
+        print(f"  Filtered to dev subset: {len(cache)} articles")
+    else:
+        cache = {t: text for t, text in cache.items() if text}
+
+    # Sort for deterministic ordering
+    sorted_titles = sorted(cache.keys())
+    if limit > 0:
+        sorted_titles = sorted_titles[:limit]
+
+    documents = [cache[title] for title in sorted_titles]
+    document_titles = sorted_titles
+
+    print(f"  Prepared {len(documents)} documents for processing")
+    return documents, document_titles
+
+
 def initialize_gsw_processor(model_name: str = "gpt-4.1-mini", vllm_base_url: str = "None"):
     """Initialize GSW processor optimized for large-scale factual content."""
     print("=== Initializing GSW Processor ===")
@@ -111,7 +171,7 @@ def initialize_gsw_processor(model_name: str = "gpt-4.1-mini", vllm_base_url: st
         overlap=0,                  # No overlap needed
         enable_context=False,       # Disable context for efficiency
         enable_spacetime=False,      # Disable spacetime for small factual content
-        prompt_type=PromptType.FACTUAL,  # Optimized for factual extraction
+        prompt_type=PromptType.FACTUAL_GPT_OSS,  # Optimized for factual extraction
         batched=False,
         batch_size=BATCH_SIZE,
     )
@@ -520,6 +580,30 @@ Examples:
         default="None",
         help="VLLM base URL to use for GSW generation"
     )
+    parser.add_argument(
+        "--corpus-type",
+        type=str,
+        choices=["2wiki", "frames"],
+        default="2wiki",
+        help="Corpus type: '2wiki' for 2WikiMultiHopQA, 'frames' for FRAMES Wikipedia articles"
+    )
+    parser.add_argument(
+        "--frames-dir",
+        type=str,
+        default="data/sleep_time/frames",
+        help="Path to FRAMES data directory (used when --corpus-type frames)"
+    )
+    parser.add_argument(
+        "--dev",
+        action="store_true",
+        help="Filter to dev subset (FRAMES only)"
+    )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=0,
+        help="Process only the first N articles (0 = all)"
+    )
     args = parser.parse_args()
 
     # Recovery mode
@@ -567,17 +651,25 @@ Examples:
             raise
 
     # Normal processing mode
-    print("🚀 Starting Full 2wiki Corpus Processing")
-    print("Processing 6,119 documents through GSW pipeline for agentic Q&A\n")
+    if args.corpus_type == "frames":
+        print("🚀 Starting FRAMES Corpus Processing")
+    else:
+        print("🚀 Starting Full 2wiki Corpus Processing")
+    print(f"Model: {args.model_name}\n")
 
     processing_start_time = datetime.now()
 
     try:
         # Setup logging
-        log_dirs = setup_logging()
+        log_dirs = setup_logging(corpus_type=args.corpus_type)
 
         # Load corpus
-        documents, document_titles = load_full_corpus()
+        if args.corpus_type == "frames":
+            documents, document_titles = load_frames_corpus(
+                args.frames_dir, dev=args.dev, limit=args.limit
+            )
+        else:
+            documents, document_titles = load_full_corpus()
 
         # Initialize processor
         processor = initialize_gsw_processor(args.model_name, args.vllm_base_url)

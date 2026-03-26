@@ -9,8 +9,13 @@ from __future__ import annotations
 import json
 import logging
 import re
-from dataclasses import dataclass
+import time
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, as_completed, wait
+from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Any, Dict, List, Optional, Set, Tuple
+
+from pydantic import BaseModel, ConfigDict, Field
 
 from .tools import normalize_similarity_text, tokenize_similarity_text
 
@@ -19,6 +24,16 @@ logger = logging.getLogger(__name__)
 
 WORKER_PROMPT_VERSION = "legacy_reverse_focus_4x4_v2"
 PLANNER_PROMPT_VERSION = "hybrid_planner_ds_v2"
+COMMIT_SIMILARITY_RECHECK_THRESHOLD = 0.70
+GUIDED_RETRY_LIMIT = 2
+
+DROP_REASON_CODES = (
+    "missing_source_ref",
+    "missing_target_ref",
+    "reverse_not_invertible",
+    "no_cross_doc_evidence",
+    "all_candidates_rejected",
+)
 
 WORKER_PRE_OUTPUT_CHECKLIST = """
 Pre-output checklist (must pass all):
@@ -101,6 +116,67 @@ Reverse: "Where did Silversmith Marco's apprentice open their workshop?" -> Veni
 Reason: reverse repeats forward question; it does not invert back to the source-side variable.
 """
 
+
+
+def _format_curriculum_guidance_block(guidance: Optional[Dict[str, Any]]) -> str:
+    if not isinstance(guidance, dict) or not guidance:
+        return ""
+
+    sections: List[str] = ["Curriculum guidance (advisory only):"]
+
+    demand = guidance.get("prior_query_demand_sketch")
+    if not isinstance(demand, dict):
+        demand = guidance.get("current_batch_demand_sketch")
+    if isinstance(demand, dict):
+        top_patterns = demand.get("top_patterns", []) or []
+        if top_patterns:
+            sections.append("Prior Query Demand Sketch:")
+            prior_batches_seen = int(guidance.get("prior_batches_seen", demand.get("batches_seen", 0)) or 0)
+            if prior_batches_seen > 0:
+                sections.append(f"- Derived from {prior_batches_seen} earlier answered batch(es).")
+            for row in top_patterns[:4]:
+                pattern = str(row.get("pattern", "")).strip()
+                count = int(row.get("count", 0) or 0)
+                representative = str(row.get("representative_query", "")).strip()
+                if not pattern:
+                    continue
+                line = f"- {pattern} x{count}"
+                if representative:
+                    line += f" | rep: {representative}"
+                sections.append(line)
+
+    feedback = guidance.get("prior_batch_feedback_brief")
+    if isinstance(feedback, dict):
+        summary_lines = feedback.get("summary_lines", []) or []
+        if summary_lines:
+            sections.append("Prior Batch Feedback Brief:")
+            for line in summary_lines[:4]:
+                cleaned = str(line).strip()
+                if cleaned:
+                    sections.append(f"- {cleaned}")
+
+    exemplars = guidance.get("bridge_exemplars")
+    if isinstance(exemplars, list) and exemplars:
+        sections.append("Relevant Prior Bridge Exemplars:")
+        for row in exemplars[:3]:
+            if not isinstance(row, dict):
+                continue
+            question = str(row.get("question", "")).strip()
+            reverse_question = str(row.get("reverse_question", "")).strip()
+            pattern_tags = row.get("pattern_tags", []) or []
+            tags = ", ".join(str(tag).strip() for tag in pattern_tags if str(tag).strip())
+            if question:
+                sections.append(f"- Forward: {question}")
+            if reverse_question:
+                sections.append(f"  Reverse: {reverse_question}")
+            if tags:
+                sections.append(f"  Tags: {tags}")
+
+    sections.append(
+        "Use this historical guidance from earlier answered batches to prefer useful question types and missing patterns, but stay grounded in the provided evidence and do not copy wording mechanically."
+    )
+    return "\n".join(sections)
+
 PLANNER_SHARED_CHECKLIST = """
 Planner checklist (must pass all):
 1. Choose only from provided candidates/actions.
@@ -173,6 +249,93 @@ State: call_count high, rejected_total rising, no new optional evidence
 Output: {"action":"run_worker","depth":1,"include_optional":false,"reason":"Keep trying same setup."}
 """
 
+
+class WorkerCandidateSchema(BaseModel):
+    """Candidate structure for worker structured outputs.
+
+    Uses extra="ignore" so that extra fields from the model (e.g. source_fact,
+    neighbor_fact) are silently dropped instead of causing validation errors
+    when structured output enforcement falls back to json_object mode.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    question: str = Field(min_length=1)
+    answers: List[str] = Field(min_length=1)
+    reverse_question: str = Field(min_length=1)
+    reverse_answers: List[str] = Field(min_length=1)
+    source_docs: List[str] = Field(min_length=2)
+    reasoning: str = Field(min_length=1)
+    confidence: float = 0.9
+    entities_involved: List[Any] = Field(default_factory=list)
+
+
+class WorkerResponseSchema(BaseModel):
+    """Top-level worker response shape."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    status: str
+    candidates: List[WorkerCandidateSchema] = Field(default_factory=list)
+    need_recursion: bool
+    notes: str
+
+
+class VerifierOutputSchema(BaseModel):
+    """Verifier output structure for bridge candidate validation.
+
+    Uses extra="ignore" so extra fields are silently dropped when structured
+    output enforcement falls back to json_object mode.
+    """
+
+    model_config = ConfigDict(extra="ignore", populate_by_name=True)
+
+    pass_field: bool = Field(alias="pass")
+    score: float = Field(ge=0.0, le=1.0)
+    failure_codes: List[str] = Field(default_factory=list)
+    notes: str = ""
+    retryable: bool = False
+    retry_hint: str = "stop_edge"
+    retry_reason: str = ""
+
+
+class PlannerCorpusDocSelection(BaseModel):
+    """Planner output for corpus document selection."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    doc_id: str
+    reason: str
+
+
+class PlannerDocEdgeSelection(BaseModel):
+    """Planner output for document edge selection."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    edge_index: int
+    reason: str
+
+
+class PlannerEdgeAction(BaseModel):
+    """Planner output for edge action decision."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    action: str
+    depth: int = Field(ge=0)
+    include_optional: bool
+    reason: str
+
+
+class OptionalDocSelection(BaseModel):
+    """Output for optional document selection."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    selected_doc_ids: List[str] = Field(default_factory=list)
+
+
 @dataclass(frozen=True)
 class EdgeKey:
     """Canonical edge tuple for one source entity -> neighbor relationship."""
@@ -218,6 +381,7 @@ class PathProof:
     neighbor_fact: Dict[str, Any]
     path_docs: List[str]
     target_refs: List[str]
+    source_subject_refs: List[str]
 
 
 @dataclass
@@ -230,6 +394,41 @@ class RenderInput:
 
 
 @dataclass
+class EdgeRetryBrief:
+    """Structured verifier feedback for same-edge regeneration."""
+
+    edge: EdgeKey
+    failure_codes: List[str]
+    retryable: bool
+    retry_hint: str
+    retry_reason: str
+    rejected_question: str
+    rejected_reverse_question: str
+    retry_attempt: int = 0
+
+    def signature(self) -> Tuple[Any, ...]:
+        return (
+            bool(self.retryable),
+            str(self.retry_hint or ""),
+            tuple(str(code).strip().upper() for code in self.failure_codes if str(code).strip()),
+            normalize_similarity_text(self.rejected_question),
+            normalize_similarity_text(self.rejected_reverse_question),
+        )
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "edge": self.edge.as_dict(),
+            "failure_codes": list(self.failure_codes),
+            "retryable": bool(self.retryable),
+            "retry_hint": str(self.retry_hint or ""),
+            "retry_reason": str(self.retry_reason or ""),
+            "rejected_question": str(self.rejected_question or ""),
+            "rejected_reverse_question": str(self.rejected_reverse_question or ""),
+            "retry_attempt": int(self.retry_attempt),
+        }
+
+
+@dataclass
 class WorkerOutput:
     """Normalized output from one worker invocation."""
 
@@ -239,6 +438,10 @@ class WorkerOutput:
     notes: str
     parse_stage: str
     raw_preview: str
+    token_usage: int = 0
+    budgeted_token_usage: int = 0
+    parse_attempts: int = 1
+    parse_recovery_used: bool = False
 
 
 @dataclass
@@ -253,6 +456,52 @@ class EdgeRunResult:
     edge_tokens: int
     # Kept for backward compatibility in summaries/events.
     property_attempted: bool
+    guided_retry_count: int = 0
+    last_retry_hint: str = ""
+    last_retry_failure_codes: List[str] = field(default_factory=list)
+
+
+@dataclass
+class PreparedEdgeWork:
+    """Immutable packetized edge work item prepared under serial focus lock."""
+
+    edge: EdgeKey
+    packet: EdgePacket
+    signal: Dict[str, Any]
+    edge_call_limit: int
+    edge_token_limit: int
+    viability: Dict[str, Any]
+    retry_brief: Optional[EdgeRetryBrief] = None
+    guided_retry_count: int = 0
+
+
+@dataclass
+class EdgeWorkerProposal:
+    """Parallel worker-generation proposal awaiting serial commit."""
+
+    edge: EdgeKey
+    packet: EdgePacket
+    signal: Dict[str, Any]
+    attempted: int
+    prefilter_rejected: int
+    sanitized_candidates: List[Dict[str, Any]]
+    budget_exhausted: bool
+    edge_tokens: int
+    worker_calls_made: int
+    no_candidate_calls: int
+    close_reason: str
+    close_detail: str
+    planner_decisions: int
+    planner_fallbacks: int
+    planner_stop_actions: int
+    edge_call_limit: int = 0
+    edge_token_limit: int = 0
+    drop_reason_counts: Dict[str, int] = field(default_factory=dict)
+    retry_brief: Optional[EdgeRetryBrief] = None
+    guided_retry_count: int = 0
+    last_retry_hint: str = ""
+    last_retry_failure_codes: List[str] = field(default_factory=list)
+    last_run_signature: Optional[Tuple[Any, ...]] = None
 
 
 class RecursiveEdgeWorker:
@@ -272,11 +521,17 @@ class RecursiveEdgeWorker:
         self.max_calls = max(1, int(max_calls))
         self.edge_max_tokens = max(1, int(edge_max_tokens))
 
+    @staticmethod
+    def _worker_response_format() -> type:
+        """Return Pydantic model class for litellm structured output."""
+        return WorkerResponseSchema
+
     def _build_messages(
         self,
         packet: EdgePacket,
         depth: int,
         include_optional: bool,
+        retry_brief: Optional[EdgeRetryBrief] = None,
     ) -> List[Dict[str, str]]:
         contexts = list(packet.mandatory_contexts)
         if include_optional:
@@ -292,6 +547,15 @@ class RecursiveEdgeWorker:
             "depth": depth,
             "include_optional": include_optional,
         }
+        if retry_brief is not None:
+            payload["retry_brief"] = {
+                "failure_codes": list(retry_brief.failure_codes),
+                "retry_hint": retry_brief.retry_hint,
+                "retry_reason": retry_brief.retry_reason,
+                "rejected_question": retry_brief.rejected_question,
+                "rejected_reverse_question": retry_brief.rejected_reverse_question,
+                "retry_attempt": retry_brief.retry_attempt,
+            }
 
         system_prompt = (
             "You are an edge-local bridge generator. "
@@ -301,8 +565,12 @@ class RecursiveEdgeWorker:
             f"Prompt version: {WORKER_PROMPT_VERSION}\n\n"
             f"{WORKER_PRE_OUTPUT_CHECKLIST}\n"
             f"{WORKER_LEGACY_EXAMPLES}\n"
+            "If retry_brief is present, stay on the SAME edge, address that verifier failure directly, "
+            "and do not restate the rejected mapping.\n"
             "Return JSON only with keys: status, candidates, need_recursion, notes."
         )
+
+        guidance_block = _format_curriculum_guidance_block(packet.constraints.get("curriculum_guidance"))
 
         user_prompt = (
             "Generate high-quality bridge candidates for this edge packet.\n"
@@ -313,8 +581,11 @@ class RecursiveEdgeWorker:
             "answers and reverse_answers MUST use doc_x::ey refs from contexts.\n"
             "If candidates are non-empty, notes MUST briefly explain why reverse is a true inversion.\n"
             "Do not emit fixed-size filler lists; emit only defensible candidates from evidence.\n"
-            "If no good candidate, return empty candidates and need_recursion boolean.\n\n"
-            f"EDGE_PACKET:\n{json.dumps(payload, ensure_ascii=False)}"
+            "If retry_brief is present, keep the same relationship, avoid the rejected question pair, "
+            "and use a different mapping, reverse, or path proof when requested.\n"
+            "If no good candidate, return empty candidates and need_recursion boolean.\n"
+            + (f"\n{guidance_block}\n" if guidance_block else "\n")
+            + f"\nEDGE_PACKET:\n{json.dumps(payload, ensure_ascii=False)}"
         )
 
         return [
@@ -325,6 +596,7 @@ class RecursiveEdgeWorker:
     def _build_render_messages(
         self,
         render_input: RenderInput,
+        retry_brief: Optional[EdgeRetryBrief] = None,
     ) -> List[Dict[str, str]]:
         payload = {
             "edge": render_input.edge.as_dict(),
@@ -334,11 +606,21 @@ class RecursiveEdgeWorker:
                     "neighbor_fact": proof.neighbor_fact,
                     "path_docs": proof.path_docs,
                     "target_refs": proof.target_refs,
+                    "source_subject_refs": proof.source_subject_refs,
                 }
                 for proof in render_input.proofs
             ],
             "constraints": render_input.constraints,
         }
+        if retry_brief is not None:
+            payload["retry_brief"] = {
+                "failure_codes": list(retry_brief.failure_codes),
+                "retry_hint": retry_brief.retry_hint,
+                "retry_reason": retry_brief.retry_reason,
+                "rejected_question": retry_brief.rejected_question,
+                "rejected_reverse_question": retry_brief.rejected_reverse_question,
+                "retry_attempt": retry_brief.retry_attempt,
+            }
 
         system_prompt = (
             "You are a bridge QA renderer. "
@@ -349,19 +631,25 @@ class RecursiveEdgeWorker:
             f"{WORKER_LEGACY_EXAMPLES}\n"
             "Render mode grounding rule: every answer ref and reverse answer ref must come from path_proofs. "
             "If a fact is missing from path_proofs, do not output that candidate. "
+            "If retry_brief is present, stay on the SAME edge and fix that verifier failure without reusing the rejected mapping. "
             "Return JSON only with keys: status, candidates, need_recursion, notes."
         )
+        guidance_block = _format_curriculum_guidance_block(render_input.constraints.get("curriculum_guidance"))
+
         user_prompt = (
             "Render bridge candidates from these path proofs.\n"
             "Each candidate MUST include keys: question, answers, reverse_question, "
             "reverse_answers, source_docs, reasoning.\n"
             "reasoning MUST include: Forward target variable = X; Reverse target variable = Y; "
             "Sub-Q1 and Sub-Q2 dependency chain.\n"
-            "answers and reverse_answers MUST be refs appearing in path_proofs target_refs or source facts.\n"
+            "answers and reverse_answers MUST be refs appearing in path_proofs target_refs, "
+            "source_subject_refs, or source facts.\n"
             "If candidates are non-empty, notes MUST briefly explain why reverse is a true inversion.\n"
             "Do not emit fixed-size filler lists; emit only defensible candidates from evidence.\n"
-            "If no good candidate, return empty candidates.\n\n"
-            f"RENDER_INPUT:\n{json.dumps(payload, ensure_ascii=False)}"
+            "If retry_brief is present, use it to choose a different inversion, target, or path proof on the SAME edge.\n"
+            "If no good candidate, return empty candidates.\n"
+            + (f"\n{guidance_block}\n" if guidance_block else "\n")
+            + f"\nRENDER_INPUT:\n{json.dumps(payload, ensure_ascii=False)}"
         )
         return [
             {"role": "system", "content": system_prompt},
@@ -419,12 +707,22 @@ class RecursiveEdgeWorker:
 
         return normalized
 
-    def _parse_worker_output(self, raw_text: str, parse_stage: str) -> WorkerOutput:
+    def _parse_worker_output(
+        self,
+        raw_text: str,
+        parse_stage: str,
+        token_usage: int = 0,
+        budgeted_token_usage: int = 0,
+        parse_attempts: int = 1,
+        parse_recovery_used: bool = False,
+    ) -> WorkerOutput:
         parsed = self.reconciler._extract_json_from_text(raw_text)
-        status = str(parsed.get("status", "ok"))
-        candidates = self._normalize_candidates(parsed.get("candidates", []))
-        need_recursion = bool(parsed.get("need_recursion", False))
-        notes = str(parsed.get("notes", ""))
+        validated = WorkerResponseSchema.model_validate(parsed)
+        normalized_payload = validated.model_dump()
+        status = str(normalized_payload.get("status", "ok"))
+        candidates = self._normalize_candidates(normalized_payload.get("candidates", []))
+        need_recursion = bool(normalized_payload.get("need_recursion", False))
+        notes = str(normalized_payload.get("notes", ""))
         preview = self.reconciler._preview_text(raw_text)
         return WorkerOutput(
             status=status,
@@ -433,6 +731,10 @@ class RecursiveEdgeWorker:
             notes=notes,
             parse_stage=parse_stage,
             raw_preview=preview,
+            token_usage=max(0, int(token_usage)),
+            budgeted_token_usage=max(0, int(budgeted_token_usage)),
+            parse_attempts=max(1, int(parse_attempts)),
+            parse_recovery_used=bool(parse_recovery_used),
         )
 
     def generate(
@@ -442,21 +744,76 @@ class RecursiveEdgeWorker:
         include_optional: bool,
         max_response_tokens: int,
         render_input: Optional[RenderInput] = None,
+        retry_brief: Optional[EdgeRetryBrief] = None,
     ) -> WorkerOutput:
+        def _metric_inc(metric_key: str, amount: int = 1) -> None:
+            metrics = getattr(self.reconciler, "rlm_metrics", None)
+            if not isinstance(metrics, dict):
+                return
+            lock = getattr(self.reconciler, "_usage_lock", None)
+            if lock:
+                with lock:
+                    base = metrics.get(metric_key, 0)
+                    try:
+                        base_int = int(base)
+                    except (TypeError, ValueError):
+                        base_int = 0
+                    metrics[metric_key] = base_int + int(amount)
+                return
+            base = metrics.get(metric_key, 0)
+            try:
+                base_int = int(base)
+            except (TypeError, ValueError):
+                base_int = 0
+            metrics[metric_key] = base_int + int(amount)
+
+        def _call_worker_model(worker_messages: List[Dict[str, str]], temperature: float, max_tokens: int):
+            try:
+                response = self.reconciler._call_model_for_stage(
+                    messages=worker_messages,
+                    model_name=self.model_name,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    stage="worker",
+                    response_format=self._worker_response_format(),
+                    return_usage=True,
+                )
+            except TypeError:
+                # Backward compatibility for test doubles or older wrappers.
+                message_only = self.reconciler._call_model_for_stage(
+                    messages=worker_messages,
+                    model_name=self.model_name,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    stage="worker",
+                    response_format=self._worker_response_format(),
+                )
+                return message_only, {"total_tokens": 0}
+
+            if isinstance(response, tuple) and len(response) == 2:
+                message_obj, usage_obj = response
+                return message_obj, usage_obj or {"total_tokens": 0}
+            return response, {"total_tokens": 0}
+
         messages = (
-            self._build_render_messages(render_input)
+            self._build_render_messages(render_input, retry_brief=retry_brief)
             if render_input is not None
-            else self._build_messages(packet, depth, include_optional)
+            else self._build_messages(packet, depth, include_optional, retry_brief=retry_brief)
         )
 
-        message = self.reconciler._call_model_for_stage(
-            messages=messages,
-            model_name=self.model_name,
+        total_token_usage = 0
+        budgeted_token_usage = 0
+        message, usage = _call_worker_model(
+            worker_messages=messages,
+            temperature=0.0,
             max_tokens=max(256, int(max_response_tokens)),
-            temperature=0.2,
-            stage="worker",
-            response_format={"type": "json_object"},
         )
+        try:
+            initial_tokens = int((usage or {}).get("total_tokens", 0) or 0)
+        except (TypeError, ValueError):
+            initial_tokens = 0
+        total_token_usage += initial_tokens
+        budgeted_token_usage += initial_tokens
         raw_text, _source = self.reconciler._extract_message_content_with_source(message)
 
         # Extract thinking content from reasoning models
@@ -490,7 +847,14 @@ class RecursiveEdgeWorker:
             raw_text = re.sub(r"<think>.*", "", raw_text, flags=re.DOTALL).strip()
 
         try:
-            return self._parse_worker_output(raw_text, parse_stage="initial")
+            return self._parse_worker_output(
+                raw_text,
+                parse_stage="initial",
+                token_usage=total_token_usage,
+                budgeted_token_usage=budgeted_token_usage,
+                parse_attempts=1,
+                parse_recovery_used=False,
+            )
         except Exception as initial_error:
             logger.warning(
                 "Worker parse failed [stage=initial edge=%s] error=%s preview=%s",
@@ -511,32 +875,86 @@ class RecursiveEdgeWorker:
             },
         ]
 
-        repaired_message = self.reconciler._call_model_for_stage(
-            messages=repair_messages,
-            model_name=self.model_name,
-            max_tokens=max(256, int(max_response_tokens)),
+        repaired_message, repair_usage = _call_worker_model(
+            worker_messages=repair_messages,
             temperature=0.0,
-            stage="worker",
-            response_format={"type": "json_object"},
+            max_tokens=max(256, int(max_response_tokens)),
         )
+        try:
+            total_token_usage += int((repair_usage or {}).get("total_tokens", 0) or 0)
+        except (TypeError, ValueError):
+            pass
         repaired_text, _repaired_source = self.reconciler._extract_message_content_with_source(repaired_message)
 
         try:
-            return self._parse_worker_output(repaired_text, parse_stage="repair_retry")
+            repaired_output = self._parse_worker_output(
+                repaired_text,
+                parse_stage="repair_retry",
+                token_usage=total_token_usage,
+                budgeted_token_usage=budgeted_token_usage,
+                parse_attempts=2,
+                parse_recovery_used=True,
+            )
+            _metric_inc("worker_parse_recovery_success", 1)
+            return repaired_output
         except Exception as retry_error:
-            logger.error(
+            logger.warning(
                 "Worker parse failed [stage=repair_retry edge=%s] error=%s preview=%s",
                 packet.edge.as_tuple(),
                 retry_error,
                 self.reconciler._preview_text(repaired_text),
             )
+
+        regenerate_messages = messages + [
+            {
+                "role": "user",
+                "content": (
+                    "Return ONLY one strict JSON object matching this schema exactly: "
+                    '{"status":"<string>","candidates":[],"need_recursion":<bool>,"notes":"<string>"}'
+                ),
+            }
+        ]
+        regenerated_text = ""
+        try:
+            regenerated_message, regen_usage = _call_worker_model(
+                worker_messages=regenerate_messages,
+                temperature=0.0,
+                max_tokens=max(256, int(max_response_tokens)),
+            )
+            try:
+                total_token_usage += int((regen_usage or {}).get("total_tokens", 0) or 0)
+            except (TypeError, ValueError):
+                pass
+            regenerated_text, _regenerated_source = self.reconciler._extract_message_content_with_source(regenerated_message)
+            regenerated_output = self._parse_worker_output(
+                regenerated_text,
+                parse_stage="regenerate_retry",
+                token_usage=total_token_usage,
+                budgeted_token_usage=budgeted_token_usage,
+                parse_attempts=3,
+                parse_recovery_used=True,
+            )
+            _metric_inc("worker_parse_recovery_success", 1)
+            return regenerated_output
+        except Exception as regenerate_error:
+            logger.error(
+                "Worker parse failed [stage=regenerate_retry edge=%s] error=%s preview=%s",
+                packet.edge.as_tuple(),
+                regenerate_error,
+                self.reconciler._preview_text(regenerated_text),
+            )
+            _metric_inc("worker_parse_recovery_fail", 1)
             return WorkerOutput(
                 status="parse_error",
                 candidates=[],
                 need_recursion=False,
-                notes=f"Worker parse error: {retry_error}",
-                parse_stage="repair_retry",
-                raw_preview=self.reconciler._preview_text(repaired_text),
+                notes=f"Worker parse error: {regenerate_error}",
+                parse_stage="regenerate_retry",
+                raw_preview=self.reconciler._preview_text(regenerated_text),
+                token_usage=max(0, int(total_token_usage)),
+                budgeted_token_usage=max(0, int(budgeted_token_usage)),
+                parse_attempts=3,
+                parse_recovery_used=True,
             )
 
 
@@ -559,16 +977,72 @@ class RootScheduler:
         self.edge_max_tokens = max(1, int(edge_max_tokens))
         self.max_optional_docs_per_edge = max(0, int(max_optional_docs_per_edge))
         self._doc_entity_index_cache: Dict[str, Dict[str, Any]] = {}
+        self._pending_retry_briefs: Dict[Tuple[str, str, str, str], EdgeRetryBrief] = {}
+        self._guided_retry_counts: Dict[Tuple[str, str, str, str], int] = {}
+        self._last_guided_retry_signatures: Dict[Tuple[str, str, str, str], Tuple[Any, ...]] = {}
+
+    def _metrics_lock(self):
+        return getattr(self.reconciler, "_usage_lock", None)
 
     def _metric_value(self, key: str) -> int:
-        value = self.reconciler.rlm_metrics.get(key, 0)
+        lock = self._metrics_lock()
+        if lock:
+            with lock:
+                value = self.reconciler.rlm_metrics.get(key, 0)
+        else:
+            value = self.reconciler.rlm_metrics.get(key, 0)
         try:
             return int(value)
         except (TypeError, ValueError):
             return 0
 
     def _metric_inc(self, key: str, amount: int = 1) -> None:
+        lock = self._metrics_lock()
+        if lock:
+            with lock:
+                base = self.reconciler.rlm_metrics.get(key, 0)
+                try:
+                    base_int = int(base)
+                except (TypeError, ValueError):
+                    base_int = 0
+                self.reconciler.rlm_metrics[key] = base_int + int(amount)
+            return
         self.reconciler.rlm_metrics[key] = self._metric_value(key) + int(amount)
+
+    def _metric_add_float(self, key: str, amount: float) -> None:
+        lock = self._metrics_lock()
+        if lock:
+            with lock:
+                base = self.reconciler.rlm_metrics.get(key, 0.0)
+                try:
+                    base_float = float(base)
+                except (TypeError, ValueError):
+                    base_float = 0.0
+                self.reconciler.rlm_metrics[key] = base_float + float(amount)
+            return
+        current = self.reconciler.rlm_metrics.get(key, 0.0)
+        try:
+            current_float = float(current)
+        except (TypeError, ValueError):
+            current_float = 0.0
+        self.reconciler.rlm_metrics[key] = current_float + float(amount)
+
+    def _metric_set_max(self, key: str, candidate: int) -> None:
+        lock = self._metrics_lock()
+        if lock:
+            with lock:
+                base = self.reconciler.rlm_metrics.get(key, 0)
+                try:
+                    base_int = int(base)
+                except (TypeError, ValueError):
+                    base_int = 0
+                if int(candidate) > base_int:
+                    self.reconciler.rlm_metrics[key] = int(candidate)
+            return
+
+        base = self._metric_value(key)
+        if int(candidate) > base:
+            self.reconciler.rlm_metrics[key] = int(candidate)
 
     def _emit_event(self, event_type: str, data: Dict[str, Any]) -> None:
         callback = self.reconciler.output_callback
@@ -586,21 +1060,25 @@ class RootScheduler:
         planner_source: str,
         planner_reason: str,
         worker_invoked: bool = True,
+        retry_brief: Optional[EdgeRetryBrief] = None,
     ) -> None:
-        self._emit_event(
-            "rlm_worker_call",
-            {
-                "edge": edge.as_dict(),
-                "call_index": int(call_index),
-                "depth": int(depth),
-                "include_optional": bool(include_optional),
-                "remaining_edge_tokens": int(remaining_edge_tokens),
-                "planner_action": str(planner_action),
-                "planner_source": str(planner_source),
-                "planner_reason": str(planner_reason or ""),
-                "worker_invoked": bool(worker_invoked),
-            },
-        )
+        payload = {
+            "edge": edge.as_dict(),
+            "call_index": int(call_index),
+            "depth": int(depth),
+            "include_optional": bool(include_optional),
+            "remaining_edge_tokens": int(remaining_edge_tokens),
+            "planner_action": str(planner_action),
+            "planner_source": str(planner_source),
+            "planner_reason": str(planner_reason or ""),
+            "worker_invoked": bool(worker_invoked),
+        }
+        if retry_brief is not None:
+            payload["guided_retry"] = True
+            payload["retry_hint"] = retry_brief.retry_hint
+            payload["retry_attempt"] = int(retry_brief.retry_attempt)
+            payload["retry_failure_codes"] = list(retry_brief.failure_codes)
+        self._emit_event("rlm_worker_call", payload)
 
     def _emit_worker_result(
         self,
@@ -618,11 +1096,161 @@ class RootScheduler:
                 "candidates_count": int(len(worker_output.candidates)),
                 "need_recursion": bool(worker_output.need_recursion),
                 "parse_stage": str(worker_output.parse_stage),
+                "final_parse_stage": str(worker_output.parse_stage),
+                "parse_attempts": int(worker_output.parse_attempts),
+                "parse_recovery_used": bool(worker_output.parse_recovery_used),
                 "worker_notes": str(worker_output.notes or ""),
                 "accepted_delta": int(accepted_delta),
                 "rejected_delta": int(rejected_delta),
             },
         )
+
+    @staticmethod
+    def _edge_state_key(edge: EdgeKey) -> Tuple[str, str, str, str]:
+        return edge.as_tuple()
+
+    def _peek_pending_retry_brief(self, edge: EdgeKey) -> Optional[EdgeRetryBrief]:
+        return self._pending_retry_briefs.get(self._edge_state_key(edge))
+
+    def _pop_pending_retry_brief(self, edge: EdgeKey) -> Optional[EdgeRetryBrief]:
+        return self._pending_retry_briefs.pop(self._edge_state_key(edge), None)
+
+    def _set_pending_retry_brief(self, brief: EdgeRetryBrief) -> None:
+        self._pending_retry_briefs[self._edge_state_key(brief.edge)] = brief
+
+    def _guided_retry_count(self, edge: EdgeKey) -> int:
+        return int(self._guided_retry_counts.get(self._edge_state_key(edge), 0))
+
+    def _set_guided_retry_count(self, edge: EdgeKey, count: int) -> None:
+        self._guided_retry_counts[self._edge_state_key(edge)] = max(0, int(count))
+
+    def _last_guided_retry_signature(self, edge: EdgeKey) -> Optional[Tuple[Any, ...]]:
+        return self._last_guided_retry_signatures.get(self._edge_state_key(edge))
+
+    def _set_last_guided_retry_signature(self, edge: EdgeKey, signature: Tuple[Any, ...]) -> None:
+        self._last_guided_retry_signatures[self._edge_state_key(edge)] = signature
+
+    def _clear_guided_retry_state(self, edge: EdgeKey) -> None:
+        edge_key = self._edge_state_key(edge)
+        self._pending_retry_briefs.pop(edge_key, None)
+        self._guided_retry_counts.pop(edge_key, None)
+        self._last_guided_retry_signatures.pop(edge_key, None)
+
+    @staticmethod
+    def _trim_retry_text(value: Any, max_len: int = 160) -> str:
+        text = str(value or "").strip()
+        if len(text) <= max_len:
+            return text
+        return text[: max_len - 3].rstrip() + "..."
+
+    def _build_retry_brief(
+        self,
+        edge: EdgeKey,
+        candidate: Dict[str, Any],
+        verdict: Dict[str, Any],
+        retry_attempt: int = 0,
+    ) -> EdgeRetryBrief:
+        failure_codes = [
+            str(code).strip().upper()
+            for code in verdict.get("failure_codes", []) or []
+            if str(code).strip()
+        ]
+        return EdgeRetryBrief(
+            edge=edge,
+            failure_codes=failure_codes,
+            retryable=bool(verdict.get("retryable", False)),
+            retry_hint=str(verdict.get("retry_hint", "stop_edge") or "stop_edge"),
+            retry_reason=self._trim_retry_text(verdict.get("retry_reason") or verdict.get("notes") or "Stop this edge."),
+            rejected_question=self._trim_retry_text(candidate.get("question", "")),
+            rejected_reverse_question=self._trim_retry_text(candidate.get("reverse_question", "")),
+            retry_attempt=max(0, int(retry_attempt)),
+        )
+
+    @staticmethod
+    def _retry_brief_priority(brief: EdgeRetryBrief) -> Tuple[int, int, int]:
+        hint_priority = {
+            "stop_edge": 6,
+            "use_different_path_proof": 5,
+            "change_mapping": 4,
+            "fix_reverse_inversion": 3,
+            "strengthen_multihop_chain": 2,
+            "remove_answer_leak": 1,
+        }
+        return (
+            1 if brief.retry_hint == "stop_edge" else 0,
+            1 if brief.retryable else 0,
+            hint_priority.get(str(brief.retry_hint or ""), 0),
+        )
+
+    def _prefer_retry_brief(
+        self,
+        current: Optional[EdgeRetryBrief],
+        candidate: Optional[EdgeRetryBrief],
+    ) -> Optional[EdgeRetryBrief]:
+        if candidate is None:
+            return current
+        if current is None:
+            return candidate
+        if self._retry_brief_priority(candidate) > self._retry_brief_priority(current):
+            return candidate
+        return current
+
+    def _guided_retry_change_room(
+        self,
+        packet: EdgePacket,
+        path_proofs: List[PathProof],
+        include_optional: bool,
+        can_recurse: bool,
+        brief: EdgeRetryBrief,
+    ) -> bool:
+        if not path_proofs:
+            return False
+        if brief.retry_hint in {"fix_reverse_inversion", "remove_answer_leak"}:
+            return True
+        if len(path_proofs) > 1:
+            return True
+        return (not include_optional and bool(packet.optional_contexts) and can_recurse)
+
+    def _guided_retry_next_state(
+        self,
+        run_depth: int,
+        run_include_optional: bool,
+        brief: EdgeRetryBrief,
+        packet: EdgePacket,
+    ) -> Tuple[int, bool]:
+        next_depth = int(run_depth)
+        next_include_optional = bool(run_include_optional)
+        if (
+            brief.retry_hint in {"use_different_path_proof", "change_mapping", "strengthen_multihop_chain"}
+            and not next_include_optional
+            and bool(packet.optional_contexts)
+            and run_depth < self.edge_max_depth
+        ):
+            next_include_optional = True
+            next_depth = min(self.edge_max_depth, max(run_depth + 1, 1))
+        return next_depth, next_include_optional
+
+    def _guided_retry_signature(
+        self,
+        run_signature: Tuple[Any, ...],
+        candidate_signature: Tuple[Tuple[Any, ...], ...],
+        brief: EdgeRetryBrief,
+    ) -> Tuple[Any, ...]:
+        return (
+            run_signature,
+            candidate_signature,
+            brief.signature(),
+        )
+
+    def _emit_guided_retry_event(
+        self,
+        event_type: str,
+        brief: EdgeRetryBrief,
+        **extra: Any,
+    ) -> None:
+        payload = brief.as_dict()
+        payload.update(extra)
+        self._emit_event(event_type, payload)
 
     def _call_tool(self, tool_name: str, arguments: Dict[str, Any], doc_id: Optional[str] = None) -> Any:
         self._emit_event("tool_call", {"tool": tool_name, "arguments": arguments})
@@ -845,6 +1473,53 @@ class RootScheduler:
                 docs.add(ref.split("::", 1)[0].strip())
         return docs
 
+    @staticmethod
+    def _new_drop_reason_counts() -> Dict[str, int]:
+        return {code: 0 for code in DROP_REASON_CODES}
+
+    @staticmethod
+    def _merge_drop_reason_counts(target: Dict[str, int], reasons: Set[str]) -> None:
+        for code in reasons:
+            if code not in DROP_REASON_CODES:
+                continue
+            target[code] = int(target.get(code, 0)) + 1
+
+    @staticmethod
+    def _source_link_orientation(source_qa: Dict[str, Any], neighbor_name: str) -> str:
+        neighbor_norm = normalize_similarity_text(neighbor_name)
+        question_norm = normalize_similarity_text(source_qa.get("question", ""))
+        answer_norm = normalize_similarity_text(source_qa.get("answer", ""))
+        if neighbor_norm and answer_norm == neighbor_norm:
+            return "neighbor_as_answer"
+        if neighbor_norm and neighbor_norm in question_norm:
+            return "neighbor_in_question"
+        return "other"
+
+    def _resolve_source_subject_refs(
+        self,
+        edge: EdgeKey,
+        source_qa: Dict[str, Any],
+        source_answer_refs: List[str],
+    ) -> List[str]:
+        source_doc = str(source_qa.get("doc_id", edge.doc_id) or edge.doc_id).strip() or edge.doc_id
+        normalized_source_entity = self._normalize_entity_text(edge.entity_name)
+        refs: List[str] = []
+
+        if normalized_source_entity:
+            doc_index = self._get_doc_entity_index(source_doc)
+            for entity_id in sorted(doc_index["norm_to_ids"].get(normalized_source_entity, set())):
+                if not self._is_valid_entity_id(source_doc, entity_id):
+                    continue
+                refs.append(f"{source_doc}::{entity_id}")
+
+        if refs:
+            return self._dedupe_preserve_order(refs)
+
+        answer_norm = self._normalize_entity_text(source_qa.get("answer", ""))
+        if answer_norm and answer_norm == normalized_source_entity:
+            return self._dedupe_preserve_order(source_answer_refs)
+        return []
+
     def _mine_path_proofs(
         self,
         packet: EdgePacket,
@@ -867,11 +1542,17 @@ class RootScheduler:
         if include_optional:
             neighbor_contexts.extend(packet.optional_contexts)
 
-        proofs: List[PathProof] = []
+        proofs_by_orientation: Dict[str, List[PathProof]] = {
+            "neighbor_as_answer": [],
+            "neighbor_in_question": [],
+            "other": [],
+        }
         seen = set()
         for source_qa in source_links:
             source_refs = self._extract_valid_refs(source_qa)
             source_docs = self._refs_to_docs(source_refs) or {packet.edge.doc_id}
+            source_subject_refs = self._resolve_source_subject_refs(packet.edge, source_qa, source_refs)
+            orientation = self._source_link_orientation(source_qa, packet.edge.neighbor_name)
             for ctx in neighbor_contexts:
                 if not isinstance(ctx, dict):
                     continue
@@ -899,8 +1580,10 @@ class RootScheduler:
                         continue
 
                     signature = (
+                        orientation,
                         normalize_similarity_text(source_qa.get("question", "")),
                         normalize_similarity_text(neighbor_qa.get("question", "")),
+                        tuple(sorted(source_subject_refs)),
                         tuple(sorted(target_refs)),
                         tuple(path_docs),
                     )
@@ -908,7 +1591,7 @@ class RootScheduler:
                         continue
                     seen.add(signature)
 
-                    proofs.append(
+                    proofs_by_orientation[orientation].append(
                         PathProof(
                             edge=packet.edge,
                             source_fact={
@@ -925,11 +1608,32 @@ class RootScheduler:
                             },
                             path_docs=path_docs,
                             target_refs=target_refs,
+                            source_subject_refs=list(source_subject_refs),
                         )
                     )
-                    if len(proofs) >= max_paths:
-                        return proofs
-        return proofs
+
+        if max_paths <= 0:
+            return []
+
+        selected: List[PathProof] = []
+        orientation_order = ("neighbor_as_answer", "neighbor_in_question", "other")
+        cursors = {key: 0 for key in orientation_order}
+
+        while len(selected) < max_paths:
+            added = False
+            for key in orientation_order:
+                bucket = proofs_by_orientation.get(key, [])
+                cursor = cursors[key]
+                if cursor >= len(bucket):
+                    continue
+                selected.append(bucket[cursor])
+                cursors[key] = cursor + 1
+                added = True
+                if len(selected) >= max_paths:
+                    break
+            if not added:
+                break
+        return selected
 
     def _build_edge_packet(
         self,
@@ -963,6 +1667,7 @@ class RootScheduler:
             constraints={
                 "must_be_chain": True,
                 "reverse_required": True,
+                "curriculum_guidance": getattr(self.reconciler, "curriculum_guidance", None),
             },
             budget={
                 "max_depth": self.edge_max_depth,
@@ -1026,11 +1731,12 @@ class RootScheduler:
                 max_tokens=256,
                 temperature=0.0,
                 stage="root",
-                response_format={"type": "json_object"},
+                response_format=OptionalDocSelection,
             )
             raw_text, _source = self.reconciler._extract_message_content_with_source(message)
             parsed = self.reconciler._extract_json_from_text(raw_text)
-            selected = parsed.get("selected_doc_ids", [])
+            result = OptionalDocSelection.model_validate(parsed)
+            selected = result.selected_doc_ids
             if isinstance(selected, list):
                 allowed = {str(d["doc_id"]) for d in ranked}
                 cleaned = [str(doc).strip() for doc in selected if str(doc).strip() in allowed]
@@ -1222,17 +1928,37 @@ class RootScheduler:
             return matches[0]
         return None
 
-    def _sanitize_candidate_refs(self, packet: EdgePacket, candidate: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    @staticmethod
+    def _collect_path_proof_allowlist(path_proofs: List[PathProof]) -> Set[str]:
+        refs: Set[str] = set()
+        for proof in path_proofs:
+            for ref in proof.target_refs:
+                if isinstance(ref, str) and "::" in ref:
+                    refs.add(ref.strip())
+            for ref in proof.source_subject_refs:
+                if isinstance(ref, str) and "::" in ref:
+                    refs.add(ref.strip())
+            for ref in proof.source_fact.get("answer_refs", []) or []:
+                if isinstance(ref, str) and "::" in ref:
+                    refs.add(ref.strip())
+        return refs
+
+    def _sanitize_candidate_refs_with_reasons(
+        self,
+        packet: EdgePacket,
+        candidate: Dict[str, Any],
+        extra_allowed_refs: Optional[Set[str]] = None,
+    ) -> Tuple[Optional[Dict[str, Any]], Set[str]]:
         raw_source_docs = candidate.get("source_docs", [])
         allowed_docs = [str(d).strip() for d in packet.source_docs if str(d).strip()]
         if not allowed_docs:
-            return None
+            return None, {"missing_target_ref"}
 
         allowed_docs_set = set(allowed_docs)
         candidate_docs = [str(d).strip() for d in raw_source_docs if str(d).strip() in allowed_docs_set]
         source_docs_for_resolution = self._dedupe_preserve_order(candidate_docs + allowed_docs)
         if len(source_docs_for_resolution) < 2:
-            return None
+            return None, {"no_cross_doc_evidence"}
 
         context_ref_map = self._build_context_answer_ref_map(packet)
         allowed_refs = {
@@ -1241,35 +1967,48 @@ class RootScheduler:
             for ref in refs
             if isinstance(ref, str) and "::" in ref
         }
+        if extra_allowed_refs:
+            allowed_refs.update(
+                ref.strip()
+                for ref in extra_allowed_refs
+                if isinstance(ref, str) and "::" in ref
+            )
         if not allowed_refs:
-            return None
+            return None, {"missing_target_ref"}
 
         resolved_answers: List[str] = []
-        unresolved: List[str] = []
+        unresolved_forward: List[str] = []
         for answer in candidate.get("answers", []):
             resolved = self._resolve_answer_ref(str(answer), source_docs_for_resolution, context_ref_map, allowed_refs)
             if resolved:
                 resolved_answers.append(resolved)
             else:
-                unresolved.append(str(answer))
+                unresolved_forward.append(str(answer))
 
         resolved_reverse: List[str] = []
+        unresolved_reverse: List[str] = []
         for answer in candidate.get("reverse_answers", []):
             resolved = self._resolve_answer_ref(str(answer), source_docs_for_resolution, context_ref_map, allowed_refs)
             if resolved:
                 resolved_reverse.append(resolved)
             else:
-                unresolved.append(str(answer))
+                unresolved_reverse.append(str(answer))
 
         resolved_answers = self._dedupe_preserve_order(resolved_answers)
         resolved_reverse = self._dedupe_preserve_order(resolved_reverse)
-        if unresolved or not resolved_answers or not resolved_reverse:
+        if unresolved_forward or unresolved_reverse or not resolved_answers or not resolved_reverse:
+            reasons: Set[str] = set()
+            if unresolved_forward or not resolved_answers:
+                reasons.add("missing_target_ref")
+            if unresolved_reverse or not resolved_reverse:
+                reasons.add("missing_source_ref")
             logger.debug(
-                "Dropping unresolved worker candidate [edge=%s unresolved=%s]",
+                "Dropping unresolved worker candidate [edge=%s unresolved_forward=%s unresolved_reverse=%s]",
                 packet.edge.as_tuple(),
-                unresolved[:6],
+                unresolved_forward[:4],
+                unresolved_reverse[:4],
             )
-            return None
+            return None, reasons
 
         docs_from_refs = {
             ref.split("::", 1)[0]
@@ -1282,28 +2021,255 @@ class RootScheduler:
                 packet.edge.as_tuple(),
                 sorted(docs_from_refs),
             )
-            return None
+            return None, {"no_cross_doc_evidence"}
         canonical_source_docs = self._dedupe_preserve_order(
             [doc for doc in source_docs_for_resolution if doc in docs_from_refs]
         )
         if len(canonical_source_docs) < 2:
-            return None
+            return None, {"no_cross_doc_evidence"}
 
         sanitized = dict(candidate)
         sanitized["answers"] = resolved_answers
         sanitized["reverse_answers"] = resolved_reverse
         sanitized["source_docs"] = canonical_source_docs
+        return sanitized, set()
+
+    def _sanitize_candidate_refs(
+        self,
+        packet: EdgePacket,
+        candidate: Dict[str, Any],
+        extra_allowed_refs: Optional[Set[str]] = None,
+    ) -> Optional[Dict[str, Any]]:
+        sanitized, _drop_reasons = self._sanitize_candidate_refs_with_reasons(
+            packet,
+            candidate,
+            extra_allowed_refs=extra_allowed_refs,
+        )
         return sanitized
 
-    def _apply_candidates(self, packet: EdgePacket, candidates: List[Dict[str, Any]]) -> Tuple[int, int]:
+    def _prevalidate_commit_candidates(self, candidates: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], int]:
+        """Run non-mutating validation/canonicalization before verifier calls."""
+        prepared: List[Dict[str, Any]] = []
+        rejected = 0
+        seen_signatures: Set[Tuple[Any, ...]] = set()
+        lookup_cache = getattr(self.reconciler, "_lookup_rejected_bridge_cache", None)
+        emit_cache_hit = getattr(self.reconciler, "_emit_pre_verifier_cache_hit", None)
+        signature_builder = getattr(self.reconciler, "_bridge_signature", None)
+
+        for candidate in candidates:
+            prevalidated = self.reconciler.tools.prevalidate_bridge_qa(candidate)
+            if not isinstance(prevalidated, dict) or not prevalidated.get("valid"):
+                rejected += 1
+                continue
+
+            bridge_spec = prevalidated.get("bridge_spec", {})
+            if not isinstance(bridge_spec, dict):
+                rejected += 1
+                continue
+
+            cached = lookup_cache(bridge_spec) if callable(lookup_cache) else None
+            if cached is not None:
+                if callable(emit_cache_hit):
+                    emit_cache_hit(bridge_spec, cached)
+                rejected += 1
+                continue
+
+            if callable(signature_builder):
+                signature = signature_builder(bridge_spec)
+            else:
+                signature = (
+                    normalize_similarity_text(bridge_spec.get("question", "")),
+                    normalize_similarity_text(bridge_spec.get("reverse_question", "")),
+                    tuple(sorted(str(v).strip().lower() for v in bridge_spec.get("answers", []) if str(v).strip())),
+                    tuple(sorted(str(v).strip().lower() for v in bridge_spec.get("reverse_answers", []) if str(v).strip())),
+                    tuple(sorted(str(v).strip().lower() for v in bridge_spec.get("source_docs", []) if str(v).strip())),
+                )
+            if signature in seen_signatures:
+                continue
+            seen_signatures.add(signature)
+            prepared.append(bridge_spec)
+
+        return prepared, rejected
+
+    @staticmethod
+    def _max_similarity_from_signal(similarity_signal: Any) -> float:
+        """Compute the max similarity score from a similarity_signal payload."""
+        if not isinstance(similarity_signal, list):
+            return 0.0
+        max_similarity = 0.0
+        for hit in similarity_signal:
+            if not isinstance(hit, dict):
+                continue
+            try:
+                score = float(hit.get("max_similarity", 0.0) or 0.0)
+            except (TypeError, ValueError):
+                continue
+            if score > max_similarity:
+                max_similarity = score
+        return max(0.0, min(1.0, max_similarity))
+
+    def _parallel_verifier_screen(
+        self,
+        edge: EdgeKey,
+        candidates: List[Dict[str, Any]],
+        retry_attempt: int = 0,
+    ) -> Tuple[List[Dict[str, Any]], int, Dict[str, int], Optional[EdgeRetryBrief]]:
+        """Run verifier in parallel and keep only passing candidates."""
+        if not candidates:
+            return [], 0, {}, None
+
+        verifier_enabled = bool(getattr(self.reconciler, "bridge_verifier_enabled", False))
+        if not verifier_enabled:
+            return list(candidates), 0, {}, None
+
+        max_workers = max(1, int(getattr(self.reconciler, "verifier_parallel_workers", 4)))
+        workers_used = min(max_workers, len(candidates))
+        self._metric_set_max("verifier_parallel_workers_used", workers_used)
+        verify_gate = getattr(self.reconciler, "verify_bridge_candidate_gate", None)
+        verify_once = getattr(self.reconciler, "_verify_bridge_candidate", None)
+        if not callable(verify_gate) and not callable(verify_once):
+            return list(candidates), 0, {}, None
+
+        start = time.perf_counter()
+        verdicts: Dict[int, Tuple[Dict[str, Any], bool]] = {}
+        with ThreadPoolExecutor(max_workers=workers_used) as pool:
+            def _verify(candidate: Dict[str, Any]) -> Tuple[Dict[str, Any], bool]:
+                if callable(verify_gate):
+                    return verify_gate(candidate)
+                verdict = verify_once(candidate)
+                score = float(verdict.get("score", 0.0) or 0.0)
+                passes_gate = bool(verdict.get("pass")) and score >= float(getattr(self.reconciler, "bridge_verifier_threshold", 0.75))
+                return verdict, passes_gate
+
+            futures = {
+                pool.submit(_verify, candidate): idx
+                for idx, candidate in enumerate(candidates)
+            }
+            for future in as_completed(futures):
+                idx = futures[future]
+                try:
+                    verdicts[idx] = future.result()
+                except Exception as exc:
+                    verdicts[idx] = (
+                        {
+                            "pass": False,
+                            "score": 0.0,
+                            "failure_codes": ["VERIFIER_ERROR"],
+                            "notes": f"Parallel verifier error: {exc}",
+                        },
+                        False,
+                    )
+        self._metric_add_float("parallel_verifier_seconds", time.perf_counter() - start)
+
+        passing: List[Dict[str, Any]] = []
+        rejected = 0
+        failure_code_counts: Dict[str, int] = {}
+        retry_brief: Optional[EdgeRetryBrief] = None
+        for idx, candidate in enumerate(candidates):
+            verdict, passes_gate = verdicts.get(
+                idx,
+                ({"pass": False, "score": 0.0, "failure_codes": ["VERIFIER_MISSING"], "notes": "Missing verifier verdict."}, False),
+            )
+            if passes_gate:
+                passing.append(candidate)
+            else:
+                retry_brief = self._prefer_retry_brief(
+                    retry_brief,
+                    self._build_retry_brief(edge, candidate, verdict, retry_attempt=retry_attempt),
+                )
+                for code in verdict.get("failure_codes", []) or []:
+                    if not isinstance(code, str) or not code.strip():
+                        continue
+                    norm_code = code.strip().upper()
+                    failure_code_counts[norm_code] = int(failure_code_counts.get(norm_code, 0)) + 1
+                rejected += 1
+        return passing, rejected, failure_code_counts, retry_brief
+
+    def _commit_preverified_candidates(
+        self,
+        edge: EdgeKey,
+        candidates: List[Dict[str, Any]],
+        retry_attempt: int = 0,
+    ) -> Tuple[int, int, bool, Optional[EdgeRetryBrief]]:
+        """Create already-verified candidates serially with deterministic ordering."""
+        accepted = 0
+        rejected = 0
+        cap_hit = False
+        retry_brief: Optional[EdgeRetryBrief] = None
+        accepted_cap = max(1, int(getattr(self.reconciler, "edge_max_accepted_bridges", 10)))
+        verifier_enabled = bool(getattr(self.reconciler, "bridge_verifier_enabled", False))
+        verify_gate = getattr(self.reconciler, "verify_bridge_candidate_gate", None)
+
+        for candidate in candidates:
+            if accepted >= accepted_cap:
+                cap_hit = True
+                break
+
+            refreshed = self.reconciler.tools.prevalidate_bridge_qa(candidate)
+            if not isinstance(refreshed, dict) or not refreshed.get("valid"):
+                rejected += 1
+                continue
+
+            bridge_spec = refreshed.get("bridge_spec", {})
+            if not isinstance(bridge_spec, dict):
+                rejected += 1
+                continue
+
+            similarity_max = self._max_similarity_from_signal(bridge_spec.get("similarity_signal", []))
+            if (
+                verifier_enabled
+                and callable(verify_gate)
+                and similarity_max >= COMMIT_SIMILARITY_RECHECK_THRESHOLD
+            ):
+                verdict, passes_gate = verify_gate(bridge_spec)
+                if not passes_gate:
+                    retry_brief = self._prefer_retry_brief(
+                        retry_brief,
+                        self._build_retry_brief(edge, bridge_spec, verdict, retry_attempt=retry_attempt),
+                    )
+                    rejected += 1
+                    continue
+
+            result = self._call_tool(
+                "create_bridge_qa",
+                {"bridges": [bridge_spec], "__preverified": True},
+                doc_id=edge.doc_id,
+            )
+            items = result if isinstance(result, list) else [result]
+            for item in items:
+                if isinstance(item, dict) and item.get("success"):
+                    accepted += 1
+                else:
+                    rejected += 1
+
+        if cap_hit:
+            self._metric_inc("edge_accept_cap_hits", 1)
+        return accepted, rejected, cap_hit, retry_brief
+
+    def _apply_candidates(
+        self,
+        packet: EdgePacket,
+        candidates: List[Dict[str, Any]],
+        path_proofs: Optional[List[PathProof]] = None,
+        drop_reason_counts: Optional[Dict[str, int]] = None,
+        retry_attempt: int = 0,
+    ) -> Tuple[int, int, bool, Optional[EdgeRetryBrief]]:
         accepted = 0
         rejected = 0
         seen_signatures: Set[Tuple[Any, ...]] = set()
+        deduped_sanitized: List[Dict[str, Any]] = []
+        reasons = drop_reason_counts if drop_reason_counts is not None else self._new_drop_reason_counts()
+        proof_allowlist = self._collect_path_proof_allowlist(path_proofs or [])
 
         for candidate in candidates:
-            sanitized = self._sanitize_candidate_refs(packet, candidate)
+            sanitized, sanitize_reasons = self._sanitize_candidate_refs_with_reasons(
+                packet,
+                candidate,
+                extra_allowed_refs=proof_allowlist,
+            )
             if sanitized is None:
                 rejected += 1
+                self._merge_drop_reason_counts(reasons, sanitize_reasons)
                 continue
 
             signature = self._exact_candidate_signature(sanitized)
@@ -1314,23 +2280,34 @@ class RootScheduler:
                 )
                 continue
             seen_signatures.add(signature)
+            deduped_sanitized.append(sanitized)
 
-            result = self._call_tool(
-                "create_bridge_qa",
-                {"bridges": [sanitized]},
-                doc_id=packet.edge.doc_id,
+        prepared, prevalidation_rejected = self._prevalidate_commit_candidates(deduped_sanitized)
+        rejected += prevalidation_rejected
+        passing, verifier_rejected, verifier_failure_codes, retry_brief = self._parallel_verifier_screen(
+            packet.edge,
+            prepared,
+            retry_attempt=retry_attempt,
+        )
+        rejected += verifier_rejected
+        if verifier_failure_codes.get("REVERSE_INVALID"):
+            reasons["reverse_not_invertible"] = int(reasons.get("reverse_not_invertible", 0)) + int(
+                verifier_failure_codes["REVERSE_INVALID"]
             )
-            items = result if isinstance(result, list) else [result]
-            for item in items:
-                if isinstance(item, dict) and item.get("success"):
-                    accepted += 1
-                else:
-                    rejected += 1
-
-        return accepted, rejected
+        accepted, commit_rejected, cap_hit, commit_retry_brief = self._commit_preverified_candidates(
+            packet.edge,
+            passing,
+            retry_attempt=retry_attempt,
+        )
+        retry_brief = self._prefer_retry_brief(retry_brief, commit_retry_brief)
+        rejected += commit_rejected
+        if candidates and accepted == 0 and rejected > 0:
+            reasons["all_candidates_rejected"] = int(reasons.get("all_candidates_rejected", 0)) + 1
+        return accepted, rejected, cap_hit, retry_brief
 
     def _run_edge(self, edge: EdgeKey) -> EdgeRunResult:
         start_tokens = self.reconciler.tokens_used
+        self._clear_guided_retry_state(edge)
 
         source_context = self._call_tool(
             "get_entity_context",
@@ -1372,19 +2349,24 @@ class RootScheduler:
         budget_exhausted = False
         call_count = 0
         no_candidate_calls = 0
+        drop_reason_counts = self._new_drop_reason_counts()
         last_failure_signature: Optional[Tuple[Tuple[Any, ...], ...]] = None
         last_failure_state: Optional[Tuple[int, bool, bool, int]] = None
         close_reason = "call_limit_reached"
         close_detail = f"Reached edge call limit ({edge_call_limit})."
         last_worker_output: Optional[WorkerOutput] = None
         last_run_signature: Optional[Tuple[Any, ...]] = None
+        active_retry_brief: Optional[EdgeRetryBrief] = None
+        guided_retry_count = 0
+        last_retry_hint = ""
+        last_retry_failure_codes: List[str] = []
 
         depth = 0
         include_optional = False
+        edge_budget_spend = 0
 
         while call_count < edge_call_limit:
-            edge_spend = self.reconciler.tokens_used - start_tokens
-            remaining_edge_tokens = edge_token_limit - edge_spend
+            remaining_edge_tokens = edge_token_limit - edge_budget_spend
             if remaining_edge_tokens <= 0:
                 budget_exhausted = True
                 close_reason = "budget_exhausted"
@@ -1430,7 +2412,7 @@ class RootScheduler:
                 bool(include_optional),
                 viability["evidence_signature"],
             )
-            if call_count > 0 and run_signature == last_run_signature and accepted_total == 0:
+            if call_count > 0 and run_signature == last_run_signature and accepted_total == 0 and active_retry_brief is None:
                 self._metric_inc("calls_blocked_no_progress", 1)
                 close_reason = "no_progress_repeat"
                 close_detail = (
@@ -1442,6 +2424,17 @@ class RootScheduler:
             last_run_signature = run_signature
 
             call_index = call_count + 1
+            current_retry_brief = active_retry_brief
+            if current_retry_brief is not None:
+                self._metric_inc("guided_retry_started", 1)
+                self._emit_guided_retry_event(
+                    "guided_retry_started",
+                    current_retry_brief,
+                    mode="rlm",
+                    call_index=call_index,
+                    depth=depth,
+                    include_optional=include_optional,
+                )
             self._emit_worker_call(
                 edge=edge,
                 call_index=call_index,
@@ -1452,6 +2445,7 @@ class RootScheduler:
                 planner_source="deterministic",
                 planner_reason="root_scheduler_default",
                 worker_invoked=True,
+                retry_brief=current_retry_brief,
             )
             worker_output = self.worker.generate(
                 packet=packet,
@@ -1459,15 +2453,24 @@ class RootScheduler:
                 include_optional=include_optional,
                 max_response_tokens=min(1400, remaining_edge_tokens),
                 render_input=render_input,
+                retry_brief=current_retry_brief,
             )
+            active_retry_brief = None
             call_count = call_index
             last_worker_output = worker_output
+            edge_budget_spend += max(0, int(getattr(worker_output, "budgeted_token_usage", 0)))
 
             attempted_total += len(worker_output.candidates)
             if not worker_output.candidates:
                 no_candidate_calls += 1
 
-            accepted, rejected = self._apply_candidates(packet, worker_output.candidates)
+            accepted, rejected, cap_hit, retry_brief = self._apply_candidates(
+                packet,
+                worker_output.candidates,
+                path_proofs=path_proofs,
+                drop_reason_counts=drop_reason_counts,
+                retry_attempt=guided_retry_count + 1,
+            )
             accepted_total += accepted
             rejected_total += rejected
             self._emit_worker_result(
@@ -1479,16 +2482,29 @@ class RootScheduler:
             )
 
             # Enforce hard edge budget even if the latest model call overshot.
-            edge_spend = self.reconciler.tokens_used - start_tokens
-            if edge_spend >= edge_token_limit:
+            if edge_budget_spend >= edge_token_limit:
                 budget_exhausted = True
                 close_reason = "budget_exhausted"
                 close_detail = "Per-edge token budget exhausted after worker call."
                 break
 
             if accepted_total > 0:
+                if current_retry_brief is not None:
+                    self._metric_inc("guided_retry_succeeded", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_succeeded",
+                        current_retry_brief,
+                        mode="rlm",
+                        accepted_total=accepted_total,
+                    )
                 close_reason = "accepted_bridge"
-                close_detail = f"Accepted {accepted_total} bridge(s)."
+                if cap_hit:
+                    close_detail = (
+                        f"Accepted {accepted_total} bridge(s); hit per-edge acceptance cap "
+                        f"({getattr(self.reconciler, 'edge_max_accepted_bridges', 10)})."
+                    )
+                else:
+                    close_detail = f"Accepted {accepted_total} bridge(s)."
                 break
 
             can_recurse = depth < self.edge_max_depth
@@ -1506,6 +2522,73 @@ class RootScheduler:
             elif accepted > 0:
                 last_failure_state = None
                 last_failure_signature = None
+
+            if accepted == 0 and retry_brief is not None:
+                last_retry_hint = retry_brief.retry_hint
+                last_retry_failure_codes = list(retry_brief.failure_codes)
+                retry_signature = self._guided_retry_signature(run_signature, candidate_signature, retry_brief)
+                if retry_brief.retry_hint == "stop_edge" or not retry_brief.retryable:
+                    close_reason = "verifier_stop_edge"
+                    close_detail = retry_brief.retry_reason or "Verifier indicated this edge should stop."
+                    break
+                if guided_retry_count >= GUIDED_RETRY_LIMIT:
+                    self._metric_inc("guided_retry_exhausted", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_exhausted",
+                        retry_brief,
+                        mode="rlm",
+                        guided_retry_count=guided_retry_count,
+                        reason="retry_limit",
+                    )
+                    close_reason = "guided_retry_exhausted"
+                    close_detail = f"Reached guided retry limit ({GUIDED_RETRY_LIMIT}) for this edge."
+                    break
+                if not self._guided_retry_change_room(packet, path_proofs, include_optional, can_recurse, retry_brief):
+                    self._metric_inc("guided_retry_exhausted", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_exhausted",
+                        retry_brief,
+                        mode="rlm",
+                        guided_retry_count=guided_retry_count,
+                        reason="no_alternate_evidence",
+                    )
+                    close_reason = "guided_retry_exhausted"
+                    close_detail = "Verifier suggested retry, but no alternate same-edge evidence remains."
+                    break
+                if self._last_guided_retry_signature(edge) == retry_signature:
+                    self._metric_inc("guided_retry_blocked_no_progress", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_blocked_no_progress",
+                        retry_brief,
+                        mode="rlm",
+                        guided_retry_count=guided_retry_count,
+                    )
+                    close_reason = "guided_retry_blocked_no_progress"
+                    close_detail = "Blocked guided retry with unchanged verifier hint and evidence state."
+                    break
+
+                guided_retry_count += 1
+                self._set_guided_retry_count(edge, guided_retry_count)
+                self._set_last_guided_retry_signature(edge, retry_signature)
+                active_retry_brief = EdgeRetryBrief(
+                    edge=retry_brief.edge,
+                    failure_codes=list(retry_brief.failure_codes),
+                    retryable=retry_brief.retryable,
+                    retry_hint=retry_brief.retry_hint,
+                    retry_reason=retry_brief.retry_reason,
+                    rejected_question=retry_brief.rejected_question,
+                    rejected_reverse_question=retry_brief.rejected_reverse_question,
+                    retry_attempt=guided_retry_count,
+                )
+                self._metric_inc("guided_retry_scheduled", 1)
+                self._emit_guided_retry_event(
+                    "guided_retry_scheduled",
+                    active_retry_brief,
+                    mode="rlm",
+                    guided_retry_count=guided_retry_count,
+                )
+                depth, include_optional = self._guided_retry_next_state(depth, include_optional, active_retry_brief, packet)
+                continue
 
             if can_recurse and not include_optional and packet.optional_contexts:
                 include_optional = True
@@ -1530,6 +2613,7 @@ class RootScheduler:
                 close_reason = "no_candidates_no_progression"
                 close_detail = (
                     f"No candidates (notes='{worker_output.notes}', parse_stage={worker_output.parse_stage}, "
+                    f"parse_attempts={worker_output.parse_attempts}, "
                     f"accepted_delta={accepted}, rejected_delta={rejected})."
                 )
                 break
@@ -1550,6 +2634,7 @@ class RootScheduler:
             if last_worker_output is not None:
                 tail = (
                     f" last_parse_stage={last_worker_output.parse_stage};"
+                    f" last_parse_attempts={last_worker_output.parse_attempts};"
                     f" last_notes={last_worker_output.notes!r}"
                 )
             close_detail = (
@@ -1579,7 +2664,11 @@ class RootScheduler:
             budget_exhausted=budget_exhausted,
             edge_tokens=max(0, edge_tokens),
             property_attempted=False,
+            guided_retry_count=guided_retry_count,
+            last_retry_hint=last_retry_hint,
+            last_retry_failure_codes=list(last_retry_failure_codes),
         )
+        self._clear_guided_retry_state(edge)
 
         self._emit_event(
             "rlm_edge_summary",
@@ -1602,6 +2691,10 @@ class RootScheduler:
                 "close_detail": close_detail if close_detail else (
                     str(last_worker_output.notes) if last_worker_output is not None and last_worker_output.notes else ""
                 ),
+                "drop_reason_counts": drop_reason_counts,
+                "guided_retry_count": guided_retry_count,
+                "last_retry_hint": last_retry_hint,
+                "last_retry_failure_codes": list(last_retry_failure_codes),
             },
         )
 
@@ -1669,6 +2762,9 @@ class RootScheduler:
                     "budget_exhausted": er.budget_exhausted,
                     "edge_tokens": er.edge_tokens,
                     "property_attempted": er.property_attempted,
+                    "guided_retry_count": er.guided_retry_count,
+                    "last_retry_hint": er.last_retry_hint,
+                    "last_retry_failure_codes": list(er.last_retry_failure_codes),
                     "worker_prompt_version": WORKER_PROMPT_VERSION,
                 }
                 for er in edge_results
@@ -1735,6 +2831,10 @@ class HybridScheduler(RootScheduler):
         edge_max_tokens: int = 3000,
         max_optional_docs_per_edge: int = 2,
         hybrid_scope: str = "doc_edge",
+        edge_parallel_enabled: bool = False,
+        edge_parallel_workers: int = 1,
+        parallel_progress_heartbeat_seconds: float = 10.0,
+        parallel_stuck_warning_seconds: float = 60.0,
     ):
         super().__init__(
             reconciler=reconciler,
@@ -1745,16 +2845,37 @@ class HybridScheduler(RootScheduler):
             max_optional_docs_per_edge=max_optional_docs_per_edge,
         )
         self.hybrid_scope = hybrid_scope if hybrid_scope in self.VALID_SCOPES else "doc_edge"
+        self.edge_parallel_enabled = bool(edge_parallel_enabled)
+        self.edge_parallel_workers = max(1, int(edge_parallel_workers))
+        self.parallel_progress_heartbeat_seconds = max(0.1, float(parallel_progress_heartbeat_seconds))
+        self.parallel_stuck_warning_seconds = max(0.1, float(parallel_stuck_warning_seconds))
 
-    def _metric_value(self, key: str) -> int:
-        value = self.reconciler.rlm_metrics.get(key, 0)
-        try:
-            return int(value)
-        except (TypeError, ValueError):
-            return 0
+    @staticmethod
+    def _inflight_edges_from_futures(
+        pending: Set[Any],
+        future_to_edge: Dict[Any, EdgeKey],
+    ) -> List[Dict[str, Any]]:
+        inflight = [future_to_edge[future].as_dict() for future in pending if future in future_to_edge]
+        inflight.sort(
+            key=lambda edge: (
+                str(edge.get("doc_id", "")),
+                str(edge.get("entity_name", "")),
+                str(edge.get("neighbor_name", "")),
+                str(edge.get("relationship", "")),
+            )
+        )
+        return inflight
 
-    def _metric_inc(self, key: str, amount: int = 1) -> None:
-        self.reconciler.rlm_metrics[key] = self._metric_value(key) + int(amount)
+    @staticmethod
+    def _oldest_inflight_seconds(
+        pending: Set[Any],
+        start_times: Dict[Any, float],
+        now_ts: float,
+    ) -> float:
+        if not pending:
+            return 0.0
+        ages = [max(0.0, now_ts - float(start_times.get(future, now_ts))) for future in pending]
+        return max(ages) if ages else 0.0
 
     def _planner_fallback(
         self,
@@ -1786,6 +2907,16 @@ class HybridScheduler(RootScheduler):
         if decision_type == "edge_action":
             return PLANNER_EDGE_ACTION_EXAMPLES
         return ""
+
+    _PLANNER_RESPONSE_MODELS: Dict[str, type] = {
+        "corpus_doc_selection": PlannerCorpusDocSelection,
+        "doc_edge_selection": PlannerDocEdgeSelection,
+        "edge_action": PlannerEdgeAction,
+    }
+
+    def _planner_response_model(self, decision_type: str) -> Optional[type]:
+        """Return Pydantic model class for the given planner decision type."""
+        return self._PLANNER_RESPONSE_MODELS.get(decision_type)
 
     @staticmethod
     def _planner_schema_hint(decision_type: str) -> Dict[str, str]:
@@ -1892,7 +3023,10 @@ class HybridScheduler(RootScheduler):
         def _attempt(
             call_messages: List[Dict[str, str]],
             attempt_label: str,
+            use_structured: bool = True,
         ) -> Tuple[Optional[Dict[str, Any]], str, str]:
+            schema_cls = self._planner_response_model(decision_type) if use_structured else None
+            response_format = schema_cls or {"type": "json_object"}
             try:
                 message = self.reconciler._call_model_for_stage(
                     messages=call_messages,
@@ -1900,7 +3034,7 @@ class HybridScheduler(RootScheduler):
                     max_tokens=max(128, int(max_tokens)),
                     temperature=0.0,
                     stage="root",
-                    response_format={"type": "json_object"},
+                    response_format=response_format,
                 )
             except Exception as e:
                 return None, "", f"planner_call_error:{e}"
@@ -1951,7 +3085,7 @@ class HybridScheduler(RootScheduler):
             }
         )
 
-        parsed, retry_raw, retry_error = _attempt(repair_messages, "repair_retry")
+        parsed, retry_raw, retry_error = _attempt(repair_messages, "repair_retry", use_structured=False)
         if parsed is not None:
             return parsed
 
@@ -2162,11 +3296,1039 @@ class HybridScheduler(RootScheduler):
             "reason": reason,
         }
 
+    def _release_focus_internal(self, edge: EdgeKey) -> None:
+        release_fn = getattr(self.reconciler.tools, "release_neighbor_focus_internal", None)
+        if callable(release_fn):
+            release_fn(
+                doc_id=edge.doc_id,
+                entity_name=edge.entity_name,
+                neighbor_name=edge.neighbor_name,
+                relationship=edge.relationship,
+            )
+            return
+
+        active = getattr(self.reconciler.tools, "active_neighbor_focus", None)
+        if not isinstance(active, dict):
+            return
+        if (
+            str(active.get("doc_id", "")).strip().lower() == edge.doc_id.strip().lower()
+            and str(active.get("entity_name", "")).strip().lower() == edge.entity_name.strip().lower()
+            and str(active.get("neighbor_name", "")).strip().lower() == edge.neighbor_name.strip().lower()
+            and str(active.get("relationship", "")).strip().lower() == edge.relationship.strip().lower()
+        ):
+            self.reconciler.tools.active_neighbor_focus = None
+
+    def _is_edge_pending(self, edge: EdgeKey) -> bool:
+        plan = self.reconciler.tools.doc_exploration_plans.get(edge.doc_id)
+        if not isinstance(plan, dict):
+            return False
+        entity_key = edge.entity_name.strip().lower()
+        neighbor_key = edge.neighbor_name.strip().lower()
+        rel_key = edge.relationship.strip().lower()
+        for entity_plan in plan.get("entities_to_explore", []) or []:
+            if str(entity_plan.get("name", "")).strip().lower() != entity_key:
+                continue
+            for neighbor in entity_plan.get("neighbors", []) or []:
+                if (
+                    str(neighbor.get("entity", "")).strip().lower() == neighbor_key
+                    and str(neighbor.get("relationship", "")).strip().lower() == rel_key
+                    and str(neighbor.get("status", "")).strip().lower() == "pending"
+                ):
+                    return True
+        return False
+
+    def _prioritize_retry_edges(self, doc_id: str, edges: List[EdgeKey]) -> List[EdgeKey]:
+        retry_edge_keys = {
+            edge_key
+            for edge_key, brief in self._pending_retry_briefs.items()
+            if brief.edge.doc_id == doc_id
+        }
+        if not retry_edge_keys:
+            return edges
+        prioritized = sorted(
+            edges,
+            key=lambda edge: (
+                0 if edge.as_tuple() in retry_edge_keys else 1,
+                edges.index(edge),
+            ),
+        )
+        return prioritized
+
+    def _prepare_edge_work_parallel(self, edge: EdgeKey) -> Optional[PreparedEdgeWork]:
+        focus_acquired = False
+        retry_brief = self._peek_pending_retry_brief(edge)
+        guided_retry_count = self._guided_retry_count(edge)
+        try:
+            source_context = self._call_tool(
+                "get_entity_context",
+                {"entity_name": edge.entity_name, "doc_id": edge.doc_id},
+            )
+            if not isinstance(source_context, dict) or "error" in source_context:
+                source_context = {
+                    "entity": edge.entity_name,
+                    "doc_id": edge.doc_id,
+                    "qa_pairs": [],
+                    "roles": [],
+                    "states": [],
+                    "relationships": {},
+                }
+
+            focus_result = self._call_tool("begin_neighbor_focus", edge.as_dict(), doc_id=edge.doc_id)
+            if isinstance(focus_result, dict) and focus_result.get("error"):
+                self._emit_event(
+                    "edge_packet_prepared",
+                    {
+                        "edge": edge.as_dict(),
+                        "prepared": False,
+                        "reason": "focus_acquire_failed",
+                        "detail": str(focus_result.get("error", "")),
+                    },
+                )
+                return None
+            focus_acquired = True
+
+            coverage = self._call_tool("plan_neighbor_doc_coverage", edge.as_dict(), doc_id=edge.doc_id)
+            if not isinstance(coverage, dict) or "error" in coverage:
+                self._emit_event(
+                    "edge_packet_prepared",
+                    {
+                        "edge": edge.as_dict(),
+                        "prepared": False,
+                        "reason": "coverage_plan_failed",
+                        "detail": str((coverage or {}).get("error", "invalid_coverage")),
+                    },
+                )
+                return None
+
+            mandatory_docs = list(coverage.get("mandatory_docs", []))
+            optional_docs = self._select_optional_doc_ids(edge, coverage.get("optional_fuzzy_docs", []))
+
+            mandatory_contexts = self._collect_contexts_for_docs(edge.neighbor_name, mandatory_docs, source_doc=edge.doc_id)
+            optional_contexts = self._collect_contexts_for_docs(edge.neighbor_name, optional_docs, source_doc=edge.doc_id) if optional_docs else []
+
+            packet = self._build_edge_packet(edge, coverage, source_context, mandatory_contexts, optional_contexts)
+            signal = self._score_edge_signal(coverage, mandatory_contexts)
+            edge_call_limit, edge_token_limit = self._low_signal_budgets(signal)
+            viability = self._evaluate_edge_viability(packet, include_optional=False)
+            if signal.get("tier") == "low":
+                self._metric_inc("low_signal_edges", 1)
+
+            self._emit_event(
+                "edge_packet_prepared",
+                {
+                    "edge": edge.as_dict(),
+                    "prepared": True,
+                    "signal_tier": signal.get("tier"),
+                    "signal_score": signal.get("score"),
+                    "mandatory_docs": len(mandatory_docs),
+                    "optional_docs": len(optional_docs),
+                    "path_proof_count": int(viability.get("path_proof_count", 0)),
+                    "call_limit": int(edge_call_limit),
+                    "token_limit": int(edge_token_limit),
+                },
+            )
+            return PreparedEdgeWork(
+                edge=edge,
+                packet=packet,
+                signal=signal,
+                edge_call_limit=edge_call_limit,
+                edge_token_limit=edge_token_limit,
+                viability=viability,
+                retry_brief=retry_brief,
+                guided_retry_count=guided_retry_count,
+            )
+        finally:
+            if focus_acquired:
+                self._release_focus_internal(edge)
+
+    def _generate_parallel_worker_proposal(self, work: PreparedEdgeWork) -> EdgeWorkerProposal:
+        edge = work.edge
+        packet = work.packet
+        signal = work.signal
+
+        start_planner_decisions = self._metric_value("planner_decisions")
+        start_planner_fallbacks = self._metric_value("planner_fallbacks")
+        start_planner_stops = self._metric_value("planner_stop_actions")
+
+        attempted_total = 0
+        prefilter_rejected = 0
+        sanitized_candidates: List[Dict[str, Any]] = []
+        seen_signatures: Set[Tuple[Any, ...]] = set()
+        budget_exhausted = False
+        call_count = 0
+        no_candidate_calls = 0
+        drop_reason_counts = self._new_drop_reason_counts()
+        close_reason = "call_limit_reached"
+        close_detail = f"Reached edge call limit ({work.edge_call_limit})."
+        last_worker_output: Optional[WorkerOutput] = None
+        last_run_signature: Optional[Tuple[Any, ...]] = None
+        last_failure_signature: Optional[Tuple[Tuple[Any, ...], ...]] = None
+        last_failure_state: Optional[Tuple[int, bool, bool, int]] = None
+        last_worker_notes = ""
+        last_candidates_count = 0
+        last_rejected_delta = 0
+        active_retry_brief = work.retry_brief
+        guided_retry_count = int(work.guided_retry_count)
+        last_retry_hint = active_retry_brief.retry_hint if active_retry_brief is not None else ""
+        last_retry_failure_codes = list(active_retry_brief.failure_codes) if active_retry_brief is not None else []
+
+        depth = 0
+        include_optional = False
+        local_edge_budget_tokens = 0
+        local_edge_total_tokens = 0
+
+        while call_count < work.edge_call_limit:
+            edge_spend = max(0, int(local_edge_budget_tokens))
+            remaining_edge_tokens = work.edge_token_limit - edge_spend
+            if remaining_edge_tokens <= 0:
+                budget_exhausted = True
+                close_reason = "budget_exhausted"
+                close_detail = "Per-edge token budget exhausted before worker call."
+                break
+
+            viability = self._evaluate_edge_viability(packet, include_optional=include_optional)
+            action = self._plan_edge_action(
+                edge=edge,
+                current_depth=depth,
+                current_include_optional=include_optional,
+                call_count=call_count,
+                remaining_edge_tokens=remaining_edge_tokens,
+                accepted_total=0,
+                attempted_total=attempted_total,
+                rejected_total=prefilter_rejected,
+                no_candidate_calls=no_candidate_calls,
+                has_optional_contexts=bool(packet.optional_contexts),
+                path_proof_count=viability["path_proof_count"],
+                mandatory_context_count=viability["mandatory_context_count"],
+                optional_context_count=viability["optional_context_count"],
+                cross_doc_fact_count=viability["cross_doc_fact_count"],
+                last_worker_notes=last_worker_notes,
+                last_candidates_count=last_candidates_count,
+                last_rejected_delta=last_rejected_delta,
+                last_close_reason=close_reason,
+            )
+
+            if action.get("action") == "stop_edge":
+                self._emit_worker_call(
+                    edge=edge,
+                    call_index=call_count + 1,
+                    depth=depth,
+                    include_optional=include_optional,
+                    remaining_edge_tokens=remaining_edge_tokens,
+                    planner_action="stop_edge",
+                    planner_source=str(action.get("source", "")),
+                    planner_reason=str(action.get("reason", "")),
+                    worker_invoked=False,
+                    retry_brief=active_retry_brief,
+                )
+                self._metric_inc("planner_stop_actions", 1)
+                close_reason = "planner_stop"
+                close_detail = f"Planner stop accepted (reason='{str(action.get('reason', '')).strip()}')."
+                break
+
+            run_depth = int(action.get("depth", depth))
+            run_include_optional = bool(action.get("include_optional", include_optional)) and bool(packet.optional_contexts)
+            depth = run_depth
+            include_optional = run_include_optional
+            viability = self._evaluate_edge_viability(packet, include_optional=run_include_optional)
+            path_proofs = viability["path_proofs"]
+            proof_allowlist = self._collect_path_proof_allowlist(path_proofs)
+            render_input = RenderInput(
+                edge=edge,
+                proofs=path_proofs,
+                constraints=packet.constraints,
+            ) if path_proofs else None
+
+            no_path_proofs = viability["path_proof_count"] == 0
+            can_optional_probe = (
+                call_count == 0
+                and not run_include_optional
+                and not packet.mandatory_contexts
+                and bool(packet.optional_contexts)
+                and run_depth < self.edge_max_depth
+            )
+            if no_path_proofs:
+                self._metric_inc("planner_actions_overridden", 1)
+                self._planner_fallback(
+                    "run_worker_overridden_no_path",
+                    {
+                        "edge": edge.as_dict(),
+                        "mandatory_contexts": viability["mandatory_context_count"],
+                        "optional_contexts": viability["optional_context_count"],
+                        "cross_doc_facts": viability["cross_doc_fact_count"],
+                    },
+                    decision_type="edge_action",
+                )
+                if can_optional_probe:
+                    include_optional = True
+                    depth = min(self.edge_max_depth, max(run_depth + 1, 1))
+                    self._metric_inc("recursive_invocations", 1)
+                    continue
+
+                self._emit_worker_call(
+                    edge=edge,
+                    call_index=call_count + 1,
+                    depth=run_depth,
+                    include_optional=run_include_optional,
+                    remaining_edge_tokens=remaining_edge_tokens,
+                    planner_action="run_worker",
+                    planner_source=str(action.get("source", "")),
+                    planner_reason=str(action.get("reason", "")),
+                    worker_invoked=False,
+                    retry_brief=active_retry_brief,
+                )
+                self._metric_inc("edges_skipped_no_path", 1)
+                close_reason = "no_viable_path_proof"
+                close_detail = (
+                    "No viable path proofs before worker call "
+                    f"(mandatory_contexts={viability['mandatory_context_count']}, "
+                    f"optional_contexts={viability['optional_context_count']}, "
+                    f"cross_doc_facts={viability['cross_doc_fact_count']})."
+                )
+                break
+
+            run_signature = (
+                int(run_depth),
+                bool(run_include_optional),
+                viability["evidence_signature"],
+            )
+            if call_count > 0 and run_signature == last_run_signature and active_retry_brief is None:
+                self._metric_inc("planner_actions_overridden", 1)
+                self._metric_inc("calls_blocked_no_progress", 1)
+                self._planner_fallback(
+                    "run_worker_overridden_no_progress",
+                    {
+                        "edge": edge.as_dict(),
+                        "run_depth": run_depth,
+                        "run_include_optional": run_include_optional,
+                        "evidence_signature": list(viability["evidence_signature"]),
+                    },
+                    decision_type="edge_action",
+                )
+                self._emit_worker_call(
+                    edge=edge,
+                    call_index=call_count + 1,
+                    depth=run_depth,
+                    include_optional=run_include_optional,
+                    remaining_edge_tokens=remaining_edge_tokens,
+                    planner_action="run_worker",
+                    planner_source=str(action.get("source", "")),
+                    planner_reason=str(action.get("reason", "")),
+                    worker_invoked=False,
+                    retry_brief=active_retry_brief,
+                )
+                close_reason = "repeated_failure"
+                close_detail = "Blocked repeated worker call with unchanged evidence state."
+                break
+            last_run_signature = run_signature
+
+            call_index = call_count + 1
+            if active_retry_brief is not None:
+                self._metric_inc("guided_retry_started", 1)
+                self._emit_guided_retry_event(
+                    "guided_retry_started",
+                    active_retry_brief,
+                    mode="hybrid_parallel_generation",
+                    call_index=call_index,
+                    depth=run_depth,
+                    include_optional=run_include_optional,
+                )
+            self._emit_event(
+                "edge_worker_dispatched",
+                {
+                    "edge": edge.as_dict(),
+                    "call_index": call_index,
+                    "depth": run_depth,
+                    "include_optional": run_include_optional,
+                },
+            )
+            self._emit_worker_call(
+                edge=edge,
+                call_index=call_index,
+                depth=run_depth,
+                include_optional=run_include_optional,
+                remaining_edge_tokens=remaining_edge_tokens,
+                planner_action=str(action.get("action", "run_worker")),
+                planner_source=str(action.get("source", "")),
+                planner_reason=str(action.get("reason", "")),
+                worker_invoked=True,
+                retry_brief=active_retry_brief,
+            )
+            worker_output = self.worker.generate(
+                packet=packet,
+                depth=run_depth,
+                include_optional=run_include_optional,
+                max_response_tokens=min(1400, remaining_edge_tokens),
+                render_input=render_input,
+                retry_brief=active_retry_brief,
+            )
+            active_retry_brief = None
+            self._emit_event(
+                "edge_worker_completed",
+                {
+                    "edge": edge.as_dict(),
+                    "call_index": call_index,
+                    "candidates_count": len(worker_output.candidates),
+                    "parse_stage": worker_output.parse_stage,
+                },
+            )
+            call_count = call_index
+            last_worker_output = worker_output
+            attempted_total += len(worker_output.candidates)
+            local_edge_total_tokens += max(0, int(getattr(worker_output, "token_usage", 0)))
+            local_edge_budget_tokens += max(0, int(getattr(worker_output, "budgeted_token_usage", 0)))
+            if not worker_output.candidates:
+                no_candidate_calls += 1
+
+            per_call_rejected = 0
+            per_call_sanitized = 0
+            for candidate in worker_output.candidates:
+                sanitized, sanitize_reasons = self._sanitize_candidate_refs_with_reasons(
+                    packet,
+                    candidate,
+                    extra_allowed_refs=proof_allowlist,
+                )
+                if sanitized is None:
+                    per_call_rejected += 1
+                    self._merge_drop_reason_counts(drop_reason_counts, sanitize_reasons)
+                    continue
+                signature = self._exact_candidate_signature(sanitized)
+                if signature in seen_signatures:
+                    continue
+                seen_signatures.add(signature)
+                sanitized_candidates.append(sanitized)
+                per_call_sanitized += 1
+            prefilter_rejected += per_call_rejected
+            if worker_output.candidates and per_call_sanitized == 0:
+                drop_reason_counts["all_candidates_rejected"] = int(
+                    drop_reason_counts.get("all_candidates_rejected", 0)
+                ) + 1
+            self._emit_worker_result(
+                edge=edge,
+                call_index=call_index,
+                worker_output=worker_output,
+                accepted_delta=0,
+                rejected_delta=per_call_rejected,
+            )
+
+            last_worker_notes = str(worker_output.notes or "")
+            last_candidates_count = int(len(worker_output.candidates))
+            last_rejected_delta = int(per_call_rejected)
+
+            edge_spend = max(0, int(local_edge_budget_tokens))
+            if edge_spend >= work.edge_token_limit:
+                budget_exhausted = True
+                close_reason = "budget_exhausted"
+                close_detail = "Per-edge token budget exhausted after worker call."
+                break
+
+            can_recurse = run_depth < self.edge_max_depth
+            state_key = (run_depth, run_include_optional, bool(render_input), len(path_proofs))
+            candidate_signature = self._candidate_signature(worker_output.candidates)
+            repeated_failure = (
+                bool(worker_output.candidates)
+                and last_failure_state == state_key
+                and last_failure_signature == candidate_signature
+            )
+            if worker_output.candidates:
+                last_failure_state = state_key
+                last_failure_signature = candidate_signature
+
+            if can_recurse and not run_include_optional and packet.optional_contexts and (
+                worker_output.need_recursion or not worker_output.candidates
+            ):
+                include_optional = True
+                depth = min(self.edge_max_depth, run_depth + 1)
+                self._metric_inc("recursive_invocations", 1)
+            elif can_recurse and worker_output.need_recursion and run_include_optional:
+                new_depth = min(self.edge_max_depth, run_depth + 1)
+                if new_depth > run_depth:
+                    depth = new_depth
+                    self._metric_inc("recursive_invocations", 1)
+
+            if repeated_failure:
+                self._metric_inc("repeated_failure_stops", 1)
+                close_reason = "repeated_failure"
+                close_detail = "Repeated candidate signature failure at same depth/state."
+                break
+
+            if not worker_output.candidates:
+                if include_optional != run_include_optional or depth != run_depth:
+                    continue
+                close_reason = "no_candidates_no_progression"
+                close_detail = (
+                    f"No candidates (notes='{worker_output.notes}', parse_stage={worker_output.parse_stage}, "
+                    f"parse_attempts={worker_output.parse_attempts}, "
+                    f"rejected_delta={per_call_rejected})."
+                )
+                break
+
+            if signal.get("probe_only"):
+                close_reason = "probe_only_no_success"
+                close_detail = "Probe-only edge produced no accepted candidates."
+                break
+
+            continue
+
+        if close_reason == "call_limit_reached":
+            tail = ""
+            if last_worker_output is not None:
+                tail = (
+                    f" last_parse_stage={last_worker_output.parse_stage};"
+                    f" last_parse_attempts={last_worker_output.parse_attempts};"
+                    f" last_notes={last_worker_output.notes!r}"
+                )
+            close_detail = (
+                f"Reached edge call limit ({work.edge_call_limit}); attempted_total={attempted_total}; "
+                f"prefilter_rejected={prefilter_rejected}; no_candidate_calls={no_candidate_calls};{tail}"
+            )
+
+        planner_decisions_delta = self._metric_value("planner_decisions") - start_planner_decisions
+        planner_fallbacks_delta = self._metric_value("planner_fallbacks") - start_planner_fallbacks
+        planner_stops_delta = self._metric_value("planner_stop_actions") - start_planner_stops
+
+        return EdgeWorkerProposal(
+            edge=edge,
+            packet=packet,
+            signal=signal,
+            attempted=attempted_total,
+            prefilter_rejected=prefilter_rejected,
+            sanitized_candidates=sanitized_candidates,
+            budget_exhausted=budget_exhausted,
+            edge_tokens=max(0, int(local_edge_total_tokens)),
+            worker_calls_made=call_count,
+            no_candidate_calls=no_candidate_calls,
+            close_reason=close_reason,
+            close_detail=close_detail,
+            planner_decisions=planner_decisions_delta,
+            planner_fallbacks=planner_fallbacks_delta,
+            planner_stop_actions=planner_stops_delta,
+            edge_call_limit=int(work.edge_call_limit),
+            edge_token_limit=int(work.edge_token_limit),
+            drop_reason_counts=drop_reason_counts,
+            retry_brief=work.retry_brief,
+            guided_retry_count=guided_retry_count,
+            last_retry_hint=last_retry_hint,
+            last_retry_failure_codes=last_retry_failure_codes,
+            last_run_signature=last_run_signature,
+        )
+
+    def _apply_sanitized_candidates(
+        self,
+        edge: EdgeKey,
+        candidates: List[Dict[str, Any]],
+        drop_reason_counts: Optional[Dict[str, int]] = None,
+        retry_attempt: int = 0,
+    ) -> Tuple[int, int, bool, Optional[EdgeRetryBrief]]:
+        reasons = drop_reason_counts if drop_reason_counts is not None else self._new_drop_reason_counts()
+        prepared, prevalidation_rejected = self._prevalidate_commit_candidates(candidates)
+        passing, verifier_rejected, verifier_failure_codes, retry_brief = self._parallel_verifier_screen(
+            edge,
+            prepared,
+            retry_attempt=retry_attempt,
+        )
+        if verifier_failure_codes.get("REVERSE_INVALID"):
+            reasons["reverse_not_invertible"] = int(reasons.get("reverse_not_invertible", 0)) + int(
+                verifier_failure_codes["REVERSE_INVALID"]
+            )
+        accepted, commit_rejected, cap_hit, commit_retry_brief = self._commit_preverified_candidates(
+            edge,
+            passing,
+            retry_attempt=retry_attempt,
+        )
+        retry_brief = self._prefer_retry_brief(retry_brief, commit_retry_brief)
+        rejected = prevalidation_rejected + verifier_rejected + commit_rejected
+        if candidates and accepted == 0 and rejected > 0:
+            reasons["all_candidates_rejected"] = int(reasons.get("all_candidates_rejected", 0)) + 1
+        return accepted, rejected, cap_hit, retry_brief
+
+    def _commit_edge_worker_proposal(self, proposal: EdgeWorkerProposal) -> EdgeRunResult:
+        edge = proposal.edge
+        accepted_total = 0
+        rejected_total = proposal.prefilter_rejected
+        close_reason = proposal.close_reason
+        close_detail = proposal.close_detail
+        drop_reason_counts = dict(proposal.drop_reason_counts or self._new_drop_reason_counts())
+        guided_retry_count = int(proposal.guided_retry_count)
+        last_retry_hint = str(proposal.last_retry_hint or "")
+        last_retry_failure_codes = list(proposal.last_retry_failure_codes or [])
+        mark_explored = True
+        self._pop_pending_retry_brief(edge)
+
+        focus_result = self._call_tool("begin_neighbor_focus", edge.as_dict(), doc_id=edge.doc_id)
+        if isinstance(focus_result, dict) and focus_result.get("error"):
+            close_reason = "stale_edge_skipped"
+            close_detail = str(focus_result.get("error", "focus_acquire_failed_at_commit"))
+            result = EdgeRunResult(
+                edge=edge,
+                accepted=0,
+                attempted=proposal.attempted,
+                rejected=rejected_total,
+                budget_exhausted=proposal.budget_exhausted,
+                edge_tokens=max(0, proposal.edge_tokens),
+                property_attempted=False,
+                guided_retry_count=guided_retry_count,
+                last_retry_hint=last_retry_hint,
+                last_retry_failure_codes=list(last_retry_failure_codes),
+            )
+            self._emit_event(
+                "rlm_edge_summary",
+                {
+                    "edge": edge.as_dict(),
+                    "accepted": result.accepted,
+                    "attempted": result.attempted,
+                    "rejected": result.rejected,
+                    "budget_exhausted": result.budget_exhausted,
+                    "edge_tokens": result.edge_tokens,
+                    "property_attempted": result.property_attempted,
+                    "signal_tier": proposal.signal.get("tier"),
+                    "signal_score": proposal.signal.get("score"),
+                    "no_candidate_calls": proposal.no_candidate_calls,
+                    "call_limit": int(proposal.edge_call_limit),
+                    "token_limit": int(proposal.edge_token_limit),
+                    "worker_prompt_version": WORKER_PROMPT_VERSION,
+                    "mode": "hybrid",
+                    "hybrid_scope": self.hybrid_scope,
+                    "planner_decisions": proposal.planner_decisions,
+                    "planner_fallbacks": proposal.planner_fallbacks,
+                    "planner_stop_actions": proposal.planner_stop_actions,
+                    "worker_calls_made": proposal.worker_calls_made,
+                    "close_reason": close_reason,
+                    "close_detail": close_detail,
+                    "drop_reason_counts": drop_reason_counts,
+                    "guided_retry_count": guided_retry_count,
+                    "last_retry_hint": last_retry_hint,
+                    "last_retry_failure_codes": list(last_retry_failure_codes),
+                },
+            )
+            return result
+
+        try:
+            coverage = self._call_tool("plan_neighbor_doc_coverage", edge.as_dict(), doc_id=edge.doc_id)
+            if not isinstance(coverage, dict) or "error" in coverage:
+                close_reason = "coverage_guard"
+                close_detail = str((coverage or {}).get("error", "coverage_refresh_failed"))
+            else:
+                accepted_apply, rejected_apply, cap_hit, retry_brief = self._apply_sanitized_candidates(
+                    edge,
+                    proposal.sanitized_candidates,
+                    drop_reason_counts=drop_reason_counts,
+                    retry_attempt=guided_retry_count + 1,
+                )
+                accepted_total += accepted_apply
+                rejected_total += rejected_apply
+                if accepted_total > 0:
+                    if proposal.retry_brief is not None:
+                        self._metric_inc("guided_retry_succeeded", 1)
+                        self._emit_guided_retry_event(
+                            "guided_retry_succeeded",
+                            proposal.retry_brief,
+                            mode="hybrid_parallel_commit",
+                            accepted_total=accepted_total,
+                        )
+                    close_reason = "accepted_bridge"
+                    if cap_hit:
+                        close_detail = (
+                            f"Accepted {accepted_total} bridge(s); hit per-edge acceptance cap "
+                            f"({getattr(self.reconciler, 'edge_max_accepted_bridges', 10)})."
+                        )
+                    else:
+                        close_detail = f"Accepted {accepted_total} bridge(s)."
+                    self._clear_guided_retry_state(edge)
+                elif retry_brief is not None:
+                    last_retry_hint = retry_brief.retry_hint
+                    last_retry_failure_codes = list(retry_brief.failure_codes)
+                    current_include_optional = False
+                    if isinstance(proposal.last_run_signature, tuple) and len(proposal.last_run_signature) >= 2:
+                        current_include_optional = bool(proposal.last_run_signature[1])
+                    viability = self._evaluate_edge_viability(proposal.packet, include_optional=current_include_optional)
+                    current_path_proofs = viability.get("path_proofs", [])
+                    can_recurse = (
+                        bool(proposal.packet.optional_contexts)
+                        and isinstance(proposal.last_run_signature, tuple)
+                        and len(proposal.last_run_signature) >= 1
+                        and int(proposal.last_run_signature[0]) < self.edge_max_depth
+                    ) if proposal.last_run_signature is not None else bool(proposal.packet.optional_contexts)
+                    retry_candidate_signature = (
+                        (normalize_similarity_text(retry_brief.rejected_question), normalize_similarity_text(retry_brief.rejected_reverse_question)),
+                    )
+                    retry_signature = self._guided_retry_signature(
+                        proposal.last_run_signature or ("parallel_commit", current_include_optional, ()),
+                        retry_candidate_signature,
+                        retry_brief,
+                    )
+                    if retry_brief.retry_hint == "stop_edge" or not retry_brief.retryable:
+                        close_reason = "verifier_stop_edge"
+                        close_detail = retry_brief.retry_reason or "Verifier indicated this edge should stop."
+                    elif guided_retry_count >= GUIDED_RETRY_LIMIT:
+                        self._metric_inc("guided_retry_exhausted", 1)
+                        self._emit_guided_retry_event(
+                            "guided_retry_exhausted",
+                            retry_brief,
+                            mode="hybrid_parallel_commit",
+                            guided_retry_count=guided_retry_count,
+                            reason="retry_limit",
+                        )
+                        close_reason = "guided_retry_exhausted"
+                        close_detail = f"Reached guided retry limit ({GUIDED_RETRY_LIMIT}) for this edge."
+                    elif not self._guided_retry_change_room(
+                        proposal.packet,
+                        current_path_proofs,
+                        current_include_optional,
+                        can_recurse,
+                        retry_brief,
+                    ):
+                        self._metric_inc("guided_retry_exhausted", 1)
+                        self._emit_guided_retry_event(
+                            "guided_retry_exhausted",
+                            retry_brief,
+                            mode="hybrid_parallel_commit",
+                            guided_retry_count=guided_retry_count,
+                            reason="no_alternate_evidence",
+                        )
+                        close_reason = "guided_retry_exhausted"
+                        close_detail = "Verifier suggested retry, but no alternate same-edge evidence remains."
+                    elif self._last_guided_retry_signature(edge) == retry_signature:
+                        self._metric_inc("guided_retry_blocked_no_progress", 1)
+                        self._emit_guided_retry_event(
+                            "guided_retry_blocked_no_progress",
+                            retry_brief,
+                            mode="hybrid_parallel_commit",
+                            guided_retry_count=guided_retry_count,
+                        )
+                        close_reason = "guided_retry_blocked_no_progress"
+                        close_detail = "Blocked guided retry with unchanged verifier hint and evidence state."
+                    else:
+                        guided_retry_count += 1
+                        scheduled_retry = EdgeRetryBrief(
+                            edge=retry_brief.edge,
+                            failure_codes=list(retry_brief.failure_codes),
+                            retryable=retry_brief.retryable,
+                            retry_hint=retry_brief.retry_hint,
+                            retry_reason=retry_brief.retry_reason,
+                            rejected_question=retry_brief.rejected_question,
+                            rejected_reverse_question=retry_brief.rejected_reverse_question,
+                            retry_attempt=guided_retry_count,
+                        )
+                        self._set_guided_retry_count(edge, guided_retry_count)
+                        self._set_last_guided_retry_signature(edge, retry_signature)
+                        self._set_pending_retry_brief(scheduled_retry)
+                        self._metric_inc("guided_retry_scheduled", 1)
+                        self._emit_guided_retry_event(
+                            "guided_retry_scheduled",
+                            scheduled_retry,
+                            mode="hybrid_parallel_commit",
+                            guided_retry_count=guided_retry_count,
+                        )
+                        close_reason = "guided_retry_scheduled"
+                        close_detail = scheduled_retry.retry_reason or "Requeued same edge with verifier-guided retry."
+                        mark_explored = False
+
+            if mark_explored:
+                mark_result = self._call_tool(
+                    "mark_neighbor_explored",
+                    {
+                        "doc_id": edge.doc_id,
+                        "entity_name": edge.entity_name,
+                        "neighbor_name": edge.neighbor_name,
+                        "relationship": edge.relationship,
+                        "bridges_created": accepted_total,
+                    },
+                    doc_id=edge.doc_id,
+                )
+                if isinstance(mark_result, dict) and mark_result.get("error"):
+                    close_reason = "coverage_guard" if mark_result.get("stage") == "coverage_guard" else "commit_mark_failed"
+                    close_detail = str(mark_result.get("error", "mark_neighbor_explored_failed"))
+                self._clear_guided_retry_state(edge)
+        finally:
+            self._release_focus_internal(edge)
+
+        if mark_explored:
+            self._metric_inc("edges_explored", 1)
+            if accepted_total > 0:
+                self._metric_inc("edges_with_bridges", 1)
+
+        edge_result = EdgeRunResult(
+            edge=edge,
+            accepted=accepted_total,
+            attempted=proposal.attempted,
+            rejected=rejected_total,
+            budget_exhausted=proposal.budget_exhausted,
+            edge_tokens=max(0, proposal.edge_tokens),
+            property_attempted=False,
+            guided_retry_count=guided_retry_count,
+            last_retry_hint=last_retry_hint,
+            last_retry_failure_codes=list(last_retry_failure_codes),
+        )
+
+        self._emit_event(
+            "rlm_edge_summary",
+            {
+                "edge": edge.as_dict(),
+                "accepted": edge_result.accepted,
+                "attempted": edge_result.attempted,
+                "rejected": edge_result.rejected,
+                "budget_exhausted": edge_result.budget_exhausted,
+                "edge_tokens": edge_result.edge_tokens,
+                "property_attempted": edge_result.property_attempted,
+                "signal_tier": proposal.signal.get("tier"),
+                "signal_score": proposal.signal.get("score"),
+                "no_candidate_calls": proposal.no_candidate_calls,
+                "call_limit": int(proposal.edge_call_limit),
+                "token_limit": int(proposal.edge_token_limit),
+                "worker_prompt_version": WORKER_PROMPT_VERSION,
+                "mode": "hybrid",
+                "hybrid_scope": self.hybrid_scope,
+                "planner_decisions": proposal.planner_decisions,
+                "planner_fallbacks": proposal.planner_fallbacks,
+                "planner_stop_actions": proposal.planner_stop_actions,
+                "worker_calls_made": proposal.worker_calls_made,
+                "close_reason": close_reason,
+                "close_detail": close_detail,
+                "drop_reason_counts": drop_reason_counts,
+                "guided_retry_count": guided_retry_count,
+                "last_retry_hint": last_retry_hint,
+                "last_retry_failure_codes": list(last_retry_failure_codes),
+            },
+        )
+        return edge_result
+
+    def _run_document_parallel(self, doc_id: str, max_edge_attempts: int) -> List[EdgeRunResult]:
+        edge_results: List[EdgeRunResult] = []
+        edge_attempts = 0
+
+        while edge_attempts < max_edge_attempts:
+            edges = self._prioritize_retry_edges(doc_id, self._iter_pending_edges(doc_id))
+            if not edges:
+                break
+
+            batch_edges = edges[: self.edge_parallel_workers]
+            if not batch_edges:
+                break
+
+            edge_attempts += len(batch_edges)
+            self._metric_inc("parallel_batches", 1)
+            self._metric_inc("parallel_workers_used", len(batch_edges))
+            self._metric_set_max("commit_queue_size_peak", len(batch_edges))
+
+            prepared_batch: List[PreparedEdgeWork] = []
+            for edge in batch_edges:
+                prepared = self._prepare_edge_work_parallel(edge)
+                if prepared is not None:
+                    prepared_batch.append(prepared)
+
+            if not prepared_batch:
+                break
+
+            generation_start = time.perf_counter()
+            proposals_by_edge: Dict[Tuple[str, str, str, str], EdgeWorkerProposal] = {}
+            batch_id = self._metric_value("parallel_batches")
+            batch_started_at_iso = datetime.now().isoformat()
+            with ThreadPoolExecutor(max_workers=min(self.edge_parallel_workers, len(prepared_batch))) as pool:
+                futures: Dict[Any, Tuple[str, str, str, str]] = {}
+                future_to_edge: Dict[Any, EdgeKey] = {}
+                for item in prepared_batch:
+                    future = pool.submit(self._generate_parallel_worker_proposal, item)
+                    futures[future] = item.edge.as_tuple()
+                    future_to_edge[future] = item.edge
+                future_start_times = {future: time.perf_counter() for future in futures}
+                warning_windows: Dict[Any, int] = {}
+                pending: Set[Any] = set(futures.keys())
+                completed = 0
+                total = len(futures)
+
+                self._emit_event(
+                    "parallel_batch_started",
+                    {
+                        "doc_id": doc_id,
+                        "batch_id": batch_id,
+                        "started_at": batch_started_at_iso,
+                        "completed": 0,
+                        "total": total,
+                        "inflight_edges": self._inflight_edges_from_futures(pending, future_to_edge),
+                        "oldest_inflight_seconds": 0.0,
+                        "elapsed_seconds": 0.0,
+                    },
+                )
+
+                while pending:
+                    done, still_pending = wait(
+                        pending,
+                        timeout=self.parallel_progress_heartbeat_seconds,
+                        return_when=FIRST_COMPLETED,
+                    )
+                    now_ts = time.perf_counter()
+                    elapsed = max(0.0, now_ts - generation_start)
+
+                    if done:
+                        for future in done:
+                            proposal = future.result()
+                            proposals_by_edge[proposal.edge.as_tuple()] = proposal
+                            pending.remove(future)
+                            completed += 1
+                            inflight_edges = self._inflight_edges_from_futures(pending, future_to_edge)
+                            self._emit_event(
+                                "parallel_batch_progress",
+                                {
+                                    "doc_id": doc_id,
+                                    "batch_id": batch_id,
+                                    "completed": completed,
+                                    "total": total,
+                                    "inflight_edges": inflight_edges,
+                                    "oldest_inflight_seconds": self._oldest_inflight_seconds(
+                                        pending, future_start_times, now_ts
+                                    ),
+                                    "elapsed_seconds": elapsed,
+                                    "completed_edge": proposal.edge.as_dict(),
+                                },
+                            )
+                    else:
+                        inflight_edges = self._inflight_edges_from_futures(still_pending, future_to_edge)
+                        self._emit_event(
+                            "parallel_batch_heartbeat",
+                            {
+                                "doc_id": doc_id,
+                                "batch_id": batch_id,
+                                "completed": completed,
+                                "total": total,
+                                "inflight_edges": inflight_edges,
+                                "oldest_inflight_seconds": self._oldest_inflight_seconds(
+                                    still_pending, future_start_times, now_ts
+                                ),
+                                "elapsed_seconds": elapsed,
+                            },
+                        )
+
+                    for future in list(still_pending):
+                        age = max(0.0, now_ts - float(future_start_times.get(future, now_ts)))
+                        if age < self.parallel_stuck_warning_seconds:
+                            continue
+                        current_window = int(age // self.parallel_stuck_warning_seconds)
+                        previous_window = warning_windows.get(future, -1)
+                        if current_window <= previous_window:
+                            continue
+                        warning_windows[future] = current_window
+                        stuck_edge = future_to_edge.get(future)
+                        if stuck_edge is None:
+                            continue
+                        self._emit_event(
+                            "parallel_worker_stuck_warning",
+                            {
+                                "doc_id": doc_id,
+                                "batch_id": batch_id,
+                                "completed": completed,
+                                "total": total,
+                                "edge": stuck_edge.as_dict(),
+                                "inflight_edges": self._inflight_edges_from_futures(still_pending, future_to_edge),
+                                "worker_inflight_seconds": age,
+                                "oldest_inflight_seconds": self._oldest_inflight_seconds(
+                                    still_pending, future_start_times, now_ts
+                                ),
+                                "elapsed_seconds": elapsed,
+                                "warning_threshold_seconds": self.parallel_stuck_warning_seconds,
+                            },
+                        )
+
+                self._emit_event(
+                    "parallel_batch_completed",
+                    {
+                        "doc_id": doc_id,
+                        "batch_id": batch_id,
+                        "completed": completed,
+                        "total": total,
+                        "inflight_edges": [],
+                        "oldest_inflight_seconds": 0.0,
+                        "elapsed_seconds": max(0.0, time.perf_counter() - generation_start),
+                    },
+                )
+            self._metric_add_float("parallel_generation_seconds", time.perf_counter() - generation_start)
+
+            commit_start = time.perf_counter()
+            for edge in batch_edges:
+                self._emit_event("edge_commit_started", {"edge": edge.as_dict()})
+                if not self._is_edge_pending(edge):
+                    self._metric_inc("stale_edge_skipped", 1)
+                    edge_result = EdgeRunResult(
+                        edge=edge,
+                        accepted=0,
+                        attempted=0,
+                        rejected=0,
+                        budget_exhausted=False,
+                        edge_tokens=0,
+                        property_attempted=False,
+                    )
+                    self._emit_event(
+                        "rlm_edge_summary",
+                        {
+                            "edge": edge.as_dict(),
+                            "accepted": 0,
+                            "attempted": 0,
+                            "rejected": 0,
+                            "budget_exhausted": False,
+                            "edge_tokens": 0,
+                            "property_attempted": False,
+                            "signal_tier": "n/a",
+                            "signal_score": 0.0,
+                            "no_candidate_calls": 0,
+                            "call_limit": 0,
+                            "token_limit": 0,
+                            "worker_prompt_version": WORKER_PROMPT_VERSION,
+                            "mode": "hybrid",
+                            "hybrid_scope": self.hybrid_scope,
+                            "planner_decisions": 0,
+                            "planner_fallbacks": 0,
+                            "planner_stop_actions": 0,
+                            "worker_calls_made": 0,
+                            "close_reason": "stale_edge_skipped",
+                            "close_detail": "Edge already explored before commit.",
+                            "drop_reason_counts": self._new_drop_reason_counts(),
+                        },
+                    )
+                    self._emit_event(
+                        "edge_commit_finished",
+                        {
+                            "edge": edge.as_dict(),
+                            "close_reason": "stale_edge_skipped",
+                            "accepted": 0,
+                        },
+                    )
+                    edge_results.append(edge_result)
+                    continue
+
+                proposal = proposals_by_edge.get(edge.as_tuple())
+                if proposal is None:
+                    self._metric_inc("stale_edge_skipped", 1)
+                    self._emit_event(
+                        "edge_commit_finished",
+                        {
+                            "edge": edge.as_dict(),
+                            "close_reason": "stale_edge_skipped",
+                            "accepted": 0,
+                            "detail": "No proposal generated for edge.",
+                        },
+                    )
+                    continue
+
+                edge_result = self._commit_edge_worker_proposal(proposal)
+                edge_results.append(edge_result)
+                self._emit_event(
+                    "edge_commit_finished",
+                    {
+                        "edge": edge.as_dict(),
+                        "close_reason": "committed",
+                        "accepted": edge_result.accepted,
+                    },
+                )
+            self._metric_add_float("serial_commit_seconds", time.perf_counter() - commit_start)
+
+        return edge_results
+
     def _run_edge(self, edge: EdgeKey) -> EdgeRunResult:
         start_tokens = self.reconciler.tokens_used
         start_planner_decisions = self._metric_value("planner_decisions")
         start_planner_fallbacks = self._metric_value("planner_fallbacks")
         start_planner_stops = self._metric_value("planner_stop_actions")
+        self._clear_guided_retry_state(edge)
 
         source_context = self._call_tool(
             "get_entity_context",
@@ -2208,6 +4370,7 @@ class HybridScheduler(RootScheduler):
         budget_exhausted = False
         call_count = 0
         no_candidate_calls = 0
+        drop_reason_counts = self._new_drop_reason_counts()
         last_failure_signature: Optional[Tuple[Tuple[Any, ...], ...]] = None
         last_failure_state: Optional[Tuple[int, bool, bool, int]] = None
         close_reason = "call_limit_reached"
@@ -2218,13 +4381,17 @@ class HybridScheduler(RootScheduler):
         last_rejected_delta = 0
         last_edge_reason = ""
         last_run_signature: Optional[Tuple[Any, ...]] = None
+        active_retry_brief: Optional[EdgeRetryBrief] = None
+        guided_retry_count = 0
+        last_retry_hint = ""
+        last_retry_failure_codes: List[str] = []
 
         depth = 0
         include_optional = False
+        edge_budget_spend = 0
 
         while call_count < edge_call_limit:
-            edge_spend = self.reconciler.tokens_used - start_tokens
-            remaining_edge_tokens = edge_token_limit - edge_spend
+            remaining_edge_tokens = edge_token_limit - edge_budget_spend
             if remaining_edge_tokens <= 0:
                 budget_exhausted = True
                 close_reason = "budget_exhausted"
@@ -2282,6 +4449,7 @@ class HybridScheduler(RootScheduler):
                         planner_source=str(action.get("source", "")),
                         planner_reason=str(action.get("reason", "")),
                         worker_invoked=False,
+                        retry_brief=active_retry_brief,
                     )
                     self._metric_inc("planner_stop_actions", 1)
                     close_reason = "planner_stop"
@@ -2339,6 +4507,7 @@ class HybridScheduler(RootScheduler):
                     planner_source=str(action.get("source", "")),
                     planner_reason=str(action.get("reason", "")),
                     worker_invoked=False,
+                    retry_brief=active_retry_brief,
                 )
                 self._metric_inc("edges_skipped_no_path", 1)
                 close_reason = "no_viable_path_proof"
@@ -2355,7 +4524,7 @@ class HybridScheduler(RootScheduler):
                 bool(run_include_optional),
                 viability["evidence_signature"],
             )
-            if call_count > 0 and run_signature == last_run_signature and accepted_total == 0:
+            if call_count > 0 and run_signature == last_run_signature and accepted_total == 0 and active_retry_brief is None:
                 self._metric_inc("planner_actions_overridden", 1)
                 self._metric_inc("calls_blocked_no_progress", 1)
                 self._planner_fallback(
@@ -2378,6 +4547,7 @@ class HybridScheduler(RootScheduler):
                     planner_source=str(action.get("source", "")),
                     planner_reason=str(action.get("reason", "")),
                     worker_invoked=False,
+                    retry_brief=active_retry_brief,
                 )
                 close_reason = "no_progress_repeat"
                 close_detail = (
@@ -2389,6 +4559,17 @@ class HybridScheduler(RootScheduler):
             last_run_signature = run_signature
 
             call_index = call_count + 1
+            current_retry_brief = active_retry_brief
+            if current_retry_brief is not None:
+                self._metric_inc("guided_retry_started", 1)
+                self._emit_guided_retry_event(
+                    "guided_retry_started",
+                    current_retry_brief,
+                    mode="hybrid",
+                    call_index=call_index,
+                    depth=run_depth,
+                    include_optional=run_include_optional,
+                )
             self._emit_worker_call(
                 edge=edge,
                 call_index=call_index,
@@ -2399,6 +4580,7 @@ class HybridScheduler(RootScheduler):
                 planner_source=str(action.get("source", "")),
                 planner_reason=str(action.get("reason", "")),
                 worker_invoked=True,
+                retry_brief=current_retry_brief,
             )
             worker_output = self.worker.generate(
                 packet=packet,
@@ -2406,15 +4588,24 @@ class HybridScheduler(RootScheduler):
                 include_optional=run_include_optional,
                 max_response_tokens=min(1400, remaining_edge_tokens),
                 render_input=render_input,
+                retry_brief=current_retry_brief,
             )
+            active_retry_brief = None
             call_count = call_index
             last_worker_output = worker_output
+            edge_budget_spend += max(0, int(getattr(worker_output, "budgeted_token_usage", 0)))
 
             attempted_total += len(worker_output.candidates)
             if not worker_output.candidates:
                 no_candidate_calls += 1
 
-            accepted, rejected = self._apply_candidates(packet, worker_output.candidates)
+            accepted, rejected, cap_hit, retry_brief = self._apply_candidates(
+                packet,
+                worker_output.candidates,
+                path_proofs=path_proofs,
+                drop_reason_counts=drop_reason_counts,
+                retry_attempt=guided_retry_count + 1,
+            )
             accepted_total += accepted
             rejected_total += rejected
             self._emit_worker_result(
@@ -2429,16 +4620,29 @@ class HybridScheduler(RootScheduler):
             last_rejected_delta = int(rejected)
             last_edge_reason = "accepted_bridge" if accepted > 0 else "worker_call_no_accept"
 
-            edge_spend = self.reconciler.tokens_used - start_tokens
-            if edge_spend >= edge_token_limit:
+            if edge_budget_spend >= edge_token_limit:
                 budget_exhausted = True
                 close_reason = "budget_exhausted"
                 close_detail = "Per-edge token budget exhausted after worker call."
                 break
 
             if accepted_total > 0:
+                if current_retry_brief is not None:
+                    self._metric_inc("guided_retry_succeeded", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_succeeded",
+                        current_retry_brief,
+                        mode="hybrid",
+                        accepted_total=accepted_total,
+                    )
                 close_reason = "accepted_bridge"
-                close_detail = f"Accepted {accepted_total} bridge(s)."
+                if cap_hit:
+                    close_detail = (
+                        f"Accepted {accepted_total} bridge(s); hit per-edge acceptance cap "
+                        f"({getattr(self.reconciler, 'edge_max_accepted_bridges', 10)})."
+                    )
+                else:
+                    close_detail = f"Accepted {accepted_total} bridge(s)."
                 break
 
             can_recurse = run_depth < self.edge_max_depth
@@ -2456,6 +4660,78 @@ class HybridScheduler(RootScheduler):
             elif accepted > 0:
                 last_failure_state = None
                 last_failure_signature = None
+
+            if accepted == 0 and retry_brief is not None:
+                last_retry_hint = retry_brief.retry_hint
+                last_retry_failure_codes = list(retry_brief.failure_codes)
+                retry_signature = self._guided_retry_signature(run_signature, candidate_signature, retry_brief)
+                if retry_brief.retry_hint == "stop_edge" or not retry_brief.retryable:
+                    close_reason = "verifier_stop_edge"
+                    close_detail = retry_brief.retry_reason or "Verifier indicated this edge should stop."
+                    break
+                if guided_retry_count >= GUIDED_RETRY_LIMIT:
+                    self._metric_inc("guided_retry_exhausted", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_exhausted",
+                        retry_brief,
+                        mode="hybrid",
+                        guided_retry_count=guided_retry_count,
+                        reason="retry_limit",
+                    )
+                    close_reason = "guided_retry_exhausted"
+                    close_detail = f"Reached guided retry limit ({GUIDED_RETRY_LIMIT}) for this edge."
+                    break
+                if not self._guided_retry_change_room(packet, path_proofs, run_include_optional, can_recurse, retry_brief):
+                    self._metric_inc("guided_retry_exhausted", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_exhausted",
+                        retry_brief,
+                        mode="hybrid",
+                        guided_retry_count=guided_retry_count,
+                        reason="no_alternate_evidence",
+                    )
+                    close_reason = "guided_retry_exhausted"
+                    close_detail = "Verifier suggested retry, but no alternate same-edge evidence remains."
+                    break
+                if self._last_guided_retry_signature(edge) == retry_signature:
+                    self._metric_inc("guided_retry_blocked_no_progress", 1)
+                    self._emit_guided_retry_event(
+                        "guided_retry_blocked_no_progress",
+                        retry_brief,
+                        mode="hybrid",
+                        guided_retry_count=guided_retry_count,
+                    )
+                    close_reason = "guided_retry_blocked_no_progress"
+                    close_detail = "Blocked guided retry with unchanged verifier hint and evidence state."
+                    break
+
+                guided_retry_count += 1
+                self._set_guided_retry_count(edge, guided_retry_count)
+                self._set_last_guided_retry_signature(edge, retry_signature)
+                active_retry_brief = EdgeRetryBrief(
+                    edge=retry_brief.edge,
+                    failure_codes=list(retry_brief.failure_codes),
+                    retryable=retry_brief.retryable,
+                    retry_hint=retry_brief.retry_hint,
+                    retry_reason=retry_brief.retry_reason,
+                    rejected_question=retry_brief.rejected_question,
+                    rejected_reverse_question=retry_brief.rejected_reverse_question,
+                    retry_attempt=guided_retry_count,
+                )
+                self._metric_inc("guided_retry_scheduled", 1)
+                self._emit_guided_retry_event(
+                    "guided_retry_scheduled",
+                    active_retry_brief,
+                    mode="hybrid",
+                    guided_retry_count=guided_retry_count,
+                )
+                depth, include_optional = self._guided_retry_next_state(
+                    run_depth,
+                    run_include_optional,
+                    active_retry_brief,
+                    packet,
+                )
+                continue
 
             # Deterministic fallback progression for next iteration.
             if can_recurse and not run_include_optional and packet.optional_contexts and (
@@ -2483,6 +4759,7 @@ class HybridScheduler(RootScheduler):
                 close_reason = "no_candidates_no_progression"
                 close_detail = (
                     f"No candidates (notes='{worker_output.notes}', parse_stage={worker_output.parse_stage}, "
+                    f"parse_attempts={worker_output.parse_attempts}, "
                     f"accepted_delta={accepted}, rejected_delta={rejected})."
                 )
                 break
@@ -2501,6 +4778,7 @@ class HybridScheduler(RootScheduler):
             if last_worker_output is not None:
                 tail = (
                     f" last_parse_stage={last_worker_output.parse_stage};"
+                    f" last_parse_attempts={last_worker_output.parse_attempts};"
                     f" last_notes={last_worker_output.notes!r}"
                 )
             close_detail = (
@@ -2530,7 +4808,11 @@ class HybridScheduler(RootScheduler):
             budget_exhausted=budget_exhausted,
             edge_tokens=max(0, edge_tokens),
             property_attempted=False,
+            guided_retry_count=guided_retry_count,
+            last_retry_hint=last_retry_hint,
+            last_retry_failure_codes=list(last_retry_failure_codes),
         )
+        self._clear_guided_retry_state(edge)
 
         planner_decisions_delta = self._metric_value("planner_decisions") - start_planner_decisions
         planner_fallbacks_delta = self._metric_value("planner_fallbacks") - start_planner_fallbacks
@@ -2562,6 +4844,10 @@ class HybridScheduler(RootScheduler):
                 "close_detail": close_detail if close_detail else (
                     str(last_worker_output.notes) if last_worker_output is not None and last_worker_output.notes else ""
                 ),
+                "drop_reason_counts": drop_reason_counts,
+                "guided_retry_count": guided_retry_count,
+                "last_retry_hint": last_retry_hint,
+                "last_retry_failure_codes": list(last_retry_failure_codes),
             },
         )
 
@@ -2586,16 +4872,19 @@ class HybridScheduler(RootScheduler):
 
         self.reconciler.rlm_metrics["docs_attempted"] += 1
 
-        edge_results: List[EdgeRunResult] = []
         max_edge_attempts = max(10, len(self._iter_pending_edges(doc_id)) * 3)
-        edge_attempts = 0
-        while edge_attempts < max_edge_attempts:
-            edges = self._iter_pending_edges(doc_id)
-            if not edges:
-                break
-            edge_attempts += 1
-            selected_edge = self._choose_edge_for_doc(doc_id, edges)
-            edge_results.append(self._run_edge(selected_edge))
+        if self.edge_parallel_enabled and self.edge_parallel_workers > 1 and self.hybrid_scope == "doc_edge":
+            edge_results = self._run_document_parallel(doc_id=doc_id, max_edge_attempts=max_edge_attempts)
+        else:
+            edge_results: List[EdgeRunResult] = []
+            edge_attempts = 0
+            while edge_attempts < max_edge_attempts:
+                edges = self._prioritize_retry_edges(doc_id, self._iter_pending_edges(doc_id))
+                if not edges:
+                    break
+                edge_attempts += 1
+                selected_edge = edges[0] if self._peek_pending_retry_brief(edges[0]) is not None else self._choose_edge_for_doc(doc_id, edges)
+                edge_results.append(self._run_edge(selected_edge))
 
         remaining_edges = self._iter_pending_edges(doc_id)
         if remaining_edges:
@@ -2644,6 +4933,9 @@ class HybridScheduler(RootScheduler):
                     "budget_exhausted": er.budget_exhausted,
                     "edge_tokens": er.edge_tokens,
                     "property_attempted": er.property_attempted,
+                    "guided_retry_count": er.guided_retry_count,
+                    "last_retry_hint": er.last_retry_hint,
+                    "last_retry_failure_codes": list(er.last_retry_failure_codes),
                     "worker_prompt_version": WORKER_PROMPT_VERSION,
                 }
                 for er in edge_results

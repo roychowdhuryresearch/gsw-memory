@@ -9,6 +9,7 @@ class PromptType(Enum):
     """Enum for different types of operator prompts."""
     EPISODIC = "episodic"
     FACTUAL = "factual"
+    FACTUAL_GPT_OSS = "factual_gpt_oss"
 
 
 class CorefPrompts:
@@ -1920,7 +1921,7 @@ class FactualExtractionPrompts:
   - Keep roles/states general since detailed facts are captured in verb phrase questions
   """
 
-class FactualExtractionPromptsNew:
+class FactualExtractionPromptsGPT_OSS:
     """Prompts for factual GSW generation - optimized for Wikipedia-style content and 2wiki QA."""
     
     SYSTEM_PROMPT = """You are an expert linguist focused on extracting factual relationships and attributes from Wikipedia-style content. Your primary task is to analyze text to create structured semantic networks that capture key factual information such as dates, places, nationalities, and other attributes needed for multi-hop question answering."""
@@ -1931,6 +1932,10 @@ Given the following text, extract factual relationships and attributes following
 <input_text>
 {input_text}
 </input_text>
+
+<background_context>
+{background_context}
+</background_context>
 
 Follow these examples for the desired extraction pattern:
 
@@ -1948,6 +1953,7 @@ Per-Rule Micro-Examples
 - Input: “German Aerospace Center (DLR) led the study.”
 - Do: Entities “German Aerospace Center (DLR)” (org) and “DLR” (alias); phrase “also known as”.
 - Don’t: Expand “UN” to “United Nations” if only “UN” appears.
+ - Clarifier: Parenthetical alias may remain inline unless the alias appears independently elsewhere.
 
 4) Two questions + complete content and recipient
 - Input: “Finance Minister Harald Jensen announced to Parliament that the budget would increase on May 19, 1919.”
@@ -3418,32 +3424,47 @@ The screenplay was written by Jordan Quinn, who also wrote the ‘City of Glass�
 **Key Instructions:**
 
 1. **Extract ALL entities**: Include people, places, dates, titles, nationalities, professions, etc.
+   - Do not encode answer-bearing values only as states; ensure a corresponding entity node exists (e.g., dates/times, locations, numbers/ordinals, titles/works, organizations, concepts) so When/Where/Who/What questions can reference them by ID.
+   - Only split into base + alias/subunit when the alias or parent appears as a standalone mention; if split, connect with an appropriate relation (e.g., "also known as", "part of"/"affiliated with").
+   - Do not create separate qualifier nodes (e.g., "city of", "province of"); retain qualifiers inside the entity name when they are part of the surface form.
 
 2. **Create relationship phrases**: These can be:
    - Factual attributes: "born on", "died on", "nationality", "profession"
    - Relationships: "directed by", "married to", "daughter of", "member of"  
    - Properties: "English title", "released in", "located in"
+   - Use the most specific term stated. Example: prefer "mother of"/"father of"/"son of"/"daughter of" when explicitly given; avoid generic "parent of"/"child of" if a precise term appears in the text.
 
 3. **Generate bidirectional questions**: Always create questions from both directions:
    - "Who was born in X?" AND "Where was Y born?"
    - "Who directed X?" AND "What did Y direct?"
+   - QA inversion: If the A→B question contains entity A and its answers are the IDs of entity B, then the B→A question must contain entity B and its answers must be the IDs of entity A. The two questions must swap sides; do not repeat the same side in both questions’ texts or answers.
+    - Non-identity check: The two questions for a phrase must return different answer IDs (they swap sides). Example: "Who directed Oppenheimer?" → [Christopher Nolan]; "What did Christopher Nolan direct?" → [Oppenheimer].
+    - Canonical inverse wording: For the B→A question, use the natural inverse relation label when one exists (e.g., son/daughter ↔ father/mother), rather than forms like "Whose … is …" or "Who is X the <relation> of?".
+    - Kinship inverse mapping: When the text uses gendered kin terms, apply the corresponding inverse (son ↔ father, daughter ↔ mother).
+   - Question subject swap (mandatory): The entity explicitly named in the A→B question must be the opposite side from the entity explicitly named in the B→A question (they must not name the same side). Example: A→B names the work (film), B→A names the director.
    
-3. **No pronouns in questions or uncertain objects in questions.**
+4. **No pronouns in questions or uncertain objects in questions.**
   - Input: “Michael Jackson stated that his verses are about the convict life in Brasil in his song Care About US”
   - Do: Who talked about the convict life in Brasil in his song Care About US?
   - Don’t: Who talked about the convict life in Brasil in his song?
 
-4. **Capture temporal information**: Ensure dates and temporal relationships are connected to relevant entities.
+5. **Capture temporal information**: Ensure dates and temporal relationships are connected to relevant entities.
+   - Attribute lifting via containment: If entity A is specified as part of/from/issued on/by entity B and B carries an explicit attribute in the same passage (e.g., date/time, location, number/ordinal), also attach that attribute to A via an appropriate relation, using the same granularity and only when unambiguous. Do not fabricate precision or lift conflicting attributes.
 
-5. **Include biographical details**: Birth/death dates, family relationships, professions, nationalities.
+6. **Include biographical details**: Birth/death dates, family relationships, professions, nationalities as entities.
 
-6. **Include work attributes**: For films, books, etc. capture directors, release dates, genres, etc.
+7. **Include work attributes**: For films, books, etc. capture directors, release dates, genres, etc.
 
-7. **Two questions per relationship phrase but phrases can be repeated for different entities**:
+8. **Two questions per relationship phrase but phrases can be repeated for different entities**:
   - Input: "John Smith and Jane Doe were born in New York on 1990 and died in Los Angeles on 2020."
   - Do: "born in" and "died in" for John Smith and Jane Doe separately and 2 questions for each phrase
   - Don't: "born in" and "died in" for John Smith and Jane Doe together and more than 2 questions for each phrase
   
+
+9. **Ensure entity coverage in QAs**: Every entity node must appear at least once as an answer ID in some verb phrase. Do not satisfy coverage via question text only. If an entity would otherwise be orphaned (only present via roles/states), add a minimal factual relation grounded in the passage to include it as an answer (e.g., released in [date], located in [place], part of/member of [container], has role/type [concept], known as [alias]). Use only attributes stated in the passage; do not fabricate.
+
+10. **Final QA Sanity Check (Mandatory)**
+   - Hard requirement before output: For every verb phrase, the two bidirectional questions must return different answer ID sets (they swap sides). If both questions produce the same answers, you must correct the pair (edit question texts and/or answer IDs) to satisfy inversion and answer-type alignment before producing the final output.
 
 Now extract the factual relationships from the given input text STRICTLY following this pattern:
 

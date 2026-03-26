@@ -56,7 +56,7 @@ DATASET_CONFIGS = {
     "2wiki_platinum": {
         "answer_field": "answer",
         "parse_json": False,
-        "allow_no_answer": True
+        "allow_no_answer": False
     },
     "2wiki_unanswerable": {
         "answer_field": "answer",
@@ -698,7 +698,7 @@ class ChainBatchedMultiHopQAEvaluator:
         # Convert to dictionary for easy lookup
         decomposition_results = {
             item["question_id"]: item
-            for item in decomposition_dataset.dataset
+            for item in decomposition_dataset
         }
         
 
@@ -837,7 +837,7 @@ class ChainBatchedMultiHopQAEvaluator:
         console.print(f"[green]✓ Answer generation complete in {elapsed:.1f}s ({elapsed/len(answer_inputs):.2f}s per question)[/green]")
         
         # Convert to dictionary for easy lookup
-        answer_results = {item["question_id"]: item for item in answer_dataset.dataset}
+        answer_results = {item["question_id"]: item for item in answer_dataset}
         
         return answer_results
     
@@ -1024,9 +1024,10 @@ def main(verbose: bool = False):
         # Initialize evaluator
         evaluator = ChainBatchedMultiHopQAEvaluator(
             num_documents=-1, 
-            num_questions=10, 
+            num_questions=-1, 
             verbose=verbose,
-            use_bm25=True
+            use_bm25=True,
+            dataset_name="2wiki_platinum"
        )
 
         
