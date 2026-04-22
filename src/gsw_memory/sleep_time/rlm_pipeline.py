@@ -135,12 +135,21 @@ def _format_curriculum_guidance_block(guidance: Optional[Dict[str, Any]]) -> str
             if prior_batches_seen > 0:
                 sections.append(f"- Derived from {prior_batches_seen} earlier answered batch(es).")
             for row in top_patterns[:4]:
-                pattern = str(row.get("pattern", "")).strip()
+                pattern = str(row.get("pattern_key") or row.get("pattern") or "").strip()
                 count = int(row.get("count", 0) or 0)
                 representative = str(row.get("representative_query", "")).strip()
+                relation_label = str(row.get("relation_label", "")).strip()
+                domain = str(row.get("domain", "")).strip()
                 if not pattern:
                     continue
                 line = f"- {pattern} x{count}"
+                details: List[str] = []
+                if relation_label and relation_label != pattern:
+                    details.append(f"rel: {relation_label}")
+                if domain:
+                    details.append(f"domain: {domain}")
+                if details:
+                    line += " | " + " | ".join(details)
                 if representative:
                     line += f" | rep: {representative}"
                 sections.append(line)
@@ -163,19 +172,76 @@ def _format_curriculum_guidance_block(guidance: Optional[Dict[str, Any]]) -> str
                 continue
             question = str(row.get("question", "")).strip()
             reverse_question = str(row.get("reverse_question", "")).strip()
+            pattern_key = str(row.get("pattern_key", "")).strip()
+            domain = str(row.get("domain", "")).strip()
             pattern_tags = row.get("pattern_tags", []) or []
             tags = ", ".join(str(tag).strip() for tag in pattern_tags if str(tag).strip())
             if question:
                 sections.append(f"- Forward: {question}")
             if reverse_question:
                 sections.append(f"  Reverse: {reverse_question}")
+            if pattern_key:
+                sections.append(f"  Pattern: {pattern_key}")
+            if domain:
+                sections.append(f"  Domain: {domain}")
             if tags:
                 sections.append(f"  Tags: {tags}")
+
+    edge_demand = guidance.get("edge_demand_context")
+    if isinstance(edge_demand, str) and edge_demand.strip():
+        sections.append("Edge-Specific Demand Signal:")
+        sections.append(edge_demand.strip())
 
     sections.append(
         "Use this historical guidance from earlier answered batches to prefer useful question types and missing patterns, but stay grounded in the provided evidence and do not copy wording mechanically."
     )
     return "\n".join(sections)
+
+def _format_edge_demand_context(
+    relevant: List[Dict[str, Any]],
+    full_profile: List[Dict[str, Any]],
+    relationship: str,
+) -> str:
+    """Format demand signal specific to one edge for the worker prompt."""
+    if not relevant and not full_profile:
+        return ""
+    lines: List[str] = [f"Edge relationship: '{relationship}'"]
+    if relevant:
+        lines.append(
+            f"This relationship has produced bridges matching {len(relevant)} demanded query type(s):"
+        )
+        for p in relevant[:5]:
+            status = ""
+            if p.get("bridge_helpful"):
+                status = " [BRIDGE HELPFUL]"
+            elif p.get("low_score"):
+                status = " [NEEDS IMPROVEMENT]"
+            elif p.get("doc_dominant"):
+                status = " [DOCS BEAT BRIDGES]"
+            pk = str(p.get("pattern_key", ""))
+            count = int(p.get("count", 0))
+            lines.append(f"  - {pk} x{count}{status}")
+            rep = str(p.get("representative_query", "")).strip()
+            if rep:
+                lines.append(f"    Example query: \"{rep}\"")
+        lines.append("Prioritize generating bridges matching these query types.")
+    else:
+        lines.append(
+            "This relationship type has not yet produced bridges matching known query patterns."
+        )
+        lines.append(
+            "Explore freely — generate the most informative cross-document bridges you can find."
+        )
+    top_overall = [p for p in full_profile if p not in relevant][:3]
+    if top_overall:
+        lines.append("\nOther high-demand query types across the corpus:")
+        for p in top_overall:
+            pk = str(p.get("pattern_key", ""))
+            count = int(p.get("count", 0))
+            rep = str(p.get("representative_query", "")).strip()
+            lines.append(f"  - {pk} x{count} (example: \"{rep}\")")
+    return "\n".join(lines)
+
 
 PLANNER_SHARED_CHECKLIST = """
 Planner checklist (must pass all):
@@ -438,10 +504,14 @@ class WorkerOutput:
     notes: str
     parse_stage: str
     raw_preview: str
+    source_field: str = "unknown"
     token_usage: int = 0
     budgeted_token_usage: int = 0
     parse_attempts: int = 1
     parse_recovery_used: bool = False
+    finish_reason: Optional[str] = None
+    message_field_summary: Dict[str, Any] = field(default_factory=dict)
+    attempt_diagnostics: List[Dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
@@ -711,13 +781,20 @@ class RecursiveEdgeWorker:
         self,
         raw_text: str,
         parse_stage: str,
+        source_field: str,
         token_usage: int = 0,
         budgeted_token_usage: int = 0,
         parse_attempts: int = 1,
         parse_recovery_used: bool = False,
+        finish_reason: Optional[str] = None,
+        message_field_summary: Optional[Dict[str, Any]] = None,
+        attempt_diagnostics: Optional[List[Dict[str, Any]]] = None,
     ) -> WorkerOutput:
-        parsed = self.reconciler._extract_json_from_text(raw_text)
-        validated = WorkerResponseSchema.model_validate(parsed)
+        parsed = self.reconciler._extract_json_from_text(raw_text, payload_label="worker")
+        try:
+            validated = WorkerResponseSchema.model_validate(parsed)
+        except Exception as validation_error:
+            raise ValueError(f"Worker schema validation failed: {validation_error}") from validation_error
         normalized_payload = validated.model_dump()
         status = str(normalized_payload.get("status", "ok"))
         candidates = self._normalize_candidates(normalized_payload.get("candidates", []))
@@ -731,10 +808,14 @@ class RecursiveEdgeWorker:
             notes=notes,
             parse_stage=parse_stage,
             raw_preview=preview,
+            source_field=str(source_field or "unknown"),
             token_usage=max(0, int(token_usage)),
             budgeted_token_usage=max(0, int(budgeted_token_usage)),
             parse_attempts=max(1, int(parse_attempts)),
             parse_recovery_used=bool(parse_recovery_used),
+            finish_reason=str(finish_reason) if finish_reason is not None else None,
+            message_field_summary=dict(message_field_summary or {}),
+            attempt_diagnostics=list(attempt_diagnostics or []),
         )
 
     def generate(
@@ -766,6 +847,111 @@ class RecursiveEdgeWorker:
             except (TypeError, ValueError):
                 base_int = 0
             metrics[metric_key] = base_int + int(amount)
+
+        def _message_field_summary(message_obj: Any) -> Dict[str, Any]:
+            summarize = getattr(self.reconciler, "_summarize_assistant_message_fields", None)
+            if callable(summarize):
+                try:
+                    return dict(summarize(message_obj) or {})
+                except Exception:
+                    pass
+            return {
+                "has_parsed": False,
+                "parsed_type": None,
+                "parsed_preview": "",
+                "has_content": False,
+                "content_preview": "",
+                "has_reasoning_content": False,
+                "reasoning_content_preview": "",
+                "has_tool_calls": False,
+            }
+
+        def _usage_finish_reason(usage_obj: Optional[Dict[str, Any]]) -> Optional[str]:
+            if not isinstance(usage_obj, dict):
+                return None
+            finish_reason = usage_obj.get("finish_reason")
+            if finish_reason is None:
+                return None
+            text = str(finish_reason).strip()
+            return text or None
+
+        def _usage_int(usage_obj: Optional[Dict[str, Any]], key: str) -> int:
+            if not isinstance(usage_obj, dict):
+                return 0
+            try:
+                return max(0, int(usage_obj.get(key, 0) or 0))
+            except (TypeError, ValueError):
+                return 0
+
+        attempt_diagnostics: List[Dict[str, Any]] = []
+
+        def _record_attempt_diagnostic(
+            *,
+            stage: str,
+            usage_obj: Optional[Dict[str, Any]],
+            source_field: str,
+            raw_text: str,
+            message_obj: Any,
+        ) -> None:
+            attempt_diagnostics.append(
+                {
+                    "stage": str(stage),
+                    "source_field": str(source_field or "unknown"),
+                    "prompt_tokens": _usage_int(usage_obj, "prompt_tokens"),
+                    "completion_tokens": _usage_int(usage_obj, "completion_tokens"),
+                    "total_tokens": _usage_int(usage_obj, "total_tokens"),
+                    "finish_reason": _usage_finish_reason(usage_obj),
+                    "raw_preview": self.reconciler._preview_text(raw_text, max_len=800),
+                    "message_fields": _message_field_summary(message_obj),
+                }
+            )
+
+        def _emit_parse_failure(
+            *,
+            stage: str,
+            error: Exception,
+            message_obj: Any,
+            raw_text: str,
+            source_field: str,
+            usage_obj: Optional[Dict[str, Any]],
+            total_token_usage_value: int,
+            budgeted_token_usage_value: int,
+            log_as_error: bool = False,
+        ) -> Tuple[Dict[str, Any], Optional[str]]:
+            message_summary = _message_field_summary(message_obj)
+            finish_reason = _usage_finish_reason(usage_obj)
+            preview = self.reconciler._preview_text(raw_text)
+            log_fn = logger.error if log_as_error else logger.warning
+            log_fn(
+                "Worker parse failed [stage=%s edge=%s source=%s finish_reason=%s tokens=%s] error=%s preview=%s fields=%s",
+                stage,
+                packet.edge.as_tuple(),
+                source_field,
+                finish_reason or "unknown",
+                total_token_usage_value,
+                error,
+                preview,
+                json.dumps(message_summary, ensure_ascii=False),
+            )
+            callback = getattr(self.reconciler, "output_callback", None)
+            if callback:
+                callback(
+                    "rlm_worker_parse_failure",
+                    {
+                        "edge": packet.edge.as_dict(),
+                        "stage": str(stage),
+                        "source_field": str(source_field or "unknown"),
+                        "error": str(error),
+                        "preview": preview,
+                        "finish_reason": finish_reason,
+                        "prompt_tokens": _usage_int(usage_obj, "prompt_tokens"),
+                        "completion_tokens": _usage_int(usage_obj, "completion_tokens"),
+                        "token_usage": int(max(0, total_token_usage_value)),
+                        "budgeted_token_usage": int(max(0, budgeted_token_usage_value)),
+                        "message_fields": message_summary,
+                    },
+                )
+            return message_summary, finish_reason
 
         def _call_worker_model(worker_messages: List[Dict[str, str]], temperature: float, max_tokens: int):
             try:
@@ -814,7 +1000,14 @@ class RecursiveEdgeWorker:
             initial_tokens = 0
         total_token_usage += initial_tokens
         budgeted_token_usage += initial_tokens
-        raw_text, _source = self.reconciler._extract_message_content_with_source(message)
+        try:
+            raw_text, source_field = self.reconciler._extract_message_content_with_source(
+                message,
+                stage="worker",
+                structured_output=True,
+            )
+        except TypeError:
+            raw_text, source_field = self.reconciler._extract_message_content_with_source(message)
 
         # Extract thinking content from reasoning models
         thinking_text = ""
@@ -846,21 +1039,38 @@ class RecursiveEdgeWorker:
             raw_text = re.sub(r"<think>.*?</think>", "", raw_text, flags=re.DOTALL).strip()
             raw_text = re.sub(r"<think>.*", "", raw_text, flags=re.DOTALL).strip()
 
+        initial_message_summary = _message_field_summary(message)
+        initial_finish_reason = _usage_finish_reason(usage)
+        _record_attempt_diagnostic(
+            stage="initial",
+            usage_obj=usage,
+            source_field=source_field,
+            raw_text=raw_text,
+            message_obj=message,
+        )
         try:
             return self._parse_worker_output(
                 raw_text,
                 parse_stage="initial",
+                source_field=source_field,
                 token_usage=total_token_usage,
                 budgeted_token_usage=budgeted_token_usage,
                 parse_attempts=1,
                 parse_recovery_used=False,
+                finish_reason=initial_finish_reason,
+                message_field_summary=initial_message_summary,
+                attempt_diagnostics=attempt_diagnostics,
             )
         except Exception as initial_error:
-            logger.warning(
-                "Worker parse failed [stage=initial edge=%s] error=%s preview=%s",
-                packet.edge.as_tuple(),
-                initial_error,
-                self.reconciler._preview_text(raw_text),
+            _emit_parse_failure(
+                stage="initial",
+                error=initial_error,
+                message_obj=message,
+                raw_text=raw_text,
+                source_field=source_field,
+                usage_obj=usage,
+                total_token_usage_value=total_token_usage,
+                budgeted_token_usage_value=budgeted_token_usage,
             )
 
         repair_messages = messages + [
@@ -884,25 +1094,49 @@ class RecursiveEdgeWorker:
             total_token_usage += int((repair_usage or {}).get("total_tokens", 0) or 0)
         except (TypeError, ValueError):
             pass
-        repaired_text, _repaired_source = self.reconciler._extract_message_content_with_source(repaired_message)
+        try:
+            repaired_text, repaired_source = self.reconciler._extract_message_content_with_source(
+                repaired_message,
+                stage="worker",
+                structured_output=True,
+            )
+        except TypeError:
+            repaired_text, repaired_source = self.reconciler._extract_message_content_with_source(repaired_message)
 
+        repaired_message_summary = _message_field_summary(repaired_message)
+        repaired_finish_reason = _usage_finish_reason(repair_usage)
+        _record_attempt_diagnostic(
+            stage="repair_retry",
+            usage_obj=repair_usage,
+            source_field=repaired_source,
+            raw_text=repaired_text,
+            message_obj=repaired_message,
+        )
         try:
             repaired_output = self._parse_worker_output(
                 repaired_text,
                 parse_stage="repair_retry",
+                source_field=repaired_source,
                 token_usage=total_token_usage,
                 budgeted_token_usage=budgeted_token_usage,
                 parse_attempts=2,
                 parse_recovery_used=True,
+                finish_reason=repaired_finish_reason,
+                message_field_summary=repaired_message_summary,
+                attempt_diagnostics=attempt_diagnostics,
             )
             _metric_inc("worker_parse_recovery_success", 1)
             return repaired_output
         except Exception as retry_error:
-            logger.warning(
-                "Worker parse failed [stage=repair_retry edge=%s] error=%s preview=%s",
-                packet.edge.as_tuple(),
-                retry_error,
-                self.reconciler._preview_text(repaired_text),
+            _emit_parse_failure(
+                stage="repair_retry",
+                error=retry_error,
+                message_obj=repaired_message,
+                raw_text=repaired_text,
+                source_field=repaired_source,
+                usage_obj=repair_usage,
+                total_token_usage_value=total_token_usage,
+                budgeted_token_usage_value=budgeted_token_usage,
             )
 
         regenerate_messages = messages + [
@@ -925,23 +1159,48 @@ class RecursiveEdgeWorker:
                 total_token_usage += int((regen_usage or {}).get("total_tokens", 0) or 0)
             except (TypeError, ValueError):
                 pass
-            regenerated_text, _regenerated_source = self.reconciler._extract_message_content_with_source(regenerated_message)
+            try:
+                regenerated_text, regenerated_source = self.reconciler._extract_message_content_with_source(
+                    regenerated_message,
+                    stage="worker",
+                    structured_output=True,
+                )
+            except TypeError:
+                regenerated_text, regenerated_source = self.reconciler._extract_message_content_with_source(regenerated_message)
+            regenerated_message_summary = _message_field_summary(regenerated_message)
+            regenerated_finish_reason = _usage_finish_reason(regen_usage)
+            _record_attempt_diagnostic(
+                stage="regenerate_retry",
+                usage_obj=regen_usage,
+                source_field=regenerated_source,
+                raw_text=regenerated_text,
+                message_obj=regenerated_message,
+            )
             regenerated_output = self._parse_worker_output(
                 regenerated_text,
                 parse_stage="regenerate_retry",
+                source_field=regenerated_source,
                 token_usage=total_token_usage,
                 budgeted_token_usage=budgeted_token_usage,
                 parse_attempts=3,
                 parse_recovery_used=True,
+                finish_reason=regenerated_finish_reason,
+                message_field_summary=regenerated_message_summary,
+                attempt_diagnostics=attempt_diagnostics,
             )
             _metric_inc("worker_parse_recovery_success", 1)
             return regenerated_output
         except Exception as regenerate_error:
-            logger.error(
-                "Worker parse failed [stage=regenerate_retry edge=%s] error=%s preview=%s",
-                packet.edge.as_tuple(),
-                regenerate_error,
-                self.reconciler._preview_text(regenerated_text),
+            regen_message_summary, regen_finish_reason = _emit_parse_failure(
+                stage="regenerate_retry",
+                error=regenerate_error,
+                message_obj=regenerated_message if "regenerated_message" in locals() else None,
+                raw_text=regenerated_text,
+                source_field=regenerated_source if "regenerated_source" in locals() else "unknown",
+                usage_obj=regen_usage if "regen_usage" in locals() else None,
+                total_token_usage_value=total_token_usage,
+                budgeted_token_usage_value=budgeted_token_usage,
+                log_as_error=True,
             )
             _metric_inc("worker_parse_recovery_fail", 1)
             return WorkerOutput(
@@ -951,10 +1210,14 @@ class RecursiveEdgeWorker:
                 notes=f"Worker parse error: {regenerate_error}",
                 parse_stage="regenerate_retry",
                 raw_preview=self.reconciler._preview_text(regenerated_text),
+                source_field=str(regenerated_source if "regenerated_source" in locals() else "unknown"),
                 token_usage=max(0, int(total_token_usage)),
                 budgeted_token_usage=max(0, int(budgeted_token_usage)),
                 parse_attempts=3,
                 parse_recovery_used=True,
+                finish_reason=regen_finish_reason,
+                message_field_summary=regen_message_summary,
+                attempt_diagnostics=attempt_diagnostics,
             )
 
 
@@ -1099,6 +1362,7 @@ class RootScheduler:
                 "final_parse_stage": str(worker_output.parse_stage),
                 "parse_attempts": int(worker_output.parse_attempts),
                 "parse_recovery_used": bool(worker_output.parse_recovery_used),
+                "source_field": str(worker_output.source_field or "unknown"),
                 "worker_notes": str(worker_output.notes or ""),
                 "accepted_delta": int(accepted_delta),
                 "rejected_delta": int(rejected_delta),
@@ -1676,6 +1940,39 @@ class RootScheduler:
             },
         )
 
+    def _compute_edge_demand_context(self, edge: EdgeKey) -> Dict[str, Any]:
+        """Compute demand relevance and dynamic budget for a given edge.
+
+        Uses the query_demand_profile and relationship_to_patterns from
+        curriculum guidance to determine how many bridges this edge should
+        produce and what demand-steering text to inject into the worker prompt.
+        """
+        guidance = getattr(self.reconciler, "curriculum_guidance", None) or {}
+        demand_profile = guidance.get("query_demand_profile", [])
+        rel_to_patterns = guidance.get("relationship_to_patterns", {})
+        default_cap = max(1, int(getattr(self, "edge_max_calls", 2)))
+
+        if not demand_profile:
+            return {"demand_budget": default_cap, "relevant_patterns": [], "demand_text": ""}
+
+        rel = edge.relationship.lower().strip()
+        produced_patterns = set(rel_to_patterns.get(rel, []))
+
+        relevant = [p for p in demand_profile if p.get("pattern_key", "") in produced_patterns]
+        total_demand_count = sum(int(p.get("count", 0)) for p in relevant)
+
+        base_cap = 2
+        demand_bonus = min(total_demand_count * 2, 8)
+        dynamic_cap = base_cap + demand_bonus
+
+        demand_text = _format_edge_demand_context(relevant, demand_profile, rel)
+
+        return {
+            "demand_budget": dynamic_cap,
+            "relevant_patterns": relevant,
+            "demand_text": demand_text,
+        }
+
     def _collect_contexts_for_docs(self, neighbor_name: str, doc_ids: List[str], source_doc: str) -> List[Dict[str, Any]]:
         contexts: List[Dict[str, Any]] = []
         requested_norm = normalize_similarity_text(neighbor_name)
@@ -2171,6 +2468,9 @@ class RootScheduler:
                 ({"pass": False, "score": 0.0, "failure_codes": ["VERIFIER_MISSING"], "notes": "Missing verifier verdict."}, False),
             )
             if passes_gate:
+                verifier_score = float(verdict.get("score", 0.0) or 0.0)
+                if verifier_score > 0:
+                    candidate["confidence"] = verifier_score
                 passing.append(candidate)
             else:
                 retry_brief = self._prefer_retry_brief(
@@ -2190,13 +2490,15 @@ class RootScheduler:
         edge: EdgeKey,
         candidates: List[Dict[str, Any]],
         retry_attempt: int = 0,
+        demand_budget: int = 0,
     ) -> Tuple[int, int, bool, Optional[EdgeRetryBrief]]:
         """Create already-verified candidates serially with deterministic ordering."""
         accepted = 0
         rejected = 0
         cap_hit = False
         retry_brief: Optional[EdgeRetryBrief] = None
-        accepted_cap = max(1, int(getattr(self.reconciler, "edge_max_accepted_bridges", 10)))
+        global_cap = max(1, int(getattr(self.reconciler, "edge_max_accepted_bridges", 10)))
+        accepted_cap = min(demand_budget, global_cap) if demand_budget > 0 else global_cap
         verifier_enabled = bool(getattr(self.reconciler, "bridge_verifier_enabled", False))
         verify_gate = getattr(self.reconciler, "verify_bridge_candidate_gate", None)
 
@@ -2214,6 +2516,10 @@ class RootScheduler:
             if not isinstance(bridge_spec, dict):
                 rejected += 1
                 continue
+
+            bridge_spec["source_relationship"] = edge.relationship
+            bridge_spec["source_entity"] = edge.entity_name
+            bridge_spec["source_neighbor"] = edge.neighbor_name
 
             similarity_max = self._max_similarity_from_signal(bridge_spec.get("similarity_signal", []))
             if (
@@ -2253,6 +2559,7 @@ class RootScheduler:
         path_proofs: Optional[List[PathProof]] = None,
         drop_reason_counts: Optional[Dict[str, int]] = None,
         retry_attempt: int = 0,
+        demand_budget: int = 0,
     ) -> Tuple[int, int, bool, Optional[EdgeRetryBrief]]:
         accepted = 0
         rejected = 0
@@ -2298,6 +2605,7 @@ class RootScheduler:
             packet.edge,
             passing,
             retry_attempt=retry_attempt,
+            demand_budget=demand_budget,
         )
         retry_brief = self._prefer_retry_brief(retry_brief, commit_retry_brief)
         rejected += commit_rejected
@@ -2338,6 +2646,18 @@ class RootScheduler:
         optional_contexts = self._collect_contexts_for_docs(edge.neighbor_name, optional_docs, source_doc=edge.doc_id) if optional_docs else []
 
         packet = self._build_edge_packet(edge, coverage, source_context, mandatory_contexts, optional_contexts)
+
+        demand_ctx = self._compute_edge_demand_context(edge)
+        if demand_ctx.get("demand_text"):
+            guidance = packet.constraints.get("curriculum_guidance")
+            if isinstance(guidance, dict):
+                guidance["edge_demand_context"] = demand_ctx["demand_text"]
+            else:
+                packet.constraints["curriculum_guidance"] = {
+                    "edge_demand_context": demand_ctx["demand_text"],
+                }
+        edge_demand_budget = int(demand_ctx.get("demand_budget", 0))
+
         signal = self._score_edge_signal(coverage, mandatory_contexts)
         edge_call_limit, edge_token_limit = self._low_signal_budgets(signal)
         if signal.get("tier") == "low":
@@ -2470,6 +2790,7 @@ class RootScheduler:
                 path_proofs=path_proofs,
                 drop_reason_counts=drop_reason_counts,
                 retry_attempt=guided_retry_count + 1,
+                demand_budget=edge_demand_budget,
             )
             accepted_total += accepted
             rejected_total += rejected
@@ -2733,6 +3054,7 @@ class RootScheduler:
         status = self._call_tool("get_doc_exploration_status", {"doc_id": doc_id}, doc_id=doc_id)
         pending_count = int(status.get("pending_count", 0)) if isinstance(status, dict) else 0
 
+        doc_exploration = None
         if pending_count == 0:
             bridges_created = sum(er.accepted for er in edge_results)
             _doc_mark = self._call_tool(
@@ -2740,6 +3062,7 @@ class RootScheduler:
                 {"doc_id": doc_id, "num_bridges_created": bridges_created},
                 doc_id=doc_id,
             )
+            doc_exploration = _doc_mark if isinstance(_doc_mark, dict) else None
             self.reconciler.rlm_metrics["docs_completed"] += 1
         else:
             bridges_created = sum(er.accepted for er in edge_results)
@@ -2753,6 +3076,8 @@ class RootScheduler:
             "bridges_created": bridges_created,
             "mode": "rlm",
             "pending_edges": pending_count,
+            "document_marked_explored": bool(doc_exploration),
+            "document_exploration": doc_exploration,
             "edge_results": [
                 {
                     "edge": er.edge.as_dict(),
@@ -4359,6 +4684,18 @@ class HybridScheduler(RootScheduler):
         optional_contexts = self._collect_contexts_for_docs(edge.neighbor_name, optional_docs, source_doc=edge.doc_id) if optional_docs else []
 
         packet = self._build_edge_packet(edge, coverage, source_context, mandatory_contexts, optional_contexts)
+
+        demand_ctx = self._compute_edge_demand_context(edge)
+        if demand_ctx.get("demand_text"):
+            guidance = packet.constraints.get("curriculum_guidance")
+            if isinstance(guidance, dict):
+                guidance["edge_demand_context"] = demand_ctx["demand_text"]
+            else:
+                packet.constraints["curriculum_guidance"] = {
+                    "edge_demand_context": demand_ctx["demand_text"],
+                }
+        edge_demand_budget = int(demand_ctx.get("demand_budget", 0))
+
         signal = self._score_edge_signal(coverage, mandatory_contexts)
         edge_call_limit, edge_token_limit = self._low_signal_budgets(signal)
         if signal.get("tier") == "low":
@@ -4605,6 +4942,7 @@ class HybridScheduler(RootScheduler):
                 path_proofs=path_proofs,
                 drop_reason_counts=drop_reason_counts,
                 retry_attempt=guided_retry_count + 1,
+                demand_budget=edge_demand_budget,
             )
             accepted_total += accepted
             rejected_total += rejected
@@ -4899,12 +5237,14 @@ class HybridScheduler(RootScheduler):
         pending_count = int(status.get("pending_count", 0)) if isinstance(status, dict) else 0
         bridges_created = sum(er.accepted for er in edge_results)
 
+        doc_exploration = None
         if pending_count == 0:
             _doc_mark = self._call_tool(
                 "mark_document_explored",
                 {"doc_id": doc_id, "num_bridges_created": bridges_created},
                 doc_id=doc_id,
             )
+            doc_exploration = _doc_mark if isinstance(_doc_mark, dict) else None
             self.reconciler.rlm_metrics["docs_completed"] += 1
 
         self.reconciler.entities_explored += 1
@@ -4921,6 +5261,8 @@ class HybridScheduler(RootScheduler):
             "mode": "hybrid",
             "hybrid_scope": self.hybrid_scope,
             "pending_edges": pending_count,
+            "document_marked_explored": bool(doc_exploration),
+            "document_exploration": doc_exploration,
             "planner_decisions": planner_decisions_delta,
             "planner_fallbacks": planner_fallbacks_delta,
             "planner_stop_actions": planner_stops_delta,

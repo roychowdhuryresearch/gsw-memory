@@ -400,6 +400,7 @@ class GSWTools:
                     "doc_id": doc_id,
                     "roles": sorted(set(r for r in roles if r)),
                     "states": sorted(set(s for s in states if s)),
+                    "qa_pairs": entity_dict.get("qa_pairs", []),
                     "score": round(float(score), 4)
                 }
 
@@ -1428,13 +1429,39 @@ class GSWTools:
         reasoning: Optional[str] = None,
         confidence: float = 0.9,
         entities_involved: Optional[List[str]] = None,
-        bridges: Optional[List[Dict[str, Any]]] = None
+        bridges: Optional[List[Dict[str, Any]]] = None,
+        source_relationship: Optional[str] = None,
+        source_entity: Optional[str] = None,
+        source_neighbor: Optional[str] = None,
     ) -> Union[Dict[str, Any], List[Dict[str, Any]]]:
         """
         Create one or more two-ended bridge QA pairs with automatic validation.
 
-        Each bridge has a forward question and a reverse question (QA inversion),
-        mirroring how GSW verb phrases generate bidirectional QA pairs.
+        Each bridge has a forward question and a reverse question (QA inversion).
+        Both must anchor on named entities — see ANCHOR RULES below.
+
+        ANCHOR RULES (critical — breaking these makes bridges unretrievable):
+        1. Forward question MUST contain a named root entity (person/film/book/org)
+           visible as a proper noun. Never use dates/places/numbers as the root.
+           BAD: "Who is the father of the person who died in October 1979?"
+           GOOD: "Who is the father of Ștefan I. Nenițescu?"
+
+        2. Chain intermediate roles freely (director/father/grandmother/spouse) but
+           the NAMED ROOT must remain visible in the question text.
+           GOOD: "What is the nationality of the director of Daytime Wives?"
+                 (root = "Daytime Wives", chain = director → nationality)
+
+        3. Reverse question: the reverse MUST also anchor on a named entity.
+           This means reverse works best for person-to-person relations (genealogy,
+           spouse, director/film). When the forward answer is a named entity, write
+           a reverse like "Who is the grandson of Maria Theresa?" → Archduke Ferdinand.
+           When the forward answer is a date/place/attribute, the reverse is
+           structurally bad (attribute-as-subject) and the verifier will reject it
+           with REVERSE_INVALID. In those cases, pick a different bridge target
+           where both sides can be named entities.
+
+        4. Format variants: when GSW stores compound names like "French-American"
+           or "Apopka, Florida", include the base form as an alternate answer too.
 
         Can be used in two modes:
         1. Single bridge mode: Pass question, answers, reverse_question, reverse_answers, source_docs, reasoning
@@ -1450,9 +1477,9 @@ class GSWTools:
             confidence: Confidence score (0-1) (single mode)
             entities_involved: Entities mentioned in bridge (single mode)
             bridges: List of bridge specifications (multiple mode). Each must contain:
-                - question (str): Forward question
+                - question (str): Forward question with named root entity
                 - answers (List[str]): Entity names answering forward question
-                - reverse_question (str): Reverse question
+                - reverse_question (str): Reverse question — also anchored on a named entity
                 - reverse_answers (List[str]): Entity names answering reverse question
                 - source_docs (List[str]): Source document IDs
                 - reasoning (str): Explanation
@@ -1527,7 +1554,10 @@ class GSWTools:
                     source_docs=bridge_spec["source_docs"],
                     reasoning=bridge_spec["reasoning"],
                     confidence=bridge_spec.get("confidence", 0.9),
-                    entities_involved=bridge_spec.get("entities_involved")
+                    entities_involved=bridge_spec.get("entities_involved"),
+                    source_relationship=bridge_spec.get("source_relationship"),
+                    source_entity=bridge_spec.get("source_entity"),
+                    source_neighbor=bridge_spec.get("source_neighbor"),
                 )
                 results.append(result)
 
@@ -1563,6 +1593,12 @@ class GSWTools:
         }
         if prepared.get("similarity_signal"):
             bridge_data["similarity_signal"] = prepared["similarity_signal"]
+        if source_relationship:
+            bridge_data["source_relationship"] = source_relationship
+        if source_entity:
+            bridge_data["source_entity"] = source_entity
+        if source_neighbor:
+            bridge_data["source_neighbor"] = source_neighbor
 
         self.bridges_created.append(bridge_data)
 

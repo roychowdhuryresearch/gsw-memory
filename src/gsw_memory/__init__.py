@@ -69,7 +69,7 @@ answer = qa_system.ask("Who is the main character?")
 """
 
 # Core memory components
-from .memory import GSWProcessor, reconcile_gsw_outputs
+from .memory import AgenticGSWPipeline, GSWProcessor, reconcile_gsw_outputs
 from .memory.models import GSWStructure, EntityNode, VerbPhraseNode, Role, Question
 from .memory.aggregators import EntitySummaryAggregator
 
@@ -85,6 +85,7 @@ __version__ = "0.1.0"
 __all__ = [
     # Core processing
     "GSWProcessor",
+    "AgenticGSWPipeline",
     "reconcile_gsw_outputs", 
     
     # Data models

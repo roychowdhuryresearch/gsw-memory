@@ -9,9 +9,12 @@ import os
 import logging
 import re
 import threading
+import time
 import traceback
 import hashlib
 from typing import List, Dict, Any, Optional, Tuple
+
+import httpx
 
 from .tools import GSWTools, normalize_similarity_text
 from .prompts import SLEEP_TIME_SYSTEM_PROMPT, SLEEP_TIME_BRIDGE_VERIFIER_PROMPT
@@ -40,6 +43,7 @@ _HIGH_SIMILARITY_BLOCKING_CODES = {
 }
 
 _VALID_RETRY_HINTS = {
+    "fix_anchor",
     "fix_reverse_inversion",
     "change_mapping",
     "strengthen_multihop_chain",
@@ -49,6 +53,8 @@ _VALID_RETRY_HINTS = {
 }
 
 _RETRYABLE_VERIFIER_FAILURE_HINTS = {
+    "OPAQUE_ANCHOR": "fix_anchor",
+    "AMBIGUOUS_GENEALOGY": "fix_anchor",
     "REVERSE_INVALID": "fix_reverse_inversion",
     "NEAR_DUPLICATE": "change_mapping",
     "TOO_TRIVIAL": "strengthen_multihop_chain",
@@ -56,6 +62,9 @@ _RETRYABLE_VERIFIER_FAILURE_HINTS = {
     "NOT_CHAIN": "use_different_path_proof",
     "CIRCULAR": "use_different_path_proof",
 }
+
+_BEDROCK_RETRYABLE_STATUS_CODES = frozenset({429, 500, 502, 503, 504})
+_BEDROCK_RETRY_DELAYS_SECONDS: Tuple[float, ...] = (1.0, 2.0, 4.0)
 
 
 class AgenticReconciler:
@@ -322,6 +331,21 @@ class AgenticReconciler:
             return f"openai/{model_name}" if not model_name.startswith("openai/") else model_name
         # openai and bedrock names pass through as-is
         return model_name
+
+    @staticmethod
+    def _pydantic_model_to_openai_json_schema(response_format: Any) -> Dict[str, Any]:
+        """Convert a Pydantic model class into an OpenAI-compatible json_schema response_format."""
+        schema_name = re.sub(r"(?<!^)(?=[A-Z])", "_", response_format.__name__).lower()
+        if schema_name.endswith("_schema"):
+            schema_name = schema_name[: -len("_schema")]
+        return {
+            "type": "json_schema",
+            "json_schema": {
+                "name": schema_name,
+                "schema": response_format.model_json_schema(),
+                "strict": True,
+            },
+        }
 
     def _create_tool_definitions(self) -> List[Dict[str, Any]]:
         """Create OpenAI-format tool definitions for graph-walk exploration."""
@@ -777,6 +801,77 @@ class AgenticReconciler:
         except ImportError:
             return False
 
+    def _is_retryable_bedrock_completion_error(self, error: Exception) -> bool:
+        """Return True when a Bedrock transport error is worth retrying."""
+        litellm_exceptions = getattr(self.litellm, "exceptions", None)
+        service_unavailable_cls = getattr(litellm_exceptions, "ServiceUnavailableError", None)
+        if service_unavailable_cls is not None and isinstance(error, service_unavailable_cls):
+            return True
+
+        api_error_cls = getattr(litellm_exceptions, "APIError", None)
+        if api_error_cls is not None and isinstance(error, api_error_cls):
+            try:
+                status_code = int(getattr(error, "status_code", 0) or 0)
+            except (TypeError, ValueError):
+                status_code = 0
+            return status_code in _BEDROCK_RETRYABLE_STATUS_CODES
+
+        if isinstance(error, httpx.HTTPStatusError):
+            status_code = getattr(getattr(error, "response", None), "status_code", 0) or 0
+            try:
+                status_code = int(status_code)
+            except (TypeError, ValueError):
+                status_code = 0
+            return status_code in _BEDROCK_RETRYABLE_STATUS_CODES
+
+        return False
+
+    def _call_litellm_completion_with_bedrock_retry(
+        self,
+        api_params: Dict[str, Any],
+        *,
+        stage: str,
+        model_name: str,
+    ) -> Any:
+        """Call LiteLLM once, or retry if Bedrock returns a transient transport failure."""
+        if self.provider != "bedrock":
+            return self.litellm.completion(**api_params)
+
+        max_attempts = len(_BEDROCK_RETRY_DELAYS_SECONDS) + 1
+        for attempt in range(1, max_attempts + 1):
+            try:
+                return self.litellm.completion(**api_params)
+            except Exception as error:
+                if not self._is_retryable_bedrock_completion_error(error):
+                    raise
+
+                error_text = self._preview_text(str(error), max_len=200)
+                error_type = type(error).__name__
+                if attempt >= max_attempts:
+                    logger.error(
+                        "Bedrock completion failed after retries [stage=%s model=%s attempt=%s/%s error_type=%s error=%s]",
+                        stage,
+                        model_name,
+                        attempt,
+                        max_attempts,
+                        error_type,
+                        error_text,
+                    )
+                    raise
+
+                delay_seconds = _BEDROCK_RETRY_DELAYS_SECONDS[attempt - 1]
+                logger.warning(
+                    "Retrying Bedrock completion [stage=%s model=%s attempt=%s/%s delay_s=%.1f error_type=%s error=%s]",
+                    stage,
+                    model_name,
+                    attempt,
+                    max_attempts,
+                    delay_seconds,
+                    error_type,
+                    error_text,
+                )
+                time.sleep(delay_seconds)
+
     def _call_model_for_stage(
         self,
         messages: List[Dict[str, Any]],
@@ -805,6 +900,7 @@ class AgenticReconciler:
         self._record_stage_call(stage)
 
         use_litellm_structured = self._is_pydantic_model(response_format)
+        use_direct_vllm_structured = self.provider == "vllm" and use_litellm_structured
 
         api_params: Dict[str, Any] = {
             "model": selected_model,
@@ -817,7 +913,9 @@ class AgenticReconciler:
         if tool_choice is not None:
             api_params["tool_choice"] = tool_choice
 
-        if use_litellm_structured:
+        if use_direct_vllm_structured:
+            api_params["response_format"] = self._pydantic_model_to_openai_json_schema(response_format)
+        elif use_litellm_structured:
             # Route through litellm for Pydantic structured output (all providers)
             api_params["response_format"] = response_format
             api_params["model"] = self._to_litellm_model(selected_model)
@@ -828,7 +926,7 @@ class AgenticReconciler:
 
         # Provider-specific knobs.
         if self.provider == "vllm":
-            if not use_litellm_structured:
+            if not use_direct_vllm_structured and not use_litellm_structured:
                 api_params["presence_penalty"] = 0.2
                 api_params["extra_body"] = {"top_k": 20, "min_p": 0.0}
         elif self.provider == "bedrock":
@@ -848,11 +946,17 @@ class AgenticReconciler:
 
         try:
             try:
-                if use_litellm_structured or self.provider == "bedrock":
-                    response = self.litellm.completion(**api_params)
+                if (use_litellm_structured and not use_direct_vllm_structured) or self.provider == "bedrock":
+                    response = self._call_litellm_completion_with_bedrock_retry(
+                        api_params,
+                        stage=stage,
+                        model_name=str(api_params.get("model", selected_model) or selected_model),
+                    )
                 else:
                     response = self.client.chat.completions.create(**api_params)
             except Exception:
+                if use_direct_vllm_structured:
+                    raise
                 if "response_format" in api_params:
                     fallback_params = dict(api_params)
                     rf = fallback_params.get("response_format")
@@ -862,17 +966,29 @@ class AgenticReconciler:
                         fallback_params["model"] = self._to_litellm_model(selected_model)
                         if self.provider == "vllm":
                             fallback_params.setdefault("api_base", str(self.client.base_url))
-                        response = self.litellm.completion(**fallback_params)
+                        response = self._call_litellm_completion_with_bedrock_retry(
+                            fallback_params,
+                            stage=stage,
+                            model_name=str(fallback_params.get("model", selected_model) or selected_model),
+                        )
                     elif isinstance(rf, dict) and rf.get("type") == "json_schema":
                         fallback_params["response_format"] = {"type": "json_object"}
                         if self.provider == "bedrock":
-                            response = self.litellm.completion(**fallback_params)
+                            response = self._call_litellm_completion_with_bedrock_retry(
+                                fallback_params,
+                                stage=stage,
+                                model_name=str(fallback_params.get("model", selected_model) or selected_model),
+                            )
                         else:
                             response = self.client.chat.completions.create(**fallback_params)
                     else:
                         fallback_params.pop("response_format", None)
                         if self.provider == "bedrock":
-                            response = self.litellm.completion(**fallback_params)
+                            response = self._call_litellm_completion_with_bedrock_retry(
+                                fallback_params,
+                                stage=stage,
+                                model_name=str(fallback_params.get("model", selected_model) or selected_model),
+                            )
                         else:
                             response = self.client.chat.completions.create(**fallback_params)
                 else:
@@ -889,12 +1005,15 @@ class AgenticReconciler:
         total_tokens = int(total_tokens or 0)
 
         self._consume_usage(response, stage=stage)
-        message = response.choices[0].message
+        choice = response.choices[0]
+        message = choice.message
+        finish_reason = getattr(choice, "finish_reason", None)
         if return_usage:
             return message, {
                 "prompt_tokens": prompt_tokens,
                 "completion_tokens": completion_tokens,
                 "total_tokens": total_tokens,
+                "finish_reason": str(finish_reason) if finish_reason is not None else None,
             }
         return message
 
@@ -916,12 +1035,34 @@ class AgenticReconciler:
             return "\n".join(parts).strip()
         return str(value)
 
-    def _extract_message_content_with_source(self, message: Any) -> Tuple[str, str]:
+    def _extract_message_content_with_source(
+        self,
+        message: Any,
+        stage: Optional[str] = None,
+        structured_output: bool = False,
+    ) -> Tuple[str, str]:
         """
-        Extract verifier text with source metadata.
+        Extract assistant payload text with source metadata.
 
-        Checks content, reasoning, and reasoning_content in that order.
+        For vLLM structured worker/verifier stages, prefer the native parsed payload
+        and report empty structured fields explicitly.
         """
+        if self.provider == "vllm" and structured_output and stage in {"worker", "verifier"}:
+            parsed_value = getattr(message, "parsed", None)
+            if parsed_value is not None:
+                if isinstance(parsed_value, str):
+                    parsed_text = parsed_value.strip()
+                else:
+                    parsed_text = json.dumps(parsed_value, ensure_ascii=False).strip()
+                if parsed_text:
+                    return parsed_text, "parsed"
+                return "", "parsed_empty"
+
+            content = self._coerce_to_text(getattr(message, "content", None)).strip()
+            if content:
+                return content, "content"
+            return "", "content_empty"
+
         fields = [
             ("content", getattr(message, "content", None)),
             ("reasoning", getattr(message, "reasoning", None)),
@@ -956,6 +1097,38 @@ class AgenticReconciler:
         if len(compact) > max_len:
             return compact[:max_len] + "..."
         return compact
+
+    def _summarize_assistant_message_fields(self, message: Any, max_preview_len: int = 240) -> Dict[str, Any]:
+        """Summarize raw assistant message fields for parse diagnostics."""
+        parsed_value = getattr(message, "parsed", None)
+        parsed_preview = ""
+        parsed_type: Optional[str] = None
+        if parsed_value is not None:
+            parsed_type = type(parsed_value).__name__
+            if isinstance(parsed_value, str):
+                parsed_preview = self._preview_text(parsed_value, max_len=max_preview_len)
+            else:
+                try:
+                    parsed_preview = self._preview_text(
+                        json.dumps(parsed_value, ensure_ascii=False),
+                        max_len=max_preview_len,
+                    )
+                except TypeError:
+                    parsed_preview = self._preview_text(str(parsed_value), max_len=max_preview_len)
+
+        content_text = self._coerce_to_text(getattr(message, "content", None))
+        reasoning_content_text = self._coerce_to_text(getattr(message, "reasoning_content", None))
+        tool_calls = getattr(message, "tool_calls", None)
+        return {
+            "has_parsed": parsed_value is not None,
+            "parsed_type": parsed_type,
+            "parsed_preview": parsed_preview,
+            "has_content": bool(content_text.strip()),
+            "content_preview": self._preview_text(content_text, max_len=max_preview_len),
+            "has_reasoning_content": bool(reasoning_content_text.strip()),
+            "reasoning_content_preview": self._preview_text(reasoning_content_text, max_len=max_preview_len),
+            "has_tool_calls": bool(tool_calls),
+        }
 
     def _extract_first_balanced_json_object(self, text: str) -> Optional[str]:
         """Extract the first balanced JSON object from arbitrary text."""
@@ -1063,11 +1236,11 @@ class AgenticReconciler:
 
         return None
 
-    def _extract_json_from_text(self, text: str) -> Dict[str, Any]:
+    def _extract_json_from_text(self, text: str, payload_label: str = "response") -> Dict[str, Any]:
         """Parse JSON object from raw model output."""
         stripped = self._normalize_verifier_text(text)
         if not stripped:
-            raise ValueError("Empty verifier response")
+            raise ValueError(f"Empty {payload_label} response")
 
         try:
             return json.loads(stripped)
@@ -1090,7 +1263,7 @@ class AgenticReconciler:
         if embedded:
             return json.loads(embedded)
 
-        raise ValueError("No JSON object found in verifier output")
+        raise ValueError(f"No JSON object found in {payload_label} output")
 
     def _normalize_verifier_output(self, raw: Dict[str, Any]) -> Dict[str, Any]:
         """Normalize verifier output into a stable shape."""
@@ -1283,7 +1456,11 @@ class AgenticReconciler:
             stage="verifier",
             response_format=response_format,
         )
-        raw_text, source_field = self._extract_message_content_with_source(verifier_message)
+        raw_text, source_field = self._extract_message_content_with_source(
+            verifier_message,
+            stage="verifier",
+            structured_output=use_structured,
+        )
         return raw_text, source_field
 
     def _verify_bridge_candidate(self, bridge_spec: Dict[str, Any]) -> Dict[str, Any]:
@@ -1346,7 +1523,7 @@ class AgenticReconciler:
             }
 
         try:
-            parsed = self._extract_json_from_text(raw_text)
+            parsed = self._extract_json_from_text(raw_text, payload_label="verifier")
             result = VerifierOutputSchema.model_validate(parsed)
             verdict = {
                 "pass": result.pass_field,
@@ -1401,7 +1578,7 @@ class AgenticReconciler:
 
         try:
             repaired_text, repaired_source = self._call_verifier_model(repair_messages, use_structured=False)
-            repaired_parsed = self._extract_json_from_text(repaired_text)
+            repaired_parsed = self._extract_json_from_text(repaired_text, payload_label="verifier")
             repaired_verdict = self._normalize_verifier_output(repaired_parsed)
             _metric_inc("verifier_parse_recovery_success", 1)
             repaired_verdict["source_field"] = repaired_source
@@ -1440,7 +1617,7 @@ class AgenticReconciler:
         regenerated_source = source_field
         try:
             regenerated_text, regenerated_source = self._call_verifier_model(regenerate_messages)
-            regenerated_parsed = self._extract_json_from_text(regenerated_text)
+            regenerated_parsed = self._extract_json_from_text(regenerated_text, payload_label="verifier")
             regenerated_verdict = self._normalize_verifier_output(regenerated_parsed)
             _metric_inc("verifier_parse_recovery_success", 1)
             regenerated_verdict["source_field"] = regenerated_source
@@ -2275,7 +2452,11 @@ class AgenticReconciler:
                     api_params["reasoning_effort"] = self.reasoning_effort
 
             if self.provider == "bedrock":
-                response = self.litellm.completion(**api_params)
+                response = self._call_litellm_completion_with_bedrock_retry(
+                    api_params,
+                    stage="legacy_tool_loop",
+                    model_name=str(api_params.get("model", self.model_name) or self.model_name),
+                )
             else:
                 response = self.client.chat.completions.create(**api_params)
 

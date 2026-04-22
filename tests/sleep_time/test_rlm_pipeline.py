@@ -1,34 +1,61 @@
 import json
+import time
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from gsw_memory.sleep_time.rlm_pipeline import (
     EdgeKey,
     EdgePacket,
     EdgeRunResult,
+    EdgeWorkerProposal,
     HybridScheduler,
     PLANNER_PROMPT_VERSION,
+    PreparedEdgeWork,
     RenderInput,
     RecursiveEdgeWorker,
     RootScheduler,
     WORKER_PROMPT_VERSION,
+    WorkerResponseSchema,
 )
 from gsw_memory.sleep_time.tools import GSWTools
 
 
 class _DummyMessage:
-    def __init__(self, content: str):
+    def __init__(self, content=None, parsed=None, reasoning=None, reasoning_content=None, finish_reason=None, tool_calls=None):
         self.content = content
+        self.parsed = parsed
+        self.reasoning = reasoning
+        self.reasoning_content = reasoning_content
+        self.finish_reason = finish_reason
+        self.tool_calls = tool_calls
+
+
+@dataclass
+class _EntityNode:
+    id: str
+    name: str
+
+
+class _MiniGSW:
+    def __init__(self, entities: List[_EntityNode]):
+        self.entity_nodes = entities
+        self.verb_phrase_nodes = []
+
+    def get_entity_by_id(self, entity_id: str):
+        for entity in self.entity_nodes:
+            if entity.id == entity_id:
+                return entity
+        return None
 
 
 class _DummySearcher:
     def __init__(self):
         self.gsw_by_doc_id = {
-            "doc_0": object(),
-            "doc_1": object(),
-            "doc_2": object(),
-            "doc_3": object(),
-            "doc_4": object(),
+            "doc_0": _MiniGSW([_EntityNode("e1", "Source")]),
+            "doc_1": _MiniGSW([_EntityNode("e2", "20 March 851"), _EntityNode("e1", "Neighbor")]),
+            "doc_2": _MiniGSW([_EntityNode("e5", "Abbey X")]),
+            "doc_3": _MiniGSW([_EntityNode("e1", "795")]),
+            "doc_4": _MiniGSW([_EntityNode("e9", "Lotharingia")]),
         }
         self.entities = [
             {"name": "Source", "doc_id": "doc_0"},
@@ -50,15 +77,21 @@ class _DummySearcher:
 class _FakeReconciler:
     def __init__(self, token_increment: int = 100):
         self.tools = GSWTools(_DummySearcher())
-        self.output_callback = None
+        self.callback_events: List[Tuple[str, Dict[str, Any]]] = []
+        self.output_callback = lambda event_type, data: self.callback_events.append((event_type, data))
         self.tokens_used = 0
         self.input_tokens = 0
         self.output_tokens = 0
         self.token_increment = token_increment
+        self.provider = "openai"
         self.budget = {"max_tokens": 10_000_000}
         self._current_doc_exploration_doc_id = None
         self.root_model = "root-model"
         self.worker_model = "worker-model"
+        self.bridge_verifier_enabled = False
+        self.bridge_verifier_threshold = 0.75
+        self.verifier_parallel_workers = 4
+        self.edge_max_accepted_bridges = 2
         self.entities_explored = 0
         self.rlm_metrics: Dict[str, Any] = {
             "root_calls": 0,
@@ -85,6 +118,25 @@ class _FakeReconciler:
             "planner_stop_actions": 0,
             "docs_attempted": 0,
             "docs_completed": 0,
+            "parallel_batches": 0,
+            "parallel_workers_used": 0,
+            "commit_queue_size_peak": 0,
+            "stale_edge_skipped": 0,
+            "parallel_generation_seconds": 0.0,
+            "serial_commit_seconds": 0.0,
+            "pre_verifier_cache_hits": 0,
+            "verifier_parallel_workers_used": 0,
+            "parallel_verifier_seconds": 0.0,
+            "edge_accept_cap_hits": 0,
+            "guided_retry_scheduled": 0,
+            "guided_retry_started": 0,
+            "guided_retry_succeeded": 0,
+            "guided_retry_exhausted": 0,
+            "guided_retry_blocked_no_progress": 0,
+            "worker_parse_recovery_success": 0,
+            "worker_parse_recovery_fail": 0,
+            "verifier_parse_recovery_success": 0,
+            "verifier_parse_recovery_fail": 0,
         }
 
         self.stage_payloads: Dict[str, List[str]] = {
@@ -92,6 +144,7 @@ class _FakeReconciler:
             "worker": [],
             "verifier": [],
         }
+        self.captured_response_formats: List[Any] = []
 
         self.context_map: Dict[str, Dict[str, Any]] = {
             "doc_0": {
@@ -218,24 +271,83 @@ class _FakeReconciler:
         response_format=None,
         tools=None,
         tool_choice=None,
+        return_usage=False,
     ):
+        self.captured_response_formats.append(response_format)
         self._increment_stage_usage(stage)
         queue = self.stage_payloads.get(stage, [])
         if queue:
             payload = queue.pop(0)
         else:
             payload = '{"status": "ok", "candidates": [], "need_recursion": false, "notes": "default"}'
-        return _DummyMessage(payload)
+        message = payload if isinstance(payload, _DummyMessage) else _DummyMessage(payload)
+        if return_usage:
+            prompt_tokens = self.token_increment // 2
+            completion_tokens = self.token_increment - prompt_tokens
+            return message, {
+                "prompt_tokens": prompt_tokens,
+                "completion_tokens": completion_tokens,
+                "total_tokens": self.token_increment,
+                "finish_reason": getattr(message, "finish_reason", None),
+            }
+        return message
 
-    def _extract_message_content_with_source(self, message):
-        return message.content, "content"
+    def _extract_message_content_with_source(self, message, stage=None, structured_output=False):
+        if self.provider == "vllm" and structured_output and stage in {"worker", "verifier"}:
+            if getattr(message, "parsed", None) is not None:
+                if isinstance(message.parsed, str):
+                    parsed_text = message.parsed.strip()
+                else:
+                    parsed_text = json.dumps(message.parsed).strip()
+                if parsed_text:
+                    return parsed_text, "parsed"
+                return "", "parsed_empty"
+            content = (message.content or "").strip()
+            if content:
+                return content, "content"
+            return "", "content_empty"
+        return (message.content or ""), "content"
 
-    def _extract_json_from_text(self, text: str):
+    def _extract_json_from_text(self, text: str, payload_label: str = "response"):
+        if not (text or "").strip():
+            raise ValueError(f"Empty {payload_label} response")
         return json.loads(text)
 
     def _preview_text(self, text: str, max_len: int = 120):
         text = (text or "").strip()
         return text[:max_len]
+
+    def _coerce_to_text(self, value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value
+        if isinstance(value, list):
+            return "\n".join(str(item) for item in value if item is not None)
+        return str(value)
+
+    def _summarize_assistant_message_fields(self, message: Any, max_preview_len: int = 240):
+        parsed_value = getattr(message, "parsed", None)
+        parsed_preview = ""
+        parsed_type = None
+        if parsed_value is not None:
+            parsed_type = type(parsed_value).__name__
+            if isinstance(parsed_value, str):
+                parsed_preview = parsed_value[:max_preview_len]
+            else:
+                parsed_preview = json.dumps(parsed_value)[:max_preview_len]
+        content_value = (getattr(message, "content", None) or "")
+        reasoning_content = (getattr(message, "reasoning_content", None) or "")
+        return {
+            "has_parsed": parsed_value is not None,
+            "parsed_type": parsed_type,
+            "parsed_preview": parsed_preview,
+            "has_content": bool(str(content_value).strip()),
+            "content_preview": str(content_value)[:max_preview_len],
+            "has_reasoning_content": bool(str(reasoning_content).strip()),
+            "reasoning_content_preview": str(reasoning_content)[:max_preview_len],
+            "has_tool_calls": bool(getattr(message, "tool_calls", None)),
+        }
 
     def _execute_tool(self, tool_name: str, arguments: Dict[str, Any]):
         if tool_name == "plan_document_exploration":
@@ -335,8 +447,168 @@ def test_worker_parse_repair_retry_path():
     output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=500)
 
     assert output.parse_stage == "repair_retry"
+    assert output.parse_attempts == 2
+    assert output.parse_recovery_used is True
+    assert output.budgeted_token_usage == 50
+    assert output.token_usage == 100
     assert len(output.candidates) == 1
     assert reconciler.rlm_metrics["worker_calls"] == 2
+    assert reconciler.rlm_metrics["worker_parse_recovery_success"] == 1
+
+
+def test_worker_parse_regenerate_retry_path():
+    reconciler = _FakeReconciler(token_increment=40)
+    reconciler.stage_payloads["worker"] = [
+        "not-json",
+        "still-not-json",
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [
+                    {
+                        "question": "Where was Source's neighbor buried?",
+                        "answers": ["doc_2::e5"],
+                        "reverse_question": "Whose neighbor was buried in Abbey X?",
+                        "reverse_answers": ["doc_0::e1"],
+                        "source_docs": ["doc_0", "doc_2"],
+                        "reasoning": "Forward target variable = Abbey X. Reverse target variable = Source. Sub-Q1 ... Sub-Q2 ...",
+                    }
+                ],
+                "need_recursion": False,
+                "notes": "Recovered on regenerate.",
+            }
+        ),
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=2, edge_max_tokens=3000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=500)
+
+    assert output.parse_stage == "regenerate_retry"
+    assert output.parse_attempts == 3
+    assert output.parse_recovery_used is True
+    assert output.budgeted_token_usage == 40
+    assert output.token_usage == 120
+    assert len(output.candidates) == 1
+    assert reconciler.rlm_metrics["worker_calls"] == 3
+    assert reconciler.rlm_metrics["worker_parse_recovery_success"] == 1
+
+
+def test_worker_uses_pydantic_structured_output():
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.stage_payloads["worker"] = [
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [],
+                "need_recursion": False,
+                "notes": "schema ok",
+            }
+        )
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=1, edge_max_tokens=1000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=300)
+
+    assert output.status == "ok"
+    response_format = reconciler.captured_response_formats[0]
+    # Should pass the Pydantic model class directly for litellm structured output
+    assert response_format is WorkerResponseSchema
+
+
+def test_worker_prefers_vllm_parsed_structured_output():
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.provider = "vllm"
+    reconciler.stage_payloads["worker"] = [
+        _DummyMessage(
+            content='{"status": "wrong", "candidates": [], "need_recursion": true, "notes": "content"}',
+            parsed={
+                "status": "ok",
+                "candidates": [],
+                "need_recursion": False,
+                "notes": "parsed wins",
+            },
+        )
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=1, edge_max_tokens=1000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=300)
+
+    assert output.status == "ok"
+    assert output.notes == "parsed wins"
+    assert output.source_field == "parsed"
+
+
+def test_worker_vllm_empty_parsed_fails_without_content_fallback():
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.provider = "vllm"
+    reconciler.stage_payloads["worker"] = [
+        _DummyMessage(
+            content='{"status": "ok", "candidates": [], "need_recursion": false, "notes": "content only"}',
+            parsed="",
+        ),
+        _DummyMessage(
+            content='{"status": "ok", "candidates": [], "need_recursion": false, "notes": "content only"}',
+            parsed="",
+        ),
+        _DummyMessage(
+            content='{"status": "ok", "candidates": [], "need_recursion": false, "notes": "content only"}',
+            parsed="",
+        ),
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=1, edge_max_tokens=1000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=300)
+
+    assert output.status == "parse_error"
+    assert output.source_field == "parsed_empty"
+    assert output.notes == "Worker parse error: Empty worker response"
+
+
+def test_worker_parse_failure_emits_diagnostics_event_with_finish_reason():
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.provider = "vllm"
+    reconciler.stage_payloads["worker"] = [
+        _DummyMessage(content="", parsed=None, reasoning_content="hidden", finish_reason="length"),
+        _DummyMessage(content="", parsed=None, reasoning_content="hidden", finish_reason="length"),
+        _DummyMessage(content="", parsed=None, reasoning_content="hidden", finish_reason="length"),
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=1, edge_max_tokens=1000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=300)
+
+    assert output.status == "parse_error"
+    assert output.finish_reason == "length"
+    assert output.message_field_summary["has_content"] is False
+    assert output.message_field_summary["has_reasoning_content"] is True
+
+    parse_failure_events = [
+        data
+        for event_type, data in reconciler.callback_events
+        if event_type == "rlm_worker_parse_failure"
+    ]
+    assert [event["stage"] for event in parse_failure_events] == [
+        "initial",
+        "repair_retry",
+        "regenerate_retry",
+    ]
+    assert all(event["finish_reason"] == "length" for event in parse_failure_events)
+    assert all(event["message_fields"]["has_reasoning_content"] is True for event in parse_failure_events)
+
+
+def test_worker_invalid_structured_payload_reports_schema_error():
+    reconciler = _FakeReconciler(token_increment=20)
+    reconciler.stage_payloads["worker"] = [
+        json.dumps({"status": "ok", "candidates": [], "need_recursion": "bad"}),
+        json.dumps({"status": "ok", "candidates": [], "need_recursion": "bad"}),
+        json.dumps({"status": "ok", "candidates": [], "need_recursion": "bad"}),
+    ]
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=1, edge_max_tokens=1000)
+    output = worker.generate(packet=_build_packet(), depth=0, include_optional=False, max_response_tokens=300)
+
+    assert output.status == "parse_error"
+    assert "Worker schema validation failed" in output.notes
+    assert output.parse_stage == "regenerate_retry"
 
 
 def test_packet_construction_includes_source_context_and_docs():
@@ -449,6 +721,185 @@ def test_scheduler_collects_optional_context_via_alias_fallback(monkeypatch):
     assert proofs
 
 
+def test_path_proofs_include_source_subject_refs():
+    reconciler = _FakeReconciler(token_increment=30)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+    proofs = scheduler._mine_path_proofs(_build_packet(), include_optional=False, max_paths=4)
+    assert proofs
+    assert any("doc_0::e1" in proof.source_subject_refs for proof in proofs)
+
+
+def test_scheduler_resolves_reverse_answer_from_source_subject_refs(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+    packet = EdgePacket(
+        edge=EdgeKey("doc_0", "Source", "Neighbor", "related to"),
+        source_docs=["doc_0", "doc_1"],
+        mandatory_docs=["doc_1"],
+        optional_docs=[],
+        source_context={
+            "doc_id": "doc_0",
+            "entity": "Source",
+            "qa_pairs": [
+                {
+                    "question": "Who is Source related to?",
+                    "answer": "Neighbor",
+                    "answer_refs": ["doc_0::e9"],
+                }
+            ],
+            "relationships": {"related to": ["Neighbor"]},
+            "roles": ["person"],
+            "states": ["historical figure"],
+        },
+        mandatory_contexts=[
+            {
+                "doc_id": "doc_1",
+                "entity": "Neighbor",
+                "qa_pairs": [
+                    {
+                        "question": "When did Neighbor die?",
+                        "answer": "20 March 851",
+                        "answer_refs": ["doc_1::e2"],
+                    }
+                ],
+                "relationships": {"died on": ["20 March 851"]},
+                "roles": ["person"],
+                "states": ["deceased"],
+            }
+        ],
+        optional_contexts=[],
+        constraints={"must_be_chain": True, "reverse_required": True},
+        budget={"max_depth": 1, "max_calls": 2, "max_tokens": 3000},
+    )
+    path_proofs = scheduler._mine_path_proofs(packet, include_optional=False, max_paths=4)
+    assert path_proofs
+
+    captured = {}
+
+    def _fake_call_tool(tool_name, arguments, doc_id=None):
+        assert tool_name == "create_bridge_qa"
+        captured["bridge"] = arguments["bridges"][0]
+        return [{"success": True, "bridge_id": "bridge_subject_ref"}]
+
+    monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
+    drop_reason_counts = scheduler._new_drop_reason_counts()
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
+        packet,
+        [
+            {
+                "question": "When did Source's neighbor die?",
+                "answers": ["doc_1::e2"],
+                "reverse_question": "Whose neighbor died on 20 March 851?",
+                "reverse_answers": ["Source"],
+                "source_docs": ["doc_0", "doc_1"],
+                "reasoning": "Sub-Q1 ... Sub-Q2 ...",
+            }
+        ],
+        path_proofs=path_proofs,
+        drop_reason_counts=drop_reason_counts,
+    )
+
+    assert accepted == 1
+    assert rejected == 0
+    assert cap_hit is False
+    assert captured["bridge"]["reverse_answers"] == ["doc_0::e1"]
+    assert drop_reason_counts["missing_source_ref"] == 0
+
+
+def test_mine_path_proofs_round_robin_balances_orientations():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+    packet = EdgePacket(
+        edge=EdgeKey("doc_0", "Source", "Neighbor", "related to"),
+        source_docs=["doc_0", "doc_1", "doc_2"],
+        mandatory_docs=["doc_1", "doc_2"],
+        optional_docs=[],
+        source_context={
+            "doc_id": "doc_0",
+            "entity": "Source",
+            "qa_pairs": [
+                {
+                    "question": "Who is Source related to?",
+                    "answer": "Neighbor",
+                    "answer_refs": ["doc_0::e1"],
+                },
+                {
+                    "question": "Who was married to Neighbor?",
+                    "answer": "Source",
+                    "answer_refs": ["doc_0::e1"],
+                },
+            ],
+            "relationships": {"related to": ["Neighbor"]},
+            "roles": ["person"],
+            "states": ["historical figure"],
+        },
+        mandatory_contexts=[
+            {
+                "doc_id": "doc_1",
+                "entity": "Neighbor",
+                "qa_pairs": [
+                    {
+                        "question": "When did Neighbor die?",
+                        "answer": "20 March 851",
+                        "answer_refs": ["doc_1::e2"],
+                    }
+                ],
+                "relationships": {"died on": ["20 March 851"]},
+                "roles": ["person"],
+                "states": ["deceased"],
+            },
+            {
+                "doc_id": "doc_2",
+                "entity": "Neighbor",
+                "qa_pairs": [
+                    {
+                        "question": "Where was Neighbor buried?",
+                        "answer": "Abbey X",
+                        "answer_refs": ["doc_2::e5"],
+                    }
+                ],
+                "relationships": {"buried in": ["Abbey X"]},
+                "roles": ["person"],
+                "states": ["historical figure"],
+            },
+        ],
+        optional_contexts=[],
+        constraints={"must_be_chain": True, "reverse_required": True},
+        budget={"max_depth": 1, "max_calls": 2, "max_tokens": 3000},
+    )
+    proofs = scheduler._mine_path_proofs(packet, include_optional=False, max_paths=2)
+    assert len(proofs) == 2
+    orientations = {
+        scheduler._source_link_orientation(proof.source_fact, packet.edge.neighbor_name)
+        for proof in proofs
+    }
+    assert orientations == {"neighbor_as_answer", "neighbor_in_question"}
+
+
 def test_scheduler_enforces_edge_token_budget():
     reconciler = _FakeReconciler(token_increment=220)
     reconciler.stage_payloads["worker"] = [
@@ -492,7 +943,7 @@ def test_scheduler_repairs_non_id_entity_refs_before_create_bridge(monkeypatch):
 
     monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
 
-    accepted, rejected = scheduler._apply_candidates(
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
         _build_packet(),
         [
             {
@@ -508,6 +959,7 @@ def test_scheduler_repairs_non_id_entity_refs_before_create_bridge(monkeypatch):
 
     assert accepted == 1
     assert rejected == 0
+    assert cap_hit is False
     assert captured["bridge"]["answers"] == ["doc_1::e2"]
     assert captured["bridge"]["reverse_answers"] == ["doc_0::e1"]
 
@@ -533,7 +985,7 @@ def test_scheduler_drops_unresolved_entity_refs_before_create_bridge(monkeypatch
 
     monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
 
-    accepted, rejected = scheduler._apply_candidates(
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
         _build_packet(),
         [
             {
@@ -549,6 +1001,7 @@ def test_scheduler_drops_unresolved_entity_refs_before_create_bridge(monkeypatch
 
     assert accepted == 0
     assert rejected == 1
+    assert cap_hit is False
     assert call_counter["create_bridge_qa"] == 0
 
 
@@ -766,13 +1219,14 @@ def test_scheduler_dedupes_identical_candidates_before_create_bridge(monkeypatch
         "reasoning": "Sub-Q1 ... Sub-Q2 ...",
     }
 
-    accepted, rejected = scheduler._apply_candidates(
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
         _build_packet(),
         [dup_candidate, dict(dup_candidate)],
     )
 
     assert accepted == 1
     assert rejected == 0
+    assert cap_hit is False
     assert call_counter["create_bridge_qa"] == 1
 
 
@@ -798,7 +1252,7 @@ def test_scheduler_canonicalizes_source_docs_to_ref_docs_only(monkeypatch):
 
     monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
 
-    accepted, rejected = scheduler._apply_candidates(
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
         _build_packet(),
         [
             {
@@ -814,7 +1268,186 @@ def test_scheduler_canonicalizes_source_docs_to_ref_docs_only(monkeypatch):
 
     assert accepted == 1
     assert rejected == 0
+    assert cap_hit is False
     assert captured["bridge"]["source_docs"] == ["doc_0", "doc_1"]
+
+
+def test_scheduler_enforces_edge_accept_cap_with_preverified_commit(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    reconciler.bridge_verifier_enabled = True
+    reconciler.edge_max_accepted_bridges = 2
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+
+    verifier_calls = {"count": 0}
+
+    def _fake_verify_gate(_bridge_spec):
+        verifier_calls["count"] += 1
+        return {"pass": True, "score": 0.99, "failure_codes": [], "notes": "ok"}, True
+
+    reconciler.verify_bridge_candidate_gate = _fake_verify_gate
+
+    create_calls = {"count": 0}
+
+    def _fake_call_tool(tool_name, arguments, doc_id=None):
+        if tool_name == "create_bridge_qa":
+            create_calls["count"] += 1
+            assert arguments.get("__preverified") is True
+            return [{"success": True, "bridge_id": f"bridge_{create_calls['count']}"}]
+        return {"success": True}
+
+    monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
+
+    candidates = []
+    for idx in range(4):
+        candidates.append(
+            {
+                "question": f"When did Source's neighbor die #{idx}?",
+                "answers": ["doc_1::e2"],
+                "reverse_question": f"Whose neighbor died on 20 March 851? #{idx}",
+                "reverse_answers": ["doc_0::e1"],
+                "source_docs": ["doc_0", "doc_1"],
+                "reasoning": "Sub-Q1 ... Sub-Q2 ...",
+            }
+        )
+
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(_build_packet(), candidates)
+
+    assert accepted == 2
+    assert rejected == 0
+    assert cap_hit is True
+    assert verifier_calls["count"] == 4
+    assert create_calls["count"] == 2
+    assert reconciler.rlm_metrics["edge_accept_cap_hits"] >= 1
+
+
+def test_scheduler_reverifies_high_similarity_sibling_at_commit(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    reconciler.bridge_verifier_enabled = True
+    reconciler.edge_max_accepted_bridges = 8
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+
+    verifier_calls = {"count": 0}
+
+    def _fake_verify_gate(bridge_spec):
+        verifier_calls["count"] += 1
+        similarity_max = scheduler._max_similarity_from_signal(bridge_spec.get("similarity_signal", []))
+        if similarity_max >= 0.70:
+            return {"pass": False, "score": 0.2, "failure_codes": ["NEAR_DUPLICATE"], "notes": "dup"}, False
+        return {"pass": True, "score": 0.99, "failure_codes": [], "notes": "ok"}, True
+
+    reconciler.verify_bridge_candidate_gate = _fake_verify_gate
+
+    create_calls = {"count": 0}
+
+    def _fake_call_tool(tool_name, arguments, doc_id=None):
+        if tool_name == "create_bridge_qa":
+            create_calls["count"] += 1
+            assert arguments.get("__preverified") is True
+            create_args = dict(arguments)
+            create_args.pop("__preverified", None)
+            return reconciler.tools.create_bridge_qa(**create_args)
+        return {"success": True}
+
+    monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
+
+    candidates = [
+        {
+            "question": "When did Source's neighbor die?",
+            "answers": ["doc_1::e2"],
+            "reverse_question": "Whose neighbor died on 20 March 851?",
+            "reverse_answers": ["doc_0::e1"],
+            "source_docs": ["doc_0", "doc_1"],
+            "reasoning": "Sub-Q1 ... Sub-Q2 ...",
+        },
+        {
+            "question": "When did the neighbor of Source die?",
+            "answers": ["doc_1::e2"],
+            "reverse_question": "Whose neighbor died on 20 March 851?",
+            "reverse_answers": ["doc_0::e1"],
+            "source_docs": ["doc_0", "doc_1"],
+            "reasoning": "Sub-Q1 ... Sub-Q2 ...",
+        },
+    ]
+
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(_build_packet(), candidates)
+
+    assert accepted == 1
+    assert rejected == 1
+    assert cap_hit is False
+    assert verifier_calls["count"] == 3
+    assert create_calls["count"] == 1
+    assert len(reconciler.tools.bridges_created) == 1
+
+
+def test_scheduler_keeps_low_similarity_commit_on_fast_path(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    reconciler.bridge_verifier_enabled = True
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=2,
+    )
+
+    verifier_calls = {"count": 0}
+
+    def _fake_verify_gate(_bridge_spec):
+        verifier_calls["count"] += 1
+        return {"pass": True, "score": 0.99, "failure_codes": [], "notes": "ok"}, True
+
+    reconciler.verify_bridge_candidate_gate = _fake_verify_gate
+
+    create_calls = {"count": 0}
+
+    def _fake_call_tool(tool_name, arguments, doc_id=None):
+        if tool_name == "create_bridge_qa":
+            create_calls["count"] += 1
+            assert arguments.get("__preverified") is True
+            create_args = dict(arguments)
+            create_args.pop("__preverified", None)
+            return reconciler.tools.create_bridge_qa(**create_args)
+        return {"success": True}
+
+    monkeypatch.setattr(scheduler, "_call_tool", _fake_call_tool)
+
+    accepted, rejected, cap_hit, retry_brief = scheduler._apply_candidates(
+        _build_packet(),
+        [
+            {
+                "question": "When did Source's neighbor die?",
+                "answers": ["doc_1::e2"],
+                "reverse_question": "Whose neighbor died on 20 March 851?",
+                "reverse_answers": ["doc_0::e1"],
+                "source_docs": ["doc_0", "doc_1"],
+                "reasoning": "Sub-Q1 ... Sub-Q2 ...",
+            }
+        ],
+    )
+
+    assert accepted == 1
+    assert rejected == 0
+    assert cap_hit is False
+    assert verifier_calls["count"] == 1
+    assert create_calls["count"] == 1
 
 
 def test_scheduler_stops_repeated_failed_candidate_signatures():
@@ -917,14 +1550,173 @@ def test_rlm_edge_summary_includes_worker_prompt_version():
     assert edge_events[0]["data"]["close_reason"] == "no_candidates_no_progression"
     assert edge_events[0]["data"]["worker_calls_made"] == 1
     assert edge_events[0]["data"]["close_detail"]
+    assert edge_events[0]["data"]["drop_reason_counts"]["missing_source_ref"] == 0
+    assert edge_events[0]["data"]["drop_reason_counts"]["missing_target_ref"] == 0
+    assert edge_events[0]["data"]["drop_reason_counts"]["reverse_not_invertible"] == 0
+    assert edge_events[0]["data"]["drop_reason_counts"]["no_cross_doc_evidence"] == 0
 
-    worker_call_events = [e for e in events if e["event"] == "rlm_worker_call"]
-    worker_result_events = [e for e in events if e["event"] == "rlm_worker_result"]
-    assert len(worker_call_events) == 1
-    assert len(worker_result_events) == 1
-    assert worker_call_events[0]["data"]["planner_action"] == "run_worker"
-    assert worker_call_events[0]["data"]["worker_invoked"] is True
-    assert worker_result_events[0]["data"]["candidates_count"] == 0
+
+def test_root_scheduler_guided_retry_same_edge():
+    reconciler = _FakeReconciler(token_increment=40)
+    reconciler.bridge_verifier_enabled = True
+    reconciler.stage_payloads["worker"] = [
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [
+                    {
+                        "question": "When did Source's neighbor die?",
+                        "answers": ["doc_1::e2"],
+                        "reverse_question": "Whose neighbor died on 20 March 851?",
+                        "reverse_answers": ["doc_0::e1"],
+                        "source_docs": ["doc_0", "doc_1"],
+                        "reasoning": "Forward target variable = 20 March 851. Reverse target variable = Source. Sub-Q1 ... Sub-Q2 ...",
+                    }
+                ],
+                "need_recursion": False,
+                "notes": "first attempt",
+            }
+        ),
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [
+                    {
+                        "question": "When did the mother of Source's neighbor die?",
+                        "answers": ["doc_1::e2"],
+                        "reverse_question": "Whose neighbor's mother died on 20 March 851?",
+                        "reverse_answers": ["doc_0::e1"],
+                        "source_docs": ["doc_0", "doc_1"],
+                        "reasoning": "Forward target variable = 20 March 851. Reverse target variable = Source. Sub-Q1 ... Sub-Q2 ...",
+                    }
+                ],
+                "need_recursion": False,
+                "notes": "retry attempt",
+            }
+        ),
+    ]
+
+    def _fake_verify_gate(bridge_spec):
+        if "mother" in bridge_spec.get("question", "").lower():
+            return {"pass": True, "score": 0.97, "failure_codes": [], "notes": "ok", "retryable": False, "retry_hint": "stop_edge", "retry_reason": "accepted"}, True
+        return {
+            "pass": False,
+            "score": 0.31,
+            "failure_codes": ["REVERSE_INVALID"],
+            "notes": "reverse mapping is weak",
+            "retryable": True,
+            "retry_hint": "fix_reverse_inversion",
+            "retry_reason": "Keep the same edge and repair the reverse inversion.",
+        }, False
+
+    reconciler.verify_bridge_candidate_gate = _fake_verify_gate
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=3, edge_max_tokens=5000)
+    scheduler = RootScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=3,
+        edge_max_tokens=5000,
+        max_optional_docs_per_edge=1,
+    )
+
+    summary = scheduler.run_document("doc_0")
+
+    assert summary["bridges_created"] == 1
+    assert reconciler.rlm_metrics["guided_retry_scheduled"] == 1
+    assert reconciler.rlm_metrics["guided_retry_started"] == 1
+    assert reconciler.rlm_metrics["guided_retry_succeeded"] == 1
+    assert summary["edge_results"][0]["guided_retry_count"] == 1
+    assert summary["edge_results"][0]["last_retry_hint"] == "fix_reverse_inversion"
+
+
+def test_hybrid_parallel_requeues_guided_retry_edge(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=40)
+    reconciler.bridge_verifier_enabled = True
+    reconciler.stage_payloads["worker"] = [
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [
+                    {
+                        "question": "When did Source's neighbor die?",
+                        "answers": ["doc_1::e2"],
+                        "reverse_question": "Whose neighbor died on 20 March 851?",
+                        "reverse_answers": ["doc_0::e1"],
+                        "source_docs": ["doc_0", "doc_1"],
+                        "reasoning": "Forward target variable = 20 March 851. Reverse target variable = Source. Sub-Q1 ... Sub-Q2 ...",
+                    }
+                ],
+                "need_recursion": False,
+                "notes": "first attempt",
+            }
+        ),
+        json.dumps(
+            {
+                "status": "ok",
+                "candidates": [
+                    {
+                        "question": "Where was Source's neighbor buried?",
+                        "answers": ["doc_2::e5"],
+                        "reverse_question": "Whose neighbor was buried in Abbey X?",
+                        "reverse_answers": ["doc_0::e1"],
+                        "source_docs": ["doc_0", "doc_2"],
+                        "reasoning": "Forward target variable = Abbey X. Reverse target variable = Source. Sub-Q1 ... Sub-Q2 ...",
+                    }
+                ],
+                "need_recursion": False,
+                "notes": "retry attempt",
+            }
+        ),
+    ]
+
+    def _fake_verify_gate(bridge_spec):
+        if "buried" in bridge_spec.get("question", "").lower():
+            return {"pass": True, "score": 0.96, "failure_codes": [], "notes": "ok", "retryable": False, "retry_hint": "stop_edge", "retry_reason": "accepted"}, True
+        return {
+            "pass": False,
+            "score": 0.28,
+            "failure_codes": ["NOT_CHAIN"],
+            "notes": "a different proof on the same edge looks more promising",
+            "retryable": True,
+            "retry_hint": "use_different_path_proof",
+            "retry_reason": "Try a different path proof on the same edge.",
+        }, False
+
+    reconciler.verify_bridge_candidate_gate = _fake_verify_gate
+
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=1, max_calls=2, edge_max_tokens=5000)
+    retry_briefs = []
+    original_generate = worker.generate
+
+    def _wrapped_generate(*args, **kwargs):
+        retry_briefs.append(kwargs.get("retry_brief"))
+        return original_generate(*args, **kwargs)
+
+    monkeypatch.setattr(worker, "generate", _wrapped_generate)
+
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=5000,
+        max_optional_docs_per_edge=1,
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=2,
+    )
+
+    summary = scheduler.run_document("doc_0")
+
+    assert summary["bridges_created"] == 1
+    assert reconciler.rlm_metrics["guided_retry_scheduled"] == 1
+    assert reconciler.rlm_metrics["guided_retry_started"] >= 1
+    assert retry_briefs[0] is None
+    assert any(brief is not None for brief in retry_briefs[1:])
+    assert any(result["guided_retry_count"] == 1 for result in summary["edge_results"])
+    assert scheduler._pending_retry_briefs == {}
 
 
 def test_hybrid_stop_edge_emits_non_invoked_worker_event_and_close_reason(monkeypatch):
@@ -994,7 +1786,7 @@ def test_rlm_parse_error_propagates_into_close_detail():
         events.append({"event": event_type, "data": data})
 
     reconciler.output_callback = _capture
-    reconciler.stage_payloads["worker"] = ["not-json", "still-not-json"]
+    reconciler.stage_payloads["worker"] = ["not-json", "still-not-json", "still not json"]
 
     worker = RecursiveEdgeWorker(reconciler, model_name="worker-model", max_depth=0, max_calls=1, edge_max_tokens=1000)
     scheduler = RootScheduler(
@@ -1012,13 +1804,17 @@ def test_rlm_parse_error_propagates_into_close_detail():
     assert edge_events
     edge_data = edge_events[0]["data"]
     assert edge_data["close_reason"] == "no_candidates_no_progression"
-    assert "parse_stage=repair_retry" in edge_data["close_detail"]
+    assert "parse_stage=regenerate_retry" in edge_data["close_detail"]
+    assert "parse_attempts=3" in edge_data["close_detail"]
     assert "Worker parse error" in edge_data["close_detail"]
 
     worker_result_events = [e for e in events if e["event"] == "rlm_worker_result"]
     assert worker_result_events
-    assert worker_result_events[0]["data"]["parse_stage"] == "repair_retry"
+    assert worker_result_events[0]["data"]["parse_stage"] == "regenerate_retry"
+    assert worker_result_events[0]["data"]["parse_attempts"] == 3
+    assert worker_result_events[0]["data"]["parse_recovery_used"] is True
     assert worker_result_events[0]["data"]["rejected_delta"] == 0
+    assert reconciler.rlm_metrics["worker_parse_recovery_fail"] == 1
 
 
 def test_hybrid_doc_scope_uses_planner_edge_choice():
@@ -1355,3 +2151,403 @@ def test_hybrid_stop_action_blocked_by_pending_mandatory_docs_falls_back_to_work
     assert reconciler.rlm_metrics["planner_fallbacks"] >= 1
     assert reconciler.rlm_metrics["worker_calls"] == 0
     assert reconciler.rlm_metrics["edges_skipped_no_path"] >= 1
+
+
+def test_hybrid_parallel_packetization_releases_focus_lock():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=1,
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=2,
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+
+    prepared = scheduler._prepare_edge_work_parallel(edge)
+    assert prepared is not None
+    assert reconciler.tools.active_neighbor_focus is None
+
+
+def test_hybrid_parallel_run_document_commits_in_deterministic_batch_order(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=2,
+    )
+
+    edge_a = EdgeKey("doc_0", "SourceA", "NeighborA", "relA")
+    edge_b = EdgeKey("doc_0", "SourceB", "NeighborB", "relB")
+    reconciler.tools.doc_exploration_plans["doc_0"] = {
+        "doc_id": "doc_0",
+        "entities_to_explore": [
+            {
+                "name": "SourceA",
+                "roles": ["person"],
+                "status": "pending",
+                "neighbors": [{"entity": "NeighborA", "relationship": "relA", "other_docs": ["doc_1"], "status": "pending"}],
+            },
+            {
+                "name": "SourceB",
+                "roles": ["person"],
+                "status": "pending",
+                "neighbors": [{"entity": "NeighborB", "relationship": "relB", "other_docs": ["doc_2"], "status": "pending"}],
+            },
+        ],
+        "total_neighbors_to_explore": 2,
+        "explored_count": 0,
+        "pending_count": 2,
+    }
+
+    packet_template = _build_packet()
+
+    def _packet_for(edge: EdgeKey) -> EdgePacket:
+        return EdgePacket(
+            edge=edge,
+            source_docs=list(packet_template.source_docs),
+            mandatory_docs=list(packet_template.mandatory_docs),
+            optional_docs=[],
+            source_context=dict(packet_template.source_context),
+            mandatory_contexts=list(packet_template.mandatory_contexts),
+            optional_contexts=[],
+            constraints=dict(packet_template.constraints),
+            budget=dict(packet_template.budget),
+        )
+
+    def _fake_prepare(edge: EdgeKey) -> PreparedEdgeWork:
+        return PreparedEdgeWork(
+            edge=edge,
+            packet=_packet_for(edge),
+            signal={"tier": "medium", "score": 1.2, "probe_only": False},
+            edge_call_limit=1,
+            edge_token_limit=1000,
+            viability={"path_proof_count": 1},
+        )
+
+    def _fake_generate(work: PreparedEdgeWork) -> EdgeWorkerProposal:
+        if work.edge == edge_a:
+            time.sleep(0.02)
+        return EdgeWorkerProposal(
+            edge=work.edge,
+            packet=work.packet,
+            signal=work.signal,
+            attempted=0,
+            prefilter_rejected=0,
+            sanitized_candidates=[],
+            budget_exhausted=False,
+            edge_tokens=0,
+            worker_calls_made=1,
+            no_candidate_calls=1,
+            close_reason="planner_stop",
+            close_detail="stop",
+            planner_decisions=0,
+            planner_fallbacks=0,
+            planner_stop_actions=0,
+        )
+
+    commit_order: List[Tuple[str, str]] = []
+
+    def _fake_commit(proposal: EdgeWorkerProposal) -> EdgeRunResult:
+        commit_order.append((proposal.edge.entity_name, proposal.edge.neighbor_name))
+        return EdgeRunResult(
+            edge=proposal.edge,
+            accepted=0,
+            attempted=proposal.attempted,
+            rejected=proposal.prefilter_rejected,
+            budget_exhausted=False,
+            edge_tokens=proposal.edge_tokens,
+            property_attempted=False,
+        )
+
+    call_count = {"iter": 0}
+
+    def _fake_iter_pending_edges(_doc_id: str):
+        call_count["iter"] += 1
+        if call_count["iter"] <= 2:
+            return [edge_a, edge_b]
+        return []
+
+    monkeypatch.setattr(scheduler, "_prepare_edge_work_parallel", _fake_prepare)
+    monkeypatch.setattr(scheduler, "_generate_parallel_worker_proposal", _fake_generate)
+    monkeypatch.setattr(scheduler, "_commit_edge_worker_proposal", _fake_commit)
+    monkeypatch.setattr(scheduler, "_iter_pending_edges", _fake_iter_pending_edges)
+
+    summary = scheduler.run_document("doc_0")
+    assert summary["mode"] == "hybrid"
+    assert commit_order == [("SourceA", "NeighborA"), ("SourceB", "NeighborB")]
+    assert reconciler.rlm_metrics["parallel_batches"] == 1
+    assert reconciler.rlm_metrics["parallel_workers_used"] == 2
+    assert reconciler.rlm_metrics["commit_queue_size_peak"] == 2
+    assert any(e["event"] == "parallel_batch_started" for e in events)
+    assert any(e["event"] == "parallel_batch_progress" for e in events)
+    assert any(e["event"] == "parallel_batch_completed" for e in events)
+    assert any(e["event"] == "edge_commit_started" for e in events)
+    assert any(e["event"] == "edge_commit_finished" for e in events)
+    batch_completed_idx = next(i for i, e in enumerate(events) if e["event"] == "parallel_batch_completed")
+    first_commit_idx = next(i for i, e in enumerate(events) if e["event"] == "edge_commit_started")
+    assert batch_completed_idx < first_commit_idx
+
+
+def test_hybrid_parallel_stale_edge_is_skipped(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=2,
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+
+    def _fake_prepare(_edge: EdgeKey) -> PreparedEdgeWork:
+        return PreparedEdgeWork(
+            edge=edge,
+            packet=_build_packet(),
+            signal={"tier": "low", "score": 0.2, "probe_only": True},
+            edge_call_limit=1,
+            edge_token_limit=1000,
+            viability={"path_proof_count": 0},
+        )
+
+    def _fake_generate(work: PreparedEdgeWork) -> EdgeWorkerProposal:
+        return EdgeWorkerProposal(
+            edge=work.edge,
+            packet=work.packet,
+            signal=work.signal,
+            attempted=0,
+            prefilter_rejected=0,
+            sanitized_candidates=[],
+            budget_exhausted=False,
+            edge_tokens=0,
+            worker_calls_made=0,
+            no_candidate_calls=0,
+            close_reason="no_viable_path_proof",
+            close_detail="none",
+            planner_decisions=0,
+            planner_fallbacks=0,
+            planner_stop_actions=0,
+        )
+
+    call_count = {"iter": 0}
+
+    def _fake_iter_pending_edges(_doc_id: str):
+        call_count["iter"] += 1
+        if call_count["iter"] <= 2:
+            return [edge]
+        return []
+
+    monkeypatch.setattr(scheduler, "_prepare_edge_work_parallel", _fake_prepare)
+    monkeypatch.setattr(scheduler, "_generate_parallel_worker_proposal", _fake_generate)
+    monkeypatch.setattr(scheduler, "_iter_pending_edges", _fake_iter_pending_edges)
+    monkeypatch.setattr(scheduler, "_is_edge_pending", lambda _edge: False)
+
+    summary = scheduler.run_document("doc_0")
+    assert summary["mode"] == "hybrid"
+    assert reconciler.rlm_metrics["stale_edge_skipped"] >= 1
+
+    stale_events = [
+        e["data"]
+        for e in events
+        if e["event"] == "rlm_edge_summary" and e["data"].get("close_reason") == "stale_edge_skipped"
+    ]
+    assert stale_events
+
+
+def test_hybrid_parallel_heartbeat_and_stuck_warning_visibility(monkeypatch):
+    reconciler = _FakeReconciler(token_increment=10)
+    events: List[Dict[str, Any]] = []
+
+    def _capture(event_type, data):
+        events.append({"event": event_type, "data": data})
+
+    reconciler.output_callback = _capture
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    scheduler = HybridScheduler(
+        reconciler=reconciler,
+        worker=worker,
+        edge_max_depth=1,
+        edge_max_calls=2,
+        edge_max_tokens=1000,
+        max_optional_docs_per_edge=0,
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=2,
+        parallel_progress_heartbeat_seconds=0.01,
+        parallel_stuck_warning_seconds=0.02,
+    )
+    edge = EdgeKey("doc_0", "Source", "Neighbor", "related to")
+
+    def _fake_prepare(_edge: EdgeKey) -> PreparedEdgeWork:
+        return PreparedEdgeWork(
+            edge=edge,
+            packet=_build_packet(),
+            signal={"tier": "medium", "score": 1.2, "probe_only": False},
+            edge_call_limit=1,
+            edge_token_limit=1000,
+            viability={"path_proof_count": 1},
+        )
+
+    def _fake_generate(work: PreparedEdgeWork) -> EdgeWorkerProposal:
+        time.sleep(0.2)
+        return EdgeWorkerProposal(
+            edge=work.edge,
+            packet=work.packet,
+            signal=work.signal,
+            attempted=0,
+            prefilter_rejected=0,
+            sanitized_candidates=[],
+            budget_exhausted=False,
+            edge_tokens=0,
+            worker_calls_made=1,
+            no_candidate_calls=1,
+            close_reason="planner_stop",
+            close_detail="stop",
+            planner_decisions=0,
+            planner_fallbacks=0,
+            planner_stop_actions=0,
+        )
+
+    call_count = {"iter": 0}
+
+    def _fake_iter_pending_edges(_doc_id: str):
+        call_count["iter"] += 1
+        if call_count["iter"] <= 2:
+            return [edge]
+        return []
+
+    monkeypatch.setattr(scheduler, "_prepare_edge_work_parallel", _fake_prepare)
+    monkeypatch.setattr(scheduler, "_generate_parallel_worker_proposal", _fake_generate)
+    monkeypatch.setattr(scheduler, "_iter_pending_edges", _fake_iter_pending_edges)
+
+    summary = scheduler.run_document("doc_0")
+    assert summary["mode"] == "hybrid"
+    assert any(e["event"] == "parallel_batch_started" for e in events)
+    assert any(e["event"] == "parallel_batch_heartbeat" for e in events)
+    assert any(e["event"] == "parallel_worker_stuck_warning" for e in events)
+    assert any(e["event"] == "parallel_batch_completed" for e in events)
+    timeout_like = [
+        e for e in events
+        if e["event"] == "rlm_edge_summary"
+        and "timeout" in str((e.get("data") or {}).get("close_reason", "")).lower()
+    ]
+    assert not timeout_like
+
+
+def test_worker_prompt_includes_curriculum_guidance_block():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    packet = _build_packet()
+    packet.constraints = {
+        **packet.constraints,
+        "curriculum_guidance": {
+            "prior_query_demand_sketch": {
+                "top_patterns": [
+                    {
+                        "pattern": "mother",
+                        "count": 2,
+                        "representative_query": "When did Mira's mother die?",
+                    }
+                ],
+                "batches_seen": 1,
+            },
+            "prior_batches_seen": 1,
+            "prior_batch_feedback_brief": {
+                "summary_lines": ["Weak coverage: mother x2"],
+            },
+            "bridge_exemplars": [
+                {
+                    "question": "When did Mira's mother die?",
+                    "reverse_question": "Whose mother died in 912?",
+                    "pattern_tags": ["mother", "death_date"],
+                }
+            ],
+        },
+    }
+
+    messages = worker._build_messages(packet=packet, depth=0, include_optional=False)
+    user_prompt = messages[1]["content"]
+
+    assert "Prior Query Demand Sketch:" in user_prompt
+    assert "- mother x2" in user_prompt
+    assert "Prior Batch Feedback Brief:" in user_prompt
+    assert "Weak coverage: mother x2" in user_prompt
+    assert "Relevant Prior Bridge Exemplars:" in user_prompt
+    assert "Forward: When did Mira's mother die?" in user_prompt
+    assert "Reverse: Whose mother died in 912?" in user_prompt
+    assert "Current Batch Demand Sketch:" not in user_prompt
+
+
+def test_render_prompt_includes_curriculum_guidance_block():
+    reconciler = _FakeReconciler(token_increment=10)
+    worker = RecursiveEdgeWorker(reconciler, model_name="worker-model")
+    render_input = RenderInput(
+        edge=_build_packet().edge,
+        proofs=[],
+        constraints={
+            "must_be_chain": True,
+            "curriculum_guidance": {
+                "current_batch_demand_sketch": {
+                    "top_patterns": [
+                        {
+                            "pattern": "burial_place",
+                            "count": 1,
+                            "representative_query": "Where was Mira buried?",
+                        }
+                    ],
+                    "batches_seen": 1,
+                },
+                "prior_batches_seen": 1,
+                "prior_batch_feedback_brief": {
+                    "summary_lines": ["Doc-backed more than bridge-backed: burial_place x1"],
+                },
+                "bridge_exemplars": [
+                    {
+                        "question": "Where was Mira buried?",
+                        "reverse_question": "Who was buried in Abbey X?",
+                        "pattern_tags": ["burial_place"],
+                    }
+                ],
+            },
+        },
+    )
+
+    messages = worker._build_render_messages(render_input)
+    user_prompt = messages[1]["content"]
+
+    assert "Prior Query Demand Sketch:" in user_prompt
+    assert "- burial_place x1" in user_prompt
+    assert "Prior Batch Feedback Brief:" in user_prompt
+    assert "Doc-backed more than bridge-backed: burial_place x1" in user_prompt
+    assert "Relevant Prior Bridge Exemplars:" in user_prompt
+    assert "Forward: Where was Mira buried?" in user_prompt
+    assert "Current Batch Demand Sketch:" not in user_prompt

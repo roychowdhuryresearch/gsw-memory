@@ -1,0 +1,1142 @@
+{
+  "dataset": "2wikimultihopqa",
+  "source_file": "playground_data/2wiki_platinum.json",
+  "questions_path": "playground_data/2wikimultihopqa.json",
+  "corpus_path": "playground_data/2wikimultihopqa_corpus.json",
+  "experiment_type": "continual_learning",
+  "family_label": "continual_7fam_49q",
+  "curriculum_batch_size": 8,
+  "curriculum_seed_batch_size": 8,
+  "total_questions": 49,
+  "total_train": 28,
+  "total_probe": 21,
+  "num_families": 7,
+  "families": [
+    "birth_place",
+    "death_place",
+    "maternal_parent",
+    "nationality",
+    "other",
+    "paternal_parent",
+    "spouse"
+  ],
+  "num_batches": 4,
+  "seed": 42,
+  "questions": [
+    {
+      "order_index": 0,
+      "original_index": 893,
+      "question_id": "8ecf15540bdb11eba7f7acde48001122",
+      "question": "Where was the husband of Emmanuelle Seigner born?",
+      "family": "birth_place",
+      "split": "train",
+      "answer": "Paris",
+      "answer_aliases": [],
+      "context_titles": [
+        "Roman Polanski",
+        "Stan Rice",
+        "Emmanuelle Seigner",
+        "Devisingh Ransingh Shekhawat",
+        "Louis Seigner",
+        "Jon Leach",
+        "Andrew Upton",
+        "James Randall Marsh",
+        "Mathilde Seigner",
+        "Stan Marks"
+      ]
+    },
+    {
+      "order_index": 1,
+      "original_index": 881,
+      "question_id": "96e154420bda11eba7f7acde48001122",
+      "question": "What is the place of birth of the performer of song Did It On'Em?",
+      "family": "birth_place",
+      "split": "train",
+      "answer": "Port of Spain",
+      "answer_aliases": [
+        "Saint James Port of Spain Trinidad and Tobago"
+      ],
+      "context_titles": [
+        "David Em",
+        "Astrid North",
+        "Nicki Minaj",
+        "Bernie Bonvoisin",
+        "Billy Milano",
+        "Lương Văn Được Em",
+        "David Re'em",
+        "Why Did It Have to Be Me?",
+        "O Valencia!",
+        "Did It On'em"
+      ]
+    },
+    {
+      "order_index": 2,
+      "original_index": 374,
+      "question_id": "fc2f7e460bda11eba7f7acde48001122",
+      "question": "Where was the director of film Katka'S Reinette Apples born?",
+      "family": "birth_place",
+      "split": "train",
+      "answer": "Rēzekne",
+      "answer_aliases": [],
+      "context_titles": [
+        "Brian Kennedy (gallery director)",
+        "Jesse E. Hobson",
+        "Katka's Reinette Apples",
+        "Peter Levin",
+        "Fridrikh Ermler",
+        "S. N. Mathur",
+        "Olav Aaraas",
+        "Candy Apples",
+        "Ian Barry (director)",
+        "Dana Blankstein"
+      ]
+    },
+    {
+      "order_index": 3,
+      "original_index": 556,
+      "question_id": "4397f3460bde11eba7f7acde48001122",
+      "question": "What is the place of birth of the performer of song Somebody Slap Me?",
+      "family": "birth_place",
+      "split": "train",
+      "answer": "Apopka",
+      "answer_aliases": [
+        "Apopka Florida"
+      ],
+      "context_titles": [
+        "Billy Milano",
+        "O Valencia!",
+        "Somebody Slap Me",
+        "Save Me (Gotye song)",
+        "Jaime Cocanower",
+        "TK McKamy",
+        "Susie van der Meer",
+        "Bernie Bonvoisin",
+        "Brad Newman",
+        "John Anderson (musician)"
+      ]
+    },
+    {
+      "order_index": 4,
+      "original_index": 92,
+      "question_id": "764446780bde11eba7f7acde48001122",
+      "question": "Where was the director of film The Outlaw Express born?",
+      "family": "birth_place",
+      "split": "probe",
+      "answer": "Santa Rosa",
+      "answer_aliases": [
+        "Santa Rosa California"
+      ],
+      "context_titles": [
+        "Peter Levin",
+        "Brian Kennedy (gallery director)",
+        "Olav Aaraas",
+        "Ian Barry (director)",
+        "S. N. Mathur",
+        "The Outlaw Express",
+        "Leo D. Maloney",
+        "Jesse E. Hobson",
+        "Code of the Outlaw",
+        "Outlaw Express"
+      ]
+    },
+    {
+      "order_index": 5,
+      "original_index": 941,
+      "question_id": "5674280a0bdd11eba7f7acde48001122",
+      "question": "Where was the wife of Gerry Neugebauer born?",
+      "family": "birth_place",
+      "split": "probe",
+      "answer": "New York",
+      "answer_aliases": [
+        "New York City"
+      ],
+      "context_titles": [
+        "Agatha (wife of Samuel of Bulgaria)",
+        "Catherine Exley",
+        "Lila Neugebauer",
+        "Jari Neugebauer",
+        "Marcia Neugebauer",
+        "Empress Shōken",
+        "Artaynte",
+        "Sally Grosvenor, Duchess of Westminster",
+        "Gerry Neugebauer",
+        "Eunoë (wife of Bogudes)"
+      ]
+    },
+    {
+      "order_index": 6,
+      "original_index": 33,
+      "question_id": "0dfe41f60bdc11eba7f7acde48001122",
+      "question": "Where was the performer of song Come Dance With Me (Song) born?",
+      "family": "birth_place",
+      "split": "probe",
+      "answer": "Hoboken, New Jersey",
+      "answer_aliases": [],
+      "context_titles": [
+        "Jack Lee (musician)",
+        "Ven a bailar conmigo",
+        "TK McKamy",
+        "Come Dance with Me (song)",
+        "Frank Sinatra",
+        "Dance with Me (Zoli Ádok song)",
+        "The Wallflower (Dance with Me, Henry)",
+        "Billy Milano",
+        "Dance with Me (Kelly Clarkson song)",
+        "Jaime Cocanower"
+      ]
+    },
+    {
+      "order_index": 7,
+      "original_index": 603,
+      "question_id": "e140bb540bda11eba7f7acde48001122",
+      "question": "Where was the place of death of Princess Yolanda Of Savoy's father?",
+      "family": "death_place",
+      "split": "train",
+      "answer": "Alexandria, Egypt",
+      "answer_aliases": [],
+      "context_titles": [
+        "Princess Luisa Cristina of Savoy",
+        "Princess Maria Pia of Bourbon-Parma",
+        "Cecile of Baux",
+        "Victor Emmanuel III of Italy",
+        "Princess Catherine Beatrice of Savoy",
+        "Victor Amadeus, Prince of Piedmont",
+        "Thomas III of Piedmont",
+        "Princess Yolanda of Savoy",
+        "René of Savoy",
+        "Yolande Louise of Savoy"
+      ]
+    },
+    {
+      "order_index": 8,
+      "original_index": 574,
+      "question_id": "b66d42be0bdd11eba7f7acde48001122",
+      "question": "Where was the place of death of Neferneferure's mother?",
+      "family": "death_place",
+      "split": "train",
+      "answer": "Amarna",
+      "answer_aliases": [],
+      "context_titles": [
+        "Neferneferure",
+        "Beaulieu-sur-Loire",
+        "Nefertiti",
+        "Place of origin",
+        "Valley of Death",
+        "Motherland (disambiguation)",
+        "Place of birth",
+        "Sennedjem",
+        "Where Was I",
+        "Dance of Death (disambiguation)"
+      ]
+    },
+    {
+      "order_index": 9,
+      "original_index": 414,
+      "question_id": "63a0ba880bd911eba7f7acde48001122",
+      "question": "Where did the director of film Hurricane At Pilgrim Hill die?",
+      "family": "death_place",
+      "split": "train",
+      "answer": "Newport Beach",
+      "answer_aliases": [
+        "Newport Beach California"
+      ],
+      "context_titles": [
+        "Dana Blankstein",
+        "S. N. Mathur",
+        "Brian Kennedy (gallery director)",
+        "Jesse E. Hobson",
+        "Olav Aaraas",
+        "Peter Levin",
+        "Richard L. Bare",
+        "Hurricane at Pilgrim Hill",
+        "Glassland",
+        "Ian Barry (director)"
+      ]
+    },
+    {
+      "order_index": 10,
+      "original_index": 677,
+      "question_id": "d759ab480bdd11eba7f7acde48001122",
+      "question": "Where was the place of death of Aleksandr Aleksandrovich Bibikov's father?",
+      "family": "death_place",
+      "split": "train",
+      "answer": "Bugulma",
+      "answer_aliases": [],
+      "context_titles": [
+        "Beaulieu-sur-Loire",
+        "Place of origin",
+        "Dance of Death (disambiguation)",
+        "Motherland (disambiguation)",
+        "Sennedjem",
+        "Aleksandr Aleksandrovich Bibikov",
+        "François Thierry",
+        "Aleksandr Bibikov",
+        "Where Was I",
+        "Place of birth"
+      ]
+    },
+    {
+      "order_index": 11,
+      "original_index": 872,
+      "question_id": "4f362ec80bdb11eba7f7acde48001122",
+      "question": "Where did the director of film The Alster Case die?",
+      "family": "death_place",
+      "split": "probe",
+      "answer": "Baltimore",
+      "answer_aliases": [
+        "Baltimore Maryland"
+      ],
+      "context_titles": [
+        "S. N. Mathur",
+        "Peter Levin",
+        "Olav Aaraas",
+        "Brian Kennedy (gallery director)",
+        "Jesse E. Hobson",
+        "Ian Barry (director)",
+        "Dana Blankstein",
+        "The Alster Case",
+        "J. Charles Haydon",
+        "The Time, the Place and the Girl (1946 film)"
+      ]
+    },
+    {
+      "order_index": 12,
+      "original_index": 292,
+      "question_id": "f5aba0260bdb11eba7f7acde48001122",
+      "question": "Where did William Louis, Prince Of Anhalt-Harzgerode's father die?",
+      "family": "death_place",
+      "split": "probe",
+      "answer": "Plötzkau",
+      "answer_aliases": [],
+      "context_titles": [
+        "Albert IV, Prince of Anhalt-Köthen",
+        "John Louis I, Prince of Anhalt-Dornburg",
+        "Bernhard VI, Prince of Anhalt-Bernburg",
+        "Otto IV, Prince of Anhalt-Bernburg",
+        "Frederick, Prince of Anhalt-Harzgerode",
+        "William Louis, Prince of Anhalt-Harzgerode",
+        "Elisabeth Charlotte of Anhalt-Harzgerode",
+        "Christian I, Prince of Anhalt-Bernburg",
+        "John Louis II, Prince of Anhalt-Zerbst",
+        "William Louis, Prince of Anhalt-Köthen"
+      ]
+    },
+    {
+      "order_index": 13,
+      "original_index": 798,
+      "question_id": "027278700bdc11eba7f7acde48001122",
+      "question": "Where was the place of death of the director of film A Rare Bird?",
+      "family": "death_place",
+      "split": "probe",
+      "answer": "Le Plessis-Bouchard",
+      "answer_aliases": [],
+      "context_titles": [
+        "Jesse E. Hobson",
+        "S. N. Mathur",
+        "Richard Pottier",
+        "Michael Govan",
+        "A Rare Bird",
+        "Brian Kennedy (gallery director)",
+        "Peter Levin",
+        "Olav Aaraas",
+        "Dana Blankstein",
+        "Ian Barry (director)"
+      ]
+    },
+    {
+      "order_index": 14,
+      "original_index": 591,
+      "question_id": "3d4662300bb011ebab90acde48001122",
+      "question": "Who is the maternal grandmother of Eleanor Of Brittany (Abbess)?",
+      "family": "maternal_parent",
+      "split": "train",
+      "answer": "Eleanor of Provence",
+      "answer_aliases": [],
+      "context_titles": [
+        "Blanche of Brittany",
+        "Hannah Arnold",
+        "Tjuyu",
+        "Kaoru Hatoyama",
+        "Gülbahar Hatun (wife of Mehmed II)",
+        "Eleanor of Brittany (abbess)",
+        "Mona Hopton Bell",
+        "Beatrice of England",
+        "Hubba bint Hulail",
+        "Anne Denman"
+      ]
+    },
+    {
+      "order_index": 15,
+      "original_index": 0,
+      "question_id": "83bf3b5a0bd911eba7f7acde48001122",
+      "question": "When did Lothair Ii's mother die?",
+      "family": "maternal_parent",
+      "split": "train",
+      "answer": "20 March 851",
+      "answer_aliases": [
+        "March 20 851"
+      ],
+      "context_titles": [
+        "Teutberga",
+        "Theodred II (Bishop of Elmham)",
+        "Lambert, Margrave of Tuscany",
+        "Etan Boritzer",
+        "Lothair II",
+        "Ermengarde of Tours",
+        "Bertha, daughter of Lothair II",
+        "Adolf I of Lotharingia",
+        "Waldrada of Lotharingia",
+        "Theobald of Arles"
+      ]
+    },
+    {
+      "order_index": 16,
+      "original_index": 971,
+      "question_id": "9ac2603a0bdd11eba7f7acde48001122",
+      "question": "Which country Maria Carolina Zamoyska's mother is from?",
+      "family": "maternal_parent",
+      "split": "train",
+      "answer": "Italian",
+      "answer_aliases": [
+        "Italy"
+      ],
+      "context_titles": [
+        "Princess Maria Carolina of Bourbon-Two Sicilies (1820–1861)",
+        "Maria Carolina Wolf",
+        "Princess Maria Carolina of Bourbon-Two Sicilies (1856–1941)",
+        "Archduchess Maria Carolina of Austria (1740–1741)",
+        "Maria Carolina of Austria",
+        "Maria Casadevall",
+        "Maria Carolina Zamoyska",
+        "Carolina Ferraz",
+        "Archduchess Marie Caroline of Austria",
+        "Princess Maria Carolina of Savoy"
+      ]
+    },
+    {
+      "order_index": 17,
+      "original_index": 255,
+      "question_id": "78ba517c0bd911eba7f7acde48001122",
+      "question": "What nationality is Arabia (Daughter Of Justin Ii)'s mother?",
+      "family": "maternal_parent",
+      "split": "train",
+      "answer": "Byzantine Empire",
+      "answer_aliases": [
+        "Byzantine"
+      ],
+      "context_titles": [
+        "Sophia (empress)",
+        "Ali Rahuma",
+        "Fulco",
+        "Eleni Gabre-Madhin",
+        "Rumbold of Mechelen",
+        "Arabia (daughter of Justin II)",
+        "Nayelly Hernández",
+        "Roberto Savio",
+        "Baglan Mailybayev",
+        "Khalid al-Habib"
+      ]
+    },
+    {
+      "order_index": 18,
+      "original_index": 826,
+      "question_id": "2319739c0bde11eba7f7acde48001122",
+      "question": "What is the date of birth of John I, Duke Of Brunswick-Grubenhagen's mother?",
+      "family": "maternal_parent",
+      "split": "probe",
+      "answer": "1264",
+      "answer_aliases": [
+        "Before 1264"
+      ],
+      "context_titles": [
+        "William, Duke of Brunswick-Grubenhagen",
+        "Anna of Brunswick-Grubenhagen-Einbeck",
+        "Melchior of Brunswick-Grubenhagen",
+        "Henry IV, Duke of Brunswick-Grubenhagen",
+        "Ernest I, Duke of Brunswick-Grubenhagen",
+        "Agnes of Meissen",
+        "Ernest III, Duke of Brunswick-Grubenhagen",
+        "John I, Duke of Brunswick-Grubenhagen",
+        "Eric I, Duke of Brunswick-Grubenhagen",
+        "Clara of Brunswick-Wolfenbüttel"
+      ]
+    },
+    {
+      "order_index": 19,
+      "original_index": 878,
+      "question_id": "9f42c2680baf11ebab90acde48001122",
+      "question": "Who is the mother-in-law of Ramiro Sánchez?",
+      "family": "maternal_parent",
+      "split": "probe",
+      "answer": "Jimena Díaz",
+      "answer_aliases": [],
+      "context_titles": [
+        "Ansur Fernández",
+        "Marian Shields Robinson",
+        "Eldon Howard",
+        "Ramiro Sánchez",
+        "Cristina Rodríguez (noble)",
+        "Priscilla Pointer",
+        "Vera Miletić",
+        "Sancho Garcés, Lord of Uncastillo",
+        "Doria Ragland",
+        "Maria Thins"
+      ]
+    },
+    {
+      "order_index": 20,
+      "original_index": 286,
+      "question_id": "511af4e80baf11ebab90acde48001122",
+      "question": "Who is Archduchess Rosa Of Austria's mother-in-law?",
+      "family": "maternal_parent",
+      "split": "probe",
+      "answer": "Archduchess Margarete Sophie of Austria",
+      "answer_aliases": [],
+      "context_titles": [
+        "Marian Shields Robinson",
+        "Philipp Albrecht, Duke of Württemberg",
+        "Eldon Howard",
+        "Doria Ragland",
+        "Maria Thins",
+        "Archduchess Maria Carolina of Austria (1740–1741)",
+        "Priscilla Pointer",
+        "Vera Miletić",
+        "Baroness Gösta von dem Bussche-Haddenhausen",
+        "Archduchess Rosa of Austria"
+      ]
+    },
+    {
+      "order_index": 21,
+      "original_index": 17,
+      "question_id": "84b691d8086a11ebbd5fac1f6bf848b6",
+      "question": "Do both directors of films Wrong Turn 5: Bloodlines and Dark River (2017 Film) have the same nationality?",
+      "family": "nationality",
+      "split": "train",
+      "answer": "no",
+      "answer_aliases": [],
+      "context_titles": [
+        "Wrong Turn 5: Bloodlines",
+        "Clio Barnard",
+        "Wrong Turn: The Foundation",
+        "Dark River (2017 film)",
+        "Wrong Turn 4: Bloody Beginnings",
+        "Luis Otero (actor)",
+        "Wrong Turn 3: Left for Dead",
+        "Declan O'Brien",
+        "Wrong Turn 2: Dead End",
+        "Dark River (1990 film)"
+      ]
+    },
+    {
+      "order_index": 22,
+      "original_index": 11,
+      "question_id": "d6898f78089511ebbd75ac1f6bf848b6",
+      "question": "Are Vasilyevsky Island and Preobrazheniya Island located in the same country?",
+      "family": "nationality",
+      "split": "train",
+      "answer": "yes",
+      "answer_aliases": [],
+      "context_titles": [
+        "Runmarö",
+        "Sula Island",
+        "Preobrazheniya Island",
+        "Vasilyevsky Island",
+        "Jeløya",
+        "Henry Island (Nova Scotia)",
+        "Fairbank Island (Michigan)",
+        "Goat Island (Tarrant County, Texas)",
+        "Wadmalaw Island",
+        "Ingmarsö"
+      ]
+    },
+    {
+      "order_index": 23,
+      "original_index": 964,
+      "question_id": "1d77753308bf11ebbd8aac1f6bf848b6",
+      "question": "Are Geneviève Pettersen and Edward Peghin from the same country?",
+      "family": "nationality",
+      "split": "train",
+      "answer": "yes",
+      "answer_aliases": [],
+      "context_titles": [
+        "Ming Luhulima",
+        "Hans Bollandsås",
+        "Chop Cut Rebuild",
+        "Sir William Sidney",
+        "Geneviève Pettersen",
+        "Per Kleiva",
+        "Jorge D'Alessandro",
+        "Willem Brakman",
+        "Edward Peghin",
+        "Godwin Davy"
+      ]
+    },
+    {
+      "order_index": 24,
+      "original_index": 608,
+      "question_id": "b358b348084e11ebbd56ac1f6bf848b6",
+      "question": "Are Frederick Elliott Brown and John Yule both from the same country?",
+      "family": "nationality",
+      "split": "train",
+      "answer": "yes",
+      "answer_aliases": [],
+      "context_titles": [
+        "Fred Biermann",
+        "J. Neely Johnson",
+        "George Elliott (cricketer)",
+        "John Yule Mackay",
+        "Godwin Davy",
+        "Odell Brown",
+        "Elliott R. Brown",
+        "Frederick Elliott Brown",
+        "John Yule",
+        "Rob Yule"
+      ]
+    },
+    {
+      "order_index": 25,
+      "original_index": 721,
+      "question_id": "611ddbf80bdc11eba7f7acde48001122",
+      "question": "What nationality is the director of film Two For Texas?",
+      "family": "nationality",
+      "split": "probe",
+      "answer": "Australia",
+      "answer_aliases": [
+        "Australian"
+      ],
+      "context_titles": [
+        "John Farrell (businessman)",
+        "Gene A. Smith",
+        "Dana Blankstein",
+        "Peter Levin",
+        "Rod Hardy",
+        "Two for the Money (1972 film)",
+        "John Donatich",
+        "Michael Govan",
+        "Two for Texas",
+        "Ian Barry (director)"
+      ]
+    },
+    {
+      "order_index": 26,
+      "original_index": 244,
+      "question_id": "eb3d62d608ad11ebbd83ac1f6bf848b6",
+      "question": "Do both films, The Wild Frontier (Film) and The Sundowners (1960 Film), have the directors who are from the same country?",
+      "family": "nationality",
+      "split": "probe",
+      "answer": "yes",
+      "answer_aliases": [],
+      "context_titles": [
+        "The Sundowners (1950 film)",
+        "Wylie Watson",
+        "The Sundowners (1960 film)",
+        "Mervyn Johns",
+        "Le propre de l'homme",
+        "Satan Town",
+        "Philip Ford (film director)",
+        "Fred Zinnemann",
+        "The Wild Frontier (film)",
+        "Chris Hughes (musician)"
+      ]
+    },
+    {
+      "order_index": 27,
+      "original_index": 726,
+      "question_id": "74eb875e086a11ebbd5fac1f6bf848b6",
+      "question": "Do both directors of films The Measure Of All Things and The Time Of Your Life (Film) share the same nationality?",
+      "family": "nationality",
+      "split": "probe",
+      "answer": "yes",
+      "answer_aliases": [],
+      "context_titles": [
+        "What Are You Doing the Rest of Your Life?",
+        "Mr. Right (2009 film)",
+        "The Measure of All Things",
+        "The Time of Your Life (film)",
+        "H. C. Potter",
+        "Stanley Weber",
+        "Sam Green",
+        "Precision: The Measure of All Things",
+        "Time of Your Life",
+        "KBFL (AM)"
+      ]
+    },
+    {
+      "order_index": 28,
+      "original_index": 329,
+      "question_id": "abb55bf20bda11eba7f7acde48001122",
+      "question": "What is the award that the performer of song Fine By Me (Chris Brown Song) received?",
+      "family": "other",
+      "split": "train",
+      "answer": "Grammy Award for Best R&B Album",
+      "answer_aliases": [],
+      "context_titles": [
+        "Train in Vain",
+        "Fine by Me (Chris Brown song)",
+        "Billy Milano",
+        "Bernie Bonvoisin",
+        "O Valencia!",
+        "Etan Boritzer",
+        "Stand by Me (Charles Albert Tindley song)",
+        "Chris Brown",
+        "Undecided (Chris Brown song)",
+        "Back to Love (Chris Brown song)"
+      ]
+    },
+    {
+      "order_index": 29,
+      "original_index": 651,
+      "question_id": "5a733ed40bdb11eba7f7acde48001122",
+      "question": "Who founded the company that published Moulin Rouge (Magazine)?",
+      "family": "other",
+      "split": "train",
+      "answer": "Sergey S. Rodionov",
+      "answer_aliases": [
+        "Sergey S. Rodionov and his father"
+      ],
+      "context_titles": [
+        "Moulin rouge (magazine)",
+        "A Night at the Moulin Rouge",
+        "It's April Again",
+        "Hyperwerks",
+        "Jacki Clérico",
+        "Pink Pages",
+        "Moulin Rouge (disambiguation)",
+        "Chappell & Co.",
+        "Moulin Rouge Hotel",
+        "Rodionov Publishing House"
+      ]
+    },
+    {
+      "order_index": 30,
+      "original_index": 844,
+      "question_id": "9248ce6c0bdd11eba7f7acde48001122",
+      "question": "Where did the director of film White Rabbit (Film) graduate from?",
+      "family": "other",
+      "split": "train",
+      "answer": "State University of New York at Purchase",
+      "answer_aliases": [],
+      "context_titles": [
+        "The Seventh Company Outdoors",
+        "Jann Turner",
+        "Tim McCann (director)",
+        "Ian Barry (director)",
+        "Dana Blankstein",
+        "Now Where Did the 7th Company Get to?",
+        "White Rabbit (film)",
+        "Olav Aaraas",
+        "Peter Levin",
+        "Nick Krause"
+      ]
+    },
+    {
+      "order_index": 31,
+      "original_index": 598,
+      "question_id": "676bf7000bb011ebab90acde48001122",
+      "question": "Who is Eustace Iii, Count Of Boulogne's uncle?",
+      "family": "other",
+      "split": "train",
+      "answer": "Godfrey IV, Duke of Lower Lorraine",
+      "answer_aliases": [],
+      "context_titles": [
+        "Matilda II, Countess of Boulogne",
+        "Hugh II, Count of Saint-Pol",
+        "Arnulf II, Count of Boulogne",
+        "Matthew, Count of Boulogne",
+        "Eustace III, Count of Boulogne",
+        "Ida of Lorraine",
+        "Arnulf III, Count of Boulogne",
+        "Eustace I, Count of Boulogne",
+        "Adelina of Holland",
+        "Baldwin II, Count of Boulogne"
+      ]
+    },
+    {
+      "order_index": 32,
+      "original_index": 377,
+      "question_id": "1f3ff7880bb011ebab90acde48001122",
+      "question": "Who is the uncle of Filippa Fleming?",
+      "family": "other",
+      "split": "probe",
+      "answer": "Ivar Fleming",
+      "answer_aliases": [],
+      "context_titles": [
+        "Erik Fleming (councilor)",
+        "Andrzej Gawroński (actor)",
+        "Bonifazio Bevilacqua Aldobrandini",
+        "John Breckin",
+        "Bradley Orr",
+        "Ivan Benito",
+        "Christopher H. Clark",
+        "Filippa Fleming",
+        "Hysen Hoxha",
+        "Ivan Novoseltsev"
+      ]
+    },
+    {
+      "order_index": 33,
+      "original_index": 691,
+      "question_id": "534cb7600bdc11eba7f7acde48001122",
+      "question": "Where did the director of film Evil Alien Conquerors graduate from?",
+      "family": "other",
+      "split": "probe",
+      "answer": "University of California Los Angeles",
+      "answer_aliases": [
+        "University of California Los Angeles (UCLA)"
+      ],
+      "context_titles": [
+        "Olav Aaraas",
+        "Chris Matheson (screenwriter)",
+        "Now Where Did the 7th Company Get to?",
+        "The Seventh Company Outdoors",
+        "Dana Blankstein",
+        "Ian Barry (director)",
+        "Mikael Håfström",
+        "Evil Alien Conquerors",
+        "Peter Levin",
+        "Brian Kennedy (gallery director)"
+      ]
+    },
+    {
+      "order_index": 34,
+      "original_index": 425,
+      "question_id": "c510c7b00baf11ebab90acde48001122",
+      "question": "Who is Marjorie Flack's sibling-in-law?",
+      "family": "other",
+      "split": "probe",
+      "answer": "Stephen Vincent Benét",
+      "answer_aliases": [],
+      "context_titles": [
+        "William Rose Benét",
+        "Wyndham Goold",
+        "Lee Chan-hyuk",
+        "Romanos Argyros (10th century)",
+        "Charles Francis Norton",
+        "Robert W. Levering",
+        "Marjorie Flack",
+        "Nick Sidi",
+        "Robert Vadra",
+        "Greg Penner"
+      ]
+    },
+    {
+      "order_index": 35,
+      "original_index": 679,
+      "question_id": "37a7af5a0bb011ebab90acde48001122",
+      "question": "Who is Margaret Fiennes, 11Th Baroness Dacre's paternal grandfather?",
+      "family": "paternal_parent",
+      "split": "train",
+      "answer": "Sir Thomas Fiennes",
+      "answer_aliases": [],
+      "context_titles": [
+        "Margaret Fiennes, 11th Baroness Dacre",
+        "Gregory Fiennes, 10th Baron Dacre",
+        "Thomas Fiennes, 9th Baron Dacre",
+        "Sampson Lennard",
+        "Robert More",
+        "Kaya Alp",
+        "Abd al-Muttalib",
+        "Anne Sackville, Baroness Dacre",
+        "Henry Lennard, 12th Baron Dacre",
+        "Lyon Cohen"
+      ]
+    },
+    {
+      "order_index": 36,
+      "original_index": 699,
+      "question_id": "897bcb4a0bb011ebab90acde48001122",
+      "question": "Who is Jan Iii Of Oświęcim's paternal grandfather?",
+      "family": "paternal_parent",
+      "split": "train",
+      "answer": "Jan I the Scholastic",
+      "answer_aliases": [],
+      "context_titles": [
+        "Johan Braakensiek",
+        "Jan III of Oświęcim",
+        "Władysław of Oświęcim",
+        "Jan IV of Oświęcim",
+        "Przemysław of Oświęcim",
+        "Henry Krause",
+        "Jan I the Scholastic",
+        "Marek Sobieski",
+        "Jan II of Oświęcim",
+        "Casimir I of Oświęcim"
+      ]
+    },
+    {
+      "order_index": 37,
+      "original_index": 167,
+      "question_id": "86ea0e1e0bb011ebab90acde48001122",
+      "question": "Who is the father-in-law of Ermengarde Of Hesbaye?",
+      "family": "paternal_parent",
+      "split": "train",
+      "answer": "Charlemagne",
+      "answer_aliases": [],
+      "context_titles": [
+        "Thuringbert, Count of Hesbaye",
+        "Peter Burroughs",
+        "Ermengarde of Hesbaye",
+        "Ogawa Mataji",
+        "Ingerman, Count of Hesbaye",
+        "Ludwig von Westphalen",
+        "Louis the Pious",
+        "John Adams (merchant)",
+        "Sigramnus, Count of Hesbaye",
+        "Barthold A. Butenschøn Sr."
+      ]
+    },
+    {
+      "order_index": 38,
+      "original_index": 452,
+      "question_id": "3685f31a0bde11eba7f7acde48001122",
+      "question": "Where did Mate Meštrović's father graduate from?",
+      "family": "paternal_parent",
+      "split": "train",
+      "answer": "Academy of Fine Arts Vienna",
+      "answer_aliases": [],
+      "context_titles": [
+        "Nancy Baron",
+        "Benny Rubinstein",
+        "Joseph J. Sullivan (vaudeville)",
+        "Ivan Meštrović",
+        "John Korty",
+        "Mate Meštrović",
+        "Robert Paul Smith",
+        "Andrew Allen (singer)",
+        "Yaya Soumahoro",
+        "Donnie Elbert"
+      ]
+    },
+    {
+      "order_index": 39,
+      "original_index": 191,
+      "question_id": "f6582e180bae11ebab90acde48001122",
+      "question": "Who is Archduchess Maria Antonia Of Austria (1899–1977)'s maternal grandfather?",
+      "family": "paternal_parent",
+      "split": "probe",
+      "answer": "Carlos, Duke of Madrid",
+      "answer_aliases": [],
+      "context_titles": [
+        "Princess Maria Antonia of the Two Sicilies",
+        "Infanta Blanca of Spain",
+        "Princess Maria Antonia of Parma",
+        "Joseph Ferdinand of Bavaria",
+        "Archduchess Maria Antonia of Austria (1858–1883)",
+        "Princess Maria Antonia of Naples and Sicily",
+        "Archduke Franz Karl of Austria",
+        "Maria Chiara Spinucci",
+        "Archduchess Maria Antonia of Austria (1899–1977)",
+        "Maria Antonia of Austria"
+      ]
+    },
+    {
+      "order_index": 40,
+      "original_index": 684,
+      "question_id": "bd46e5d20baf11ebab90acde48001122",
+      "question": "Who is the maternal grandfather of Amaury De Montfort (Died 1241)?",
+      "family": "paternal_parent",
+      "split": "probe",
+      "answer": "Bouchard V de Montmorency",
+      "answer_aliases": [],
+      "context_titles": [
+        "Lyon Cohen",
+        "Amaury II de Montfort",
+        "Alix de Montmorency",
+        "Guillaume de Montfort of Hainaut",
+        "Kaya Alp",
+        "Beatrice, Countess of Montfort",
+        "Abd al-Muttalib",
+        "John IV, Count of Soissons",
+        "Amaury de Montfort (died 1241)",
+        "Amaury I de Montfort"
+      ]
+    },
+    {
+      "order_index": 41,
+      "original_index": 354,
+      "question_id": "f04a80e20bdc11eba7f7acde48001122",
+      "question": "What is the date of birth of Alfonso Fadrique's father?",
+      "family": "paternal_parent",
+      "split": "probe",
+      "answer": "13 December 1272",
+      "answer_aliases": [
+        "December 13 1272"
+      ],
+      "context_titles": [
+        "John Fadrique",
+        "Brian Saunders (weightlifter)",
+        "David Aldus",
+        "Frederick III of Sicily",
+        "Les Richards",
+        "Politics of Malta",
+        "Alfonso Fadrique",
+        "Etan Boritzer",
+        "Theodred II (Bishop of Elmham)",
+        "Terence Robinson"
+      ]
+    },
+    {
+      "order_index": 42,
+      "original_index": 335,
+      "question_id": "3ac0ebec0bde11eba7f7acde48001122",
+      "question": "Who is the spouse of the director of film Apprentice To Murder?",
+      "family": "spouse",
+      "split": "train",
+      "answer": "Dorothy Thomas",
+      "answer_aliases": [],
+      "context_titles": [
+        "Apprentice to Murder",
+        "Adib Kheir",
+        "Gertrude of Bavaria",
+        "Marie-Louise Coidavid",
+        "Maria Teresa, Grand Duchess of Luxembourg",
+        "Heather D. Gibson",
+        "Sophia Magdalena of Denmark",
+        "Mehdi Abrishamchi",
+        "Princess Auguste of Bavaria (1875–1964)",
+        "Ralph L. Thomas"
+      ]
+    },
+    {
+      "order_index": 43,
+      "original_index": 334,
+      "question_id": "674b49540bda11eba7f7acde48001122",
+      "question": "Who is the spouse of the director of film Where Mountains Float?",
+      "family": "spouse",
+      "split": "train",
+      "answer": "Astrid Henning-Jensen",
+      "answer_aliases": [],
+      "context_titles": [
+        "Gertrude of Bavaria",
+        "Princess Auguste of Bavaria (1875–1964)",
+        "Heather D. Gibson",
+        "Mehdi Abrishamchi",
+        "Adib Kheir",
+        "Where Mountains Float",
+        "Bjarne Henning-Jensen",
+        "Maria Teresa, Grand Duchess of Luxembourg",
+        "Marie-Louise Coidavid",
+        "Sophia Magdalena of Denmark"
+      ]
+    },
+    {
+      "order_index": 44,
+      "original_index": 55,
+      "question_id": "8e07f1f00bda11eba7f7acde48001122",
+      "question": "Who is the spouse of the director of film My Three Merry Widows?",
+      "family": "spouse",
+      "split": "train",
+      "answer": "Mapy Cortés",
+      "answer_aliases": [
+        "María del Pilar Cordero",
+        "María del Pilar Cordero (Mapy Cortés)"
+      ],
+      "context_titles": [
+        "My Three Angels (film)",
+        "My Three Merry Widows",
+        "Marie-Louise Coidavid",
+        "Gertrude of Bavaria",
+        "Fernando Cortés",
+        "Maria Teresa, Grand Duchess of Luxembourg",
+        "Mehdi Abrishamchi",
+        "Princess Auguste of Bavaria (1875–1964)",
+        "The Very Merry Widows",
+        "Sophia Magdalena of Denmark"
+      ]
+    },
+    {
+      "order_index": 45,
+      "original_index": 31,
+      "question_id": "3a3c2efe0bdc11eba7f7acde48001122",
+      "question": "What nationality is Beatrice I, Countess Of Burgundy's husband?",
+      "family": "spouse",
+      "split": "train",
+      "answer": "Germany",
+      "answer_aliases": [
+        "German"
+      ],
+      "context_titles": [
+        "Otto I, Count of Burgundy",
+        "Joan III, Countess of Burgundy",
+        "Frederick V, Duke of Swabia",
+        "Isabella of Bourbon",
+        "Frederick I, Holy Roman Emperor",
+        "Sibylla of Burgundy, Duchess of Burgundy",
+        "Matilda II, Countess of Nevers",
+        "Joan II, Countess of Burgundy",
+        "Florine of Burgundy",
+        "Beatrice I, Countess of Burgundy"
+      ]
+    },
+    {
+      "order_index": 46,
+      "original_index": 671,
+      "question_id": "5a34b04e0bd911eba7f7acde48001122",
+      "question": "What nationality is Matilda Of Frisia's husband?",
+      "family": "spouse",
+      "split": "probe",
+      "answer": "France",
+      "answer_aliases": [
+        "French"
+      ],
+      "context_titles": [
+        "Matilda of Frisia",
+        "Adelaide of Waldeck",
+        "Michèle Kahn Spike",
+        "Johanne Marie Malleville",
+        "Hatebrand",
+        "Matilda of England, Duchess of Saxony",
+        "Geoffrey III, Count of Perche",
+        "Adelbold",
+        "Redbad, King of the Frisians",
+        "Henry I of France"
+      ]
+    },
+    {
+      "order_index": 47,
+      "original_index": 21,
+      "question_id": "0bedb7e80bdc11eba7f7acde48001122",
+      "question": "Why did John Middleton Murry's wife die?",
+      "family": "spouse",
+      "split": "probe",
+      "answer": "tuberculosis",
+      "answer_aliases": [
+        "extrapulmonary tuberculosis"
+      ],
+      "context_titles": [
+        "John Middleton (architect)",
+        "John Middleton Murry Jr.",
+        "Anne Estelle Rice",
+        "Katherine Mansfield",
+        "Richard T. Jones",
+        "Lamman Rucker",
+        "Philip Mairet",
+        "John Middleton (footballer, born 1955)",
+        "J. W. N. Sullivan",
+        "John Middleton Murry"
+      ]
+    },
+    {
+      "order_index": 48,
+      "original_index": 535,
+      "question_id": "b7de2a860bd911eba7f7acde48001122",
+      "question": "Who is the spouse of the director of film West Of Shanghai?",
+      "family": "spouse",
+      "split": "probe",
+      "answer": "Maureen O'Sullivan",
+      "answer_aliases": [],
+      "context_titles": [
+        "Sophia Magdalena of Denmark",
+        "Marie-Louise Coidavid",
+        "John Farrow",
+        "West of Shanghai",
+        "Adib Kheir",
+        "Heather D. Gibson",
+        "Maria Teresa, Grand Duchess of Luxembourg",
+        "Princess Auguste of Bavaria (1875–1964)",
+        "Mehdi Abrishamchi",
+        "Gertrude of Bavaria"
+      ]
+    }
+  ]
+}

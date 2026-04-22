@@ -19,6 +19,43 @@ def extract_json_from_output(text: str) -> dict:
         raise ValueError(f"Error extracting JSON: {e}")
 
 
+def _extract_first_balanced_json_object(text: str) -> str | None:
+    """Extract the first balanced JSON object from free-form text."""
+    start_idx = None
+    depth = 0
+    in_string = False
+    escape = False
+
+    for idx, ch in enumerate(text):
+        if start_idx is None:
+            if ch == "{":
+                start_idx = idx
+                depth = 1
+                in_string = False
+                escape = False
+            continue
+
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+
+        if ch == '"':
+            in_string = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start_idx : idx + 1]
+
+    return None
+
+
 def parse_gsw(text: str) -> GSWStructure:
     """Parse LLM output text into a GSWStructure object."""
     # Clean up the text to extract JSON
@@ -29,9 +66,10 @@ def parse_gsw(text: str) -> GSWStructure:
     elif "</semantic_construction>" in text:
         text = text.split("</semantic_construction>")[0]
     else:
-        # Try to find JSON structure
-        text = text.rsplit("}", 1)[0] + "}"
-    
+        balanced_json = _extract_first_balanced_json_object(text)
+        if balanced_json is not None:
+            text = balanced_json
+
     try:
         # Extract JSON part
         data = extract_json_from_output(text.strip())

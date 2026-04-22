@@ -374,6 +374,42 @@ python playground/sleep_time/run_bridge_test.py \
     --output_dir logs/bridge_test
 ```
 
+### Local vLLM GPT-OSS on 2x RTX A6000
+Use the helper script:
+
+```bash
+playground/sleep_time/serve_vllm_gpt_oss_120b_a6000_tp2.sh
+```
+
+Then point sleep-time runs at:
+
+```bash
+--base_url http://127.0.0.1:6379/v1 \
+--model openai/gpt-oss-120b
+```
+
+### Local vLLM Qwen 3.5 on 1x RTX A6000
+Use the helper script:
+
+```bash
+playground/sleep_time/serve_vllm_qwen3_5_35b_a3b_a6000.sh
+```
+
+Then point sleep-time runs at:
+
+```bash
+--base_url http://127.0.0.1:6379/v1 \
+--model Qwen/Qwen3.5-35B-A3B \
+--root_model Qwen/Qwen3.5-35B-A3B \
+--worker_model Qwen/Qwen3.5-35B-A3B
+```
+
+If the exact base model is unstable at `32768` context on a single A6000, retry the serve command with:
+
+```bash
+--max-model-len 16384
+```
+
 ---
 
 **Last Updated**: 2026-03-02

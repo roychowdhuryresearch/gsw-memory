@@ -18,7 +18,7 @@ try:
     from langchain_voyageai import VoyageAIEmbeddings
 
     EMBEDDING_AVAILABLE = True
-except ImportError:
+except Exception:
     EMBEDDING_AVAILABLE = False
     faiss = None
     np = None

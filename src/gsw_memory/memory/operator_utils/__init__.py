@@ -9,9 +9,11 @@ from .coref import CorefOperator
 from .context import ContextGenerator
 from .gsw_operator import GSWOperator
 from .spacetime import SpaceTimeLinker
+from .agentic_gsw import AgenticGSWPipeline
 from .utils import chunk_text, extract_json_from_output, parse_gsw
 
 __all__ = [
+    "AgenticGSWPipeline",
     "CorefOperator",
     "ContextGenerator", 
     "GSWOperator",

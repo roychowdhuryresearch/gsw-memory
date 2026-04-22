@@ -22,8 +22,10 @@ import os
 import re
 import signal
 import sys
+import threading
 import time
 import traceback
+import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Callable
@@ -176,6 +178,27 @@ class InteractiveDisplay:
         )
         self.console.print()
 
+    def show_verifier_event(self, payload: Dict[str, Any]):
+        """Display compact verifier results in verbose mode."""
+        parts = [
+            f"pass={payload.get('verifier_pass')}",
+            f"score={float(payload.get('score', 0.0) or 0.0):.2f}",
+        ]
+        failure_codes = payload.get("failure_codes", []) or []
+        if failure_codes:
+            parts.append(f"codes={','.join(str(code) for code in failure_codes)}")
+        blocked = payload.get("similarity_gate_blocked_by", []) or []
+        if blocked:
+            parts.append(f"blocked_by={','.join(str(code) for code in blocked)}")
+        retry_hint = str(payload.get("retry_hint", "") or "").strip()
+        if retry_hint:
+            parts.append(f"retry_hint={retry_hint}")
+        notes = str(payload.get("notes", "") or "").strip()
+        if notes:
+            parts.append(f"notes={notes}")
+        self.console.print(f"[magenta]🧪 Verifier:[/magenta] [dim]{' | '.join(parts)}[/dim]")
+        self.console.print()
+
     def show_worker_event(self, event_type: str, payload: Dict[str, Any]):
         """Display compact worker lifecycle events in verbose mode."""
         if event_type == "rlm_worker_call":
@@ -206,6 +229,44 @@ class InteractiveDisplay:
         if notes:
             parts.append(f"notes={notes}")
         self.console.print(f"[cyan]🧾 Worker Result:[/cyan] [dim]{' | '.join(parts)}[/dim]")
+        self.console.print()
+
+    def show_parallel_batch_event(self, event_type: str, payload: Dict[str, Any]):
+        """Display compact parallel batch progress and warning events in verbose mode."""
+        completed = int(payload.get("completed", 0) or 0)
+        total = int(payload.get("total", 0) or 0)
+        elapsed = float(payload.get("elapsed_seconds", 0.0) or 0.0)
+        oldest = float(payload.get("oldest_inflight_seconds", 0.0) or 0.0)
+        batch_id = payload.get("batch_id")
+        doc_id = payload.get("doc_id")
+
+        if event_type == "parallel_worker_stuck_warning":
+            edge = payload.get("edge", {}) or {}
+            edge_label = (
+                f"{edge.get('doc_id', '?')}::{edge.get('entity_name', '?')} -> "
+                f"{edge.get('neighbor_name', '?')} ({edge.get('relationship', '?')})"
+            )
+            self.console.print(
+                "[yellow]⚠ Parallel Worker Stuck:[/yellow] "
+                f"[dim]doc={doc_id} batch={batch_id} done={completed}/{total} "
+                f"edge={edge_label} age={float(payload.get('worker_inflight_seconds', 0.0) or 0.0):.1f}s "
+                f"oldest={oldest:.1f}s elapsed={elapsed:.1f}s[/dim]"
+            )
+            self.console.print()
+            return
+
+        label = {
+            "parallel_batch_started": "Parallel Batch Started",
+            "parallel_batch_progress": "Parallel Batch Progress",
+            "parallel_batch_heartbeat": "Parallel Batch Heartbeat",
+            "parallel_batch_completed": "Parallel Batch Completed",
+        }.get(event_type, "Parallel Batch")
+
+        self.console.print(
+            f"[cyan]⏱ {label}:[/cyan] "
+            f"[dim]doc={doc_id} batch={batch_id} done={completed}/{total} "
+            f"oldest={oldest:.1f}s elapsed={elapsed:.1f}s[/dim]"
+        )
         self.console.print()
 
     def show_validation_result(self, result: Dict[str, Any]):
@@ -291,16 +352,31 @@ class InteractiveDisplay:
 class SleepTimeRunner:
     """Orchestrates sleep-time exploration with checkpointing and logging."""
 
-    def __init__(self, args: argparse.Namespace):
+    @staticmethod
+    def _generate_run_id(now: Optional[datetime] = None) -> str:
+        """Generate a per-run identifier that stays unique across concurrent shard threads."""
+        timestamp = (now or datetime.now()).strftime("%Y%m%d_%H%M%S_%f")
+        return f"{timestamp}_{uuid.uuid4().hex[:8]}"
+
+    def __init__(
+        self,
+        args: argparse.Namespace,
+        entity_searcher: Optional[EntitySearcher] = None,
+        curriculum_guidance: Optional[Dict[str, Any]] = None,
+    ):
         """
         Initialize runner with configuration.
 
         Args:
             args: Parsed command-line arguments
+            entity_searcher: Optional pre-built searcher to reuse in-process
+            curriculum_guidance: Optional in-memory curriculum guidance payload
         """
         self.args = args
-        self.run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.run_id = self._generate_run_id()
         self.start_time = time.time()
+        self.injected_entity_searcher = entity_searcher
+        self.injected_curriculum_guidance = curriculum_guidance if isinstance(curriculum_guidance, dict) else None
 
         # Setup output directories
         self.output_dir = Path(args.output_dir) / f"run_{self.run_id}"
@@ -308,75 +384,135 @@ class SleepTimeRunner:
         self.checkpoint_dir = self.output_dir / "checkpoints"
         self.checkpoint_dir.mkdir(exist_ok=True)
 
+        # Logging lifecycle bookkeeping for in-process reuse
+        self._managed_loggers: List[logging.Logger] = []
+        self._managed_handlers: List[logging.Handler] = []
+        self._agent_module_logger: Optional[logging.Logger] = None
+        self._agent_module_handler: Optional[logging.Handler] = None
+        self._logging_cleaned = False
+
         # Setup logging
         self._setup_logging()
 
         # State
-        self.entity_searcher = None
+        self.entity_searcher = entity_searcher
         self.agent = None
         self.explored_entities = []
         self.all_bridges = []
         self.errors = []
         self.interrupted = False
 
-        # Register signal handler for graceful shutdown
-        signal.signal(signal.SIGINT, self._signal_handler)
-        signal.signal(signal.SIGTERM, self._signal_handler)
+        # Register signal handlers only from the main thread. Threaded curriculum
+        # shard generation reuses this runner in worker threads, where Python
+        # forbids process-level signal registration.
+        if threading.current_thread() is threading.main_thread():
+            signal.signal(signal.SIGINT, self._signal_handler)
+            signal.signal(signal.SIGTERM, self._signal_handler)
+            self.logger.info("Registered process signal handlers in the main thread")
+        else:
+            self.logger.info(
+                "Skipping process signal handler registration in non-main thread %s",
+                threading.current_thread().name,
+            )
 
-        self.logger.info(f"="*80)
-        self.logger.info(f"Sleep-Time Exploration Run: {self.run_id}")
-        self.logger.info(f"="*80)
-        self.logger.info(f"Configuration: {vars(args)}")
+        self.logger.info("=" * 80)
+        self.logger.info("Sleep-Time Exploration Run: %s", self.run_id)
+        self.logger.info("=" * 80)
+        self.logger.info("Configuration: %s", vars(args))
+        if self.injected_entity_searcher is not None:
+            self.logger.info(
+                "Using injected EntitySearcher with %s docs",
+                len(getattr(self.injected_entity_searcher, "gsw_by_doc_id", {})),
+            )
+        if self.injected_curriculum_guidance is not None:
+            self.logger.info(
+                "Using injected curriculum guidance keys: %s",
+                sorted(self.injected_curriculum_guidance.keys()),
+            )
 
     def _setup_logging(self):
         """Setup structured logging to console and files."""
-        # Create logs directory
         logs_dir = self.output_dir / "logs"
         logs_dir.mkdir(exist_ok=True)
 
-        # Main logger
-        self.logger = logging.getLogger("sleep_time")
-        self.logger.setLevel(logging.DEBUG)
+        logger_base = f"sleep_time.{self.run_id}"
 
-        # File handler - detailed logs
-        file_handler = logging.FileHandler(logs_dir / "execution.log")
-        file_handler.setLevel(logging.DEBUG)
+        def _reset_logger(name: str, level: int) -> logging.Logger:
+            logger = logging.getLogger(name)
+            logger.setLevel(level)
+            logger.propagate = False
+            for handler in list(logger.handlers):
+                logger.removeHandler(handler)
+                try:
+                    handler.close()
+                except Exception:
+                    pass
+            self._managed_loggers.append(logger)
+            return logger
+
         file_formatter = logging.Formatter(
             "[%(asctime)s] [%(levelname)-8s] [%(name)s] %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S"
+            datefmt="%Y-%m-%d %H:%M:%S",
         )
+
+        self.logger = _reset_logger(logger_base, logging.DEBUG)
+        file_handler = logging.FileHandler(logs_dir / "execution.log")
+        file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(file_formatter)
         self.logger.addHandler(file_handler)
+        self._managed_handlers.append(file_handler)
 
-        # Tool call logger - separate JSON log
-        self.tool_logger = logging.getLogger("sleep_time.tools")
-        self.tool_logger.setLevel(logging.INFO)
+        self.tool_logger = _reset_logger(f"{logger_base}.tools", logging.INFO)
         tool_handler = logging.FileHandler(logs_dir / "tool_calls.jsonl")
         tool_handler.setFormatter(logging.Formatter("%(message)s"))
         self.tool_logger.addHandler(tool_handler)
+        self._managed_handlers.append(tool_handler)
 
-        # Error logger - separate error log
-        self.error_logger = logging.getLogger("sleep_time.errors")
-        self.error_logger.setLevel(logging.ERROR)
+        self.error_logger = _reset_logger(f"{logger_base}.errors", logging.ERROR)
         error_handler = logging.FileHandler(logs_dir / "errors.log")
         error_handler.setFormatter(file_formatter)
         self.error_logger.addHandler(error_handler)
+        self._managed_handlers.append(error_handler)
 
-        # Trace logger - human-readable agent execution trace
-        self.trace_logger = logging.getLogger("sleep_time.trace")
-        self.trace_logger.setLevel(logging.INFO)
+        self.trace_logger = _reset_logger(f"{logger_base}.trace", logging.INFO)
         trace_handler = logging.FileHandler(logs_dir / "agent_trace.log")
-        trace_handler.setFormatter(logging.Formatter("%(message)s"))  # Plain text, no timestamps
+        trace_handler.setFormatter(logging.Formatter("%(message)s"))
         self.trace_logger.addHandler(trace_handler)
+        self._managed_handlers.append(trace_handler)
 
-        # Also log to agentic_reconciler module
-        agent_logger = logging.getLogger("src.gsw_memory.sleep_time.agentic_reconciler")
-        agent_logger.setLevel(logging.DEBUG)
-        agent_logger.addHandler(file_handler)
+        self._agent_module_logger = logging.getLogger("src.gsw_memory.sleep_time.agentic_reconciler")
+        self._agent_module_logger.setLevel(logging.DEBUG)
+        self._agent_module_handler = logging.FileHandler(logs_dir / "execution.log")
+        self._agent_module_handler.setLevel(logging.DEBUG)
+        self._agent_module_handler.setFormatter(file_formatter)
+        self._agent_module_logger.addHandler(self._agent_module_handler)
 
-        console.print(f"[green]✓ Logging setup complete[/green]")
+        console.print("[green]✓ Logging setup complete[/green]")
         console.print(f"  Logs directory: {logs_dir}")
         console.print(f"  Trace log: {logs_dir / 'agent_trace.log'}")
+
+    def _cleanup_logging(self):
+        """Detach and close file handlers so sequential in-process runs do not leak handlers."""
+        if getattr(self, "_logging_cleaned", False):
+            return
+        self._logging_cleaned = True
+
+        agent_logger = getattr(self, "_agent_module_logger", None)
+        agent_handler = getattr(self, "_agent_module_handler", None)
+        if agent_logger is not None and agent_handler is not None:
+            agent_logger.removeHandler(agent_handler)
+            try:
+                agent_handler.close()
+            except Exception:
+                pass
+
+        for logger in getattr(self, "_managed_loggers", []):
+            for handler in list(logger.handlers):
+                logger.removeHandler(handler)
+                try:
+                    handler.close()
+                except Exception:
+                    pass
 
     def _signal_handler(self, signum, frame):
         """Handle interrupt signals gracefully."""
@@ -442,8 +578,28 @@ class SleepTimeRunner:
                     )
                 elif event_type == "hybrid_planner_decision":
                     display.show_planner_decision(data)
+                elif event_type == "verifier_result":
+                    display.show_verifier_event(data)
                 elif event_type in {"rlm_worker_call", "rlm_worker_result"}:
                     display.show_worker_event(event_type, data)
+                elif event_type == "pre_verifier_cache_hit":
+                    display.show_tool_result(data, tool_name="pre_verifier_cache_hit")
+                elif event_type in {
+                    "parallel_batch_started",
+                    "parallel_batch_progress",
+                    "parallel_batch_heartbeat",
+                    "parallel_worker_stuck_warning",
+                    "parallel_batch_completed",
+                }:
+                    display.show_parallel_batch_event(event_type, data)
+                elif event_type in {
+                    "edge_packet_prepared",
+                    "edge_worker_dispatched",
+                    "edge_worker_completed",
+                    "edge_commit_started",
+                    "edge_commit_finished",
+                }:
+                    display.show_tool_result(data, tool_name=event_type)
 
             # Always log to trace file with visual separators
             if event_type == "iteration_start":
@@ -502,12 +658,34 @@ class SleepTimeRunner:
                 self.trace_logger.info(f"\n[rlm_edge] {json.dumps(data, ensure_ascii=False)}")
             elif event_type == "rlm_doc_summary":
                 self.trace_logger.info(f"\n[rlm_doc] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "rlm_doc_summary",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
             elif event_type == "hybrid_planner_decision":
                 self.trace_logger.info(f"\n[planner] {json.dumps(data, ensure_ascii=False)}")
                 self.tool_logger.info(
                     json.dumps(
                         {
                             "event_type": "hybrid_planner_decision",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type == "verifier_result":
+                self.trace_logger.info(f"\n[verifier] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "verifier_result",
                             "timestamp": datetime.now().isoformat(),
                             "data": data,
                         },
@@ -538,13 +716,86 @@ class SleepTimeRunner:
                         ensure_ascii=False,
                     )
                 )
+            elif event_type == "rlm_worker_parse_failure":
+                self.trace_logger.info(f"\n[worker_parse_failure] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "rlm_worker_parse_failure",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type == "pre_verifier_cache_hit":
+                self.trace_logger.info(f"\n[pre_verifier_cache_hit] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": "pre_verifier_cache_hit",
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type in {
+                "parallel_batch_started",
+                "parallel_batch_progress",
+                "parallel_batch_heartbeat",
+                "parallel_worker_stuck_warning",
+                "parallel_batch_completed",
+            }:
+                self.trace_logger.info(f"\n[{event_type}] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": event_type,
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
+            elif event_type in {
+                "edge_packet_prepared",
+                "edge_worker_dispatched",
+                "edge_worker_completed",
+                "edge_commit_started",
+                "edge_commit_finished",
+            }:
+                marker = {
+                    "edge_packet_prepared": "edge_packet_prepared",
+                    "edge_worker_dispatched": "edge_worker_dispatched",
+                    "edge_worker_completed": "edge_worker_completed",
+                    "edge_commit_started": "edge_commit_started",
+                    "edge_commit_finished": "edge_commit_finished",
+                }[event_type]
+                self.trace_logger.info(f"\n[{marker}] {json.dumps(data, ensure_ascii=False)}")
+                self.tool_logger.info(
+                    json.dumps(
+                        {
+                            "event_type": event_type,
+                            "timestamp": datetime.now().isoformat(),
+                            "data": data,
+                        },
+                        ensure_ascii=False,
+                    )
+                )
 
         return callback
 
     def load_gsws(self) -> EntitySearcher:
         """Load GSW structures and build indexes."""
+        if self.entity_searcher is not None:
+            doc_count = len(getattr(self.entity_searcher, "gsw_by_doc_id", {}))
+            console.print(f"\n[cyan]Reusing injected EntitySearcher ({doc_count} GSWs)...[/cyan]")
+            self.logger.info("Reusing injected EntitySearcher with %s docs", doc_count)
+            return self.entity_searcher
+
         console.print(f"\n[cyan]Loading {self.args.num_docs} GSWs...[/cyan]")
-        self.logger.info(f"Loading GSWs from: {self.args.gsw_path}")
+        self.logger.info("Loading GSWs from: %s", self.args.gsw_path)
 
         try:
             entity_searcher = EntitySearcher(
@@ -552,19 +803,20 @@ class SleepTimeRunner:
                 path_to_gsw_files=self.args.gsw_path,
                 cache_dir=self.args.cache_dir,
                 rebuild_cache=False,
-                verbose=False,  # Suppress EntitySearcher logs
+                verbose=False,
                 use_bm25=True,
-                use_gpu_for_qa_index=False
+                use_gpu_for_qa_index=False,
+                embedding_gpu_memory_utilization=getattr(self.args, "embedding_gpu_memory_utilization", 0.5),
             )
 
             console.print(f"[green]✓ Loaded {len(entity_searcher.gsw_by_doc_id)} GSWs[/green]")
-            self.logger.info(f"Successfully loaded {len(entity_searcher.gsw_by_doc_id)} GSWs")
-
+            self.logger.info("Successfully loaded %s GSWs", len(entity_searcher.gsw_by_doc_id))
+            self.entity_searcher = entity_searcher
             return entity_searcher
 
         except Exception as e:
             console.print(f"[red]✗ Failed to load GSWs: {e}[/red]")
-            self.logger.error(f"Failed to load GSWs: {e}", exc_info=True)
+            self.logger.error("Failed to load GSWs: %s", e, exc_info=True)
             raise
 
     def initialize_agent(self, display: Optional[InteractiveDisplay] = None) -> AgenticReconciler:
@@ -576,75 +828,131 @@ class SleepTimeRunner:
         """
         console.print(f"\n[cyan]Initializing agent with model: {self.args.model}[/cyan]")
 
-        # Always create callback handler for trace logging (with or without display)
         output_callback = self._create_callback_handler(display)
+
+        curriculum_guidance = self.injected_curriculum_guidance
+        if curriculum_guidance is not None:
+            self.logger.info(
+                "Using injected curriculum guidance with keys: %s",
+                sorted(curriculum_guidance.keys()),
+            )
+        elif getattr(self.args, 'curriculum_guidance_file', None):
+            try:
+                with open(self.args.curriculum_guidance_file, 'r') as f:
+                    curriculum_guidance = json.load(f)
+            except Exception as e:
+                console.print(f"[yellow]Warning: failed to load curriculum guidance: {e}[/yellow]")
+                self.logger.warning("Failed to load curriculum guidance from %s: %s", self.args.curriculum_guidance_file, e)
+
+        reasoning_effort = getattr(self.args, 'reasoning_effort', 'medium')
+        base_url = getattr(self.args, 'base_url', None)
+        disable_bridge_verifier = bool(getattr(self.args, 'disable_bridge_verifier', False))
+        bridge_verifier_threshold = float(getattr(self.args, 'bridge_verifier_threshold', 0.7))
+        bridge_verifier_fail_open = bool(getattr(self.args, 'bridge_verifier_fail_open', False))
+        bridge_verifier_model = getattr(self.args, 'bridge_verifier_model', None)
+        pipeline_mode = getattr(self.args, 'pipeline_mode', 'legacy')
+        hybrid_scope = getattr(self.args, 'hybrid_scope', 'doc_edge')
+        root_model = getattr(self.args, 'root_model', None)
+        worker_model = getattr(self.args, 'worker_model', None)
+        edge_max_depth = int(getattr(self.args, 'edge_max_depth', 1))
+        edge_max_calls = int(getattr(self.args, 'edge_max_calls', 2))
+        edge_max_tokens = int(getattr(self.args, 'edge_max_tokens', 3000))
+        max_optional_docs_per_edge = int(getattr(self.args, 'max_optional_docs_per_edge', 2))
+        edge_parallel_enabled = bool(getattr(self.args, 'edge_parallel_enabled', False))
+        edge_parallel_workers = int(getattr(self.args, 'edge_parallel_workers', 1))
+        verifier_parallel_workers = int(getattr(self.args, 'verifier_parallel_workers', 4))
+        edge_max_accepted_bridges = int(getattr(self.args, 'edge_max_accepted_bridges', 10))
+        parallel_progress_heartbeat_seconds = float(getattr(self.args, 'parallel_progress_heartbeat_seconds', 10.0))
+        parallel_stuck_warning_seconds = float(getattr(self.args, 'parallel_stuck_warning_seconds', 60.0))
+        num_entities = int(getattr(self.args, 'num_entities', 0))
+        num_docs = int(getattr(self.args, 'num_docs', len(getattr(self.entity_searcher, 'gsw_by_doc_id', {}))))
+        max_tokens = int(getattr(self.args, 'max_tokens', 500_000))
 
         try:
             agent = AgenticReconciler(
                 entity_searcher=self.entity_searcher,
                 model_name=self.args.model,
                 budget={
-                    "max_entities": self.args.num_entities,
-                    "max_documents": self.args.num_docs,
-                    "max_tokens": self.args.max_tokens
+                    "max_entities": num_entities,
+                    "max_documents": num_docs,
+                    "max_tokens": max_tokens,
                 },
-                verbose=False,  # Suppress default verbose - we use callback
+                verbose=False,
                 output_callback=output_callback,
-                reasoning_effort=self.args.reasoning_effort,
-                base_url=getattr(self.args, 'base_url', None),
-                bridge_verifier_enabled=not self.args.disable_bridge_verifier,
-                bridge_verifier_threshold=self.args.bridge_verifier_threshold,
-                bridge_verifier_fail_open=self.args.bridge_verifier_fail_open,
-                bridge_verifier_model=self.args.bridge_verifier_model,
-                pipeline_mode=self.args.pipeline_mode,
-                hybrid_scope=self.args.hybrid_scope,
-                root_model=self.args.root_model,
-                worker_model=self.args.worker_model,
-                edge_max_depth=self.args.edge_max_depth,
-                edge_max_calls=self.args.edge_max_calls,
-                edge_max_tokens=self.args.edge_max_tokens,
-                max_optional_docs_per_edge=self.args.max_optional_docs_per_edge,
+                reasoning_effort=reasoning_effort,
+                base_url=base_url,
+                bridge_verifier_enabled=not disable_bridge_verifier,
+                bridge_verifier_threshold=bridge_verifier_threshold,
+                bridge_verifier_fail_open=bridge_verifier_fail_open,
+                bridge_verifier_model=bridge_verifier_model,
+                pipeline_mode=pipeline_mode,
+                hybrid_scope=hybrid_scope,
+                root_model=root_model,
+                worker_model=worker_model,
+                edge_max_depth=edge_max_depth,
+                edge_max_calls=edge_max_calls,
+                edge_max_tokens=edge_max_tokens,
+                max_optional_docs_per_edge=max_optional_docs_per_edge,
+                edge_parallel_enabled=edge_parallel_enabled,
+                edge_parallel_workers=edge_parallel_workers,
+                verifier_parallel_workers=verifier_parallel_workers,
+                edge_max_accepted_bridges=edge_max_accepted_bridges,
+                parallel_progress_heartbeat_seconds=parallel_progress_heartbeat_seconds,
+                parallel_stuck_warning_seconds=parallel_stuck_warning_seconds,
+                curriculum_guidance=curriculum_guidance,
             )
 
-            console.print(f"[green]✓ Agent initialized[/green]")
+            console.print("[green]✓ Agent initialized[/green]")
             if hasattr(agent, 'provider'):
                 if agent.provider == "together":
-                    console.print(f"  [dim]Reasoning effort: {self.args.reasoning_effort}[/dim]")
+                    console.print(f"  [dim]Reasoning effort: {reasoning_effort}[/dim]")
                 elif agent.provider == "vllm":
-                    console.print(f"  [dim]vllm base URL: {self.args.base_url}[/dim]")
+                    console.print(f"  [dim]vllm base URL: {base_url}[/dim]")
             console.print(
-                f"  [dim]Bridge verifier: {'off' if self.args.disable_bridge_verifier else 'on'} "
-                f"(model: {self.args.bridge_verifier_model or self.args.model}, "
-                f"threshold: {self.args.bridge_verifier_threshold:.2f})[/dim]"
+                f"  [dim]Bridge verifier: {'off' if disable_bridge_verifier else 'on'} "
+                f"(model: {bridge_verifier_model or self.args.model}, "
+                f"threshold: {bridge_verifier_threshold:.2f})[/dim]"
             )
             console.print(
-                f"  [dim]Pipeline: {self.args.pipeline_mode} "
-                f"(root={self.args.root_model or self.args.model}, "
-                f"worker={self.args.worker_model or self.args.model})[/dim]"
+                f"  [dim]Pipeline: {pipeline_mode} "
+                f"(root={root_model or self.args.model}, "
+                f"worker={worker_model or self.args.model}, "
+                f"parallel={'on' if edge_parallel_enabled else 'off'}:{edge_parallel_workers}, "
+                f"verifier_workers={verifier_parallel_workers}, "
+                f"edge_accept_cap={edge_max_accepted_bridges}, "
+                f"hb={parallel_progress_heartbeat_seconds}s, "
+                f"stuck_warn={parallel_stuck_warning_seconds}s)[/dim]"
             )
             self.logger.info(
-                f"Agent initialized with model: {self.args.model} "
-                f"(provider: {getattr(agent, 'provider', 'unknown')}, "
-                f"reasoning_effort: {self.args.reasoning_effort}, "
-                f"bridge_verifier_enabled: {not self.args.disable_bridge_verifier}, "
-                f"bridge_verifier_model: {self.args.bridge_verifier_model or self.args.model}, "
-                f"bridge_verifier_threshold: {self.args.bridge_verifier_threshold}, "
-                f"bridge_verifier_fail_open: {self.args.bridge_verifier_fail_open}, "
-                f"pipeline_mode: {self.args.pipeline_mode}, "
-                f"hybrid_scope: {self.args.hybrid_scope}, "
-                f"root_model: {self.args.root_model or self.args.model}, "
-                f"worker_model: {self.args.worker_model or self.args.model}, "
-                f"edge_max_depth: {self.args.edge_max_depth}, "
-                f"edge_max_calls: {self.args.edge_max_calls}, "
-                f"edge_max_tokens: {self.args.edge_max_tokens}, "
-                f"max_optional_docs_per_edge: {self.args.max_optional_docs_per_edge})"
+                "Agent initialized with model: %s (provider: %s, reasoning_effort: %s, bridge_verifier_enabled: %s, bridge_verifier_model: %s, bridge_verifier_threshold: %s, bridge_verifier_fail_open: %s, pipeline_mode: %s, hybrid_scope: %s, root_model: %s, worker_model: %s, edge_max_depth: %s, edge_max_calls: %s, edge_max_tokens: %s, max_optional_docs_per_edge: %s, edge_parallel_enabled: %s, edge_parallel_workers: %s, verifier_parallel_workers: %s, edge_max_accepted_bridges: %s, parallel_progress_heartbeat_seconds: %s, parallel_stuck_warning_seconds: %s)",
+                self.args.model,
+                getattr(agent, 'provider', 'unknown'),
+                reasoning_effort,
+                not disable_bridge_verifier,
+                bridge_verifier_model or self.args.model,
+                bridge_verifier_threshold,
+                bridge_verifier_fail_open,
+                pipeline_mode,
+                hybrid_scope,
+                root_model or self.args.model,
+                worker_model or self.args.model,
+                edge_max_depth,
+                edge_max_calls,
+                edge_max_tokens,
+                max_optional_docs_per_edge,
+                edge_parallel_enabled,
+                edge_parallel_workers,
+                verifier_parallel_workers,
+                edge_max_accepted_bridges,
+                parallel_progress_heartbeat_seconds,
+                parallel_stuck_warning_seconds,
             )
 
             return agent
 
         except Exception as e:
             console.print(f"[red]✗ Failed to initialize agent: {e}[/red]")
-            self.logger.error(f"Failed to initialize agent: {e}", exc_info=True)
+            self.logger.error("Failed to initialize agent: %s", e, exc_info=True)
             raise
 
     def _save_checkpoint(self, entity_count: Optional[int] = None, force: bool = False):
@@ -1068,6 +1376,16 @@ class SleepTimeRunner:
                     "alias_resolution_hits",
                     "docs_attempted",
                     "docs_completed",
+                    "parallel_batches",
+                    "parallel_workers_used",
+                    "commit_queue_size_peak",
+                    "stale_edge_skipped",
+                    "parallel_generation_seconds",
+                    "serial_commit_seconds",
+                    "pre_verifier_cache_hits",
+                    "verifier_parallel_workers_used",
+                    "parallel_verifier_seconds",
+                    "edge_accept_cap_hits",
                 ]:
                     if key in rlm_metrics:
                         f.write(f"  {key}: {rlm_metrics[key]}\n")
@@ -1110,6 +1428,12 @@ class SleepTimeRunner:
             table.add_row("RLM Worker Calls", str(rlm_metrics.get("worker_calls", 0)))
             table.add_row("RLM No-Path Skips", str(rlm_metrics.get("edges_skipped_no_path", 0)))
             table.add_row("RLM Action Overrides", str(rlm_metrics.get("planner_actions_overridden", 0)))
+            table.add_row("RLM Parallel Batches", str(rlm_metrics.get("parallel_batches", 0)))
+            table.add_row("RLM Stale Edge Skips", str(rlm_metrics.get("stale_edge_skipped", 0)))
+            table.add_row("RLM Pre-Verifier Cache Hits", str(rlm_metrics.get("pre_verifier_cache_hits", 0)))
+            table.add_row("RLM Verifier Workers Used", str(rlm_metrics.get("verifier_parallel_workers_used", 0)))
+            table.add_row("RLM Verifier Seconds", f"{float(rlm_metrics.get('parallel_verifier_seconds', 0.0)):.1f}")
+            table.add_row("RLM Edge Accept Cap Hits", str(rlm_metrics.get("edge_accept_cap_hits", 0)))
         table.add_row("Errors", str(report['summary']['total_errors']), style="yellow" if report['summary']['total_errors'] > 0 else "green")
 
         console.print(table)
@@ -1122,14 +1446,12 @@ class SleepTimeRunner:
 
     def run(self):
         """Main execution flow."""
+        report = None
         try:
-            # Load GSWs or checkpoint
-            if self.args.resume_from:
+            if getattr(self.args, 'resume_from', None):
                 checkpoint = self.load_checkpoint(self.args.resume_from)
-                # Load config from checkpoint
                 self.entity_searcher = self.load_gsws()
                 self.agent = self.initialize_agent()
-                # Restore token counts
                 self.agent.tokens_used = checkpoint["progress"]["tokens_used"]
                 self.agent.input_tokens = checkpoint["progress"].get("input_tokens", 0)
                 self.agent.output_tokens = checkpoint["progress"].get("output_tokens", 0)
@@ -1140,26 +1462,42 @@ class SleepTimeRunner:
                 self.entity_searcher = self.load_gsws()
                 self.agent = self.initialize_agent()
 
-            # Run exploration
             self.explore_entities()
 
-            # Generate and save report
             report = self.generate_report()
             self.save_results(report)
             self.print_summary(report)
+            return report
 
         except KeyboardInterrupt:
             console.print("\n[yellow]⚠ Interrupted by user[/yellow]")
             self.logger.warning("Interrupted by user")
+            return report
         except Exception as e:
             console.print(f"\n[red]✗ Fatal error: {e}[/red]")
-            self.logger.error(f"Fatal error: {e}", exc_info=True)
+            self.logger.error("Fatal error: %s", e, exc_info=True)
             self.error_logger.error(f"Fatal error: {e}\n{traceback.format_exc()}")
             raise
         finally:
-            # Final checkpoint on exit
             if self.agent and self.explored_entities:
                 self._save_checkpoint(force=True)
+            self._cleanup_logging()
+
+
+def run_sleep_time_once(
+    args: argparse.Namespace,
+    *,
+    entity_searcher: Optional[EntitySearcher] = None,
+    curriculum_guidance: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Run a single sleep-time exploration in-process and return the report dict."""
+    runner = SleepTimeRunner(
+        args,
+        entity_searcher=entity_searcher,
+        curriculum_guidance=curriculum_guidance,
+    )
+    report = runner.run()
+    return report or {}
 
 
 def main():
@@ -1178,6 +1516,8 @@ def main():
     parser.add_argument("--cache_dir", type=str,
                         default="/mnt/SSD1/shreyas/SM_GSW/2wiki/.gsw_cache",
                         help="Path to cache directory")
+    parser.add_argument("--embedding_gpu_memory_utilization", type=float, default=0.5,
+                        help="GPU memory fraction reserved for the retrieval embedding model.")
 
     # Exploration configuration
     parser.add_argument("--num_entities", type=int, default=2,
@@ -1203,7 +1543,7 @@ def main():
                         help="Reasoning effort for Together AI models (low/medium/high) - higher = better reasoning but slower. Default: medium for balance.")
     parser.add_argument("--disable_bridge_verifier", action="store_true",
                         help="Disable bridge verifier subagent gate for create_bridge_qa.")
-    parser.add_argument("--bridge_verifier_threshold", type=float, default=0.75,
+    parser.add_argument("--bridge_verifier_threshold", type=float, default=0.7,
                         help="Minimum verifier score (0-1) needed to keep a created bridge.")
     parser.add_argument("--bridge_verifier_fail_open", action="store_true",
                         help="If set, bridge verifier API/parse errors won't block bridge creation.")
@@ -1226,6 +1566,20 @@ def main():
                         help="Per-edge token budget in RLM mode.")
     parser.add_argument("--max_optional_docs_per_edge", type=int, default=2,
                         help="Maximum optional fuzzy docs included per edge packet in RLM mode.")
+    parser.add_argument("--edge_parallel_enabled", action="store_true",
+                        help="Enable doc-local parallel worker generation in hybrid mode (serial commit stays enforced).")
+    parser.add_argument("--edge_parallel_workers", type=int, default=1,
+                        help="Number of parallel worker threads per hybrid batch.")
+    parser.add_argument("--parallel_progress_heartbeat_seconds", type=float, default=10.0,
+                        help="Heartbeat interval (seconds) for parallel batch progress events.")
+    parser.add_argument("--parallel_stuck_warning_seconds", type=float, default=60.0,
+                        help="Warning threshold (seconds) for in-flight parallel worker calls.")
+    parser.add_argument("--verifier_parallel_workers", type=int, default=4,
+                        help="Number of parallel verifier calls per edge commit.")
+    parser.add_argument("--edge_max_accepted_bridges", type=int, default=10,
+                        help="Maximum accepted bridges committed per edge before stopping.")
+    parser.add_argument("--curriculum_guidance_file", type=str, default=None,
+                        help="Optional JSON file with curriculum demand sketch, feedback brief, and bridge exemplars for worker prompts.")
 
     # Output configuration
     parser.add_argument("--output_dir", type=str, default="logs/sleep_time",
@@ -1258,6 +1612,11 @@ def main():
         f"Model: {args.model}\n"
         f"Pipeline: {args.pipeline_mode}\n"
         f"Hybrid scope: {args.hybrid_scope}\n"
+        f"Parallel workers: {'on' if args.edge_parallel_enabled else 'off'} ({args.edge_parallel_workers})\n"
+        f"Parallel heartbeat: {args.parallel_progress_heartbeat_seconds}s\n"
+        f"Parallel stuck warn: {args.parallel_stuck_warning_seconds}s\n"
+        f"Verifier workers: {args.verifier_parallel_workers}\n"
+        f"Edge accept cap: {args.edge_max_accepted_bridges}\n"
         f"Bridge verifier: {'off' if args.disable_bridge_verifier else 'on'} "
         f"(threshold={args.bridge_verifier_threshold:.2f})\n"
         f"Output: {args.output_dir}",
@@ -1266,8 +1625,7 @@ def main():
     ))
 
     # Run exploration
-    runner = SleepTimeRunner(args)
-    runner.run()
+    run_sleep_time_once(args)
 
 
 if __name__ == "__main__":

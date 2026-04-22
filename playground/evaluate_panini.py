@@ -24,7 +24,6 @@ from pydantic import BaseModel
 from typing import List
 
 import os 
-os.environ['CUDA_VISIBLE_DEVICES'] = '1,0'
 
 # os.environ["CURATOR_DISABLE_CACHE"] = "1"
 # Add the parent directory to the path
@@ -71,7 +70,7 @@ DATASET_CONFIGS = {
     "musique_platinum": {
         "answer_field": "answer",
         "parse_json": False,
-        "allow_no_answer": True
+        "allow_no_answer": False
     },
     "musique_unanswerable": {
         "answer_field": "answer",
@@ -445,6 +444,16 @@ class ChainBatchedMultiHopQAEvaluator:
                         "require_all_responses": False,
                     },
                     "generation_params": {"temperature": 0}
+                },
+                "bedrock": {
+                    "model_name": "bedrock/converse/openai.gpt-oss-120b-1:0",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "request_timeout": 300.0,
+                        "max_concurrent_requests": 64,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {"temperature": 0}
                 }
             },
             "answerer": {
@@ -474,6 +483,16 @@ class ChainBatchedMultiHopQAEvaluator:
                         "presence_penalty": 0.3,
                         "frequency_penalty": 0.3,
                     }
+                },
+                "bedrock": {
+                    "model_name": "bedrock/converse/openai.gpt-oss-120b-1:0",
+                    "backend": "litellm",
+                    "backend_params": {
+                        "request_timeout": 300.0,
+                        "max_concurrent_requests": 64,
+                        "require_all_responses": False,
+                    },
+                    "generation_params": {"temperature": 0}
                 }
             }
         }
@@ -567,9 +586,10 @@ class ChainBatchedMultiHopQAEvaluator:
                 "response_format": DecomposedQuestionList
             }
 
-            # Add backend params for opensource models
-            if decomposer_mode == "opensource":
+            # Add backend params for litellm-backed modes (opensource, bedrock, etc.)
+            if "backend" in decomposer_config:
                 decomposer_kwargs["backend"] = decomposer_config["backend"]
+            if "backend_params" in decomposer_config:
                 decomposer_kwargs["backend_params"] = decomposer_config["backend_params"]
 
             self.decomposer = ChainQuestionDecomposer(**decomposer_kwargs)
@@ -587,9 +607,10 @@ class ChainBatchedMultiHopQAEvaluator:
                 "generation_params": answerer_config["generation_params"]
             }
 
-            # Add backend params for opensource models
-            if answerer_mode == "opensource":
+            # Add backend params for litellm-backed modes (opensource, bedrock, etc.)
+            if "backend" in answerer_config:
                 answerer_kwargs["backend"] = answerer_config["backend"]
+            if "backend_params" in answerer_config:
                 answerer_kwargs["backend_params"] = answerer_config["backend_params"]
 
             self.answer_generator = ChainAnswerGenerator(**answerer_kwargs)
@@ -1010,63 +1031,68 @@ class ChainBatchedMultiHopQAEvaluator:
             console.print("No chain-following results found (all used fallback)")
 
 
-def main(verbose: bool = False):
-    """Main evaluation function.
-    
-    Args:
-        verbose: Whether to show detailed output
-    """
-    console.print("\n[bold cyan]🚀 Chain-Based Batched Multi-Hop QA Evaluation on 2WikiMultihopQA[/bold cyan]")
-    console.print("Using chain-following approach with oracle-style prompting")
-    console.print("Parallel processing for decomposition and answer generation")
-    
-    try:
-        # Initialize evaluator
-        evaluator = ChainBatchedMultiHopQAEvaluator(
-            num_documents=-1, 
-            num_questions=-1, 
-            verbose=verbose,
-            use_bm25=True,
-            dataset_name="2wiki_platinum"
-       )
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Chain-Based Batched Multi-Hop QA Evaluation")
+    parser.add_argument("--dataset", type=str, default="musique", choices=list(DATASET_CONFIGS.keys()))
+    parser.add_argument("--num_documents", type=int, default=-1)
+    parser.add_argument("--num_questions", type=int, default=-1)
+    parser.add_argument("--chain_top_k", type=int, default=15)
+    parser.add_argument("--use_bm25", action="store_true", default=True)
+    parser.add_argument("--decomposer_mode", type=str, default="bedrock",
+                        choices=["closedsource", "opensource", "bedrock"])
+    parser.add_argument("--decomposer_model", type=str, default=None,
+                        help="Override decomposer model name")
+    parser.add_argument("--answerer_mode", type=str, default="bedrock",
+                        choices=["closedsource", "opensource", "bedrock"])
+    parser.add_argument("--answerer_model", type=str, default=None,
+                        help="Override answerer model name")
+    parser.add_argument("--verbose", action="store_true", default=False)
+    args = parser.parse_args()
 
-        
-        # Run batched evaluation
+    console.print(f"\n[bold cyan]Chain-Based Batched Multi-Hop QA Evaluation on {args.dataset}[/bold cyan]")
+    console.print(f"Decomposer: {args.decomposer_mode} | Answerer: {args.answerer_mode}")
+
+    try:
+        evaluator = ChainBatchedMultiHopQAEvaluator(
+            num_documents=args.num_documents,
+            num_questions=args.num_questions,
+            verbose=args.verbose,
+            chain_top_k=args.chain_top_k,
+            use_bm25=args.use_bm25,
+            dataset_name=args.dataset,
+            decomposer_mode=args.decomposer_mode,
+            decomposer_model=args.decomposer_model,
+            answerer_mode=args.answerer_mode,
+            answerer_model=args.answerer_model,
+        )
+
         results = evaluator.run_evaluation()
-        
-        # Compute metrics
         overall_metrics, per_example_metrics = evaluator.compute_metrics(results)
-        
-        # Display results
+
         console.print("\n" + "="*60)
         console.print("[bold green]Evaluation Results:[/bold green]")
         console.print(format_evaluation_report(overall_metrics, per_example_metrics, show_examples=5))
-        
-        # Display chain statistics
+
         evaluator.display_chain_statistics(results)
-        
-        # Display token usage summary
+
         console.print("\n[bold cyan]Token Usage Summary:[/bold cyan]")
         total_tokens = sum(r.token_count for r in results)
         avg_tokens = total_tokens / len(results) if results else 0
         min_tokens = min((r.token_count for r in results), default=0)
         max_tokens = max((r.token_count for r in results), default=0)
-        
         console.print(f"Total tokens: {total_tokens:,}")
         console.print(f"Average tokens per question: {avg_tokens:.0f}")
         console.print(f"Min tokens: {min_tokens:,}")
         console.print(f"Max tokens: {max_tokens:,}")
-        
-        # Save results
+
         evaluator.save_results(results, overall_metrics, per_example_metrics)
-        
-        console.print("\n[bold green]✓ Chain-based batched evaluation completed successfully![/bold green]")
-        
+        console.print("\n[bold green]Evaluation completed successfully![/bold green]")
+
     except Exception as e:
         console.print(f"[bold red]Evaluation failed: {e}[/bold red]")
         raise
 
 
 if __name__ == "__main__":
-    # Set verbose=True for detailed output during development
-    main(verbose=False)
+    main()

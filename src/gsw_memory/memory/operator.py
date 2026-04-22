@@ -18,6 +18,11 @@ from .operator_utils import (
     chunk_text,
     parse_gsw,
 )
+from .operator_utils.alibaba_thinking import (
+    normalize_openai_base_url,
+    resolve_api_key_for_base_url,
+)
+from .operator_utils.coverage_repair import repair_dangling_entities
 from ..prompts.operator_prompts import PromptType
 
 
@@ -27,7 +32,8 @@ class GSWProcessor:
     def __init__(
         self,
         model_name: str = "gpt-4o",
-        vllm_base_url: str = "http://127.0.0.1:6379/v1",
+        vllm_base_url: Optional[str] = None,
+        base_url: Optional[str] = None,
         generation_params: Optional[Dict] = None,
         enable_coref: bool = True,
         enable_chunking: bool = True,
@@ -39,10 +45,12 @@ class GSWProcessor:
         prompt_type: PromptType = PromptType.EPISODIC,
         batched: bool = False,
         batch_size: Optional[int] = 100,
+        enable_coverage_repair: bool = False,
     ):
         """Initialize the GSW processor with configuration options."""
         self.model_name = model_name
-        self.vllm_base_url = vllm_base_url
+        self.vllm_base_url = normalize_openai_base_url(vllm_base_url)
+        self.base_url = normalize_openai_base_url(base_url) or self.vllm_base_url
         self.generation_params = generation_params or {"temperature": 0.0}
         self.enable_coref = enable_coref
         self.enable_chunking = enable_chunking
@@ -54,6 +62,7 @@ class GSWProcessor:
         self.prompt_type = prompt_type
         self.batched = batched
         self.batch_size = batch_size
+        self.enable_coverage_repair = enable_coverage_repair
         # Check if visualization is requested but NetworkX is not available
         if self.enable_visualization:
             try:
@@ -67,6 +76,80 @@ class GSWProcessor:
                     "Warning: Visualization module not available. Visualization disabled."
                 )
                 self.enable_visualization = False
+
+    def _get_openai_backend_params(self) -> Dict:
+        """Build backend params for OpenAI-compatible structured calls."""
+        params: Dict = {"require_all_responses": False}
+        if self.batched:
+            params["batch_size"] = self.batch_size
+        if self.base_url:
+            params["base_url"] = self.base_url
+            params["api_key"] = resolve_api_key_for_base_url(self.base_url)
+        return params
+
+    def _create_gsw_model(self) -> GSWOperator:
+        """Create the configured GSW operator for the active provider."""
+        if self.model_name.startswith("bedrock/"):
+            bedrock_model = self.model_name
+            if not bedrock_model.startswith("bedrock/converse/"):
+                bedrock_model = bedrock_model.replace("bedrock/", "bedrock/converse/", 1)
+            return GSWOperator(
+                model_name=bedrock_model,
+                backend="litellm",
+                backend_params={
+                    "require_all_responses": False,
+                    "max_requests_per_minute": 200,
+                    "max_tokens_per_minute": 200_000,
+                },
+                generation_params={**self.generation_params, "max_tokens": 16384},
+                prompt_type=self.prompt_type,
+                response_format=GSWStructure,
+            )
+        if "together_ai/" in self.model_name:
+            return GSWOperator(
+                model_name=self.model_name,
+                backend="litellm",
+                backend_params={
+                    "require_all_responses": False,
+                    "max_tokens_per_minute": 200_000,
+                },
+                generation_params=self.generation_params,
+                prompt_type=self.prompt_type,
+                response_format=GSWStructure,
+            )
+        if "hosted_vllm" in self.model_name:
+            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
+            return GSWOperator(
+                model_name=self.model_name,
+                backend_params={
+                    "base_url": self.base_url or self.vllm_base_url,
+                    "request_timeout": 3600.0,
+                    "max_concurrent_requests": 64,
+                    "max_requests_per_minute": 120,
+                    "max_tokens_per_minute": 200000,
+                    "seconds_to_pause_on_rate_limit": 5,
+                    "require_all_responses": False,
+                },
+                generation_params={
+                    "temperature": 0.6,
+                    "top_p": 0.95,
+                    "top_k": 20,
+                    "min_p": 0.0,
+                    "max_tokens": 8092,
+                },
+                prompt_type=self.prompt_type,
+                backend="litellm",
+                response_format=GSWStructure,
+            )
+        return GSWOperator(
+            model_name=self.model_name,
+            generation_params=self.generation_params,
+            prompt_type=self.prompt_type,
+            backend="openai",
+            response_format=GSWStructure,
+            batch=self.batched,
+            backend_params=self._get_openai_backend_params(),
+        )
 
     def process_documents(
         self,
@@ -271,80 +354,7 @@ class GSWProcessor:
         #     # batch = True,  # Enable batching with rate limit handling
         #     # response_format = GSWStructure,  # Use constrained decoding
         # )
-        if self.model_name.startswith("bedrock/"):
-            bedrock_model = self.model_name
-            if not bedrock_model.startswith("bedrock/converse/"):
-                bedrock_model = bedrock_model.replace("bedrock/", "bedrock/converse/", 1)
-            gsw_model = GSWOperator(
-                model_name=bedrock_model,
-                backend="litellm",
-                backend_params={
-                    "require_all_responses": False,
-                    "max_requests_per_minute": 200,
-                    "max_tokens_per_minute": 200_000,
-                },
-                generation_params={**self.generation_params, "max_tokens": 16384},
-                prompt_type=self.prompt_type,
-                response_format=GSWStructure,
-            )
-        elif "together_ai/" in self.model_name:
-            gsw_model = GSWOperator(
-                model_name=self.model_name,
-                backend="litellm",
-                backend_params={
-                    "require_all_responses": False,
-                    "max_tokens_per_minute": 200_000,
-                },
-                generation_params=self.generation_params,
-                prompt_type=self.prompt_type,
-                response_format=GSWStructure,
-            )
-        elif "hosted_vllm" in self.model_name:
-            os.environ["HOSTED_VLLM_API_KEY"] = "token-abc123"
-            gsw_model = GSWOperator(
-                model_name=self.model_name,
-                backend_params={
-                    "base_url": self.vllm_base_url,
-                    "request_timeout": 3600.0,
-                    "max_concurrent_requests": 64,
-                    "max_requests_per_minute": 120,
-                    "max_tokens_per_minute": 200000,
-                    "seconds_to_pause_on_rate_limit": 5,
-                    "require_all_responses": False,
-                },
-                generation_params={
-                    "temperature": 0.6,
-                    "top_p": 0.95,
-                    "top_k": 20,
-                    "min_p": 0.0,
-                    "max_tokens": 8092,
-                },
-                prompt_type=self.prompt_type,
-                backend="litellm",
-                response_format=GSWStructure,
-            )
-        else:
-            if self.batched:
-                gsw_model = GSWOperator(
-                    model_name=self.model_name,
-                    generation_params=self.generation_params,
-                    prompt_type=self.prompt_type,
-                    backend="openai",
-                    response_format=GSWStructure,  # Use constrained decoding
-                    batch=self.batched,
-                    backend_params={"batch_size": self.batch_size,
-                                    "require_all_responses": False},
-                )
-            else:
-                gsw_model = GSWOperator(
-                    model_name=self.model_name,
-                    generation_params=self.generation_params,
-                    prompt_type=self.prompt_type,
-                    backend="openai",
-                    response_format=GSWStructure,  # Use constrained decoding
-                    batch=self.batched,
-                    backend_params={"require_all_responses": False},
-                )
+        gsw_model = self._create_gsw_model()
 
         # Prepare GSW inputs from all chunks across all documents
         gsw_inputs = []
@@ -399,6 +409,33 @@ class GSWProcessor:
         #             f"Error processing GSW for chunk {response.get('global_id', 'unknown')}: {e}"
         #         )
         #         continue
+
+        # Step 5b: Coverage Repair (fix dangling entities)
+        if self.enable_coverage_repair:
+            repair_backend_params = self._get_openai_backend_params()
+            if self.model_name.startswith("bedrock/"):
+                bedrock_model = self.model_name
+                if not bedrock_model.startswith("bedrock/converse/"):
+                    bedrock_model = bedrock_model.replace("bedrock/", "bedrock/converse/", 1)
+                repair_dangling_entities(
+                    all_documents_data=all_documents_data,
+                    model_name=bedrock_model,
+                    backend="litellm",
+                    backend_params={
+                        "require_all_responses": False,
+                        "max_requests_per_minute": 200,
+                        "max_tokens_per_minute": 200_000,
+                    },
+                    generation_params={**self.generation_params, "max_tokens": 16384},
+                )
+            else:
+                repair_dangling_entities(
+                    all_documents_data=all_documents_data,
+                    model_name=self.model_name,
+                    backend="openai",
+                    backend_params=repair_backend_params,
+                    generation_params=self.generation_params,
+                )
 
         # Step 6: Spacetime Linking (parallel across all chunks)
         if do_spacetime:

@@ -14,6 +14,7 @@ from .reconciler import Reconciler, reconcile_gsw_outputs
 
 # Import individual operators for backward compatibility
 from .operator_utils import (
+    AgenticGSWPipeline,
     CorefOperator,
     ContextGenerator,
     GSWOperator,
@@ -34,6 +35,7 @@ __all__ = [
     "GSWStructure",
     # Main processor and reconciler
     "GSWProcessor",
+    "AgenticGSWPipeline",
     "Reconciler",
     "reconcile_gsw_outputs",
     # Individual operators (for advanced usage)

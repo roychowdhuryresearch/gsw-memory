@@ -19,18 +19,19 @@ import os
 import sys
 import argparse
 from datetime import datetime
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any, Optional, Set
 from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from dotenv import load_dotenv
 from gsw_memory import GSWProcessor, reconcile_gsw_outputs
+from gsw_memory.memory.operator_utils.alibaba_thinking import (
+    is_dashscope_base_url,
+    normalize_openai_base_url,
+    process_documents_with_alibaba_thinking,
+)
 from gsw_memory.prompts.operator_prompts import PromptType
-
-import importlib
-print(importlib.metadata.version("bespokelabs-curator"))
-
 
 # Load environment variables
 load_dotenv()
@@ -38,6 +39,7 @@ load_dotenv()
 # Configuration
 CORPUS_PATH = "/home/yigit/codebase/gsw-memory/playground_data/2wikimultihopqa_corpus.json"
 BATCH_SIZE = 1000  # Process documents in batches to manage memory
+DEFAULT_DASHSCOPE_THINKING_MAX_CONCURRENT_REQUESTS = 100
 
 
 def setup_logging(corpus_type: str = "2wiki"):
@@ -158,12 +160,56 @@ def load_frames_corpus(
     return documents, document_titles
 
 
-def initialize_gsw_processor(model_name: str = "gpt-4.1-mini", vllm_base_url: str = "None"):
+def resolve_base_url(
+    base_url: Optional[str] = None,
+    vllm_base_url: Optional[str] = None,
+) -> Optional[str]:
+    """Resolve the effective OpenAI-compatible base URL."""
+    return normalize_openai_base_url(base_url) or normalize_openai_base_url(vllm_base_url)
+
+
+def _successful_document_indices(processed_documents: List[Dict[str, Dict[str, Any]]]) -> List[int]:
+    """Return local document indices with at least one valid GSW."""
+    successful_indices = []
+    for doc_idx, doc_chunks in enumerate(processed_documents):
+        if any(chunk_data.get("gsw") is not None for chunk_data in doc_chunks.values()):
+            successful_indices.append(doc_idx)
+    return successful_indices
+
+
+def _count_successful_documents(processed_documents: List[Dict[str, Dict[str, Any]]]) -> int:
+    return len(_successful_document_indices(processed_documents))
+
+
+def _save_direct_outputs(
+    processor: GSWProcessor,
+    output_dir: str,
+    documents: List[str],
+    all_documents_data: List[Dict[str, Dict[str, Any]]],
+):
+    """Save direct-thinking outputs using the standard processor layout."""
+    processor._save_outputs_unified(
+        output_dir=output_dir,
+        save_intermediates=False,
+        resolved_documents={idx: document for idx, document in enumerate(documents)},
+        all_documents_data=all_documents_data,
+        do_visualization=False,
+        batch_idx=1,
+    )
+
+
+def initialize_gsw_processor(
+    model_name: str = "gpt-4.1-mini",
+    base_url: Optional[str] = None,
+    vllm_base_url: Optional[str] = None,
+    enable_coverage_repair: bool = False,
+):
     """Initialize GSW processor optimized for large-scale factual content."""
     print("=== Initializing GSW Processor ===")
 
     processor = GSWProcessor(
         model_name=model_name,
+        base_url=base_url,
         vllm_base_url=vllm_base_url,
         enable_coref=False,          # Disable for speed and factual content
         enable_chunking=False,       # Factual documents are typically short
@@ -174,6 +220,7 @@ def initialize_gsw_processor(model_name: str = "gpt-4.1-mini", vllm_base_url: st
         prompt_type=PromptType.FACTUAL_GPT_OSS,  # Optimized for factual extraction
         batched=False,
         batch_size=BATCH_SIZE,
+        enable_coverage_repair=enable_coverage_repair,
     )
     
     print("✅ GSW processor initialized with optimizations:")
@@ -181,6 +228,8 @@ def initialize_gsw_processor(model_name: str = "gpt-4.1-mini", vllm_base_url: st
     print("   - Chunking disabled for single-document processing")
     print("   - Coref disabled for performance")
     print("   - Spacetime enabled for temporal relationships")
+    if base_url:
+        print(f"   - OpenAI-compatible base URL: {base_url}")
     
     return processor
 
@@ -189,7 +238,11 @@ def process_corpus_in_batches(
     processor: GSWProcessor, 
     documents: List[str], 
     document_titles: List[str],
-    log_dirs: Dict[str, str]
+    log_dirs: Dict[str, str],
+    enable_thinking: bool = False,
+    base_url: Optional[str] = None,
+    thinking_budget: int = 0,
+    repair_model: Optional[str] = "none",
 ) -> List[Any]:
     """Process documents in batches to manage memory and monitor progress."""
     print(f"\n=== Processing {len(documents)} Documents in Batches ===")
@@ -204,21 +257,47 @@ def process_corpus_in_batches(
     
     # try:
     documents = [f"{title}\n{doc}" for title, doc in zip(document_titles, documents)] # Add title to each document
-
-    gsw_structures = processor.process_documents(
-        documents,
-        output_dir=os.path.join(log_dirs["gsw_output_dir"], f"full_corpus_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+    output_dir = os.path.join(
+        log_dirs["gsw_output_dir"],
+        f"full_corpus_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
     )
+
+    if enable_thinking:
+        thinking_max_workers = DEFAULT_DASHSCOPE_THINKING_MAX_CONCURRENT_REQUESTS
+        print(
+            f"   Using DashScope thinking mode via Curator with repair_model={repair_model}"
+        )
+        gsw_structures = process_documents_with_alibaba_thinking(
+            documents=documents,
+            model_name=processor.model_name,
+            prompt_type=processor.prompt_type,
+            base_url=base_url,
+            thinking_budget=thinking_budget if thinking_budget > 0 else None,
+            repair_model=repair_model,
+            max_workers=thinking_max_workers,
+            progress_label="documents",
+        )
+        _save_direct_outputs(
+            processor=processor,
+            output_dir=output_dir,
+            documents=documents,
+            all_documents_data=gsw_structures,
+        )
+    else:
+        gsw_structures = processor.process_documents(
+            documents,
+            output_dir=output_dir,
+        )
     
     # Count successful GSW structures
-    valid_structures = [gsw for gsw in gsw_structures if gsw is not None]
-    all_gsw_structures.extend(valid_structures)
+    successful_docs = _count_successful_documents(gsw_structures)
+    all_gsw_structures.extend(gsw_structures)
     
     end_time = datetime.now()
     run_duration = (end_time - start_time).total_seconds()
     
     print(f"   ✅ Processing completed in {run_duration:.1f}s")
-    print(f"   Generated {len(valid_structures)} GSW structures")
+    print(f"   Generated valid GSWs for {successful_docs}/{len(documents)} documents")
     
     processed_docs += len(documents)
     progress = (processed_docs / total_docs) * 100
@@ -230,7 +309,7 @@ def process_corpus_in_batches(
         "batch_start": "full_corpus",
         "batch_end": "full_corpus",
         "documents_processed": len(documents),
-        "gsw_structures_generated": len(valid_structures),
+        "gsw_structures_generated": successful_docs,
         "processing_time_seconds": run_duration,
         "timestamp": end_time.isoformat(),
         "document_titles": document_titles
@@ -245,7 +324,7 @@ def process_corpus_in_batches(
     
     print(f"\n✅ Corpus processing completed!")
     print(f"   Total documents processed: {processed_docs}")
-    print(f"   Total GSW structures generated: {len(all_gsw_structures)}")
+    print(f"   Total documents with valid GSWs: {successful_docs}")
     
     return all_gsw_structures
 
@@ -309,7 +388,11 @@ def process_missing_documents(
     output_dir: str,
     corpus_offset: int = 0,
     model_name: str = "gpt-4.1-mini",
-    vllm_base_url: str = "None"
+    base_url: Optional[str] = None,
+    vllm_base_url: Optional[str] = None,
+    enable_thinking: bool = False,
+    thinking_budget: int = 0,
+    repair_model: Optional[str] = "none",
 ) -> int:
     """
     Process missing documents in batch and merge into existing output directory.
@@ -359,7 +442,11 @@ def process_missing_documents(
     print(f"Loaded {len(docs_to_process)} documents for processing")
 
     # Initialize processor with same settings as original
-    processor = initialize_gsw_processor(model_name, vllm_base_url)
+    processor = initialize_gsw_processor(
+        model_name=model_name,
+        base_url=base_url,
+        vllm_base_url=vllm_base_url,
+    )
 
     # Create temporary output directory for processing
     import tempfile
@@ -371,14 +458,34 @@ def process_missing_documents(
     try:
         # Process all missing documents in batch
         print(f"Processing {len(docs_to_process)} documents in batch...")
-        gsw_results = processor.process_documents(
-            docs_to_process,
-            output_dir=temp_dir,
-            batch_idx=1,
-            batch_size=len(docs_to_process)
-        )
+        if enable_thinking:
+            thinking_max_workers = DEFAULT_DASHSCOPE_THINKING_MAX_CONCURRENT_REQUESTS
+            gsw_results = process_documents_with_alibaba_thinking(
+                documents=docs_to_process,
+                model_name=model_name,
+                prompt_type=processor.prompt_type,
+                base_url=base_url,
+                thinking_budget=thinking_budget if thinking_budget > 0 else None,
+                repair_model=repair_model,
+                max_workers=thinking_max_workers,
+                progress_label="recovery documents",
+            )
+            _save_direct_outputs(
+                processor=processor,
+                output_dir=temp_dir,
+                documents=docs_to_process,
+                all_documents_data=gsw_results,
+            )
+        else:
+            gsw_results = processor.process_documents(
+                docs_to_process,
+                output_dir=temp_dir,
+                batch_idx=1,
+                batch_size=len(docs_to_process)
+            )
 
-        successful_count = sum(1 for r in gsw_results if r is not None)
+        successful_local_indices = _successful_document_indices(gsw_results)
+        successful_count = len(successful_local_indices)
         print(f"Successfully processed {successful_count}/{len(docs_to_process)} documents")
 
         # Now we need to:
@@ -393,8 +500,9 @@ def process_missing_documents(
 
         # The processor created doc_0, doc_1, doc_2, ... in temp_dir
         # We need to rename them to doc_398, doc_559, doc_951, ... based on missing_docs_sorted
-        for i, actual_doc_idx in enumerate(missing_docs_sorted[:successful_count]):
-            temp_doc_folder = f"doc_{i}"
+        for local_doc_idx in successful_local_indices:
+            actual_doc_idx = missing_docs_sorted[local_doc_idx]
+            temp_doc_folder = f"doc_{local_doc_idx}"
             actual_doc_folder = f"doc_{actual_doc_idx}"
 
             # Move networks folder
@@ -452,8 +560,9 @@ def process_missing_documents(
             }
 
         # Merge documents with correct doc_N keys
-        for i, actual_doc_idx in enumerate(missing_docs_sorted[:successful_count]):
-            temp_doc_key = f"doc_{i}"
+        for local_doc_idx in successful_local_indices:
+            actual_doc_idx = missing_docs_sorted[local_doc_idx]
+            temp_doc_key = f"doc_{local_doc_idx}"
             actual_doc_key = f"doc_{actual_doc_idx}"
 
             if temp_doc_key in temp_combined["documents"]:
@@ -575,10 +684,33 @@ Examples:
         help="Model name to use for GSW generation"
     )
     parser.add_argument(
+        "--base-url",
+        type=str,
+        default=None,
+        help="OpenAI-compatible base URL to use for GSW generation"
+    )
+    parser.add_argument(
         "--vllm-base-url",
         type=str,
-        default="None",
-        help="VLLM base URL to use for GSW generation"
+        default=None,
+        help="Compatibility alias for --base-url"
+    )
+    parser.add_argument(
+        "--enable-thinking",
+        action="store_true",
+        help="Use Alibaba DashScope thinking mode via Curator"
+    )
+    parser.add_argument(
+        "--thinking-budget",
+        type=int,
+        default=0,
+        help="Optional DashScope thinking budget in tokens (0 = provider default)"
+    )
+    parser.add_argument(
+        "--repair-model",
+        type=str,
+        default="none",
+        help="Non-thinking repair model used when thinking output is not valid JSON; use 'none' to disable repair"
     )
     parser.add_argument(
         "--corpus-type",
@@ -604,7 +736,18 @@ Examples:
         default=0,
         help="Process only the first N articles (0 = all)"
     )
+    parser.add_argument(
+        "--coverage-repair",
+        action="store_true",
+        help="Run a second LLM pass to fix dangling entities (entities with no question pointing to them)"
+    )
     args = parser.parse_args()
+    resolved_base_url = resolve_base_url(args.base_url, args.vllm_base_url)
+
+    if args.enable_thinking and not is_dashscope_base_url(resolved_base_url):
+        raise ValueError(
+            "--enable-thinking currently requires --base-url to point to a DashScope compatible-mode endpoint"
+        )
 
     # Recovery mode
     if args.recover_missing:
@@ -626,7 +769,11 @@ Examples:
                 args.recover_missing,
                 args.corpus_offset,
                 args.model_name,
-                args.vllm_base_url
+                resolved_base_url,
+                args.vllm_base_url,
+                args.enable_thinking,
+                args.thinking_budget,
+                args.repair_model,
             )
 
             # Verify recovery
@@ -656,6 +803,13 @@ Examples:
     else:
         print("🚀 Starting Full 2wiki Corpus Processing")
     print(f"Model: {args.model_name}\n")
+    if resolved_base_url:
+        print(f"Base URL: {resolved_base_url}")
+    if args.enable_thinking:
+        print(
+            f"Thinking mode enabled (budget={args.thinking_budget or 'default'}, "
+            f"repair_model={args.repair_model})\n"
+        )
 
     processing_start_time = datetime.now()
 
@@ -672,11 +826,23 @@ Examples:
             documents, document_titles = load_full_corpus()
 
         # Initialize processor
-        processor = initialize_gsw_processor(args.model_name, args.vllm_base_url)
+        processor = initialize_gsw_processor(
+            model_name=args.model_name,
+            base_url=resolved_base_url,
+            vllm_base_url=args.vllm_base_url,
+            enable_coverage_repair=args.coverage_repair,
+        )
 
         # Process corpus in batches
         gsw_structures = process_corpus_in_batches(
-            processor, documents, document_titles, log_dirs
+            processor,
+            documents,
+            document_titles,
+            log_dirs,
+            enable_thinking=args.enable_thinking,
+            base_url=resolved_base_url,
+            thinking_budget=args.thinking_budget,
+            repair_model=args.repair_model,
         )
 
         print(f"\n🎉 Full corpus processing completed successfully!")
@@ -686,7 +852,7 @@ Examples:
             "log_dirs": log_dirs,
             "processing_stats": {
                 "total_documents": len(documents),
-                "gsw_structures": len(gsw_structures)
+                "gsw_structures": _count_successful_documents(gsw_structures)
             }
         }
 

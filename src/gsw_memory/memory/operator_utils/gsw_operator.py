@@ -12,6 +12,36 @@ from ...prompts.operator_prompts import FactualExtractionPrompts, FactualExtract
 from ..models import GSWStructure
 
 
+def get_prompt_class(prompt_type: PromptType):
+    """Resolve the prompt class for a GSW extraction mode."""
+    if prompt_type == PromptType.EPISODIC:
+        return OperatorPrompts
+    if prompt_type == PromptType.FACTUAL:
+        return FactualExtractionPrompts
+    if prompt_type == PromptType.FACTUAL_GPT_OSS:
+        return FactualExtractionPromptsGPT_OSS
+    raise ValueError(f"Unsupported prompt type: {prompt_type}")
+
+
+def build_gsw_messages(
+    prompt_type: PromptType,
+    input_text: str,
+    background_context: str = "",
+):
+    """Build canonical chat messages for GSW extraction."""
+    prompt_class = get_prompt_class(prompt_type)
+    return [
+        {"role": "system", "content": prompt_class.SYSTEM_PROMPT},
+        {
+            "role": "user",
+            "content": prompt_class.USER_PROMPT_TEMPLATE.format(
+                input_text=input_text,
+                background_context=background_context,
+            ),
+        },
+    ]
+
+
 # class GSWOperator(curator.LLM):
 #     """Curator class for generating GSWs using sophisticated semantic role extraction."""
 
@@ -83,29 +113,15 @@ class GSWOperator(curator.LLM):
         """
         super().__init__(**kwargs)
         self.prompt_type = prompt_type
-
-        # Select appropriate prompt class based on type
-        if prompt_type == PromptType.EPISODIC:
-            self.prompt_class = OperatorPrompts
-        elif prompt_type == PromptType.FACTUAL:
-            self.prompt_class = FactualExtractionPrompts
-        elif prompt_type == PromptType.FACTUAL_GPT_OSS:
-            self.prompt_class = FactualExtractionPromptsGPT_OSS
-        else:
-            raise ValueError(f"Unsupported prompt type: {prompt_type}")
+        self.prompt_class = get_prompt_class(prompt_type)
 
     def prompt(self, input):
         """Create a prompt for the LLM to generate a GSW."""
-        return [
-            {"role": "system", "content": self.prompt_class.SYSTEM_PROMPT},
-            {
-                "role": "user",
-                "content": self.prompt_class.USER_PROMPT_TEMPLATE.format(
-                    input_text=input["text"],
-                    background_context=input.get("context", "")
-                ),
-            },
-        ]
+        return build_gsw_messages(
+            prompt_type=self.prompt_type,
+            input_text=input["text"],
+            background_context=input.get("context", ""),
+        )
 
     def parse(self, input, response: GSWStructure):
         """Parse the LLM response - already a validated GSWStructure Pydantic object!"""

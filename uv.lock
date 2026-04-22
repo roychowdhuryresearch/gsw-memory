@@ -1806,16 +1806,6 @@ wheels = [
 ]
 
 [[package]]
-name = "flash-attn"
-version = "2.8.3"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "einops" },
-    { name = "torch" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/3b/b2/8d76c41ad7974ee264754709c22963447f7f8134613fd9ce80984ed0dab7/flash_attn-2.8.3.tar.gz", hash = "sha256:1e71dd64a9e0280e0447b8a0c2541bad4bf6ac65bdeaa2f90e51a9e57de0370d", size = 8447812, upload-time = "2025-08-15T08:28:12.911Z" }
-
-[[package]]
 name = "fonttools"
 version = "4.61.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2381,7 +2371,6 @@ dependencies = [
     { name = "editables" },
     { name = "faiss-gpu" },
     { name = "fastapi-sso" },
-    { name = "flash-attn" },
     { name = "google-genai" },
     { name = "hatchling" },
     { name = "hdbscan" },
@@ -2434,7 +2423,6 @@ requires-dist = [
     { name = "editables", specifier = ">=0.5" },
     { name = "faiss-gpu", specifier = ">=1.7.2" },
     { name = "fastapi-sso", specifier = ">=0.21.0" },
-    { name = "flash-attn", specifier = ">=2.8.3" },
     { name = "google-genai", specifier = ">=1.46.0" },
     { name = "hatchling", specifier = ">=1.28.0" },
     { name = "hdbscan", specifier = ">=0.8.40" },

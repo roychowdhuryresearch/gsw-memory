@@ -1,0 +1,37 @@
+# venvs
+.venv/
+venv/
+env/
+.env
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# logs / runs / traces (live outside repo)
+logs/
+runs/
+traces/
+*.log
+
+# data (live on /mnt/SSD3 or similar)
+data/
+models/
+hf_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# third-party checkouts (read-only repos we clone for adapters)
+third_party/*/
+!third_party/README.md
+
+# os
+.DS_Store
+Thumbs.db

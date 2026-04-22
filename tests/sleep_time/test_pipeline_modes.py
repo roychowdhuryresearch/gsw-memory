@@ -62,3 +62,33 @@ def test_explore_entity_dispatches_doc_id_to_hybrid_document(monkeypatch):
     assert result["mode"] == "hybrid"
     assert result["entity"] == "doc_0"
     assert called["doc"] == 1
+
+
+def test_parallel_hybrid_knobs_are_stored(monkeypatch):
+    def _fake_init(self, model_name, base_url=None):
+        self.provider = "openai"
+        self.client = None
+        self.litellm = None
+
+    monkeypatch.setattr(AgenticReconciler, "_initialize_client", _fake_init)
+    agent = AgenticReconciler(
+        entity_searcher=_DummySearcher(),
+        model_name="gpt-4o-mini",
+        verbose=False,
+        bridge_verifier_enabled=False,
+        pipeline_mode="hybrid",
+        hybrid_scope="doc_edge",
+        edge_parallel_enabled=True,
+        edge_parallel_workers=4,
+        verifier_parallel_workers=6,
+        edge_max_accepted_bridges=3,
+        parallel_progress_heartbeat_seconds=7.5,
+        parallel_stuck_warning_seconds=45.0,
+    )
+
+    assert agent.edge_parallel_enabled is True
+    assert agent.edge_parallel_workers == 4
+    assert agent.verifier_parallel_workers == 6
+    assert agent.edge_max_accepted_bridges == 3
+    assert agent.parallel_progress_heartbeat_seconds == 7.5
+    assert agent.parallel_stuck_warning_seconds == 45.0

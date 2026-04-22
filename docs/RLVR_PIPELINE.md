@@ -49,6 +49,7 @@ pip install verl peft
 ```bash
 # .env
 OPENAI_API_KEY=your_key_here
+DASHSCOPE_API_KEY=your_dashscope_key_here
 ```
 
 ---
@@ -60,7 +61,7 @@ OPENAI_API_KEY=your_key_here
 ```bash
 python playground/generate_gsws_multihop.py \
     --model-name gpt-4.1-mini \
-    --vllm-base-url None
+    --base-url None
 ```
 
 **Output structure:**
@@ -76,8 +77,34 @@ To use a local vLLM server instead of OpenAI:
 ```bash
 python playground/generate_gsws_multihop.py \
     --model-name Qwen/Qwen3-30B-A3B-Thinking \
-    --vllm-base-url http://127.0.0.1:6379/v1
+    --base-url http://127.0.0.1:6379/v1
 ```
+
+To use Alibaba DashScope in non-thinking mode with structured output:
+```bash
+python playground/generate_gsws_multihop.py \
+    --model-name qwen-plus \
+    --base-url https://dashscope-intl.aliyuncs.com/compatible-mode/v1
+```
+
+To use Alibaba DashScope in thinking mode:
+```bash
+python playground/generate_gsws_multihop.py \
+    --model-name qwen-plus \
+    --base-url https://dashscope-intl.aliyuncs.com/compatible-mode/v1 \
+    --enable-thinking
+```
+
+To opt into a repair pass for malformed thinking output:
+```bash
+python playground/generate_gsws_multihop.py \
+    --model-name qwen-plus \
+    --base-url https://dashscope-intl.aliyuncs.com/compatible-mode/v1 \
+    --enable-thinking \
+    --repair-model qwen-flash
+```
+
+Note: DashScope structured output is available in non-thinking mode only. Thinking mode runs through Curator without `response_format`; it saves raw/debug metadata to the raw outputs and only uses a repair model when `--repair-model` is explicitly set.
 
 To recover documents that failed in a previous run:
 ```bash

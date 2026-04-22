@@ -15,6 +15,99 @@ A bridge is a **two-ended** QA pair that requires combining information from mul
 
 **Answers use entity references** in `doc_x::ey` format (e.g. `doc_12::e3`). Use the entity IDs from `get_entity_context` output (`answer_refs` field). Keep reasoning in human-readable names.
 
+## BRIDGE ANCHOR RULES (CRITICAL — breaking these makes bridges unretrievable)
+
+Bridges exist to be retrieved by user queries at question-answering time. A bridge that doesn't share keywords with how users phrase their questions is dead weight. Follow these rules strictly:
+
+### Rule 1 — Named root entity
+Every bridge question MUST contain a proper named root entity that a user would actually type in their query. The root is typically a:
+- Proper person name: "Ferdinand, Prince of Solms-Braunfels", "Archduke Ferdinand Karl Joseph of Austria-Este"
+- Film/book/song title: "Daytime Wives", "The Merry Monahans"
+- Organization name: "Abbey of Saint Benedict"
+
+The root must be **visible as a named noun phrase** in the question text, not hidden behind a descriptive clause.
+
+### Rule 2 — Forbidden opaque anchors
+Never use dates, years, numbers, places-as-attributes, or unnamed descriptive clauses as the root anchor. Users don't search by these.
+
+**BAD examples (do NOT generate these — they're real failures from prior batches):**
+- "Who is the father of the person who died in October 1979?" → use "Who is the father of Ștefan I. Nenițescu?"
+- "When did the person who married in 1798 die?" → use "When did the father of Ferdinand, Prince of Solms-Braunfels die?"
+- "When did the person who died in Sławięcice die?" → use "When did Prince Frederick William of Solms-Braunfels die?"
+- "Who is the son of the person who died in Monfort?" → use "Who is the son of Reginald I of Guelders?"
+- "Who was born in the town where Prince Frederick William was born?" → use "Who was born in Braunfels?"
+
+### Rule 3 — Chain roles are fine, but root must still be named
+You MAY chain intermediate roles (director/composer/father/grandmother/spouse). The mid-hops don't need proper names — they're descriptive relations. What matters is that a NAMED root entity is visible in the question text.
+
+**GOOD examples:**
+- "What is the nationality of the director of Daytime Wives?" (root = "Daytime Wives", chain = director → nationality)
+- "Where was the paternal grandfather of Anna Dorothea of Saxe-Weimar born?" (root = "Anna Dorothea of Saxe-Weimar", chain = paternal grandfather → birthplace)
+- "When did the father of Ferdinand, Prince of Solms-Braunfels die?" (root = "Ferdinand, Prince of Solms-Braunfels", chain = father → death date)
+
+### Rule 4 — Format variants for answers
+When the GSW stores a compound entity name like "French-American" or "Apopka, Florida" or "Henry McLaren, 2nd Baron Aberconway", include the base form as an alternate answer when the docs support it:
+- Nationality: store both "French-American" and "French" if both are attested
+- Place: store both "Apopka, Florida" and "Apopka"
+- Titled person: store both "Henry McLaren, 2nd Baron Aberconway" and "Henry McLaren"
+
+Users asking "What nationality is X?" typically expect "French" not "French-American". Prefer the country-level form when supported.
+
+### Rule 5 — Forward direction: never use attributes as subjects
+The forward question must ask about a named entity, not about an attribute. Do NOT write forward questions where the subject is a date, place, or attribute.
+
+**BAD forward questions (these are real failures from prior batches):**
+- "Who is French-American?" → attribute as subject (use forward "What is the nationality of X?" instead)
+- "Who died on 24 February 1761?" → date as subject
+- "Who was born on 22 October 1770?" → date as subject
+- "Which film was directed by the person born on 10 February 1904?" → opaque mid-hop
+
+### Rule 6 — Reverse direction: both sides must be named entities
+The reverse question MUST swap which entity is asked vs answered, AND both sides must anchor on a named entity. This is what makes reverse valuable for entity-to-entity relations (genealogy, spouse, director/film) — users might query from either direction.
+
+**GOOD reverse (both sides named):**
+- Forward: "Who is the paternal grandmother of Archduke Ferdinand Karl Joseph?" → Maria Theresa of Austria
+- Reverse: "Who is the grandson of Maria Theresa of Austria?" → Archduke Ferdinand Karl Joseph ✓
+- Forward: "Who directed Daytime Wives?" → Émile Chautard
+- Reverse: "Which film did Émile Chautard direct?" → Daytime Wives ✓
+
+**Pick a DIFFERENT bridge target when reverse would be attribute-as-subject:**
+If you find yourself wanting to write a reverse like "Who is Italian-French?" or "Who died on 22 October 1770?" or "Who died in Bruges?", that's a sign your forward answer is an attribute. The verifier will reject it with `REVERSE_INVALID`. Instead, pick a bridge where the forward answer is itself a named entity:
+
+- Instead of `"What is the nationality of Sergio Gobbi?" → "Italian-French"`, pick a bridge like `"Who directed Blondy?" → "Sergio Gobbi"` (reverse: `"Which film did Sergio Gobbi direct?" → "Blondy"`).
+- Instead of `"When was Frederick William born?" → "22 October 1770"`, pick `"Who is the father of Ferdinand, Prince of Solms-Braunfels?" → "Frederick William"` (reverse: `"Who is the son of Frederick William?" → "Ferdinand, Prince of Solms-Braunfels"`).
+
+The reverse question is always required. Generate bridges only where both sides anchor on named entities.
+
+### Rule 7 — Genealogy bridges MUST specify paternal/maternal
+When generating grandparent or in-law bridges, ALWAYS specify the lineage side (paternal/maternal) and ALWAYS store both forms when the evidence supports it. A generic "grandfather" bridge is ambiguous — user queries typically ask for a SPECIFIC side.
+
+**BAD — ambiguous genealogy:**
+- "Who is the grandfather of Anna Dorothea of Saxe-Weimar?" (which grandfather?)
+- "Who is the grandmother of Margaret of Valois?" (paternal or maternal?)
+
+**GOOD — explicit lineage:**
+- "Who is the **paternal grandfather** of Anna Dorothea of Saxe-Weimar?" → William, Duke of Saxe-Weimar (via father's father)
+- "Who is the **maternal grandmother** of Margaret of Valois?" → Madeleine de La Tour d'Auvergne (via mother's mother)
+- "Who is the **paternal grandmother** of Archduke Ferdinand Karl Joseph of Austria-Este?" → Maria Theresa of Austria
+
+**Chain decomposition:** A paternal grandfather bridge decomposes as:
+- Sub-Q1: [person] → father → [father entity] (doc X)
+- Sub-Q2: [father entity] → father → [grandfather] (doc Y)
+
+A maternal grandmother bridge decomposes as:
+- Sub-Q1: [person] → mother → [mother entity] (doc X)
+- Sub-Q2: [mother entity] → mother → [grandmother] (doc Y)
+
+**Same rule applies to:**
+- **Father-in-law / mother-in-law**: specify via spouse (X's spouse's father, not just "X's father-in-law" alone — the bridge question should use the exact "father-in-law" phrasing users type, but the decomposition must chain through the spouse)
+- **Uncle/aunt**: specify paternal uncle vs maternal uncle when possible
+- **Great-grandparents**: specify the full chain (paternal-paternal-grandfather etc.)
+
+**When to generate BOTH paternal and maternal bridges for the same person:** If the evidence supports it (both parents have parents in the source docs), generate separate bridges for each side. Do not collapse them into a generic "grandfather" bridge.
+
+---
+
 For example, when exploring "Master Aldric" (a blacksmith in doc_5):
 - Question: "Where did Master Aldric's patron build a chapel?"
 - Answers: ["doc_11::e4"]
@@ -81,6 +174,11 @@ Every bridge must decompose into chained sub-questions where hop 1's answer feed
 Also avoid:
 - **Circular bridges**: Q and reverse Q restate the same fact ("What was the sole joint action?" / "What was the largest military engagement?" — same event)
 - **Answer-in-question**: "What defense alliance comprising nuclear-armed nations was established to counter Warsaw Pact?" — description gives away NATO
+- **Conjunction fallbacks (DO NOT generate these — they waste verifier calls and get rejected)**: When an edge has no clean chainable relations, do NOT fall back to "sharing" or "common to" questions. They are always rejected as NOT_CHAIN + TOO_TRIVIAL.
+  - BAD: "Who shares the profession of film director with Émile Chautard?"
+  - BAD: "Which profession is common to Dana Blankstein-Cohen and Peter Levin?"
+  - BAD: "Who is a film director that holds the same position as John Farrell at YouTube?"
+  If you cannot find a clean chainable relation on an edge after 2 retries, STOP that edge and move on. No bridge is better than a bad conjunction.
 
 ## MANDATORY: Write Decomposition Before Creating Bridges
 
@@ -612,7 +710,76 @@ Creating both."
 
 SLEEP_TIME_BRIDGE_VERIFIER_PROMPT = """You are a strict bridge QA verifier.
 
-Evaluate whether a proposed two-ended bridge is a real multi-hop chain and whether the reverse question is valid.
+Evaluate whether a proposed bridge is a real multi-hop chain AND whether it follows the anchor rules that make it retrievable by user queries.
+
+## ANCHOR RULES (reject bridges that violate these)
+
+A bridge question is RETRIEVABLE only if it anchors on a named root entity that a user would actually type in their query. Intermediate relation hops are fine (director/father/grandmother/spouse), but the ROOT must be a named noun phrase (proper person name, film/book/song title, organization, named place).
+
+### Forward question requirements
+- The forward question MUST contain a named root entity visible as a proper noun.
+- The forward question MUST NOT use a date, year, number, or unnamed descriptive clause ("the person who died in X", "the person born on Y", "the predecessor of Z") as the root anchor. Use code `OPAQUE_ANCHOR` for these.
+
+GOOD: "What is the nationality of the director of Daytime Wives?" (root = "Daytime Wives")
+GOOD: "Who is the paternal grandfather of Anna Dorothea of Saxe-Weimar?" (root = "Anna Dorothea of Saxe-Weimar")
+GOOD: "When did the father of Ferdinand, Prince of Solms-Braunfels die?" (root = "Ferdinand, Prince of Solms-Braunfels")
+
+BAD — OPAQUE_ANCHOR:
+- "Who is the father of the person who died in October 1979?" (date as root)
+- "When did the person who married in 1798 die?" (year as root)
+- "Who is the son of the person who died in Monfort?" (place-in-descriptive-clause as root)
+- "On what date did the predecessor of Wilhelm Christian Karl die?" (role-as-root with no named person)
+
+### Genealogy specificity — grandparent bridges MUST specify paternal/maternal
+When a bridge asks about a grandparent, great-grandparent, or other indirect ancestor, it MUST specify the lineage side (paternal/maternal). Generic "grandfather" or "grandmother" bridges are ambiguous — they don't match user queries that ask about a specific lineage side, and they can resolve to either parent's parent leading to wrong answers.
+
+BAD — AMBIGUOUS_GENEALOGY:
+- "Who is the grandfather of Anna Dorothea of Saxe-Weimar?" (which side? paternal or maternal?)
+- "Who is the grandmother of Margaret of Valois?" (ambiguous)
+- "Where was the grandfather of Ferdinand born?" (ambiguous)
+
+GOOD — explicit lineage:
+- "Who is the paternal grandfather of Anna Dorothea of Saxe-Weimar?" ✓
+- "Who is the maternal grandmother of Margaret of Valois?" ✓
+- "Where was the paternal grandfather of Ferdinand, Prince of Solms-Braunfels born?" ✓
+
+Use the failure code `AMBIGUOUS_GENEALOGY` and retry hint `fix_anchor` (the worker should split into separate paternal/maternal bridges based on the evidence). If the evidence only supports ONE side (e.g., only the father's parents are in the source docs), the worker should still label it explicitly as "paternal" or "maternal".
+
+### Reverse question requirements
+Reverse is a BONUS, not a hard requirement. The forward question carries the value — if the forward anchors on a named entity and asks a clean multi-hop question, the bridge is useful even when the reverse is weak.
+
+**IMPORTANT — structural vs quality failures:**
+
+Two kinds of reverse failure look similar but should be handled very differently:
+
+1. **Structural failure (PASS the bridge)** — when the forward answer is a date/place/attribute, a well-formed reverse is impossible in principle (the reverse would have to put the attribute as the subject, which users never query). Do NOT emit `REVERSE_INVALID` in this case. The bridge is still valuable because the forward question is retrievable on its own, and the ingest layer will automatically drop the unusable reverse surface from the search index.
+
+   Examples where you should PASS:
+   - Forward: "What is the nationality of the director of Daytime Wives?" → "French-American"
+     Reverse: "Who has French-American nationality?" → Émile Chautard
+     → The forward is perfect (named root "Daytime Wives", clean chain). The reverse is structurally unavoidable. **pass=true**, note the reverse as "forward-only bridge; ingest layer drops unusable reverse surface".
+   - Forward: "When did the father of Ferdinand, Prince of Solms-Braunfels die?" → "24 February 1761"
+     Reverse: "Who died on 24 February 1761?" → Prince Frederick William
+     → Forward is clean, reverse has a date subject. **pass=true**.
+   - Forward: "Where did Master Aldric's patron die?" → "Bruges"
+     Reverse: "Who died in Bruges?" → Lady Margaux
+     → Forward is clean, reverse has a place subject. **pass=true**.
+
+2. **Quality failure (REJECT the bridge with REVERSE_INVALID)** — when the reverse is simply a bad inversion of the same mapping, the worker could have written a better reverse on the same facts. Emit `REVERSE_INVALID` with retry hint `fix_reverse_inversion`.
+   Examples where you should REJECT:
+   - Forward: "Where did Master Aldric's patron build a chapel?" → Bruges
+     Reverse: ❌ "Who built a chapel?" (too vague, doesn't use the answer entity)
+   - Forward: "Who is the mother of Margaret of Valois?" → Catherine de Medici
+     Reverse: ❌ "Who is Margaret of Valois's mother?" (same question rephrased, no inversion)
+
+3. **GOOD reverse (also PASS)** — both sides are named entities, reverse truly inverts:
+   - Forward: "Who is the paternal grandmother of Archduke Ferdinand Karl?" → Maria Theresa of Austria
+   - Reverse: "Who is the grandson of Maria Theresa of Austria?" → Archduke Ferdinand Karl ✓
+
+**Decision rule**: If the forward answer is a date/place/attribute/number, a well-formed reverse is IMPOSSIBLE — do not penalize the worker for it. Pass the bridge based on the forward's quality alone.
+
+---
+
 Input may include optional `similarity_signal` with highly similar existing bridges.
 Each hit may include `existing_question_snippet` and `existing_reverse_question_snippet`.
 If present, compare the candidate against those snippets and decide whether it is meaningfully distinct or too trivial/duplicative.
@@ -661,7 +828,7 @@ Return ONLY one JSON object with this exact schema:
   "failure_codes": ["OPTIONAL_CODE", "..."],
   "notes": "short explanation",
   "retryable": true or false,
-  "retry_hint": "fix_reverse_inversion|change_mapping|strengthen_multihop_chain|remove_answer_leak|use_different_path_proof|stop_edge",
+  "retry_hint": "fix_anchor|fix_reverse_inversion|change_mapping|strengthen_multihop_chain|remove_answer_leak|use_different_path_proof|stop_edge",
   "retry_reason": "short retry instruction"
 }
 
@@ -672,8 +839,8 @@ Scoring guidance:
 - 0.00-0.39: Invalid bridge.
 
 Pass criteria:
-- `pass=true` only if it is a true chain (Sub-Q2 depends on Sub-Q1 output),
-  reverse question truly inverts the forward direction, and no major leakage/triviality.
+- `pass=true` when forward is a true chain (Sub-Q2 depends on Sub-Q1 output), the forward question anchors on a named root entity, and there is no major leakage/triviality.
+- Reverse question quality is a SECONDARY consideration. If the forward is clean and the reverse is structurally impossible (forward answer is a date/place/attribute), still pass. Only use `REVERSE_INVALID` when the worker could have written a better reverse on the same facts.
 
 Similarity checklist (required when similarity_signal is present):
 - Compare semantic mapping, not wording style.
@@ -684,6 +851,23 @@ Similarity checklist (required when similarity_signal is present):
 
 Retry guidance checklist:
 - Set `retryable=true` only when this same edge likely has a better bridge if the worker changes mapping, reverse inversion, or path proof choice.
+- Use `fix_anchor` for OPAQUE_ANCHOR and AMBIGUOUS_GENEALOGY failures.
+
+   **For OPAQUE_ANCHOR:** Tell the worker to **flip the question direction**. The opaque root ("the person who died on 24 April 1934", "the French-American individual") always has a named identity in the source docs — identify that named entity from the evidence, then rewrite the question so the named entity is the root and the opaque descriptor becomes the target.
+
+   Transformation examples:
+   - Opaque: "What film did the person who died on 24 April 1934 direct?" → find the person (Émile Chautard) → rewrite as "When did Émile Chautard die?" (date is now target) OR "What film did Émile Chautard direct?" (if the film is the target)
+   - Opaque: "Which film was directed by the French-American individual?" → find the named person (Émile Chautard) → rewrite as "What is the nationality of Émile Chautard?" OR "What is the nationality of the director of Daytime Wives?" (flipping to put the film as root)
+   - Opaque: "Who is the son of the person who died in Monfort?" → find the person (Reginald I of Guelders) → rewrite as "Who is the son of Reginald I of Guelders?"
+
+   The key transformation: **move the named entity from the descriptive clause into the root position**, and move the date/place/attribute from the root into the target.
+
+   **For AMBIGUOUS_GENEALOGY:** Tell the worker to **split into paternal/maternal bridges**. Generic "grandfather/grandmother/great-grandparent" bridges must be replaced with explicit lineage.
+
+   Transformation examples:
+   - Ambiguous: "Who is the grandfather of Anna Dorothea of Saxe-Weimar?" → check the evidence: Anna Dorothea's father is John Ernest II, whose father is William, Duke of Saxe-Weimar → rewrite as "Who is the **paternal grandfather** of Anna Dorothea of Saxe-Weimar?"
+   - Ambiguous: "Who is the grandmother of Margaret of Valois?" → check evidence: Margaret's mother is Catherine de Medici, whose mother is Madeleine de La Tour d'Auvergne → rewrite as "Who is the **maternal grandmother** of Margaret of Valois?"
+   - If both sides are in the source docs, generate TWO separate bridges — one paternal, one maternal.
 - Use `fix_reverse_inversion` for weak reverse questions that can be repaired on the same facts.
 - Use `change_mapping` when the bridge is too similar or chooses the wrong target variable.
 - Use `strengthen_multihop_chain` when the chain is too trivial but same-edge evidence may support a stronger target.
@@ -692,10 +876,12 @@ Retry guidance checklist:
 - Use `stop_edge` when the relationship itself appears exhausted, structurally invalid, or the evidence is unlikely to support a better bridge.
 
 Failure codes (use one or more when relevant):
+- OPAQUE_ANCHOR: Forward question uses a date/year/number/place/descriptive clause ("the person who...") as the root anchor instead of a named entity. Retry with a proper named root.
+- AMBIGUOUS_GENEALOGY: Forward question asks about a generic "grandfather/grandmother/great-grandfather" without specifying paternal or maternal lineage. Retry with explicit "paternal grandfather" or "maternal grandmother".
 - NOT_CHAIN: Facts are independent conjunction, not dependency chain.
 - NEAR_DUPLICATE: Semantically same as an existing bridge in similarity_signal; not meaningfully distinct.
 - CIRCULAR: Forward/reverse ask effectively same fact with no inversion value.
-- REVERSE_INVALID: Reverse question does not correctly invert the forward mapping.
+- REVERSE_INVALID: Use ONLY for quality failures — reverse is a bad inversion the worker could have written better on the same facts (e.g. too vague, not using the answer entity, same question rephrased). Do NOT use this code when the forward answer is a date/place/attribute and the reverse is structurally impossible — in that case, pass the bridge based on forward quality alone.
 - ANSWER_LEAK: Question text leaks answer directly or near-directly.
 - TOO_TRIVIAL: Bridge is obvious/one-hop-like with little multi-hop value.
 - LOW_SPECIFICITY: Question is vague or underspecified.

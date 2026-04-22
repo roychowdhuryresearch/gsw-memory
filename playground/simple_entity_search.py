@@ -10,6 +10,7 @@ import json
 import glob
 import os
 import hashlib
+import threading
 from pathlib import Path
 from typing import List, Dict, Any, Tuple, Optional
 import sys
@@ -35,8 +36,11 @@ except ImportError:
 try:
     import faiss
     FAISS_AVAILABLE = True
-except ImportError:
-    print("Warning: FAISS not available. Install with: pip install faiss-cpu or faiss-gpu")
+except Exception as e:
+    print(
+        "Warning: FAISS not available or failed to import. "
+        f"Falling back to non-FAISS retrieval. Original error: {e}"
+    )
     FAISS_AVAILABLE = False
 
 # VLLM for embeddings
@@ -74,6 +78,66 @@ except ImportError:
 from src.gsw_memory.memory.models import GSWStructure
 
 console = Console()
+
+EMBEDDING_MODEL_NAME = "Qwen/Qwen3-Embedding-8B"
+_SHARED_EMBEDDING_MODELS: Dict[str, Any] = {}
+_SHARED_EMBEDDING_MODEL_LOCKS: Dict[str, threading.Lock] = {}
+_SHARED_EMBEDDING_MODELS_LOCK = threading.RLock()
+
+
+class _ThreadSafeSharedEmbeddingModel:
+    """Serialize embed calls against a shared local embedding model instance."""
+
+    def __init__(self, model_name: str, model: Any, embed_lock: threading.Lock):
+        self.model_name = model_name
+        self._model = model
+        self._embed_lock = embed_lock
+
+    def embed(self, *args, **kwargs):
+        with self._embed_lock:
+            return self._model.embed(*args, **kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._model, name)
+
+
+def _get_shared_embedding_lock(model_name: str) -> threading.Lock:
+    with _SHARED_EMBEDDING_MODELS_LOCK:
+        lock = _SHARED_EMBEDDING_MODEL_LOCKS.get(model_name)
+        if lock is None:
+            lock = threading.Lock()
+            _SHARED_EMBEDDING_MODEL_LOCKS[model_name] = lock
+        return lock
+
+
+def _huggingface_hub_cache_root() -> Path:
+    if os.environ.get("HUGGINGFACE_HUB_CACHE"):
+        return Path(os.environ["HUGGINGFACE_HUB_CACHE"]).expanduser()
+    if os.environ.get("HF_HUB_CACHE"):
+        return Path(os.environ["HF_HUB_CACHE"]).expanduser()
+    if os.environ.get("HF_HOME"):
+        return Path(os.environ["HF_HOME"]).expanduser() / "hub"
+    return Path.home() / ".cache" / "huggingface" / "hub"
+
+
+def _resolve_cached_hf_snapshot(model_name: str) -> Optional[Path]:
+    model_cache_dir = _huggingface_hub_cache_root() / f"models--{model_name.replace('/', '--')}"
+    refs_main = model_cache_dir / "refs" / "main"
+    if not refs_main.exists():
+        return None
+    revision = refs_main.read_text().strip()
+    if not revision:
+        return None
+    snapshot_dir = model_cache_dir / "snapshots" / revision
+    if not snapshot_dir.exists():
+        return None
+    required_files = [
+        "config.json",
+        "tokenizer_config.json",
+    ]
+    if not all((snapshot_dir / filename).exists() for filename in required_files):
+        return None
+    return snapshot_dir
 
 
 def get_detailed_instruct(task_description: str, query: str) -> str:
@@ -119,7 +183,18 @@ def load_gsw_files(num_documents: int = 50, path_to_gsw_files: str = None) -> Tu
 class EntitySearcher:
     """Simple entity searcher that extracts entities from GSW files and performs semantic search."""
     
-    def __init__(self, num_documents: int = 50, cache_dir: str = None, path_to_gsw_files: str = None, rebuild_cache: bool = False, verbose: bool = True, use_bm25: bool = False, gpu_device: int = 1, use_gpu_for_qa_index: bool = True):
+    def __init__(
+        self,
+        num_documents: int = 50,
+        cache_dir: str = None,
+        path_to_gsw_files: str = None,
+        rebuild_cache: bool = False,
+        verbose: bool = True,
+        use_bm25: bool = False,
+        gpu_device: int = 1,
+        use_gpu_for_qa_index: bool = True,
+        embedding_gpu_memory_utilization: float = 0.5,
+    ):
         """Initialize the entity searcher.
 
         Args:
@@ -131,10 +206,17 @@ class EntitySearcher:
             use_bm25: If True, use BM25 for entity search instead of embeddings
             gpu_device: GPU device ID to use (0-3 for RTX A6000s, default: 0)
             use_gpu_for_qa_index: If True, transfer Q&A FAISS index to GPU (requires significant GPU memory, default: False)
+            embedding_gpu_memory_utilization: Fraction of GPU memory vLLM may reserve for the retrieval embedding model.
         """
         self.verbose_init = verbose
         self.gpu_device = gpu_device
         self.use_gpu_for_qa_index = use_gpu_for_qa_index
+        self.embedding_gpu_memory_utilization = float(embedding_gpu_memory_utilization)
+        if not 0.0 < self.embedding_gpu_memory_utilization <= 1.0:
+            raise ValueError(
+                "embedding_gpu_memory_utilization must be within (0.0, 1.0], "
+                f"got {self.embedding_gpu_memory_utilization!r}"
+            )
 
         # Initialize GPU resources for FAISS
         if FAISS_AVAILABLE:
@@ -149,12 +231,16 @@ class EntitySearcher:
         self.entity_texts = []
         self.embeddings = None
         self.embedding_model = None
+        self.embedding_model_reused = False
+        self.embedding_model_source = None
+        self.embedding_init_error = None
         self.gsw_by_doc_id = {}  # Store GSW structures by doc_id for QA lookup
         self.openai_client = None  # For answer generation
         self.show_llm_prompt = True  # Toggle for debugging LLM prompts
         self.path_to_gsw_files = path_to_gsw_files # Path to the GSW files
         # Embedding cache attributes
         self.cache_dir = Path(cache_dir) if cache_dir else Path(".")
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.rebuild_cache = rebuild_cache
         self.qa_embedding_cache = {}  # In-memory cache for Q&A embeddings: {qa_text_hash: embedding}
         self.qa_metadata_cache = {}  # Maps qa_text_hash to Q&A metadata for direct search
@@ -185,35 +271,36 @@ class EntitySearcher:
         
         self._extract_entities_from_gsw(gsw_structures, doc_ids)
         
-        if VLLM_AVAILABLE:
-            self._initialize_embedding_model()
+        if not VLLM_AVAILABLE:
+            raise ValueError(
+                f"Retrieval embedding model {EMBEDDING_MODEL_NAME} requires vLLM, but vLLM is not available."
+            )
 
-            # BM25 index is only for the entity search
-            if self.embedding_model:
-                # Try to load cached embeddings first
+        self._initialize_embedding_model()
+        if not self.embedding_model:
+            error_detail = str(self.embedding_init_error or "unknown embedding initialization error")
+            raise ValueError(
+                f"Failed to initialize retrieval embedding model {EMBEDDING_MODEL_NAME} "
+                f"for docs={len(self.gsw_by_doc_id)} cache_dir={self.cache_dir}. "
+                f"No reusable embedding engine available. Original error: {error_detail}"
+            )
 
-                if self.use_bm25:
-                    self._build_bm25_index()
+        if self.use_bm25:
+            self._build_bm25_index()
 
-                if not self.rebuild_cache and self._load_entity_embeddings_cache():
-                    if self.verbose_init:
-                        console.print("[green]✓ Loaded entity embeddings from cache[/green]")
-                else:
-                    self._generate_embeddings()
-                    self._save_entity_embeddings_cache()
-                
-                # Load Q&A embedding cache if it exists, or precompute all Q&A embeddings
-                if not self.rebuild_cache and self._load_qa_embeddings_cache():
-                    if self.verbose_init:
-                        console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
-                    # Build embeddings matrix for loaded cache
-                    self._build_qa_embeddings_matrix()
+        if not self.rebuild_cache and self._load_entity_embeddings_cache():
+            if self.verbose_init:
+                console.print("[green]✓ Loaded entity embeddings from cache[/green]")
+        else:
+            self._generate_embeddings()
+            self._save_entity_embeddings_cache()
 
-                # Precompute any missing Q&A embeddings
-                self._precompute_qa_embeddings()
+        if not self.rebuild_cache and self._load_qa_embeddings_cache():
+            if self.verbose_init:
+                console.print(f"[green]✓ Loaded {len(self.qa_embedding_cache)} Q&A embeddings from cache[/green]")
+            self._build_qa_embeddings_matrix()
 
-            else:
-                raise ValueError("No embedding model or BM25 index found")
+        self._precompute_qa_embeddings()
         
         # Initialize OpenAI client if available
         if OPENAI_AVAILABLE:
@@ -357,17 +444,54 @@ class EntitySearcher:
     
     
     def _initialize_embedding_model(self):
-        """Initialize the Qwen embedding model."""
+        """Initialize or reuse the shared Qwen embedding model."""
         try:
-            if self.verbose_init:
-                console.print("[cyan]Initializing Qwen3-Embedding-8B model...[/cyan]")
-            self.embedding_model = LLM(model="Qwen/Qwen3-Embedding-8B", task="embed")
-            if self.verbose_init:
-                console.print("[green]✓ Qwen embedding model initialized[/green]")
+            model_target = EMBEDDING_MODEL_NAME
+            cached_snapshot = _resolve_cached_hf_snapshot(EMBEDDING_MODEL_NAME)
+            if cached_snapshot is not None:
+                model_target = str(cached_snapshot)
+
+            with _SHARED_EMBEDDING_MODELS_LOCK:
+                shared_model = _SHARED_EMBEDDING_MODELS.get(EMBEDDING_MODEL_NAME)
+                if shared_model is not None:
+                    self.embedding_model = shared_model
+                    self.embedding_model_reused = True
+                    self.embedding_model_source = "reused"
+                    self.embedding_init_error = None
+                    if self.verbose_init:
+                        console.print("[green]✓ Reusing shared Qwen3-Embedding-8B model[/green]")
+                    return
+
+                if self.verbose_init:
+                    source_label = "local HF snapshot" if cached_snapshot is not None else EMBEDDING_MODEL_NAME
+                    console.print(
+                        "[cyan]Initializing Qwen3-Embedding-8B model "
+                        f"from {source_label} "
+                        f"(gpu_memory_utilization={self.embedding_gpu_memory_utilization:.2f})...[/cyan]"
+                    )
+                raw_model = LLM(
+                    model=model_target,
+                    runner="pooling",
+                    gpu_memory_utilization=self.embedding_gpu_memory_utilization,
+                )
+                shared_model = _ThreadSafeSharedEmbeddingModel(
+                    model_name=EMBEDDING_MODEL_NAME,
+                    model=raw_model,
+                    embed_lock=_get_shared_embedding_lock(EMBEDDING_MODEL_NAME),
+                )
+                _SHARED_EMBEDDING_MODELS[EMBEDDING_MODEL_NAME] = shared_model
+                self.embedding_model = shared_model
+                self.embedding_model_reused = False
+                self.embedding_model_source = "local_snapshot" if cached_snapshot is not None else "started"
+                self.embedding_init_error = None
+                if self.verbose_init:
+                    console.print("[green]✓ Qwen embedding model initialized[/green]")
         except Exception as e:
             if self.verbose_init:
                 console.print(f"[red]Error initializing embedding model: {e}[/red]")
             self.embedding_model = None
+            self.embedding_model_source = "failed"
+            self.embedding_init_error = e
 
     def _build_bm25_index(self) -> None:
         """Build BM25 index for entity search."""
@@ -449,7 +573,7 @@ class EntitySearcher:
             console.print("Precomputing Q&A pair embeddings...")
 
         # Collect all unique Q&A pairs from all GSW structures
-        all_qa_data = {}  # qa_text -> metadata dict
+        all_qa_data = {}  # qa_key -> metadata dict
         qa_count = 0
 
         for doc_id, gsw in self.gsw_by_doc_id.items():
@@ -460,14 +584,14 @@ class EntitySearcher:
                         if hasattr(question, 'answers') and question.answers:
                             # Resolve answer IDs to names for embedding
                             answer_names, answer_rolestates = self._resolve_entity_ids_to_names(question.answers, doc_id)
-                            answers_text = ', '.join(answer_names)
 
-                            # Create Q&A text representation (same format as in _rerank_qa_pairs)
-                            qa_text = f"{question.text} {answers_text}"
+                            # Dedup key includes doc_id to avoid collisions
+                            # (same question text can appear in different docs)
+                            qa_key = f"{question.text}\t{doc_id}"
 
                             # Store metadata for this Q&A pair
-                            if qa_text not in all_qa_data:
-                                all_qa_data[qa_text] = {
+                            if qa_key not in all_qa_data:
+                                all_qa_data[qa_key] = {
                                     'question': question.text if hasattr(question, 'text') else "Unknown question",
                                     'answer_ids': question.answers,
                                     'answer_names': answer_names,
@@ -484,47 +608,51 @@ class EntitySearcher:
             return
 
         # Store metadata for all Q&A pairs
-        for qa_text, metadata in all_qa_data.items():
-            qa_hash = self._get_qa_text_hash(qa_text)
+        for qa_key, metadata in all_qa_data.items():
+            qa_hash = self._get_qa_text_hash(qa_key)
             self.qa_metadata_cache[qa_hash] = metadata
 
         # Check how many are already cached
-        uncached_texts = []
-        for qa_text in all_qa_data.keys():
-            qa_hash = self._get_qa_text_hash(qa_text)
+        uncached_keys = []
+        for qa_key in all_qa_data.keys():
+            qa_hash = self._get_qa_text_hash(qa_key)
             if qa_hash not in self.qa_embedding_cache:
-                uncached_texts.append(qa_text)
-        
-        if not uncached_texts:
+                uncached_keys.append(qa_key)
+
+        if not uncached_keys:
             if self.verbose_init:
                 console.print(f"[green]✓ All {len(all_qa_data)} Q&A pairs already cached[/green]")
             # Build embeddings matrix even if all are cached
             self._build_qa_embeddings_matrix()
             return
-        
+
         if self.verbose_init:
-            console.print(f"Generating embeddings for {len(uncached_texts)} uncached Q&A pairs...")
-        
+            console.print(f"Generating embeddings for {len(uncached_keys)} uncached Q&A pairs...")
+
         try:
-            # Task for Q&A embeddings
-            task = 'Given a question-answer pair, create an embedding that captures the semantic meaning for similarity comparison with user queries.'
-            
+            # Embed question text ONLY (not answer names) for cleaner similarity matching.
+            # Previously embedded f"{question} {answers}" which caused answer-text
+            # (e.g. 6 actor names) to dominate embeddings and break retrieval.
+            task = 'Given a question, create an embedding that captures the semantic meaning for similarity comparison with user queries.'
+
             # Generate embeddings in batches
             batch_size = 32
-            for i in range(0, len(uncached_texts), batch_size):
-                batch_texts = uncached_texts[i:i+batch_size]
+            for i in range(0, len(uncached_keys), batch_size):
+                batch_keys = uncached_keys[i:i+batch_size]
+                # Embed question-only text (metadata['question']), not the full qa_key
+                batch_questions = [all_qa_data[k]['question'] for k in batch_keys]
                 if self.verbose_init:
-                    console.print(f"  Processing batch {i//batch_size + 1}/{(len(uncached_texts) + batch_size - 1)//batch_size}...")
-                
+                    console.print(f"  Processing batch {i//batch_size + 1}/{(len(uncached_keys) + batch_size - 1)//batch_size}...")
+
                 # Create instructed texts for this batch
-                instructed_batch = [get_detailed_instruct(task, qa_text) for qa_text in batch_texts]
-                
+                instructed_batch = [get_detailed_instruct(task, q) for q in batch_questions]
+
                 # Generate embeddings
                 outputs = self.embedding_model.embed(instructed_batch)
-                
-                # Store in cache
-                for qa_text, output in zip(batch_texts, outputs):
-                    qa_hash = self._get_qa_text_hash(qa_text)
+
+                # Store in cache (keyed by qa_key hash for dedup)
+                for qa_key, output in zip(batch_keys, outputs):
+                    qa_hash = self._get_qa_text_hash(qa_key)
                     embedding = np.array(output.outputs.embedding)
                     self.qa_embedding_cache[qa_hash] = embedding
             
@@ -541,15 +669,25 @@ class EntitySearcher:
             if self.verbose_init:
                 console.print(f"[red]Error precomputing Q&A embeddings: {e}[/red]")
     
-    def _embed_query(self, queries: List[str]) -> Optional[np.ndarray]:
-        """Embed a query using the Qwen model."""
+    def _embed_query(self, queries) -> Optional[list]:
+        """Embed one or more queries using the Qwen model.
+
+        Args:
+            queries: A single query string or a list of query strings.
+
+        Returns:
+            List of numpy embedding arrays, one per query.
+        """
         if not self.embedding_model:
             return None
-        
-        # Use the same task description as for entity embeddings
-        task = 'Given an query, create an embedding that captures the semantic meaning for similarity comparison with QA pairs.'
+
+        # Accept both str and List[str] — callers often pass a bare string
+        if isinstance(queries, str):
+            queries = [queries]
+
+        task = 'Given a query, create an embedding that captures the semantic meaning for similarity comparison with QA pairs.'
         instructed_queries = [get_detailed_instruct(task, query) for query in queries]
-        
+
         try:
             outputs = self.embedding_model.embed(instructed_queries)
             embeddings = [np.array(output.outputs.embedding) for output in outputs]

@@ -81,7 +81,11 @@ def test_create_bridge_allows_semantic_near_duplicate_for_verifier_decision():
     )
 
     assert second["success"] is True
-    assert second["validation"].get("similarity_signal")
+    similarity = second["validation"].get("similarity_signal")
+    assert similarity
+    first_hit = similarity[0]
+    assert "existing_question_snippet" in first_hit
+    assert "existing_reverse_question_snippet" in first_hit
 
 
 def test_create_bridge_canonicalizes_source_docs_to_grounded_ref_docs():
