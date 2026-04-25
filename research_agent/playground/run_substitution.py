@@ -35,19 +35,24 @@ if str(_SRC) not in sys.path:
 import typer
 
 # Import-time side effect: loading adapters registers them.
-import research_agent.adapters.agentic_reasoning_mindmap  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.asearcher  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.context1  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.eigent_search_q_plus  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.gam  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.graph_r1  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.ours_gsw_v1  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.rule_decomp_gsw  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.search_o1  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.search_r1  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.smtl  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.tongyi_deep_research  # noqa: F401  pylint: disable=unused-import
-import research_agent.adapters.vanilla_rag_react  # noqa: F401  pylint: disable=unused-import
+# Baselines (E1–E13 + prior ours variants)
+import research_agent.adapters.baselines.agentic_reasoning_mindmap  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.asearcher  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.context1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.eigent_search_q_plus  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.gam  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.graph_r1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.ours_gsw_v1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.rule_decomp_gsw  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.search_o1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.search_r1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.smtl  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.tongyi_deep_research  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.baselines.vanilla_rag_react  # noqa: F401  pylint: disable=unused-import
+# Ours (Phase-1 planner)
+import research_agent.adapters.ours.gsw_planner_v1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.ours.gsw_planner_react_v1  # noqa: F401  pylint: disable=unused-import
+import research_agent.adapters.ours.gsw_planner_orchestrator_v1  # noqa: F401  pylint: disable=unused-import
 from research_agent.adapters.base import AdapterContext, get_adapter
 from research_agent.eval import load_frames, load_subset
 from research_agent.eval.harness import persist_cell, run_cell
@@ -82,6 +87,10 @@ def main(
     base_url: str = typer.Option("", help="OpenAI-compatible base_url (e.g. vLLM's /v1)."),
     api_key: str = typer.Option("", help="API key (env OPENAI_API_KEY used if empty)."),
     max_turns: int = typer.Option(16, help="Hard turn cap per question."),
+    retriever: str = typer.Option(
+        "bm25",
+        help="Retriever to use: bm25 (default), dense (Qwen3-Embedding-8B), or hybrid (RRF of both).",
+    ),
     max_completion_tokens: int = typer.Option(
         50000,
         help=(
@@ -116,6 +125,18 @@ def main(
     reasoner_api_key: str = typer.Option(
         "", help="API key for the reasoner endpoint (empty = reuse --api-key / OPENAI_API_KEY)."
     ),
+    orchestrator_mode: str = typer.Option(
+        "",
+        help=(
+            "Only for ours_gsw_planner_orchestrator_v1. 'deterministic' "
+            "(Phase-1 per-level researchers) or 'llm' (LLM orchestrator + "
+            "parallel per-blank researchers). Empty = adapter default."
+        ),
+    ),
+    orchestrator_max_turns: int = typer.Option(
+        0,
+        help="Only for llm mode: max orchestrator turns (default 12).",
+    ),
 ) -> None:
     subset_obj = load_subset(subset)
     questions_all = load_frames(split=split)
@@ -133,13 +154,17 @@ def main(
         return
 
     adapter_cls = get_adapter(system)
-    extra: dict[str, object] = {}
+    extra: dict[str, object] = {"retriever_type": retriever}
     if reasoner_model:
         extra["reasoner"] = {
             "model_name": reasoner_model,
             "base_url": reasoner_base_url,
             "api_key": reasoner_api_key or os.environ.get("OPENAI_API_KEY", ""),
         }
+    if orchestrator_mode:
+        extra["orchestrator_mode"] = orchestrator_mode
+    if orchestrator_max_turns > 0:
+        extra["orchestrator_max_turns"] = orchestrator_max_turns
 
     ctx = AdapterContext(
         system_id=system,

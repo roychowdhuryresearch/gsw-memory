@@ -1,0 +1,195 @@
+"""System-prompt construction for the LLM orchestrator.
+
+The orchestrator does not retrieve directly; it decides which blanks
+to dispatch to a per-blank researcher, when to ask the plan-updater
+to revise the plan, and when to submit the final answer.
+
+Prompt structure, top-to-bottom:
+
+1. **Orchestrator mission** — what its role is.
+2. **Plan schema legend** (reuse of SYSTEM_PROMPT_LEGEND, so the
+   orchestrator and the researchers speak the same language).
+3. **Current plan** (full, not sliced — orchestrator needs the whole
+   picture).
+4. **Current state** (every blank with status + value).
+5. **Tools** — dispatch_subplan / request_plan_update / get_state /
+   submit_answer.
+6. **Rules + stop conditions**.
+
+Only sections (3) and (4) vary per turn. Sections (1), (2), (5), (6)
+are static and cacheable.
+"""
+
+from __future__ import annotations
+
+import textwrap
+from typing import Any
+
+from research_agent.adapters.ours._planner_exec import BlankResult
+from research_agent.adapters.ours._planner_react_prompt import (
+    SYSTEM_PROMPT_LEGEND,
+    render_plan_brief,
+)
+
+
+ORCHESTRATOR_MISSION = textwrap.dedent(
+    """
+    You are the **Orchestrator** of a multi-agent research team
+    answering one question.
+
+    You hold:
+    - The question (in the user message).
+    - The current **GSWPlan**: a typed DAG of entities, verb-phrases,
+      and constraints. One blank entity is the target whose value is
+      the final answer.
+    - The **global state**: which blanks are resolved, their committed
+      values, and their evidence chunk ids.
+
+    Each turn you pick EXACTLY ONE of four tools:
+
+    - `dispatch_subplan(blank_ids: list[str], hints?: str)` — ask a
+      fan-out of researchers to retrieve and commit values for a
+      specific set of blanks. Each blank in the list is resolved by
+      its OWN researcher in parallel. Use this for the main
+      retrieval work.
+    - `request_plan_update(reason: str, evidence: str)` — the plan is
+      wrong or missing something. A plan-updater LLM rewrites the
+      plan from the evidence you provide; the revised plan replaces
+      the current one and resolved blanks are carried over by id
+      where possible.
+    - `get_state()` — re-read the current state. Rarely needed;
+      state is already in this prompt.
+    - `submit_answer(answer: str)` — terminate with the final answer.
+      Only allowed when the TARGET blank is resolved in state. The
+      answer should match the committed target value.
+
+    The run ends when you call `submit_answer` (success) or hit the
+    turn budget (fail).
+    """
+).strip()
+
+
+ORCHESTRATOR_RULES = textwrap.dedent(
+    """
+    ## Rules
+
+    1. Every turn MUST be exactly one tool call. Never reply in prose.
+    2. `dispatch_subplan` may include 1 to 8 blank_ids. Include
+       multiple ids ONLY when they have no mutual dependency
+       (different rows in the topological level chart below). When in
+       doubt, dispatch fewer — the researchers are isolated and will
+       not help each other solve siblings.
+    3. Do not dispatch a blank that is already `status=resolved` in
+       state. Use `request_plan_update` if its current value is wrong.
+    4. Only call `request_plan_update` when you have concrete
+       evidence that the plan structure is wrong. A single weak
+       retrieval is NOT enough; it just means "dispatch again with
+       different blanks".
+    5. Constraint-output blanks fill themselves once their input
+       blanks are resolved. Never dispatch a blank that is the output
+       of a constraint; dispatch its INPUTS.
+    6. `submit_answer(answer)` is the ONLY way to end. Pass the
+       committed target value verbatim. If retrieval genuinely
+       cannot find the target, you may still submit a best-guess
+       answer — but prefer `request_plan_update` first if the plan
+       itself looks wrong.
+
+    ## Answer format for `submit_answer`
+
+    - Person / entity: just the name.
+    - Year / date: just the date value.
+    - Number: just the number.
+    - Bool: `True` or `False`.
+    - List: comma-separated values, no surrounding prose.
+    - Never prefix with "Answer:", "Final:", etc.
+    """
+).strip()
+
+
+def _state_table_for_prompt(
+    plan_dict: dict[str, Any],
+    state: dict[str, BlankResult],
+) -> str:
+    """Render every blank in the state as a row the orchestrator can read.
+
+    Constraint-output blanks are marked so the orchestrator doesn't
+    try to dispatch them.
+    """
+    ent_by_id = {e.get("id"): e for e in plan_dict.get("entities", [])}
+    constraint_outputs = {
+        c.get("output_blank_id")
+        for c in plan_dict.get("constraints", [])
+        if c.get("output_blank_id")
+    }
+    target_id = next(
+        (
+            e.get("id")
+            for e in plan_dict.get("entities", [])
+            if e.get("is_target")
+        ),
+        None,
+    )
+    rows: list[str] = []
+    for bid, br in state.items():
+        ent = ent_by_id.get(bid, {})
+        role = ent.get("role", "—")
+        vt = ent.get("value_type", "text")
+        flags: list[str] = []
+        if bid == target_id:
+            flags.append("TARGET")
+        if bid in constraint_outputs:
+            flags.append("auto-computed (do not dispatch)")
+        flag_str = "  [" + ", ".join(flags) + "]" if flags else ""
+        if br.status == "resolved":
+            val = br.value
+            if isinstance(val, str) and len(val) > 80:
+                val = val[:77] + "..."
+            rows.append(
+                f"- `{bid}` (role=`{role}`, value_type=`{vt}`, "
+                f"**RESOLVED**): {val!r}{flag_str}"
+            )
+        else:
+            rows.append(
+                f"- `{bid}` (role=`{role}`, value_type=`{vt}`, "
+                f"status=`{br.status}`){flag_str}"
+            )
+    if not rows:
+        return "_(no blanks in this plan)_"
+    return "\n".join(rows)
+
+
+def build_orchestrator_prompt(
+    plan_dict: dict[str, Any],
+    order: list[str],
+    levels: dict[str, int],
+    state: dict[str, BlankResult],
+    *,
+    turn_index: int = 0,
+    recent_activity: str = "",
+) -> str:
+    """Assemble the full system prompt for the orchestrator.
+
+    Called every turn — sections 3 and 4 reflect the latest state and
+    any plan revisions.
+
+    ``recent_activity`` is a short orchestrator-local log (last
+    dispatch's resolved ids, last plan-update summary, etc.) that the
+    prompt surfaces right before the tools list so the orchestrator
+    sees what it just did.
+    """
+    brief = render_plan_brief(plan_dict, order, levels)  # full, no slice
+    state_table = _state_table_for_prompt(plan_dict, state)
+    activity_section = (
+        f"## Recent activity\n\n{recent_activity.strip()}\n"
+        if recent_activity.strip()
+        else ""
+    )
+    return (
+        f"{ORCHESTRATOR_MISSION}\n\n"
+        f"{SYSTEM_PROMPT_LEGEND}\n\n"
+        f"{brief}\n\n"
+        f"## Current state\n\n{state_table}\n\n"
+        f"{activity_section}"
+        f"{ORCHESTRATOR_RULES}\n\n"
+        f"(Turn {turn_index + 1}.)"
+    )
