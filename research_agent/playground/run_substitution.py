@@ -137,6 +137,15 @@ def main(
         0,
         help="Only for llm mode: max orchestrator turns (default 12).",
     ),
+    prompt_style: str = typer.Option(
+        "full",
+        help=(
+            "Only for ours_gsw_planner_react_v1. 'full' (default) renders "
+            "the plan as entities/VPs/constraints + topological steps. "
+            "'topo_only' renders ONLY the numbered topological step list "
+            "with retrieval signals + dependency annotations."
+        ),
+    ),
 ) -> None:
     subset_obj = load_subset(subset)
     questions_all = load_frames(split=split)
@@ -165,6 +174,8 @@ def main(
         extra["orchestrator_mode"] = orchestrator_mode
     if orchestrator_max_turns > 0:
         extra["orchestrator_max_turns"] = orchestrator_max_turns
+    if prompt_style and prompt_style != "full":
+        extra["prompt_style"] = prompt_style
 
     ctx = AdapterContext(
         system_id=system,

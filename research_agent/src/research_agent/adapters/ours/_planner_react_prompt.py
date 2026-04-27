@@ -454,14 +454,194 @@ def render_plan_brief(
     return "\n".join(out).rstrip()
 
 
+def render_plan_topo_only(
+    plan_dict: dict[str, Any],
+    order: list[str],
+    levels: dict[str, int],
+) -> str:
+    """Render the plan as ONLY a topological numbered step list.
+
+    This is the stripped-down sibling of :func:`render_plan_brief` —
+    used by the topo-only ablation on ``ours_gsw_planner_react_v1``.
+    Drops the entities / verb-phrases / constraints structured dump
+    and exposes only:
+
+    - One section "## Solve order (topological)" with numbered Steps
+      grouped by level (parallel siblings within a level).
+    - Per step: blank id, value_type, role, target tag, "depends on
+      Step N" annotations (so the dependency graph is visible without
+      needing the full graph), and retrieval signals (subject +
+      relation pairs derived from the wired VPs).
+    - Constraint-output blanks are flagged as auto-computed (do NOT
+      dispatch).
+
+    The legend (``SYSTEM_PROMPT_LEGEND``) is still prepended by
+    :func:`build_system_prompt`, so the LLM still has the schema
+    vocabulary if it needs to interpret the per-step annotations.
+    """
+    ent_by_id: dict[str, dict[str, Any]] = {
+        e.get("id"): e for e in plan_dict.get("entities", [])
+    }
+    constraint_by_output = {
+        c.get("output_blank_id"): c
+        for c in plan_dict.get("constraints", [])
+        if c.get("output_blank_id")
+    }
+    vp_by_blank: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for vp in plan_dict.get("verb_phrases", []):
+        for side in ("subject_id", "object_id"):
+            eid = vp.get(side)
+            if eid in ent_by_id and ent_by_id[eid].get("kind") == "blank":
+                vp_by_blank[eid].append(vp)
+
+    # Reverse-dependency map (blank → blanks it depends on). Used to
+    # render "depends on Step N" inline so the LLM sees bridging
+    # relationships without the structured graph.
+    blank_set = {
+        e.get("id") for e in plan_dict.get("entities", [])
+        if e.get("kind") == "blank"
+    }
+    depends_on: dict[str, list[str]] = defaultdict(list)
+    for c in plan_dict.get("constraints", []):
+        out_id = c.get("output_blank_id")
+        if not out_id or out_id not in blank_set:
+            continue
+        for inp_field in ("args_blanks", "sort_by_blank_ids"):
+            for inp in c.get(inp_field) or []:
+                if inp in blank_set and inp != out_id:
+                    depends_on[out_id].append(inp)
+    for vp in plan_dict.get("verb_phrases", []):
+        s, o = vp.get("subject_id"), vp.get("object_id")
+        s_ent, o_ent = ent_by_id.get(s, {}), ent_by_id.get(o, {})
+        if (s_ent.get("kind") == "blank"
+                and s_ent.get("value_type") == "entity"
+                and o_ent.get("kind") == "blank"):
+            depends_on[o].append(s)
+
+    out: list[str] = []
+    out.append("## Solve order (topological)")
+    out.append("")
+    out.append(
+        "Each step below resolves ONE blank. Steps in the same "
+        "level have no mutual dependencies and can be solved in any "
+        "order. Use the listed retrieval signals (subject + relation) "
+        "to query for evidence."
+    )
+    out.append("")
+
+    if not order:
+        out.append("_(no blanks to solve)_")
+        return "\n".join(out).rstrip()
+
+    by_level: dict[int, list[str]] = defaultdict(list)
+    for b_id in order:
+        by_level[levels.get(b_id, 0)].append(b_id)
+
+    # Map blank_id → step number (1-indexed), so dependency
+    # annotations can reference earlier steps.
+    step_of: dict[str, int] = {}
+    n = 1
+    for lvl in sorted(by_level):
+        for b_id in by_level[lvl]:
+            step_of[b_id] = n
+            n += 1
+
+    step = 1
+    for lvl in sorted(by_level):
+        ids = by_level[lvl]
+        header = f"### Level {lvl + 1}"
+        if len(ids) > 1:
+            header += "  _(parallel)_"
+        out.append(header)
+        for b_id in ids:
+            ent = ent_by_id.get(b_id, {})
+            vt = ent.get("value_type") or "text"
+            role = ent.get("role") or "—"
+            target_tag = " **(TARGET)**" if ent.get("is_target") else ""
+            line = (
+                f"**Step {step}** — fill `{b_id}` "
+                f"(value_type=`{vt}`, role=`{role}`){target_tag}"
+            )
+            deps = depends_on.get(b_id) or []
+            dep_steps = sorted({step_of[d] for d in deps if d in step_of})
+            if dep_steps:
+                plural = "s" if len(dep_steps) > 1 else ""
+                line += (
+                    f" — depends on Step{plural} "
+                    + ", ".join(str(s) for s in dep_steps)
+                )
+            out.append(line)
+
+            if b_id in constraint_by_output:
+                c = constraint_by_output[b_id]
+                kind = c.get("kind")
+                op_name = c.get("op")
+                method = (
+                    f"computed by constraint `{kind}`"
+                    + (f" (`{op_name}`)" if op_name else "")
+                )
+                if kind == "derived":
+                    method += f" over `{c.get('args_blanks', [])}`"
+                elif kind in ("argmax", "argmin"):
+                    method += (
+                        f" over candidates `{c.get('candidate_entity_ids', [])}`, "
+                        f"ranked by `{c.get('sort_by_blank_ids', [])}`"
+                    )
+                out.append(f"    — {method} (auto-computed; do NOT dispatch)")
+            else:
+                signals: list[str] = []
+                for vp in vp_by_blank.get(b_id, []):
+                    s, o = vp.get("subject_id"), vp.get("object_id")
+                    other = o if s == b_id else s
+                    other_ent = ent_by_id.get(other, {})
+                    other_name = (
+                        other_ent.get("name")
+                        if other_ent.get("kind") == "filled"
+                        else other
+                    )
+                    signals.append(f"`({other_name}, {vp.get('phrase')})`")
+                sig_text = (
+                    ", ".join(signals)
+                    if signals
+                    else "_(no wired VPs — fall back to role + question keywords)_"
+                )
+                out.append(f"    — retrieval signals: {sig_text}")
+            step += 1
+        out.append("")
+
+    return "\n".join(out).rstrip()
+
+
 def build_system_prompt(
     plan_dict: dict[str, Any],
     order: list[str],
     levels: dict[str, int],
     slice_blank_ids: Optional[list[str]] = None,
+    *,
+    topo_only: bool = False,
 ) -> str:
-    """Assemble the full system prompt for the reasoner."""
-    brief = render_plan_brief(plan_dict, order, levels, slice_blank_ids=slice_blank_ids)
+    """Assemble the full system prompt for the reasoner.
+
+    When ``topo_only=True``, the plan brief is replaced with a
+    stripped-down topological-step list (no entities / VPs /
+    constraints structured dump). Used by the topo-only ablation on
+    ``ours_gsw_planner_react_v1``.
+    """
+    if topo_only:
+        if slice_blank_ids is not None:
+            # Slice-then-topo-only is not currently used. The
+            # orchestrator dispatches per-blank slices via the
+            # multi-agent path; the flat react adapter never slices.
+            # If we need this later, derive a sliced order/levels and
+            # call render_plan_topo_only on them.
+            raise NotImplementedError(
+                "topo_only with slice_blank_ids is not supported"
+            )
+        brief = render_plan_topo_only(plan_dict, order, levels)
+    else:
+        brief = render_plan_brief(
+            plan_dict, order, levels, slice_blank_ids=slice_blank_ids
+        )
     return (
         f"{SYSTEM_PROMPT_LEGEND}\n\n"
         f"{brief}\n\n"

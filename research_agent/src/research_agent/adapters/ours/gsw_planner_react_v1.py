@@ -537,7 +537,15 @@ class OursGSWPlannerReactV1Adapter(_PlannerFallbackMixin, Adapter):
         }
 
         # --- 4. Build system prompt + dispatcher ---------------------
-        system_prompt = build_system_prompt(plan_dict, order, levels)
+        # Phase-3.7 ablation: ``prompt_style="topo_only"`` switches the
+        # plan brief to a topological-step-only render (no entities /
+        # VPs / constraints dump). Default ``"full"`` is unchanged.
+        prompt_style = (self.ctx.extra or {}).get("prompt_style", "full")
+        topo_only = (prompt_style == "topo_only")
+        system_prompt = build_system_prompt(
+            plan_dict, order, levels, topo_only=topo_only
+        )
+        traj.extra["prompt_style"] = "topo_only" if topo_only else "full"
         dispatch, counters = self._make_plan_dispatcher(plan, state)
 
         messages: list[dict[str, Any]] = [
