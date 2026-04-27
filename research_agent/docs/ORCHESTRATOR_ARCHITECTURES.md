@@ -1,296 +1,367 @@
-# Orchestrator architectures — deterministic vs LLM
+# Orchestrator architectures — deterministic vs LLM (Phase-3.2, current)
 
-> **Scope.** Side-by-side description of the two modes supported by the
-> `ours_gsw_planner_orchestrator_v1` adapter, with concrete examples
-> pulled from the first 10-question FRAMES probe.
-> Both modes share the same per-blank ReAct researcher class, the
-> same retrieval tools, and the same `emit_plan` + topology
-> infrastructure. They differ only in **who controls the outer loop**.
+The `ours_gsw_planner_orchestrator_v1` adapter ships two modes that share
+the same plan emission, retriever, researcher class, and constraint-cascade
+machinery. They differ in **who runs the outer loop** that decides which
+blanks to resolve next and when to finalize.
 
-Date: 2026-04-24
-Benchmark: FRAMES dev 10Q (first 10 in `configs/frames_dev_100.json`)
-Reasoner: `bedrock/openai.gpt-oss-120b-1:0`, hybrid retriever.
+- **deterministic** — Python for-loop walks the topological levels.
+- **llm** — an LLM orchestrator chooses dispatches, can request a plan
+  revision mid-run, listens for researcher escalations, and decides when
+  to submit the answer.
 
----
+Both produce the same `Trajectory` shape (with extra fields specific to llm
+mode); both are inspectable via the same Streamlit UI.
 
-## 1. The two modes in one diagram
+### Recent phases (chronological)
 
-### Mode A — deterministic orchestrator (Phase-1 default)
+- **Phase-2** (commit `e7d3a7a`, tag `orch-v2-shipped`) — original llm
+  mode shipped. Orchestrator can dispatch in parallel and call
+  `request_plan_update` mid-run.
+- **Phase-3** — `suggest_plan_revision` researcher tool added. The
+  researcher can signal "the plan is missing a step" and end its loop;
+  the orchestrator sees `revision_requests` in the dispatch result.
+- **Phase-3.1** — researcher prompt tightened: mandatory escalate when
+  retrieval returns no plausible value; explicit anti-priors language
+  (forbid `"likely X"` / `"probably X"` commits). Closed the loophole
+  where the researcher would commit a priors-pulled value with the
+  `insufficient_evidence` sentinel.
+- **Phase-3.2** (current) — orchestrator-side loop control:
+  - **Plan-update cap**: `request_plan_update` is rejected after
+    `MAX_PLAN_UPDATES_PER_RUN = 2` successful calls per question.
+  - **Give-up path**: `submit_answer("")` is accepted (with
+    `stopped_reason="give_up_unanswerable"`) when the cap is reached
+    AND the target is still unresolved. Without the cap reached,
+    submit_answer still requires a resolved target.
+  - **Hint enrichment**: after a successful `request_plan_update`, the
+    next `dispatch_subplan` auto-prepends `[after plan revision: …]`
+    to the orchestrator-supplied `hints`, so the new researcher knows
+    the prior context and doesn't rediscover the same gap.
 
-```
- emit_plan(Q) ─► GSWPlan ─► topo sort + dep graph ─► levels (dict[blank_id, int])
-                                                          │
-                                                          ▼
-                        ┌─────────────────────────────────────────────────┐
-                        │  Python for-loop over sorted levels             │
-                        │    level_blanks = blanks at this level,         │
-                        │                   minus constraint outputs      │
-                        │                                                 │
-                        │    one ReActResearcher per level with           │
-                        │    allowed_blank_ids = all level_blanks         │
-                        │    (may be 1..N blanks handled sequentially     │
-                        │     inside one researcher conversation)         │
-                        │                                                 │
-                        │    cascade_auto_compute(plan, state)            │
-                        └─────────────────────────────────────────────────┘
-                                          │
-                                          ▼
-                   final_answer = state[target.id].value (or "")
-```
-
-No LLM runs at the orchestrator layer. Control flow is fully
-deterministic. Researchers use the usual ReAct tools (`search`,
-`read`, `find`, `update_blank`, `get_state`) and stop when every
-blank in their slice is resolved or when their turn budget is
-exhausted.
-
-### Mode B — LLM orchestrator (Phase-2)
-
-```
- emit_plan(Q) ─► GSWPlan ─► topo + levels (hints, not enforced)
-                                     │
-                                     ▼
- ┌─────────────────────────────────────────────────────────────────┐
- │  ORCHESTRATOR (LLM, ReAct loop, max 12 turns)                   │
- │                                                                 │
- │  Tools:                                                         │
- │    - dispatch_subplan(blank_ids, hints?) ───► ThreadPool of     │
- │        per-blank researchers (cap 8 concurrent). Each blank     │
- │        gets its OWN researcher with a single-element slice.     │
- │    - request_plan_update(reason, evidence) ──► plan-updater     │
- │        LLM (one-shot). Returns a revised GSWPlan;               │
- │        resolved blanks carry over by id.                        │
- │    - get_state() ─► current state snapshot                      │
- │    - submit_answer(answer) ─► terminal                          │
- │                                                                 │
- │  Cascade_auto_compute runs after every dispatch.                │
- └─────────────────────────────────────────────────────────────────┘
-                                     │
-                                     ▼
-                    final_answer = args["answer"] from submit_answer
-                                   (fallback: state[target.id].value)
-```
-
-The LLM makes every strategic choice: WHICH blanks to resolve next,
-whether to re-dispatch after weak retrieval, whether to revise the
-plan, when to finalize. Researchers are still ReAct agents and handle
-retrieval on their assigned blank.
+> Recovery: `git checkout orch-v2-shipped` reverts to Phase-2; Phase-3+
+> is on the active branch and can be reset to the tag if needed.
 
 ---
 
-## 2. Side-by-side — what each mode produces
+## 1. Shared pieces (used by both modes)
 
-| field | deterministic | llm |
+| component | file | role |
 |---|---|---|
-| `extra["orchestrator_mode"]` | `"deterministic"` | `"llm"` |
-| `extra["researcher_traces"]` | one per topological level | one per blank per dispatch |
-| `extra["plan_json_versions"]` | absent | list; length = 1 + number of plan revisions |
-| `extra["plan_updates"]` | absent | list of `{turn, reason, evidence, diff_summary, ...}` |
-| `extra["dispatches"]` | absent | list of `{dispatch_idx, blank_ids, hints, partial}` |
-| tool_calls with `level=-1` | none | orchestrator-level tool calls (dispatch / plan_update / submit_answer) |
-| researcher tool_calls `.level` | topological level int | dispatch-index int (0, 1, 2, …) |
-| `messages._level` | topological level | -1 for orchestrator, dispatch-idx for researchers |
+| `emit_plan` | `_planner_emit.py` | one LLM call → validated `GSWPlan` (with one repair retry) |
+| `GSWPlan`, `BlankResult` | `_planner_exec.py` | typed plan + blank-fill state |
+| `topological_sort_blanks`, `build_dependency_graph`, `_compute_levels` | `_planner_exec.py` + `gsw_planner_react_v1.py` | dependency DAG → `dict[blank_id, level]` |
+| `ReActResearcher` | `gsw_planner_orchestrator_v1.py` | per-blank ReAct loop, **6 tools** (search / read / find / update_blank / get_state / suggest_plan_revision) |
+| `_cascade_auto_compute` | `gsw_planner_react_v1.py` | fires constraint outputs once their inputs are resolved |
+| `_PlannerFallbackMixin` | `_planner_emit.py` | falls back to flat `ours_gsw_v1` on planner-side errors |
+
+The researcher class is identical in both modes — only its `allowed_blank_ids`
+differs (one researcher gets the level's whole slice in deterministic mode;
+each researcher gets a single-blank slice in llm mode).
 
 ---
 
-## 3. Head-to-head on the 10Q probe
+## 2. Mode A — deterministic orchestrator
 
-Reasoner model / retriever / subset identical across both columns.
-Same 10 questions, same judge, same retriever cache.
+```
+ emit_plan(Q) ──► GSWPlan
+                    │
+                    ▼
+   topological_sort_blanks + build_dependency_graph
+                    │
+                    ▼
+   levels: dict[blank_id, int]    ← grouped by level number
+                    │
+                    ▼
+   for lvl in sorted(levels):
+       slice = blanks_at(lvl) - constraint_outputs
+       if not slice:
+           cascade_auto_compute(plan, state); continue
 
-| qid | gold | **deterministic** pred (turns) | **llm** pred (turns) |
+       researcher = ReActResearcher(
+           allowed_blank_ids = slice,        # whole level at once
+           state = shared_state,
+           max_turns = level_max_turns,      # default 20
+       )
+       trace = researcher.solve()
+       cascade_auto_compute(plan, state)
+
+   final_answer = state[target.id].value if resolved else ""
+```
+
+- **No LLM at the outer layer.** Control flow is fully deterministic.
+- **One researcher per topological level.** If a level has K blanks,
+  the researcher juggles all K inside one conversation.
+- **Sequential across levels** — strict topological order.
+- **Stops** on `state[target.id].status == "resolved"` or when a researcher
+  hits its turn budget without resolving the target.
+
+`Trajectory.extra` keys (deterministic mode):
+
+| key | shape | meaning |
+|---|---|---|
+| `orchestrator_mode` | `"deterministic"` | mode tag |
+| `plan_json` | `dict` | the emitted plan |
+| `topological_order` | `list[str]` | blanks in solve order |
+| `topology_levels` | `dict[str, int]` | blank → level |
+| `researcher_traces` | `list[dict]` | one entry per topological level |
+| `executed_blanks` | `list[dict]` | final state per blank |
+| `stopped_reason` | `str` | `"finished"` / `"target_unresolved"` / `"llm_error"` |
+
+---
+
+## 3. Mode B — LLM orchestrator
+
+```
+ emit_plan(Q) ──► GSWPlan ──► topo + levels (used as hints only)
+                                       │
+                                       ▼
+ ┌─────────────────────────────────────────────────────────────┐
+ │  ORCHESTRATOR (LLM ReAct loop, max 12 turns)                │
+ │                                                             │
+ │  Tools (all strict, tool_choice=required):                  │
+ │    • dispatch_subplan(blank_ids, hints?) ─────► fan out     │
+ │       one researcher per id (cap 8 concurrent threads).     │
+ │       Each gets a fresh state snapshot; merged back on      │
+ │       completion. cascade_auto_compute fires after.         │
+ │    • request_plan_update(reason, evidence) ───► one-shot    │
+ │       plan-updater LLM revises the GSWPlan. State is        │
+ │       reconciled by blank_id (keep, add, drop).             │
+ │    • get_state() ─► snapshot                                │
+ │    • submit_answer(answer) ─► terminate                     │
+ │                                                             │
+ │  Each turn the system prompt is REBUILT from the current    │
+ │  plan + state, so the orchestrator always sees fresh        │
+ │  context after every dispatch / plan revision.              │
+ └─────────────────────────────────────────────────────────────┘
+                                       │
+                                       ▼
+                   submit_answer or max_turns → final_answer
+```
+
+- **The LLM owns the outer loop.** It picks which blanks to dispatch and
+  when to revise the plan or submit.
+- **Per-blank parallelism.** A `dispatch_subplan` with K ids spawns K
+  researchers concurrently, each with a single-element `allowed_blank_ids`.
+- **Plan revision is a tool call.** `request_plan_update` invokes a
+  separate one-shot LLM (`update_plan` in `_plan_updater.py`) whose
+  output is a revised `GSWPlan`. State carries by blank_id; new blanks
+  start `unknown`, dropped blanks are removed.
+- **Stops** on `submit_answer` (success), max_turns (fail), or LLM error.
+
+`Trajectory.extra` keys (llm mode — superset of deterministic):
+
+| key | shape | meaning |
+|---|---|---|
+| `orchestrator_mode` | `"llm"` | mode tag |
+| `plan_json` | `dict` | the FINAL plan after any revisions |
+| `plan_json_versions` | `list[dict]` | every plan revision (length = 1 + #revisions) |
+| `plan_updates` | `list[dict]` | `{turn, reason, evidence, diff_summary, preserved_ids, added_ids, dropped_ids}` per `request_plan_update` call |
+| `dispatches` | `list[dict]` | `{dispatch_idx, blank_ids, hints, partial}` per `dispatch_subplan` call |
+| `researcher_traces` | `list[dict]` | one entry per researcher (one per blank, per dispatch) |
+| `executed_blanks` | `list[dict]` | final state per blank |
+| `stopped_reason` | `str` | `"finished"` / `"max_turns"` / `"llm_error"` |
+
+---
+
+## 4. Tool surface — side by side
+
+### Orchestrator tools (llm mode only)
+
+| tool | inputs | returns |
+|---|---|---|
+| `dispatch_subplan` | `blank_ids: list[str]`, `hints?: str` | `{ok, resolved: {bid: {value, evidence_chunk_ids}}, partial}` |
+| `request_plan_update` | `reason: str`, `evidence: str` | `{ok, diff_summary, preserved_ids, added_ids, dropped_ids}` |
+| `get_state` | — | `{blanks: [...], target_blank_id, ...}` |
+| `submit_answer` | `answer: str` | `{ok}` (terminal) |
+
+### Researcher tools (both modes — identical)
+
+| tool | inputs | returns |
+|---|---|---|
+| `search` | `query: str`, `top_k?: int` | `{results: [{chunk_id, title, score, text}]}` |
+| `read` | `chunk_id: str` | `{chunk_id, title, article_text}` |
+| `find` | `chunk_id: str`, `pattern: str` | `{match_count, snippets: [{offset, snippet}]}` |
+| `update_blank` | `blank_id: str`, `value`, `evidence_chunk_ids: list[str]` | `{ok, state}` (rejects ids outside `allowed_blank_ids`; rejects values pulled from priors per Phase-3.1 prompt) |
+| `get_state` | — | `{blanks: [{...writable}]}` |
+| **`suggest_plan_revision`** | `reason: str`, `hint: str` | `{ok, escalated}` — ends the researcher's loop with `stopped="plan_revision_requested"`; the assigned blank stays unresolved; the orchestrator sees the request in its dispatch result |
+
+Researchers do NOT have `finish` — the deterministic loop or the
+orchestrator handles termination.
+
+#### Researcher escalation contract (Phase-3.1)
+
+The researcher MUST call `suggest_plan_revision` when:
+
+- After 2 retrieval calls (`search` + optional `read`/`find`), no
+  retrieved chunk contains a plausible value for the assigned blank.
+- The researcher's reasoning starts reaching for training-data
+  priors (`"likely X"`, `"probably X"`, `"might need external
+  knowledge"`, `"based on what I know..."`).
+- Resolving the blank requires a **new intermediate blank** that
+  doesn't exist in the plan yet.
+
+The researcher MAY call `update_blank` with `evidence_chunk_ids=
+["insufficient_evidence"]` ONLY when a chunk did surface a plausible
+value but its precision/confidence is low. A value that does not
+appear in any retrieved chunk is NOT a valid sentinel-commit; that
+case must escalate.
+
+---
+
+## 5. Researcher contract (both modes)
+
+A researcher's `solve()` ends when:
+
+| stop reason | trigger |
+|---|---|
+| `all_resolved` | every id in `allowed_blank_ids` has `status="resolved"` in shared state |
+| `max_turns` | turn budget exhausted |
+| `llm_error` | LLM call raised |
+| `no_tool_call` | model returned text-only with no tool call |
+
+The researcher prompt requires it to commit a value for every assigned
+blank before stopping (using the `insufficient_evidence` sentinel in
+`evidence_chunk_ids` as a fallback for weak retrieval). This rule is the
+load-bearing piece behind the 10Q probe results below.
+
+---
+
+## 6. Plan-updater contract (llm mode only)
+
+When the orchestrator calls `request_plan_update`, a separate LLM call
+(`update_plan` in `_plan_updater.py`) takes:
+
+- the question
+- the current `GSWPlan` (full JSON)
+- the current state (which blanks are resolved + their values)
+- the orchestrator's `reason` and `evidence`
+
+…and emits a revised `GSWPlan`. The updater MUST preserve existing
+`blank_id`s wherever the slot semantics are unchanged (the orchestrator
+relies on this for state carryover), MAY add or drop blanks, and MAY
+change which blank is the target.
+
+Validation pipeline reuses the planner's pydantic + grounding checks
+from `_planner_emit.py`. On parse failure the updater retries once;
+terminal failure is logged as `plan_update_rejected` and the orchestrator
+continues with the OLD plan.
+
+State reconciliation:
+
+| diff class | action |
+|---|---|
+| blank_id in old AND new plan | preserve `BlankResult` (resolved values carry) |
+| blank_id only in new plan | initialize `BlankResult(status="unknown")` |
+| blank_id only in old plan | drop from state (logged in `dropped_ids`) |
+
+---
+
+## 7. 10Q FRAMES probe — head-to-head
+
+Same 10 questions, same retriever (hybrid), same reasoner
+(`bedrock/openai.gpt-oss-120b-1:0`), same judge (`gpt-4o`).
+
+| qid | gold | deterministic | llm |
 |---|---|---|---|
-| q174 | "The Boeing 777 was first flown on…" | ✗ `'Boeing 777'` (18) | ✗ `'Boeing 777'` (6) |
+| q174 | "The Boeing 777 was first flown on…" | ✗ `'Boeing 777'` (18 turns) | ✗ `'Boeing 777'` (6 turns) |
 | q70 | `'84,512'` | **✓ `'84512'` (20)** | **✓ `'84512'` (22)** |
 | q445 | `'14'` | ✗ `'15'` (17) | ✗ `'8.0'` (17) |
 | q401 | `'100'` | ✓ `'100'` (11) | ✓ `'100'` (9) |
 | q376 | `'Ornithologie'` | ✗ empty (20, max_turns) | **✓ `'Ornithologie'` (52)** |
 | q196 | `'5'` | ✓ `'5'` (6) | ✓ `'5'` (5) |
-| q167 | `'Daniela Lavender'` | ✓ `'Daniela Lavender'` (8) | ✓ `'Daniela Lavender'` (8) |
-| q742 | `'LeBron James, Diana Taurasi, Tina Charles, DeWanna Bonner'` | ✗ 3/4 correct, wrong 4th (20) | ✗ empty (orchestrator LLM error, 0 turns) |
-| q154 | `'Dark Side of the Moon'` | ✓ `'The Dark Side of the Moon'` (5) | ✓ `'The Dark Side of the Moon'` (4) |
-| q796 | `'Italy'` | ✓ `'Italy'` (5) | ✓ `'Italy'` (5) |
+| q167 | `'Daniela Lavender'` | ✓ (8) | ✓ (8) |
+| q742 | "LeBron James, Diana Taurasi, Tina Charles, DeWanna Bonner" | ✗ 3/4 names, wrong 4th (20) | ✗ orchestrator LLM error at turn 0 |
+| q154 | `'Dark Side of the Moon'` | ✓ (5) | ✓ (4) |
+| q796 | `'Italy'` | ✓ (5) | ✓ (5) |
 
-**Finals**: deterministic **6/10 (60%)**, llm **7/10 (70%)**.
+**Totals**: deterministic **6/10 (60%)**, llm **7/10 (70%)**.
+Reference: flat `planner_react` with v5.1 prompt + Hybrid retriever scored
+**5/10 (50%)** on the same 10-question slice.
 
-Both modes strongly exceed flat v5.1 Hybrid's **5/10 (50%)** on the
-same 10-Q slice. LLM mode beats deterministic by +1 on this sample
-— winning q376 (via multi-dispatch recovery) while losing q742 (an
-orchestrator LLM call errored at turn 0, treated as
-`target_unresolved`; a deterministic-mode researcher would have
-produced a partial commit here).
+The single divergent Q is **q376**: deterministic exhausts its researcher's
+turn budget without committing; llm re-dispatches after the first researcher
+returns weak evidence and eventually commits the correct answer. This is
+exactly the behavior the LLM mode was designed to enable.
 
-### Key divergence: q376
-
-This is the single Q that differentiates the two modes so far.
-
-- **Deterministic** walks the topological plan once, sees that its
-  single-researcher's 20-turn budget is exhausted without resolving
-  the target, and stamps `stopped_reason = target_unresolved` →
-  `predicted_answer = ""`.
-- **LLM orchestrator** receives the same "weak retrieval" signal
-  from its first dispatch, decides to re-dispatch (and/or revise
-  hints), and eventually commits the correct answer after 52 total
-  turns.
-
-This is exactly the failure mode the LLM mode was built for: when
-the plan + first-pass retrieval is insufficient, the orchestrator
-can replan or retry; the deterministic mode cannot.
-
-Cost of that recovery: 13k output tokens vs 5k on the deterministic
-fail. The LLM mode trades tokens for correctness on hard questions.
+The single regression is **q742**: the orchestrator LLM call errored at the
+first turn (model returned no tool call), short-circuiting the run before
+any researcher fired. Deterministic mode produces a partial-list commit
+instead.
 
 ---
 
-## 4. Worked trajectory — q70 (both modes ✓, simplest case)
-
-> Question: *What was the daily average passenger count in 2011 of
-> the first station on the train line that serves Hiraka Train
-> Station in Japan?*
-> Gold: `'84,512'`
-
-The emitted plan has one bridge blank (`b_line`, the line serving
-Hiraka) and one target (`b_count`, the passenger count at the line's
-first station).
-
-### Deterministic trajectory (20 turns, 2.5k out-tokens)
-
-1. Topology: one level (all blanks have no mutual deps, because the
-   emitted plan has t ← line via a VP edge).
-
-   Actually: `b_line` at level 0, `b_count` at level 1 via
-   projection edge. Two researchers.
-
-2. Researcher 1 (level 0, slice=[b_line]): 8 turns of search/find,
-   commits `b_line = "Kōnan Railway"`.
-3. Orchestrator cascades constraints (none to fire).
-4. Researcher 2 (level 1, slice=[b_count]) starts with the now-
-   resolved `b_line` in its prior-values table: searches
-   "Kōnan Railway" + "first station" + "passenger count 2011",
-   reads `Kōnan Line__0`, commits `b_count = 84512`.
-5. Target status = resolved; final_answer = "84512".
-
-### LLM-orchestrator trajectory (22 turns, 3.4k out-tokens)
-
-Orchestrator turns:
-1. `dispatch_subplan(blank_ids=["b_line"])` — kick off researcher A
-   on just the line blank.
-2. Researcher A resolves `b_line = "Kōnan Railway"`.
-3. Orchestrator sees `b_line` resolved in the state table;
-   dispatches `dispatch_subplan(blank_ids=["b_count"])`.
-4. Researcher B (single-blank slice) retrieves with the resolved
-   line as an anchor, commits `b_count = 84512`.
-5. Orchestrator calls `submit_answer("84512")`.
-
-Both succeed, but the LLM orchestrator's dispatches are explicit
-entries in `extra["dispatches"]` (2 dispatches), while the
-deterministic mode just has 2 entries in `extra["researcher_traces"]`
-indexed by topological level.
-
----
-
-## 5. Worked trajectory — q376 (only LLM recovers)
-
-> Question: *What is the French (not Latin) term for the branch of
-> science known as ornithology?*
-> Gold: `'Ornithologie'`
-
-The question is trivially a retrieval-and-translate, but the emitted
-plan often gets confused between multiple candidate French terms
-(the article likely mentions several). Flat v5.1 Hybrid committed
-`'Nouveau dictionnaire d'histoire naturelle'` (wrong); orch-det
-ran out its budget without committing.
-
-### Deterministic trajectory (20 turns, empty pred)
-
-- One researcher with allowed_blank_ids=[t].
-- 20 turns of search + read on variations of "ornithology French".
-- No commit (the v5.1 commit rule requires confidence or insufficient-evidence fallback; the model kept re-querying instead of bailing).
-- stopped = max_turns; researcher.unresolved = [t].
-- Orchestrator has no replay mechanism. Final answer = "".
-
-### LLM-orchestrator trajectory (52 turns, 13k out-tokens)
-
-Conceptually:
-1. `dispatch_subplan(blank_ids=["t"])` — first try.
-2. Researcher A: 20 turns, no commit. Orchestrator sees
-   `partial: true`.
-3. Orchestrator inspects state, notices target still unresolved,
-   issues a second `dispatch_subplan(["t"], hints=<targeted>)`.
-4. Researcher B (second dispatch, same blank) gets a different
-   slice of retrieval context (or the refined hint), commits
-   `t = "Ornithologie"`.
-5. `submit_answer("Ornithologie")`.
-
-Two dispatches, both `extra["dispatches"]` entries, both researchers
-tagged with different `level` values in tool_calls. The
-orchestrator's own turn count is 3 (dispatch, dispatch, submit); the
-total turns metric aggregates researcher turns.
-
----
-
-## 6. When to prefer each mode
+## 8. When to prefer each mode
 
 | situation | prefer |
 |---|---|
-| Budget-sensitive workflows (one-shot, cheap) | **deterministic** |
-| Plans that are known to be brittle / plan-error is the dominant failure | **llm** |
-| Multi-blank parallel levels where you want maximum concurrency | **llm** (per-blank researchers run parallel via threadpool) |
-| Reproducibility / no randomness required | **deterministic** (no orchestrator LLM) |
-| You want plan-revision signal in the trajectory for debugging | **llm** |
+| Budget-sensitive, one-shot workflows | **deterministic** |
+| Reproducibility (no orchestrator-side LLM noise) | **deterministic** |
+| Plan errors are the dominant failure mode | **llm** |
+| Multi-blank levels where parallel retrieval matters | **llm** (true thread-pool concurrency) |
+| You want plan-revision events visible in the trajectory for debugging | **llm** |
 
 ---
 
-## 7. Current results snapshot
+## 9. Streamlit inspector
 
-FRAMES dev 100Q reference results (gpt-oss-120b, hybrid retriever):
+Both modes are inspectable via:
 
-| system | judge % | notes |
-|---|---:|---|
-| vanilla_rag_react (flat ReAct) | 53% | but ~7.5% of wins are hallucinated |
-| planner_react_v1 (flat planner + reasoner, v5.1 prompt, Dense) | 53% | hallucination ~2% |
-| planner_react_v1 (v5.1 prompt, Hybrid) | ~49-50% (100Q in flight) | same hallucination |
-| orchestrator_v1 deterministic (10Q) | **60%** | +10 pts over flat hybrid |
-| orchestrator_v1 llm (10Q) | **70%** | +20 pts over flat hybrid |
-
-10Q is a thin sample — the real confirmation requires a 100Q pilot
-on both modes. But the 10Q probe recovers one Q that every prior
-pipeline missed (q376 on llm), demonstrating the "replan on weak
-retrieval" contract does what it's supposed to.
-
----
-
-## 8. Inspector / Streamlit
-
-The inspector at `playground/planner_orchestrator_run_inspector.py`
-detects `extra["orchestrator_mode"]` per question and shows
-different tabs:
-
-- **deterministic mode**: Plan / Researchers / Executed blanks /
-  Messages / Reasoning
-- **llm mode**: Plan / **Orchestrator** (new) / **Researchers** /
-  **Plan versions** (new) / Executed blanks / Messages / Reasoning
-
-The Orchestrator tab lists every orchestrator tool call with a
-colored chip (red for `dispatch_subplan`, pink for
-`request_plan_update`, orange for `submit_answer`), plus a
-plan-update events list if the orchestrator invoked the plan-updater.
-Plan-versions tab shows each plan revision side-by-side with its
-own graphviz graph.
-
-Run:
 ```bash
 .venv/bin/streamlit run playground/planner_orchestrator_run_inspector.py
 ```
 
+The inspector auto-detects `extra["orchestrator_mode"]` per question:
+
+- **deterministic** mode → 5 tabs: Plan / Researchers / Executed blanks /
+  Messages / Reasoning.
+- **llm** mode → 7 tabs: adds **Orchestrator** (per-turn orchestrator
+  tool calls + plan-update events + dispatches list) and **Plan versions**
+  (graphviz of every plan revision side-by-side).
+
+Inside each researcher card the **Turn-by-turn narrative** shows each
+assistant turn with its hidden reasoning inlined above the tool calls
+(JSON args + JSON tool results, all collapsible).
+
 ---
 
-## 9. Log pointers (for streamlit)
+## 10. CLI
 
-| cell | directory |
+```bash
+.venv/bin/python playground/run_substitution.py \
+  --system ours_gsw_planner_orchestrator_v1 \
+  --model bedrock/openai.gpt-oss-120b-1:0 \
+  --retriever hybrid \
+  --subset configs/frames_dev_100.json --limit 10 \
+  --max-turns 60 \
+  --orchestrator-mode {deterministic|llm} \
+  --orchestrator-max-turns 12 \
+  --llm-judge --judge-model gpt-4o
+```
+
+`--orchestrator-mode` is the only knob that switches between the two
+modes; `--orchestrator-max-turns` is honored only by `llm` and bounds
+the orchestrator-side ReAct loop.
+
+---
+
+## 11. Source pointers
+
+| component | file:lines |
 |---|---|
-| Orch 10Q probe — deterministic | `logs/ours_gsw_planner_orchestrator_v1__bedrock_openai.gpt-oss-120b-1:0__20260424_235207/` |
-| Orch 10Q probe — LLM | `logs/ours_gsw_planner_orchestrator_v1__bedrock_openai.gpt-oss-120b-1:0__20260424_235206/` |
+| Adapter entry point | `src/research_agent/adapters/ours/gsw_planner_orchestrator_v1.py` |
+| Deterministic loop | `_run_deterministic` in same file |
+| LLM-orchestrator loop | `_run_llm_orchestrator` in same file |
+| Parallel dispatcher | `_dispatch_subplan_parallel` in same file |
+| Researcher class | `ReActResearcher` in same file |
+| Researcher prompt | `_researcher_prompt.py` |
+| Orchestrator prompt | `_orchestrator_prompt.py` |
+| Plan-updater | `_plan_updater.py` |
+| Probe configs | `configs/frames_dev_100.json` |
 
-Both dirs will contain `cell_result.json` once the LLM run finishes
-(deterministic already has one).
+| log dir | n | judge | mode |
+|---|---:|---:|---|
+| `logs/orch_phase1v1_10q/` | 10 | 0.30 | deterministic (v1 probe) |
+| `logs/orch_phase1v2_10q/` | 10 | 0.50 | deterministic (commit-fix probe) |
+| `logs/orch_phase2_det_10q/` | 10 | 0.60 | deterministic |
+| `logs/orch_phase2_llm_10q/` | 10 | 0.70 | llm (Phase-2) |
+| `logs/orch_phase3_llm_10q/` | 10 | 0.60 | llm (Phase-3 with escalation) |

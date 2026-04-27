@@ -93,6 +93,38 @@ ORCHESTRATOR_RULES = textwrap.dedent(
        cannot find the target, you may still submit a best-guess
        answer — but prefer `request_plan_update` first if the plan
        itself looks wrong.
+    7. If a `dispatch_subplan` result contains `revision_requests`
+       (a researcher escalated because the plan is missing a step),
+       your **default next move** is `request_plan_update` using the
+       first request's `reason` as the update reason and `hint` as
+       the evidence. Override this default ONLY if you have a concrete
+       cheaper recovery (e.g. re-dispatching the same blank with
+       targeted hints will plausibly succeed). Do NOT ignore an
+       escalation silently.
+
+    8. **Plan-update cap**. You may call `request_plan_update` at
+       most TWICE per question. After the second call, further
+       `request_plan_update` calls will be REJECTED. If two revisions
+       have not unlocked the answer, the corpus likely lacks the
+       required data — do NOT keep trying. Either:
+         (a) `submit_answer("")` — accept the question is unanswerable
+             from the corpus (the harness will treat this as
+             `stopped_reason="give_up_unanswerable"`); or
+         (b) dispatch one more researcher with explicit hints asking
+             it to commit a best-guess from chunks already retrieved
+             (use only if you have a plausible best-guess on hand).
+    9. **Per-blank dispatch cap**. After a blank has triggered TWO
+       researcher escalations (`suggest_plan_revision`), further
+       `dispatch_subplan` calls including that blank will be REJECTED.
+       The corpus genuinely lacks the data; permuting hints will not
+       help. Your options:
+         (a) call `request_plan_update` (if cap above not reached) to
+             revise the plan with new intermediate blanks;
+         (b) dispatch a DIFFERENT (still-unresolved) blank;
+         (c) `submit_answer("")` (give up, acceptable when the corpus
+             gap is structural — see rule 8 path (a)).
+       Do NOT keep dispatching the same blank with new hints once it
+       has hit this cap; that loop is what the cap is built to prevent.
 
     ## Answer format for `submit_answer`
 
@@ -102,6 +134,51 @@ ORCHESTRATOR_RULES = textwrap.dedent(
     - Bool: `True` or `False`.
     - List: comma-separated values, no surrounding prose.
     - Never prefix with "Answer:", "Final:", etc.
+    """
+).strip()
+
+
+# Worked example shown ONLY when the most recent dispatch was
+# cap-rejected. Helps the LLM recover from the per-blank cap loop
+# instead of just retrying with permuted hints. Inserted between the
+# rules and the answer-format section.
+CAP_REJECTION_EXAMPLE = textwrap.dedent(
+    """
+    ## ⚠️ Recent cap-rejection — read this before your next move
+
+    Your most recent `dispatch_subplan` call was REJECTED by the
+    per-blank dispatch cap. The blank has already triggered 2
+    researcher escalations; the corpus does not contain the data and
+    permuting `hints` will NOT help. Re-dispatching the same blank
+    again will be rejected again with the same error.
+
+    ### Worked example — what to do
+
+    You called:
+        dispatch_subplan(["b_X"], hints="…")
+    Got back:
+        {"ok": false, "error": "per-blank dispatch cap reached for ['b_X']: …"}
+
+    ❌ WRONG next move — re-dispatching the same blank with a new hint:
+        dispatch_subplan(["b_X"], hints="<different wording>")
+        # → will be rejected again with the same error.
+
+    ✅ RIGHT next move (a) — if you have NOT yet called
+       `request_plan_update` twice, ask for a plan revision:
+        request_plan_update(
+            reason="researcher escalated twice on b_X; corpus lacks this data",
+            evidence="<paste the cap-rejection error here>"
+        )
+
+    ✅ RIGHT next move (b) — if both caps are reached OR plan-update
+       is unlikely to help, give up cleanly:
+        submit_answer("")
+        # → trajectory will be stamped stopped_reason="give_up_unanswerable"
+
+    ✅ RIGHT next move (c) — if a different unresolved blank still has
+       budget, dispatch THAT blank instead.
+
+    Do NOT call `dispatch_subplan` with the capped blank ids again.
     """
 ).strip()
 
@@ -166,6 +243,7 @@ def build_orchestrator_prompt(
     *,
     turn_index: int = 0,
     recent_activity: str = "",
+    recent_cap_rejection: bool = False,
 ) -> str:
     """Assemble the full system prompt for the orchestrator.
 
@@ -176,6 +254,13 @@ def build_orchestrator_prompt(
     dispatch's resolved ids, last plan-update summary, etc.) that the
     prompt surfaces right before the tools list so the orchestrator
     sees what it just did.
+
+    ``recent_cap_rejection`` — when ``True``, the
+    ``CAP_REJECTION_EXAMPLE`` worked-example block is inserted near
+    the rules. The orchestrator-loop sets this only on turns
+    immediately following a cap-rejected dispatch; it disappears as
+    soon as the orchestrator picks a different tool (so the prompt
+    isn't permanently bloated).
     """
     brief = render_plan_brief(plan_dict, order, levels)  # full, no slice
     state_table = _state_table_for_prompt(plan_dict, state)
@@ -184,12 +269,16 @@ def build_orchestrator_prompt(
         if recent_activity.strip()
         else ""
     )
+    cap_section = (
+        f"\n\n{CAP_REJECTION_EXAMPLE}" if recent_cap_rejection else ""
+    )
     return (
         f"{ORCHESTRATOR_MISSION}\n\n"
         f"{SYSTEM_PROMPT_LEGEND}\n\n"
         f"{brief}\n\n"
         f"## Current state\n\n{state_table}\n\n"
         f"{activity_section}"
-        f"{ORCHESTRATOR_RULES}\n\n"
+        f"{ORCHESTRATOR_RULES}"
+        f"{cap_section}\n\n"
         f"(Turn {turn_index + 1}.)"
     )

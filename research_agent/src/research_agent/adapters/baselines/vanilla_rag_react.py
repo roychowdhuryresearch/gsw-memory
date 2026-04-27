@@ -25,6 +25,7 @@ from research_agent.models.llm_client import LLMClient
 from research_agent.models.trace import ToolCall, Trajectory
 from research_agent.retrieval.bm25 import BM25Retriever
 from research_agent.retrieval.corpus import load_frames_corpus
+from research_agent.retrieval.dense import build_retriever
 
 
 SYSTEM_PROMPT = """You are a careful research assistant. Answer the user's \
@@ -94,7 +95,12 @@ class VanillaRAGReActAdapter(Adapter):
     def __init__(self, ctx: AdapterContext) -> None:
         super().__init__(ctx)
         self.corpus = ctx.extra.get("corpus") or load_frames_corpus()
-        self.retriever = ctx.extra.get("retriever") or BM25Retriever(self.corpus)
+        retriever_override = ctx.extra.get("retriever")
+        if retriever_override is not None:
+            self.retriever = retriever_override
+        else:
+            retriever_type = ctx.extra.get("retriever_type", "bm25")
+            self.retriever = build_retriever(retriever_type, self.corpus)
         self.llm = LLMClient(
             model=ctx.model_name or ctx.model_id,
             base_url=ctx.base_url or None,

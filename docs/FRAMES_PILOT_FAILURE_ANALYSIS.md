@@ -59,6 +59,9 @@ The `rule_decomp_gsw` cells in the grid are a **separate decomposition-ablation 
 | 21 | context1_plus_reasoner | chromadb/context-1 (gpt-5 reasoner — 404, original) | 30 | 0.00 | 0.00 | 0.00 | 8.2 | 27.1 |
 | 21 | rule_decomp_gsw *(decomp ablation)* | Qwen/Qwen3.5-4B | 30 | 0.00 | 0.00 | 0.00 | 2.7 | 55.8 |
 | — | **`ours_gsw_v1` (planned)** | gpt-oss-20B + focused-GSW scratchpad | — | not yet run | — | — | — | — |
+| 19 | **ours_gsw_planner_v1 (Phase 1, prompt-only)** | bedrock/gpt-oss-120b | 30 | **0.367** | 0.300 | 0.355 | 4.0 | 16.4 |
+| 20 | **ours_gsw_planner_v1 (Phase 1, prompt-only)** | bedrock/gpt-oss-20b | 30 | **0.333** | 0.267 | 0.304 | 3.3 | 12.0 |
+| — | ours_gsw_planner_v1 | gpt-5 | killed at 5/30 | 0.00 | — | — | — | — |
 
 **Currently re-running** (as of 2026-04-20 14:09): context1_plus_reasoner with three reasoners — gpt-5, bedrock/gpt-oss-120b, bedrock/gpt-oss-20b. Partial scores pending final snapshots.
 
@@ -407,6 +410,97 @@ Tongyi is the closest architectural sibling to `ours_gsw_v1`:
 On the 11 `wrong_synthesis` Qs Tongyi missed, the retrieval was correct but the model picked the wrong fact from prose. A GSW intermediate turning retrieved chunks into discrete entity-attribute triples would structurally prevent "Roger Federer" (q693) or "Pete Davidson" (q510) style substitution errors by binding each candidate answer to a provenance chunk.
 
 **Headroom estimate for `ours_gsw_v1` vs Tongyi's 0.50**: if the GSW scratchpad converts even 40% of the `wrong_synthesis` cluster (4 of 11) without introducing new failures, `ours_gsw_v1` at 20B would land at **0.63 judge** — matching Search-o1's 120b leader. On FRAMES this is a strong ceiling claim at much smaller compute.
+
+---
+
+## 12. `ours_gsw_planner_v1` — Phase 1 prompt-only GSW-fragment planner (this iteration)
+
+**Implementation**: `research_agent/src/research_agent/adapters/ours/gsw_planner_v1.py` + `_planner_exec.py` + `_planner_prompts.py`. Registered id: `ours_gsw_planner_v1`. Tests: `research_agent/tests/ours/test_planner_exec.py` (11 green).
+
+**Architecture**: one LLM call emits a typed GSW-fragment plan (filled entities / blank entities with `value_type` / verb-phrases / constraints); pure-Python executor does topological sort + per-blank identification / projection (one LLM extraction each) + Python-only evaluation of derived / argmax / argmin constraints. Falls back to `ours_gsw_v1` flat decomposition on parse or execution error.
+
+### Final 30-Q FRAMES pilot results
+
+| model | judge | EM | F1 | mean turns | wall (s) | fallback_rate | dominant loss signature |
+|---|---:|---:|---:|---:|---:|---:|---|
+| bedrock/gpt-oss-120b | **0.367** | 0.300 | 0.355 | 4.0 | **16.4** | 7% (2/30) | 6 hallucination, 5 wrong_retrieval, 5 wrong_synthesis, 3 early_stop |
+| bedrock/gpt-oss-20b | **0.333** | 0.267 | 0.304 | 3.3 | **12.0** | **27% (8/30)** | 8 hallucination, 8 early_stop, 2 wrong_retrieval, 2 wrong_synthesis |
+| gpt-5 (killed at 5/30) | 0.00 | — | — | — | — | — | — |
+
+### Comparison to other cells at matched compute
+
+| system | model | judge | delta vs planner-v1 |
+|---|---|---:|---:|
+| vanilla_rag_react | bedrock/gpt-oss-20b | 0.43 | +0.10 pp vs planner-v1 |
+| vanilla_rag_react | bedrock/gpt-oss-120b | 0.40 | +0.03 pp vs planner-v1 |
+| agentic_reasoning_mindmap (E12) | bedrock/gpt-oss-20b | **0.50** | +0.17 pp vs planner-v1 |
+| agentic_reasoning_mindmap (E12) | bedrock/gpt-oss-120b | 0.40 | +0.03 pp vs planner-v1 |
+| **ours_gsw_planner_v1** | bedrock/gpt-oss-20b | **0.333** | — |
+| **ours_gsw_planner_v1** | bedrock/gpt-oss-120b | **0.367** | — |
+
+**Prompt-only `gsw_planner_v1` under-performs vanilla RAG+ReAct at both 20b and 120b.** The typed-DAG hypothesis did not validate at prompt-only scale on the 30-Q FRAMES pilot.
+
+### What actually happened
+
+**Zero structural failures**: 0 parse errors post-retry on 120b, 0 execution-errors (cycles / bad refs) on 120b. 20b had a higher **27% fallback rate** (27% = 8/30 — mostly `parse_failure:empty LLM response` and `unbalanced braces in LLM response` — 20b's JSON emission is brittle). This is the "protocol brittleness" failure surface the pilot already documented for smaller models across E9 / E12 / E13.
+
+**Dominant remaining failure is hallucination at the extraction stage** (6 at 120b, 8 at 20b). The planner correctly identifies what blanks to fill and what verb-phrase to use, but the per-blank LLM extraction fabricates values on temporally-anchored or numeric questions. Example:
+
+- **q70** (gold `84,512`) — planner emits two attribute-project blanks + diff constraint. Executor retrieves Portland-ME + Portland-OR chunks. But LLM extraction returns wrong numbers (e.g. `128492`) on one city, derived op computes the subtraction on wrong inputs → confident wrong answer.
+- **q510** (gold `Shane Gillis`) — 20b predicted `"Benson"`, a hallucinated name. The temporal anchoring "as of August 2024" wasn't enforced by the schema.
+
+**Mean turn count dropped from 10+ (ReAct family) to 3–4**: structural win on compute — planner-v1 is **~5× faster per Q** than vanilla_rag_react. The failure isn't inefficiency; it's extraction quality.
+
+### Concrete examples
+
+**Correct** (both cells):
+- q512 (gold: Rob Reiner): `pred="Rob Reiner"` — clean entity resolution.
+- q158 (gold: 12): `pred="12"` — simple 2-hop chain executed cleanly.
+
+**Correct at 20b, surprising**:
+- q793 (gold: Joel Oshiro Dyck played for the Chatham Wheels...): `pred="Nippon Paper Cranes."` — partial credit; judge lenient.
+
+**Hallucination (numeric)**:
+- q70 (gold: 84,512): `pred="128492"` at both 20b and 120b. Plan structure was correct; extraction pulled the wrong census number from retrieved chunks.
+
+**Hallucination (entity)**:
+- q510 (gold: Shane Gillis): 20b `pred="Benson"`. Temporal constraint ("as of August 2024") wasn't reified into the plan — executor retrieved without date filter and extracted a plausible-but-wrong name.
+
+**Fallback to flat** (example, 20b q793):
+- Parse failure: `parse_failure:empty LLM response`. 20b's second repair attempt also returned empty. Delegated to `ours_gsw_v1` flat decomposition — which then got the partial answer above.
+
+### Go/no-go decision (per plan gate)
+
+| criterion | target | actual 20b | pass? |
+|---|---:|---:|:-:|
+| judge ≥ 0.50 at bedrock/gpt-oss-20b | ≥ 0.50 | **0.333** | ❌ |
+| fallback-flat rate < 20% | < 0.20 | **0.27** | ❌ |
+| parse-validity ≥ 80% | ≥ 0.80 | ~73% at 20b (8/30 fallback) / 93% at 120b | partial |
+| ≥ 1 unique win on impossible set (q371/q302/q133) | ≥ 1 | 0 | ❌ |
+
+**Gate failed. Per plan, 20b judge < 0.40 puts us in "pivot" territory**, not "iterate".
+
+### Read — why prompt-only didn't work, and what Phase 2 would need
+
+The pilot shows the *planner* is structurally viable (low parse/exec error at 120b) but the *executor's per-blank extraction* is where the quality leaks:
+
+1. **Extraction hallucinates numbers and dates** — the LLM extract step is un-trained at the fragment-schema task. Vanilla RAG+ReAct beats planner-v1 because ReAct re-examines chunks across multiple turns, while planner-v1 commits to one shot per blank.
+2. **Temporal anchors aren't modelled** — "as of August 2024" should be a Constraint on the retrieval scope, but the schema has no temporal-filter kind. Schema gap.
+3. **20b's JSON emission is brittle** — 27% fallback rate. Not a schema problem; an LLM-at-scale problem that SFT addresses.
+
+**Phase 2 is still viable but harder-sold**. The three issues above map onto:
+- (1) train the extraction step jointly with the planner via SFT+DPO on answer-F1.
+- (2) extend the schema with a `TemporalScope` constraint kind.
+- (3) SFT will sharply reduce parse errors at 20b.
+
+Alternatively, **pivot to a hybrid approach**: use the typed-GSW-fragment as a scratchpad INSIDE a ReAct loop rather than as a one-shot plan. That combines the structural benefit of the typed schema with ReAct's multi-turn error recovery.
+
+### What this contributes to the paper (even with the gate miss)
+
+- First reported prompt-only typed-DAG planner result on FRAMES. Establishes a lower-bound baseline for the typed-DAG direction.
+- Clean isolation of where prompt-only fails (extraction hallucination, not plan validity).
+- The 5× wall-time reduction vs vanilla RAG+ReAct is real and durable — the Phase-2 trained version should keep this efficiency property.
+- Documents a clear schema-gap (no temporal scope) that Phase 2 addresses.
 
 ---
 

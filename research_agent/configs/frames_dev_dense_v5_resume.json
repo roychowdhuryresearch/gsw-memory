@@ -1,26 +1,8 @@
 {
-  "subset_id": "frames_dev_dense_v5_resume",
+  "subset_id": "frames_dev_100_dense_resume_phase35",
   "benchmark": "frames",
   "split": "dev",
   "question_ids": [
-    "591",
-    "374",
-    "630",
-    "793",
-    "449",
-    "39",
-    "236",
-    "512",
-    "218",
-    "362",
-    "510",
-    "141",
-    "121",
-    "554",
-    "129",
-    "515",
-    "491",
-    "371",
     "54",
     "671",
     "800",
@@ -83,6 +65,11 @@
     "145",
     "716"
   ],
-  "stratification": {},
+  "stratification": {
+    "2_hop": 32,
+    "3_hop": 30,
+    "4_5_hop": 29,
+    "6plus_hop": 9
+  },
   "seed": 0
 }

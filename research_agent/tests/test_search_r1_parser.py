@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from research_agent.adapters.search_r1 import SearchR1Adapter
+from research_agent.adapters.baselines.search_r1 import SearchR1Adapter
 from research_agent.adapters.base import AdapterContext
 from research_agent.retrieval.corpus import ArticleCorpus, Chunk
 

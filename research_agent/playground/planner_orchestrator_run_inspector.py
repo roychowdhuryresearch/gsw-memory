@@ -211,6 +211,7 @@ def _tool_palette(name: str) -> str:
         "find": "#00838F",
         "update_blank": "#2E7D32",
         "get_state": "#616161",
+        "suggest_plan_revision": "#FF6F00",  # amber-strong (escalation)
         # Orchestrator tools (llm mode)
         "dispatch_subplan": "#C62828",       # red-strong
         "request_plan_update": "#AD1457",    # pink-strong
@@ -639,10 +640,32 @@ if orch_tab is not None:
         # Dispatches list
         if dispatches:
             st.markdown("### Dispatches")
+            # Flatten revision_requests for the table view; full
+            # detail surfaces in the per-dispatch expander below.
+            disp_rows = []
+            for d in dispatches:
+                rrs = d.get("revision_requests") or []
+                disp_rows.append({
+                    "dispatch_idx": d.get("dispatch_idx"),
+                    "blank_ids": d.get("blank_ids"),
+                    "hints": (d.get("hints") or "")[:60],
+                    "partial": d.get("partial"),
+                    "revisions_requested": len(rrs),
+                })
             st.dataframe(
-                pd.DataFrame(dispatches),
+                pd.DataFrame(disp_rows),
                 use_container_width=True, hide_index=True,
             )
+            # Surface any escalations prominently.
+            for d in dispatches:
+                rrs = d.get("revision_requests") or []
+                for rr in rrs:
+                    st.warning(
+                        f"🆙 dispatch #{d.get('dispatch_idx')} — researcher "
+                        f"escalated for `{rr.get('blank_id','?')}`:\n\n"
+                        f"**reason**: {rr.get('reason','')}\n\n"
+                        f"**hint**: {rr.get('hint','')}"
+                    )
 
 
 # --- Tab: Researchers -------------------------------------------------
@@ -665,6 +688,7 @@ with researchers_tab:
                 else "⏱️" if stopped == "max_turns"
                 else "❌" if stopped == "llm_error"
                 else "🛑" if stopped == "no_tool_call"
+                else "🆙" if stopped == "plan_revision_requested"
                 else "❔"
             )
             header = (

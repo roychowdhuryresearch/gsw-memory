@@ -171,7 +171,7 @@ def test_load_musique_shape():
 
 def test_rule_decomp_adapter_registers():
     """Importing the adapter module must register the canonical system id."""
-    import research_agent.adapters.rule_decomp_gsw  # noqa: F401
+    import research_agent.adapters.baselines.rule_decomp_gsw  # noqa: F401
     from research_agent.adapters.base import get_adapter
 
     cls = get_adapter("rule_decomp_gsw")

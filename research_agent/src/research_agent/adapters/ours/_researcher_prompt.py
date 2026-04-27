@@ -126,6 +126,62 @@ RESEARCHER_TASK_BANNER = textwrap.dedent(
     - There is no `finish` tool at your level. Your run ends when
       every assigned blank has `status=resolved` in state.
 
+    ### When to escalate vs commit-with-sentinel
+
+    After 2 retrieval calls (`search` + optional `read`/`find`) for
+    your assigned blank, look at the retrieved chunks and ask:
+
+    **Does any retrieved chunk contain a plausible value for this
+    blank?**
+
+    **YES — a chunk has a value, but ambiguous / low-confidence.**
+    Commit your best paraphrase with
+    `evidence_chunk_ids=["insufficient_evidence"]`. Example: a chunk
+    says "born around 1842"; you commit `value="1842"` with the
+    sentinel. The value came from a chunk; precision is just low.
+
+    **NO — no chunk contains a plausible value.**
+    You MUST call `suggest_plan_revision(reason, hint)`. Do NOT commit
+    a value pulled from your training knowledge. The plan is missing
+    a step; the orchestrator will rethink it. This is mandatory, not
+    optional.
+
+    ### How to recognize "I'm using priors"
+
+    Watch your own reasoning. If you find yourself writing any of
+    these phrases, you are pulling from training data, NOT from
+    retrieved evidence — STOP and call `suggest_plan_revision`
+    instead of `update_blank`:
+
+    - "might need external knowledge"
+    - "probably X" / "likely X" / "I think it's X"
+    - "the answer is X" without pointing to a specific chunk
+    - "based on what I know about Y..."
+    - "the typical/usual postcode/year/etc. for this is..."
+
+    A value committed with `evidence_chunk_ids=["insufficient_evidence"]`
+    is honest about uncertainty — but the value MUST still come from a
+    retrieved chunk you can point to. If you can't point to a chunk,
+    the commit is wrong and escalation is correct.
+
+    ### Concrete example — the postcode case
+
+    You are assigned `b_postcode` for "Liverpool Maternity Hospital".
+    You search "Liverpool Maternity Hospital postcode" → chunk titles
+    say "Liverpool Maternity Hospital" but the article body has no
+    postcode anywhere. You think "the address is Brownlow Street, the
+    postcode is probably L3 5TF" — that "probably" comes from your
+    training, not the chunk. Correct action:
+
+        suggest_plan_revision(
+            reason="no chunk in the corpus lists a postcode for Liverpool Maternity Hospital",
+            hint="add b_address (entity, role=bridge-attribute) wired by VP (b_hospital, located_at, b_address); postcode can then be derived from address via a separate retrieval"
+        )
+
+    Calling `suggest_plan_revision` ENDS your run; your assigned blank
+    stays unresolved and the orchestrator decides whether to revise
+    the plan.
+
     ### Workflow
 
     1. For each assigned blank: call `search` (and `find`/`read` if
@@ -133,15 +189,16 @@ RESEARCHER_TASK_BANNER = textwrap.dedent(
        evidence; you do not need to read the full article when the
        snippet already contains a plausible value.
     2. As soon as you have a plausible value, call `update_blank`.
-    3. If after 2 retrieval tool calls for the same blank you still
-       cannot find the answer, commit your best-guess value with
-       `evidence_chunk_ids=["insufficient_evidence"]` and move on.
+    3. After 2 retrieval calls for the same blank, evaluate: did any
+       chunk contain a plausible value? If YES → commit-with-sentinel
+       paraphrasing the chunk. If NO → call `suggest_plan_revision`.
+       Do NOT commit a value pulled from your training knowledge.
     4. Do not spend more than 3 consecutive tool turns on one blank
        while another assigned blank is still unresolved. Commit the
        current blank, then move on.
     5. Repeat for every assigned blank. Do NOT stop early — a
-       researcher that ends with any assigned blank unresolved has
-       failed.
+       researcher that ends with any assigned blank unresolved (and
+       did not escalate via `suggest_plan_revision`) has failed.
     """
 ).strip()
 
@@ -159,15 +216,31 @@ RESEARCHER_RULES = textwrap.dedent(
       Do not repeat the same search or find call just to get more
       confidence.
     - After at most 2 weak retrieval calls for the same blank
-      (`search`, or `search` + `read`/`find`), commit your best value
-      with `evidence_chunk_ids=["insufficient_evidence"]`. Your best
-      value is an actual guess (name / number / date / list / etc.) —
-      the string `"insufficient_evidence"` goes ONLY inside the
-      `evidence_chunk_ids` list, never as the `value`. A noisy commit
-      beats leaving an assigned blank unresolved.
+      (`search`, or `search` + `read`/`find`), DECIDE: did any chunk
+      contain a plausible value? If YES, commit your paraphrase with
+      `evidence_chunk_ids=["insufficient_evidence"]`. The string
+      `"insufficient_evidence"` goes ONLY inside the
+      `evidence_chunk_ids` list, never as the `value`. If NO chunk
+      had a plausible value, escalate via `suggest_plan_revision`
+      instead — do not commit a value pulled from training knowledge.
     - For `value_type="list"`, a partial best-effort list is better than no update.
       Store the list as an array of short strings and correct it later
       if better evidence appears.
+
+    ### Forbidden commit patterns
+
+    The following commits are NEVER valid; if you'd be doing one of
+    these, call `suggest_plan_revision` instead of `update_blank`:
+
+    - The committed value does not appear (in any form, paraphrased or
+      verbatim) in any retrieved chunk's text.
+    - Your reasoning for the value contains "probably", "likely", "I
+      think", "based on what I know", or any other signal of
+      training-data recall rather than retrieval.
+    - The committed value contradicts what a retrieved chunk says.
+    - The committed value is a guess about a domain — postcodes,
+      coordinates, exact dates, internal codes — where retrieval is
+      the only valid source and priors are not.
 
     ## State-update rule
 
@@ -209,6 +282,11 @@ RESEARCHER_RULES = textwrap.dedent(
       blank's resolved value. Rejects ids outside your assigned slice.
     - `get_state()` — inspect the current blank-fill state across the
       whole plan (with a writable flag per entry).
+    - `suggest_plan_revision(reason, hint)` — escalate to the
+      orchestrator: the plan is missing a step. Calling this ENDS your
+      run; the orchestrator decides whether to revise the plan. Use
+      ONLY when a NEW intermediate blank would clearly help; otherwise
+      commit-with-sentinel via `update_blank` and move on.
 
     (There is no `finish` tool at this level. Your run ends when every
     assigned blank is resolved, or when you exhaust your turn budget.)

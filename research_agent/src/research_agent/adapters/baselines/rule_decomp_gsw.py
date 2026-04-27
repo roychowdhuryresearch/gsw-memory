@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Any
 
 from research_agent.adapters.base import AdapterContext, register_adapter
-from research_agent.adapters.ours_gsw_v1 import (
+from research_agent.adapters.baselines.ours_gsw_v1 import (
     OursGSWv1Adapter,
     SubQuestion as OursSubQuestion,
 )

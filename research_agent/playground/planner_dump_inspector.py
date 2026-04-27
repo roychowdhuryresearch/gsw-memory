@@ -56,10 +56,18 @@ _LOGS = _ROOT / "logs"
 
 @st.cache_data
 def _discover_dumps() -> list[Path]:
-    """Find all planner_dump_* directories, newest first."""
+    """Find all planner_dump_* directories, newest first.
+
+    Also looks under ``logs/_archive/dumps/`` so dirs moved during
+    log cleanup remain reachable.
+    """
     if not _LOGS.exists():
         return []
-    return sorted(_LOGS.glob("planner_dump_*"), key=lambda p: p.name, reverse=True)
+    found = list(_LOGS.glob("planner_dump_*"))
+    archive = _LOGS / "_archive" / "dumps"
+    if archive.exists():
+        found.extend(archive.glob("planner_dump_*"))
+    return sorted(found, key=lambda p: p.name, reverse=True)
 
 
 @st.cache_data

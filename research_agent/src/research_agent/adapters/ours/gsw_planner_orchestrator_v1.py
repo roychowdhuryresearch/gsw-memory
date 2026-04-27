@@ -20,10 +20,14 @@ Pipeline per question:
    After the loop, the target blank is checked; its value is the
    final answer or the run stamps ``stopped_reason=target_unresolved``.
 
-The orchestrator itself makes NO LLM calls. Only researchers do.
+In deterministic mode, the orchestrator itself makes no LLM calls.
+In LLM-orchestrator mode, the orchestrator also makes control-flow
+LLM calls and may invoke the plan-updater/replanner.
 
 Researcher contract:
 - ``search``, ``read``, ``find``, ``update_blank``, ``get_state`` tools.
+- ``suggest_plan_revision`` escalates to the orchestrator/replanner when
+  the plan is missing a retrieval step.
 - ``update_blank`` rejects any id outside ``allowed_blank_ids``.
 - No ``finish`` tool — researcher ends its own loop when all assigned
   blanks are resolved or max_turns hits.
@@ -283,6 +287,48 @@ _RESEARCHER_TOOLS: list[dict[str, Any]] = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "suggest_plan_revision",
+            "description": (
+                "Escalate to the orchestrator: the plan is missing a step. "
+                "Use ONLY when retrieval reveals that resolving your "
+                "assigned blank requires a NEW intermediate blank that "
+                "does not exist in the plan yet (not when evidence for "
+                "your current blank is just thin — for that, commit your "
+                "best-guess value with `evidence_chunk_ids="
+                "['insufficient_evidence']` instead). Calling this tool "
+                "ENDS your run; your assigned blank stays unresolved and "
+                "the orchestrator decides whether to revise the plan."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "reason": {
+                        "type": "string",
+                        "description": (
+                            "Short note on what was missing. Example: "
+                            "'no chunk in the corpus lists postcodes for "
+                            "Liverpool Maternity Hospital'."
+                        ),
+                    },
+                    "hint": {
+                        "type": "string",
+                        "description": (
+                            "Concrete suggestion for the new step, e.g. a "
+                            "new blank id and what predicate would link it. "
+                            "Example: 'add b_address (entity for the "
+                            "hospital address); postcode could be derived "
+                            "from address'."
+                        ),
+                    },
+                },
+                "additionalProperties": False,
+                "required": ["reason", "hint"],
+            },
+        },
+    },
 ]
 
 
@@ -325,6 +371,9 @@ class ReActResearcher:
         self.question = question
         self.max_turns = max_turns
         self.max_completion_tokens = max_completion_tokens
+        # Set by `_tool_suggest_plan_revision` when the researcher
+        # escalates. Surfaced in ``solve()``'s return value.
+        self._revision_request: Optional[dict[str, Any]] = None
 
     # --- tool implementations (bound to this researcher's state) ----
 
@@ -510,6 +559,40 @@ class ReActResearcher:
             )
         return ""
 
+    def _tool_suggest_plan_revision(
+        self,
+        *,
+        reason: str,
+        hint: str,
+    ) -> dict[str, Any]:
+        """Researcher escalation: end the run, ask orchestrator to rethink the plan."""
+        if not isinstance(reason, str) or not reason.strip():
+            return {
+                "ok": False,
+                "error": (
+                    "`reason` must be a non-empty string describing what "
+                    "was missing in retrieval."
+                ),
+            }
+        if not isinstance(hint, str) or not hint.strip():
+            return {
+                "ok": False,
+                "error": (
+                    "`hint` must be a non-empty string suggesting a new "
+                    "intermediate step (e.g. 'add b_address blank')."
+                ),
+            }
+        # Record the request — the loop checks this each turn and exits.
+        # Attach the assigned slice so the orchestrator knows which blank
+        # triggered the escalation.
+        self._revision_request = {
+            "blank_id": self.allowed_order[0] if self.allowed_order else None,
+            "assigned_blank_ids": list(self.allowed_order),
+            "reason": reason.strip(),
+            "hint": hint.strip(),
+        }
+        return {"ok": True, "escalated": True}
+
     def _dispatch(self, name: str, args_json: str) -> dict[str, Any]:
         try:
             args = json.loads(args_json) if args_json else {}
@@ -526,6 +609,8 @@ class ReActResearcher:
                 return self._tool_update_blank(**args)
             if name == "get_state":
                 return self._tool_get_state()
+            if name == "suggest_plan_revision":
+                return self._tool_suggest_plan_revision(**args)
             return {"error": f"unknown tool {name!r}"}
         except TypeError as exc:
             return {"error": f"bad tool call: {exc}"}
@@ -652,6 +737,12 @@ class ReActResearcher:
                         "content": result_json,
                     }
                 )
+            # Researcher escalation overrides the resolved-check —
+            # the loop ends regardless of whether assigned blanks are
+            # filled, because the researcher decided the plan is wrong.
+            if self._revision_request is not None:
+                stopped = "plan_revision_requested"
+                break
             if self._all_assigned_resolved():
                 stopped = "all_resolved"
                 break
@@ -672,6 +763,7 @@ class ReActResearcher:
             "tool_calls": tool_calls,
             "messages": messages,
             "reasoning": "\n".join(reasoning_chunks),
+            "revision_request": self._revision_request,
         }
 
 
@@ -752,6 +844,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         # --- 2. Topology --------------------------------------------
         plan_dict = plan.model_dump()
         try:
+            plan.target()
             order = topological_sort_blanks(plan)
             deps = build_dependency_graph(plan)
             levels = _compute_levels(deps)
@@ -786,13 +879,23 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             )
 
         # --- 5. Populate remaining Trajectory fields ----------------
+        # In llm mode the plan may have been revised mid-run; the FINAL
+        # plan is in ``traj.extra["plan_json"]`` (set by the mode-method).
+        # Use it to compute is_target so blanks added by plan-updater
+        # don't trigger a "unknown entity id" lookup error.
+        final_plan_dict = traj.extra.get("plan_json") or plan.model_dump()
+        target_ids: set[str] = {
+            e.get("id")
+            for e in (final_plan_dict.get("entities") or [])
+            if e.get("is_target")
+        }
         traj.extra["executed_blanks"] = [
             {
                 "blank_id": res.blank_id,
                 "value": res.value,
                 "status": res.status,
                 "evidence_chunk_ids": list(res.evidence_chunk_ids or []),
-                "is_target": plan.entity_by_id(res.blank_id).is_target,
+                "is_target": res.blank_id in target_ids,
             }
             for res in state.values()
         ]
@@ -926,6 +1029,20 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
     # ------------------------------------------------------------------
 
     MAX_PARALLEL_RESEARCHERS: ClassVar[int] = 8
+    # Phase-3.2: cap on plan-updater calls per question. Two revisions
+    # is enough for any plausible plan-error recovery; beyond that,
+    # the corpus likely lacks the data and further revision is a
+    # losing loop. The orchestrator can submit_answer with an empty/
+    # best-effort string after the cap is reached.
+    MAX_PLAN_UPDATES_PER_RUN: ClassVar[int] = 2
+    # Phase-3.2 follow-up: per-blank dispatch cap. If a single blank
+    # has triggered ``MAX_ESCALATIONS_PER_BLANK`` researcher
+    # escalations (suggest_plan_revision), further dispatches of that
+    # blank are REJECTED. Prevents the "spam dispatch with permuted
+    # hints" loop where the orchestrator never calls request_plan_update
+    # but keeps re-dispatching a blank whose retrieval target isn't in
+    # the corpus.
+    MAX_ESCALATIONS_PER_BLANK: ClassVar[int] = 2
 
     def _dispatch_subplan_parallel(
         self,
@@ -937,6 +1054,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         levels: dict[str, int],
         question: str,
         blank_ids: list[str],
+        hints: str = "",
         level_tag: int = 0,
     ) -> list[dict[str, Any]]:
         """Spawn one ReActResearcher per blank in ``blank_ids`` and run
@@ -963,6 +1081,14 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             bid: copy.copy(br) for bid, br in state.items()
         }
 
+        question_with_hints = question
+        if hints.strip():
+            question_with_hints = (
+                f"{question}\n\n"
+                "Orchestrator hints for this assigned blank:\n"
+                f"{hints.strip()}"
+            )
+
         def _solve_one(blank_id: str) -> tuple[str, dict[str, Any], dict[str, BlankResult]]:
             local_state: dict[str, BlankResult] = {
                 bid: copy.copy(br) for bid, br in pre_snapshot.items()
@@ -981,7 +1107,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 state=local_state,
                 allowed_blank_ids=[blank_id],
                 system_prompt=system_prompt,
-                question=question,
+                question=question_with_hints,
                 max_turns=self.level_max_turns,
                 max_completion_tokens=self.ctx.max_completion_tokens,
             )
@@ -1051,13 +1177,23 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         all_tool_calls: list[ToolCall] = []
         all_messages: list[dict[str, Any]] = []
         reasoning_chunks: list[str] = []
+        # Phase-3.2 follow-up: per-blank escalation counter.
+        # Incremented every time a researcher returns
+        # `revision_request` for that blank.
+        escalations_per_blank: dict[str, int] = {}
 
         total_prompt_tokens = total_completion_tokens = 0
+        orchestrator_turns = 0
         dispatch_idx = 0
         recent_activity: str = ""
         final_answer = ""
         stopped_reason = "max_turns"
         target_id = plan.target().id
+        # Phase-3.4: track consecutive cap-rejected dispatches. Reset
+        # on any non-cap-rejected tool call. After 3 in a row, the loop
+        # auto-gives-up — see check at end of turn.
+        consecutive_cap_rejections = 0
+        recent_cap_rejection = False
 
         for turn in range(1, max_turns + 1):
             # Fire any pending constraint cascades before building the prompt.
@@ -1067,6 +1203,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 plan_dict, order, levels, state,
                 turn_index=turn - 1,
                 recent_activity=recent_activity,
+                recent_cap_rejection=recent_cap_rejection,
             )
             orch_messages: list[dict[str, Any]] = [
                 {"role": "system", "content": system_prompt},
@@ -1087,6 +1224,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 )
                 break
 
+            orchestrator_turns += 1
             total_prompt_tokens += int(getattr(resp, "prompt_tokens", 0) or 0)
             total_completion_tokens += int(getattr(resp, "completion_tokens", 0) or 0)
             if resp.reasoning_content:
@@ -1131,6 +1269,19 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                         "error": f"bad tool args: {exc}",
                     }
                 else:
+                    # Phase-3.2: pass plan-update count (for cap) + last
+                    # update summary (for hint enrichment).
+                    last_pu_summary = ""
+                    if plan_updates:
+                        last = plan_updates[-1]
+                        if not last.get("rejected"):
+                            last_pu_summary = (
+                                f"diff={last.get('diff_summary','')}; "
+                                f"reason={str(last.get('reason',''))[:80]}"
+                            )
+                    pu_count = sum(
+                        1 for pu in plan_updates if not pu.get("rejected")
+                    )
                     result, action = self._run_orchestrator_tool(
                         name=name,
                         args=args,
@@ -1142,7 +1293,12 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                         question=question,
                         dispatch_idx=dispatch_idx,
                         constraint_outputs=constraint_outputs,
+                        plan_update_count=pu_count,
+                        last_plan_update_summary=last_pu_summary,
+                        escalations_per_blank=escalations_per_blank,
                     )
+                    total_prompt_tokens += action.get("prompt_tokens", 0)
+                    total_completion_tokens += action.get("completion_tokens", 0)
                     # Update mutable bookkeeping based on the action.
                     if action.get("dispatch_traces") is not None:
                         traces = action["dispatch_traces"]
@@ -1176,8 +1332,19 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                                 "blank_ids": action["blank_ids"],
                                 "hints": action.get("hints", ""),
                                 "partial": action.get("partial", False),
+                                "revision_requests": action.get(
+                                    "revision_requests", []
+                                ),
                             }
                         )
+                        # Phase-3.2 follow-up: bump per-blank escalation
+                        # counter for blanks whose researcher escalated.
+                        for rr in action.get("revision_requests") or []:
+                            bid = rr.get("blank_id")
+                            if bid:
+                                escalations_per_blank[bid] = (
+                                    escalations_per_blank.get(bid, 0) + 1
+                                )
                         dispatch_idx += 1
                     if action.get("new_plan") is not None:
                         # Swap plan + plan_dict + order + levels.
@@ -1188,6 +1355,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                             topological_sort_blanks,
                         )
                         try:
+                            plan.target()
                             order = topological_sort_blanks(plan)
                             deps = build_dependency_graph(plan)
                             levels = _compute_levels(deps)
@@ -1196,6 +1364,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                             # log the rejection.
                             plan = action["old_plan"]
                             plan_dict = plan.model_dump()
+                            state.clear()
+                            state.update(action.get("old_state", {}))
                             result = {
                                 "ok": False,
                                 "error": (
@@ -1203,6 +1373,15 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                                     "Reverting to previous plan."
                                 ),
                             }
+                            plan_updates.append(
+                                {
+                                    "turn": turn,
+                                    "reason": action["reason"],
+                                    "evidence": action["evidence"],
+                                    "rejected": True,
+                                    "error": result["error"],
+                                }
+                            )
                         else:
                             constraint_outputs = {
                                 c.output_blank_id for c in plan.constraints
@@ -1266,15 +1445,50 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                         "_level": -1,
                     }
                 )
+                # Phase-3.4: track consecutive per-blank cap rejections.
+                # The dispatcher returns a result with
+                # `error` containing "per-blank dispatch cap reached"
+                # (and ok:false) when this happens.
+                is_cap_rejection = (
+                    name == "dispatch_subplan"
+                    and isinstance(result, dict)
+                    and result.get("ok") is False
+                    and "per-blank dispatch cap reached"
+                    in str(result.get("error", ""))
+                )
+                if is_cap_rejection:
+                    consecutive_cap_rejections += 1
+                else:
+                    consecutive_cap_rejections = 0
+                # The "recent_cap_rejection" flag is what the next-turn
+                # system prompt reads to decide whether to render the
+                # worked-example block.
+                recent_cap_rejection = is_cap_rejection
+
                 # Refresh the per-turn recent_activity summary the
                 # orchestrator sees next turn.
                 if name == "dispatch_subplan" and isinstance(result, dict):
-                    resolved = result.get("resolved", {})
-                    recent_activity = (
-                        f"dispatch #{dispatch_idx - 1}: blank_ids="
-                        f"{list(resolved.keys())} resolved; "
-                        f"partial={result.get('partial', False)}"
-                    )
+                    if is_cap_rejection:
+                        recent_activity = (
+                            f"dispatch CAP-REJECTED ({consecutive_cap_rejections}"
+                            f" consecutive); error: "
+                            + str(result.get("error", ""))[:160]
+                        )
+                    else:
+                        resolved = result.get("resolved", {})
+                        rrs = result.get("revision_requests") or []
+                        recent_activity = (
+                            f"dispatch #{dispatch_idx - 1}: blank_ids="
+                            f"{list(resolved.keys())} resolved; "
+                            f"partial={result.get('partial', False)}"
+                        )
+                        if rrs:
+                            first = rrs[0]
+                            recent_activity += (
+                                f"; researcher escalated for "
+                                f"{first.get('blank_id','?')!r}: "
+                                f"{first.get('reason','')[:80]}"
+                            )
                 elif name == "request_plan_update" and isinstance(result, dict):
                     if result.get("ok"):
                         recent_activity = (
@@ -1289,6 +1503,20 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             if broke_out:
                 break
 
+            # Phase-3.4 safety net: after 3 consecutive cap-rejections,
+            # the LLM has clearly ignored the worked example and is
+            # stuck. Force-exit instead of burning the whole budget.
+            if consecutive_cap_rejections >= 3:
+                stopped_reason = "give_up_unanswerable"
+                # Best-effort answer: use committed target value if any,
+                # else empty.
+                tgt_res = state.get(target_id)
+                if tgt_res is not None and tgt_res.status == "resolved":
+                    final_answer = _stringify(tgt_res.value)
+                else:
+                    final_answer = ""
+                break
+
         # Final-answer fallback: if orchestrator exhausted its turns
         # but target is resolved, use that committed value.
         tgt_res = state.get(target_id)
@@ -1297,7 +1525,9 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             if stopped_reason == "max_turns":
                 stopped_reason = "finished_late"
 
-        traj.turns = sum(t.get("turns", 0) for t in researcher_traces)
+        traj.turns = orchestrator_turns + sum(
+            t.get("turns", 0) for t in researcher_traces
+        )
         traj.prompt_tokens = total_prompt_tokens
         traj.completion_tokens = total_completion_tokens
         traj.tool_calls = all_tool_calls
@@ -1333,6 +1563,9 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         question: str,
         dispatch_idx: int,
         constraint_outputs: set[str],
+        plan_update_count: int = 0,
+        last_plan_update_summary: str = "",
+        escalations_per_blank: Optional[dict[str, int]] = None,
     ) -> tuple[dict[str, Any], dict[str, Any]]:
         """Execute one orchestrator-tool call. Returns ``(result, action)``
         where ``result`` is what the orchestrator sees as the tool
@@ -1359,6 +1592,14 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         if name == "dispatch_subplan":
             blank_ids = args.get("blank_ids") or []
             hints = args.get("hints", "")
+            # Phase-3.2: when a plan revision has just happened, prepend
+            # a summary so the new researcher knows the prior context
+            # (avoids the "researcher rediscovers the same gap" loop).
+            if last_plan_update_summary:
+                hints = (
+                    f"[after plan revision: {last_plan_update_summary}] "
+                    + hints
+                ).strip()
             if not isinstance(blank_ids, list) or not blank_ids:
                 return (
                     {"ok": False, "error": "blank_ids must be a non-empty list"},
@@ -1416,11 +1657,40 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     action,
                 )
 
+            # Phase-3.2 follow-up: reject re-dispatch of blanks that
+            # have already triggered MAX_ESCALATIONS_PER_BLANK escalations.
+            # Prevents the spam-dispatch-with-permuted-hints loop.
+            esc = escalations_per_blank or {}
+            burned = [
+                b for b in blank_ids
+                if esc.get(b, 0) >= self.MAX_ESCALATIONS_PER_BLANK
+            ]
+            if burned:
+                return (
+                    {
+                        "ok": False,
+                        "error": (
+                            f"per-blank dispatch cap reached for "
+                            f"{burned}: each has triggered "
+                            f"{self.MAX_ESCALATIONS_PER_BLANK} researcher "
+                            "escalations already. Re-dispatching with "
+                            "different hints will not help — the corpus "
+                            "lacks this data. Either call "
+                            "`request_plan_update` to revise the plan "
+                            "(if the cap there hasn't been reached), or "
+                            "`submit_answer` (empty answer is acceptable)."
+                        ),
+                        "escalations_per_blank": {b: esc.get(b, 0) for b in blank_ids},
+                    },
+                    action,
+                )
+
             traces = self._dispatch_subplan_parallel(
                 plan=plan, plan_dict=plan_dict,
                 state=state, order=order, levels=levels,
                 question=question,
                 blank_ids=blank_ids,
+                hints=hints,
                 level_tag=dispatch_idx,
             )
             # Build orchestrator-visible summary.
@@ -1435,21 +1705,66 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     }
                 else:
                     any_partial = True
+
+            # Collect researcher escalations (Phase-3): a researcher may
+            # signal that the plan is missing a step by calling
+            # suggest_plan_revision. Surface these to the orchestrator.
+            revision_requests: list[dict[str, Any]] = []
+            for tr in traces:
+                rr = tr.get("revision_request")
+                if rr:
+                    revision_requests.append(rr)
+
             result = {
                 "ok": True,
                 "resolved": resolved_map,
                 "partial": any_partial,
             }
+            if revision_requests:
+                result["revision_requests"] = revision_requests
             action["dispatch_traces"] = traces
             action["blank_ids"] = blank_ids
             action["hints"] = hints
             action["partial"] = any_partial
+            action["revision_requests"] = revision_requests
             return result, action
 
         if name == "request_plan_update":
             reason = args.get("reason", "") or ""
             evidence = args.get("evidence", "") or ""
+            # Phase-3.2 cap: prevent runaway loops where the corpus
+            # genuinely lacks the requested data and every revision
+            # leads back to the same gap.
+            if plan_update_count >= self.MAX_PLAN_UPDATES_PER_RUN:
+                action["plan_update_rejected"] = True
+                action["reason"] = reason
+                action["evidence"] = evidence
+                action["error"] = (
+                    f"max plan updates ({self.MAX_PLAN_UPDATES_PER_RUN}) "
+                    f"reached for this question"
+                )
+                return (
+                    {
+                        "ok": False,
+                        "error": (
+                            f"plan_update_cap_reached: already used "
+                            f"{plan_update_count}/{self.MAX_PLAN_UPDATES_PER_RUN} "
+                            "plan-updater calls. Further revisions are unlikely "
+                            "to help — the corpus may genuinely lack this data. "
+                            "Either submit_answer with a best-effort answer "
+                            "(empty string is acceptable) or dispatch a final "
+                            "researcher with explicit hints to commit a "
+                            "best-guess from chunks already retrieved."
+                        ),
+                        "plan_update_count": plan_update_count,
+                        "max_plan_updates": self.MAX_PLAN_UPDATES_PER_RUN,
+                    },
+                    action,
+                )
             try:
+                old_state = {
+                    bid: copy.copy(br) for bid, br in state.items()
+                }
                 new_plan, diff, _meta = update_plan(
                     old_plan=plan,
                     state=state,
@@ -1474,12 +1789,15 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 )
             action["new_plan"] = new_plan
             action["old_plan"] = plan
+            action["old_state"] = old_state
             action["reason"] = reason
             action["evidence"] = evidence
             action["diff_summary"] = diff.summary
             action["preserved_ids"] = diff.preserved_ids
             action["added_ids"] = diff.added_ids
             action["dropped_ids"] = diff.dropped_ids
+            action["prompt_tokens"] = _meta.prompt_tokens
+            action["completion_tokens"] = _meta.completion_tokens
             return (
                 {
                     "ok": True,
@@ -1495,7 +1813,27 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             answer = str(args.get("answer", "")).strip()
             target_id = plan.target().id
             tgt_res = state.get(target_id)
-            if tgt_res is None or tgt_res.status != "resolved":
+            target_resolved = tgt_res is not None and tgt_res.status == "resolved"
+            if not target_resolved:
+                # Phase-3.2: when the plan-update cap is reached AND the
+                # target is still unresolved, the orchestrator is allowed
+                # to give up. Stamps a distinct stopped_reason so the
+                # trajectory is visibly "we tried, corpus lacks the data"
+                # rather than "we never finished".
+                if plan_update_count >= self.MAX_PLAN_UPDATES_PER_RUN:
+                    action["final_answer"] = answer  # may be ""
+                    action["stopped_reason"] = "give_up_unanswerable"
+                    return (
+                        {
+                            "ok": True,
+                            "note": (
+                                f"target unresolved AND plan-update cap "
+                                f"({self.MAX_PLAN_UPDATES_PER_RUN}) reached; "
+                                "submitting best-effort answer."
+                            ),
+                        },
+                        action,
+                    )
                 return (
                     {
                         "ok": False,

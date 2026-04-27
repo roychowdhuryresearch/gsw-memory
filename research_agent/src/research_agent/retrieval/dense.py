@@ -170,12 +170,26 @@ class DenseRetriever:
         self._index = index
 
     def _fingerprint(self) -> str:
-        """A stable key for (corpus, model) cache bucketing."""
+        """A stable key for (corpus, model) cache bucketing.
+
+        Includes a hash of article TEXT lengths so the cache
+        auto-invalidates when the corpus content changes (e.g.,
+        Phase-3.3 table-aware re-parse). Lengths are cheap and
+        sufficient — the chance of a coincidental length collision
+        across all 366 articles is effectively zero.
+        """
+        sorted_titles = sorted(self.corpus._by_title.keys())
         titles_hash = hashlib.sha256(
-            "\n".join(sorted(self.corpus._by_title.keys())).encode()
+            "\n".join(sorted_titles).encode()
         ).hexdigest()[:12]
+        # Include text-length signature so a re-parse with same titles
+        # but different body text triggers a fresh embedding build.
+        text_sig = "\n".join(
+            f"{t}:{len(self.corpus._by_title[t])}" for t in sorted_titles
+        )
+        text_hash = hashlib.sha256(text_sig.encode()).hexdigest()[:12]
         model_slug = self.model_name.replace("/", "__")
-        return f"{model_slug}__{titles_hash}"
+        return f"{model_slug}__{titles_hash}__{text_hash}"
 
     # ------------------------------------------------------------------
     # Query

@@ -34,21 +34,79 @@ class Chunk:
 
 
 def _split_on_paragraphs(text: str, max_chars: int, overlap: int) -> list[tuple[int, int]]:
-    """Greedy paragraph-aware chunking. Returns (start, end) offsets."""
+    """Greedy paragraph-aware chunking with hard-cap fallback.
+
+    A "paragraph" is a run of non-empty lines (separated by blank
+    lines). When a paragraph itself exceeds ``max_chars`` (e.g., a
+    Wikipedia table flattened to one-row-per-line with no blank
+    separators), we force-split it on line boundaries. As a final
+    safety net, any single line longer than ``max_chars`` is
+    character-sliced.
+    """
     paragraphs = [m for m in re.finditer(r"[^\n]+(?:\n[^\n]+)*", text)]
     if not paragraphs:
         return [(0, len(text))]
 
-    spans: list[tuple[int, int]] = []
-    start = paragraphs[0].start()
-    cur_end = start
+    # First split each over-long paragraph into line-bounded
+    # sub-spans of <= max_chars each. Paragraphs under the cap pass
+    # through unchanged.
+    sub_spans: list[tuple[int, int]] = []
     for p in paragraphs:
-        if p.end() - start > max_chars and cur_end > start:
+        if p.end() - p.start() <= max_chars:
+            sub_spans.append((p.start(), p.end()))
+            continue
+        # Walk lines inside the over-long paragraph, accumulating up
+        # to max_chars per sub-span.
+        body_start = p.start()
+        body_end = p.end()
+        body = text[body_start:body_end]
+        line_offsets: list[tuple[int, int]] = []  # (start, end) within body
+        cur = 0
+        for line_match in re.finditer(r"[^\n]*(?:\n|$)", body):
+            ls, le = line_match.start(), line_match.end()
+            if le == ls:
+                continue
+            line_offsets.append((ls, le))
+        if not line_offsets:
+            line_offsets = [(0, len(body))]
+        sub_start = line_offsets[0][0]
+        sub_end = sub_start
+        for ls, le in line_offsets:
+            if le - sub_start > max_chars:
+                if sub_end > sub_start:
+                    sub_spans.append((body_start + sub_start, body_start + sub_end))
+                sub_start = ls
+                sub_end = le
+                # Final safety net: a single line longer than max_chars
+                # gets character-sliced into max_chars pieces.
+                if le - ls > max_chars:
+                    pos = ls
+                    while pos < le:
+                        chunk_end = min(pos + max_chars, le)
+                        sub_spans.append((body_start + pos, body_start + chunk_end))
+                        pos = chunk_end
+                    sub_start = le
+                    sub_end = le
+            else:
+                sub_end = le
+        if sub_end > sub_start:
+            sub_spans.append((body_start + sub_start, body_start + sub_end))
+
+    # Now greedily re-merge adjacent sub-spans up to max_chars (this
+    # gives us paragraph-aware chunks where possible while never
+    # exceeding the cap on a single chunk).
+    spans: list[tuple[int, int]] = []
+    if not sub_spans:
+        return [(0, len(text))]
+    start = sub_spans[0][0]
+    cur_end = sub_spans[0][1]
+    for s, e in sub_spans[1:]:
+        if e - start > max_chars and cur_end > start:
             spans.append((start, cur_end))
-            start = max(cur_end - overlap, p.start())
-            cur_end = p.end()
+            start = max(cur_end - overlap, s)
+            cur_end = e
         else:
-            cur_end = p.end()
+            cur_end = e
     if start < cur_end:
         spans.append((start, cur_end))
     return spans

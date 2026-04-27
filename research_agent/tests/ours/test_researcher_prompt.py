@@ -48,12 +48,38 @@ def test_commit_budget_and_value_hygiene_language():
     """The per-level researcher prompt should explicitly prevent the
     observed loop/placeholder failures."""
     combined = "\n".join([RESEARCHER_TASK_BANNER, RESEARCHER_RULES])
-    assert "after 2 tool calls for a blank" in combined
     assert "Do not spend more than 3 consecutive tool turns on one blank" in combined
     assert "a partial best-effort list is better" in combined
     assert "than no update" in combined
     assert 'value="None"' in combined
     assert "a JSON/tool-call string" in combined
+
+
+def test_mandatory_escalate_on_retrieval_empty():
+    """Phase-3.1: when no retrieved chunk contains a plausible value,
+    the researcher MUST escalate via suggest_plan_revision — it is not
+    optional. The asymmetric YES/NO rule must be present."""
+    combined = "\n".join([RESEARCHER_TASK_BANNER, RESEARCHER_RULES])
+    assert "Does any retrieved chunk contain a plausible value" in combined
+    assert "MUST call `suggest_plan_revision" in combined
+    assert "mandatory, not" in combined.lower() or "non-negotiable" in combined.lower()
+    # Forbidden-commit subsection
+    assert "Forbidden commit patterns" in combined
+    assert "training-data recall" in combined or "training knowledge" in combined
+
+
+def test_anti_priors_phrase_list_is_present():
+    """Phase-3.1: explicit list of priors-recall phrases that should
+    trigger escalation must be in the prompt + worked example."""
+    combined = "\n".join([RESEARCHER_TASK_BANNER, RESEARCHER_RULES])
+    assert "might need external knowledge" in combined
+    assert "probably" in combined.lower()
+    assert "likely" in combined.lower()
+    assert "based on what I know" in combined
+    # Concrete worked example for the postcode case
+    assert "Liverpool Maternity Hospital" in combined
+    assert "L3 5TF" in combined
+    assert "b_address" in combined
 
 
 def test_level_0_first_researcher_no_prior_values():
