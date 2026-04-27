@@ -1279,9 +1279,10 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                                 f"diff={last.get('diff_summary','')}; "
                                 f"reason={str(last.get('reason',''))[:80]}"
                             )
-                    pu_count = sum(
-                        1 for pu in plan_updates if not pu.get("rejected")
-                    )
+                    # Count all attempts, including rejected no-op or invalid
+                    # replans. Otherwise the model can burn turns retrying the
+                    # same unsupported update forever without hitting the cap.
+                    pu_count = len(plan_updates)
                     result, action = self._run_orchestrator_tool(
                         name=name,
                         args=args,
@@ -1398,6 +1399,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                                     "preserved_ids": action["preserved_ids"],
                                     "added_ids": action["added_ids"],
                                     "dropped_ids": action["dropped_ids"],
+                                    "op_summary": action.get("op_summary", ""),
+                                    "attempts": action.get("attempts", 1),
                                 }
                             )
                     if action.get("plan_update_rejected"):
@@ -1796,6 +1799,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             action["preserved_ids"] = diff.preserved_ids
             action["added_ids"] = diff.added_ids
             action["dropped_ids"] = diff.dropped_ids
+            action["op_summary"] = diff.op_summary
+            action["attempts"] = diff.attempts
             action["prompt_tokens"] = _meta.prompt_tokens
             action["completion_tokens"] = _meta.completion_tokens
             return (
@@ -1805,6 +1810,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     "preserved_ids": diff.preserved_ids,
                     "added_ids": diff.added_ids,
                     "dropped_ids": diff.dropped_ids,
+                    "op_summary": diff.op_summary,
+                    "attempts": diff.attempts,
                 },
                 action,
             )

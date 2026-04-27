@@ -80,11 +80,20 @@ ORCHESTRATOR_RULES = textwrap.dedent(
        doubt, dispatch fewer — the researchers are isolated and will
        not help each other solve siblings.
     3. Do not dispatch a blank that is already `status=resolved` in
-       state. Use `request_plan_update` if its current value is wrong.
+       state. Use `request_plan_update` for a wrong value ONLY when
+       the evidence shows a schema-supported graph change is needed.
     4. Only call `request_plan_update` when you have concrete
-       evidence that the plan structure is wrong. A single weak
-       retrieval is NOT enough; it just means "dispatch again with
-       different blanks".
+       evidence that the plan structure is wrong. It is for structural
+       edits: adding/dropping blanks, changing relations, changing the
+       target blank, or changing constraints supported by the current
+       schema. A single weak retrieval is NOT enough; it just means
+       "dispatch again with different blanks".
+       Do NOT use `request_plan_update` for answer formatting only
+       (for example semicolon vs space), for replacing a committed
+       value while leaving the graph unchanged, or for operations the
+       schema/executor cannot express (for example rounding to nearest
+       ten, multiplication, or division). If a plan update is rejected
+       as a no-op, do not retry the same request.
     5. Constraint-output blanks fill themselves once their input
        blanks are resolved. Never dispatch a blank that is the output
        of a constraint; dispatch its INPUTS.

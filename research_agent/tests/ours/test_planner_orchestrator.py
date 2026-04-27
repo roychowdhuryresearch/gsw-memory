@@ -96,6 +96,37 @@ def _tc(tid: str, name: str, args: dict[str, Any]) -> dict[str, Any]:
     return {"id": tid, "name": name, "arguments": json.dumps(args)}
 
 
+# Phase-3.6: the plan-updater LLM emits a single PlanDiffOp JSON.
+# Helpers to construct the most common ops in the tests.
+
+def _add_blank_op(blank_id: str, vp_id: str, *, subject_id: str = "e1",
+                  phrase: str = "associated_with",
+                  value_type: str = "text",
+                  role: str = "bridge-attribute") -> str:
+    return json.dumps({
+        "op": "add_blank",
+        "blank": {"id": blank_id, "value_type": value_type, "role": role},
+        "wire_via_vp": {
+            "id": vp_id, "phrase": phrase,
+            "subject_id": subject_id, "object_id": blank_id,
+        },
+    })
+
+
+def _change_target_op(from_id: str, to_id: str) -> str:
+    return json.dumps({"op": "change_target", "from_id": from_id, "to_id": to_id})
+
+
+def _trivial_op() -> str:
+    """An op that ``is_trivial_op`` always rejects (no-op shape)."""
+    return json.dumps({"op": "change_target", "from_id": "t", "to_id": "t"})
+
+
+def _invalid_op_remove_target_wiring() -> str:
+    """Removing the only VP wiring the target — apply_diff rejects."""
+    return json.dumps({"op": "remove_vp", "vp_id": "vp1"})
+
+
 # ---------------------------------------------------------------------------
 # Fixture plan — Picasso / Pink Floyd bridge (2 levels)
 # ---------------------------------------------------------------------------
@@ -884,23 +915,7 @@ def test_dispatch_subplan_surfaces_revision_requests_to_orchestrator():
     'revision_requests'. The orchestrator may then call
     request_plan_update."""
     plan_dict = _one_level_plan()
-    new_plan = {
-        # Updated plan has a NEW intermediate blank b_intermediate.
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_intermediate", "kind": "blank",
-             "role": "bridge-attribute", "value_type": "text"},
-            {"id": "t", "kind": "blank", "role": "target",
-             "value_type": "entity", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with",
-             "subject_id": "e1", "object_id": "b_intermediate"},
-            {"id": "vp2", "phrase": "released",
-             "subject_id": "e1", "object_id": "t"},
-        ],
-        "constraints": [],
-    }
+    # Plan-updater emits an add_blank op that introduces b_intermediate.
 
     # Orchestrator script:
     #   1. dispatch t (researcher escalates)
@@ -947,12 +962,10 @@ def test_dispatch_subplan_surfaces_revision_requests_to_orchestrator():
                 "evidence_chunk_ids": ["c2"],
             })]),
         ],
-        # Plan-updater LLM returns the revised plan as JSON.
-        # The plan-updater's system prompt reuses PLANNER_SYSTEM, but
-        # we route by "## Plan-updater mode" which is uniquely in the
-        # updater's appended text.
-        "## Plan-updater mode": [
-            _StubResponse(text=json.dumps(new_plan)),
+        # Plan-updater emits ONE diff op. Route key "Plan-Updater"
+        # is unique to the new (Phase-3.6) UPDATER_SYSTEM prompt.
+        "You are the **Plan-Updater**": [
+            _StubResponse(text=_add_blank_op("b_intermediate", "vp_int")),
         ],
     }
     llm = _RoutedLLM(routes)
@@ -995,47 +1008,39 @@ def test_dispatch_subplan_surfaces_revision_requests_to_orchestrator():
     )
 
 
-def test_invalid_replan_restores_previous_plan_and_state():
-    """The plan-updater mutates state during reconciliation. If the
-    revised plan then fails target/topology validation, the
-    orchestrator must roll both plan and state back."""
+def test_invalid_replan_rejected_after_3_attempts():
+    """Plan-updater emits a diff op that produces an invalid plan
+    every time. After MAX_REVISION_ATTEMPTS=3 retries it raises
+    PlanEmitError; the orchestrator records a rejected plan_update
+    event and the original plan + state are unchanged."""
     plan_dict = _one_level_plan()
-    invalid_no_target_plan = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_new", "kind": "blank", "role": "bridge-attribute", "value_type": "text"},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with", "subject_id": "e1", "object_id": "b_new"},
-        ],
-        "constraints": [],
-    }
+    # remove_vp(vp1) dangles target t → DiffApplyError every attempt.
+    invalid_op = _invalid_op_remove_target_wiring()
     routes = {
         "You are the **Orchestrator**": [
             _StubResponse(tool_calls=[_tc("o1", "request_plan_update", {
                 "reason": "try invalid update",
-                "evidence": "adds b_new but loses target",
+                "evidence": "remove the wiring VP",
             })]),
             _StubResponse(tool_calls=[_tc("o2", "get_state", {})]),
         ],
-        "## Plan-updater mode": [
-            _StubResponse(text=json.dumps(invalid_no_target_plan)),
+        "You are the **Plan-Updater**": [
+            _StubResponse(text=invalid_op),
+            _StubResponse(text=invalid_op),
+            _StubResponse(text=invalid_op),
         ],
     }
     llm = _RoutedLLM(routes)
     adapter = _mk_llm_adapter(llm, plan_dict=plan_dict, orchestrator_max_turns=2)
     traj = adapter.run_question("Q", question_id="qbadreplan")
 
-    # Final plan is still the original plan with target `t`.
+    # Final plan unchanged.
     assert any(e.get("id") == "t" and e.get("is_target") for e in traj.extra["plan_json"]["entities"])
-    assert not any(e.get("id") == "b_new" for e in traj.extra["plan_json"]["entities"])
-    # State was restored too: no b_new entry leaked from the rejected revision.
-    blank_ids = {b["blank_id"] for b in traj.extra["executed_blanks"]}
-    assert blank_ids == {"t"}
     # The failed replan is visible as a rejected plan_update event.
     assert len(traj.extra["plan_updates"]) == 1
     assert traj.extra["plan_updates"][0].get("rejected") is True
-    assert "no_target" in traj.extra["plan_updates"][0].get("error", "")
+    err = traj.extra["plan_updates"][0].get("error", "")
+    assert "could not produce a structural change" in err or "apply_diff failed" in err
 
 
 def test_researcher_suggest_plan_revision_rejects_empty_args():
@@ -1074,30 +1079,6 @@ def test_plan_update_cap_rejects_third_call():
     request_plan_update calls, the third one is rejected with a clear
     error pointing the orchestrator at submit_answer."""
     plan_dict = _one_level_plan()
-    new_plan_v2 = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_extra1", "kind": "blank", "role": "bridge-attribute", "value_type": "text"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "entity", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with", "subject_id": "e1", "object_id": "b_extra1"},
-            {"id": "vp2", "phrase": "released", "subject_id": "e1", "object_id": "t"},
-        ],
-        "constraints": [],
-    }
-    new_plan_v3 = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_extra2", "kind": "blank", "role": "bridge-attribute", "value_type": "text"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "entity", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with", "subject_id": "e1", "object_id": "b_extra2"},
-            {"id": "vp2", "phrase": "released", "subject_id": "e1", "object_id": "t"},
-        ],
-        "constraints": [],
-    }
     routes = {
         "You are the **Orchestrator**": [
             # Update #1 — ok
@@ -1109,10 +1090,11 @@ def test_plan_update_cap_rejects_third_call():
             # After rejection orchestrator submits empty (give-up).
             _StubResponse(tool_calls=[_tc("o4", "submit_answer", {"answer": ""})]),
         ],
-        # Plan-updater serves two distinct revised plans, then nothing.
-        "## Plan-updater mode": [
-            _StubResponse(text=json.dumps(new_plan_v2)),
-            _StubResponse(text=json.dumps(new_plan_v3)),
+        # Plan-updater emits two add_blank ops (post-update-1 plan has
+        # b_extra1, so update #2 must use a fresh id b_extra2).
+        "You are the **Plan-Updater**": [
+            _StubResponse(text=_add_blank_op("b_extra1", "vp_x1")),
+            _StubResponse(text=_add_blank_op("b_extra2", "vp_x2")),
         ],
     }
     llm = _RoutedLLM(routes)
@@ -1131,23 +1113,58 @@ def test_plan_update_cap_rejects_third_call():
            "cap" in plan_updates[2].get("error", "").lower()
 
 
+def test_noop_plan_updates_are_rejected_and_count_toward_cap():
+    """Trivial diff ops are rejected after MAX_REVISION_ATTEMPTS=3
+    retries each. Each rejected ``request_plan_update`` call still
+    counts toward MAX_PLAN_UPDATES_PER_RUN — the cap covers
+    orchestrator-level requests, not internal LLM retries."""
+    plan_dict = _one_level_plan()
+    trivial = _trivial_op()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "request_plan_update", {"reason": "r1", "evidence": "e1"})]),
+            _StubResponse(tool_calls=[_tc("o2", "request_plan_update", {"reason": "r2", "evidence": "e2"})]),
+            _StubResponse(tool_calls=[_tc("o3", "request_plan_update", {"reason": "r3", "evidence": "e3"})]),
+            _StubResponse(tool_calls=[_tc("o4", "submit_answer", {"answer": ""})]),
+        ],
+        # Each request_plan_update consumes 3 internal retries → 9
+        # total trivial responses. _RoutedLLM falls back to "(no
+        # route)" once the queue empties; that's also a parse failure
+        # so each request still ends up rejected.
+        "You are the **Plan-Updater**": [
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+            _StubResponse(text=trivial),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(llm, plan_dict=plan_dict, orchestrator_max_turns=8)
+    traj = adapter.run_question("Q", question_id="qnoopcap")
+
+    assert traj.final_answer == ""
+    assert traj.extra["stopped_reason"] == "give_up_unanswerable"
+    # No accepted replan should be added to plan_json_versions.
+    assert len(traj.extra["plan_json_versions"]) == 1
+    plan_updates = traj.extra["plan_updates"]
+    assert len(plan_updates) == 3
+    assert plan_updates[0].get("rejected") is True
+    assert plan_updates[1].get("rejected") is True
+    assert plan_updates[2].get("rejected") is True
+    # The 3rd attempt should hit the cap (rejected calls still count).
+    assert "max plan updates" in plan_updates[2].get("error", "").lower()
+
+
 def test_submit_answer_give_up_when_cap_reached_and_target_unresolved():
     """submit_answer accepts an empty answer when the plan-update cap
     is reached AND the target is still unresolved. Stops with
     `stopped_reason='give_up_unanswerable'`."""
     plan_dict = _one_level_plan()
-    new_plan = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_extra", "kind": "blank", "role": "bridge-attribute", "value_type": "text"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "entity", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with", "subject_id": "e1", "object_id": "b_extra"},
-            {"id": "vp2", "phrase": "released", "subject_id": "e1", "object_id": "t"},
-        ],
-        "constraints": [],
-    }
     routes = {
         "You are the **Orchestrator**": [
             # Burn 2 plan-updates so the cap is reached.
@@ -1156,9 +1173,9 @@ def test_submit_answer_give_up_when_cap_reached_and_target_unresolved():
             # Try to submit empty answer despite target unresolved → allowed.
             _StubResponse(tool_calls=[_tc("o3", "submit_answer", {"answer": ""})]),
         ],
-        "## Plan-updater mode": [
-            _StubResponse(text=json.dumps(new_plan)),
-            _StubResponse(text=json.dumps(new_plan)),
+        "You are the **Plan-Updater**": [
+            _StubResponse(text=_add_blank_op("b_extra1", "vp_x1")),
+            _StubResponse(text=_add_blank_op("b_extra2", "vp_x2")),
         ],
     }
     llm = _RoutedLLM(routes)
@@ -1210,18 +1227,6 @@ def test_dispatch_hint_includes_last_plan_update_summary():
     should auto-prepend the last revision diff_summary to its hints
     so the new researcher knows the prior context."""
     plan_dict = _one_level_plan()
-    new_plan = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Pink Floyd", "role": "subject"},
-            {"id": "b_new", "kind": "blank", "role": "bridge-attribute", "value_type": "text"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "entity", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "associated_with", "subject_id": "e1", "object_id": "b_new"},
-            {"id": "vp2", "phrase": "released", "subject_id": "e1", "object_id": "t"},
-        ],
-        "constraints": [],
-    }
     # Route order matters: more-specific keys first so the t-researcher
     # (whose system prompt contains a "Prior resolved values" entry for
     # b_new) doesn't accidentally match the b_new route.
@@ -1238,7 +1243,7 @@ def test_dispatch_hint_includes_last_plan_update_summary():
             })]),
             _StubResponse(tool_calls=[_tc("o4", "submit_answer", {"answer": "DONE"})]),
         ],
-        "## Plan-updater mode": [_StubResponse(text=json.dumps(new_plan))],
+        "You are the **Plan-Updater**": [_StubResponse(text=_add_blank_op("b_new", "vp_new"))],
         # Most-specific marker for t — only the target-slice has this.
         "**TARGET**": [
             _StubResponse(tool_calls=[_tc("rB", "update_blank", {
