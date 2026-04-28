@@ -23,6 +23,7 @@ import hashlib
 import logging
 import os
 import pickle
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -127,6 +128,11 @@ class DenseRetriever:
 
         # The encoder is only needed for queries after the build.
         self._model = None  # lazy — loaded on first search
+        # Lock around the lazy load so concurrent search() calls (e.g.,
+        # ThreadPoolExecutor over questions) don't race to materialize
+        # the SentenceTransformer — that race triggers a meta-tensor
+        # error on torch 2.x.
+        self._model_lock = threading.Lock()
 
     # ------------------------------------------------------------------
     # Index build
@@ -196,7 +202,12 @@ class DenseRetriever:
     # ------------------------------------------------------------------
 
     def _ensure_model(self):
-        if self._model is None:
+        if self._model is not None:
+            return self._model
+        # Double-checked locking — only one thread loads the model.
+        with self._model_lock:
+            if self._model is not None:
+                return self._model
             import torch
             from sentence_transformers import SentenceTransformer
 
