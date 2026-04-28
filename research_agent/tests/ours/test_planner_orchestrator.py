@@ -1074,10 +1074,15 @@ def test_researcher_suggest_plan_revision_rejects_empty_args():
 # ---------------------------------------------------------------------------
 
 
-def test_plan_update_cap_rejects_third_call():
-    """After MAX_PLAN_UPDATES_PER_RUN (default 2) successful
-    request_plan_update calls, the third one is rejected with a clear
-    error pointing the orchestrator at submit_answer."""
+def test_plan_update_cap_rejects_third_call(monkeypatch):
+    """After MAX_PLAN_UPDATES_PER_RUN successful request_plan_update
+    calls, the next one is rejected with a clear error pointing the
+    orchestrator at submit_answer. Test pins cap=2 so the routes stay
+    short — the production cap is now 4 (Fix #3)."""
+    from research_agent.adapters.ours.gsw_planner_orchestrator_v1 import (
+        OursGSWPlannerOrchestratorV1Adapter,
+    )
+    monkeypatch.setattr(OursGSWPlannerOrchestratorV1Adapter, "MAX_PLAN_UPDATES_PER_RUN", 2)
     plan_dict = _one_level_plan()
     routes = {
         "You are the **Orchestrator**": [
@@ -1113,11 +1118,16 @@ def test_plan_update_cap_rejects_third_call():
            "cap" in plan_updates[2].get("error", "").lower()
 
 
-def test_noop_plan_updates_are_rejected_and_count_toward_cap():
+def test_noop_plan_updates_are_rejected_and_count_toward_cap(monkeypatch):
     """Trivial diff ops are rejected after MAX_REVISION_ATTEMPTS=3
     retries each. Each rejected ``request_plan_update`` call still
     counts toward MAX_PLAN_UPDATES_PER_RUN — the cap covers
-    orchestrator-level requests, not internal LLM retries."""
+    orchestrator-level requests, not internal LLM retries.
+    Pin cap=2 to keep the test compact."""
+    from research_agent.adapters.ours.gsw_planner_orchestrator_v1 import (
+        OursGSWPlannerOrchestratorV1Adapter,
+    )
+    monkeypatch.setattr(OursGSWPlannerOrchestratorV1Adapter, "MAX_PLAN_UPDATES_PER_RUN", 2)
     plan_dict = _one_level_plan()
     trivial = _trivial_op()
     routes = {
@@ -1160,10 +1170,14 @@ def test_noop_plan_updates_are_rejected_and_count_toward_cap():
     assert "max plan updates" in plan_updates[2].get("error", "").lower()
 
 
-def test_submit_answer_give_up_when_cap_reached_and_target_unresolved():
+def test_submit_answer_give_up_when_cap_reached_and_target_unresolved(monkeypatch):
     """submit_answer accepts an empty answer when the plan-update cap
     is reached AND the target is still unresolved. Stops with
-    `stopped_reason='give_up_unanswerable'`."""
+    `stopped_reason='give_up_unanswerable'`. Pin cap=2 for compact test."""
+    from research_agent.adapters.ours.gsw_planner_orchestrator_v1 import (
+        OursGSWPlannerOrchestratorV1Adapter,
+    )
+    monkeypatch.setattr(OursGSWPlannerOrchestratorV1Adapter, "MAX_PLAN_UPDATES_PER_RUN", 2)
     plan_dict = _one_level_plan()
     routes = {
         "You are the **Orchestrator**": [

@@ -583,3 +583,264 @@ def test_build_dependency_graph_respects_vp_projection():
     deps = build_dependency_graph(plan)
     assert "b_person" in deps["b_age"]
     assert deps["b_person"] == set()
+
+
+# ---------------------------------------------------------------------------
+# Phase-3.6.2 — per-kind constraint-shape validation
+#
+# A constraint missing its required input fields is uncomputable. The
+# planner emit-repair loop relies on these ValueErrors to surface a
+# concrete problem to the LLM for retry.
+# ---------------------------------------------------------------------------
+
+
+def _base_entities_two_candidates() -> list[Entity]:
+    return [
+        Entity(id="e1", kind="filled", name="A", role="candidate"),
+        Entity(id="e2", kind="filled", name="B", role="candidate"),
+        Entity(id="b1", kind="blank", value_type="number", role="bridge-number"),
+        Entity(id="b2", kind="blank", value_type="number", role="bridge-number"),
+        Entity(
+            id="t",
+            kind="blank",
+            value_type="entity",
+            is_target=True,
+            role="target",
+        ),
+    ]
+
+
+def _base_vps_two_candidates() -> list[VerbPhrase]:
+    return [
+        VerbPhrase(id="vp1", phrase="has_x", subject_id="e1", object_id="b1"),
+        VerbPhrase(id="vp2", phrase="has_x", subject_id="e2", object_id="b2"),
+    ]
+
+
+def test_constraint_argmax_without_candidates_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=_base_entities_two_candidates(),
+            verb_phrases=_base_vps_two_candidates(),
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="argmax",
+                    candidate_entity_ids=[],  # empty — invalid
+                    sort_by_blank_ids=["b1", "b2"],
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "candidate_entity_ids" in msg
+    assert "argmax" in msg
+
+
+def test_constraint_argmin_without_sort_by_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=_base_entities_two_candidates(),
+            verb_phrases=_base_vps_two_candidates(),
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="argmin",
+                    candidate_entity_ids=["e1", "e2"],
+                    sort_by_blank_ids=[],  # empty — invalid
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "sort_by_blank_ids" in msg
+    assert "argmin" in msg
+
+
+def test_constraint_derived_with_empty_args_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A", role="subject"),
+                Entity(id="b1", kind="blank", value_type="number", role="bridge-number"),
+                Entity(
+                    id="t",
+                    kind="blank",
+                    value_type="number",
+                    is_target=True,
+                    role="target",
+                ),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_x", subject_id="e1", object_id="b1"),
+            ],
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="derived",
+                    op="diff",
+                    args_blanks=[],  # empty — invalid
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "args_blanks" in msg
+    assert "derived" in msg
+
+
+def test_constraint_gt_without_left_ref_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A", role="subject"),
+                Entity(id="b1", kind="blank", value_type="number", role="bridge-number"),
+                Entity(
+                    id="t",
+                    kind="blank",
+                    value_type="bool",
+                    is_target=True,
+                    role="target",
+                ),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_x", subject_id="e1", object_id="b1"),
+            ],
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="gt",
+                    left_ref=None,  # missing — invalid
+                    right_ref="b1",
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "left_ref" in msg or "right_ref" in msg
+    assert "gt" in msg
+
+
+def test_constraint_equals_without_right_ref_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A", role="subject"),
+                Entity(id="b1", kind="blank", value_type="text", role="bridge-text"),
+                Entity(
+                    id="t",
+                    kind="blank",
+                    value_type="bool",
+                    is_target=True,
+                    role="target",
+                ),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_x", subject_id="e1", object_id="b1"),
+            ],
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="equals",
+                    left_ref="b1",
+                    right_ref=None,  # missing — invalid
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "left_ref" in msg or "right_ref" in msg
+    assert "equals" in msg
+
+
+def test_constraint_in_list_with_empty_args_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A", role="subject"),
+                Entity(id="b1", kind="blank", value_type="list", role="bridge-list"),
+                Entity(
+                    id="t",
+                    kind="blank",
+                    value_type="bool",
+                    is_target=True,
+                    role="target",
+                ),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_x", subject_id="e1", object_id="b1"),
+            ],
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="in_list",
+                    args_blanks=[],  # empty — invalid
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "args_blanks" in msg
+    assert "in_list" in msg
+
+
+def test_constraint_argmax_with_full_shape_accepted():
+    """A well-formed argmax constraint must validate without errors."""
+    plan = GSWPlan(
+        entities=_base_entities_two_candidates(),
+        verb_phrases=_base_vps_two_candidates(),
+        constraints=[
+            Constraint(
+                id="c1",
+                kind="argmax",
+                candidate_entity_ids=["e1", "e2"],
+                sort_by_blank_ids=["b1", "b2"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    assert plan.constraints[0].kind == "argmax"
+
+
+def test_constraint_derived_with_args_accepted():
+    """A well-formed derived constraint must validate without errors."""
+    plan = GSWPlan(
+        entities=[
+            Entity(id="e1", kind="filled", name="A", role="subject"),
+            Entity(id="b1", kind="blank", value_type="number", role="bridge-number"),
+            Entity(id="b2", kind="blank", value_type="number", role="bridge-number"),
+            Entity(
+                id="t",
+                kind="blank",
+                value_type="number",
+                is_target=True,
+                role="target",
+            ),
+        ],
+        verb_phrases=[
+            VerbPhrase(id="vp1", phrase="x", subject_id="e1", object_id="b1"),
+            VerbPhrase(id="vp2", phrase="y", subject_id="e1", object_id="b2"),
+        ],
+        constraints=[
+            Constraint(
+                id="c1",
+                kind="derived",
+                op="diff",
+                args_blanks=["b1", "b2"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    assert plan.constraints[0].args_blanks == ["b1", "b2"]

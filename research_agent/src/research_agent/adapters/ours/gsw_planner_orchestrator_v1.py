@@ -833,6 +833,19 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             )
         except PlanEmitError as exc:
             traj.extra["plan_emit_error"] = f"{exc.kind}:{exc.detail}"
+            if exc.kind == "exhausted":
+                # All repair attempts ran and failed. Falling back to a
+                # flat ReAct adapter here makes things worse: with no
+                # plan to ground retrieval, the flat reasoner often
+                # hallucinates a confident answer (e.g. "Zero." /
+                # "Data not available."). Surface the failure honestly
+                # by submitting an empty answer.
+                traj.extra["planner_failed"] = True
+                traj.extra["stopped_reason"] = "planner_exhausted"
+                traj.final_answer = ""
+                traj.reasoning = ""
+                traj.wall_time_s = round(time.time() - start, 3)
+                return traj
             return self._run_fallback(
                 question, question_id, articles,
                 reason=f"{exc.kind}:{exc.detail}",
@@ -1034,6 +1047,12 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
     # the corpus likely lacks the data and further revision is a
     # losing loop. The orchestrator can submit_answer with an empty/
     # best-effort string after the cap is reached.
+    #
+    # Phase-3.6.2 Fix #3 attempted to raise this to 4 to recover q227 /
+    # q308 / q401, but a 2x100Q probe showed wrong_synthesis grew
+    # 12.5 → 18 (mean) and judge_acc dropped from 68.5 → 66 — the
+    # extra cap budget converted "give up empty" into "submit stale
+    # wrong value". Reverted to 2.
     MAX_PLAN_UPDATES_PER_RUN: ClassVar[int] = 2
     # Phase-3.2 follow-up: per-blank dispatch cap. If a single blank
     # has triggered ``MAX_ESCALATIONS_PER_BLANK`` researcher

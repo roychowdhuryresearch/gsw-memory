@@ -675,15 +675,51 @@ REPAIR_SYSTEM = textwrap.dedent(
 ).strip()
 
 
-def build_repair_messages(question: str, bad_response: str, error: str) -> list[dict]:
-    """Messages for the one-shot repair retry on parse failure."""
+def build_repair_messages(
+    question: str,
+    bad_response: str,
+    error: str,
+    *,
+    attempt: int = 1,
+    max_attempts: int = 1,
+) -> list[dict]:
+    """Messages for the repair retry on parse failure.
+
+    ``attempt`` is 1-indexed; ``max_attempts`` is the total repair budget.
+    Later attempts get a progressively sharper preface so the LLM knows
+    it has already failed earlier rounds and must change its output.
+    """
     msgs = build_planner_messages(question)
     msgs.append({"role": "assistant", "content": bad_response})
+
+    if max_attempts <= 1 or attempt <= 1:
+        preface = REPAIR_SYSTEM
+    elif attempt < max_attempts:
+        preface = (
+            f"This is repair attempt {attempt} of {max_attempts}. "
+            "Your previous repaired output ALSO failed validation. "
+            "Read the validation error carefully — the named field "
+            "is the one to fix. Do NOT echo your previous response.\n\n"
+            f"{REPAIR_SYSTEM}"
+        )
+    else:
+        preface = (
+            f"FINAL repair attempt ({attempt}/{max_attempts}). "
+            "All earlier repairs have failed. If this attempt does not "
+            "validate, the question will be answered without a plan. "
+            "Address the SPECIFIC field named in the validation error — "
+            "if it complains about empty `args_blanks`, populate them; "
+            "if it complains about missing `left_ref`, supply it; if it "
+            "complains about a dangling entity, add a verb-phrase that "
+            "uses it. Re-emit the entire JSON object from scratch.\n\n"
+            f"{REPAIR_SYSTEM}"
+        )
+
     msgs.append(
         {
             "role": "user",
             "content": (
-                f"{REPAIR_SYSTEM}\n\nValidation error was:\n{error}\n\n"
+                f"{preface}\n\nValidation error was:\n{error}\n\n"
                 "Return the corrected JSON now."
             ),
         }

@@ -151,6 +151,52 @@ class GSWPlan(BaseModel):
             )
         return self
 
+    @model_validator(mode="after")
+    def _check_constraint_shape(self) -> "GSWPlan":
+        """Validate per-kind required fields on each constraint.
+
+        A constraint with empty inputs is uncomputable — the executor
+        can't pick a winner / sum / compare anything. The
+        orchestrator then submits whatever placeholder is in scope
+        (e.g., the literal hint string ``Winner B``). Catching at
+        plan-emit time and raising ``ValueError`` lets the planner
+        repair retry surface a concrete error to the LLM.
+        """
+        for c in self.constraints:
+            if c.kind == "derived":
+                if not c.args_blanks:
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind=derived, op={c.op!r}) "
+                        "has empty args_blanks; derived constraints must "
+                        "list the input blanks"
+                    )
+            elif c.kind in ("argmax", "argmin"):
+                if not c.candidate_entity_ids:
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind={c.kind}) has empty "
+                        "candidate_entity_ids; argmax/argmin must list "
+                        "the entities to choose between"
+                    )
+                if not c.sort_by_blank_ids:
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind={c.kind}) has empty "
+                        "sort_by_blank_ids; argmax/argmin must specify "
+                        "the blank(s) to rank candidates by"
+                    )
+            elif c.kind in ("equals", "gt", "lt"):
+                if not (c.left_ref and c.right_ref):
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind={c.kind}) requires "
+                        "both left_ref and right_ref"
+                    )
+            elif c.kind == "in_list":
+                if not c.args_blanks:
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind=in_list) has empty "
+                        "args_blanks; in_list must list [member, list_blank]"
+                    )
+        return self
+
 
 # ---------------------------------------------------------------------------
 # Errors + state
