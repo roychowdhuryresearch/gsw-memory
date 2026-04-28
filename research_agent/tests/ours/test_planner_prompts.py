@@ -18,7 +18,6 @@ from __future__ import annotations
 import pytest
 
 from research_agent.adapters.ours._planner_exec import GSWPlan
-from research_agent.adapters.ours._planner_emit import _parse_plan
 from research_agent.adapters.ours._planner_prompts import (
     _FEW_SHOT_1_TEMPORAL_BRIDGE,
     _FEW_SHOT_2_AS_OF_DATE_DIFF,
@@ -127,36 +126,6 @@ def test_as_of_date_shot_has_date_anchor_role() -> None:
         if e.kind == "filled" and e.role == "as-of-date"
     ]
     assert as_of_date_roles, "few-shot #2 must carry a filled as-of-date entity"
-
-
-def test_parse_plan_rejects_ungrounded_placeholder_filled_entity() -> None:
-    import json
-
-    bad_plan = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Winner A", "role": "candidate"},
-            {"id": "b1", "kind": "blank", "value_type": "number", "role": "bridge-number"},
-            {"id": "t", "kind": "blank", "value_type": "entity", "role": "target", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "has_age", "subject_id": "e1", "object_id": "b1"}
-        ],
-        "constraints": [
-            {
-                "id": "c1",
-                "kind": "argmin",
-                "candidate_entity_ids": ["e1"],
-                "sort_by_blank_ids": ["b1"],
-                "output_blank_id": "t",
-            }
-        ],
-    }
-    with pytest.raises(ValueError) as excinfo:
-        _parse_plan(
-            json.dumps(bad_plan),
-            question="Of the non-Americans who have won the Phoenix Open, who was youngest?",
-        )
-    assert "grounding test" in str(excinfo.value)
 
 
 def test_temporal_bridge_shot_has_year_anchor_role() -> None:

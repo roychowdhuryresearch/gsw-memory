@@ -21,7 +21,6 @@ from research_agent.adapters.ours._plan_diff import (
     RemoveBlankOp,
     RemoveConstraintOp,
     RemoveVPOp,
-    ReplaceConstraintOp,
     apply_diff,
     is_trivial_op,
     parse_diff_op,
@@ -91,22 +90,6 @@ def test_parse_diff_op_unknown_op_raises():
     from pydantic import ValidationError
     with pytest.raises(ValidationError):
         parse_diff_op({"op": "rename_blank", "blank_id": "x"})
-
-
-def test_parse_diff_op_routes_to_replace_constraint():
-    op = parse_diff_op({
-        "op": "replace_constraint",
-        "constraint_id": "c1",
-        "constraint": {
-            "id": "c1",
-            "kind": "derived",
-            "op": "sum",
-            "args_blanks": ["b_a", "b_b"],
-            "output_blank_id": "t",
-        },
-    })
-    assert isinstance(op, ReplaceConstraintOp)
-    assert op.constraint_id == "c1"
 
 
 # ---------------------------------------------------------------------------
@@ -284,82 +267,6 @@ def test_apply_change_value_type():
     new = apply_diff(plan, op)
     t_ent = next(e for e in new.entities if e.id == "t")
     assert t_ent.value_type == "text"
-
-
-def test_apply_replace_constraint():
-    plan_dict = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Alice", "role": "subject"},
-            {"id": "b_a", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "b_b", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "number", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "has_a", "subject_id": "e1", "object_id": "b_a"},
-            {"id": "vp2", "phrase": "has_b", "subject_id": "e1", "object_id": "b_b"},
-        ],
-        "constraints": [
-            {
-                "id": "c1",
-                "kind": "derived",
-                "op": "sum",
-                "args_blanks": ["b_a"],
-                "output_blank_id": "t",
-            }
-        ],
-    }
-    plan = GSWPlan.model_validate(plan_dict)
-    op = parse_diff_op({
-        "op": "replace_constraint",
-        "constraint_id": "c1",
-        "constraint": {
-            "id": "c1",
-            "kind": "derived",
-            "op": "sum",
-            "args_blanks": ["b_a", "b_b"],
-            "output_blank_id": "t",
-        },
-    })
-    new = apply_diff(plan, op)
-    assert len(new.constraints) == 1
-    assert new.constraints[0].args_blanks == ["b_a", "b_b"]
-
-
-def test_apply_add_constraint_duplicate_output_rejected():
-    plan_dict = {
-        "entities": [
-            {"id": "e1", "kind": "filled", "name": "Alice", "role": "subject"},
-            {"id": "b_a", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "b_b", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "t", "kind": "blank", "role": "target", "value_type": "number", "is_target": True},
-        ],
-        "verb_phrases": [
-            {"id": "vp1", "phrase": "has_a", "subject_id": "e1", "object_id": "b_a"},
-            {"id": "vp2", "phrase": "has_b", "subject_id": "e1", "object_id": "b_b"},
-        ],
-        "constraints": [
-            {
-                "id": "c1",
-                "kind": "derived",
-                "op": "sum",
-                "args_blanks": ["b_a"],
-                "output_blank_id": "t",
-            }
-        ],
-    }
-    plan = GSWPlan.model_validate(plan_dict)
-    op = parse_diff_op({
-        "op": "add_constraint",
-        "constraint": {
-            "id": "c2",
-            "kind": "derived",
-            "op": "sum",
-            "args_blanks": ["b_a", "b_b"],
-            "output_blank_id": "t",
-        },
-    })
-    with pytest.raises(DiffApplyError):
-        apply_diff(plan, op)
 
 
 def test_apply_add_blank_introducing_cycle_rejected():

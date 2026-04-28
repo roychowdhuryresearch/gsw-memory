@@ -73,20 +73,7 @@ class _ConstraintSpec(BaseModel):
 
     id: str
     kind: Literal["derived", "argmax", "argmin", "equals", "in_list", "gt", "lt"]
-    op: Optional[
-        Literal[
-            "diff",
-            "sum",
-            "avg",
-            "max",
-            "min",
-            "count",
-            "concat",
-            "mul",
-            "div",
-            "round_nearest",
-        ]
-    ] = None
+    op: Optional[Literal["diff", "sum", "avg", "max", "min", "count", "concat"]] = None
     args_blanks: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)
@@ -135,12 +122,6 @@ class RemoveConstraintOp(BaseModel):
     constraint_id: str
 
 
-class ReplaceConstraintOp(BaseModel):
-    op: Literal["replace_constraint"]
-    constraint_id: str
-    constraint: _ConstraintSpec
-
-
 class ChangeValueTypeOp(BaseModel):
     op: Literal["change_value_type"]
     blank_id: str
@@ -156,7 +137,6 @@ PlanDiffOp = Annotated[
         RemoveVPOp,
         AddConstraintOp,
         RemoveConstraintOp,
-        ReplaceConstraintOp,
         ChangeValueTypeOp,
     ],
     Field(discriminator="op"),
@@ -282,13 +262,6 @@ def is_trivial_op(op: "PlanDiffOp", plan: GSWPlan) -> tuple[bool, str]:
             return True, f"remove_constraint: id {op.constraint_id!r} not in plan"
         return False, ""
 
-    if isinstance(op, ReplaceConstraintOp):
-        if op.constraint_id not in cons_ids:
-            return True, f"replace_constraint: id {op.constraint_id!r} not in plan"
-        if op.constraint.id != op.constraint_id and op.constraint.id in cons_ids:
-            return True, f"replace_constraint: new id {op.constraint.id!r} already exists"
-        return False, ""
-
     if isinstance(op, ChangeValueTypeOp):
         if op.blank_id not in blank_ids:
             return True, f"change_value_type: blank_id {op.blank_id!r} not in plan"
@@ -402,22 +375,6 @@ def apply_diff(old_plan: GSWPlan, op: "PlanDiffOp") -> GSWPlan:
 
     elif isinstance(op, RemoveConstraintOp):
         new.constraints = [c for c in new.constraints if c.id != op.constraint_id]
-
-    elif isinstance(op, ReplaceConstraintOp):
-        new.constraints = [c for c in new.constraints if c.id != op.constraint_id]
-        new.constraints.append(
-            Constraint(
-                id=op.constraint.id,
-                kind=op.constraint.kind,
-                op=op.constraint.op,
-                args_blanks=list(op.constraint.args_blanks),
-                candidate_entity_ids=list(op.constraint.candidate_entity_ids),
-                sort_by_blank_ids=list(op.constraint.sort_by_blank_ids),
-                left_ref=op.constraint.left_ref,
-                right_ref=op.constraint.right_ref,
-                output_blank_id=op.constraint.output_blank_id,
-            )
-        )
 
     elif isinstance(op, ChangeValueTypeOp):
         for e in new.entities:

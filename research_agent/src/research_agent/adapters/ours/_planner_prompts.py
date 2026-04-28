@@ -120,15 +120,11 @@ PLANNER_SYSTEM = textwrap.dedent(
     ### Step 3 — Constraints (only when needed)
     Add a constraint ONLY when the question demands:
       - **derived**: arithmetic over blank values (`op ∈ {diff, sum,
-        avg, max, min, count, concat, mul, div, round_nearest}`,
-        `args_blanks = [...]`). Use `round_nearest` for explicit
-        "round to the nearest ten" style post-aggregation transforms.
+        avg, max, min, count, concat}`, `args_blanks = [...]`).
       - **argmax** / **argmin**: pick the entity among N candidates
         whose ranking blank value is extreme (`candidate_entity_ids`
         and `sort_by_blank_ids` aligned same-length).
-      - **equals / in_list / gt / lt**: relational comparisons with
-        `left_ref`, `right_ref`, and an `output_blank_id`. Do not use
-        relational constraints as dangling assertions with no output.
+      - **equals / in_list / gt / lt**: relational (rare in Phase 1).
 
     Most 2–3 hop questions need **zero** constraints — the bridging
     dependency is already expressed by verb-phrases. Use constraints
@@ -248,9 +244,6 @@ PLANNER_SYSTEM = textwrap.dedent(
       - argmax / argmin: `candidate_entity_ids`, `sort_by_blank_ids`
         (same length; position i of one maps to position i of the other).
       - relational: `left_ref`, `right_ref`.
-    - A blank may be produced by at most one constraint. If you need
-      to change a constraint during repair, replace it; do not emit
-      two constraints with the same `output_blank_id`.
 
     ## Output format
 

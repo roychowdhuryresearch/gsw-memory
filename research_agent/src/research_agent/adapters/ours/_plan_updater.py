@@ -58,11 +58,7 @@ from research_agent.adapters.ours._plan_diff import (
     plan_signature,
 )
 from research_agent.adapters.ours._planner_emit import PlanEmitError, PlanEmitMeta
-from research_agent.adapters.ours._planner_exec import (
-    BlankResult,
-    GSWPlan,
-    build_dependency_graph,
-)
+from research_agent.adapters.ours._planner_exec import BlankResult, GSWPlan
 
 
 # Maximum number of LLM calls per ``update_plan`` request. Each
@@ -92,9 +88,6 @@ class PlanReconcileDiff:
     op_summary: str = ""
     # Number of LLM attempts used (1..MAX_REVISION_ATTEMPTS).
     attempts: int = 1
-    # Preserved ids whose cached values were cleared because the
-    # structural retrieval/computation path changed.
-    invalidated_ids: list[str] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +127,7 @@ UPDATER_SYSTEM = textwrap.dedent(
 
     {"op": "add_constraint",
      "constraint": {"id": "c_<new>", "kind": "derived|argmax|argmin|equals|in_list|gt|lt",
-                    "op": "diff|sum|avg|max|min|count|concat|mul|div|round_nearest",
+                    "op": "diff|sum|avg|max|min|count|concat",
                     "args_blanks": ["<blank>", ...],
                     "candidate_entity_ids": ["<id>", ...],
                     "sort_by_blank_ids": ["<blank>", ...],
@@ -142,11 +135,6 @@ UPDATER_SYSTEM = textwrap.dedent(
                     "output_blank_id": "<blank>"}}
 
     {"op": "remove_constraint", "constraint_id": "<existing>"}
-
-    {"op": "replace_constraint",
-     "constraint_id": "<existing>",
-     "constraint": {"id": "c_<same_or_new>", "kind": "...",
-                    "...": "..."}}
 
     {"op": "change_value_type", "blank_id": "<existing>",
      "to": "date|number|entity|attribute|list|text|bool"}
@@ -165,10 +153,7 @@ UPDATER_SYSTEM = textwrap.dedent(
     5. `change_value_type.to` MUST differ from the current value_type.
     6. `change_target` and `add_vp`/`remove_vp` must not introduce a
        cycle in the dependency graph.
-    7. Use `replace_constraint` when an existing constraint has the
-       wrong args/op/output. Do NOT add a second constraint with the
-       same `output_blank_id`.
-    8. Filled entities (`kind=filled`) are grounded in the question
+    7. Filled entities (`kind=filled`) are grounded in the question
        text — never rename or remove them.
 
     ## Worked examples
@@ -325,9 +310,8 @@ def build_updater_messages(
         Emit ONE diff op (JSON object) that reconciles the plan with the
         evidence. Pick the smallest meaningful change — `add_blank`
         for a missing intermediate, `change_target` for a wrong target
-        blank, `replace_constraint` when an existing constraint has
-        wrong args/op/output, `add_constraint` for a genuinely new
-        aggregation/filter, etc. Return ONLY the JSON object.
+        blank, `add_constraint` for an aggregation/filter, etc. Return
+        ONLY the JSON object.
         """
     ).strip()
 
@@ -365,10 +349,8 @@ def build_updater_retry_messages(
                 If `add_blank` was rejected because the id collides,
                 pick a different fresh id. If `change_target` was
                 rejected, you may instead want `change_value_type` or
-                `add_blank` for a missing bridge step. If
-                `add_constraint` was rejected because another constraint
-                already outputs to that blank, use `replace_constraint`
-                instead. Return ONLY the JSON op object.
+                `add_blank` for a missing bridge step. Return ONLY the
+                JSON op object.
                 """
             ).strip(),
         }
@@ -436,8 +418,6 @@ def _op_summary(op: PlanDiffOp) -> str:
         return f"add_constraint({op.constraint.id})"
     if name == "remove_constraint":
         return f"remove_constraint({op.constraint_id})"
-    if name == "replace_constraint":
-        return f"replace_constraint({op.constraint_id} -> {op.constraint.id})"
     if name == "change_value_type":
         return f"change_value_type({op.blank_id} -> {op.to})"
     return name
@@ -573,8 +553,6 @@ def _reconcile_state(
     added = sorted(new_ids - old_ids)
     dropped = sorted(old_ids - new_ids)
 
-    invalidated = _compute_invalidated_ids(old_plan, new_plan, preserved)
-
     # Add unknown entries for newly-introduced ids.
     for bid in added:
         if bid not in state:
@@ -584,97 +562,12 @@ def _reconcile_state(
     for bid in dropped:
         state.pop(bid, None)
 
-    # Clear stale cached values after structural edits. This must happen
-    # after dropping obsolete ids but before the orchestrator resumes, so
-    # constraint cascade/re-dispatch can recompute through the new graph.
-    for bid in invalidated:
-        if bid in state:
-            state[bid] = BlankResult(blank_id=bid, status="unknown")
-
     summary = (
-        f"preserved={len(preserved)}, added={len(added)}, "
-        f"dropped={len(dropped)}, invalidated={len(invalidated)}"
+        f"preserved={len(preserved)}, added={len(added)}, dropped={len(dropped)}"
     )
     return PlanReconcileDiff(
         preserved_ids=preserved,
         added_ids=added,
         dropped_ids=dropped,
-        invalidated_ids=invalidated,
         summary=summary,
     )
-
-
-def _blank_local_signature(plan: GSWPlan, blank_id: str) -> tuple:
-    """Structural facts that affect how one blank is retrieved/computed."""
-    ent = plan.entity_by_id(blank_id)
-    ent_sig = (
-        ent.id,
-        ent.kind,
-        ent.value_type or "",
-        ent.role or "",
-        ent.name or "",
-        # Deliberately exclude is_target: changing the final-answer
-        # pointer should not erase a valid cached value for that blank.
-    )
-    vp_sig = tuple(sorted(
-        (vp.id, vp.phrase, vp.subject_id, vp.object_id)
-        for vp in plan.verb_phrases
-        if blank_id in (vp.subject_id, vp.object_id)
-    ))
-    out_constraints = tuple(sorted(
-        (
-            c.id,
-            c.kind,
-            c.op or "",
-            tuple(c.args_blanks),
-            tuple(c.candidate_entity_ids),
-            tuple(c.sort_by_blank_ids),
-            c.left_ref or "",
-            c.right_ref or "",
-            c.output_blank_id or "",
-        )
-        for c in plan.constraints
-        if c.output_blank_id == blank_id
-    ))
-    return ent_sig, vp_sig, out_constraints
-
-
-def _compute_invalidated_ids(
-    old_plan: GSWPlan,
-    new_plan: GSWPlan,
-    preserved_ids: list[str],
-) -> list[str]:
-    """Find preserved blanks whose cached values no longer match graph.
-
-    Direct invalidation catches changed retrieval VPs, value_type changes,
-    and changed output constraints. We then propagate invalidation along
-    the new dependency graph so downstream computed blanks are refreshed.
-    """
-    preserved = set(preserved_ids)
-    direct = {
-        bid for bid in preserved
-        if _blank_local_signature(old_plan, bid)
-        != _blank_local_signature(new_plan, bid)
-    }
-    if not direct:
-        return []
-
-    try:
-        deps = build_dependency_graph(new_plan)
-    except Exception:  # noqa: BLE001
-        return sorted(direct)
-
-    children: dict[str, set[str]] = {bid: set() for bid in deps}
-    for child, parents in deps.items():
-        for parent in parents:
-            children.setdefault(parent, set()).add(child)
-
-    invalidated = set(direct)
-    stack = list(direct)
-    while stack:
-        bid = stack.pop()
-        for child in children.get(bid, set()):
-            if child in preserved and child not in invalidated:
-                invalidated.add(child)
-                stack.append(child)
-    return sorted(invalidated)
