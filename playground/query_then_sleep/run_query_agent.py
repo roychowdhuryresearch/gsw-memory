@@ -63,19 +63,21 @@ def _load_bridge_registry_snapshot(path: Optional[str], entity_searcher: Any) ->
                 source_docs=list(record.source_docs),
             )
         )
-        registry.surfaces.append(
-            BridgeSurface(
-                bridge_id=bridge_id,
-                orientation="reverse",
-                question_text=reverse_question,
-                answer_text=record.reverse_answer_text,
-                pattern_tags=list(record.pattern_tags),
-                question_pattern=dict(record.reverse_pattern),
-                source_docs=list(record.source_docs),
+        reverse_answer_type = str(record.reverse_pattern.get("answer_type", "")).strip().lower()
+        if reverse_answer_type in {"person", "organization"}:
+            registry.surfaces.append(
+                BridgeSurface(
+                    bridge_id=bridge_id,
+                    orientation="reverse",
+                    question_text=reverse_question,
+                    answer_text=record.reverse_answer_text,
+                    pattern_tags=list(record.pattern_tags),
+                    question_pattern=dict(record.reverse_pattern),
+                    source_docs=list(record.source_docs),
+                )
             )
-        )
+            registry._surface_keys.add((bridge_id, "reverse"))
         registry._surface_keys.add((bridge_id, "forward"))
-        registry._surface_keys.add((bridge_id, "reverse"))
     if registry.surfaces:
         embed_fn = getattr(entity_searcher, "_embed_query", None)
         if callable(embed_fn):
@@ -118,6 +120,8 @@ def main() -> None:
     parser.add_argument("--bridge_registry_snapshot", default=None)
     parser.add_argument("--max_iterations", type=int, default=20)
     parser.add_argument("--bridge_query_top_k", type=int, default=10)
+    parser.add_argument("--bridge_inject_min_score", type=float, default=0.30)
+    parser.add_argument("--bridge_inject_top_k", type=int, default=5)
     parser.add_argument("--embedding_gpu_memory_utilization", type=float, default=0.5)
     parser.add_argument("--reasoning_effort", default="medium")
     parser.add_argument("--verbose", action="store_true")
@@ -180,12 +184,14 @@ def main() -> None:
             bridge_registry=bridge_registry,
             max_iterations=args.max_iterations,
             bridge_top_k=args.bridge_query_top_k,
+            bridge_inject_min_score=args.bridge_inject_min_score,
+            bridge_inject_top_k=args.bridge_inject_top_k,
             reasoning_effort=args.reasoning_effort,
             event_callback=stage_logger.event,
         )
         for trace in result.traces:
             used = list(trace.bridge_ids_used)
-            helpful = used if (trace.bridge_evidence_used and float(trace.f1 or 0.0) > 0.0) else []
+            helpful = used if (trace.bridge_evidence_used_in_answer and float(trace.f1 or 0.0) >= 0.5) else []
             bridge_registry.record_query_usage(used, helpful, args.batch_index)
             stage_logger.progress(
                 "question",

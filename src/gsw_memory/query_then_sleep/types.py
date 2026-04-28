@@ -46,7 +46,11 @@ class QueryInteractionTrace:
     found_relations: List[str] = field(default_factory=list)
     missing_relations: List[str] = field(default_factory=list)
     bridge_evidence_used: bool = False
+    bridge_evidence_injected: bool = False
+    bridge_evidence_used_in_answer: bool = False
     bridge_ids_used: List[str] = field(default_factory=list)
+    bridge_ids_seen: List[str] = field(default_factory=list)
+    bridge_ids_injected: List[str] = field(default_factory=list)
     tool_iterations: int = 0
     status: str = "ok"
     error: str = ""
@@ -89,6 +93,7 @@ class InteractionGuidanceSummary:
     missing_bridge_targets: List[Dict[str, Any]] = field(default_factory=list)
     natural_language_summary: str = ""
     supporting_examples: List[Dict[str, Any]] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -104,6 +109,8 @@ class QuerySleepBatchRecord:
     bridges_generated_for_next_batch: int
     bridges_after_sleep: int
     bridge_usage_rate: float
+    bridge_answer_usage_rate: float = 0.0
+    sleep_targeted_edge_ratio: float = 0.7
     missing_relation_counts: Dict[str, int] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, Any]:

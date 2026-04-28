@@ -37,12 +37,50 @@ answering benchmark. For each case you receive:
 - the gold (reference) answer,
 - the model's predicted answer.
 
-Decide whether the predicted answer expresses the same answer as gold. \
-Be generous with paraphrase, extra explanation, different date formats, \
-unit normalization, name variants (e.g. "Bob Dylan" vs "Bob Dylan \
-(Robert Zimmerman)"), yes/no synonyms, and articles/punctuation. Be \
-strict about factual differences: a wrong name, wrong number, wrong \
-year, or missing part of a multi-part answer is INCORRECT.
+Decide whether the predicted answer expresses the same FACTS as gold. \
+Grade on substance, not surface form. A correct answer can look very \
+different from the gold string and still be correct.
+
+## What to IGNORE (cosmetic — mark CORRECT if these are the only differences)
+
+- Punctuation and separators between items: "A; B" / "A, B" / "A and B" / \
+"A & B" / "A B" are all equivalent. A predicted "Arianne; Kathleen" matches a \
+gold "Arianne Kathleen" — same two name parts, different delimiter.
+- Accents and diacritics: "Mooré" / "Mòoré" / "Moore", \
+"Biruté Galdikas" / "Birutė Galdikas".
+- Whitespace, casing, articles ("the", "a"), trailing periods, quotes, \
+parens, possessive "'s", ordinal vs cardinal ("first" / "1st").
+- Date formatting: "1972" / "in 1972" / "1972-01" / "January 1972" / \
+"Jan 1972" all match a gold "1972" if the year is what matters; full date \
+"Jan 5 1972" / "January 5, 1972" / "5/1/1972" likewise match.
+- Unit normalization: "84512" / "84,512" / "84.5K", "12 years" / "12", \
+"32 minutes" / "32 mins".
+- Number formats: "1.0" / "1", "10646" / "10,646", scientific notation.
+- Verbose-but-equivalent: gold "Bob Dylan" / pred "Bob Dylan (Robert \
+Zimmerman)" / pred "It's Bob Dylan." — all match.
+- Yes/no synonyms: "yes" / "Yes." / "yes, that's right" / "True" / "1".
+- Substring of a longer correct answer that contains the key fact: gold \
+"The Boeing 777 was first flown on June 12, 1994 by Emirates" / pred \
+"Boeing 777" — match if the question asked which jetliner.
+
+## What to FLAG as INCORRECT
+
+- Wrong fact: different name, different number/year off by any amount, \
+different entity. "Sekiro" vs "The Last of Us Part II" — INCORRECT.
+- Off-by-one or off-by-small-delta on a number when precision matters: \
+"43" vs "44", "10" vs "12" — INCORRECT (the answer is the number, so a \
+different number is wrong).
+- Missing key part of a multi-part answer: gold "Bowens, Thomas, & \
+Madison" / pred "Bowens, Thomas" — INCORRECT (missing one of three names). \
+But "Bowens; Thomas; Madison" / "Bowens Thomas Madison" — CORRECT (same \
+three names, cosmetic delimiter).
+- Empty / hallucinated tool-call JSON / refusals.
+
+## Rule of thumb
+
+If a careful human reader would say "yes, the model got it right, just \
+formatted differently," mark CORRECT. If they'd say "the model got the \
+fact wrong," mark INCORRECT.
 
 Respond with a single JSON object — no preamble, no code fence — of the form:
 {"correct": true|false, "reason": "<one sentence>"}"""

@@ -36,6 +36,28 @@ def test_prioritize_edges_with_reserve_promotes_targeted_edges():
     assert exploratory in ordered
 
 
+def test_deprioritized_relations_are_penalized_not_targeted():
+    guidance = build_sleep_guidance_payload(
+        {
+            "relation_gap_profile": [
+                {"relation_label": "spouse", "asked": 8, "found": 8, "missing": 0},
+                {"relation_label": "birth_place", "asked": 6, "found": 2, "missing": 4},
+            ],
+            "deprioritized_chain_families": [
+                {"relation_labels": ["spouse"], "found": 8},
+            ],
+        }
+    )
+    birth_edge = EdgeKey("doc_1", "Joan", "Paris", "birth_place")
+    spouse_edge = EdgeKey("doc_1", "Joan", "Partner", "spouse")
+
+    ordered = prioritize_edges_with_reserve([spouse_edge, birth_edge], guidance)
+
+    assert guidance["sleep_focus"]["target_relations"] == ["birth_place"]
+    assert "spouse" in guidance["sleep_focus"]["deprioritized_relations"]
+    assert ordered[0] == birth_edge
+
+
 def test_guided_worker_includes_interaction_guidance_block():
     guidance = build_sleep_guidance_payload(
         {

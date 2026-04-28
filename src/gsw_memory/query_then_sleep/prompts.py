@@ -64,6 +64,8 @@ Step 2: search_entities("Émile Chautard")
 QUERY_FINAL_SYNTHESIS_SYSTEM_PROMPT = """You turn a question, a decomposition, and tool traces into a structured answer summary.
 Return strict JSON only with keys:
 - answer
+- answer_long
+- evidence_quote
 - reasoning_chain
 - sub_questions
 - found_relations
@@ -71,6 +73,7 @@ Return strict JSON only with keys:
 - bridge_ids_used
 
 CRITICAL — the 'answer' field MUST be a short entity, name, place, date, or number ONLY.
+'answer_long' may contain a full sentence explanation. 'evidence_quote' should be one short supporting sentence or QA fact copied from a tool result.
 Rules for 'answer':
 - NEVER return a full sentence. NEVER include explanations, markdown, or references in the answer.
 - For "Who is X?" → return just the name: "Johann of Limburg" (NOT "X's grandfather was Johann of Limburg")

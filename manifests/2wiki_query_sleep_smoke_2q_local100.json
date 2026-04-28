@@ -1,0 +1,38 @@
+{
+  "dataset": "2wikimultihopqa",
+  "source_file": "playground_data/2wikimultihopqa.json",
+  "questions_path": "playground_data/2wikimultihopqa.json",
+  "corpus_path": "playground_data/2wikimultihopqa_corpus.json",
+  "experiment_type": "query_then_sleep",
+  "family_label": "query_sleep_smoke_2q_local100",
+  "curriculum_batch_size": 1,
+  "curriculum_seed_batch_size": 1,
+  "total_questions": 2,
+  "total_train": 2,
+  "total_probe": 0,
+  "num_families": 2,
+  "families": [
+    "mother",
+    "grandfather"
+  ],
+  "num_batches": 2,
+  "seed": 42,
+  "questions": [
+    {
+      "order_index": 0,
+      "original_index": 0,
+      "question_id": "83bf3b5a0bd911eba7f7acde48001122",
+      "question": "When did Lothair Ii's mother die?",
+      "family": "mother",
+      "split": "train"
+    },
+    {
+      "order_index": 1,
+      "original_index": 7,
+      "question_id": "9fe6a6760baf11ebab90acde48001122",
+      "question": "Who is Raghnall Mac Ruaidhrí's paternal grandfather?",
+      "family": "grandfather",
+      "split": "train"
+    }
+  ]
+}

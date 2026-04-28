@@ -400,6 +400,8 @@ def _build_query_command(args: argparse.Namespace, *, batch_index: int, batch_di
         "--model", _resolve_query_model(args),
         "--max_iterations", str(args.query_max_iterations),
         "--bridge_query_top_k", str(args.bridge_query_top_k),
+        "--bridge_inject_min_score", str(getattr(args, "bridge_inject_min_score", 0.30)),
+        "--bridge_inject_top_k", str(getattr(args, "bridge_inject_top_k", 5)),
         "--embedding_gpu_memory_utilization", str(args.embedding_gpu_memory_utilization),
         "--reasoning_effort", str(args.reasoning_effort),
     ]
@@ -483,6 +485,7 @@ def _build_sleep_command(
         "--parallel_progress_heartbeat_seconds", str(args.parallel_progress_heartbeat_seconds),
         "--parallel_stuck_warning_seconds", str(args.parallel_stuck_warning_seconds),
         "--curriculum_generation_parallel_workers", str(args.curriculum_generation_parallel_workers),
+        "--targeted_edge_ratio", str(getattr(args, "targeted_edge_ratio", 0.7)),
         "--max_tokens", str(args.max_tokens),
         "--max_iterations", str(args.max_iterations),
         "--reasoning_effort", str(args.reasoning_effort),
@@ -534,6 +537,8 @@ def main() -> None:
     parser.add_argument("--max_batches", type=int, default=0)
     parser.add_argument("--query_max_iterations", type=int, default=20)
     parser.add_argument("--bridge_query_top_k", type=int, default=5)
+    parser.add_argument("--bridge_inject_min_score", type=float, default=0.30)
+    parser.add_argument("--bridge_inject_top_k", type=int, default=5)
     parser.add_argument("--embedding_gpu_memory_utilization", type=float, default=0.5)
     parser.add_argument("--pipeline_mode", default="hybrid")
     parser.add_argument("--hybrid_scope", default="doc_edge")
@@ -549,6 +554,7 @@ def main() -> None:
     parser.add_argument("--parallel_stuck_warning_seconds", type=float, default=60.0)
     parser.add_argument("--curriculum_generation_parallel_enabled", action="store_true")
     parser.add_argument("--curriculum_generation_parallel_workers", type=int, default=1)
+    parser.add_argument("--targeted_edge_ratio", type=float, default=0.7)
     parser.add_argument("--max_tokens", type=int, default=10000000)
     parser.add_argument("--max_iterations", type=int, default=30)
     parser.add_argument("--reasoning_effort", default="medium")
@@ -588,6 +594,7 @@ def main() -> None:
 
     learning_curve: List[Dict[str, Any]] = []
     current_registry_snapshot: Optional[Path] = None
+    targeted_edge_ratio = max(0.4, min(0.9, float(args.targeted_edge_ratio)))
 
     for batch_index, _batch_items in enumerate(batches):
         batch_dir = output_root / f"batch_{batch_index}"
@@ -655,6 +662,20 @@ def main() -> None:
         bridges_generated = 0
         bridges_after_sleep = bridges_before
         if batch_index + 1 < len(batches):
+            usage_signal = float(q_metrics.get("bridge_answer_usage_rate", q_metrics.get("bridge_usage_rate", 0.0)) or 0.0)
+            if bridges_before > 0:
+                previous_ratio = targeted_edge_ratio
+                if usage_signal < 0.2:
+                    targeted_edge_ratio = max(0.4, targeted_edge_ratio - 0.2)
+                elif usage_signal > 0.8:
+                    targeted_edge_ratio = min(0.9, targeted_edge_ratio + 0.15)
+                if targeted_edge_ratio != previous_ratio:
+                    print(
+                        f"  Adjusted sleep targeted_edge_ratio: {previous_ratio:.2f} → {targeted_edge_ratio:.2f} "
+                        f"(bridge answer usage={usage_signal:.2f})",
+                        flush=True,
+                    )
+            args.targeted_edge_ratio = targeted_edge_ratio
             print(f"\n  \u25b6 SLEEP PHASE (generating bridges for batch {batch_index + 1})", flush=True)
             sleep_dir = batch_dir / f"sleep_for_batch_{batch_index + 1}"
             _append_jsonl(experiment_progress_path, {"phase": "sleep", "status": "started", "batch_index": batch_index, "sleep_batch_index": batch_index + 1})
@@ -699,6 +720,8 @@ def main() -> None:
                 bridges_generated_for_next_batch=bridges_generated,
                 bridges_after_sleep=bridges_after_sleep,
                 bridge_usage_rate=float(overall_metrics.get("bridge_usage_rate", 0.0) or 0.0),
+                bridge_answer_usage_rate=float(overall_metrics.get("bridge_answer_usage_rate", 0.0) or 0.0),
+                sleep_targeted_edge_ratio=float(targeted_edge_ratio),
                 missing_relation_counts=missing_relation_counts,
             ).as_dict()
         )

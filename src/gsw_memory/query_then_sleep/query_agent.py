@@ -29,20 +29,36 @@ from .types import (
 class QueryToolAdapter:
     """Query-time tool surface backed by sleep-time GSW tools plus bridge retrieval."""
 
-    def __init__(self, entity_searcher: Any, bridge_registry: Optional[BridgeRegistry] = None, bridge_top_k: int = 10):
+    def __init__(
+        self,
+        entity_searcher: Any,
+        bridge_registry: Optional[BridgeRegistry] = None,
+        bridge_top_k: int = 10,
+        event_callback: Optional[Callable[[str, Dict[str, Any]], None]] = None,
+    ):
         self.entity_searcher = entity_searcher
         self.gsw_tools = GSWTools(entity_searcher)
         self.bridge_registry = bridge_registry or BridgeRegistry()
         self.bridge_top_k = max(1, int(bridge_top_k))
         self.bridge_hits_seen: List[Dict[str, Any]] = []
         self.bridge_ids_seen: List[str] = []
+        self.event_callback = event_callback
+        self.fallback_events: List[Dict[str, Any]] = []
 
     def _embed_texts(self, texts: Sequence[str]) -> Optional[Sequence[Any]]:
         if not texts or not hasattr(self.entity_searcher, "_embed_query"):
             return None
         try:
             return self.entity_searcher._embed_query(list(texts))
-        except Exception:
+        except Exception as exc:
+            payload = {
+                "fallback_type": "embedding_fallback",
+                "error": str(exc),
+                "text_count": len(texts),
+            }
+            self.fallback_events.append(payload)
+            if self.event_callback is not None:
+                self.event_callback("embedding_fallback", payload)
             return None
 
     def search_entities(self, query: str, top_k: int = 10, exclude_doc_id: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -76,16 +92,22 @@ class QueryToolAdapter:
 
 
 class QueryAgent:
-    """Agentic query-time answerer using shared provider transport and tool calling."""
+    """Agentic query-time answerer.
+
+    ``max_iterations`` is the per-question tool-loop cap, distinct from the
+    sleep phase's per-batch exploration cap.
+    """
 
     def __init__(
         self,
         model_name: str,
         *,
         base_url: Optional[str] = None,
-        max_iterations: int = 8,
+        max_iterations: int = 12,
         generation_params: Optional[Dict[str, Any]] = None,
         bridge_top_k: int = 10,
+        bridge_inject_min_score: float = 0.30,
+        bridge_inject_top_k: int = 5,
         reasoning_effort: str = "medium",
         event_callback: Optional[Callable[[str, Dict[str, Any]], None]] = None,
     ) -> None:
@@ -94,6 +116,8 @@ class QueryAgent:
         self.max_iterations = max(1, int(max_iterations))
         self.generation_params = dict(generation_params or {"temperature": 0.0})
         self.bridge_top_k = max(1, int(bridge_top_k))
+        self.bridge_inject_min_score = max(0.0, float(bridge_inject_min_score))
+        self.bridge_inject_top_k = max(1, int(bridge_inject_top_k))
         self.reasoning_effort = str(reasoning_effort or "medium").strip() or "medium"
         self.event_callback = event_callback
         self.transport = StageTransport(
@@ -295,6 +319,29 @@ class QueryAgent:
         return ""
 
     @classmethod
+    def _choose_final_answer_with_metadata(
+        cls,
+        *,
+        question: str,
+        synthesis_answer: str,
+        synthesis_raw_text: str,
+        tool_loop_final_text: str,
+    ) -> tuple[str, str]:
+        normalized_answer = cls._normalize_final_answer(question, synthesis_answer)
+        if normalized_answer and not cls._looks_like_long_answer(normalized_answer):
+            return normalized_answer, ""
+
+        for label, source_text in (
+            ("synthesis_raw_text", synthesis_raw_text),
+            ("tool_loop_final_text", tool_loop_final_text),
+            ("synthesis_answer", synthesis_answer),
+        ):
+            candidate = cls._extract_short_answer_candidate(question, source_text)
+            if candidate:
+                return candidate, f"short_answer_candidate_from_{label}"
+        return normalized_answer, "long_or_empty_structured_answer" if normalized_answer else ""
+
+    @classmethod
     def _choose_final_answer(
         cls,
         *,
@@ -303,15 +350,82 @@ class QueryAgent:
         synthesis_raw_text: str,
         tool_loop_final_text: str,
     ) -> str:
-        normalized_answer = cls._normalize_final_answer(question, synthesis_answer)
-        if normalized_answer and not cls._looks_like_long_answer(normalized_answer):
-            return normalized_answer
+        answer, _fallback_reason = cls._choose_final_answer_with_metadata(
+            question=question,
+            synthesis_answer=synthesis_answer,
+            synthesis_raw_text=synthesis_raw_text,
+            tool_loop_final_text=tool_loop_final_text,
+        )
+        return answer
 
-        for source_text in (synthesis_raw_text, tool_loop_final_text, synthesis_answer):
-            candidate = cls._extract_short_answer_candidate(question, source_text)
-            if candidate:
-                return candidate
-        return normalized_answer
+    @staticmethod
+    def _bridge_hit_audit_key(hit: Dict[str, Any]) -> tuple[str, str, str]:
+        return (
+            str(hit.get("bridge_id", "") or "").strip(),
+            str(hit.get("orientation", "") or "").strip(),
+            str(hit.get("question", "") or "").strip(),
+        )
+
+    @staticmethod
+    def _bridge_hit_audit_row(hit: Dict[str, Any], rank: int, injected: bool = False) -> Dict[str, Any]:
+        try:
+            score = round(float(hit.get("score", 0.0) or 0.0), 4)
+        except (TypeError, ValueError):
+            score = 0.0
+        return {
+            "rank": int(rank),
+            "bridge_id": str(hit.get("bridge_id", "") or "").strip(),
+            "orientation": str(hit.get("orientation", "") or "").strip(),
+            "score": score,
+            "injected": bool(injected),
+            "question": str(hit.get("question", "") or "").strip(),
+            "answer_text": str(hit.get("answer_text", "") or "").strip(),
+            "relation_label": str(hit.get("relation_label", "") or "").strip(),
+            "pattern_key": str(hit.get("pattern_key", "") or "").strip(),
+            "domain": str(hit.get("domain", "") or "").strip(),
+            "source_docs": [str(doc_id) for doc_id in hit.get("source_docs", []) or [] if str(doc_id)],
+            "retrieved_count": int(hit.get("retrieved_count", 0) or 0),
+            "helpful_count": int(hit.get("helpful_count", 0) or 0),
+        }
+
+    @classmethod
+    def _bridge_retrieval_audit(
+        cls,
+        *,
+        query: str,
+        registry_bridge_count: int,
+        registry_surface_count: int,
+        top_k: int,
+        min_score: float,
+        raw_hits: Sequence[Dict[str, Any]],
+        injected_hits: Sequence[Dict[str, Any]],
+        attempted: bool,
+        skipped_reason: str = "",
+    ) -> Dict[str, Any]:
+        injected_keys = {cls._bridge_hit_audit_key(hit) for hit in injected_hits}
+        raw_rows = [
+            cls._bridge_hit_audit_row(hit, rank=index, injected=cls._bridge_hit_audit_key(hit) in injected_keys)
+            for index, hit in enumerate(raw_hits, start=1)
+        ]
+        injected_rows = [
+            cls._bridge_hit_audit_row(hit, rank=index, injected=True)
+            for index, hit in enumerate(injected_hits, start=1)
+        ]
+        scores = [row["score"] for row in raw_rows]
+        return {
+            "attempted": bool(attempted),
+            "query": str(query or ""),
+            "registry_bridge_count": int(registry_bridge_count),
+            "registry_surface_count": int(registry_surface_count),
+            "top_k": int(top_k),
+            "min_score": float(min_score),
+            "raw_hit_count": len(raw_rows),
+            "injected_hit_count": len(injected_rows),
+            "max_score": max(scores) if scores else None,
+            "skipped_reason": str(skipped_reason or ""),
+            "raw_hits": raw_rows,
+            "injected_hits": injected_rows,
+        }
 
     def _emit(self, event_type: str, **data: Any) -> None:
         if self.event_callback is not None:
@@ -467,19 +581,35 @@ class QueryAgent:
             "get_bridge_evidence": tools.get_bridge_evidence,
         }
 
-        # Auto-search bridges if registry has any
+        auto_bridge_ids: List[str] = []
+        raw_bridge_hits: List[Dict[str, Any]] = []
+        bridge_hits: List[Dict[str, Any]] = []
+        bridge_auto_attempted = False
+        bridge_auto_skipped_reason = "registry_empty"
+        # Auto-search bridges if registry has any, but do not inject obvious junk.
         if len(tools.bridge_registry.records) > 0:
-            bridge_hits = tools.get_bridge_evidence(item.question)
+            bridge_auto_attempted = True
+            bridge_auto_skipped_reason = ""
+            raw_bridge_hits = tools.get_bridge_evidence(item.question, top_k=self.bridge_inject_top_k)
+            bridge_hits = [
+                hit for hit in raw_bridge_hits
+                if float(hit.get("score", 0.0) or 0.0) >= self.bridge_inject_min_score
+            ]
             if bridge_hits:
+                auto_bridge_ids = [
+                    str(hit.get("bridge_id", "") or "").strip()
+                    for hit in bridge_hits
+                    if str(hit.get("bridge_id", "") or "").strip()
+                ]
                 bridge_text = "\n".join(
                     f"- Bridge: Q: {h.get('question', '')} A: {h.get('answer_text', '')}"
                     for h in bridge_hits[:5]
                 )
                 messages[1]["content"] += (
-                    f"\n\nPre-computed bridge evidence (hints, verify before using):\n{bridge_text}"
+                    f"\n\nPre-computed bridge evidence (trusted when it matches the question):\n{bridge_text}"
                     f"\n\nThese bridges suggest which entities and relations to look for. "
                     f"Bridge answers are entity names that may not exactly match the expected format — "
-                    f"verify with search_qa_pairs before giving your final answer."
+                    f"use the short canonical answer format in the final response."
                 )
                 tool_calls.append(ToolCallTrace(
                     tool_name="get_bridge_evidence",
@@ -503,10 +633,23 @@ class QueryAgent:
                     result={"hits": len(bridge_hits)},
                     call_id="auto_bridge_search",
                 )
+            elif raw_bridge_hits:
+                bridge_auto_skipped_reason = "no_hit_above_threshold"
+                self._emit(
+                    "bridge_auto_inject_skipped",
+                    question_id=question_id,
+                    reason=bridge_auto_skipped_reason,
+                    min_score=self.bridge_inject_min_score,
+                    raw_hit_count=len(raw_bridge_hits),
+                    max_score=max(float(hit.get("score", 0.0) or 0.0) for hit in raw_bridge_hits),
+                )
+            else:
+                bridge_auto_skipped_reason = "no_hits"
 
         final_text = ""
         error_text = ""
         iterations = 0
+        tool_arg_parse_failures: List[Dict[str, Any]] = []
 
         try:
             while iterations < self.max_iterations:
@@ -541,6 +684,17 @@ class QueryAgent:
                     for function_call in response.tool_calls:
                         parsed_arguments = dict(function_call.arguments)
                         tool_fn = tool_map.get(function_call.name)
+                        if getattr(function_call, "arguments_error", ""):
+                            payload = {
+                                "question_id": question_id,
+                                "iteration": iterations,
+                                "tool": function_call.name,
+                                "call_id": function_call.call_id,
+                                "error": function_call.arguments_error,
+                                "raw_arguments": function_call.raw_arguments,
+                            }
+                            tool_arg_parse_failures.append(payload)
+                            self._emit("tool_arg_parse_failed", **payload)
                         self._emit(
                             "tool_call",
                             question_id=question_id,
@@ -616,12 +770,20 @@ class QueryAgent:
         if synthesis_sub_questions:
             sub_questions = synthesis_sub_questions
 
-        final_answer = self._choose_final_answer(
+        final_answer, normalization_fallback_reason = self._choose_final_answer_with_metadata(
             question=item.question,
             synthesis_answer=str(synthesis.get("answer", "") or "").strip(),
             synthesis_raw_text=synthesis_raw_text,
             tool_loop_final_text=final_text.strip(),
         )
+        if normalization_fallback_reason:
+            self._emit(
+                "normalization_fallback",
+                question_id=question_id,
+                reason=normalization_fallback_reason,
+                synthesis_answer=str(synthesis.get("answer", "") or "").strip(),
+                final_answer=final_answer,
+            )
 
         gold_answers = []
         if item.gold_answer:
@@ -630,6 +792,23 @@ class QueryAgent:
             if alias and alias not in gold_answers:
                 gold_answers.append(alias)
         exact_match, f1 = score_predicted_answer(gold_answers, final_answer)
+        synthesis_bridge_ids = [
+            str(v).strip()
+            for v in synthesis.get("bridge_ids_used", []) or []
+            if str(v).strip()
+        ]
+        seen_bridge_id_set = set(tools.bridge_ids_seen)
+        bridge_auto_retrieval = self._bridge_retrieval_audit(
+            query=item.question,
+            registry_bridge_count=len(tools.bridge_registry.records),
+            registry_surface_count=len(getattr(tools.bridge_registry, "surfaces", []) or []),
+            top_k=self.bridge_inject_top_k,
+            min_score=self.bridge_inject_min_score,
+            raw_hits=raw_bridge_hits,
+            injected_hits=bridge_hits,
+            attempted=bridge_auto_attempted,
+            skipped_reason=bridge_auto_skipped_reason,
+        )
         trace = QueryInteractionTrace(
             question_id=question_id,
             question=str(item.question or ""),
@@ -644,7 +823,11 @@ class QueryAgent:
             found_relations=[str(v).strip() for v in synthesis.get("found_relations", []) or [] if str(v).strip()],
             missing_relations=[str(v).strip() for v in synthesis.get("missing_relations", []) or [] if str(v).strip()],
             bridge_evidence_used=bool(tools.bridge_ids_seen),
-            bridge_ids_used=[str(v).strip() for v in synthesis.get("bridge_ids_used", []) or tools.bridge_ids_seen if str(v).strip()],
+            bridge_evidence_injected=bool(auto_bridge_ids),
+            bridge_evidence_used_in_answer=bool(set(synthesis_bridge_ids) & seen_bridge_id_set),
+            bridge_ids_used=synthesis_bridge_ids,
+            bridge_ids_seen=list(tools.bridge_ids_seen),
+            bridge_ids_injected=auto_bridge_ids,
             tool_iterations=iterations,
             status="error" if error_text else "ok",
             error=error_text,
@@ -653,6 +836,10 @@ class QueryAgent:
                 "raw_synthesis_text": synthesis_raw_text,
                 "question_metadata": dict(item.metadata or {}),
                 "provider": self.transport.provider,
+                "normalization_fallback_reason": normalization_fallback_reason,
+                "fallback_events": list(tools.fallback_events),
+                "tool_arg_parse_failures": tool_arg_parse_failures,
+                "bridge_auto_retrieval": bridge_auto_retrieval,
             },
         )
         self._emit(
@@ -665,6 +852,8 @@ class QueryAgent:
             f1=trace.f1,
             exact_match=trace.exact_match,
             bridge_evidence_used=trace.bridge_evidence_used,
+            bridge_evidence_injected=trace.bridge_evidence_injected,
+            bridge_evidence_used_in_answer=trace.bridge_evidence_used_in_answer,
             bridge_ids_used=list(trace.bridge_ids_used),
             tool_iterations=trace.tool_iterations,
             missing_relations=list(trace.missing_relations),
@@ -680,9 +869,11 @@ def run_query_agent_batch(
     model_name: str,
     base_url: Optional[str] = None,
     bridge_registry: Optional[BridgeRegistry] = None,
-    max_iterations: int = 8,
+    max_iterations: int = 12,
     generation_params: Optional[Dict[str, Any]] = None,
     bridge_top_k: int = 10,
+    bridge_inject_min_score: float = 0.30,
+    bridge_inject_top_k: int = 5,
     reasoning_effort: str = "medium",
     event_callback: Optional[Callable[[str, Dict[str, Any]], None]] = None,
 ) -> QueryAgentBatchResult:
@@ -693,12 +884,19 @@ def run_query_agent_batch(
         max_iterations=max_iterations,
         generation_params=generation_params,
         bridge_top_k=bridge_top_k,
+        bridge_inject_min_score=bridge_inject_min_score,
+        bridge_inject_top_k=bridge_inject_top_k,
         reasoning_effort=reasoning_effort,
         event_callback=event_callback,
     )
 
     for item in batch_items:
-        tools = QueryToolAdapter(entity_searcher=entity_searcher, bridge_registry=bridge_registry, bridge_top_k=bridge_top_k)
+        tools = QueryToolAdapter(
+            entity_searcher=entity_searcher,
+            bridge_registry=bridge_registry,
+            bridge_top_k=bridge_top_k,
+            event_callback=event_callback,
+        )
         traces.append(query_agent.answer_question(item=item, tools=tools))
 
     scored_f1 = [float(trace.f1) for trace in traces if trace.f1 is not None]
@@ -706,10 +904,14 @@ def run_query_agent_batch(
     bridge_usage_rate = (
         sum(1 for trace in traces if trace.bridge_evidence_used) / float(len(traces)) if traces else 0.0
     )
+    bridge_answer_usage_rate = (
+        sum(1 for trace in traces if trace.bridge_evidence_used_in_answer) / float(len(traces)) if traces else 0.0
+    )
     overall_metrics = {
         "F1": sum(scored_f1) / len(scored_f1) if scored_f1 else 0.0,
         "ExactMatch": sum(scored_em) / len(scored_em) if scored_em else 0.0,
         "bridge_usage_rate": bridge_usage_rate,
+        "bridge_answer_usage_rate": bridge_answer_usage_rate,
         "questions_answered": float(len(traces)),
     }
     return QueryAgentBatchResult(batch_index=int(batch_index), traces=traces, overall_metrics=overall_metrics)

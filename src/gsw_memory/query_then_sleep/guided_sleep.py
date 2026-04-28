@@ -28,7 +28,22 @@ def build_sleep_guidance_payload(
         str(row.get("relation_label", "") or row.get("relation", "")).strip()
         for row in gap_rows[:8]
         if str(row.get("relation_label", "") or row.get("relation", "")).strip()
+        and int(row.get("missing", 0) or 0) > 0
     ]
+    deprioritized_relations = [
+        str(row.get("relation_label", "") or row.get("relation", "")).strip()
+        for row in gap_rows
+        if str(row.get("relation_label", "") or row.get("relation", "")).strip()
+        and int(row.get("missing", 0) or 0) == 0
+        and int(row.get("found", 0) or 0) > 0
+    ]
+    for row in summary_payload.get("deprioritized_chain_families", []) or []:
+        if not isinstance(row, dict):
+            continue
+        for relation in row.get("relation_labels", []) or []:
+            cleaned = str(relation or "").strip()
+            if cleaned and cleaned not in deprioritized_relations:
+                deprioritized_relations.append(cleaned)
     target_entities = [
         str(row.get("entity", "") or "").strip()
         for row in target_rows[:12]
@@ -40,7 +55,7 @@ def build_sleep_guidance_payload(
             "targeted_edge_ratio": max(0.0, min(1.0, float(targeted_edge_ratio))),
             "target_relations": target_relations,
             "target_entities": target_entities,
-            "deprioritized_relations": [],
+            "deprioritized_relations": deprioritized_relations,
         },
     }
 
@@ -121,6 +136,13 @@ def score_edge_for_guidance(edge: EdgeKey, guidance: Dict[str, Any] | None) -> f
         str(row.get("relation_label", "") or row.get("relation", "")).strip()
         for row in interaction.get("relation_gap_profile", []) or []
         if isinstance(row, dict)
+        and int(row.get("missing", 0) or 0) > 0
+    ]
+    sleep_focus = payload.get("sleep_focus", {}) if isinstance(payload.get("sleep_focus"), dict) else {}
+    deprioritized_relations = [
+        str(relation or "").strip()
+        for relation in sleep_focus.get("deprioritized_relations", []) or []
+        if str(relation or "").strip()
     ]
     target_entities = [
         str(row.get("entity", "") or "").strip()
@@ -132,7 +154,8 @@ def score_edge_for_guidance(edge: EdgeKey, guidance: Dict[str, Any] | None) -> f
     entity_score = _entity_match_score(edge.entity_name, edge.neighbor_name, target_entities)
     relation_score = _relation_match_score(edge.relationship, target_relations)
     example_score = _supporting_example_match(edge, examples)
-    return (2.0 * entity_score) + (1.5 * relation_score) + example_score
+    deprioritized_score = _relation_match_score(edge.relationship, deprioritized_relations)
+    return (2.0 * entity_score) + (1.5 * relation_score) + example_score - (0.5 * deprioritized_score)
 
 
 def prioritize_edges_with_reserve(
@@ -151,7 +174,7 @@ def prioritize_edges_with_reserve(
     targeted = [row for row in scored if row[0] > 0]
     exploratory = [row for row in scored if row[0] <= 0]
     targeted.sort(key=lambda row: (-row[0], row[1].as_tuple()))
-    exploratory.sort(key=lambda row: row[1].as_tuple())
+    exploratory.sort(key=lambda row: (-row[0], row[1].as_tuple()))
 
     if not targeted or targeted_ratio >= 0.999:
         return [edge for _score, edge in targeted + exploratory]

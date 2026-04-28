@@ -124,6 +124,33 @@ def test_stage_transport_normalizes_openai_tool_calls(monkeypatch):
     assert response.tool_calls[0].arguments == {"query": "ermengarde"}
 
 
+def test_stage_transport_preserves_tool_argument_parse_errors(monkeypatch):
+    openai_client = _FakeOpenAIClient(
+        [
+            _DummyResponse(
+                _DummyMessage(
+                    content="",
+                    tool_calls=[_DummyToolCall("call_1", "search_entities", '{"query": "ermengarde", top_k: five}')],
+                ),
+            )
+        ]
+    )
+
+    def _fake_init(self):
+        self.provider = "openai"
+        self.model_name = self.original_model_name
+        self.client = openai_client
+        self.litellm = None
+
+    monkeypatch.setattr(StageTransport, "_initialize_client", _fake_init)
+
+    transport = StageTransport("gpt-4o-mini")
+    response = transport.chat([{"role": "user", "content": "find Ermengarde"}])
+
+    assert response.tool_calls[0].arguments == {}
+    assert response.tool_calls[0].arguments_error
+
+
 def test_stage_transport_retries_bedrock_calls(monkeypatch):
     sleep_calls = []
     monkeypatch.setattr("gsw_memory.query_then_sleep.transport.time.sleep", lambda seconds: sleep_calls.append(seconds))

@@ -33,7 +33,8 @@ class _LLMQuestionPatternAdapter:
     def __call__(self, question: str) -> Dict[str, Any]:
         system_prompt = (
             "Classify the main relation demand in this query fragment. "
-            "Return strict JSON only with keys: operation, answer_type, domain, relation_label, comparison_target, pattern_key."
+            "Return strict JSON only with key: relation_label. "
+            "Use a short snake_case relation label."
         )
         payload, response = self.transport.generate_json(
             instructions=system_prompt,
@@ -331,14 +332,14 @@ def _generate_natural_language_summary(
     base_url: Optional[str] = None,
     reasoning_effort: str = "medium",
     event_callback: Optional[Callable[[str, Dict[str, Any]], None]] = None,
-) -> str:
+) -> tuple[str, Dict[str, Any]]:
     fallback = _build_natural_language_summary(
         undercovered_chain_families,
         deprioritized_chain_families,
         entity_gap_targets,
     )
     if not str(model_name or "").strip() and not str(base_url or "").strip():
-        return fallback
+        return fallback, {"summary_source": "heuristic_no_model"}
 
     try:
         transport = StageTransport(
@@ -379,9 +380,16 @@ def _generate_natural_language_summary(
             event_callback("model_response", log_payload)
         summary = str(payload.get("natural_language_summary", "") or "").strip()
         if summary:
-            return summary
+            return summary, {"summary_source": "llm"}
     except Exception as exc:
         if event_callback is not None:
+            event_callback(
+                "guidance_llm_fallback",
+                {
+                    "reason": "summary_generation_failed",
+                    "error": str(exc),
+                },
+            )
             event_callback(
                 "analysis_guidance_summary_fallback",
                 {
@@ -389,7 +397,12 @@ def _generate_natural_language_summary(
                     "error": str(exc),
                 },
             )
-    return fallback
+        return fallback, {
+            "summary_source": "heuristic_fallback",
+            "guidance_llm_fallback": True,
+            "guidance_llm_error": str(exc),
+        }
+    return fallback, {"summary_source": "heuristic_empty_llm_response"}
 
 
 def analyze_query_interactions(
@@ -493,7 +506,7 @@ def analyze_query_interactions(
 
     failed_questions_details = _build_failed_questions_for_summary(traces)
 
-    natural_language_summary = _generate_natural_language_summary(
+    natural_language_summary, summary_metadata = _generate_natural_language_summary(
         relation_gap_profile=relation_gap_profile,
         bridge_chain_profile=bridge_chain_profile,
         undercovered_chain_families=undercovered_chain_families,
@@ -525,4 +538,5 @@ def analyze_query_interactions(
         missing_bridge_targets=entity_gap_targets[:10],
         natural_language_summary=natural_language_summary,
         supporting_examples=supporting_examples,
+        metadata=summary_metadata,
     )

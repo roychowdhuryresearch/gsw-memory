@@ -138,19 +138,21 @@ def _load_bridge_registry_snapshot(path: Optional[str], entity_searcher: Any) ->
                 source_docs=list(record.source_docs),
             )
         )
-        registry.surfaces.append(
-            BridgeSurface(
-                bridge_id=bridge_id,
-                orientation="reverse",
-                question_text=reverse_question,
-                answer_text=record.reverse_answer_text,
-                pattern_tags=list(record.pattern_tags),
-                question_pattern=dict(record.reverse_pattern),
-                source_docs=list(record.source_docs),
+        reverse_answer_type = str(record.reverse_pattern.get("answer_type", "")).strip().lower()
+        if reverse_answer_type in {"person", "organization"}:
+            registry.surfaces.append(
+                BridgeSurface(
+                    bridge_id=bridge_id,
+                    orientation="reverse",
+                    question_text=reverse_question,
+                    answer_text=record.reverse_answer_text,
+                    pattern_tags=list(record.pattern_tags),
+                    question_pattern=dict(record.reverse_pattern),
+                    source_docs=list(record.source_docs),
+                )
             )
-        )
+            registry._surface_keys.add((bridge_id, "reverse"))
         registry._surface_keys.add((bridge_id, "forward"))
-        registry._surface_keys.add((bridge_id, "reverse"))
     if registry.surfaces:
         embed_fn = getattr(entity_searcher, "_embed_query", None)
         if callable(embed_fn):
@@ -571,6 +573,7 @@ def main() -> None:
     parser.add_argument("--parallel_stuck_warning_seconds", type=float, default=60.0)
     parser.add_argument("--curriculum_generation_parallel_enabled", action="store_true")
     parser.add_argument("--curriculum_generation_parallel_workers", type=int, default=1)
+    parser.add_argument("--targeted_edge_ratio", type=float, default=0.7)
     parser.add_argument("--max_tokens", type=int, default=500000)
     parser.add_argument("--max_iterations", type=int, default=30)
     parser.add_argument("--reasoning_effort", default="medium")
@@ -592,7 +595,10 @@ def main() -> None:
         console.print(f"  base URL: {args.base_url}")
 
     guidance_summary = InteractionGuidanceSummary(**json.loads(Path(args.guidance_file).read_text()))
-    guidance_payload = build_sleep_guidance_payload(guidance_summary)
+    guidance_payload = build_sleep_guidance_payload(
+        guidance_summary,
+        targeted_edge_ratio=float(args.targeted_edge_ratio),
+    )
     _write_json(output_dir / "sleep_guidance_payload.json", guidance_payload)
 
     from gsw_memory.query_then_sleep.prompts import render_interaction_guidance_block

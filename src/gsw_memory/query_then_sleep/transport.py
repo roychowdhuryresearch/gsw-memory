@@ -20,6 +20,7 @@ class TransportToolCall:
     arguments: Dict[str, Any] = field(default_factory=dict)
     call_id: str = ""
     raw_arguments: str = ""
+    arguments_error: str = ""
 
     def as_dict(self) -> Dict[str, Any]:
         return {
@@ -27,6 +28,7 @@ class TransportToolCall:
             "arguments": dict(self.arguments),
             "call_id": self.call_id,
             "raw_arguments": self.raw_arguments,
+            "arguments_error": self.arguments_error,
         }
 
 
@@ -332,6 +334,7 @@ def _extract_tool_calls(message: Any) -> List[TransportToolCall]:
         name = ""
         raw_arguments = ""
         arguments: Dict[str, Any] = {}
+        arguments_error = ""
         call_id = str(getattr(item, "id", None) or getattr(item, "call_id", None) or "")
         if function is not None:
             name = str(getattr(function, "name", "") or "")
@@ -346,7 +349,8 @@ def _extract_tool_calls(message: Any) -> List[TransportToolCall]:
                 parsed = json.loads(raw_arguments)
                 if isinstance(parsed, dict):
                     arguments = parsed
-            except Exception:
+            except Exception as exc:
+                arguments_error = str(exc)
                 arguments = {}
         normalized.append(
             TransportToolCall(
@@ -354,6 +358,7 @@ def _extract_tool_calls(message: Any) -> List[TransportToolCall]:
                 arguments=arguments,
                 call_id=call_id,
                 raw_arguments=raw_arguments,
+                arguments_error=arguments_error,
             )
         )
     return normalized
