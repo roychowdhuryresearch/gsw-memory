@@ -98,6 +98,7 @@ def run_cell(
     on_question_done=None,
     raw_trace_dir: Path | str | None = None,
     judge: LLMJudge | None = None,
+    concurrency: int = 1,
 ) -> CellResult:
     """Run ``adapter`` over the given questions and return an aggregated CellResult.
 
@@ -105,6 +106,15 @@ def run_cell(
     ``judge_correct`` verdict. The headline ``accuracy`` stays on
     exact_match — judge verdicts are reported alongside via
     ``n_judge_correct`` / ``judge_accuracy`` so both signals are visible.
+
+    ``concurrency``: when > 1, run that many ``adapter.run_question``
+    calls in parallel via a ThreadPoolExecutor. Each Q is an
+    independent network-bound LLM session; the adapter's shared state
+    (``llm``, ``retriever``, ``corpus``) is read-only at query time so
+    concurrent calls are safe. Per-Q logging is interleaved but
+    timestamped so traces remain readable. Default 1 = sequential
+    (no behavior change). Tune to provider rate limits (~4–8 is safe
+    for Bedrock gpt-oss-120b at our TPM).
     """
 
     results: list[QuestionResult] = []
@@ -131,18 +141,19 @@ def run_cell(
     _FAIL_FAST_AFTER = 3
     _fail_errors: list[str] = []
 
-    n_total_plan = len(list(questions)) if hasattr(questions, "__len__") else None
+    questions_list = list(questions)
+    n_total_plan = len(questions_list)
     _log.info(
-        "cell start | system=%s model=%s subset=%s n=%s",
+        "cell start | system=%s model=%s subset=%s n=%s concurrency=%d",
         adapter.ctx.system_id, adapter.ctx.model_id, subset_id,
-        n_total_plan if n_total_plan is not None else "?",
+        n_total_plan, concurrency,
     )
 
-    for i, q in enumerate(questions, start=1):
+    def _process_one(i: int, q: FramesQuestion) -> tuple[QuestionResult, str | None]:
+        """Run a single question end-to-end. Returns (result, fail_error_or_None)."""
         _log.info(
             "q%s start (%s/%s) hops=%s | %s",
-            q.id, i, n_total_plan if n_total_plan is not None else "?",
-            q.num_hops, q.question[:140],
+            q.id, i, n_total_plan, q.num_hops, q.question[:140],
         )
         t0 = time.time()
         try:
@@ -160,24 +171,18 @@ def run_cell(
             predicted = ""
         trajectory.wall_time_s = trajectory.wall_time_s or (time.time() - t0)
 
-        # Detect likely-configuration errors (every Q failing the same way).
         _llm_err = trajectory.extra.get("llm_error") or trajectory.extra.get("adapter_error")
         _stopped_reason = trajectory.extra.get("stopped_reason", "")
+        fail_err: str | None = None
         if trajectory.turns == 0 and _llm_err:
-            _fail_errors.append(str(_llm_err))
+            fail_err = str(_llm_err)
             _log.warning("q%s zero-turn failure: %s", q.id, _llm_err)
-        elif trajectory.turns > 0 or trajectory.final_answer:
-            _fail_errors.clear()  # a real response recovered us
-        # Surface mid-question LLM errors even when turn 1 succeeded — the
-        # run otherwise looks like a silent early_stop with no pred.
         if _llm_err and _stopped_reason == "llm_error":
             _log.warning(
                 "q%s mid-question LLM error after turn %d (pred empty): %s",
                 q.id, trajectory.turns, _llm_err,
             )
 
-        # Verbose per-turn trace — DEBUG only, so it stays out of the terminal
-        # unless --verbose is set, but always lands in run.log.
         for tc in trajectory.tool_calls:
             _log.debug(
                 "q%s turn %d | %s(%s) -> %s%s",
@@ -188,14 +193,11 @@ def run_cell(
             )
 
         result = _score_one(q, trajectory, predicted, judge=judge)
-        results.append(result)
 
         if trace_dir:
             (trace_dir / f"q_{q.id}.json").write_text(
                 trajectory.model_dump_json(indent=2)
             )
-            # Also emit a human-readable markdown sibling so cells can be
-            # audited by eye without parsing the JSON.
             try:
                 (trace_dir / f"q_{q.id}.md").write_text(
                     render_question_markdown(result)
@@ -215,20 +217,54 @@ def run_cell(
             trajectory.completion_tokens, judge_tag,
             (predicted or "")[:80], (q.answer or "")[:80],
         )
+        return result, fail_err
 
-        if on_question_done:
-            on_question_done(result)
+    if concurrency <= 1:
+        # Sequential — preserves Phase-1/-2 fail-fast semantics exactly.
+        for i, q in enumerate(questions_list, start=1):
+            result, fail_err = _process_one(i, q)
+            if fail_err:
+                _fail_errors.append(fail_err)
+            elif result.trajectory.turns > 0 or result.predicted_answer:
+                _fail_errors.clear()
+            results.append(result)
+            if on_question_done:
+                on_question_done(result)
+            if len(_fail_errors) >= _FAIL_FAST_AFTER and len(set(_fail_errors)) == 1:
+                _log.error(
+                    "cell fail-fast: first %d Qs all failed with the same error %r — "
+                    "aborting before more LLM calls",
+                    _FAIL_FAST_AFTER, _fail_errors[0],
+                )
+                break
+    else:
+        # Parallel — drop fail-fast (each worker is independent and we'd
+        # rather see all results than abort mid-flight).
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        results_by_id: dict[str, QuestionResult] = {}
+        with ThreadPoolExecutor(max_workers=concurrency) as ex:
+            futures = {
+                ex.submit(_process_one, i, q): q.id
+                for i, q in enumerate(questions_list, start=1)
+            }
+            for fut in as_completed(futures):
+                qid = futures[fut]
+                try:
+                    result, _ = fut.result()
+                except Exception as exc:  # noqa: BLE001
+                    _log.error("q%s worker raised: %s", qid, exc)
+                    continue
+                results_by_id[qid] = result
+                if on_question_done:
+                    on_question_done(result)
+        # Preserve original question order in CellResult.
+        for q in questions_list:
+            if q.id in results_by_id:
+                results.append(results_by_id[q.id])
 
-        if len(_fail_errors) >= _FAIL_FAST_AFTER:
-            # All of the last N questions failed before any turn ran.
-            # Almost certainly a config issue — surface it and stop.
-            msg = (
-                f"[harness] aborting cell after {len(_fail_errors)} consecutive "
-                f"zero-turn failures. Likely cause: {_fail_errors[-1]!r}"
-            )
-            print(msg)
-            cell.config["aborted_reason"] = _fail_errors[-1]
-            break
+    if len(_fail_errors) >= _FAIL_FAST_AFTER and len(set(_fail_errors)) == 1:
+        # Sequential path may set this; surface for downstream debug.
+        cell.config["aborted_reason"] = _fail_errors[-1]
 
     cell.questions = results
     cell.n_total = len(results)

@@ -146,6 +146,16 @@ def main(
             "with retrieval signals + dependency annotations."
         ),
     ),
+    concurrency: int = typer.Option(
+        1,
+        help=(
+            "Run that many questions in parallel via a ThreadPoolExecutor "
+            "in the harness. Each Q is an independent network-bound LLM "
+            "session — adapter state is read-only at query time so "
+            "concurrent calls are safe. Tune to provider rate limits "
+            "(~4–8 is safe for Bedrock gpt-oss-120b)."
+        ),
+    ),
 ) -> None:
     subset_obj = load_subset(subset)
     questions_all = load_frames(split=split)
@@ -218,6 +228,7 @@ def main(
         benchmark=subset_obj.benchmark,
         raw_trace_dir=trace_dir,
         judge=judge,
+        concurrency=concurrency,
     )
 
     persist_cell(cell, cell_dir / "cell_result.json")
