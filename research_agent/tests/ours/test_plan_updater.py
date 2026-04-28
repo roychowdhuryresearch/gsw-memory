@@ -317,6 +317,59 @@ def test_update_plan_change_target_op():
     targets = [e.id for e in new_plan.blank_entities() if e.is_target]
     assert targets == ["b_a"]
     assert "change_target" in diff.op_summary
+    # Changing only the target pointer preserves the resolved value.
+    assert state["b_a"].status == "resolved"
+    assert state["b_a"].value == "X"
+
+
+def test_update_plan_replace_constraint_invalidates_stale_target():
+    old = GSWPlan.model_validate({
+        "entities": [
+            {"id": "e1", "kind": "filled", "name": "Alice", "role": "subject"},
+            {"id": "b_a", "kind": "blank", "role": "bridge-number", "value_type": "number"},
+            {"id": "b_b", "kind": "blank", "role": "bridge-number", "value_type": "number"},
+            {"id": "t", "kind": "blank", "role": "target", "value_type": "number", "is_target": True},
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "has_a", "subject_id": "e1", "object_id": "b_a"},
+            {"id": "vp2", "phrase": "has_b", "subject_id": "e1", "object_id": "b_b"},
+        ],
+        "constraints": [
+            {
+                "id": "c1",
+                "kind": "derived",
+                "op": "sum",
+                "args_blanks": ["b_a"],
+                "output_blank_id": "t",
+            }
+        ],
+    })
+    state = {
+        "b_a": BlankResult(blank_id="b_a", value=1, status="resolved"),
+        "b_b": BlankResult(blank_id="b_b", value=2, status="resolved"),
+        "t": BlankResult(blank_id="t", value=1, status="resolved"),
+    }
+    op = json.dumps({
+        "op": "replace_constraint",
+        "constraint_id": "c1",
+        "constraint": {
+            "id": "c1",
+            "kind": "derived",
+            "op": "sum",
+            "args_blanks": ["b_a", "b_b"],
+            "output_blank_id": "t",
+        },
+    })
+    llm = _ScriptedLLM([_StubResp(text=op)])
+    _new_plan, diff, _meta = update_plan(
+        old_plan=old, state=state, question="Q",
+        reason="target sum missed b_b", evidence="e", llm_client=llm,
+    )
+    assert diff.invalidated_ids == ["t"]
+    assert state["b_a"].status == "resolved"
+    assert state["b_b"].status == "resolved"
+    assert state["t"].status == "unknown"
+    assert state["t"].value is None
 
 
 def test_update_plan_strips_markdown_fences():

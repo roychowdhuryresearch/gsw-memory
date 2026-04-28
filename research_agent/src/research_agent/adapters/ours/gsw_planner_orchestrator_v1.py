@@ -1399,6 +1399,9 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                                     "preserved_ids": action["preserved_ids"],
                                     "added_ids": action["added_ids"],
                                     "dropped_ids": action["dropped_ids"],
+                                    "invalidated_ids": action.get(
+                                        "invalidated_ids", []
+                                    ),
                                     "op_summary": action.get("op_summary", ""),
                                     "attempts": action.get("attempts", 1),
                                 }
@@ -1799,6 +1802,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             action["preserved_ids"] = diff.preserved_ids
             action["added_ids"] = diff.added_ids
             action["dropped_ids"] = diff.dropped_ids
+            action["invalidated_ids"] = diff.invalidated_ids
             action["op_summary"] = diff.op_summary
             action["attempts"] = diff.attempts
             action["prompt_tokens"] = _meta.prompt_tokens
@@ -1810,6 +1814,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     "preserved_ids": diff.preserved_ids,
                     "added_ids": diff.added_ids,
                     "dropped_ids": diff.dropped_ids,
+                    "invalidated_ids": diff.invalidated_ids,
                     "op_summary": diff.op_summary,
                     "attempts": diff.attempts,
                 },

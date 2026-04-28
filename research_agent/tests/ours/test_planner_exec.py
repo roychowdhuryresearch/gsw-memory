@@ -373,6 +373,79 @@ def test_execute_sum_digits_from_text_postcode():
     assert trace.tool_calls[-1].name == "constraint:derived"
 
 
+def test_execute_mul_div_and_round_nearest():
+    plan = GSWPlan(
+        entities=[
+            Entity(id="e1", kind="filled", name="A"),
+            Entity(id="e2", kind="filled", name="B"),
+            Entity(id="e3", kind="filled", name="C"),
+            Entity(id="b1", kind="blank", value_type="number"),
+            Entity(id="b2", kind="blank", value_type="number"),
+            Entity(id="b3", kind="blank", value_type="number"),
+            Entity(id="b_mul", kind="blank", value_type="number"),
+            Entity(id="b_div", kind="blank", value_type="number"),
+            Entity(id="t", kind="blank", value_type="number", is_target=True),
+        ],
+        verb_phrases=[
+            VerbPhrase(id="vp1", phrase="has_value", subject_id="e1", object_id="b1"),
+            VerbPhrase(id="vp2", phrase="has_value", subject_id="e2", object_id="b2"),
+            VerbPhrase(id="vp3", phrase="has_value", subject_id="e3", object_id="b3"),
+        ],
+        constraints=[
+            Constraint(
+                id="c1", kind="derived", op="mul",
+                args_blanks=["b1", "b2"], output_blank_id="b_mul",
+            ),
+            Constraint(
+                id="c2", kind="derived", op="div",
+                args_blanks=["b_mul", "b3"], output_blank_id="b_div",
+            ),
+            Constraint(
+                id="c3", kind="derived", op="round_nearest",
+                args_blanks=["b_div"], output_blank_id="t",
+            ),
+        ],
+    )
+    retriever = _StubRetriever({
+        "A": [_StubChunk("a", "A", "six")],
+        "B": [_StubChunk("b", "B", "seven")],
+        "C": [_StubChunk("c", "C", "five")],
+    })
+    llm = _StubLLM({"six": 6, "seven": 7, "five": 5})
+    final, trace = execute(plan, retriever=retriever, llm_client=llm, top_k=5)
+    assert final == "10"
+    assert trace.tool_calls[-1].name == "constraint:derived"
+
+
+def test_execute_gt_relational_bool_target():
+    plan = GSWPlan(
+        entities=[
+            Entity(id="e_left", kind="filled", name="Left"),
+            Entity(id="e_right", kind="filled", name="Right"),
+            Entity(id="b_left", kind="blank", value_type="number"),
+            Entity(id="b_right", kind="blank", value_type="number"),
+            Entity(id="t", kind="blank", value_type="bool", is_target=True),
+        ],
+        verb_phrases=[
+            VerbPhrase(id="vp1", phrase="has_value", subject_id="e_left", object_id="b_left"),
+            VerbPhrase(id="vp2", phrase="has_value", subject_id="e_right", object_id="b_right"),
+        ],
+        constraints=[
+            Constraint(
+                id="c1", kind="gt", left_ref="b_left",
+                right_ref="b_right", output_blank_id="t",
+            )
+        ],
+    )
+    retriever = _StubRetriever({
+        "Left": [_StubChunk("l", "Left", "value 10")],
+        "Right": [_StubChunk("r", "Right", "value 4")],
+    })
+    llm = _StubLLM({"Left": 10, "Right": 4})
+    final, _trace = execute(plan, retriever=retriever, llm_client=llm, top_k=5)
+    assert final == "True"
+
+
 def test_execute_argmax_entity_selector():
     # Use non-overlapping unique substrings as entity names so stubs match.
     names = ["Alpha", "Bravo", "Charlie", "Delta"]
@@ -409,6 +482,73 @@ def test_execute_argmax_entity_selector():
     llm = _StubLLM(years)
     final, _trace = execute(plan, retriever=retriever, llm_client=llm, top_k=5)
     assert final == "Alpha"  # 1996 is max
+
+
+def test_constraint_validator_rejects_empty_or_duplicate_outputs():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A"),
+                Entity(id="b1", kind="blank", value_type="number"),
+                Entity(id="t", kind="blank", value_type="number", is_target=True),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_value", subject_id="e1", object_id="b1"),
+                VerbPhrase(id="vp2", phrase="candidate_answer", subject_id="e1", object_id="t"),
+            ],
+            constraints=[
+                Constraint(id="c1", kind="derived", op="sum", output_blank_id="t"),
+            ],
+        )
+    assert "args_blanks" in str(excinfo.value)
+
+    with pytest.raises(ValidationError) as excinfo2:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A"),
+                Entity(id="b1", kind="blank", value_type="number"),
+                Entity(id="b2", kind="blank", value_type="number"),
+                Entity(id="t", kind="blank", value_type="number", is_target=True),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_a", subject_id="e1", object_id="b1"),
+                VerbPhrase(id="vp2", phrase="has_b", subject_id="e1", object_id="b2"),
+            ],
+            constraints=[
+                Constraint(
+                    id="c1", kind="derived", op="sum",
+                    args_blanks=["b1"], output_blank_id="t",
+                ),
+                Constraint(
+                    id="c2", kind="derived", op="sum",
+                    args_blanks=["b2"], output_blank_id="t",
+                ),
+            ],
+        )
+    assert "multiple constraints output" in str(excinfo2.value)
+
+
+def test_constraint_validator_rejects_relational_assertion_without_output():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="e1", kind="filled", name="A"),
+                Entity(id="b1", kind="blank", value_type="number"),
+                Entity(id="t", kind="blank", value_type="number", is_target=True),
+            ],
+            verb_phrases=[
+                VerbPhrase(id="vp1", phrase="has_value", subject_id="e1", object_id="b1"),
+                VerbPhrase(id="vp2", phrase="candidate_answer", subject_id="e1", object_id="t"),
+            ],
+            constraints=[
+                Constraint(id="c1", kind="equals", left_ref="b1", right_ref="e1"),
+            ],
+        )
+    assert "requires output_blank_id" in str(excinfo.value)
 
 
 def test_execute_unknown_cascades_to_target():

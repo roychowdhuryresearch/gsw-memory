@@ -86,7 +86,20 @@ class Constraint(BaseModel):
 
     id: str
     kind: Literal["derived", "argmax", "argmin", "equals", "in_list", "gt", "lt"]
-    op: Optional[Literal["diff", "sum", "avg", "max", "min", "count", "concat"]] = None
+    op: Optional[
+        Literal[
+            "diff",
+            "sum",
+            "avg",
+            "max",
+            "min",
+            "count",
+            "concat",
+            "mul",
+            "div",
+            "round_nearest",
+        ]
+    ] = None
     args_blanks: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)
@@ -149,6 +162,135 @@ class GSWPlan(BaseModel):
             raise ValueError(
                 f"dangling entities (no verb-phrase or constraint edge): {dangling}"
             )
+        return self
+
+    @model_validator(mode="after")
+    def _check_executable_refs(self) -> "GSWPlan":
+        """Validate references and constraint shapes the executor can run.
+
+        The planner prompt advertises a small executable constraint
+        language. Rejecting malformed uses here prevents bad plans from
+        reaching orchestration and then looping around unresolved targets.
+        """
+        all_ids = [e.id for e in self.entities]
+        if len(all_ids) != len(set(all_ids)):
+            raise ValueError("duplicate entity ids in plan")
+        ent_ids = set(all_ids)
+        blank_ids = {e.id for e in self.blank_entities()}
+
+        vp_ids = [vp.id for vp in self.verb_phrases]
+        if len(vp_ids) != len(set(vp_ids)):
+            raise ValueError("duplicate verb-phrase ids in plan")
+        for vp in self.verb_phrases:
+            missing = [
+                ref for ref in (vp.subject_id, vp.object_id)
+                if ref not in ent_ids
+            ]
+            if missing:
+                raise ValueError(
+                    f"verb-phrase {vp.id!r} references unknown ids: {missing}"
+                )
+
+        constraint_ids = [c.id for c in self.constraints]
+        if len(constraint_ids) != len(set(constraint_ids)):
+            raise ValueError("duplicate constraint ids in plan")
+
+        output_seen: dict[str, str] = {}
+        for c in self.constraints:
+            if c.output_blank_id:
+                if c.output_blank_id not in blank_ids:
+                    raise ValueError(
+                        f"constraint {c.id!r} output_blank_id "
+                        f"{c.output_blank_id!r} is not a blank id"
+                    )
+                prior = output_seen.get(c.output_blank_id)
+                if prior is not None:
+                    raise ValueError(
+                        f"multiple constraints output to blank "
+                        f"{c.output_blank_id!r}: {prior!r}, {c.id!r}"
+                    )
+                output_seen[c.output_blank_id] = c.id
+
+            if c.kind == "derived":
+                if not c.output_blank_id:
+                    raise ValueError(
+                        f"derived constraint {c.id!r} requires output_blank_id"
+                    )
+                if not c.op:
+                    raise ValueError(f"derived constraint {c.id!r} requires op")
+                if not c.args_blanks:
+                    raise ValueError(
+                        f"derived constraint {c.id!r} requires args_blanks"
+                    )
+                bad_args = [b for b in c.args_blanks if b not in blank_ids]
+                if bad_args:
+                    raise ValueError(
+                        f"derived constraint {c.id!r} has non-blank args: {bad_args}"
+                    )
+                if c.op == "div" and len(c.args_blanks) < 2:
+                    raise ValueError(
+                        f"div constraint {c.id!r} requires at least 2 args"
+                    )
+                continue
+
+            if c.kind in ("argmax", "argmin"):
+                if not c.output_blank_id:
+                    raise ValueError(
+                        f"{c.kind} constraint {c.id!r} requires output_blank_id"
+                    )
+                if not c.candidate_entity_ids or not c.sort_by_blank_ids:
+                    raise ValueError(
+                        f"{c.kind} constraint {c.id!r} requires candidates "
+                        "and sort_by_blank_ids"
+                    )
+                if len(c.candidate_entity_ids) != len(c.sort_by_blank_ids):
+                    raise ValueError(
+                        f"{c.kind} constraint {c.id!r} requires aligned "
+                        "candidate_entity_ids and sort_by_blank_ids"
+                    )
+                bad_candidates = [
+                    eid for eid in c.candidate_entity_ids if eid not in ent_ids
+                ]
+                bad_sort = [bid for bid in c.sort_by_blank_ids if bid not in blank_ids]
+                if bad_candidates:
+                    raise ValueError(
+                        f"{c.kind} constraint {c.id!r} has unknown candidates: "
+                        f"{bad_candidates}"
+                    )
+                if bad_sort:
+                    raise ValueError(
+                        f"{c.kind} constraint {c.id!r} has non-blank sort ids: "
+                        f"{bad_sort}"
+                    )
+                continue
+
+            if c.kind in ("equals", "in_list", "gt", "lt"):
+                if not c.output_blank_id:
+                    raise ValueError(
+                        f"relational constraint {c.id!r} requires output_blank_id"
+                    )
+                missing_refs = [
+                    field for field, ref in (
+                        ("left_ref", c.left_ref),
+                        ("right_ref", c.right_ref),
+                    )
+                    if not ref
+                ]
+                if missing_refs:
+                    raise ValueError(
+                        f"relational constraint {c.id!r} requires "
+                        f"{', '.join(missing_refs)}"
+                    )
+                bad_refs = [
+                    ref for ref in (c.left_ref, c.right_ref)
+                    if ref and ref not in ent_ids
+                ]
+                if bad_refs:
+                    raise ValueError(
+                        f"relational constraint {c.id!r} references unknown ids: "
+                        f"{bad_refs}"
+                    )
+
         return self
 
 
@@ -533,6 +675,39 @@ def _count_constraint_value(value: Any) -> int:
     return 1
 
 
+def _resolve_constraint_ref(
+    ref: Optional[str],
+    plan: GSWPlan,
+    state: dict[str, BlankResult],
+) -> Any:
+    """Resolve a constraint ref to either a blank value or filled name."""
+    if not ref:
+        return None
+    ent = plan.entity_by_id(ref)
+    if ent.kind == "blank":
+        res = state.get(ref)
+        if res is None or res.status != "resolved":
+            return None
+        return res.value
+    return ent.name
+
+
+def _coerce_relational_number(value: Any) -> Optional[float]:
+    """Numeric coercion for gt/lt; list values use their first item."""
+    if isinstance(value, (list, tuple)) and value:
+        value = value[0]
+    return _coerce_constraint_number(value)
+
+
+def _contains_value(container: Any, needle: Any) -> bool:
+    """Best-effort membership with case-insensitive string matching."""
+    if container is None or needle is None:
+        return False
+    if isinstance(container, (list, tuple, set)):
+        return any(_contains_value(item, needle) for item in container)
+    return str(container).strip().lower() == str(needle).strip().lower()
+
+
 # ---------------------------------------------------------------------------
 # Per-blank fill strategies
 # ---------------------------------------------------------------------------
@@ -660,6 +835,35 @@ def _compute_constraint(
             val = abs(nums[0] - nums[1]) if len(nums) >= 2 else nums[0]
         elif op == "sum":
             val = sum(nums)
+        elif op == "mul":
+            val = 1.0
+            for n in nums:
+                val *= n
+        elif op == "div":
+            val = nums[0]
+            for denom in nums[1:]:
+                if denom == 0:
+                    return BlankResult(
+                        blank_id=out_id,
+                        status="unknown",
+                        wall_time_s=round(time.time() - t0, 3),
+                    )
+                val /= denom
+        elif op == "round_nearest":
+            base = nums[0]
+            nearest = nums[1] if len(nums) > 1 else 10.0
+            if nearest == 0:
+                return BlankResult(
+                    blank_id=out_id,
+                    status="unknown",
+                    wall_time_s=round(time.time() - t0, 3),
+                )
+            # Round halves away from zero for predictable "nearest ten"
+            # behavior on positive answer counts.
+            import math
+
+            sign = -1 if base < 0 else 1
+            val = sign * math.floor(abs(base) / abs(nearest) + 0.5) * abs(nearest)
         elif op == "avg":
             val = sum(nums) / len(nums)
         elif op == "max":
@@ -704,7 +908,55 @@ def _compute_constraint(
             wall_time_s=round(time.time() - t0, 3),
         )
 
-    # Relational constraints: Phase-2; treat as pass-through for now.
+    if constraint.kind in ("equals", "in_list", "gt", "lt"):
+        left = _resolve_constraint_ref(constraint.left_ref, plan, state)
+        right = _resolve_constraint_ref(constraint.right_ref, plan, state)
+        if left is None or right is None:
+            return BlankResult(blank_id=out_id, status="unknown")
+
+        result_bool: Optional[bool] = None
+        passthrough: Any = None
+        if constraint.kind == "equals":
+            result_bool = _contains_value(left, right)
+            passthrough = left
+        elif constraint.kind == "in_list":
+            if isinstance(right, (list, tuple, set)):
+                result_bool = _contains_value(right, left)
+                passthrough = left
+            elif isinstance(left, (list, tuple, set)):
+                result_bool = _contains_value(left, right)
+                passthrough = right
+            else:
+                result_bool = _contains_value(right, left)
+                passthrough = left
+        elif constraint.kind in ("gt", "lt"):
+            left_num = _coerce_relational_number(left)
+            right_num = _coerce_relational_number(right)
+            if left_num is None or right_num is None:
+                return BlankResult(blank_id=out_id, status="unknown")
+            result_bool = (
+                left_num > right_num
+                if constraint.kind == "gt"
+                else left_num < right_num
+            )
+            passthrough = left
+
+        if result_bool is None:
+            return BlankResult(blank_id=out_id, status="unknown")
+        out_ent = plan.entity_by_id(out_id)
+        if out_ent.value_type == "bool":
+            out_val: Any = result_bool
+        elif result_bool:
+            out_val = passthrough
+        else:
+            return BlankResult(blank_id=out_id, status="unknown")
+        return BlankResult(
+            blank_id=out_id,
+            value=out_val,
+            status="resolved",
+            wall_time_s=round(time.time() - t0, 3),
+        )
+
     return BlankResult(blank_id=out_id, status="unknown")
 
 

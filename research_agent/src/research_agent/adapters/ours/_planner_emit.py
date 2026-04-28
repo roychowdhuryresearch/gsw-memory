@@ -13,6 +13,7 @@ adapter or surface the failure some other way.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
@@ -103,7 +104,7 @@ def emit_plan(
 
     # ---- Parse attempt 1 ----------------------------------------------
     try:
-        plan = _parse_plan(text)
+        plan = _parse_plan(text, question=question)
         return plan, meta
     except (ValidationError, ValueError, json.JSONDecodeError) as exc:
         meta.parse_error = str(exc)[:400]
@@ -131,16 +132,45 @@ def emit_plan(
 
     # ---- Parse attempt 2 ----------------------------------------------
     try:
-        plan = _parse_plan(repair_text)
+        plan = _parse_plan(repair_text, question=question)
         return plan, meta
     except (ValidationError, ValueError, json.JSONDecodeError) as exc:
         raise PlanEmitError(kind="parse_failure", detail=str(exc)) from exc
 
 
-def _parse_plan(text: str) -> GSWPlan:
+def _normalise_for_grounding(text: str) -> str:
+    return re.sub(r"\s+", " ", text.strip().lower())
+
+
+def _validate_grounded_filled_entities(plan: GSWPlan, question: str) -> None:
+    """Enforce the prompt's grounding rule at parse time.
+
+    Filled entities must be literal question substrings unless they are
+    explicitly marked as collective expansions. This catches placeholder
+    candidates such as "Winner A" before they reach execution.
+    """
+    q_norm = _normalise_for_grounding(question)
+    bad: list[str] = []
+    for ent in plan.filled_entities():
+        if (ent.state or "").startswith("expanded_from_collective:"):
+            continue
+        name = _normalise_for_grounding(ent.name or "")
+        if name and name not in q_norm:
+            bad.append(f"{ent.id}={ent.name!r}")
+    if bad:
+        raise ValueError(
+            "filled entities fail grounding test against question: "
+            + ", ".join(bad)
+        )
+
+
+def _parse_plan(text: str, *, question: str = "") -> GSWPlan:
     """Balanced-brace JSON extract + Pydantic validate."""
     obj = _extract_json_object(text)
-    return GSWPlan.model_validate(obj)
+    plan = GSWPlan.model_validate(obj)
+    if question:
+        _validate_grounded_filled_entities(plan, question)
+    return plan
 
 
 # ---------------------------------------------------------------------------
