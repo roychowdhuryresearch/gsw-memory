@@ -223,6 +223,28 @@ def test_update_plan_retries_after_unparseable_response():
     assert len(llm.calls) == 2
 
 
+def test_update_plan_passes_seed_to_all_attempts():
+    old = _old_plan()
+    state = {
+        "b_a": BlankResult(blank_id="b_a", value="X", status="resolved"),
+        "t": BlankResult(blank_id="t", status="unknown"),
+    }
+    llm = _ScriptedLLM([
+        _StubResp(text="this is not json at all"),
+        _StubResp(text=_add_blank_op_json()),
+    ])
+    update_plan(
+        old_plan=old,
+        state=state,
+        question="Q",
+        reason="r",
+        evidence="e",
+        llm_client=llm,
+        llm_seed=456,
+    )
+    assert [c.get("seed") for c in llm.calls] == [456, 456]
+
+
 def test_update_plan_retries_after_trivial_op():
     """First response is a trivial op (existing blank id), retry succeeds."""
     old = _old_plan()

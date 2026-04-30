@@ -90,10 +90,12 @@ SYSTEM_PROMPT_LEGEND = textwrap.dedent(
     A constraint computes a blank without retrieval.
 
     - `derived` applies an operation such as `diff`, `sum`, `avg`,
-      `max`, `min`, `count`, or `concat` to input blanks.
+      `max`, `min`, `count`, `concat`, `mul`, `div`, or
+      `round_nearest` to input blanks.
     - `argmax` / `argmin` pick the winning entity from candidates using
       aligned ranking blanks.
-    - Relational kinds like `equals`, `in_list`, `gt`, and `lt` are rare.
+    - Relational kinds like `equals`, `in_list`, `gt`, and `lt` produce
+      bool outputs when their inputs are resolved.
 
     Every constraint has an `output_blank_id`. When all of the
     constraint's input blanks are resolved, the adapter AUTOMATICALLY

@@ -214,13 +214,27 @@ def _concat_plan() -> dict[str, Any]:
     }
 
 
-def _mk_adapter(scripted: _ScriptedLLM, *, plan_dict: dict[str, Any], corpus=None, retriever=None):
+def _mk_adapter(
+    scripted: _ScriptedLLM,
+    *,
+    plan_dict: dict[str, Any],
+    corpus=None,
+    retriever=None,
+    extra: dict[str, Any] | None = None,
+):
+    extra_cfg = {
+        "corpus": corpus or _StubCorpus({}),
+        "retriever": retriever or _StubRetriever({}),
+        "level_max_turns": 6,
+    }
+    if extra:
+        extra_cfg.update(extra)
     ctx = AdapterContext(
         system_id="ours_gsw_planner_orchestrator_v1",
         model_id="stub",
         max_turns=30,
         max_completion_tokens=2000,
-        extra={"corpus": corpus or _StubCorpus({}), "retriever": retriever or _StubRetriever({}), "level_max_turns": 6},
+        extra=extra_cfg,
     )
     adapter = OursGSWPlannerOrchestratorV1Adapter(ctx)
     adapter.llm = scripted
@@ -228,7 +242,14 @@ def _mk_adapter(scripted: _ScriptedLLM, *, plan_dict: dict[str, Any], corpus=Non
     from research_agent.adapters.ours import gsw_planner_orchestrator_v1 as mod
     from research_agent.adapters.ours._planner_emit import PlanEmitMeta
 
-    def _fake_emit(question, llm_client, *, max_tokens=4096, enable_repair=True):
+    def _fake_emit(
+        question,
+        llm_client,
+        *,
+        max_tokens=4096,
+        enable_repair=True,
+        llm_seed=None,
+    ):
         return GSWPlan.model_validate(plan_dict), PlanEmitMeta(
             prompt_tokens=1, completion_tokens=1, raw_response="{}"
         )
@@ -671,26 +692,37 @@ def _mk_llm_adapter(
     corpus=None,
     retriever=None,
     orchestrator_max_turns: int = 6,
+    extra: dict[str, Any] | None = None,
 ):
+    extra_cfg = {
+        "corpus": corpus or _StubCorpus({}),
+        "retriever": retriever or _StubRetriever({}),
+        "level_max_turns": 6,
+        "orchestrator_mode": "llm",
+        "orchestrator_max_turns": orchestrator_max_turns,
+    }
+    if extra:
+        extra_cfg.update(extra)
     ctx = AdapterContext(
         system_id="ours_gsw_planner_orchestrator_v1",
         model_id="stub",
         max_turns=30,
         max_completion_tokens=2000,
-        extra={
-            "corpus": corpus or _StubCorpus({}),
-            "retriever": retriever or _StubRetriever({}),
-            "level_max_turns": 6,
-            "orchestrator_mode": "llm",
-            "orchestrator_max_turns": orchestrator_max_turns,
-        },
+        extra=extra_cfg,
     )
     adapter = OursGSWPlannerOrchestratorV1Adapter(ctx)
     adapter.llm = routed
     from research_agent.adapters.ours import gsw_planner_orchestrator_v1 as mod
     from research_agent.adapters.ours._planner_emit import PlanEmitMeta
 
-    def _fake_emit(question, llm_client, *, max_tokens=4096, enable_repair=True):
+    def _fake_emit(
+        question,
+        llm_client,
+        *,
+        max_tokens=4096,
+        enable_repair=True,
+        llm_seed=None,
+    ):
         return GSWPlan.model_validate(plan_dict), PlanEmitMeta(
             prompt_tokens=1, completion_tokens=1, raw_response="{}"
         )
@@ -836,6 +868,118 @@ def test_llm_orch_submit_answer_rejected_when_target_unresolved():
     traj = adapter.run_question("Q", question_id="qllm4")
     assert traj.final_answer == "real answer"
     assert traj.extra["stopped_reason"] == "finished"
+
+
+def test_synthesis_validator_defaults_off():
+    plan_dict = _one_level_plan()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "dispatch_subplan", {"blank_ids": ["t"]})]),
+            _StubResponse(tool_calls=[_tc("o2", "submit_answer", {"answer": "X"})]),
+        ],
+        "resolve exactly these blanks": [
+            _StubResponse(tool_calls=[_tc("r1", "update_blank", {
+                "blank_id": "t",
+                "value": "X",
+                "evidence_chunk_ids": ["c"],
+            })]),
+        ],
+        "You are a synthesis validator": [
+            _StubResponse(text=json.dumps({
+                "verdict": "wrong",
+                "reason": "should not be called",
+            })),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(llm, plan_dict=plan_dict)
+    traj = adapter.run_question("Q", question_id="qvalidatoroff")
+    assert traj.final_answer == "X"
+    assert traj.extra["synthesis_validator_mode"] == "off"
+    assert traj.extra["validator_verdicts"] == []
+    validator_calls = [
+        c for c in llm.calls
+        if "synthesis validator" in (c["messages"][0].get("content", ""))
+    ]
+    assert validator_calls == []
+
+
+def test_synthesis_validator_log_only_records_but_does_not_reject():
+    plan_dict = _one_level_plan()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "dispatch_subplan", {"blank_ids": ["t"]})]),
+            _StubResponse(tool_calls=[_tc("o2", "submit_answer", {"answer": "X"})]),
+        ],
+        "resolve exactly these blanks": [
+            _StubResponse(tool_calls=[_tc("r1", "update_blank", {
+                "blank_id": "t",
+                "value": "X",
+                "evidence_chunk_ids": ["c"],
+            })]),
+        ],
+        "You are a synthesis validator": [
+            _StubResponse(text=json.dumps({
+                "verdict": "wrong",
+                "reason": "log-only disagreement",
+                "suggested_correction": "Y",
+            })),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(
+        llm,
+        plan_dict=plan_dict,
+        extra={"synthesis_validator_mode": "log_only"},
+    )
+    traj = adapter.run_question("Q", question_id="qvalidatorlog")
+    assert traj.final_answer == "X"
+    assert traj.extra["validator_retries_used"] == 0
+    assert traj.extra["validator_verdicts"][0]["verdict"] == "wrong"
+    assert traj.extra["validator_verdicts"][0]["mode"] == "log_only"
+
+
+def test_synthesis_validator_reject_feedback_reaches_next_prompt():
+    plan_dict = _one_level_plan()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "dispatch_subplan", {"blank_ids": ["t"]})]),
+            _StubResponse(tool_calls=[_tc("o2", "submit_answer", {"answer": "bad"})]),
+            _StubResponse(tool_calls=[_tc("o3", "submit_answer", {"answer": "good"})]),
+        ],
+        "resolve exactly these blanks": [
+            _StubResponse(tool_calls=[_tc("r1", "update_blank", {
+                "blank_id": "t",
+                "value": "bad",
+                "evidence_chunk_ids": ["c"],
+            })]),
+        ],
+        "You are a synthesis validator": [
+            _StubResponse(text=json.dumps({
+                "verdict": "wrong",
+                "reason": "bad is inconsistent with the retrieved facts",
+                "flagged_blank": "t",
+                "suggested_correction": "good",
+            })),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(
+        llm,
+        plan_dict=plan_dict,
+        extra={"synthesis_validator_mode": "reject"},
+    )
+    traj = adapter.run_question("Q", question_id="qvalidatorreject")
+    assert traj.final_answer == "good"
+    assert traj.extra["validator_retries_used"] == 1
+
+    orch_calls = [
+        c for c in llm.calls
+        if "You are the **Orchestrator**" in c["messages"][0].get("content", "")
+    ]
+    third_prompt = orch_calls[2]["messages"][0]["content"]
+    assert "submit_answer rejected by synthesis validator" in third_prompt
+    assert "bad is inconsistent" in third_prompt
 
 
 def test_llm_orch_max_turns_returns_empty_when_target_unresolved():

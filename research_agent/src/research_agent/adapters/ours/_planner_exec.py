@@ -86,7 +86,20 @@ class Constraint(BaseModel):
 
     id: str
     kind: Literal["derived", "argmax", "argmin", "equals", "in_list", "gt", "lt"]
-    op: Optional[Literal["diff", "sum", "avg", "max", "min", "count", "concat"]] = None
+    op: Optional[
+        Literal[
+            "diff",
+            "sum",
+            "avg",
+            "max",
+            "min",
+            "count",
+            "concat",
+            "mul",
+            "div",
+            "round_nearest",
+        ]
+    ] = None
     args_blanks: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)
@@ -122,6 +135,36 @@ class GSWPlan(BaseModel):
             if e.id == eid:
                 return e
         raise ExecutionError(kind="bad_ref", detail=f"unknown entity id {eid!r}")
+
+    @model_validator(mode="after")
+    def _check_known_refs(self) -> "GSWPlan":
+        """Every VP/constraint reference must point at an emitted entity."""
+        entity_ids = {e.id for e in self.entities}
+        blank_ids = {e.id for e in self.blank_entities()}
+
+        def require_known(ref: Optional[str], *, where: str) -> None:
+            if ref and ref not in entity_ids:
+                raise ValueError(f"{where} references unknown entity id {ref!r}")
+
+        def require_blank(ref: Optional[str], *, where: str) -> None:
+            if ref and ref not in blank_ids:
+                raise ValueError(f"{where} references non-blank id {ref!r}")
+
+        for vp in self.verb_phrases:
+            require_known(vp.subject_id, where=f"verb-phrase {vp.id!r}.subject_id")
+            require_known(vp.object_id, where=f"verb-phrase {vp.id!r}.object_id")
+
+        for c in self.constraints:
+            for b in c.args_blanks:
+                require_blank(b, where=f"constraint {c.id!r}.args_blanks")
+            for b in c.sort_by_blank_ids:
+                require_blank(b, where=f"constraint {c.id!r}.sort_by_blank_ids")
+            for eid in c.candidate_entity_ids:
+                require_known(eid, where=f"constraint {c.id!r}.candidate_entity_ids")
+            require_known(c.left_ref, where=f"constraint {c.id!r}.left_ref")
+            require_known(c.right_ref, where=f"constraint {c.id!r}.right_ref")
+            require_blank(c.output_blank_id, where=f"constraint {c.id!r}.output_blank_id")
+        return self
 
     @model_validator(mode="after")
     def _check_no_dangling(self) -> "GSWPlan":
@@ -164,6 +207,10 @@ class GSWPlan(BaseModel):
         """
         for c in self.constraints:
             if c.kind == "derived":
+                if not c.op:
+                    raise ValueError(
+                        f"constraint {c.id!r} (kind=derived) has no op"
+                    )
                 if not c.args_blanks:
                     raise ValueError(
                         f"constraint {c.id!r} (kind=derived, op={c.op!r}) "
@@ -190,10 +237,13 @@ class GSWPlan(BaseModel):
                         "both left_ref and right_ref"
                     )
             elif c.kind == "in_list":
-                if not c.args_blanks:
+                has_left_right = bool(c.left_ref and c.right_ref)
+                has_args = len(c.args_blanks) >= 2
+                if not (has_left_right or has_args):
                     raise ValueError(
-                        f"constraint {c.id!r} (kind=in_list) has empty "
-                        "args_blanks; in_list must list [member, list_blank]"
+                        f"constraint {c.id!r} (kind=in_list) requires "
+                        "either left_ref/right_ref or args_blanks="
+                        "[member_blank, list_blank]"
                     )
         return self
 
@@ -274,10 +324,17 @@ def build_dependency_graph(plan: GSWPlan) -> dict[str, set[str]]:
             inputs.update(x for x in c.args_blanks if x in blanks)
         elif c.kind in ("argmax", "argmin"):
             inputs.update(x for x in c.sort_by_blank_ids if x in blanks)
-        elif c.kind in ("equals", "in_list", "gt", "lt"):
+        elif c.kind in ("equals", "gt", "lt"):
             for x in (c.left_ref, c.right_ref):
                 if x and x in blanks:
                     inputs.add(x)
+        elif c.kind == "in_list":
+            if c.left_ref and c.right_ref:
+                for x in (c.left_ref, c.right_ref):
+                    if x in blanks:
+                        inputs.add(x)
+            else:
+                inputs.update(x for x in c.args_blanks[:2] if x in blanks)
 
         if c.output_blank_id and c.output_blank_id in blanks:
             # output depends on all inputs (minus self)
@@ -579,6 +636,54 @@ def _count_constraint_value(value: Any) -> int:
     return 1
 
 
+def _constraint_ref_value(
+    ref: Optional[str],
+    plan: GSWPlan,
+    state: dict[str, BlankResult],
+) -> tuple[Any, bool]:
+    """Resolve a constraint ref from state or a filled entity name."""
+    if not ref:
+        return None, False
+    res = state.get(ref)
+    if res is not None:
+        return res.value, res.status == "resolved"
+    try:
+        ent = plan.entity_by_id(ref)
+    except ExecutionError:
+        return None, False
+    if ent.kind == "filled":
+        return ent.name or ent.id, True
+    return None, False
+
+
+def _relational_ref_pair(constraint: Constraint) -> tuple[Optional[str], Optional[str]]:
+    if constraint.left_ref and constraint.right_ref:
+        return constraint.left_ref, constraint.right_ref
+    if constraint.kind == "in_list" and len(constraint.args_blanks) >= 2:
+        return constraint.args_blanks[0], constraint.args_blanks[1]
+    return None, None
+
+
+def _constraint_values_equal(left: Any, right: Any) -> bool:
+    left_num = _coerce_number(left)
+    right_num = _coerce_number(right)
+    if left_num is not None and right_num is not None:
+        return left_num == right_num
+    return str(left).strip().casefold() == str(right).strip().casefold()
+
+
+def _constraint_contains(member: Any, container: Any) -> bool:
+    if isinstance(container, (list, tuple, set)):
+        return any(_constraint_values_equal(member, item) for item in container)
+    text = str(container or "")
+    import re
+
+    parts = [p.strip() for p in re.split(r"[,;\n]\s*", text) if p.strip()]
+    if parts:
+        return any(_constraint_values_equal(member, part) for part in parts)
+    return str(member).strip().casefold() in text.casefold()
+
+
 # ---------------------------------------------------------------------------
 # Per-blank fill strategies
 # ---------------------------------------------------------------------------
@@ -706,6 +811,31 @@ def _compute_constraint(
             val = abs(nums[0] - nums[1]) if len(nums) >= 2 else nums[0]
         elif op == "sum":
             val = sum(nums)
+        elif op == "mul":
+            val = 1.0
+            for n in nums:
+                val *= n
+        elif op == "div":
+            if len(nums) < 2 or nums[1] == 0:
+                return BlankResult(
+                    blank_id=out_id,
+                    status="unknown",
+                    wall_time_s=round(time.time() - t0, 3),
+                )
+            val = nums[0] / nums[1]
+        elif op == "round_nearest":
+            step = nums[1] if len(nums) >= 2 else 10.0
+            if step == 0:
+                return BlankResult(
+                    blank_id=out_id,
+                    status="unknown",
+                    wall_time_s=round(time.time() - t0, 3),
+                )
+            import math
+
+            q = nums[0] / step
+            rounded_q = math.floor(q + 0.5) if q >= 0 else math.ceil(q - 0.5)
+            val = rounded_q * step
         elif op == "avg":
             val = sum(nums) / len(nums)
         elif op == "max":
@@ -750,7 +880,42 @@ def _compute_constraint(
             wall_time_s=round(time.time() - t0, 3),
         )
 
-    # Relational constraints: Phase-2; treat as pass-through for now.
+    if constraint.kind in ("equals", "gt", "lt", "in_list"):
+        left_ref, right_ref = _relational_ref_pair(constraint)
+        left, left_ok = _constraint_ref_value(left_ref, plan, state)
+        right, right_ok = _constraint_ref_value(right_ref, plan, state)
+        if not (left_ok and right_ok):
+            return BlankResult(
+                blank_id=out_id,
+                status="unknown",
+                wall_time_s=round(time.time() - t0, 3),
+            )
+
+        if constraint.kind == "equals":
+            val = _constraint_values_equal(left, right)
+        elif constraint.kind == "in_list":
+            val = _constraint_contains(left, right)
+        else:
+            left_num = _coerce_constraint_number(left)
+            right_num = _coerce_constraint_number(right)
+            if left_num is None or right_num is None:
+                return BlankResult(
+                    blank_id=out_id,
+                    status="unknown",
+                    wall_time_s=round(time.time() - t0, 3),
+                )
+            val = (
+                left_num > right_num
+                if constraint.kind == "gt"
+                else left_num < right_num
+            )
+        return BlankResult(
+            blank_id=out_id,
+            value=val,
+            status="resolved",
+            wall_time_s=round(time.time() - t0, 3),
+        )
+
     return BlankResult(blank_id=out_id, status="unknown")
 
 

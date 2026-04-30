@@ -73,7 +73,20 @@ class _ConstraintSpec(BaseModel):
 
     id: str
     kind: Literal["derived", "argmax", "argmin", "equals", "in_list", "gt", "lt"]
-    op: Optional[Literal["diff", "sum", "avg", "max", "min", "count", "concat"]] = None
+    op: Optional[
+        Literal[
+            "diff",
+            "sum",
+            "avg",
+            "max",
+            "min",
+            "count",
+            "concat",
+            "mul",
+            "div",
+            "round_nearest",
+        ]
+    ] = None
     args_blanks: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)

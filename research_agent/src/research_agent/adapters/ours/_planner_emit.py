@@ -95,6 +95,7 @@ def emit_plan(
     max_tokens: int = 4096,
     enable_repair: bool = True,
     max_repair_attempts: int = MAX_REPAIR_ATTEMPTS,
+    llm_seed: int | None = None,
 ) -> tuple[GSWPlan, PlanEmitMeta]:
     """Emit + validate a ``GSWPlan`` from a question with multi-retry repair.
 
@@ -120,6 +121,7 @@ def emit_plan(
         resp = llm_client.chat(
             messages=build_planner_messages(question),
             max_tokens=max_tokens,
+            seed=llm_seed,
         )
     except Exception as exc:  # noqa: BLE001
         raise PlanEmitError(kind="llm_error", detail=str(exc)) from exc
@@ -154,6 +156,7 @@ def emit_plan(
                     max_attempts=max_repair_attempts,
                 ),
                 max_tokens=max_tokens,
+                seed=llm_seed,
             )
         except Exception as exc:  # noqa: BLE001
             raise PlanEmitError(

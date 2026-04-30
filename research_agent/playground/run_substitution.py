@@ -156,6 +156,29 @@ def main(
             "(~4–8 is safe for Bedrock gpt-oss-120b)."
         ),
     ),
+    seed: int = typer.Option(
+        -1,
+        help=(
+            "Seed plumbed into the OpenAI/vLLM Chat Completions seed field. "
+            "Identical seeds with identical prompts give bit-reproducible "
+            "outputs on vLLM. -1 (default) means no seed sent. Bedrock / "
+            "LiteLLM ignore it."
+        ),
+    ),
+    temperature: float = typer.Option(
+        0.0,
+        help=(
+            "Default model temperature for adapter LLM calls. Use 0.0 for "
+            "eval determinism; raise only for exploratory runs."
+        ),
+    ),
+    synthesis_validator_mode: str = typer.Option(
+        "",
+        help=(
+            "Only for ours_gsw_planner_orchestrator_v1: off, log_only, or "
+            "reject. Empty uses adapter default."
+        ),
+    ),
 ) -> None:
     subset_obj = load_subset(subset)
     questions_all = load_frames(split=split)
@@ -166,6 +189,7 @@ def main(
     typer.echo(f"system={system} model={model} base_url={base_url or '(default openai)'}")
     typer.echo(f"subset={subset_obj.subset_id} split={split} n_questions={len(questions)}")
     typer.echo(f"max_turns={max_turns} max_completion_tokens={max_completion_tokens}")
+    typer.echo(f"temperature={temperature} seed={seed if seed >= 0 else '(none)'}")
 
     if dry_run:
         for q in questions[:5]:
@@ -173,7 +197,10 @@ def main(
         return
 
     adapter_cls = get_adapter(system)
-    extra: dict[str, object] = {"retriever_type": retriever}
+    extra: dict[str, object] = {
+        "retriever_type": retriever,
+        "llm_temperature": temperature,
+    }
     if reasoner_model:
         extra["reasoner"] = {
             "model_name": reasoner_model,
@@ -186,6 +213,10 @@ def main(
         extra["orchestrator_max_turns"] = orchestrator_max_turns
     if prompt_style and prompt_style != "full":
         extra["prompt_style"] = prompt_style
+    if seed >= 0:
+        extra["llm_seed"] = seed
+    if synthesis_validator_mode:
+        extra["synthesis_validator_mode"] = synthesis_validator_mode
 
     ctx = AdapterContext(
         system_id=system,

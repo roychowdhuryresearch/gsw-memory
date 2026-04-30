@@ -102,6 +102,16 @@ def test_emit_plan_repairs_after_one_failure():
     assert len(llm.calls) == 2
 
 
+def test_emit_plan_passes_seed_to_initial_and_repair_calls():
+    llm = _ScriptedLLM([
+        _StubResp(text="not json"),
+        _StubResp(text=_valid_plan_json()),
+    ])
+    plan, _meta = emit_plan("What is X?", llm, llm_seed=123)
+    assert plan.target().id == "t"
+    assert [c.get("seed") for c in llm.calls] == [123, 123]
+
+
 def test_emit_plan_repairs_on_third_attempt():
     """First call + 2 bad repairs, third repair succeeds."""
     llm = _ScriptedLLM([

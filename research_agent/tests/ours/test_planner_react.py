@@ -651,7 +651,14 @@ def _patch_emit_plan(monkeypatch, plan_dict: dict[str, Any]):
     from research_agent.adapters.ours import gsw_planner_react_v1 as mod
     from research_agent.adapters.ours._planner_emit import PlanEmitMeta
 
-    def _fake_emit(question, llm_client, *, max_tokens=4096, enable_repair=True):
+    def _fake_emit(
+        question,
+        llm_client,
+        *,
+        max_tokens=4096,
+        enable_repair=True,
+        llm_seed=None,
+    ):
         return GSWPlan.model_validate(plan_dict), PlanEmitMeta(
             prompt_tokens=123, completion_tokens=456, raw_response="{}"
         )

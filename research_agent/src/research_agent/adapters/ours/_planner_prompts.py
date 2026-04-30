@@ -120,11 +120,15 @@ PLANNER_SYSTEM = textwrap.dedent(
     ### Step 3 — Constraints (only when needed)
     Add a constraint ONLY when the question demands:
       - **derived**: arithmetic over blank values (`op ∈ {diff, sum,
-        avg, max, min, count, concat}`, `args_blanks = [...]`).
+        avg, max, min, count, concat, mul, div, round_nearest}`,
+        `args_blanks = [...]`). For `round_nearest`, one arg rounds to
+        the nearest ten; two args use the second blank as the interval.
       - **argmax** / **argmin**: pick the entity among N candidates
         whose ranking blank value is extreme (`candidate_entity_ids`
         and `sort_by_blank_ids` aligned same-length).
-      - **equals / in_list / gt / lt**: relational (rare in Phase 1).
+      - **equals / in_list / gt / lt**: relational constraints with
+        `left_ref`, `right_ref`, and an output bool blank. `in_list`
+        may alternatively use `args_blanks=[member_blank, list_blank]`.
 
     Most 2–3 hop questions need **zero** constraints — the bridging
     dependency is already expressed by verb-phrases. Use constraints
@@ -241,9 +245,12 @@ PLANNER_SYSTEM = textwrap.dedent(
     - `output_blank_id` (required): the blank this constraint fills.
     - Kind-specific populated fields:
       - derived: `op`, `args_blanks`.
+        Supported ops: diff, sum, avg, max, min, count, concat, mul,
+        div, round_nearest.
       - argmax / argmin: `candidate_entity_ids`, `sort_by_blank_ids`
         (same length; position i of one maps to position i of the other).
-      - relational: `left_ref`, `right_ref`.
+      - relational: `left_ref`, `right_ref`. For in_list, `args_blanks`
+        may be used instead as [member_blank, list_blank].
 
     ## Output format
 

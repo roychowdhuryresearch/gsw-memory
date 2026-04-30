@@ -250,7 +250,9 @@ class OursGSWPlannerReactV1Adapter(_PlannerFallbackMixin, Adapter):
             model=ctx.model_name or ctx.model_id,
             base_url=ctx.base_url or None,
             api_key=ctx.api_key or None,
+            default_temperature=float(ctx.extra.get("llm_temperature", 0.0)),
         )
+        self.llm_seed: Optional[int] = ctx.extra.get("llm_seed")
         self._fallback_adapter: Optional[Adapter] = None
 
     # ------------------------------------------------------------------
@@ -487,6 +489,7 @@ class OursGSWPlannerReactV1Adapter(_PlannerFallbackMixin, Adapter):
                 question,
                 llm_client=self.llm,
                 max_tokens=self.ctx.max_completion_tokens,
+                llm_seed=self.llm_seed,
             )
             traj.prompt_tokens += emit_meta.prompt_tokens
             traj.completion_tokens += emit_meta.completion_tokens
@@ -565,6 +568,7 @@ class OursGSWPlannerReactV1Adapter(_PlannerFallbackMixin, Adapter):
                     tools=_TOOLS,
                     tool_choice="required",
                     max_tokens=self.ctx.max_completion_tokens,
+                    seed=self.llm_seed,
                 )
             except Exception as exc:  # noqa: BLE001
                 stopped_reason = "llm_error"

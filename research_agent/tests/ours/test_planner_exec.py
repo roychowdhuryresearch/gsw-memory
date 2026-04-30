@@ -12,11 +12,13 @@ from typing import Any
 import pytest
 
 from research_agent.adapters.ours._planner_exec import (
+    BlankResult,
     Constraint,
     Entity,
     ExecutionError,
     GSWPlan,
     VerbPhrase,
+    _compute_constraint,
     build_dependency_graph,
     execute,
     topological_sort_blanks,
@@ -240,6 +242,120 @@ def test_topo_sort_cycle_raises():
 # ---------------------------------------------------------------------------
 # execute() — derived ops
 # ---------------------------------------------------------------------------
+
+
+def _constraint_state(**values: Any) -> dict[str, BlankResult]:
+    return {
+        bid: BlankResult(blank_id=bid, value=value, status="resolved")
+        for bid, value in values.items()
+    }
+
+
+def test_compute_constraint_mul_div_round_nearest():
+    plan = GSWPlan(
+        entities=[
+            Entity(id="b_a", kind="blank", value_type="number"),
+            Entity(id="b_b", kind="blank", value_type="number"),
+            Entity(id="t", kind="blank", value_type="number", is_target=True),
+        ],
+        constraints=[
+            Constraint(
+                id="c_mul",
+                kind="derived",
+                op="mul",
+                args_blanks=["b_a", "b_b"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    state = _constraint_state(b_a=6, b_b=7)
+    res = _compute_constraint(plan.constraints[0], plan, state)
+    assert res.status == "resolved"
+    assert res.value == 42
+
+    div = Constraint(
+        id="c_div",
+        kind="derived",
+        op="div",
+        args_blanks=["b_a", "b_b"],
+        output_blank_id="t",
+    )
+    assert _compute_constraint(div, plan, _constraint_state(b_a=84, b_b=2)).value == 42
+
+    round_plan = GSWPlan(
+        entities=[
+            Entity(id="b_value", kind="blank", value_type="number"),
+            Entity(id="t", kind="blank", value_type="number", is_target=True),
+        ],
+        constraints=[
+            Constraint(
+                id="c_round",
+                kind="derived",
+                op="round_nearest",
+                args_blanks=["b_value"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    rounded = _compute_constraint(
+        round_plan.constraints[0],
+        round_plan,
+        _constraint_state(b_value=86),
+    )
+    assert rounded.value == 90
+
+
+def test_compute_relational_constraints_and_in_list_dependencies():
+    plan = GSWPlan(
+        entities=[
+            Entity(id="b_member", kind="blank", value_type="text"),
+            Entity(id="b_list", kind="blank", value_type="list"),
+            Entity(id="t", kind="blank", value_type="bool", is_target=True),
+        ],
+        constraints=[
+            Constraint(
+                id="c_in",
+                kind="in_list",
+                args_blanks=["b_member", "b_list"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    deps = build_dependency_graph(plan)
+    assert deps["t"] == {"b_member", "b_list"}
+    res = _compute_constraint(
+        plan.constraints[0],
+        plan,
+        _constraint_state(b_member="Beta", b_list=["Alpha", "Beta"]),
+    )
+    assert res.status == "resolved"
+    assert res.value is True
+
+    eq = Constraint(
+        id="c_eq",
+        kind="equals",
+        left_ref="b_member",
+        right_ref="b_list",
+        output_blank_id="t",
+    )
+    assert _compute_constraint(
+        eq,
+        plan,
+        _constraint_state(b_member="42", b_list=42),
+    ).value is True
+
+    gt = Constraint(
+        id="c_gt",
+        kind="gt",
+        left_ref="b_member",
+        right_ref="b_list",
+        output_blank_id="t",
+    )
+    assert _compute_constraint(
+        gt,
+        plan,
+        _constraint_state(b_member="1999", b_list="1984"),
+    ).value is True
 
 
 def test_execute_diff_numeric():
@@ -812,6 +928,28 @@ def test_constraint_argmax_with_full_shape_accepted():
         ],
     )
     assert plan.constraints[0].kind == "argmax"
+
+
+def test_constraint_unknown_candidate_ref_rejected():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=_base_entities_two_candidates(),
+            verb_phrases=_base_vps_two_candidates(),
+            constraints=[
+                Constraint(
+                    id="c1",
+                    kind="argmax",
+                    candidate_entity_ids=["e1", "e_missing"],
+                    sort_by_blank_ids=["b1", "b2"],
+                    output_blank_id="t",
+                )
+            ],
+        )
+    msg = str(excinfo.value)
+    assert "candidate_entity_ids" in msg
+    assert "e_missing" in msg
 
 
 def test_constraint_derived_with_args_accepted():

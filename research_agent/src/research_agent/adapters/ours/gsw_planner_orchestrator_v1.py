@@ -359,6 +359,7 @@ class ReActResearcher:
         question: str,
         max_turns: int = 15,
         max_completion_tokens: int = 50000,
+        llm_seed: Optional[int] = None,
     ) -> None:
         self.llm = llm
         self.corpus = corpus
@@ -371,6 +372,7 @@ class ReActResearcher:
         self.question = question
         self.max_turns = max_turns
         self.max_completion_tokens = max_completion_tokens
+        self.llm_seed = llm_seed
         # Set by `_tool_suggest_plan_revision` when the researcher
         # escalates. Surfaced in ``solve()``'s return value.
         self._revision_request: Optional[dict[str, Any]] = None
@@ -670,6 +672,7 @@ class ReActResearcher:
                     tools=_RESEARCHER_TOOLS,
                     tool_choice="required",
                     max_tokens=self.max_completion_tokens,
+                    seed=self.llm_seed,
                 )
             except Exception as exc:  # noqa: BLE001
                 stopped = "llm_error"
@@ -798,7 +801,18 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             model=ctx.model_name or ctx.model_id,
             base_url=ctx.base_url or None,
             api_key=ctx.api_key or None,
+            default_temperature=float(ctx.extra.get("llm_temperature", 0.0)),
         )
+        # Optional deterministic seed for OpenAI/vLLM endpoints. None = no seed.
+        self.llm_seed: Optional[int] = ctx.extra.get("llm_seed")
+        # Off by default: the validator is useful as instrumentation, but
+        # reject-mode adds another stochastic LLM call to the control loop.
+        # Valid values: off, log_only, reject.
+        self.synthesis_validator_mode = str(
+            ctx.extra.get("synthesis_validator_mode", "off")
+        ).strip().lower()
+        if self.synthesis_validator_mode not in {"off", "log_only", "reject"}:
+            self.synthesis_validator_mode = "off"
         self._fallback_adapter: Optional[Adapter] = None
         # Per-researcher turn budget (default 20).
         self.level_max_turns = ctx.extra.get("level_max_turns", 20)
@@ -823,6 +837,13 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         )
         traj.extra["gold_articles"] = articles or []
         traj.extra["fallback_flag"] = False
+        supports_seed = getattr(self.llm, "supports_seed", lambda: False)
+        traj.extra["llm_temperature"] = getattr(self.llm, "default_temperature", None)
+        traj.extra["llm_seed"] = self.llm_seed
+        traj.extra["llm_seed_effective"] = (
+            self.llm_seed is not None and bool(supports_seed())
+        )
+        traj.extra["synthesis_validator_mode"] = self.synthesis_validator_mode
         start = time.time()
 
         # --- 1. Plan -------------------------------------------------
@@ -830,6 +851,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             plan, emit_meta = emit_plan(
                 question, self.llm,
                 max_tokens=4096, enable_repair=True,
+                llm_seed=self.llm_seed,
             )
         except PlanEmitError as exc:
             traj.extra["plan_emit_error"] = f"{exc.kind}:{exc.detail}"
@@ -979,6 +1001,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 question=question,
                 max_turns=self.level_max_turns,
                 max_completion_tokens=self.ctx.max_completion_tokens,
+                llm_seed=self.llm_seed,
             )
             trace = researcher.solve()
             researcher_traces.append(
@@ -1062,6 +1085,11 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
     # but keeps re-dispatching a blank whose retrieval target isn't in
     # the corpus.
     MAX_ESCALATIONS_PER_BLANK: ClassVar[int] = 2
+    # Phase-3.7 (synthesis validator): if explicitly enabled in
+    # reject-mode, a wrong verdict can reject one submit_answer and give
+    # the orchestrator one re-think turn. Default mode is off because the
+    # validator is another stochastic model call.
+    MAX_VALIDATOR_RETRIES: ClassVar[int] = 1
 
     def _dispatch_subplan_parallel(
         self,
@@ -1129,6 +1157,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                 question=question_with_hints,
                 max_turns=self.level_max_turns,
                 max_completion_tokens=self.ctx.max_completion_tokens,
+                llm_seed=self.llm_seed,
             )
             trace = researcher.solve()
             return blank_id, trace, local_state
@@ -1200,6 +1229,9 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         # Incremented every time a researcher returns
         # `revision_request` for that blank.
         escalations_per_blank: dict[str, int] = {}
+        # Phase-3.7: synthesis-validator retry counter.
+        validator_retries: int = 0
+        validator_verdicts: list[dict[str, Any]] = []
 
         total_prompt_tokens = total_completion_tokens = 0
         orchestrator_turns = 0
@@ -1235,6 +1267,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     tools=_ORCHESTRATOR_TOOLS,
                     tool_choice="required",
                     max_tokens=self.ctx.max_completion_tokens,
+                    seed=self.llm_seed,
                 )
             except Exception as exc:  # noqa: BLE001
                 stopped_reason = "llm_error"
@@ -1316,7 +1349,12 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                         plan_update_count=pu_count,
                         last_plan_update_summary=last_pu_summary,
                         escalations_per_blank=escalations_per_blank,
+                        validator_retries=validator_retries,
                     )
+                    if action.get("validator_verdict") is not None:
+                        validator_verdicts.append(action["validator_verdict"])
+                    if action.get("validator_rejected"):
+                        validator_retries += 1
                     total_prompt_tokens += action.get("prompt_tokens", 0)
                     total_completion_tokens += action.get("completion_tokens", 0)
                     # Update mutable bookkeeping based on the action.
@@ -1521,6 +1559,17 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                             "plan_update rejected: "
                             + str(result.get("error", ""))[:100]
                         )
+                elif name == "submit_answer" and isinstance(result, dict):
+                    if action.get("validator_rejected"):
+                        recent_activity = (
+                            "submit_answer rejected by synthesis validator: "
+                            + str(result.get("error", ""))[:500]
+                        )
+                    elif result.get("ok") is False:
+                        recent_activity = (
+                            "submit_answer rejected: "
+                            + str(result.get("error", ""))[:180]
+                        )
 
             if broke_out:
                 break
@@ -1562,6 +1611,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         traj.extra["plan_json_versions"] = plan_json_versions
         traj.extra["plan_updates"] = plan_updates
         traj.extra["dispatches"] = dispatches
+        traj.extra["validator_verdicts"] = validator_verdicts
+        traj.extra["validator_retries_used"] = validator_retries
         traj.extra["orchestrator_mode"] = "llm"
         # Keep the FINAL plan in plan_json (replaces initial).
         traj.extra["plan_json"] = plan_dict
@@ -1588,6 +1639,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         plan_update_count: int = 0,
         last_plan_update_summary: str = "",
         escalations_per_blank: Optional[dict[str, int]] = None,
+        validator_retries: int = 0,
     ) -> tuple[dict[str, Any], dict[str, Any]]:
         """Execute one orchestrator-tool call. Returns ``(result, action)``
         where ``result`` is what the orchestrator sees as the tool
@@ -1796,6 +1848,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     llm_client=self.llm,
                     max_tokens=4096,
                     enable_repair=True,
+                    llm_seed=self.llm_seed,
                 )
             except Exception as exc:  # noqa: BLE001
                 action["plan_update_rejected"] = True
@@ -1872,7 +1925,52 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     },
                     action,
                 )
-            action["final_answer"] = answer or _stringify(tgt_res.value)
+            final_pred = answer or _stringify(tgt_res.value)
+
+            # Phase-3.7: optional synthesis validator. In log_only mode
+            # it records a verdict; in reject mode, one wrong verdict can
+            # reject the submit and surface feedback to the next turn.
+            validator_mode = self.synthesis_validator_mode
+            should_validate = (
+                final_pred.strip()
+                and validator_mode in {"log_only", "reject"}
+                and (
+                    validator_mode == "log_only"
+                    or validator_retries < self.MAX_VALIDATOR_RETRIES
+                )
+            )
+            if should_validate:
+                from research_agent.adapters.ours._synthesis_validator import (
+                    build_rejection_message,
+                    validate_synthesis,
+                )
+
+                verdict = validate_synthesis(
+                    question=question,
+                    plan=plan,
+                    state=state,
+                    proposed_answer=final_pred,
+                    corpus=self.corpus,
+                    llm=self.llm,
+                    llm_seed=self.llm_seed,
+                )
+                action["validator_verdict"] = {
+                    "verdict": verdict.verdict,
+                    "reason": verdict.reason,
+                    "flagged_blank": verdict.flagged_blank,
+                    "suggested_correction": verdict.suggested_correction,
+                    "proposed_answer": final_pred,
+                    "mode": validator_mode,
+                }
+                if validator_mode == "reject" and verdict.verdict == "wrong":
+                    rejection = build_rejection_message(verdict, final_pred)
+                    action["validator_rejected"] = True
+                    return (
+                        {"ok": False, "error": rejection},
+                        action,
+                    )
+
+            action["final_answer"] = final_pred
             action["stopped_reason"] = "finished"
             return {"ok": True}, action
 

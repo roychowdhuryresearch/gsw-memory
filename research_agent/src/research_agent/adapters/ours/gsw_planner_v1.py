@@ -69,7 +69,9 @@ class OursGSWPlannerV1Adapter(_PlannerFallbackMixin, Adapter):
             model=ctx.model_name or ctx.model_id,
             base_url=ctx.base_url or None,
             api_key=ctx.api_key or None,
+            default_temperature=float(ctx.extra.get("llm_temperature", 0.0)),
         )
+        self.llm_seed: Optional[int] = ctx.extra.get("llm_seed")
         self._top_k = int(ctx.extra.get("top_k", 8))
         # Lazily constructed fallback adapter (instantiation has side effects).
         self._fallback_adapter: Optional[Adapter] = None
@@ -100,6 +102,7 @@ class OursGSWPlannerV1Adapter(_PlannerFallbackMixin, Adapter):
                 question,
                 llm_client=self.llm,
                 max_tokens=self.ctx.max_completion_tokens,
+                llm_seed=self.llm_seed,
             )
             traj.prompt_tokens += emit_meta.prompt_tokens
             traj.completion_tokens += emit_meta.completion_tokens

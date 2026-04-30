@@ -127,7 +127,7 @@ UPDATER_SYSTEM = textwrap.dedent(
 
     {"op": "add_constraint",
      "constraint": {"id": "c_<new>", "kind": "derived|argmax|argmin|equals|in_list|gt|lt",
-                    "op": "diff|sum|avg|max|min|count|concat",
+                    "op": "diff|sum|avg|max|min|count|concat|mul|div|round_nearest",
                     "args_blanks": ["<blank>", ...],
                     "candidate_entity_ids": ["<id>", ...],
                     "sort_by_blank_ids": ["<blank>", ...],
@@ -155,6 +155,9 @@ UPDATER_SYSTEM = textwrap.dedent(
        cycle in the dependency graph.
     7. Filled entities (`kind=filled`) are grounded in the question
        text — never rename or remove them.
+    8. For `round_nearest`, one arg rounds to nearest ten; two args use
+       the second blank as the interval. For `in_list`, use either
+       left_ref/right_ref or args_blanks=[member_blank, list_blank].
 
     ## Worked examples
 
@@ -433,6 +436,7 @@ def update_plan(
     llm_client: Any,
     max_tokens: int = 4096,
     enable_repair: bool = True,
+    llm_seed: int | None = None,
 ) -> tuple[GSWPlan, PlanReconcileDiff, PlanEmitMeta]:
     """Rejection-sampling loop over diff ops.
 
@@ -469,7 +473,11 @@ def update_plan(
             )
 
         try:
-            resp = llm_client.chat(messages=messages, max_tokens=max_tokens)
+            resp = llm_client.chat(
+                messages=messages,
+                max_tokens=max_tokens,
+                seed=llm_seed,
+            )
         except Exception as exc:  # noqa: BLE001
             raise PlanEmitError(kind="llm_error", detail=str(exc)) from exc
 
