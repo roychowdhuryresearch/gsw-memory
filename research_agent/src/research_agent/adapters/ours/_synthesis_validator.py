@@ -48,6 +48,25 @@ class ValidatorVerdict(BaseModel):
         default=None,
         description="What the answer should be, if wrong",
     )
+    corrected_answer: Optional[str] = Field(
+        default=None,
+        description="Final answer to submit if confidently repairable",
+    )
+    confidence: Optional[str] = Field(
+        default=None,
+        description="'high', 'medium', or 'low'",
+    )
+    error_type: Optional[str] = Field(
+        default=None,
+        description=(
+            "format, arithmetic, spelling, wrong_entity, missing_detail, "
+            "structural_plan_error, or other"
+        ),
+    )
+    evidence_support: Optional[str] = Field(
+        default=None,
+        description="Short note tying corrected_answer to shown evidence",
+    )
     raw_response: str = Field(default="", exclude=True)
 
 
@@ -71,18 +90,72 @@ CRITICAL RULES:
 5. Format / cosmetic differences are NOT wrong. "Katie" vs "Kathleen"
    = correct. "84512" vs "84,512" = correct.
 
-If the verdict is "wrong" you MAY provide a `suggested_correction`
-naming what the answer should be, but it is optional — the agent
-will get a chance to re-think regardless.
+If the verdict is "wrong", provide a concise `corrected_answer` ONLY
+when the shown retrieved facts support the exact final answer. Do not
+guess from prior knowledge. If the plan itself is structurally wrong,
+set `error_type="structural_plan_error"` and leave `corrected_answer`
+null unless the final answer is directly supported anyway.
 
 Output a single JSON object, no other text:
 {
   "verdict": "correct" | "wrong",
   "reason": "<one sentence>",
   "flagged_blank": "<blank id whose committed value seems wrong, or null>",
-  "suggested_correction": "<optional — what the answer should be, or null>"
+  "suggested_correction": "<backward-compatible alias for corrected_answer, or null>",
+  "corrected_answer": "<final answer only, or null>",
+  "confidence": "high" | "medium" | "low",
+  "error_type": "format" | "arithmetic" | "spelling" | "wrong_entity" | "missing_detail" | "structural_plan_error" | "other",
+  "evidence_support": "<brief reference to the retrieved facts, or null>"
 }
 """
+
+
+SAFE_AUTO_REPAIR_ERROR_TYPES = {
+    "format",
+    "arithmetic",
+    "spelling",
+    "missing_detail",
+}
+
+
+def auto_repair_candidate(
+    verdict: ValidatorVerdict,
+    proposed_answer: str,
+) -> tuple[Optional[str], str]:
+    """Return a gated corrected answer, or ``(None, reason)``.
+
+    The gate is intentionally conservative: it only accepts high-confidence
+    final-value repairs for local answer mistakes. Structural-plan and
+    wrong-entity repairs stay in the normal reject/rethink path.
+    """
+    if verdict.verdict != "wrong":
+        return None, "verdict is not wrong"
+
+    corrected = (
+        (verdict.corrected_answer or "").strip()
+        or (verdict.suggested_correction or "").strip()
+    )
+    if not corrected:
+        return None, "missing corrected_answer"
+
+    if corrected == (proposed_answer or "").strip():
+        return None, "corrected_answer equals proposed_answer"
+
+    confidence = (verdict.confidence or "").strip().lower()
+    if confidence != "high":
+        return None, f"confidence is not high: {confidence or 'missing'}"
+
+    error_type = (verdict.error_type or "").strip().lower()
+    if error_type not in SAFE_AUTO_REPAIR_ERROR_TYPES:
+        return None, f"unsafe error_type: {error_type or 'missing'}"
+
+    # Avoid accepting explanatory validator prose as the final answer.
+    if len(corrected) > 240:
+        return None, "corrected_answer too long"
+    if corrected[:1] in {"{", "["} and corrected[-1:] in {"}", "]"}:
+        return None, "corrected_answer looks like structured data"
+
+    return corrected, "accepted"
 
 
 def _format_evidence_snippets(
@@ -203,12 +276,19 @@ def validate_synthesis(
         )
 
     suggested = (data.get("suggested_correction") or "").strip() or None
+    corrected = (data.get("corrected_answer") or "").strip() or None
+    if corrected is None:
+        corrected = suggested
 
     return ValidatorVerdict(
         verdict=verdict,
         reason=(data.get("reason") or "")[:240],
         flagged_blank=data.get("flagged_blank") or None,
         suggested_correction=suggested,
+        corrected_answer=corrected,
+        confidence=(data.get("confidence") or "").strip().lower() or None,
+        error_type=(data.get("error_type") or "").strip().lower() or None,
+        evidence_support=(data.get("evidence_support") or "")[:240] or None,
         raw_response=text[:400],
     )
 

@@ -263,6 +263,109 @@ def _tool_timeline_df(tool_calls: list[dict], level: Optional[int] = None) -> pd
     return pd.DataFrame(rows)
 
 
+def _question_tags(q: dict) -> list[str]:
+    """Derived filters for common orchestrator failure/recovery paths."""
+    traj = q.get("trajectory") or {}
+    extra = traj.get("extra") or {}
+    tool_calls = traj.get("tool_calls") or []
+    plan_updates = extra.get("plan_updates") or []
+    tags: set[str] = set()
+
+    if q.get("judge_correct") is True:
+        tags.add("judge_correct")
+    elif q.get("judge_correct") is False:
+        tags.add("judge_wrong")
+    if not (q.get("predicted_answer") or "").strip():
+        tags.add("empty_pred")
+
+    if extra.get("fallback_flag"):
+        tags.add("fallback")
+    if extra.get("planner_failed") or extra.get("plan_emit_error"):
+        tags.add("planner_failed")
+    if extra.get("topology_error"):
+        tags.add("topology_error")
+
+    if plan_updates:
+        tags.add("plan_update_used")
+    if any(pu.get("rejected") for pu in plan_updates):
+        tags.add("plan_update_rejected")
+    if any(
+        pu.get("rejected")
+        and "max plan updates" in str(pu.get("error", "")).lower()
+        for pu in plan_updates
+    ):
+        tags.add("plan_update_cap")
+
+    verdicts = extra.get("validator_verdicts") or []
+    if verdicts:
+        tags.add("validator_used")
+    if any(v.get("verdict") == "wrong" for v in verdicts):
+        tags.add("validator_rejected")
+        if q.get("judge_correct") is True:
+            tags.add("validator_rejected_recovered")
+        elif q.get("judge_correct") is False:
+            tags.add("validator_rejected_failed")
+    if extra.get("validator_repairs_used"):
+        tags.add("validator_repaired")
+
+    dispatches = extra.get("dispatches") or []
+    if any(d.get("revision_requests") for d in dispatches):
+        tags.add("researcher_requested_revision")
+    if any(
+        "per-blank dispatch cap" in str(tc.get("error", "")).lower()
+        for tc in tool_calls
+    ):
+        tags.add("per_blank_dispatch_cap")
+    if any(
+        tc.get("name") == "submit_answer" and tc.get("error")
+        for tc in tool_calls
+    ):
+        tags.add("submit_rejected")
+    if any(tc.get("error") for tc in tool_calls):
+        tags.add("tool_error")
+
+    stopped = extra.get("stopped_reason")
+    if stopped:
+        tags.add(f"stopped:{stopped}")
+    return sorted(tags)
+
+
+def _issue_type(q: dict) -> str:
+    """Small, user-facing diagnostic bucket for sidebar filtering."""
+    tags = set(_question_tags(q))
+    if "planner_failed" in tags:
+        return "Planner failed"
+    if "fallback" in tags:
+        return "Fallback"
+    if "topology_error" in tags:
+        return "Topology error"
+    if "validator_rejected_failed" in tags:
+        return "Validator rejected → failed"
+    if "validator_rejected_recovered" in tags:
+        return "Validator rejected → recovered"
+    if "validator_repaired" in tags:
+        return "Validator repaired"
+    if "plan_update_cap" in tags:
+        return "Plan-update cap"
+    if "plan_update_rejected" in tags:
+        return "Plan update rejected"
+    if "per_blank_dispatch_cap" in tags:
+        return "Per-blank dispatch cap"
+    if "submit_rejected" in tags:
+        return "Submit rejected"
+    if "empty_pred" in tags:
+        return "Empty prediction"
+    if "tool_error" in tags:
+        return "Tool error"
+    if "plan_update_used" in tags:
+        return "Plan update used"
+    if q.get("judge_correct") is True:
+        return "Correct"
+    if q.get("judge_correct") is False:
+        return "Wrong answer"
+    return "Other"
+
+
 def _executed_blanks_df(extra: dict) -> pd.DataFrame:
     plan = extra.get("plan_json") or {}
     role_by_id = {e.get("id"): e.get("role") for e in plan.get("entities", [])}
@@ -377,11 +480,14 @@ for q in cell.get("questions", []):
             "id": q.get("question_id"),
             "hops": q.get("num_hops", "—"),
             "judge": _judge_icon(q),
+            "failure_mode": q.get("failure_mode", "—") or "—",
+            "issue_type": _issue_type(q),
             "mode": extra.get("orchestrator_mode", "—"),
             "stopped": extra.get("stopped_reason", "?"),
             "researchers": len(rts),
             "plan_vers": len(extra.get("plan_json_versions") or []) or 1,
             "plan_upd": len(extra.get("plan_updates") or []),
+            "validator": int(extra.get("validator_retries_used") or 0),
             "turns": traj.get("turns", 0),
             "wall_s": round(traj.get("wall_time_s", 0), 1),
             "tokens_out": traj.get("completion_tokens", 0),
@@ -395,12 +501,53 @@ qs_df = pd.DataFrame(rows)
 judge_filter = st.sidebar.multiselect(
     "Judge verdict", ["✓", "✗", "—"], default=["✓", "✗", "—"]
 )
+failure_values = sorted({r["failure_mode"] for r in rows if r["failure_mode"]})
+failure_filter = st.sidebar.multiselect(
+    "Failure mode",
+    failure_values,
+    default=failure_values,
+)
 stop_values = sorted({r["stopped"] for r in rows if r["stopped"]})
 stop_filter = st.sidebar.multiselect("Stopped reason", stop_values, default=stop_values)
+issue_values = sorted({r["issue_type"] for r in rows if r["issue_type"]})
+issue_filter = st.sidebar.multiselect(
+    "Issue type",
+    issue_values,
+    default=issue_values,
+    help="Small derived buckets for common planner/orchestrator/validator paths.",
+)
 
 filt = qs_df[
-    qs_df["judge"].isin(judge_filter) & qs_df["stopped"].isin(stop_filter)
+    qs_df["judge"].isin(judge_filter)
+    & qs_df["failure_mode"].isin(failure_filter)
+    & qs_df["stopped"].isin(stop_filter)
+    & qs_df["issue_type"].isin(issue_filter)
 ].reset_index(drop=True)
+
+st.caption(
+    f"Showing {len(filt)} / {len(qs_df)} questions after filters."
+)
+if not filt.empty:
+    with st.expander("Filtered subset summary", expanded=False):
+        cL, cR = st.columns(2)
+        with cL:
+            st.caption("failure_mode")
+            fmode_df = (
+                filt["failure_mode"]
+                .value_counts(dropna=False)
+                .rename_axis("failure_mode")
+                .reset_index(name="count")
+            )
+            st.dataframe(fmode_df, use_container_width=True, hide_index=True)
+        with cR:
+            st.caption("issue_type")
+            issue_df = (
+                filt["issue_type"]
+                .value_counts(dropna=False)
+                .rename_axis("issue_type")
+                .reset_index(name="count")
+            )
+            st.dataframe(issue_df, use_container_width=True, hide_index=True)
 st.dataframe(filt, use_container_width=True, hide_index=True)
 
 if filt.empty:
@@ -478,6 +625,7 @@ if mode == "llm":
         "Plan",
         "Orchestrator",
         "Researchers",
+        "Validator",
         "Plan versions",
         "Executed blanks",
         "Messages",
@@ -485,24 +633,27 @@ if mode == "llm":
     ])
     orch_tab = tabs[1]
     researchers_tab = tabs[2]
-    plan_versions_tab = tabs[3]
-    executed_tab = tabs[4]
-    messages_tab = tabs[5]
-    reasoning_tab = tabs[6]
+    validator_tab = tabs[3]
+    plan_versions_tab = tabs[4]
+    executed_tab = tabs[5]
+    messages_tab = tabs[6]
+    reasoning_tab = tabs[7]
 else:
     tabs = st.tabs([
         "Plan",
         "Researchers",
+        "Validator",
         "Executed blanks",
         "Messages",
         "Reasoning",
     ])
     orch_tab = None
     researchers_tab = tabs[1]
+    validator_tab = tabs[2]
     plan_versions_tab = None
-    executed_tab = tabs[2]
-    messages_tab = tabs[3]
-    reasoning_tab = tabs[4]
+    executed_tab = tabs[3]
+    messages_tab = tabs[4]
+    reasoning_tab = tabs[5]
 
 # --- Tab: Plan ---------------------------------------------------------
 with tabs[0]:
@@ -666,6 +817,138 @@ if orch_tab is not None:
                         f"**reason**: {rr.get('reason','')}\n\n"
                         f"**hint**: {rr.get('hint','')}"
                     )
+
+
+# --- Tab: Validator ---------------------------------------------------
+with validator_tab:
+    validator_verdicts = extra.get("validator_verdicts") or []
+    validator_mode = extra.get("synthesis_validator_mode", "—")
+    validator_retries = int(extra.get("validator_retries_used") or 0)
+    validator_repairs = int(extra.get("validator_repairs_used") or 0)
+    validator_calls = [
+        tc for tc in all_tool_calls
+        if tc.get("level") == -1 and tc.get("name") == "submit_answer"
+    ]
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("mode", validator_mode)
+    c2.metric("verdicts", len(validator_verdicts))
+    c3.metric("rejections", validator_retries)
+    c4.metric("repairs", validator_repairs)
+
+    if not validator_verdicts:
+        st.info("No validator verdicts recorded for this question.")
+    else:
+        rows_v = []
+        for i, v in enumerate(validator_verdicts, start=1):
+            rows_v.append(
+                {
+                    "#": i,
+                    "mode": v.get("mode", validator_mode),
+                    "verdict": v.get("verdict"),
+                    "proposed": v.get("proposed_answer"),
+                    "suggested": v.get("suggested_correction"),
+                    "corrected": v.get("corrected_answer"),
+                    "confidence": v.get("confidence"),
+                    "error_type": v.get("error_type"),
+                    "auto_repair": v.get("auto_repair_accepted", False),
+                    "repair_reason": v.get("auto_repair_reason", ""),
+                    "flagged_blank": v.get("flagged_blank"),
+                    "reason": v.get("reason"),
+                }
+            )
+        st.dataframe(
+            pd.DataFrame(rows_v),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        for i, v in enumerate(validator_verdicts, start=1):
+            verdict = v.get("verdict", "?")
+            icon = "✅" if verdict == "correct" else "❌"
+            repaired = " · repaired" if v.get("auto_repair_accepted") else ""
+            with st.expander(
+                f"{icon} verdict #{i}: {verdict}{repaired} · proposed={v.get('proposed_answer')!r}",
+                expanded=(verdict == "wrong"),
+            ):
+                st.markdown(f"**Reason**: {v.get('reason', '')}")
+                if v.get("flagged_blank"):
+                    st.markdown(f"**Flagged blank**: `{v.get('flagged_blank')}`")
+                if v.get("suggested_correction") is not None:
+                    st.markdown(
+                        f"**Suggested correction**: `{v.get('suggested_correction')}`"
+                    )
+                if v.get("corrected_answer") is not None:
+                    st.markdown(
+                        f"**Corrected answer**: `{v.get('corrected_answer')}`"
+                    )
+                if v.get("confidence") or v.get("error_type"):
+                    st.markdown(
+                        f"**Repair gate**: confidence=`{v.get('confidence')}` · "
+                        f"error_type=`{v.get('error_type')}` · "
+                        f"accepted=`{bool(v.get('auto_repair_accepted'))}`"
+                    )
+                if v.get("auto_repair_reason"):
+                    st.caption(f"auto_repair_reason: {v.get('auto_repair_reason')}")
+                if v.get("evidence_support"):
+                    st.markdown(f"**Evidence support**: {v.get('evidence_support')}")
+
+    st.markdown("### Submit / Validator Flow")
+    if not validator_calls:
+        st.caption("No submit_answer calls recorded.")
+    else:
+        submit_rows = []
+        for tc in validator_calls:
+            args = tc.get("args", {}) or {}
+            result_text = tc.get("result_full") or tc.get("result_preview") or ""
+            result_obj = None
+            if result_text.strip().startswith("{"):
+                try:
+                    result_obj = json.loads(result_text)
+                except Exception:  # noqa: BLE001
+                    result_obj = None
+            submit_rows.append(
+                {
+                    "turn": tc.get("turn"),
+                    "answer_arg": args.get("answer"),
+                    "ok": (
+                        result_obj.get("ok")
+                        if isinstance(result_obj, dict)
+                        else None
+                    ),
+                    "validator_repaired": (
+                        result_obj.get("validator_repaired")
+                        if isinstance(result_obj, dict)
+                        else None
+                    ),
+                    "error": tc.get("error", "") or "",
+                    "result_preview": result_text[:180],
+                }
+            )
+        st.dataframe(
+            pd.DataFrame(submit_rows),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+        for tc in validator_calls:
+            with st.expander(
+                f"submit_answer turn {tc.get('turn')} · answer={((tc.get('args') or {}).get('answer'))!r}",
+                expanded=bool(tc.get("error")),
+            ):
+                st.json(tc.get("args", {}) or {}, expanded=False)
+                result_text = tc.get("result_full") or tc.get("result_preview") or ""
+                stripped = result_text.strip()
+                if stripped and (
+                    (stripped.startswith("{") and stripped.endswith("}"))
+                    or (stripped.startswith("[") and stripped.endswith("]"))
+                ):
+                    try:
+                        st.json(json.loads(stripped), expanded=False)
+                    except Exception:  # noqa: BLE001
+                        st.code(result_text, language=None, wrap_lines=True)
+                else:
+                    st.code(result_text or "(empty)", language=None, wrap_lines=True)
 
 
 # --- Tab: Researchers -------------------------------------------------

@@ -175,8 +175,8 @@ def main(
     synthesis_validator_mode: str = typer.Option(
         "",
         help=(
-            "Only for ours_gsw_planner_orchestrator_v1: off, log_only, or "
-            "reject. Empty uses adapter default."
+            "Only for ours_gsw_planner_orchestrator_v1: off, log_only, "
+            "reject, or repair. Empty uses adapter default."
         ),
     ),
 ) -> None:

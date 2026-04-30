@@ -982,6 +982,89 @@ def test_synthesis_validator_reject_feedback_reaches_next_prompt():
     assert "bad is inconsistent" in third_prompt
 
 
+def test_synthesis_validator_repair_mode_auto_submits_safe_correction():
+    plan_dict = _one_level_plan()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "dispatch_subplan", {"blank_ids": ["t"]})]),
+            _StubResponse(tool_calls=[_tc("o2", "submit_answer", {"answer": "38"})]),
+        ],
+        "resolve exactly these blanks": [
+            _StubResponse(tool_calls=[_tc("r1", "update_blank", {
+                "blank_id": "t",
+                "value": "38",
+                "evidence_chunk_ids": ["c"],
+            })]),
+        ],
+        "You are a synthesis validator": [
+            _StubResponse(text=json.dumps({
+                "verdict": "wrong",
+                "reason": "arithmetic should yield 37",
+                "flagged_blank": "t",
+                "corrected_answer": "37",
+                "confidence": "high",
+                "error_type": "arithmetic",
+                "evidence_support": "retrieved birth/death dates imply 37",
+            })),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(
+        llm,
+        plan_dict=plan_dict,
+        extra={"synthesis_validator_mode": "repair"},
+    )
+    traj = adapter.run_question("Q", question_id="qvalidatorrepair")
+    assert traj.final_answer == "37"
+    assert traj.extra["stopped_reason"] == "finished_validator_repaired"
+    assert traj.extra["validator_retries_used"] == 0
+    assert traj.extra["validator_repairs_used"] == 1
+    verdict = traj.extra["validator_verdicts"][0]
+    assert verdict["auto_repair_accepted"] is True
+    assert verdict["auto_repair_reason"] == "accepted"
+
+
+def test_synthesis_validator_repair_mode_rejects_unsafe_correction():
+    plan_dict = _one_level_plan()
+    routes = {
+        "You are the **Orchestrator**": [
+            _StubResponse(tool_calls=[_tc("o1", "dispatch_subplan", {"blank_ids": ["t"]})]),
+            _StubResponse(tool_calls=[_tc("o2", "submit_answer", {"answer": "bad"})]),
+            _StubResponse(tool_calls=[_tc("o3", "submit_answer", {"answer": "good"})]),
+        ],
+        "resolve exactly these blanks": [
+            _StubResponse(tool_calls=[_tc("r1", "update_blank", {
+                "blank_id": "t",
+                "value": "bad",
+                "evidence_chunk_ids": ["c"],
+            })]),
+        ],
+        "You are a synthesis validator": [
+            _StubResponse(text=json.dumps({
+                "verdict": "wrong",
+                "reason": "wrong entity",
+                "flagged_blank": "t",
+                "corrected_answer": "other entity",
+                "confidence": "high",
+                "error_type": "wrong_entity",
+            })),
+        ],
+    }
+    llm = _RoutedLLM(routes)
+    adapter = _mk_llm_adapter(
+        llm,
+        plan_dict=plan_dict,
+        extra={"synthesis_validator_mode": "repair"},
+    )
+    traj = adapter.run_question("Q", question_id="qvalidatorrepairunsafe")
+    assert traj.final_answer == "good"
+    assert traj.extra["validator_retries_used"] == 1
+    assert traj.extra["validator_repairs_used"] == 0
+    verdict = traj.extra["validator_verdicts"][0]
+    assert verdict.get("auto_repair_accepted") is not True
+    assert "unsafe error_type" in verdict["auto_repair_reason"]
+
+
 def test_llm_orch_max_turns_returns_empty_when_target_unresolved():
     """Orchestrator bounces around without committing; hits max_turns."""
     plan_dict = _one_level_plan()

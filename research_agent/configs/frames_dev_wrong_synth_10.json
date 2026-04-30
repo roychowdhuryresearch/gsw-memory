@@ -1,0 +1,22 @@
+{
+  "subset_id": "frames_dev_wrong_synth_10",
+  "benchmark": "frames",
+  "split": "dev",
+  "question_ids": [
+    "345",
+    "702",
+    "596",
+    "508",
+    "68",
+    "742",
+    "334",
+    "129",
+    "39",
+    "208"
+  ],
+  "stratification": {
+    "wrong_synthesis_canonical": 10
+  },
+  "seed": 0,
+  "description": "10 Qs that failed canonical Phase-3.6.2 (215600) with wrong_synthesis or loop mode where retrieved chunks contained the gold answer but the orchestrator's synthesis picked the wrong fact / format. Used to test the synthesis validator (Phase-3.7)."
+}

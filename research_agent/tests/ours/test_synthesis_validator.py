@@ -17,6 +17,7 @@ from research_agent.adapters.ours._planner_exec import (
 )
 from research_agent.adapters.ours._synthesis_validator import (
     ValidatorVerdict,
+    auto_repair_candidate,
     build_rejection_message,
     build_validator_messages,
     validate_synthesis,
@@ -165,6 +166,66 @@ def test_validator_returns_wrong_with_flagged_blank_and_correction():
     assert v.verdict == "wrong"
     assert v.flagged_blank == "t"
     assert v.suggested_correction == "Ty Van Burkleo"
+    assert v.corrected_answer == "Ty Van Burkleo"
+
+
+def test_validator_parses_repair_fields():
+    plan = _two_blank_plan()
+    corpus = _stub_corpus()
+    state = _resolved_state(corpus)
+    llm = _ScriptedLLM([_StubResponse(text=json.dumps({
+        "verdict": "wrong",
+        "reason": "age arithmetic is off",
+        "flagged_blank": "t",
+        "corrected_answer": "37",
+        "confidence": "high",
+        "error_type": "arithmetic",
+        "evidence_support": "born 1899 and died aged 37",
+    }))])
+    v = validate_synthesis(
+        question="Q", plan=plan, state=state, proposed_answer="38",
+        corpus=corpus, llm=llm,
+    )
+    assert v.verdict == "wrong"
+    assert v.corrected_answer == "37"
+    assert v.confidence == "high"
+    assert v.error_type == "arithmetic"
+    assert "born 1899" in (v.evidence_support or "")
+
+
+def test_auto_repair_candidate_accepts_high_confidence_safe_fix():
+    v = ValidatorVerdict(
+        verdict="wrong",
+        reason="arithmetic is off",
+        corrected_answer="37",
+        confidence="high",
+        error_type="arithmetic",
+    )
+    repaired, reason = auto_repair_candidate(v, "38")
+    assert repaired == "37"
+    assert reason == "accepted"
+
+
+def test_auto_repair_candidate_rejects_low_confidence_or_unsafe_type():
+    low = ValidatorVerdict(
+        verdict="wrong",
+        reason="maybe wrong",
+        corrected_answer="37",
+        confidence="medium",
+        error_type="arithmetic",
+    )
+    assert auto_repair_candidate(low, "38")[0] is None
+
+    unsafe = ValidatorVerdict(
+        verdict="wrong",
+        reason="wrong entity",
+        corrected_answer="Other Person",
+        confidence="high",
+        error_type="wrong_entity",
+    )
+    repaired, reason = auto_repair_candidate(unsafe, "Person")
+    assert repaired is None
+    assert "unsafe error_type" in reason
 
 
 def test_validator_falls_back_to_correct_on_unparseable_response():

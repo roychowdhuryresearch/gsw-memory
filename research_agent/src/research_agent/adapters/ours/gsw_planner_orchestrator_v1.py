@@ -807,11 +807,13 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         self.llm_seed: Optional[int] = ctx.extra.get("llm_seed")
         # Off by default: the validator is useful as instrumentation, but
         # reject-mode adds another stochastic LLM call to the control loop.
-        # Valid values: off, log_only, reject.
+        # Valid values: off, log_only, reject, repair.
         self.synthesis_validator_mode = str(
             ctx.extra.get("synthesis_validator_mode", "off")
         ).strip().lower()
-        if self.synthesis_validator_mode not in {"off", "log_only", "reject"}:
+        if self.synthesis_validator_mode not in {
+            "off", "log_only", "reject", "repair",
+        }:
             self.synthesis_validator_mode = "off"
         self._fallback_adapter: Optional[Adapter] = None
         # Per-researcher turn budget (default 20).
@@ -1231,6 +1233,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         escalations_per_blank: dict[str, int] = {}
         # Phase-3.7: synthesis-validator retry counter.
         validator_retries: int = 0
+        validator_repairs: int = 0
         validator_verdicts: list[dict[str, Any]] = []
 
         total_prompt_tokens = total_completion_tokens = 0
@@ -1355,6 +1358,8 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                         validator_verdicts.append(action["validator_verdict"])
                     if action.get("validator_rejected"):
                         validator_retries += 1
+                    if action.get("validator_repaired"):
+                        validator_repairs += 1
                     total_prompt_tokens += action.get("prompt_tokens", 0)
                     total_completion_tokens += action.get("completion_tokens", 0)
                     # Update mutable bookkeeping based on the action.
@@ -1613,6 +1618,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
         traj.extra["dispatches"] = dispatches
         traj.extra["validator_verdicts"] = validator_verdicts
         traj.extra["validator_retries_used"] = validator_retries
+        traj.extra["validator_repairs_used"] = validator_repairs
         traj.extra["orchestrator_mode"] = "llm"
         # Keep the FINAL plan in plan_json (replaces initial).
         traj.extra["plan_json"] = plan_dict
@@ -1929,11 +1935,14 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
 
             # Phase-3.7: optional synthesis validator. In log_only mode
             # it records a verdict; in reject mode, one wrong verdict can
-            # reject the submit and surface feedback to the next turn.
+            # reject the submit and surface feedback to the next turn. In
+            # repair mode, high-confidence local final-answer fixes can
+            # replace the submitted answer immediately; unsafe fixes fall
+            # back to the reject path.
             validator_mode = self.synthesis_validator_mode
             should_validate = (
                 final_pred.strip()
-                and validator_mode in {"log_only", "reject"}
+                and validator_mode in {"log_only", "reject", "repair"}
                 and (
                     validator_mode == "log_only"
                     or validator_retries < self.MAX_VALIDATOR_RETRIES
@@ -1941,6 +1950,7 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
             )
             if should_validate:
                 from research_agent.adapters.ours._synthesis_validator import (
+                    auto_repair_candidate,
                     build_rejection_message,
                     validate_synthesis,
                 )
@@ -1959,10 +1969,35 @@ class OursGSWPlannerOrchestratorV1Adapter(_PlannerFallbackMixin, Adapter):
                     "reason": verdict.reason,
                     "flagged_blank": verdict.flagged_blank,
                     "suggested_correction": verdict.suggested_correction,
+                    "corrected_answer": verdict.corrected_answer,
+                    "confidence": verdict.confidence,
+                    "error_type": verdict.error_type,
+                    "evidence_support": verdict.evidence_support,
                     "proposed_answer": final_pred,
                     "mode": validator_mode,
                 }
-                if validator_mode == "reject" and verdict.verdict == "wrong":
+                if validator_mode == "repair" and verdict.verdict == "wrong":
+                    repaired, repair_reason = auto_repair_candidate(
+                        verdict, final_pred
+                    )
+                    action["validator_verdict"]["auto_repair_reason"] = (
+                        repair_reason
+                    )
+                    if repaired is not None:
+                        action["validator_verdict"]["auto_repair_accepted"] = True
+                        action["validator_repaired"] = True
+                        action["final_answer"] = repaired
+                        action["stopped_reason"] = "finished_validator_repaired"
+                        return (
+                            {
+                                "ok": True,
+                                "validator_repaired": True,
+                                "answer": repaired,
+                            },
+                            action,
+                        )
+
+                if validator_mode in {"reject", "repair"} and verdict.verdict == "wrong":
                     rejection = build_rejection_message(verdict, final_pred)
                     action["validator_rejected"] = True
                     return (
