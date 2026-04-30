@@ -69,6 +69,9 @@ SYSTEM_PROMPT_LEGEND = textwrap.dedent(
     Auxiliary fields:
     - `category: true` means the filled entity is a category or role,
       not a named individual.
+    - `literal_value` on a filled `constraint-value` is the typed value
+      Python constraints consume; use it instead of researching the
+      surface `name`.
     - `state="expanded_from_collective:<group>"` marks a valid candidate
       expanded from a collective named in the question.
 
@@ -258,6 +261,8 @@ def _format_entity(e: dict[str, Any]) -> str:
         parts.append("**is_target=true**")
     if e.get("state"):
         parts.append(f"state={e['state']!r}")
+    if e.get("literal_value") is not None:
+        parts.append(f"literal_value={e['literal_value']!r}")
     return "- " + "  ".join(parts)
 
 
@@ -276,6 +281,8 @@ def _format_constraint(c: dict[str, Any]) -> str:
         parts.append(f"op={c['op']}")
     if c.get("args_blanks"):
         parts.append(f"args_blanks={c['args_blanks']}")
+    if c.get("args_refs"):
+        parts.append(f"args_refs={c['args_refs']}")
     if c.get("candidate_entity_ids"):
         parts.append(f"candidates={c['candidate_entity_ids']}")
     if c.get("sort_by_blank_ids"):
@@ -345,9 +352,16 @@ def render_plan_brief(
         # Constraints: keep if their output is in slice OR any input is in slice
         kept_constraints: list[dict[str, Any]] = []
         for c in constraints:
-            ins = set(c.get("args_blanks") or []) | set(c.get("sort_by_blank_ids") or [])
+            ins = (
+                set(c.get("args_refs") or [])
+                | set(c.get("args_blanks") or [])
+                | set(c.get("sort_by_blank_ids") or [])
+            )
             if c.get("output_blank_id") in slice_set or (ins & slice_set):
                 kept_constraints.append(c)
+                for ref in c.get("args_refs") or []:
+                    if ref in ent_by_id and ent_by_id[ref].get("kind") == "filled":
+                        keep_ent_ids.add(ref)
                 # Input blanks of a slice-constraint are upstream — we'll render them below.
 
         entities = [e for e in entities if e.get("id") in keep_ent_ids]
@@ -428,7 +442,9 @@ def render_plan_brief(
                     op = c.get("op")
                     method = f"constraint `{kind}`" + (f" (`{op}`)" if op else "")
                     if kind == "derived":
-                        method += f"; inputs: `{c.get('args_blanks', [])}`"
+                        method += (
+                            f"; inputs: `{c.get('args_refs') or c.get('args_blanks', [])}`"
+                        )
                     elif kind in ("argmax", "argmin"):
                         method += (
                             f"; candidates: `{c.get('candidate_entity_ids', [])}`, "
@@ -448,7 +464,7 @@ def render_plan_brief(
                         other_name = other_ent.get("name") or other
                         signals.append(f"`({other_name}, {vp.get('phrase')})`")
                     sig_text = ", ".join(signals) if signals else "_(no wired VPs — fall back to role+question keywords)_"
-                    out.append(f"    — method: retrieval + LLM extract")
+                    out.append("    — method: retrieval + LLM extract")
                     out.append(f"    — retrieval signals: {sig_text}")
                 step += 1
             out.append("")
@@ -508,7 +524,7 @@ def render_plan_topo_only(
         out_id = c.get("output_blank_id")
         if not out_id or out_id not in blank_set:
             continue
-        for inp_field in ("args_blanks", "sort_by_blank_ids"):
+        for inp_field in ("args_refs", "args_blanks", "sort_by_blank_ids"):
             for inp in c.get(inp_field) or []:
                 if inp in blank_set and inp != out_id:
                     depends_on[out_id].append(inp)
@@ -583,7 +599,7 @@ def render_plan_topo_only(
                     + (f" (`{op_name}`)" if op_name else "")
                 )
                 if kind == "derived":
-                    method += f" over `{c.get('args_blanks', [])}`"
+                    method += f" over `{c.get('args_refs') or c.get('args_blanks', [])}`"
                 elif kind in ("argmax", "argmin"):
                     method += (
                         f" over candidates `{c.get('candidate_entity_ids', [])}`, "

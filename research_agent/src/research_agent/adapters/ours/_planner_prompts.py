@@ -1,4 +1,4 @@
-"""Planner prompt v3 for the GSW-fragment question-planner adapter.
+"""Planner prompt v4 for the GSW-fragment question-planner adapter.
 
 Version 3 deltas vs v2 (2026-04-23):
   - Grounding test: every filled entity.name must appear as a substring of
@@ -12,14 +12,15 @@ Version 3 deltas vs v2 (2026-04-23):
     carries state="expanded_from_collective:<group-name>" and the
     collective itself remains as a filled entity with category=true,
     role=list-header.
-  - All 5 few-shots are now hand-authored synthetic examples (fictional
+  - All few-shots are now hand-authored synthetic examples (fictional
     entities) — the v2 few-shots were drawn from FRAMES dev split and
     leaked into the evaluation set.
   - Tightened role-vocabulary descriptions: subject vs scope-filter,
     candidate (≥2 siblings only), year-anchor / date-anchor, list-header.
 
-The executor schema did not change in v3. The Entity.state field shipped
-in v2 and is now activated by the prompt for collective provenance.
+Version 4 adds literal-aware derived-constraint inputs (``args_refs``)
+and tightens plan-quality rules for target hubs, post-aggregation
+transforms, and collective expansion.
 """
 
 from __future__ import annotations
@@ -29,7 +30,7 @@ import textwrap
 
 
 # ---------------------------------------------------------------------------
-# System prompt (v3)
+# System prompt (v4)
 # ---------------------------------------------------------------------------
 
 
@@ -121,8 +122,11 @@ PLANNER_SYSTEM = textwrap.dedent(
     Add a constraint ONLY when the question demands:
       - **derived**: arithmetic over blank values (`op ∈ {diff, sum,
         avg, max, min, count, concat, mul, div, round_nearest}`,
-        `args_blanks = [...]`). For `round_nearest`, one arg rounds to
-        the nearest ten; two args use the second blank as the interval.
+        prefer `args_refs = [...]`). `args_refs` may contain blank ids
+        OR filled literal entities with role=`constraint-value`.
+        Legacy `args_blanks = [...]` is still valid only when every
+        input is a blank. For `round_nearest`, one arg rounds to the
+        nearest ten; two args use the second input as the interval.
       - **argmax** / **argmin**: pick the entity among N candidates
         whose ranking blank value is extreme (`candidate_entity_ids`
         and `sort_by_blank_ids` aligned same-length).
@@ -134,6 +138,12 @@ PLANNER_SYSTEM = textwrap.dedent(
     dependency is already expressed by verb-phrases. Use constraints
     only when pure Python arithmetic or selection is required to
     produce the target value.
+
+    Do NOT hide computation in a predicate. If the question says
+    "difference", "how many more", "rounded to the nearest ten",
+    "twelve years earlier", "older/younger/longer", "top five",
+    "before/after", or asks for a count/sum/ratio, expose the needed
+    blanks and constraints explicitly.
 
     ## Hard rule 1 — Grounding test (no internal-knowledge leakage)
 
@@ -148,7 +158,7 @@ PLANNER_SYSTEM = textwrap.dedent(
       (b) rename it to a substring that IS present in the question, or
       (c) — and only if the entity is a member of a collective group
            the question names — use the collective-expansion escape
-           hatch (see Hard rule 3).
+           hatch (see Hard rule 4).
 
     Do NOT invent named individuals, dates, places, or facts the
     question doesn't already name. The executor's retrieval grounds
@@ -182,7 +192,26 @@ PLANNER_SYSTEM = textwrap.dedent(
     filled entities so the executor can use them as retrieval
     signals and scope filters.
 
-    ## Hard rule 3 — Collective-expansion escape hatch
+    ## Hard rule 3 — Literal constants are not blanks
+
+    Numeric/string constants that appear in the question and are used
+    only as constraint inputs MUST be filled entities with
+    `role: "constraint-value"`, not blanks. Use them directly in
+    `args_refs`. For numeric constants, also include `literal_value`
+    so Python consumes the number rather than parsing the English name.
+
+    Correct:
+      - `{"id": "e_twelve", "kind": "filled", "name": "twelve",
+         "role": "constraint-value", "literal_value": 12}`
+      - `{"kind": "derived", "op": "diff",
+         "args_refs": ["b_award_year", "e_twelve"],
+         "output_blank_id": "b_prior_year"}`
+
+    Incorrect:
+      - create `b_offset` and wire `twelve --[value]--> b_offset`.
+      - ask the researcher to find the value of "twelve".
+
+    ## Hard rule 4 — Collective expansion needs real members
 
     When the question names a finite, well-known group by collective
     name (e.g. "the Brontë sisters", "the Jonas Brothers", "the three
@@ -195,10 +224,11 @@ PLANNER_SYSTEM = textwrap.dedent(
     like `(Brontë sisters, members, ?sisters)`. The executor resolves
     the members at runtime.
 
-    **Pattern 2 — escape hatch: planner-time expansion.**
+    **Pattern 2 — rare escape hatch: planner-time expansion.**
     Use ONLY when the downstream reasoning needs argmax / argmin /
     arithmetic over the individual members (which Pattern 1 cannot
-    currently express — argmax requires fixed `candidate_entity_ids`).
+    currently express — argmax requires fixed `candidate_entity_ids`)
+    AND you know the exact real member names.
     You may expand the collective into individual filled entities AT
     PLAN TIME if and only if:
 
@@ -210,13 +240,32 @@ PLANNER_SYSTEM = textwrap.dedent(
          filled entity with `category: true, role: "list-header"`, and
          is wired to the expanded entities via `member_of` VPs (or
          equivalent) so it is not dangling.
-      3. The expanded entities' names DO NOT need to satisfy the
-         Hard-rule-1 grounding test — the `state` breadcrumb is how
-         you legitimately declare their origin.
+      3. The expanded entities must be exact real members, not
+         placeholders, guesses, examples, or stand-ins. If you are not
+         certain of every member name, use Pattern 1 and let retrieval
+         resolve the list.
 
-    Never silently invent members. The `state` breadcrumb is how you
-    declare you're using world knowledge and the auditor can count,
-    review, or challenge it.
+    Never invent members. Never emit names like "Winner A", "Founder
+    1", or plausible-looking placeholders.
+
+    ## Hard rule 5 — TARGET is not a junk drawer
+
+    Direct VPs into/out of the target are valid only for simple
+    "find the entity matching these clues" questions.
+
+    If the question implies computation, list membership/intersection,
+    ranking, temporal filtering, or a compound answer, do NOT connect
+    every clue directly to `TARGET`. Create intermediate blanks:
+      - list/set questions: retrieve each relevant list/set as a blank
+        and connect membership/filtering explicitly.
+      - temporal questions: retrieve event/date blanks, then connect
+        before/after/earlier/later logic explicitly.
+      - arithmetic/format questions: retrieve numeric/date blanks,
+        compute with derived constraints, then apply any rounding or
+        final formatting as another constraint.
+      - compound-answer questions: create one blank per required answer
+        component, then combine them into the final target with a
+        `concat` constraint or mark the final text blank as target.
 
     ## Field spec (strict)
 
@@ -227,6 +276,10 @@ PLANNER_SYSTEM = textwrap.dedent(
     - For filled: `name` (the surface form from the question).
     - For filled: `category: true` when the name is a role / category
       rather than a named entity.
+    - For filled `constraint-value`: include `literal_value` when the
+      value is numeric or otherwise typed. Keep `name` as the exact
+      surface text from the question, e.g. name="twelve",
+      literal_value=12.
     - For blank: `value_type` ∈ {date, number, entity, attribute,
       list, text, bool}.
     - Exactly one blank has `is_target: true`.
@@ -244,7 +297,8 @@ PLANNER_SYSTEM = textwrap.dedent(
     - `kind` (required): derived / argmax / argmin / equals / in_list / gt / lt.
     - `output_blank_id` (required): the blank this constraint fills.
     - Kind-specific populated fields:
-      - derived: `op`, `args_blanks`.
+      - derived: `op`, `args_refs` preferred; `args_blanks` allowed
+        only for legacy blank-only inputs.
         Supported ops: diff, sum, avg, max, min, count, concat, mul,
         div, round_nearest.
       - argmax / argmin: `candidate_entity_ids`, `sort_by_blank_ids`
@@ -271,11 +325,11 @@ PLANNER_SYSTEM = textwrap.dedent(
 
 
 # ---------------------------------------------------------------------------
-# Few-shot examples (v3 — hand-authored synthetic, to avoid test-set leakage)
+# Few-shot examples (v4 — hand-authored synthetic, to avoid test-set leakage)
 #
 # Each example uses unambiguously fictional entities so the LLM cannot
 # rely on world-knowledge priors to fill them in. Each demonstrates at
-# least one v3 rule (grounding, date-anchor, collective-expansion).
+# least one v4 rule (grounding, date-anchor, literals, target structure).
 # ---------------------------------------------------------------------------
 
 
@@ -497,77 +551,48 @@ _FEW_SHOT_4_COMPOUND_SCOPE = {
 }
 
 
-_FEW_SHOT_5_COLLECTIVE_EXPANSION = {
+_FEW_SHOT_5_LITERAL_OFFSET = {
     "question": (
-        "Who lived longer — one of the Three Founders of Acme Corp or "
-        "Dorian Vexley?"
+        "The game Starfall Nexus won the D.I.C.E. Award in 2041. Which "
+        "game won the same award twelve years earlier?"
     ),
     "how_to_think": textwrap.dedent(
         """
-        Step 1 — Entities + roles (this question triggers Hard rule 3,
-        the collective-expansion escape hatch — the comparison requires
-        argmax over individual lifespans, which Pattern 1 cannot express):
-          • "Three Founders of Acme Corp" → filled, role=list-header,
-            category=true. The collective itself is grounded in the
-            question text.
-          • Three expanded founders → each filled, role=candidate,
-            with state="expanded_from_collective:Three Founders of Acme Corp".
-            These names do NOT need to satisfy the grounding test — the
-            state breadcrumb is their provenance declaration.
-            (Here we use invented names Mira Tallow, Essen Quorn,
-            Varik Opsahl as stand-ins; in a real plan these would be
-            the actual founders' names drawn from world knowledge.)
-          • "Dorian Vexley" → filled, role=candidate (surface in question).
-          • Four lifespans → blanks, role=bridge-number, value_type=number.
-          • The longer-lived person → blank, role=target, value_type=entity,
-            is_target=true.
-        Step 2 — Verb-phrases (the collective must be wired or it dangles;
-        we wire it via member_of edges from each expanded founder):
-          • vp1..vp3: (expanded_founder_k, member_of, Three Founders of Acme Corp).
-          • vp4..vp7: (person_k, lived_years, ?lifespan_k) — one per
-            person (3 expanded + Dorian Vexley).
+        Step 1 — Entities + roles:
+          • "Starfall Nexus" → filled, role=subject.
+          • "D.I.C.E. Award" → filled, role=object.
+          • "2041" → filled, role=year-anchor.
+          • "twelve" → filled, role=constraint-value, literal_value=12.
+            This is NOT a blank; the executor should not research the
+            value of "twelve".
+          • The prior award year → blank, role=bridge-date, value_type=date.
+          • The winning game in that prior year → blank, role=target,
+            value_type=entity, is_target=true.
+        Step 2 — Verb-phrases:
+          • vp1: (Starfall Nexus, won, D.I.C.E. Award) — grounds the award.
+          • vp2: (Starfall Nexus, won_in_year, 2041) — grounds the known year.
+          • vp3: (?target, won, D.I.C.E. Award).
+          • vp4: (?target, won_in_year, ?prior_year).
         Step 3 — Constraints:
-          c1: argmax over all four candidates,
-              candidate_entity_ids=[e_f1,e_f2,e_f3,e_vexley],
-              sort_by_blank_ids=[b_lf1,b_lf2,b_lf3,b_lf_vexley],
-              output_blank_id=t.
+          "twelve years earlier" is arithmetic, so expose it:
+          c1: derived op=diff, args_refs=[e_year, e_twelve],
+          output_blank_id=b_prior_year. Use args_refs because one input
+          is a filled literal entity.
         """
     ).strip(),
     "plan": {
         "entities": [
+            {"id": "e_game", "kind": "filled", "name": "Starfall Nexus", "role": "subject"},
+            {"id": "e_award", "kind": "filled", "name": "D.I.C.E. Award", "role": "object"},
+            {"id": "e_year", "kind": "filled", "name": "2041", "role": "year-anchor", "literal_value": 2041},
             {
-                "id": "e_collective",
+                "id": "e_twelve",
                 "kind": "filled",
-                "name": "Three Founders of Acme Corp",
-                "role": "list-header",
-                "category": True,
+                "name": "twelve",
+                "role": "constraint-value",
+                "literal_value": 12,
             },
-            {
-                "id": "e_f1",
-                "kind": "filled",
-                "name": "Mira Tallow",
-                "role": "candidate",
-                "state": "expanded_from_collective:Three Founders of Acme Corp",
-            },
-            {
-                "id": "e_f2",
-                "kind": "filled",
-                "name": "Essen Quorn",
-                "role": "candidate",
-                "state": "expanded_from_collective:Three Founders of Acme Corp",
-            },
-            {
-                "id": "e_f3",
-                "kind": "filled",
-                "name": "Varik Opsahl",
-                "role": "candidate",
-                "state": "expanded_from_collective:Three Founders of Acme Corp",
-            },
-            {"id": "e_vexley", "kind": "filled", "name": "Dorian Vexley", "role": "candidate"},
-            {"id": "b_lf1", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "b_lf2", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "b_lf3", "kind": "blank", "role": "bridge-number", "value_type": "number"},
-            {"id": "b_lf_v", "kind": "blank", "role": "bridge-number", "value_type": "number"},
+            {"id": "b_prior_year", "kind": "blank", "role": "bridge-date", "value_type": "date"},
             {
                 "id": "t",
                 "kind": "blank",
@@ -577,28 +602,85 @@ _FEW_SHOT_5_COLLECTIVE_EXPANSION = {
             },
         ],
         "verb_phrases": [
-            {"id": "vp1", "phrase": "member_of", "subject_id": "e_f1", "object_id": "e_collective"},
-            {"id": "vp2", "phrase": "member_of", "subject_id": "e_f2", "object_id": "e_collective"},
-            {"id": "vp3", "phrase": "member_of", "subject_id": "e_f3", "object_id": "e_collective"},
-            {"id": "vp4", "phrase": "lived_years", "subject_id": "e_f1", "object_id": "b_lf1"},
-            {"id": "vp5", "phrase": "lived_years", "subject_id": "e_f2", "object_id": "b_lf2"},
-            {"id": "vp6", "phrase": "lived_years", "subject_id": "e_f3", "object_id": "b_lf3"},
-            {
-                "id": "vp7",
-                "phrase": "lived_years",
-                "subject_id": "e_vexley",
-                "object_id": "b_lf_v",
-            },
+            {"id": "vp1", "phrase": "won", "subject_id": "e_game", "object_id": "e_award"},
+            {"id": "vp2", "phrase": "won_in_year", "subject_id": "e_game", "object_id": "e_year"},
+            {"id": "vp3", "phrase": "won", "subject_id": "t", "object_id": "e_award"},
+            {"id": "vp4", "phrase": "won_in_year", "subject_id": "t", "object_id": "b_prior_year"},
         ],
         "constraints": [
             {
                 "id": "c1",
-                "kind": "argmax",
-                "candidate_entity_ids": ["e_f1", "e_f2", "e_f3", "e_vexley"],
-                "sort_by_blank_ids": ["b_lf1", "b_lf2", "b_lf3", "b_lf_v"],
-                "output_blank_id": "t",
+                "kind": "derived",
+                "op": "diff",
+                "args_refs": ["e_year", "e_twelve"],
+                "output_blank_id": "b_prior_year",
             }
         ],
+    },
+}
+
+
+_FEW_SHOT_6_LIST_INTERSECTION = {
+    "question": (
+        "Which player appears on both the North League career home run "
+        "leaders list and the North League career stolen base leaders list?"
+    ),
+    "how_to_think": textwrap.dedent(
+        """
+        Step 1 — Entities + roles:
+          • "North League career home run leaders" → filled,
+            role=list-header, category=true.
+          • "North League career stolen base leaders" → filled,
+            role=list-header, category=true.
+          • Each list's members → two list blanks.
+          • The player in both lists → blank, role=target, value_type=entity.
+        Step 2 — Verb-phrases:
+          Do NOT attach both list clues directly to TARGET as a
+          target-hub. First retrieve the two lists, then identify the
+          shared member using the list blanks as retrieval/context.
+          • vp1: (home run leaders list, members, ?home_run_leaders).
+          • vp2: (stolen base leaders list, members, ?stolen_base_leaders).
+          • vp3: (?target, appears_in, ?home_run_leaders).
+          • vp4: (?target, appears_in, ?stolen_base_leaders).
+        Step 3 — Constraints:
+          None. The current executor has no entity-valued intersection
+          op, but the plan still exposes the two list blanks instead of
+          hiding the structure in direct target clues.
+        """
+    ).strip(),
+    "plan": {
+        "entities": [
+            {
+                "id": "e_hr_list",
+                "kind": "filled",
+                "name": "North League career home run leaders",
+                "role": "list-header",
+                "category": True,
+            },
+            {
+                "id": "e_sb_list",
+                "kind": "filled",
+                "name": "North League career stolen base leaders",
+                "role": "list-header",
+                "category": True,
+            },
+            {"id": "b_hr_list", "kind": "blank", "role": "list-member", "value_type": "list"},
+            {"id": "b_sb_list", "kind": "blank", "role": "list-member", "value_type": "list"},
+            {
+                "id": "t",
+                "kind": "blank",
+                "role": "target",
+                "value_type": "entity",
+                "is_target": True,
+            },
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "members", "subject_id": "e_hr_list", "object_id": "b_hr_list"},
+            {"id": "vp2", "phrase": "members", "subject_id": "e_sb_list", "object_id": "b_sb_list"},
+            {"id": "vp3", "phrase": "appears_in", "subject_id": "t", "object_id": "b_hr_list"},
+            {"id": "vp4", "phrase": "appears_in", "subject_id": "t", "object_id": "b_sb_list"},
+        ],
+        "constraints": [],
     },
 }
 
@@ -608,7 +690,8 @@ _FEW_SHOTS = [
     _FEW_SHOT_2_AS_OF_DATE_DIFF,
     _FEW_SHOT_3_ENUMERATED_ARGMAX,
     _FEW_SHOT_4_COMPOUND_SCOPE,
-    _FEW_SHOT_5_COLLECTIVE_EXPANSION,
+    _FEW_SHOT_5_LITERAL_OFFSET,
+    _FEW_SHOT_6_LIST_INTERSECTION,
 ]
 
 
@@ -631,20 +714,21 @@ def _format_few_shot(example: dict) -> str:
 def build_planner_messages(question: str) -> list[dict]:
     """Build the system + user message list for the planner LLM call.
 
-    Each few-shot demonstrates at least one v3 rule: grounding,
-    date-anchor handling, or the collective-expansion escape hatch. The
-    user prompt reminds the model to self-apply the grounding test
-    before emitting JSON.
+    Each few-shot demonstrates at least one v4 rule: grounding,
+    date-anchor handling, literal constants, or avoiding risky target
+    hubs. The user prompt reminds the model to self-apply the grounding
+    test before emitting JSON.
     """
     few_shots_rendered = "\n\n---\n\n".join(_format_few_shot(ex) for ex in _FEW_SHOTS)
     user = (
-        "Here are five worked examples. Each shows the three-step "
+        "Here are six worked examples. Each shows the three-step "
         "thinking protocol (How to think) followed by the corresponding "
-        "Plan JSON. Pay attention to how each example honours the three "
-        "hard rules: grounding (every filled entity.name appears in the "
-        "question), date-anchor (dates become filled entities), and the "
-        "collective-expansion escape hatch (state breadcrumb when the "
-        "planner expands a named group).\n\n"
+        "Plan JSON. Pay attention to how each example honours the hard "
+        "rules: grounding (every filled entity.name appears in the "
+        "question), date-anchor (dates become filled entities), literal "
+        "constants (use filled constraint-value entities with "
+        "literal_value + args_refs), and target structure (avoid risky "
+        "target hubs when intermediate blanks are needed).\n\n"
         "For the new question, walk the same three steps internally, "
         "self-apply the grounding test to each filled entity before "
         "emitting it, then return ONLY the Plan JSON — no prose.\n\n"
@@ -676,6 +760,13 @@ REPAIR_SYSTEM = textwrap.dedent(
        question to a filled entity with role=year-anchor,
        date-anchor, or as-of-date, and wires it into at least one
        verb-phrase.
+    6. Does not create blanks for literal constants. Numeric literals
+       used in constraints should be filled `constraint-value` entities
+       with `literal_value` and referenced through `args_refs`.
+    7. Avoids risky TARGET hubs: if the question implies computation,
+       list intersection, temporal filtering, ranking, or a compound
+       answer, create intermediate blanks/constraints instead of wiring
+       every clue directly to TARGET.
 
     Do not include any prose or Markdown fences.
     """
@@ -715,7 +806,11 @@ def build_repair_messages(
             "All earlier repairs have failed. If this attempt does not "
             "validate, the question will be answered without a plan. "
             "Address the SPECIFIC field named in the validation error — "
-            "if it complains about empty `args_blanks`, populate them; "
+            "if it complains about empty `args_refs`/`args_blanks`, "
+            "populate them; if it complains about `literal_value`, add "
+            "a typed literal_value to the filled constraint-value entity; "
+            "if it complains about a risky TARGET hub, create intermediate "
+            "blanks and constraints; "
             "if it complains about missing `left_ref`, supply it; if it "
             "complains about a dangling entity, add a verb-phrase that "
             "uses it. Re-emit the entire JSON object from scratch.\n\n"

@@ -26,9 +26,9 @@ import json
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, Field, ValidationError, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 from research_agent.models.trace import ToolCall
 
@@ -60,6 +60,10 @@ class Entity(BaseModel):
     # role annotations keep validating.
     role: Optional[str] = None
     state: Optional[str] = None
+    # Literal value for filled constraint constants. Example:
+    # name="twelve", literal_value=12 lets the entity remain grounded in
+    # the question text while constraints consume the numeric value.
+    literal_value: Optional[Any] = None
 
 
 class VerbPhrase(BaseModel):
@@ -75,7 +79,7 @@ class Constraint(BaseModel):
     """Dependency between blanks.
 
     Only one of the field groups is populated per instance:
-    - ``op`` + ``args_blanks`` for ``kind="derived"``.
+    - ``op`` + ``args_refs`` / ``args_blanks`` for ``kind="derived"``.
     - ``candidate_entity_ids`` + ``sort_by_blank_ids`` for argmax / argmin.
     - ``left_ref`` / ``right_ref`` for relational kinds (Phase-2).
 
@@ -101,6 +105,10 @@ class Constraint(BaseModel):
         ]
     ] = None
     args_blanks: list[str] = Field(default_factory=list)
+    # Preferred input list for derived constraints. Unlike the legacy
+    # args_blanks field, args_refs may point to blanks or filled literal
+    # entities such as constraint-value "twelve".
+    args_refs: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)
     left_ref: Optional[str] = None
@@ -157,6 +165,8 @@ class GSWPlan(BaseModel):
         for c in self.constraints:
             for b in c.args_blanks:
                 require_blank(b, where=f"constraint {c.id!r}.args_blanks")
+            for ref in c.args_refs:
+                require_known(ref, where=f"constraint {c.id!r}.args_refs")
             for b in c.sort_by_blank_ids:
                 require_blank(b, where=f"constraint {c.id!r}.sort_by_blank_ids")
             for eid in c.candidate_entity_ids:
@@ -182,6 +192,7 @@ class GSWPlan(BaseModel):
             referenced.add(vp.object_id)
         for c in self.constraints:
             referenced.update(c.args_blanks)
+            referenced.update(c.args_refs)
             referenced.update(c.candidate_entity_ids)
             referenced.update(c.sort_by_blank_ids)
             for ref in (c.left_ref, c.right_ref, c.output_blank_id):
@@ -211,11 +222,11 @@ class GSWPlan(BaseModel):
                     raise ValueError(
                         f"constraint {c.id!r} (kind=derived) has no op"
                     )
-                if not c.args_blanks:
+                if not (c.args_refs or c.args_blanks):
                     raise ValueError(
                         f"constraint {c.id!r} (kind=derived, op={c.op!r}) "
-                        "has empty args_blanks; derived constraints must "
-                        "list the input blanks"
+                        "has empty args_refs/args_blanks; derived "
+                        "constraints must list input refs"
                     )
             elif c.kind in ("argmax", "argmin"):
                 if not c.candidate_entity_ids:
@@ -321,7 +332,7 @@ def build_dependency_graph(plan: GSWPlan) -> dict[str, set[str]]:
     for c in plan.constraints:
         inputs: set[str] = set()
         if c.kind == "derived":
-            inputs.update(x for x in c.args_blanks if x in blanks)
+            inputs.update(x for x in _derived_arg_refs(c) if x in blanks)
         elif c.kind in ("argmax", "argmin"):
             inputs.update(x for x in c.sort_by_blank_ids if x in blanks)
         elif c.kind in ("equals", "gt", "lt"):
@@ -652,8 +663,15 @@ def _constraint_ref_value(
     except ExecutionError:
         return None, False
     if ent.kind == "filled":
+        if ent.literal_value is not None:
+            return ent.literal_value, True
         return ent.name or ent.id, True
     return None, False
+
+
+def _derived_arg_refs(constraint: Constraint) -> list[str]:
+    """Return derived inputs, preferring the literal-aware field."""
+    return list(constraint.args_refs or constraint.args_blanks or [])
 
 
 def _relational_ref_pair(constraint: Constraint) -> tuple[Optional[str], Optional[str]]:
@@ -769,16 +787,21 @@ def _compute_constraint(
     assert out_id, "compute_constraint requires output_blank_id"
 
     if constraint.kind == "derived":
-        args = [state.get(b) for b in constraint.args_blanks]
-        if any(a is None or a.status != "resolved" or a.value is None for a in args):
+        arg_refs = _derived_arg_refs(constraint)
+        resolved_args = [
+            _constraint_ref_value(ref, plan, state)
+            for ref in arg_refs
+        ]
+        if any(not ok or value is None for value, ok in resolved_args):
             return BlankResult(
                 blank_id=out_id,
                 status="unknown",
                 wall_time_s=round(time.time() - t0, 3),
             )
+        values = [value for value, _ok in resolved_args]
         op = constraint.op
         if op == "concat":
-            out_val = "; ".join(_stringify(a.value) for a in args)
+            out_val = "; ".join(_stringify(value) for value in values)
             return BlankResult(
                 blank_id=out_id,
                 value=out_val,
@@ -786,10 +809,10 @@ def _compute_constraint(
                 wall_time_s=round(time.time() - t0, 3),
             )
         if op == "count":
-            if len(args) == 1:
-                val = _count_constraint_value(args[0].value)
+            if len(values) == 1:
+                val = _count_constraint_value(values[0])
             else:
-                val = len(args)
+                val = len(values)
             return BlankResult(
                 blank_id=out_id,
                 value=val,
@@ -797,9 +820,9 @@ def _compute_constraint(
                 wall_time_s=round(time.time() - t0, 3),
             )
         if op == "sum":
-            nums = [_coerce_sum_term(a.value) for a in args]
+            nums = [_coerce_sum_term(value) for value in values]
         else:
-            nums = [_coerce_constraint_number(a.value) for a in args]
+            nums = [_coerce_constraint_number(value) for value in values]
         if any(n is None for n in nums):
             return BlankResult(
                 blank_id=out_id,

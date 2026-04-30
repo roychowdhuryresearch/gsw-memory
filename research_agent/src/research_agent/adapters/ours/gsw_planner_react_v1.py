@@ -50,7 +50,6 @@ from research_agent.adapters.ours._planner_exec import (
 from research_agent.adapters.ours._planner_react_prompt import build_system_prompt
 from research_agent.models.llm_client import LLMClient
 from research_agent.models.trace import ToolCall, Trajectory
-from research_agent.retrieval.bm25 import BM25Retriever
 from research_agent.retrieval.corpus import load_frames_corpus
 from research_agent.retrieval.dense import build_retriever
 
@@ -713,24 +712,26 @@ def _stringify(v: Any) -> str:
     return str(v)
 
 
-def _collect_constraint_inputs(c: Constraint) -> list[str]:
+def _collect_constraint_inputs(c: Constraint, blank_ids: set[str] | None = None) -> list[str]:
     """Return the list of blank ids a constraint reads from.
 
     Mirrors the input semantics in ``_planner_exec._compute_constraint``:
-    - derived: args_blanks
+    - derived: args_refs when present, otherwise args_blanks
     - argmax / argmin: sort_by_blank_ids  (candidate_entity_ids are filled
       entities, not retrievable inputs)
     - relational (equals / in_list / gt / lt): left_ref + right_ref
     """
     inputs: list[str] = []
     if c.kind == "derived":
-        inputs.extend(c.args_blanks or [])
+        inputs.extend(c.args_refs or c.args_blanks or [])
     elif c.kind in ("argmax", "argmin"):
         inputs.extend(c.sort_by_blank_ids or [])
     elif c.kind in ("equals", "in_list", "gt", "lt"):
         for ref in (c.left_ref, c.right_ref):
             if ref:
                 inputs.append(ref)
+    if blank_ids is not None:
+        inputs = [i for i in inputs if i in blank_ids]
     return [i for i in inputs if i]
 
 
@@ -751,6 +752,7 @@ def _cascade_auto_compute(
     """
     newly_filled: list[str] = []
     changed = True
+    blank_ids = {e.id for e in plan.blank_entities()}
     while changed:
         changed = False
         for c in plan.constraints:
@@ -760,9 +762,10 @@ def _cascade_auto_compute(
             out = state.get(out_id)
             if out is not None and out.status == "resolved":
                 continue  # already set (by LLM commit or prior cascade)
-            inputs = _collect_constraint_inputs(c)
-            if not inputs:
+            refs = _collect_constraint_inputs(c)
+            if not refs:
                 continue
+            inputs = [ref for ref in refs if ref in blank_ids]
             if not all(
                 state.get(i) is not None
                 and state[i].status == "resolved"

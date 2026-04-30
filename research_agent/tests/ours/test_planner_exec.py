@@ -305,6 +305,67 @@ def test_compute_constraint_mul_div_round_nearest():
     assert rounded.value == 90
 
 
+def test_compute_constraint_args_refs_accepts_filled_literal_value():
+    plan = GSWPlan(
+        entities=[
+            Entity(id="b_year", kind="blank", value_type="number"),
+            Entity(
+                id="e_twelve",
+                kind="filled",
+                name="twelve",
+                role="constraint-value",
+                literal_value=12,
+            ),
+            Entity(id="t", kind="blank", value_type="number", is_target=True),
+        ],
+        constraints=[
+            Constraint(
+                id="c_prior",
+                kind="derived",
+                op="diff",
+                args_refs=["b_year", "e_twelve"],
+                output_blank_id="t",
+            )
+        ],
+    )
+    deps = build_dependency_graph(plan)
+    assert deps["t"] == {"b_year"}
+
+    res = _compute_constraint(plan.constraints[0], plan, _constraint_state(b_year=2011))
+    assert res.status == "resolved"
+    assert res.value == 1999
+
+
+def test_args_blanks_still_rejects_filled_literal_refs():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError) as excinfo:
+        GSWPlan(
+            entities=[
+                Entity(id="b_year", kind="blank", value_type="number"),
+                Entity(
+                    id="e_twelve",
+                    kind="filled",
+                    name="twelve",
+                    role="constraint-value",
+                    literal_value=12,
+                ),
+                Entity(id="t", kind="blank", value_type="number", is_target=True),
+            ],
+            constraints=[
+                Constraint(
+                    id="c_prior",
+                    kind="derived",
+                    op="diff",
+                    args_blanks=["b_year", "e_twelve"],
+                    output_blank_id="t",
+                )
+            ],
+        )
+    assert "args_blanks" in str(excinfo.value)
+    assert "e_twelve" in str(excinfo.value)
+
+
 def test_compute_relational_constraints_and_in_list_dependencies():
     plan = GSWPlan(
         entities=[

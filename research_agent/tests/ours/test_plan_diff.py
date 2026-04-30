@@ -13,14 +13,8 @@ import pytest
 
 from research_agent.adapters.ours._plan_diff import (
     AddBlankOp,
-    AddConstraintOp,
-    AddVPOp,
     ChangeTargetOp,
-    ChangeValueTypeOp,
     DiffApplyError,
-    RemoveBlankOp,
-    RemoveConstraintOp,
-    RemoveVPOp,
     apply_diff,
     is_trivial_op,
     parse_diff_op,
@@ -259,6 +253,43 @@ def test_apply_add_constraint_concat():
     assert len(new.constraints) == 1
     assert new.constraints[0].kind == "derived"
     assert new.constraints[0].args_blanks == ["b_a", "b_b"]
+
+
+def test_apply_add_constraint_preserves_args_refs():
+    plan_dict = {
+        "entities": [
+            {"id": "e1", "kind": "filled", "name": "Game X", "role": "subject"},
+            {
+                "id": "e_twelve",
+                "kind": "filled",
+                "name": "twelve",
+                "role": "constraint-value",
+                "literal_value": 12,
+            },
+            {"id": "b_year", "kind": "blank", "role": "bridge-date", "value_type": "date"},
+            {"id": "t", "kind": "blank", "role": "target", "value_type": "date", "is_target": True},
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "won_in_year", "subject_id": "e1", "object_id": "b_year"},
+            {"id": "vp2", "phrase": "offset", "subject_id": "e1", "object_id": "e_twelve"},
+            {"id": "vp3", "phrase": "prior_year_target", "subject_id": "t", "object_id": "b_year"},
+        ],
+        "constraints": [],
+    }
+    plan = GSWPlan.model_validate(plan_dict)
+    op = parse_diff_op({
+        "op": "add_constraint",
+        "constraint": {
+            "id": "c1",
+            "kind": "derived",
+            "op": "diff",
+            "args_refs": ["b_year", "e_twelve"],
+            "output_blank_id": "t",
+        },
+    })
+    new = apply_diff(plan, op)
+    assert new.constraints[0].args_refs == ["b_year", "e_twelve"]
+    assert new.constraints[0].args_blanks == []
 
 
 def test_apply_change_value_type():

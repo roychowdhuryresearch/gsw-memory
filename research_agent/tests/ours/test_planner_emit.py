@@ -188,6 +188,89 @@ def test_emit_plan_disable_repair_raises_parse_failure():
     assert len(llm.calls) == 1
 
 
+def test_emit_plan_repairs_literal_constant_blank():
+    bad_plan = json.dumps({
+        "entities": [
+            {"id": "e1", "kind": "filled", "name": "X", "role": "subject"},
+            {"id": "e_twelve", "kind": "filled", "name": "twelve", "role": "constraint-value"},
+            {"id": "b_offset", "kind": "blank", "role": "bridge-number", "value_type": "number"},
+            {"id": "t", "kind": "blank", "role": "target", "value_type": "number", "is_target": True},
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "value", "subject_id": "e_twelve", "object_id": "b_offset"},
+            {"id": "vp2", "phrase": "has_value", "subject_id": "e1", "object_id": "t"},
+        ],
+        "constraints": [],
+    })
+    llm = _ScriptedLLM([
+        _StubResp(text=bad_plan),
+        _StubResp(text=_valid_plan_json()),
+    ])
+    plan, meta = emit_plan("What is twelve years earlier than X?", llm)
+    assert plan.target().id == "t"
+    assert meta.repair_used is True
+    assert "literal_constant_blank" in meta.parse_error
+
+
+def test_emit_plan_repairs_numeric_literal_ref_without_literal_value():
+    bad_plan = json.dumps({
+        "entities": [
+            {"id": "e1", "kind": "filled", "name": "X", "role": "subject"},
+            {"id": "e_twelve", "kind": "filled", "name": "twelve", "role": "constraint-value"},
+            {"id": "b_year", "kind": "blank", "role": "bridge-date", "value_type": "date"},
+            {"id": "t", "kind": "blank", "role": "target", "value_type": "date", "is_target": True},
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "won_in_year", "subject_id": "e1", "object_id": "b_year"},
+        ],
+        "constraints": [
+            {
+                "id": "c1",
+                "kind": "derived",
+                "op": "diff",
+                "args_refs": ["b_year", "e_twelve"],
+                "output_blank_id": "t",
+            }
+        ],
+    })
+    llm = _ScriptedLLM([
+        _StubResp(text=bad_plan),
+        _StubResp(text=_valid_plan_json()),
+    ])
+    plan, meta = emit_plan("What is twelve years earlier than X?", llm)
+    assert plan.target().id == "t"
+    assert meta.repair_used is True
+    assert "literal_value_missing" in meta.parse_error
+
+
+def test_emit_plan_repairs_risky_target_hub():
+    bad_plan = json.dumps({
+        "entities": [
+            {"id": "e1", "kind": "filled", "name": "Kessington", "role": "subject"},
+            {"id": "e2", "kind": "filled", "name": "Raleford", "role": "subject"},
+            {"id": "e_date", "kind": "filled", "name": "2047", "role": "year-anchor"},
+            {"id": "t", "kind": "blank", "role": "target", "value_type": "number", "is_target": True},
+        ],
+        "verb_phrases": [
+            {"id": "vp1", "phrase": "has_population", "subject_id": "e1", "object_id": "t"},
+            {"id": "vp2", "phrase": "has_population", "subject_id": "e2", "object_id": "t"},
+            {"id": "vp3", "phrase": "as_of_date", "subject_id": "t", "object_id": "e_date"},
+        ],
+        "constraints": [],
+    })
+    llm = _ScriptedLLM([
+        _StubResp(text=bad_plan),
+        _StubResp(text=_valid_plan_json()),
+    ])
+    plan, meta = emit_plan(
+        "What is the difference in population between Kessington and Raleford in 2047?",
+        llm,
+    )
+    assert plan.target().id == "t"
+    assert meta.repair_used is True
+    assert "risky_target_hub" in meta.parse_error
+
+
 def test_emit_plan_llm_exception_during_repair():
     """LLM-level exception during a repair call surfaces as llm_error."""
 

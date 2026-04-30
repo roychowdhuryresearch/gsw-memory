@@ -229,7 +229,9 @@ def _render_md(record: dict) -> str:
             for c in constraints:
                 inputs_s = ""
                 if c.get("kind") == "derived":
-                    inputs_s = ", ".join(f"`{x}`" for x in c.get("args_blanks", []))
+                    inputs_s = ", ".join(
+                        f"`{x}`" for x in (c.get("args_refs") or c.get("args_blanks", []))
+                    )
                 elif c.get("kind") in ("argmax", "argmin"):
                     candidates = c.get("candidate_entity_ids", [])
                     sort_by = c.get("sort_by_blank_ids", [])

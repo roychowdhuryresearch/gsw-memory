@@ -1,14 +1,15 @@
-"""Shape-validation tests for the prompt v3 few-shots.
+"""Shape-validation tests for the prompt v4 few-shots.
 
-These tests do NOT call an LLM. They take the 5 synthetic few-shot
+These tests do NOT call an LLM. They take the synthetic few-shot
 plans shipped in ``_planner_prompts._FEW_SHOTS`` and push them through
 the executor's Pydantic schema to ensure they never silently ship
 broken:
 
 - Every plan validates (no dangling entities; all roles present;
   exactly one target blank).
-- Few-shot #5 (collective expansion) has exactly three filled entities
-  carrying the ``state="expanded_from_collective:<group>"`` breadcrumb.
+- The literal-offset few-shot uses `literal_value` + `args_refs`, not a
+  fake blank for "twelve".
+- No few-shot teaches placeholder collective expansion names.
 
 If a future prompt edit breaks a few-shot, these tests fail fast.
 """
@@ -23,7 +24,8 @@ from research_agent.adapters.ours._planner_prompts import (
     _FEW_SHOT_2_AS_OF_DATE_DIFF,
     _FEW_SHOT_3_ENUMERATED_ARGMAX,
     _FEW_SHOT_4_COMPOUND_SCOPE,
-    _FEW_SHOT_5_COLLECTIVE_EXPANSION,
+    _FEW_SHOT_5_LITERAL_OFFSET,
+    _FEW_SHOT_6_LIST_INTERSECTION,
     _FEW_SHOTS,
 )
 
@@ -38,14 +40,16 @@ _COLLECTIVE_PREFIX = "expanded_from_collective:"
         _FEW_SHOT_2_AS_OF_DATE_DIFF,
         _FEW_SHOT_3_ENUMERATED_ARGMAX,
         _FEW_SHOT_4_COMPOUND_SCOPE,
-        _FEW_SHOT_5_COLLECTIVE_EXPANSION,
+        _FEW_SHOT_5_LITERAL_OFFSET,
+        _FEW_SHOT_6_LIST_INTERSECTION,
     ],
     ids=[
         "temporal_bridge",
         "as_of_date_diff",
         "enumerated_argmax",
         "compound_scope",
-        "collective_expansion",
+        "literal_offset",
+        "list_intersection",
     ],
 )
 def test_few_shot_plan_validates(example: dict) -> None:
@@ -65,47 +69,14 @@ def test_few_shot_plan_validates(example: dict) -> None:
     assert len(plan.entities) >= 2
 
 
-def test_few_shots_list_has_five() -> None:
-    """The prompt feeds exactly 5 few-shots into the user message."""
-    assert len(_FEW_SHOTS) == 5
+def test_few_shots_list_has_six() -> None:
+    """The prompt feeds exactly 6 few-shots into the user message."""
+    assert len(_FEW_SHOTS) == 6
 
 
-def test_collective_expansion_carries_state_breadcrumb() -> None:
-    """Few-shot #5 must demonstrate the Hard-rule-3 escape hatch:
-    every expanded member carries the ``expanded_from_collective:`` state,
-    and the collective itself is present with category=true."""
-    plan = GSWPlan.model_validate(_FEW_SHOT_5_COLLECTIVE_EXPANSION["plan"])
-
-    expanded = [
-        e for e in plan.entities
-        if e.kind == "filled" and (e.state or "").startswith(_COLLECTIVE_PREFIX)
-    ]
-    assert len(expanded) == 3, f"expected 3 expanded entities, got {len(expanded)}"
-
-    # All three point at the same collective group.
-    groups = {e.state.split(":", 1)[1] for e in expanded}
-    assert len(groups) == 1, f"expanded entities reference inconsistent groups: {groups}"
-
-    # The collective itself is in the plan, with category=True.
-    collectives = [
-        e for e in plan.entities
-        if e.kind == "filled" and e.category and groups.pop().lower() in (e.name or "").lower()
-    ]
-    # (groups was mutated by pop; rebuild for message clarity)
-    assert collectives, "collective list-header entity not found in plan"
-    assert collectives[0].role == "list-header"
-
-
-def test_no_other_few_shot_uses_state_breadcrumb() -> None:
-    """Shots 1-4 should NOT carry collective-expansion breadcrumbs —
-    they cover the grounded cases. Catches accidental copy-paste."""
-    non_expansion_shots = [
-        _FEW_SHOT_1_TEMPORAL_BRIDGE,
-        _FEW_SHOT_2_AS_OF_DATE_DIFF,
-        _FEW_SHOT_3_ENUMERATED_ARGMAX,
-        _FEW_SHOT_4_COMPOUND_SCOPE,
-    ]
-    for ex in non_expansion_shots:
+def test_no_few_shot_uses_state_breadcrumb() -> None:
+    """Few-shots should not teach fake collective expansions."""
+    for ex in _FEW_SHOTS:
         plan = GSWPlan.model_validate(ex["plan"])
         leaked = [
             e.id for e in plan.entities
@@ -115,6 +86,30 @@ def test_no_other_few_shot_uses_state_breadcrumb() -> None:
             f"few-shot '{ex['question'][:60]}' unexpectedly carries state "
             f"breadcrumb on entities: {leaked}"
         )
+
+
+def test_literal_offset_shot_uses_literal_value_and_args_refs() -> None:
+    plan = GSWPlan.model_validate(_FEW_SHOT_5_LITERAL_OFFSET["plan"])
+    literal = plan.entity_by_id("e_twelve")
+    assert literal.role == "constraint-value"
+    assert literal.literal_value == 12
+
+    constraint = plan.constraints[0]
+    assert constraint.args_refs == ["e_year", "e_twelve"]
+    assert constraint.args_blanks == []
+
+
+def test_list_intersection_shot_uses_intermediate_list_blanks() -> None:
+    plan = GSWPlan.model_validate(_FEW_SHOT_6_LIST_INTERSECTION["plan"])
+    list_blanks = [e.id for e in plan.blank_entities() if e.value_type == "list"]
+    assert set(list_blanks) == {"b_hr_list", "b_sb_list"}
+
+    target_vps = [
+        vp for vp in plan.verb_phrases
+        if "t" in (vp.subject_id, vp.object_id)
+    ]
+    assert len(target_vps) == 2
+    assert {vp.object_id for vp in target_vps} == {"b_hr_list", "b_sb_list"}
 
 
 def test_as_of_date_shot_has_date_anchor_role() -> None:

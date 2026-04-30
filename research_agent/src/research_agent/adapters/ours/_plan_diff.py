@@ -27,6 +27,7 @@ Companion code:
 
 from __future__ import annotations
 
+import json
 from typing import Annotated, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
@@ -88,6 +89,7 @@ class _ConstraintSpec(BaseModel):
         ]
     ] = None
     args_blanks: list[str] = Field(default_factory=list)
+    args_refs: list[str] = Field(default_factory=list)
     candidate_entity_ids: list[str] = Field(default_factory=list)
     sort_by_blank_ids: list[str] = Field(default_factory=list)
     left_ref: Optional[str] = None
@@ -344,6 +346,7 @@ def apply_diff(old_plan: GSWPlan, op: "PlanDiffOp") -> GSWPlan:
         new.constraints = [
             c for c in new.constraints
             if op.blank_id not in c.args_blanks
+            and op.blank_id not in c.args_refs
             and op.blank_id not in c.candidate_entity_ids
             and op.blank_id not in c.sort_by_blank_ids
             and c.output_blank_id != op.blank_id
@@ -378,6 +381,7 @@ def apply_diff(old_plan: GSWPlan, op: "PlanDiffOp") -> GSWPlan:
                 kind=op.constraint.kind,
                 op=op.constraint.op,
                 args_blanks=list(op.constraint.args_blanks),
+                args_refs=list(op.constraint.args_refs),
                 candidate_entity_ids=list(op.constraint.candidate_entity_ids),
                 sort_by_blank_ids=list(op.constraint.sort_by_blank_ids),
                 left_ref=op.constraint.left_ref,
@@ -436,6 +440,7 @@ def plan_signature(plan: GSWPlan) -> tuple:
             e.id,
             e.kind,
             e.name or "",
+            _literal_signature(e.literal_value),
             e.value_type or "",
             bool(e.is_target),
             e.role or "",
@@ -452,6 +457,7 @@ def plan_signature(plan: GSWPlan) -> tuple:
             c.kind,
             c.op or "",
             tuple(c.args_blanks),
+            tuple(c.args_refs),
             tuple(c.candidate_entity_ids),
             tuple(c.sort_by_blank_ids),
             c.left_ref or "",
@@ -461,3 +467,9 @@ def plan_signature(plan: GSWPlan) -> tuple:
         for c in plan.constraints
     ))
     return (ents, vps, cons)
+
+
+def _literal_signature(value: object) -> str:
+    if value is None:
+        return ""
+    return json.dumps(value, sort_keys=True, default=str)

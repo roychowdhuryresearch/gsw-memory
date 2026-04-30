@@ -21,7 +21,7 @@ the relevant subgraph.
 from __future__ import annotations
 
 import textwrap
-from typing import Any, Optional
+from typing import Any
 
 from research_agent.adapters.ours._planner_exec import BlankResult
 from research_agent.adapters.ours._planner_react_prompt import (
@@ -68,6 +68,9 @@ RESEARCHER_LEGEND = textwrap.dedent(
     - Common blank roles: `target`, `bridge-entity`, `bridge-date`,
       `bridge-number`, `bridge-attribute`, `list-member`,
       `comparison-output`, `aggregate-output`.
+    - Filled `constraint-value` entities may include `literal_value`;
+      those are consumed by Python constraints and should not be
+      researched as blanks.
 
     ### VerbPhrase  `(subject, phrase, object)`
 
@@ -85,7 +88,7 @@ RESEARCHER_LEGEND = textwrap.dedent(
 
     A constraint computes a blank without retrieval.
     - `derived` applies an op such as `diff`, `sum`, `avg`, `max`,
-      `min`, `count`, or `concat` to input blanks.
+      `min`, `count`, or `concat` to input refs.
     - `argmax` / `argmin` pick the winning entity from candidates
       using aligned ranking blanks.
 

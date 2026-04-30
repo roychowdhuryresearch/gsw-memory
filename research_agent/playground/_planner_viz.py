@@ -196,7 +196,7 @@ def plan_to_dot(
         colour = _KIND_COLOUR.get(kind, "#6A1B9A")
         label = kind + (f" ({op})" if op else "")
         if kind == "derived":
-            inputs = list(c.get("args_blanks", []) or [])
+            inputs = list(c.get("args_refs", []) or c.get("args_blanks", []) or [])
         elif kind in ("argmax", "argmin"):
             inputs = list(c.get("sort_by_blank_ids", []) or [])
         else:
@@ -267,7 +267,7 @@ def constraints_df(plan: Optional[dict]) -> pd.DataFrame:
     for c in plan.get("constraints", []):
         kind = c.get("kind", "")
         if kind == "derived":
-            inputs = ", ".join(c.get("args_blanks", []))
+            inputs = ", ".join(c.get("args_refs") or c.get("args_blanks", []))
         elif kind in ("argmax", "argmin"):
             inputs = (
                 f"cands={c.get('candidate_entity_ids', [])} "
@@ -336,7 +336,9 @@ def solve_steps_markdown(
                 op = c.get("op")
                 detail = f"constraint `{kind}`" + (f" (`{op}`)" if op else "")
                 if kind == "derived":
-                    detail += f"; inputs: `{c.get('args_blanks', [])}`"
+                    detail += (
+                        f"; inputs: `{c.get('args_refs') or c.get('args_blanks', [])}`"
+                    )
                 elif kind in ("argmax", "argmin"):
                     detail += (
                         f"; candidates: `{c.get('candidate_entity_ids', [])}`, "

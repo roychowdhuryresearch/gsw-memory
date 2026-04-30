@@ -129,6 +129,7 @@ UPDATER_SYSTEM = textwrap.dedent(
      "constraint": {"id": "c_<new>", "kind": "derived|argmax|argmin|equals|in_list|gt|lt",
                     "op": "diff|sum|avg|max|min|count|concat|mul|div|round_nearest",
                     "args_blanks": ["<blank>", ...],
+                    "args_refs": ["<blank_or_filled_literal>", ...],
                     "candidate_entity_ids": ["<id>", ...],
                     "sort_by_blank_ids": ["<blank>", ...],
                     "left_ref": "<id>", "right_ref": "<id>",
@@ -155,9 +156,12 @@ UPDATER_SYSTEM = textwrap.dedent(
        cycle in the dependency graph.
     7. Filled entities (`kind=filled`) are grounded in the question
        text — never rename or remove them.
-    8. For `round_nearest`, one arg rounds to nearest ten; two args use
-       the second blank as the interval. For `in_list`, use either
-       left_ref/right_ref or args_blanks=[member_blank, list_blank].
+    8. For derived constraints, prefer `args_refs` when an input is a
+       filled literal/constraint-value entity; keep `args_blanks` for
+       old blank-only constraints. For `round_nearest`, one arg rounds
+       to nearest ten; two args use the second input as the interval.
+       For `in_list`, use either left_ref/right_ref or
+       args_blanks=[member_blank, list_blank].
 
     ## Worked examples
 
@@ -238,8 +242,14 @@ def _render_plan_for_updater(plan: GSWPlan) -> str:
             flags.append("TARGET")
         flag_str = f" [{', '.join(flags)}]" if flags else ""
         if e.kind == "filled":
+            literal = (
+                f", literal_value={e.literal_value!r}"
+                if e.literal_value is not None
+                else ""
+            )
             lines.append(
-                f"- `{e.id}` (filled, role=`{e.role or '—'}`): name={e.name!r}{flag_str}"
+                f"- `{e.id}` (filled, role=`{e.role or '—'}`): "
+                f"name={e.name!r}{literal}{flag_str}"
             )
         else:
             lines.append(
@@ -264,6 +274,8 @@ def _render_plan_for_updater(plan: GSWPlan) -> str:
                 args.append(f"op={c.op}")
             if c.args_blanks:
                 args.append(f"args={c.args_blanks}")
+            if c.args_refs:
+                args.append(f"args_refs={c.args_refs}")
             if c.candidate_entity_ids:
                 args.append(f"candidates={c.candidate_entity_ids}")
             if c.sort_by_blank_ids:

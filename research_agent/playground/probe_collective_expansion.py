@@ -137,7 +137,7 @@ def render_plan(plan) -> str:
         for c in plan.constraints:
             extra = ""
             if c.kind == "derived":
-                extra = f" op={c.op} args={c.args_blanks}"
+                extra = f" op={c.op} args={c.args_refs or c.args_blanks}"
             elif c.kind in ("argmax", "argmin"):
                 extra = f" cand={c.candidate_entity_ids} sort={c.sort_by_blank_ids}"
             lines.append(f"    {c.id:<6} kind={c.kind}{extra} → {c.output_blank_id}")

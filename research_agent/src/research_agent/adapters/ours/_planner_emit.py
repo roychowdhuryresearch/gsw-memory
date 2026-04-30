@@ -13,6 +13,7 @@ adapter or surface the failure some other way.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
@@ -134,7 +135,7 @@ def emit_plan(
 
     # ---- Parse attempt 1 ----------------------------------------------
     try:
-        plan = _parse_plan(text)
+        plan = _parse_plan(text, question=question)
         return plan, meta
     except (ValidationError, ValueError, json.JSONDecodeError) as exc:
         meta.parse_error = str(exc)[:400]
@@ -172,7 +173,7 @@ def emit_plan(
         meta.completion_tokens += int(getattr(repair_resp, "completion_tokens", 0) or 0)
 
         try:
-            plan = _parse_plan(repair_text)
+            plan = _parse_plan(repair_text, question=question)
             meta.repair_attempts.append({
                 "response": repair_text,
                 "reasoning": meta.repair_reasoning,
@@ -198,10 +199,138 @@ def emit_plan(
     raise PlanEmitError(kind="exhausted", detail=detail) from last_exc
 
 
-def _parse_plan(text: str) -> GSWPlan:
+def _parse_plan(text: str, *, question: str = "") -> GSWPlan:
     """Balanced-brace JSON extract + Pydantic validate."""
     obj = _extract_json_object(text)
-    return GSWPlan.model_validate(obj)
+    plan = GSWPlan.model_validate(obj)
+    _validate_plan_quality(question, plan)
+    return plan
+
+
+_NUMERIC_DERIVED_OPS = {
+    "diff",
+    "sum",
+    "avg",
+    "max",
+    "min",
+    "mul",
+    "div",
+    "round_nearest",
+}
+
+_LITERAL_VALUE_PHRASES = {
+    "value",
+    "value_is",
+    "equals_number",
+    "number_value",
+    "year_value",
+}
+
+_RISKY_HUB_CUES = re.compile(
+    r"\b("
+    r"difference|sum|total|average|ratio|percent|percentage|rounded|nearest|"
+    r"older|younger|longer|shorter|earlier|later|before|after|"
+    r"how many|how much|more|less|count|"
+    r"top|leaders?|leaderboard|ranked|ranking|list|lists|both|career|"
+    r"same award|same [a-z0-9 .,'-]{0,40} award|"
+    r"population|score|head-to-head"
+    r")\b",
+    flags=re.IGNORECASE,
+)
+
+_COMPOUND_ANSWER_CUE = re.compile(
+    r"\b(?:what|which|who|name|give|provide)\b.{0,80}\band\b.{0,80}"
+    r"\b(?:percentage|percent|population|character|role|movie|film|team|score|number|date|year)\b",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+
+
+def _validate_plan_quality(question: str, plan: GSWPlan) -> None:
+    """Reject structurally valid but low-quality planner patterns.
+
+    These checks intentionally raise ``ValueError`` so ``emit_plan`` uses
+    the existing repair loop. They are narrow quality gates, not a full
+    semantic validator.
+    """
+    _reject_literal_constant_blanks(plan)
+    _reject_numeric_literal_refs_without_values(plan)
+    _reject_risky_target_hub(question, plan)
+
+
+def _reject_literal_constant_blanks(plan: GSWPlan) -> None:
+    literal_ids = {
+        e.id
+        for e in plan.filled_entities()
+        if e.role == "constraint-value" or e.literal_value is not None
+    }
+    if not literal_ids:
+        return
+    blanks = {e.id for e in plan.blank_entities()}
+    for vp in plan.verb_phrases:
+        literal_to_blank = (
+            vp.subject_id in literal_ids and vp.object_id in blanks
+        ) or (
+            vp.object_id in literal_ids and vp.subject_id in blanks
+        )
+        if not literal_to_blank:
+            continue
+        phrase = vp.phrase.strip().lower()
+        if phrase in _LITERAL_VALUE_PHRASES or "value" in phrase:
+            raise ValueError(
+                "literal_constant_blank: do not create a blank whose only "
+                f"purpose is to hold literal {vp.subject_id!r}/{vp.object_id!r}; "
+                "use a filled constraint-value entity with literal_value and "
+                "reference it directly in args_refs"
+            )
+
+
+def _reject_numeric_literal_refs_without_values(plan: GSWPlan) -> None:
+    ent_by_id = {e.id: e for e in plan.entities}
+    for c in plan.constraints:
+        if c.kind != "derived" or c.op not in _NUMERIC_DERIVED_OPS:
+            continue
+        for ref in c.args_refs:
+            ent = ent_by_id.get(ref)
+            if (
+                ent is not None
+                and ent.kind == "filled"
+                and ent.role == "constraint-value"
+                and ent.literal_value is None
+            ):
+                raise ValueError(
+                    "literal_value_missing: numeric derived constraint "
+                    f"{c.id!r} references filled constraint-value {ref!r} "
+                    "without literal_value; keep name grounded in the "
+                    "question and add the typed literal_value"
+                )
+
+
+def _reject_risky_target_hub(question: str, plan: GSWPlan) -> None:
+    try:
+        target_id = plan.target().id
+    except Exception:
+        return
+    incident = [
+        vp
+        for vp in plan.verb_phrases
+        if target_id in (vp.subject_id, vp.object_id)
+    ]
+    if len(incident) < 3:
+        return
+    if any(c.output_blank_id == target_id for c in plan.constraints):
+        return
+    if not (
+        _RISKY_HUB_CUES.search(question or "")
+        or _COMPOUND_ANSWER_CUE.search(question or "")
+    ):
+        return
+    raise ValueError(
+        "risky_target_hub: target blank has "
+        f"{len(incident)} direct verb-phrase clues and the question "
+        "contains computation/list/temporal/compound cues; create "
+        "intermediate blanks and constraints instead of wiring every "
+        "clue directly to TARGET"
+    )
 
 
 # ---------------------------------------------------------------------------
