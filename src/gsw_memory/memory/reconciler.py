@@ -115,18 +115,20 @@ class Reconciler:
             new_gsw, entity_merge_map, space_merge_map, time_merge_map
         )
 
-        # Step 7: Update answers in new GSW to point to merged entities
-        self._update_verb_phrase_answers(new_gsw, entity_merge_map)
+        # Step 7: Handle information nodes OR verb phrases
+        if new_gsw.information_nodes:
+            self._update_information_node_answers(new_gsw, entity_merge_map)
+            self._add_information_nodes(new_gsw)
+        else:
+            # Existing verb phrase reconciliation path
+            self._update_verb_phrase_answers(new_gsw, entity_merge_map)
 
-        # Step 8: Verb phrase reconciliation
-        matched_new_verb_ids = self.matching_strategy.reconcile_verb_phrases(
-            new_gsw, self.global_memory
-        )
+            matched_new_verb_ids = self.matching_strategy.reconcile_verb_phrases(
+                new_gsw, self.global_memory
+            )
+            self._add_unmatched_verb_phrases(new_gsw, matched_new_verb_ids)
 
-        # Step 9: Add unmatched verb phrases
-        self._add_unmatched_verb_phrases(new_gsw, matched_new_verb_ids)
-
-        # Step 10: Question reconciliation
+        # Step 8: Question reconciliation
         if verified_entity_pairs and new_chunk_text:
             matched_old_entity_ids = {
                 old_entity.id for (_, old_entity) in verified_entity_pairs
@@ -186,6 +188,41 @@ class Reconciler:
             global_time_id = id_mapping.get(time_id, time_id)
             new_time_edges.append((global_entity_id, global_time_id))
         new_gsw.time_edges = new_time_edges
+
+        # Process information nodes
+        for info_node in new_gsw.information_nodes:
+            original_info_id = info_node.id
+            if not info_node.chunk_id:
+                info_node.chunk_id = chunk_id
+            info_node.id = f"{chunk_id}::{original_info_id}"
+
+            # Update entity mentions
+            for mention in info_node.entity_mentions:
+                global_entity_id = id_mapping.get(mention.entity_id)
+                if global_entity_id:
+                    mention.entity_id = global_entity_id
+
+            # Update questions
+            for question in info_node.questions:
+                original_question_id = question.id
+                if not question.chunk_id:
+                    question.chunk_id = chunk_id
+                question.id = f"{chunk_id}::{original_question_id}"
+
+                updated_answers = []
+                for answer in question.answers:
+                    global_entity_id = id_mapping.get(answer)
+                    if global_entity_id:
+                        updated_answers.append(global_entity_id)
+                    elif (
+                        "::" in answer
+                        and self.global_memory
+                        and self.global_memory.get_entity_by_id(answer)
+                    ):
+                        updated_answers.append(answer)
+                    else:
+                        updated_answers.append(answer)
+                question.answers = updated_answers
 
         # Process verb phrases and questions
         for verb in new_gsw.verb_phrase_nodes:
@@ -345,6 +382,24 @@ class Reconciler:
                     updated_q_answers.append(final_id)
                 q.answers = updated_q_answers
 
+    def _update_information_node_answers(self, new_gsw, entity_merge_map):
+        """Update entity references in information nodes to point to merged entities."""
+        for info_node in new_gsw.information_nodes:
+            for mention in info_node.entity_mentions:
+                final_id = entity_merge_map.get(mention.entity_id, mention.entity_id)
+                mention.entity_id = final_id
+            for q in info_node.questions:
+                q.answers = [entity_merge_map.get(a, a) for a in q.answers]
+
+    def _add_information_nodes(self, new_gsw):
+        """Add all information nodes from new GSW to global memory.
+
+        InformationNodes are never merged across sessions — each represents
+        a distinct communicative event. Only entity references get reconciled.
+        """
+        for info_node in new_gsw.information_nodes:
+            self.global_memory.add_information_node(info_node)
+
     def _add_unmatched_verb_phrases(self, new_gsw, matched_new_verb_ids):
         """Add verb phrases that didn't match existing ones."""
         existing_vp_ids = {vp.id for vp in self.global_memory.verb_phrase_nodes}
@@ -382,7 +437,7 @@ class Reconciler:
 
         total_questions = sum(
             len(vp.questions) for vp in self.global_memory.verb_phrase_nodes
-        )
+        ) + sum(len(info.questions) for info in self.global_memory.information_nodes)
 
         # Count entities with temporal evolution
         entities_with_evolution = 0
@@ -397,6 +452,7 @@ class Reconciler:
         return {
             "entities": len(self.global_memory.entity_nodes),
             "verb_phrases": len(self.global_memory.verb_phrase_nodes),
+            "information_nodes": len(self.global_memory.information_nodes),
             "questions": total_questions,
             "entities_with_evolution": entities_with_evolution,
             "total_roles": total_roles,

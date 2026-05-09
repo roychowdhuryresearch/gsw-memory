@@ -10,6 +10,7 @@ class PromptType(Enum):
 
     EPISODIC = "episodic"
     FACTUAL = "factual"
+    CONVERSATIONAL = "conversational"
 
 
 class CorefPrompts:
@@ -3581,3 +3582,148 @@ Return a JSON object with a single key "spatio_temporal_links". The value should
 }}
 ```
 """
+
+
+class ConversationalStage1Prompts:
+    """Stage 1 prompts for conversational InformationNode extraction.
+
+    Identifies discrete information units from a conversation session.
+    """
+
+    SYSTEM_PROMPT = """You are an expert at analyzing conversations to identify distinct pieces of information that were communicated. Your task is to break a conversation into discrete information units — each representing a coherent fact, event, plan, emotion, or piece of knowledge that was shared."""
+
+    USER_PROMPT_TEMPLATE = """Analyze the following conversation session and identify each discrete piece of information that was communicated.
+
+<session>
+{session_text}
+</session>
+
+{entity_context_block}
+
+For each information unit, provide:
+- **id**: A unique identifier (e.g., "info_1", "info_2")
+- **description**: A brief summary of what was communicated (e.g., "Caroline's necklace — gift from Swedish grandma")
+- **relevant_turns**: The dialogue turn IDs that contain this information (e.g., ["D4:3"])
+- **speaker**: Who communicated this information
+
+Guidelines:
+1. Each unit should be a coherent, self-contained piece of information
+2. One turn may contain multiple information units (e.g., someone mentions their job AND their family)
+3. Information that spans multiple turns (e.g., Q&A exchange) should be a single unit
+4. EXCLUDE: greetings, small talk ("How are you?"), filler ("Yeah", "Right"), and repetitions
+5. INCLUDE: facts about people/places/events, plans, opinions, emotions with specific content, relationships, temporal information
+6. If entity context is provided, note when information updates or contradicts known entity states
+
+Output ONLY valid JSON:
+```json
+{{
+    "information_units": [
+        {{
+            "id": "info_1",
+            "description": "...",
+            "relevant_turns": ["..."],
+            "speaker": "..."
+        }}
+    ]
+}}
+```"""
+
+
+class ConversationalStage2Prompts:
+    """Stage 2 prompts for conversational InformationNode extraction.
+
+    Extracts entities, roles, states, and QA pairs for a single information unit.
+    """
+
+    SYSTEM_PROMPT = """You are an expert at extracting structured knowledge from conversations. You are given a specific SITUATION (an information unit description) and the source conversation turns it came from. Your job is to extract entities and generate QA pairs that are **scoped to this situation only**.
+
+The information unit description defines the situation of interest. The source turns are provided as evidence — use them to ground your extraction, but do NOT extract information beyond what the situation describes.
+
+CRITICAL RULES:
+- **SITUATION-GUIDED**: Only extract entities and generate QA pairs that are directly relevant to the described situation. If the source turn contains other facts not covered by the situation description, ignore them.
+- Every answer must EITHER be an entity ID from your entity_nodes list OR a "TEXT:" prefixed string. Never use an entity ID to represent something that entity is not.
+- If an answer is a descriptive phrase, date, quantity, or anything that is not one of your extracted entities, use "TEXT:" prefix."""
+
+    USER_PROMPT_TEMPLATE = """Extract entities and generate QA pairs for the following information unit.
+
+<information_unit>
+ID: {info_id}
+Description: {info_description}
+Speaker: {info_speaker}
+Relevant turns: {info_turns}
+</information_unit>
+
+<session_context>
+Session timestamp: {session_timestamp}
+</session_context>
+
+<source_turns>
+{source_turn_text}
+</source_turns>
+
+{known_entities_block}
+
+{entity_context_block}
+
+**Task 1: Entity Extraction**
+Extract ONLY entities that are relevant to the SITUATION described in <information_unit>. The source turns provide evidence, but do not extract entities that fall outside the situation's scope.
+
+For each entity:
+- If the entity already exists in <known_entities>, REUSE its exact ID
+- For NEW entities not in <known_entities>, assign a new unique ID that does NOT collide with existing IDs (e.g., if e1-e7 exist, start new ones at e8)
+- Provide the entity name
+- Assign a situation-specific role (how this entity functions in THIS situation)
+- List situation-specific states (conditions/descriptions in THIS situation)
+
+Entity types: persons, organizations, places, objects, abstract concepts, temporal entities.
+
+**Task 2: Situation-Guided QA Pair Generation**
+Generate QA pairs that would help someone **retrieve this specific situation** later. The situation description defines what is interesting here — generate questions that target THIS facet of the conversation, not other facts that happen to appear in the same turn.
+
+Rules:
+- **Basics always covered**: Generate at least one question each for who, what, when, where (if applicable to THIS situation)
+- **Situation-guided additions**: What questions would lead someone back to THIS specific situation months from now? Only generate questions whose answers are covered by the situation description.
+- Questions must be specific and natural (e.g., "What country is Caroline's grandma from?" NOT "Who is from?")
+- **Answer format**: Use an entity ID (e.g., "e1") ONLY if the answer IS that entity. For all other answers (descriptions, dates, quantities, lists), use "TEXT:" prefix (e.g., "TEXT:love, faith, strength", "TEXT:last Friday", "TEXT:ten years old")
+- speaker_id: the name of the person who communicated this (e.g., "Caroline", "Melanie")
+- evidence_turn_ids: the turn IDs from <source_turns>
+- Questions should be standalone — understandable without seeing the conversation
+
+**Task 3: Spatio-Temporal Grounding**
+Resolve any temporal and spatial references in this situation against the session timestamp ({session_timestamp}).
+
+- **Temporal**: If the situation mentions relative time references ("last week", "yesterday", "last Friday", "ten years ago"), resolve them to approximate absolute dates/periods using the session timestamp. If no temporal reference is relevant, use null.
+- **Location**: If the situation mentions or implies a specific location, extract it. If no location is relevant, use null.
+
+Output ONLY valid JSON:
+```json
+{{
+    "entity_nodes": [
+        {{
+            "id": "e1",
+            "name": "...",
+            "roles": [{{"role": "...", "states": ["..."]}}]
+        }}
+    ],
+    "information_nodes": [
+        {{
+            "id": "{info_id}",
+            "description": "{info_description}",
+            "entity_mentions": [
+                {{"entity_id": "e1", "role": "...", "states": ["..."]}}
+            ],
+            "questions": [
+                {{
+                    "id": "q1",
+                    "text": "...",
+                    "answers": ["e1"],
+                    "speaker_id": "...",
+                    "evidence_turn_ids": ["..."]
+                }}
+            ],
+            "timestamp": "resolved absolute date/period or null",
+            "location": "resolved location or null"
+        }}
+    ]
+}}
+```"""
