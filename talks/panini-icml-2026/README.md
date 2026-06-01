@@ -15,4 +15,4 @@ Authors: Shreyas Rajesh, Pavan Holur, Mehmet Yigit Turali, Chenda Duan, Vwani Ro
 
 Open `index.html` in a browser. Use left/right arrow keys or the on-screen buttons to navigate.
 
-The current HTML draft embeds arXiv PDF pages for paper figures because the local shell runner was unavailable for extracting Overleaf assets or running a Colloquium build.
+The HTML draft uses direct source images for the main paper figures and the official ICML SVG logo. It does not embed scrollable PDF pages.
