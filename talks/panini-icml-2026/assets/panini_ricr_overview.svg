@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">PANINI RICR inference overview</title>
+  <desc id="desc">A slide-friendly reconstruction of the PANINI RICR inference-time figure: plan subquestions, retrieve chains through GSW memory, and answer from compact evidence.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2563eb"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="54" y="62" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#111827">PANINI inference: Reasoning Inference Chain Retrieval</text>
+  <text x="54" y="96" font-family="Inter, Arial, sans-serif" font-size="18" fill="#4b5563">Plan subquestions, traverse GSW memory, and send compact evidence chains to the reader LLM.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="54" y="138" width="270" height="476" rx="18" fill="#eef5ff" stroke="#bfdbfe"/>
+    <rect x="370" y="138" width="470" height="476" rx="18" fill="#f8fafc" stroke="#d7dde8"/>
+    <rect x="886" y="138" width="300" height="476" rx="18" fill="#eefbf3" stroke="#bbf7d0"/>
+  </g>
+
+  <text x="82" y="184" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#1d4ed8">1. Planning</text>
+  <text x="398" y="184" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#111827">2. Chain retrieval over GSWs</text>
+  <text x="914" y="184" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#15803d">3. Answer generation</text>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="88" y="228" width="200" height="76" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="106" y="258" font-size="16" font-weight="800" fill="#111827">User query</text>
+    <text x="106" y="282" font-size="14" fill="#4b5563">multi-hop question</text>
+    <rect x="88" y="352" width="200" height="150" rx="12" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+    <text x="106" y="382" font-size="16" font-weight="800" fill="#111827">Subquestions</text>
+    <text x="106" y="414" font-size="14" fill="#4b5563">Who is X's mother?</text>
+    <text x="106" y="444" font-size="14" fill="#4b5563">Who is Y's father?</text>
+    <text x="106" y="474" font-size="14" fill="#4b5563">Which person died first?</text>
+    <path d="M188 304 L188 352" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"/>
+  </g>
+
+  <path d="M324 376 C346 376 348 376 370 376" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M840 376 C862 376 864 376 886 376" stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <circle cx="460" cy="270" r="38" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+    <circle cx="594" cy="250" r="38" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+    <circle cx="710" cy="310" r="38" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+    <circle cx="506" cy="420" r="38" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+    <circle cx="666" cy="468" r="38" fill="#f3e8ff" stroke="#7c3aed" stroke-width="3"/>
+    <line x1="460" y1="270" x2="594" y2="250" stroke="#64748b" stroke-width="3"/>
+    <line x1="594" y1="250" x2="710" y2="310" stroke="#64748b" stroke-width="3"/>
+    <line x1="460" y1="270" x2="506" y2="420" stroke="#64748b" stroke-width="3"/>
+    <line x1="506" y1="420" x2="666" y2="468" stroke="#64748b" stroke-width="3"/>
+    <line x1="710" y1="310" x2="666" y2="468" stroke="#64748b" stroke-width="3"/>
+    <text x="430" y="276" font-size="14" font-weight="800" fill="#1e3a8a">seed</text>
+    <text x="568" y="256" font-size="14" font-weight="800" fill="#075985">QA</text>
+    <text x="690" y="316" font-size="14" font-weight="800" fill="#166534">entity</text>
+    <text x="484" y="426" font-size="14" font-weight="800" fill="#92400e">QA</text>
+    <text x="640" y="474" font-size="14" font-weight="800" fill="#581c87">answer</text>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="414" y="540" width="120" height="36" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+    <rect x="546" y="540" width="120" height="36" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+    <rect x="678" y="540" width="120" height="36" rx="9" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="437" y="563" font-size="14" fill="#4b5563">expand</text>
+    <text x="571" y="563" font-size="14" fill="#4b5563">score</text>
+    <text x="704" y="563" font-size="14" fill="#4b5563">prune</text>
+    <path d="M534 558 L546 558" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M666 558 L678 558" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="930" y="236" width="210" height="100" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+    <text x="958" y="268" font-size="16" font-weight="800" fill="#111827">Top chains</text>
+    <text x="958" y="296" font-size="14" fill="#4b5563">deduplicated evidence</text>
+    <rect x="930" y="392" width="210" height="126" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+    <text x="958" y="426" font-size="16" font-weight="800" fill="#111827">Reader LLM</text>
+    <text x="958" y="456" font-size="14" fill="#4b5563">answer conditioned on</text>
+    <text x="958" y="480" font-size="14" fill="#4b5563">compact inference paths</text>
+    <path d="M1035 336 L1035 392" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"/>
+  </g>
+</svg>
