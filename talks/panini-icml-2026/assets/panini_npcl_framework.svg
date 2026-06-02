@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">PANINI non-parametric continual learning framework</title>
+  <desc id="desc">A slide-friendly reconstruction of the PANINI paper framework figure: continual documents are written into individual GSWs, consolidated into global memory, and read as inference chains.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2,2 L10,6 L2,10 Z" fill="#2563eb"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="720" fill="#ffffff"/>
+  <text x="54" y="62" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="800" fill="#111827">Non-parametric continual learning with structured memory</text>
+  <text x="54" y="96" font-family="Inter, Arial, sans-serif" font-size="18" fill="#4b5563">Write new experiences into Generative Semantic Workspaces, then read compact reasoning chains.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="54" y="142" width="248" height="405" rx="18" fill="#eef5ff" stroke="#bfdbfe"/>
+    <rect x="348" y="142" width="248" height="405" rx="18" fill="#f8fafc" stroke="#d7dde8"/>
+    <rect x="642" y="142" width="248" height="405" rx="18" fill="#eefbf3" stroke="#bbf7d0"/>
+    <rect x="936" y="142" width="248" height="405" rx="18" fill="#fff8dc" stroke="#fde68a"/>
+  </g>
+
+  <text x="78" y="184" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#1d4ed8">1. Continual experience</text>
+  <text x="372" y="184" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#111827">2. Individual GSWs</text>
+  <text x="666" y="184" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#15803d">3. Global workspace</text>
+  <text x="960" y="184" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#92400e">4. Inference chains</text>
+
+  <g font-family="Inter, Arial, sans-serif" font-size="16" fill="#334155">
+    <rect x="90" y="236" width="112" height="74" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+    <text x="112" y="266">Doc A</text><text x="104" y="290" font-size="13" fill="#64748b">new facts</text>
+    <rect x="156" y="334" width="112" height="74" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+    <text x="178" y="364">Doc B</text><text x="169" y="388" font-size="13" fill="#64748b">events</text>
+    <rect x="84" y="428" width="112" height="74" rx="10" fill="#ffffff" stroke="#93c5fd"/>
+    <text x="106" y="458">Doc C</text><text x="101" y="482" font-size="13" fill="#64748b">entities</text>
+  </g>
+
+  <g stroke="#2563eb" stroke-width="3" fill="none" marker-end="url(#arrow)">
+    <path d="M302 344 C326 344 326 344 348 344"/>
+    <path d="M596 344 C620 344 620 344 642 344"/>
+    <path d="M890 344 C914 344 914 344 936 344"/>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <circle cx="444" cy="262" r="38" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+    <circle cx="516" cy="326" r="38" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+    <circle cx="422" cy="410" r="38" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+    <line x1="444" y1="262" x2="516" y2="326" stroke="#64748b" stroke-width="3"/>
+    <line x1="516" y1="326" x2="422" y2="410" stroke="#64748b" stroke-width="3"/>
+    <line x1="444" y1="262" x2="422" y2="410" stroke="#64748b" stroke-width="3"/>
+    <text x="426" y="268" font-size="15" font-weight="800" fill="#1e3a8a">entity</text>
+    <text x="501" y="332" font-size="15" font-weight="800" fill="#075985">event</text>
+    <text x="407" y="416" font-size="15" font-weight="800" fill="#166534">QA</text>
+    <rect x="388" y="486" width="160" height="42" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="407" y="512" font-size="15" fill="#4b5563">per-document graph</text>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <circle cx="766" cy="260" r="44" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+    <circle cx="710" cy="378" r="38" fill="#dbeafe" stroke="#2563eb" stroke-width="3"/>
+    <circle cx="824" cy="388" r="38" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+    <line x1="766" y1="260" x2="710" y2="378" stroke="#64748b" stroke-width="3"/>
+    <line x1="766" y1="260" x2="824" y2="388" stroke="#64748b" stroke-width="3"/>
+    <line x1="710" y1="378" x2="824" y2="388" stroke="#64748b" stroke-width="3"/>
+    <text x="724" y="264" font-size="15" font-weight="800" fill="#166534">reconciled</text>
+    <text x="685" y="384" font-size="15" font-weight="800" fill="#1e3a8a">entities</text>
+    <text x="807" y="394" font-size="15" font-weight="800" fill="#92400e">events</text>
+    <rect x="684" y="486" width="194" height="42" rx="10" fill="#ffffff" stroke="#d7dde8"/>
+    <text x="704" y="512" font-size="15" fill="#4b5563">continually updated memory</text>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <rect x="977" y="232" width="150" height="50" rx="12" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <rect x="1002" y="326" width="150" height="50" rx="12" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <rect x="978" y="420" width="150" height="50" rx="12" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <path d="M1052 282 L1070 326" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"/>
+    <path d="M1075 376 L1054 420" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="1006" y="263" font-size="15" fill="#111827">QA pair</text>
+    <text x="1032" y="357" font-size="15" fill="#111827">QA pair</text>
+    <text x="1007" y="451" font-size="15" fill="#111827">answer</text>
+    <text x="966" y="512" font-size="15" fill="#4b5563">retrieve paths, not chunks</text>
+  </g>
+</svg>
