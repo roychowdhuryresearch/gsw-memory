@@ -1,5 +1,7 @@
 # ECE 232E — Panini Structured-Memory Project
 
+[Open the student notebook in Google Colab](https://colab.research.google.com/github/YigitTurali/panini-course-project/blob/main/Panini_Course_Project.ipynb).
+
 This folder is self-contained. It includes the selected 2WikiMultiHopQA
 questions, source documents, GSW JSON networks, flattened entity/QA metadata,
 Qwen3-Embedding-8B vectors, dense/TF-IDF/BM25 indices, model configuration,
@@ -30,7 +32,11 @@ No access to the original GSW-Memory repository is required.
 
 ## Colab setup
 
+The notebook clones this repository automatically. For a manual Colab setup:
+
 ```python
+!git clone --depth 1 https://github.com/YigitTurali/panini-course-project.git
+%cd panini-course-project
 !pip install -q -r requirements-colab.txt
 ```
 
@@ -47,9 +53,9 @@ Verify the supplied retrieval artifacts without loading any Qwen model:
 python quickstart.py .
 ```
 
-`Panini_Course_Project.ipynb` is the Colab-ready student workspace. Set its
-`PACKAGE_ROOT` cell to the copied release directory and work through Parts
-1–5.
+`Panini_Course_Project.ipynb` is the Colab-ready student workspace. Its setup
+cell uses `/content/panini-course-project`; change `PACKAGE_ROOT` only when
+using a Drive copy or another directory.
 
 ## Supplied embeddings
 
