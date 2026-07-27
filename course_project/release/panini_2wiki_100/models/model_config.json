@@ -1,6 +1,14 @@
 {
   "decomposer": {
-    "model": "yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+    "model": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+    "models": {
+      "colab_default_4b": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+      "higher_capacity_8b": "yigitturali/GSW-QA-Decomposer-Qwen3-8B"
+    },
+    "model_links": {
+      "colab_default_4b": "https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+      "higher_capacity_8b": "https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B"
+    },
     "prompt": "models/decomposition_prompt.txt",
     "quantization": "4bit-nf4-recommended-for-colab",
     "temperature": 0.0

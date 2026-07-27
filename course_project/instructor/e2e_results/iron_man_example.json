@@ -1,0 +1,730 @@
+{
+  "question_id": "63b35a580bd911eba7f7acde48001122",
+  "question": "Where was the director of film The Iron Man (Serial) born?",
+  "gold_answer": "Tripp County, South Dakota",
+  "prediction": "29 November 1975",
+  "exact_match": 0.0,
+  "token_f1": 0.0,
+  "models": {
+    "decomposer": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+    "embedding": "Qwen/Qwen3-Embedding-8B",
+    "reranker": "Qwen/Qwen3-Reranker-8B"
+  },
+  "decomposition": [
+    {
+      "question": "Who directed the film The Iron Man (Serial)?",
+      "requires_retrieval": true
+    },
+    {
+      "question": "Where was <ENTITY_Q1> born?",
+      "requires_retrieval": true
+    }
+  ],
+  "beams": [
+    {
+      "score": 0.3700540534049131,
+      "answers_by_step": {
+        "1": "1975",
+        "2": "29 November 1975"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_452::gsw_452_0.json::v2::q4",
+          "question": "When did Levon Ashotovich Grigorian die?",
+          "answer": "29 November 1975",
+          "score": 0.376953125
+        }
+      ]
+    },
+    {
+      "score": 0.3700540534049131,
+      "answers_by_step": {
+        "1": "1975",
+        "2": "Markus Weissenberger"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_1060::gsw_1060_0.json::v1::q2",
+          "question": "Who was born on March 8, 1975?",
+          "answer": "Markus Weissenberger",
+          "score": 0.376953125
+        }
+      ]
+    },
+    {
+      "score": 0.36328125000000006,
+      "answers_by_step": {
+        "1": "1975",
+        "2": "1972"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_876::gsw_876_0.json::v1::q1",
+          "question": "When was Where Does it Hurt? released?",
+          "answer": "1972",
+          "score": 0.36328125
+        }
+      ]
+    },
+    {
+      "score": 0.36328125000000006,
+      "answers_by_step": {
+        "1": "1975",
+        "2": "9 May 1975"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_3292::gsw_3292_0.json::v3::q6",
+          "question": "When did Archduke Franz Josef of Austria-Tuscany die?",
+          "answer": "9 May 1975",
+          "score": 0.36328125
+        }
+      ]
+    },
+    {
+      "score": 0.36328125000000006,
+      "answers_by_step": {
+        "1": "1975",
+        "2": "Celine Dion"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_880::gsw_880_0.json::v4::q7",
+          "question": "Who performed 'Where Does My Heart Beat Now'?",
+          "answer": "Celine Dion",
+          "score": 0.36328125
+        }
+      ]
+    }
+  ],
+  "retrieval_trace": [
+    {
+      "query": "Who directed the film The Iron Man (Serial)?",
+      "query_embedding_source": "supplied",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 83,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_3432::gsw_3432_0.json::v6::q11",
+          "question": "When was The Stepford Wives released?",
+          "answer": "1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v10::q19",
+          "question": "How much did Iron Man 2 gross worldwide?",
+          "answer": "$623.9 million",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v12::q23",
+          "question": "What film follows Iron Man 2?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v6::q12",
+          "question": "What film did Marvel Studios produce?",
+          "answer": "Iron Man 2",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v7::q14",
+          "question": "What film did Paramount Pictures distribute?",
+          "answer": "Iron Man 2",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v9::q18",
+          "question": "What film was filmed in California?",
+          "answer": "Iron Man 2",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v4::q7",
+          "question": "When did Iron Man 2 premiere?",
+          "answer": "April 26, 2010",
+          "score": 0.255859375
+        },
+        {
+          "qa_uid": "doc_2146::gsw_2146_0.json::v2::q4",
+          "question": "What film did Jay Marchant direct?",
+          "answer": "The Iron Man",
+          "score": 0.255859375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v7::q14",
+          "question": "What film grossed over $1.2 billion?",
+          "answer": "Iron Man 3",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v11::q21",
+          "question": "What award was Iron Man 2 nominated for?",
+          "answer": "Best Visual Effects",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v1::q1",
+          "question": "Who directed Iron Man 2?",
+          "answer": "Jon Favreau",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v7::q13",
+          "question": "Who distributed Iron Man 2?",
+          "answer": "Paramount Pictures",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v1::q1",
+          "question": "When was Iron Man 3 released?",
+          "answer": "2013",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v2::q3",
+          "question": "Who produced Iron Man 3?",
+          "answer": "Marvel Studios",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v12::q24",
+          "question": "What film is Iron Man 3 a sequel to?",
+          "answer": "Iron Man 2",
+          "score": 0.22265625
+        }
+      ],
+      "seconds": 1.8917353264987469
+    },
+    {
+      "query": "Where was 1975 born?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 64,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_1060::gsw_1060_0.json::v1::q2",
+          "question": "Who was born on March 8, 1975?",
+          "answer": "Markus Weissenberger",
+          "score": 0.376953125
+        },
+        {
+          "qa_uid": "doc_452::gsw_452_0.json::v2::q4",
+          "question": "When did Levon Ashotovich Grigorian die?",
+          "answer": "29 November 1975",
+          "score": 0.376953125
+        },
+        {
+          "qa_uid": "doc_1980::gsw_1980_0.json::v1::q1",
+          "question": "Who was born on 15 November 1925?",
+          "answer": "Pavel Vondruška",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_3292::gsw_3292_0.json::v3::q6",
+          "question": "When did Archduke Franz Josef of Austria-Tuscany die?",
+          "answer": "9 May 1975",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_4165::gsw_4165_0.json::v1::q1",
+          "question": "Who was born in 1945?",
+          "answer": "María Encarnación Valenzuela Conthe",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_876::gsw_876_0.json::v1::q1",
+          "question": "When was Where Does it Hurt? released?",
+          "answer": "1972",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_880::gsw_880_0.json::v4::q7",
+          "question": "Who performed 'Where Does My Heart Beat Now'?",
+          "answer": "Celine Dion",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_1060::gsw_1060_0.json::v1::q1",
+          "question": "When was Markus Weissenberger born?",
+          "answer": "March 8, 1975",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_4165::gsw_4165_0.json::v1::q2",
+          "question": "When was María Encarnación Valenzuela Conthe born?",
+          "answer": "1945",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_736::gsw_736_0.json::v1::q1",
+          "question": "When was Chen Shou-lum born?",
+          "answer": "30 August 1925",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_880::gsw_880_0.json::v3::q5",
+          "question": "What song did Robert White Johnson co-write?",
+          "answer": "Where Does My Heart Beat Now",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_1980::gsw_1980_0.json::v1::q2",
+          "question": "When was Pavel Vondruška born?",
+          "answer": "15 November 1925",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2305::gsw_2305_0.json::v3::q5",
+          "question": "What award was Where Mountains Float nominated for?",
+          "answer": "Academy Award for Best Documentary Feature",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2305::gsw_2305_0.json::v4::q7",
+          "question": "What award did Where Mountains Float win?",
+          "answer": "Bodil Award for Best Documentary",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_4734::gsw_4734_0.json::v6::q11",
+          "question": "When was The Wilby Conspiracy released?",
+          "answer": "1975",
+          "score": 0.3203125
+        }
+      ],
+      "seconds": 1.9007635302841663
+    },
+    {
+      "query": "Where was $623.9 million born?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 53,
+      "reranked_candidate_count": 56,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_86::gsw_86_0.json::v1::q1",
+          "question": "Who was born in 1963?",
+          "answer": "Michael Govan",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_1056::gsw_1056_0.json::v1::q1",
+          "question": "When was Alan Chipp born?",
+          "answer": "9 January 1937",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v7::q13",
+          "question": "How much did Iron Man 3 gross?",
+          "answer": "$1.2 billion",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_20::gsw_20_0.json::v1::q2",
+          "question": "When was Bernard Bonvoisin born?",
+          "answer": "9 July 1956",
+          "score": 0.255859375
+        },
+        {
+          "qa_uid": "doc_2112::gsw_2112_0.json::v5::q10",
+          "question": "Who drives the No. 9 Ford?",
+          "answer": "Thomas Praytor",
+          "score": 0.255859375
+        },
+        {
+          "qa_uid": "doc_62::gsw_62_0.json::v4::q8",
+          "question": "What is located in Ontario?",
+          "answer": "Six Nations of the Grand River Territory",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_882::gsw_882_0.json::v2::q4",
+          "question": "When did Garry Hoy die?",
+          "answer": "July 9, 1993",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_700::gsw_700_0.json::v1::q2",
+          "question": "When was Yulia Yasenok born?",
+          "answer": "July 9, 1983",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_915::gsw_915_0.json::v3::q5",
+          "question": "Where is GlobalPost located?",
+          "answer": "United States",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_1979::gsw_1979_0.json::v1::q1",
+          "question": "When was Ladislav Smoljak born?",
+          "answer": "9 December 1931",
+          "score": 0.2119140625
+        },
+        {
+          "qa_uid": "doc_58::gsw_58_0.json::v1::q1",
+          "question": "When was Hartley W Lobban born?",
+          "answer": "9 May 1926",
+          "score": 0.2119140625
+        },
+        {
+          "qa_uid": "doc_882::gsw_882_0.json::v2::q3",
+          "question": "Who died on July 9, 1993?",
+          "answer": "Garry Hoy",
+          "score": 0.2119140625
+        },
+        {
+          "qa_uid": "doc_916::gsw_916_0.json::v2::q3",
+          "question": "What is the circulation of Moskovskij Komsomolets?",
+          "answer": "one million",
+          "score": 0.2119140625
+        },
+        {
+          "qa_uid": "doc_1056::gsw_1056_0.json::v1::q2",
+          "question": "Who was born on 9 January 1937?",
+          "answer": "Alan Chipp",
+          "score": 0.2021484375
+        },
+        {
+          "qa_uid": "doc_1479::gsw_1479_0.json::v1::q2",
+          "question": "When was Charles Cuthbert Powell Williams born?",
+          "answer": "9 February 1933",
+          "score": 0.2021484375
+        }
+      ],
+      "seconds": 1.5126943811774254
+    },
+    {
+      "query": "Where was Iron Man 2 born?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 76,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v11::q22",
+          "question": "What film was nominated for Best Visual Effects?",
+          "answer": "Iron Man 2",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v3::q6",
+          "question": "What did Walt Disney Studios Motion Pictures distribute?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v6::q12",
+          "question": "What premiered at the Grand Rex in Paris?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v8::q16",
+          "question": "What film was nominated for Best Visual Effects?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v1::q2",
+          "question": "What film was released in 2013?",
+          "answer": "Iron Man 3",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v12::q24",
+          "question": "What film is Iron Man 3 a sequel to?",
+          "answer": "Iron Man 2",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v3::q6",
+          "question": "In what film does Robert Downey Jr. star?",
+          "answer": "Iron Man 2",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v5::q10",
+          "question": "In what film does Robert Downey Jr. star?",
+          "answer": "Iron Man 3",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v7::q14",
+          "question": "What film grossed over $1.2 billion?",
+          "answer": "Iron Man 3",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2146::gsw_2146_0.json::v1::q1",
+          "question": "When was The Iron Man released?",
+          "answer": "1924",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v1::q1",
+          "question": "When was Iron Man 3 released?",
+          "answer": "2013",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_2148::gsw_2148_0.json::v1::q1",
+          "question": "Who was born on October 30, 1954?",
+          "answer": "Kim Jung-man",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v5::q10",
+          "question": "What film was released in the United States on May 7, 2010?",
+          "answer": "Iron Man 2",
+          "score": 0.2392578125
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v10::q20",
+          "question": "What film grossed over $623.9 million worldwide?",
+          "answer": "Iron Man 2",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v9::q17",
+          "question": "Where was Iron Man 2 filmed?",
+          "answer": "California",
+          "score": 0.2333984375
+        }
+      ],
+      "seconds": 1.7850327715277672
+    },
+    {
+      "query": "Where was Iron Man 3 born?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 76,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v11::q22",
+          "question": "What film was nominated for Best Visual Effects?",
+          "answer": "Iron Man 2",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v3::q6",
+          "question": "What did Walt Disney Studios Motion Pictures distribute?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v6::q12",
+          "question": "What premiered at the Grand Rex in Paris?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v8::q16",
+          "question": "What film was nominated for Best Visual Effects?",
+          "answer": "Iron Man 3",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v12::q24",
+          "question": "What film is Iron Man 3 a sequel to?",
+          "answer": "Iron Man 2",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_2143::gsw_2143_0.json::v3::q6",
+          "question": "In what film does Robert Downey Jr. star?",
+          "answer": "Iron Man 2",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v1::q2",
+          "question": "What film was released in 2013?",
+          "answer": "Iron Man 3",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v5::q10",
+          "question": "In what film does Robert Downey Jr. star?",
+          "answer": "Iron Man 3",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v7::q14",
+          "question": "What film grossed over $1.2 billion?",
+          "answer": "Iron Man 3",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_2146::gsw_2146_0.json::v1::q1",
+          "question": "When was The Iron Man released?",
+          "answer": "1924",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v1::q1",
+          "question": "When was Iron Man 3 released?",
+          "answer": "2013",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_2148::gsw_2148_0.json::v1::q1",
+          "question": "Who was born on October 30, 1954?",
+          "answer": "Kim Jung-man",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v5::q9",
+          "question": "Who stars in Iron Man 3?",
+          "answer": "Robert Downey Jr.",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v5::q9",
+          "question": "Who stars in Iron Man 3?",
+          "answer": "Gwyneth Paltrow",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_2147::gsw_2147_0.json::v5::q9",
+          "question": "Who stars in Iron Man 3?",
+          "answer": "Don Cheadle",
+          "score": 0.28125
+        }
+      ],
+      "seconds": 1.7509281001985073
+    },
+    {
+      "query": "Where was April 26, 2010 born?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 51,
+      "reranked_candidate_count": 51,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_4858::gsw_4858_0.json::v1::q2",
+          "question": "Where was Nodesha born?",
+          "answer": "San Bernardino, California",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3237::gsw_3237_0.json::v8::q15",
+          "question": "What is Donald Appleyard's nationality?",
+          "answer": "British-born American",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_3237::gsw_3237_0.json::v8::q16",
+          "question": "Who is British-born American?",
+          "answer": "Donald Appleyard",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_4458::gsw_4458_0.json::v11::q22",
+          "question": "When was 'Lifers' released?",
+          "answer": "2010",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_3393::gsw_3393_0.json::v2::q3",
+          "question": "When did Herschell Gordon Lewis die?",
+          "answer": "September 26, 2016",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_5391::gsw_5391_0.json::v1::q1",
+          "question": "Who was born on 10 June 1987?",
+          "answer": "Johanna Maria Jansson",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_619::gsw_619_0.json::v3::q5",
+          "question": "When did Jean Rollin die?",
+          "answer": "2010",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_902::gsw_902_0.json::v12::q24",
+          "question": "Who died in 2010?",
+          "answer": "Mary Anna Sibell Elizabeth Sturt",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_1663::gsw_1663_0.json::v1::q2",
+          "question": "Who was born in 1910?",
+          "answer": "Quintana Saravia Haydée Mercedes",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_3393::gsw_3393_0.json::v2::q4",
+          "question": "Who died on September 26, 2016?",
+          "answer": "Herschell Gordon Lewis",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_4175::gsw_4175_0.json::v1::q1",
+          "question": "When was The Red Eagle released?",
+          "answer": "2010",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_701::gsw_701_0.json::v1::q2",
+          "question": "Who was born on 25 April 1990?",
+          "answer": "Yuliya Baraley",
+          "score": 0.22265625
+        },
+        {
+          "qa_uid": "doc_3921::gsw_3921_0.json::v2::q4",
+          "question": "When did Howard Winchester Hawks die?",
+          "answer": "December 26, 1977",
+          "score": 0.2021484375
+        },
+        {
+          "qa_uid": "doc_4458::gsw_4458_0.json::v11::q23",
+          "question": "What film was released in 2010?",
+          "answer": "Lifers",
+          "score": 0.2021484375
+        },
+        {
+          "qa_uid": "doc_902::gsw_902_0.json::v12::q23",
+          "question": "When did Mary Anna Sibell Elizabeth Sturt die?",
+          "answer": "2010",
+          "score": 0.2021484375
+        }
+      ],
+      "seconds": 1.5014824979007244
+    }
+  ],
+  "timings": {
+    "decomposition_seconds": 11.389264598488808,
+    "retrieval_and_ricr_seconds": 10.344039663672447
+  }
+}

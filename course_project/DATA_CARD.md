@@ -1,5 +1,13 @@
 # Panini 2Wiki Course Dataset Card
 
+This teaching subset is derived from
+[2WikiMultiHopQA](https://github.com/Alab-NII/2wikimultihop), distributed under
+the Apache License 2.0. Please cite the original dataset paper:
+
+> Xanh Ho, Anh-Khoa Duong Nguyen, Saku Sugawara, and Akiko Aizawa.
+> “Constructing A Multi-hop QA Dataset for Comprehensive Evaluation of
+> Reasoning Steps.” COLING 2020.
+
 ## Purpose
 
 This is a compact, reproducible teaching subset of 2WikiMultiHopQA paired with
@@ -48,6 +56,11 @@ decomposition templates.
 Answer substitution can produce a query string not present in the fixed table.
 For that case only, students may use the supplied query-encoder wrapper and
 cache the result. Corpus embeddings never need to be regenerated.
+
+Question decomposition uses the instructor checkpoints
+[Qwen3-4B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
+or [Qwen3-8B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B).
+The 4B variant is the default for free-tier Colab.
 
 ## Intended and out-of-scope uses
 

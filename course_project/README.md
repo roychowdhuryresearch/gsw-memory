@@ -24,6 +24,13 @@ Students do **not** generate corpus embeddings. The instructors provide aligned
 entity, QA-pair, and query/sub-question embedding artifacts. Student code loads
 these artifacts and implements search, fusion, reranking, and chain traversal.
 
+The supplied decomposition checkpoints are:
+
+- [GSW-QA-Decomposer-Qwen3-4B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
+  for free-tier Colab.
+- [GSW-QA-Decomposer-Qwen3-8B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
+  for the higher-capacity comparison.
+
 ## Built dataset
 
 The default build selects 100 questions from 2WikiMultiHopQA:

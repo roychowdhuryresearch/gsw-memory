@@ -11,7 +11,15 @@
   },
   "models": {
     "decomposer": {
-      "model": "yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+      "model": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+      "models": {
+        "colab_default_4b": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+        "higher_capacity_8b": "yigitturali/GSW-QA-Decomposer-Qwen3-8B"
+      },
+      "model_links": {
+        "colab_default_4b": "https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+        "higher_capacity_8b": "https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B"
+      },
       "prompt": "models/decomposition_prompt.txt",
       "quantization": "4bit-nf4-recommended-for-colab",
       "temperature": 0.0
@@ -29,10 +37,10 @@
   },
   "artifact_count": 810,
   "artifacts": {
-    "DATA_CARD.md": "b74e969385833e63fbb6a187a314fbcd5a0414ce1c773af5fa6fba1ea710141b",
+    "DATA_CARD.md": "1d71c954045cec6d1d559380e8e1522240cd038375f12f0d00248ee9c82c3366",
     "PROJECT_SPEC.md": "ad98b029698257d1048e6d96fdeb9f8ffe92f220107aa99dbe33b6d53f507504",
     "Panini_Course_Project.ipynb": "f95dce0261031314527aabaf8b997e146ccb06e3c19a00fe8468fad2b075df82",
-    "README.md": "9c0b8f939e456725c9897f0d66b940e4e5a0bae7e23284627fc907bd0d5cc957",
+    "README.md": "8ed00af97fa5049495825b4003426694251bc4e92ea76f82523984001e8cdc8f",
     "documents.jsonl": "737e125c029dbd0866583d8cc76ae5a732a07228b27543f453b24a59b70fe81d",
     "embeddings/embedding_manifest.json": "311bb1643b632d724eb5ba809b4c18e2c39fc6fde3ba8ce157bf663bd3beb262",
     "embeddings/entity_embeddings.npy": "ed75b8f48e878004ec01d10554d0c82b8fc4b1681c15029f97a15e80abcb9cc6",
@@ -823,7 +831,7 @@
     "metadata/entities.jsonl": "e509a2656ea2b09f5fdd204e81cc77eec814105f010683812463cef68a7afdcf",
     "metadata/qa_pairs.jsonl": "1603ed650ac4e9654fcdc17d4cc9f182c818eb48dade000fc0530844a593675a",
     "models/decomposition_prompt.txt": "26782685ca94657cba11fbe6defaca36b2f061fe355a57a44df3c09ab7a2b540",
-    "models/model_config.json": "0fccd805143dd332a839c2952d4bced6512284452ad66adc49be93f7726b8a0c",
+    "models/model_config.json": "c5767e54a9b7c9aa70cbf35d2b76f75a8fea1686d1866fae548343655bbec397",
     "panini_course/__init__.py": "f5e777c00fa7aa1cda2442b2dadf3bc22e8430815f118cffd2a6c9cd0370370c",
     "panini_course/artifacts.py": "879029799505cf162ebcb03456ed1a515fb5a9b9bb9e332cfc13e2788ec54d12",
     "panini_course/graph.py": "5af7af00f993a52f5e08b693c26d4ab23ff7a6f7302a1686b6a2e75d49869d4e",

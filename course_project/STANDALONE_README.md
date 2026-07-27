@@ -71,9 +71,13 @@ cache the resulting vectors.
 See `models/model_config.json` for immutable Hugging Face model IDs and the
 decomposition prompt. Models should be loaded sequentially in Colab:
 
-1. Fine-tuned Qwen decomposer.
+1. Fine-tuned Qwen decomposer:
+   - [Qwen3-4B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
+     is the free-tier Colab default.
+   - [Qwen3-8B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
+     is the higher-capacity option.
 2. 4-bit Qwen query encoder for uncached instantiated queries.
-3. Qwen reranker.
+3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B).
 
 Do not keep all three models resident simultaneously.
 
