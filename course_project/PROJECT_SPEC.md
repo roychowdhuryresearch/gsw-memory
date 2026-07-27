@@ -2,7 +2,10 @@
 
 The canonical specification is [PROJECT_HANDOUT.pdf](PROJECT_HANDOUT.pdf).
 The handout contains the precise algorithms, metrics, output schema,
-deliverables, and point allocation.
+deliverables, and 150-point allocation. It is organized as one continuous
+system-building story: each stage introduces the next technical problem, and
+every question requires both an implementation and an explanation in the
+student's own words.
 
 ## Required datasets
 
@@ -30,19 +33,19 @@ creates cross-document reasoning chains dynamically through RICR.
 
 | Question | Component | Points |
 |---|---|---:|
-| Q1 | Understand the two data packages | 4 |
-| Q2 | GSW network and entity reconciliation | 8 |
-| Q3 | Structured-memory network analysis | 8 |
-| Q4 | Question decomposition and dependency graphs | 10 |
-| Q5 | Sparse retrieval baselines | 8 |
-| Q6 | Dense, hybrid, and paper-style dual retrieval | 12 |
-| Q7 | Reranking analysis | 5 |
-| Q8 | RICR implementation | 15 |
-| Q9 | RICR ablations | 10 |
-| Q10 | 2Wiki end-to-end evaluation | 7 |
-| Q11 | MuSiQue transfer and scaling | 8 |
-| Q12 | Reproducibility and submission | 5 |
-|  | **Total** | **100** |
+| Q1 | Understand the two data packages | 6 |
+| Q2 | GSW network and entity reconciliation | 12 |
+| Q3 | Structured-memory network analysis | 12 |
+| Q4 | Question decomposition and dependency graphs | 14 |
+| Q5 | Sparse retrieval baselines | 12 |
+| Q6 | Dense, hybrid, and paper-style dual retrieval | 16 |
+| Q7 | Reranking analysis | 8 |
+| Q8 | RICR implementation | 22 |
+| Q9 | RICR ablations | 14 |
+| Q10 | 2Wiki end-to-end evaluation | 10 |
+| Q11 | MuSiQue transfer and scaling | 12 |
+| Q12 | Reproducibility and submission | 12 |
+|  | **Total** | **150** |
 
 ## Required models
 

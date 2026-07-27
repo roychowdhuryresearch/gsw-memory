@@ -1,6 +1,6 @@
 # ECE 232E — Panini MuSiQue Companion Package
 
-[Read the complete 100-point project handout](PROJECT_HANDOUT.pdf).
+[Read the complete 150-point project handout](PROJECT_HANDOUT.pdf).
 
 This folder is the self-contained 100-question MuSiQue companion to the
 [2Wiki starter repository](https://github.com/YigitTurali/panini-course-project).

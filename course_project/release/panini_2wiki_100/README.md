@@ -2,7 +2,7 @@
 
 [Open the student notebook in Google Colab](https://colab.research.google.com/github/YigitTurali/panini-course-project/blob/main/Panini_Course_Project.ipynb).
 
-[Read the complete 100-point project handout](PROJECT_HANDOUT.pdf). The
+[Read the complete 150-point project handout](PROJECT_HANDOUT.pdf). The
 handout uses this 100-question 2Wiki package and the companion 100-question
 MuSiQue package at `packages/panini_musique_100`.
 

@@ -76,40 +76,39 @@ Prof.\ Vwani Roychowdhury \hfill UCLA Department of Electrical and Computer Engi
   {\LARGE\bfseries Structured Memory Networks and}\\[2pt]
   {\LARGE\bfseries Reasoning Inference Chain Retrieval}\\[5pt]
   {\large Based on \PANINI: Continual Learning in Token Space via Structured Memory}\\[5pt]
-  {\large\bfseries 100 points}\\[2pt]
+  {\large\bfseries 150 points}\\[2pt]
   {\large Due Saturday, August 15, 2026 at 11:59 PM Pacific Time}
 \end{center}
 \vspace{4mm}
 \hrule height 0.8pt
 \vspace{5mm}
 
-\section{Purpose and learning objectives}
+\section{The project: inherit, understand, and operate a structured memory}
 
-Standard retrieval-augmented generation stores document chunks and asks a
-language model to repeatedly reason over retrieved text. \PANINI instead
-converts documents into GSWs: heterogeneous semantic networks containing
-entities, verb-phrase/event nodes, roles, states, and grounded question--answer
-(QA) edges. At inference time, \RICR decomposes a multi-hop query and searches
-for compact chains of QA pairs through this structured memory.
+Imagine joining a team after its write-time system has processed a collection
+of documents. The original passages are no longer the primary memory.
+Instead, every document has become a Generative Semantic Workspace (GSW): a
+small heterogeneous network of entities, verb phrases, roles, states, and
+grounded question--answer relations. Your task is to make this accumulated
+memory answer new multi-hop questions without flattening it back into long
+chunks.
 
-This project connects the \PANINI framework to core topics from ECE 232E:
-heterogeneous graph construction, network projection, connectivity,
-centrality, ranking, sparse and dense search, beam search, scaling, and
-controlled experimental evaluation. By the end of the project, you should be
-able to:
+The project follows the life of one system from handoff to deployment. You
+will first determine what was written and whether separate workspaces can be
+viewed as a meaningful global network. You will then receive a user question,
+turn it into an executable dependency graph, retrieve one piece of evidence at
+a time, and connect those pieces using Reasoning Inference Chain Retrieval
+(\RICR). Finally, you will freeze the design on 2WikiMultiHopQA, move it
+unchanged to MuSiQue, and hand the complete reproducible system to another
+team.
 
-\begin{enumerate}
-  \item construct and characterize corpus-level networks from document-level
-        GSWs;
-  \item compare TF--IDF, BM25, dense, hybrid, and structure-aware retrieval;
-  \item execute and validate a neural question-decomposition plan;
-  \item implement \RICR with chain scoring and diversity-preserving pruning;
-  \item analyze generalization from 2WikiMultiHopQA to MuSiQue; and
-  \item report accuracy, retrieval quality, latency, evidence size, and
-        failure modes reproducibly.
-\end{enumerate}
+At each stage you must do two things: implement the mechanism and explain in
+your own words what its output means. A correct number without an
+interpretation is incomplete, because network properties can be artifacts of
+entity reconciliation, retrieval scores can hide mismatched candidates, and a
+correct final answer can still be supported by a broken reasoning chain.
 
-\section{Reading, repository, and compute}
+\section{What your team receives}
 
 \paragraph{Required reading.}
 Read Sections 1--4 and Algorithm 1 of
@@ -151,10 +150,14 @@ The required path must run on a free Google Colab GPU. No paid API is required
 or permitted for the required results. Corpus GSWs, embeddings, and indices
 are supplied; regenerating them is outside the project scope.
 
-\section{Datasets and evaluation protocol}
+\section{Stage I: The memory arrives}
 
-You will receive two independent 100-question packages with the same directory
-contract and stable IDs.
+Your team is taking over a \PANINI memory after its write-time workers have
+finished. Two collections arrive: one built from 2WikiMultiHopQA and one from
+MuSiQue. They were produced independently, but they use the same directory
+contract and stable-ID scheme so that one implementation can operate on both.
+Each package contains 100 questions and only the document-level GSWs, metadata,
+embeddings, and indices needed for this project.
 
 \begin{table}[h]
 \centering
@@ -196,97 +199,7 @@ distributed under
 \href{https://github.com/Alab-NII/2wikimultihop}{Apache 2.0}. Retain the
 dataset IDs and attribution files in all derived outputs.
 
-\section{Fixed definitions and default settings}
-
-\subsection{Graph views and the reconciliation boundary}
-
-For each GSW, construct the \textbf{native directed multigraph}. Entity,
-space/time, and verb-phrase/event records are nodes. Each grounded QA answer is
-a directed edge from its verb-phrase node to its answer node. The edge retains
-the stable QA ID, question, document ID, and direction. Do not merge records
-merely because their display strings match.
-
-Next construct an \textbf{unreconciled entity projection}. Its nodes are the
-document-local entity occurrences identified by their stable UIDs. Two
-occurrences are adjacent when they answer QA records attached to the same
-local verb-phrase; repeated neighborhoods increment edge weight. Finally,
-construct one or more \textbf{analysis-only reconciled projections} by mapping
-occurrence UIDs to proposed cross-document entity IDs and aggregating the
-projected edges.
-
-The supplied exact-surface baseline case-folds, removes punctuation, and
-collapses spaces. Students must implement and justify a more conservative
-reconciliation rule that also uses available type, role/state, and local
-neighborhood evidence. Neither method has complete gold identity labels, so
-evaluate it with a reproducible manual audit and a sensitivity comparison.
-All network results must name the precise graph and reconciliation rule used.
-
-\paragraph{Why the reconciled graph is not used by \PANINI.}
-The paper reconciles entities within a document but does not precompute
-cross-document entity links. Its sparse entity index retains the originating
-document-local node, its dense index retrieves QA pairs directly, and \RICR
-creates cross-document chains at read time by inserting a retrieved answer
-into the next sub-question. A global surface merge can incorrectly join
-homonyms, titles, years, occupations, and nationality values into artificial
-hubs; a conservative rule can instead miss aliases. These errors directly
-distort components and centralities and would contaminate retrieval if treated
-as facts. In this project reconciliation is therefore a network-analysis
-exercise only. Do not use reconciled edges for entity expansion, candidate
-generation, reranking, \RICR, or answer prediction.
-
-\subsection{Retrieval and \RICR defaults}
-
-Unless a question explicitly requests an ablation, use:
-
-\begin{center}
-\begin{tabular}{@{}ll@{}}
-\toprule
-Random seed & 232\\
-Dense similarity & inner product of L2-normalized vectors\\
-Reciprocal Rank Fusion & $\operatorname{RRF}(d)=\sum_r 1/(60+r(d))$\\
-Pre-rerank candidate pool & $M=60$ unique QA records\\
-Candidates returned per hop & $k=15$\\
-Beam width & $B=5$\\
-Chain score & geometric mean of hop scores\\
-Generation & deterministic; sampling disabled\\
-\bottomrule
-\end{tabular}
-\end{center}
-
-For a length-$t$ chain $C=(e_1,\ldots,e_t)$ with positive hop scores
-$s_1,\ldots,s_t$, use
-\begin{equation}
-  \operatorname{score}(C)
-  = \left(\prod_{\ell=1}^{t}\max(s_\ell,\epsilon)\right)^{1/t}
-  = \exp\left(\frac{1}{t}\sum_{\ell=1}^{t}
-    \log\max(s_\ell,\epsilon)\right),
-  \qquad \epsilon=10^{-12}.
-\end{equation}
-The log-domain form is recommended. At every pruning step, sort by decreasing
-chain score and use the stable QA-ID sequence as the deterministic tie-breaker.
-Retain at most one chain per normalized \emph{current answer}.
-
-\subsection{Metrics}
-
-Use the provided normalization functions. Report:
-\begin{description}
-  \item[Retrieval:] Recall@$k$ for $k\in\{1,5,10,15\}$, reciprocal rank/MRR,
-        supporting-document recall, and supporting-QA recall.
-  \item[Chains:] complete-chain recovery (all required supporting hops occur in
-        one surviving chain), average surviving chains, and average unique
-        current answers.
-  \item[Answers:] Exact Match (EM) and token F1, giving each question the
-        maximum score over its accepted answer aliases.
-  \item[Efficiency:] wall-clock latency per stage, peak GPU memory when a model
-        is used, number of reranked candidates, number of returned QA pairs,
-        and answer-model input tokens.
-\end{description}
-Aggregate by macro-average over questions. Include the number of evaluated
-questions in every table. Never average already-rounded subgroup values.
-
-\section{Graded questions}
-
-\question{1}{Understand the two data packages}{4}
+\question{1}{Understand the two data packages}{6}
 
 Imagine that the write-time stage of \PANINI has just finished processing two
 collections of documents. You did not run that stage: you inherit its
@@ -313,15 +226,51 @@ for all later questions.
         \code{supporting\_facts}, or \code{evidences}.
   \item Run \code{pytest -q tests}. Record which tests pass and which RICR
         tests are skipped before you begin the implementation.
+  \item In your own words, explain why stable IDs are necessary when graph
+        records, embedding rows, and retrieval results are stored in different
+        files. Give one plausible failure that a row-count check alone would
+        not detect.
 \end{enumerate}
 
 \deliverables One dataset table, three short schema examples, the no-leakage
-assertion, and the initial test summary in the notebook.
+assertion, the initial test summary, and a 150--200 word explanation.
 
-\grading Dataset table (1), schema explanation (1), automated leakage check
-(1), and starter-test run (1).
+\grading Dataset table (1), schema explanation (1), automated checks and
+starter-test run (2), and own-words explanation (2).
 
-\question{2}{Build the GSW network and reconcile entities}{8}
+\section{Stage II: The local workspaces become a network}
+
+The package audit tells you that every record can be traced back to its
+document. Now open those documents conceptually. A GSW is not a conventional
+knowledge graph with one globally resolved node for every real-world object.
+It is a local account of an experience: entity, space/time, and verb-phrase
+nodes are tied together by grounded QA answers. Combining files therefore
+creates two different scientific objects. The first is the network that was
+actually written. The second is a network inferred by deciding which local
+occurrences should share a global identity.
+
+Begin with the \textbf{native directed multigraph}. Each local record keeps a
+document-namespaced UID. Each grounded answer creates a directed edge from its
+verb-phrase node to the answer node, keyed by stable QA ID. From this graph,
+form an \textbf{unreconciled entity projection}: two document-local answer
+occurrences are adjacent when they belong to the same verb-phrase
+neighborhood, and repeated neighborhoods increment edge weight.
+
+Only then propose cross-document identities. The supplied exact-surface
+baseline case-folds text, removes punctuation, and collapses spaces. Your
+conservative alternative will also use type, role/state, and neighborhood
+evidence. Relabeling and aggregating the occurrence projection under either
+mapping produces an \textbf{analysis-only reconciled projection}.
+
+This distinction is central to the story. \PANINI reconciles within a document
+but does not precompute these cross-document links. Its entity index returns
+the originating local node, and \RICR discovers a cross-document chain at read
+time. A global merge can turn homonyms, titles, years, occupations, or
+nationality values into false hubs; a conservative rule can miss aliases.
+Consequently, the reconciled projections below are used to learn about
+network sensitivity, never as retrieval evidence.
+
+\question{2}{Build the GSW network and reconcile entities}{12}
 
 The verified records from Question 1 are still hundreds of separate local
 workspaces. To study them as a network, first preserve exactly what was written
@@ -352,15 +301,20 @@ unreconciled graph can be evaluated under several identity hypotheses.
         Include at least two false-merge and two missed-alias examples.
   \item Add unit tests for edge direction, provenance, projection weight,
         cross-document non-merge, intended merge, and homonym non-merge.
+  \item Explain in your own words why entity reconciliation changes the
+        mathematical graph rather than merely cleaning its labels. Use one
+        false merge and one missed alias from your audit to support the
+        explanation.
 \end{enumerate}
 
 \deliverables Construction and reconciliation code, the audit table, graph
-counts under all three identity conditions, and passing tests.
+counts under all three identity conditions, passing tests, and a 200--300 word
+explanation.
 
 \grading Correct native graph (2), correct unreconciled projection (2),
-reconciliation method and audit (3), and tests (1).
+reconciliation method and audit (4), tests (2), and own-words explanation (2).
 
-\question{3}{Analyze the structured-memory network}{8}
+\question{3}{Analyze the structured-memory network}{12}
 
 Question 2 produces several candidate ``global memories,'' but network
 statistics can make a bad reconciliation look convincing. For example,
@@ -394,16 +348,38 @@ and conservative projection; include native-graph measurements as a reference.
         types and edge/QA labels. Conclude with a specific explanation of why
         the reconciled projection must not be used by the \PANINI retrieval
         pipeline.
+  \item In your own words, distinguish a hub that reflects repeated semantic
+        participation from a hub manufactured by reconciliation. Name the
+        evidence you used to make that judgment rather than relying on degree
+        alone.
 \end{enumerate}
 
 \deliverables At least four plots, two sensitivity tables, and a 200--300 word
-cross-dataset interpretation that separates local GSW structure from
+cross-dataset interpretation plus a 150--200 word hub explanation that
+separates local GSW structure from
 reconciliation artifacts.
 
-\grading Connectivity sensitivity (2), degree analysis (2), centrality audit
-(2), and clustering/assortativity/path interpretation (2).
+\grading Connectivity sensitivity (3), degree analysis (2), centrality audit
+(2), clustering/assortativity/path visualization (2), and own-words
+interpretation (3).
 
-\question{4}{Question decomposition and dependency graphs}{10}
+\section{Stage III: A user asks a multi-hop question}
+
+The memory has now been inspected, but none of its global statistics answers a
+particular user. Suppose the question is, ``Which film has the director who
+died later?'' No single stored QA pair contains the final result. The system
+must first identify two film-to-director branches, retrieve two death dates,
+and compare them. This changes the computational object again: the next graph
+is not a memory graph but a \textbf{dependency graph of work still to be
+performed}.
+
+The decomposer supplies a textual plan. Your parser turns that plan into
+retrieval nodes, deterministic-operation nodes, and dependency edges.
+Placeholders carry an answer forward, while independent branches may run in
+parallel. A malformed plan must be rejected before it can issue misleading
+retrieval calls.
+
+\question{4}{Question decomposition and dependency graphs}{14}
 
 The network audit does not yet answer a user's multi-hop question. \RICR first
 turns that question into an executable plan. For example, ``Which director
@@ -433,15 +409,37 @@ such as comparison or intersection, then topologically sort the result.
   \item Analyze two errors from each dataset. Distinguish malformed output,
         wrong dependency, missing hop, extra hop, and semantically incorrect
         atomic question.
+  \item Choose one valid multi-branch decomposition. Draw its dependency graph
+        by hand, walk through its execution order, and explain in your own
+        words why its final operation is reasoning rather than retrieval.
 \end{enumerate}
 
 \deliverables \code{decompositions.jsonl}, parser tests, a metric table, and
-four concise error analyses.
+four concise error analyses, plus one annotated hand-worked plan.
 
 \grading Inference and caching (2), parser/validation (3), parallel-sequence
-handling (2), metrics (2), and error analysis (1).
+handling (2), metrics (2), error analysis (2), and own-words plan explanation
+(3).
 
-\question{5}{Sparse retrieval baselines}{8}
+\section{Stage IV: Find one piece of evidence}
+
+The dependency graph produces an atomic question such as ``Who directed
+\emph{The Glass Wall}?'' The system now needs an ordered list of GSW QA pairs
+that might answer it. Begin with lexical search so that every score can be
+explained from matched terms. Then add semantic search for paraphrases and
+entity-first search for questions whose best entry point is a named entity.
+All retrievers return the same record shape,
+\code{(qa\_uid, score, rank, source)}, allowing their behavior to be compared
+without changing downstream code.
+
+Unless a question explicitly asks for an ablation, use random seed 232,
+inner product over L2-normalized dense vectors, RRF constant 60, a pre-rerank
+pool of $M=60$ unique QA records, and $k=15$ returned candidates. Generation
+and model-based scoring are deterministic with sampling disabled. Retrieval
+expansion follows only document-local GSW adjacency; the reconciliation graphs
+from Stage II remain outside the operational pipeline.
+
+\question{5}{Sparse retrieval baselines}{12}
 
 The dependency graph now tells the system what atomic question to ask, but not
 where to find its answer. Begin with sparse methods because their behavior is
@@ -460,6 +458,10 @@ and evaluate:
   \item BM25 retrieval over the same QA text; and
   \item BM25 entity retrieval over surface name, aliases, roles, and states,
         followed by expansion to QA records attached to each retrieved entity.
+  \item Select two atomic questions on which the methods disagree. Show the
+        matched terms and scores, then explain in your own words how document
+        frequency, BM25 length normalization, and entity expansion produced
+        the different rankings.
 \end{enumerate}
 
 Use identical text normalization within a method across datasets. State all
@@ -468,12 +470,12 @@ the development splits at $k\in\{1,5,10,15\}$. Report Recall@$k$ and MRR
 overall, by 2Wiki question type, and by MuSiQue hop count.
 
 \deliverables One implementation per method, a complete retrieval table, and
-a short explanation of where entity expansion helps or hurts.
+a pair of annotated disagreements with a 200--300 word interpretation.
 
-\grading Correct TF--IDF/BM25 QA search (3), correct entity expansion (2),
-evaluation (2), and interpretation (1).
+\grading Correct TF--IDF/BM25 QA search (4), correct entity expansion (2),
+evaluation (2), and own-words retrieval interpretation (4).
 
-\question{6}{Dense, hybrid, and paper-style dual retrieval}{12}
+\question{6}{Dense, hybrid, and paper-style dual retrieval}{16}
 
 Sparse retrieval exposes a central difficulty of multi-hop search: an atomic
 question may paraphrase the stored QA text, while an entity mention may be the
@@ -499,15 +501,20 @@ encoder and cache it by exact normalized query string.
         and return the top $k=15$.
   \item Compare all methods using the Question 5 protocol. Add mean and
         95th-percentile retrieval latency and the average candidate count.
+  \item For one query helped by dual retrieval, label every top-15 candidate
+        by the route that introduced it. Explain in your own words why neither
+        dense QA search nor entity expansion alone produced the same pool.
 \end{enumerate}
 
 \deliverables Search code, FAISS consistency test, performance/latency tables,
-and the saved top-15 retrieval trace for every development atomic question.
+the saved top-15 retrieval trace for every development atomic question, and
+one route-by-route explanation.
 
-\grading Dense retrieval (3), RRF (2), dual candidate construction (3),
-reranking/deduplication (2), and evaluation (2).
+\grading Dense retrieval (3), RRF (3), dual candidate construction (3),
+reranking/deduplication (2), evaluation (2), and own-words route explanation
+(3).
 
-\question{7}{Does reranking always help?}{5}
+\question{7}{Does reranking always help?}{8}
 
 Question 6 deliberately constructs a broad candidate pool: its goal is recall,
 so high-ranked items from different routes may be redundant or only
@@ -527,14 +534,40 @@ Use rank reciprocal $1/r$ after assigning each candidate its best pre-rerank
 rank. Report Recall@15 and MRR for each dataset. Find one query for which
 reranking improves the first relevant rank and one for which it worsens it.
 For each, show the top five candidates before and after scoring and explain the
-lexical/entity mismatch.
+lexical/entity mismatch. Then explain in your own words why a cross-encoder can
+be semantically more informed yet still make the ranking worse. Your answer
+must refer to the observed scores and candidate pool, not only to model size.
 
 \deliverables One comparison table and two annotated retrieval traces.
 
-\grading Controlled comparison (2), traces (2), and evidence-based explanation
-(1).
+\grading Controlled comparison (3), traces (2), and evidence-based own-words
+explanation (3).
 
-\question{8}{Implement Reasoning Inference Chain Retrieval}{15}
+\section{Stage V: Turn retrieved pieces into a reasoning chain}
+
+Retrieving one QA pair is not enough for the original multi-hop question.
+After the first answer is selected, it is substituted into the next template,
+creating a new query that may lead to a different document. Every retained
+hypothesis therefore becomes a chain with its own evidence, instantiated
+questions, answers, and scores.
+
+Use beam width $B=5$ and $k=15$ candidates per hop unless an ablation says
+otherwise. For a length-$t$ chain $C=(e_1,\ldots,e_t)$ with positive hop
+scores $s_1,\ldots,s_t$, score the whole path by
+\begin{equation}
+  \operatorname{score}(C)
+  = \left(\prod_{\ell=1}^{t}\max(s_\ell,\epsilon)\right)^{1/t}
+  = \exp\left(\frac{1}{t}\sum_{\ell=1}^{t}
+    \log\max(s_\ell,\epsilon)\right),
+  \qquad \epsilon=10^{-12}.
+\end{equation}
+Compute this geometric mean in the log domain. At every pruning point, sort
+by decreasing chain score and then by stable QA-ID sequence. Retain at most
+one chain for each normalized current answer. These rules make the search
+deterministic and prevent many differently worded copies of the same answer
+from occupying the beam.
+
+\question{8}{Implement Reasoning Inference Chain Retrieval}{22}
 
 At this point you have an executable decomposition and a retriever for one
 atomic question. The remaining problem is sequential: the answer selected at
@@ -575,26 +608,33 @@ For each linear sequence:
   \item repeat until the sequence ends; and
   \item combine parallel sequences by deduplicating evidence using stable QA
         ID while preserving the highest-scoring provenance.
+  \item Hand-work a two-hop example with $B=2$ and $k=2$, showing all
+        expansions before and after global pruning.
+  \item Explain in your own words why pruning separately inside each parent
+        beam is not equivalent to global pruning, why unique-answer pruning
+        promotes useful diversity, and why a geometric mean is used for chain
+        scores.
 \end{enumerate}
 
 A candidate from an earlier chain may not be mutated in place. Pruning is
 global across all $kB$ expansions, not performed separately per parent. Sort by
 decreasing geometric-mean score and then stable QA-ID sequence, retaining only
 the first chain for each normalized current answer. Ties must use the
-deterministic rule from Section 4.2. Return both the deduplicated evidence and
-complete trace: instantiated questions, candidates, scores, pruned chains, and
-selected QA IDs at every hop. Only after toy cases pass should you connect the
-real retriever from Question 7.
+deterministic rule stated at the beginning of Stage V. Return both the
+deduplicated evidence and complete trace: instantiated questions, candidates,
+scores, pruned chains, and selected QA IDs at every hop. Only after toy cases
+pass should you connect the real retriever from Question 7.
 
 \deliverables Working implementation, all supplied \RICR tests passing, at
 least three additional tests of your own (including parallel sequences), plus
-one human-readable trace from each dataset.
+one human-readable trace from each dataset, the hand-worked beam, and a
+200--300 word design explanation.
 
-\grading First-hop/pruning behavior (3), multi-hop expansion/substitution (4),
-chain scoring (2), parallel evidence merge (2), deterministic trace format
-(1), and tests/edge cases (3).
+\grading First-hop/pruning behavior (4), multi-hop expansion/substitution (5),
+chain scoring (3), parallel evidence merge (3), deterministic trace format
+(2), tests/edge cases (3), and own-words design explanation (2).
 
-\question{9}{\RICR ablation study}{10}
+\question{9}{\RICR ablation study}{14}
 
 A working search procedure does not show that its design choices are
 necessary. A larger beam can preserve a correct early hypothesis but increases
@@ -607,6 +647,11 @@ Select a fixed, stratified 20-question subset from each development dataset
 and publish the IDs before running experiments. The default is $B=5$, $k=15$,
 unique-answer pruning enabled, geometric-mean scoring, and the best frozen
 Question 7 retrieval score.
+
+Before running the experiments, write one directional prediction for each
+ablation below and justify it in your own words. Afterward, compare the
+observed result with the prediction and explain discrepancies using saved
+traces.
 
 \begin{enumerate}[label=(\alph*)]
   \item Beam width: $B\in\{1,3,5\}$.
@@ -621,14 +666,31 @@ Report supporting-QA recall, complete-chain recovery, answer EM/F1, mean
 latency, and mean evidence count. Plot accuracy versus latency and accuracy
 versus evidence size. Change only the named factor in each comparison.
 
-\deliverables One ablation table, two trade-off plots, and a 200--300 word
-recommendation of the configuration you would deploy.
+\deliverables One prediction table, one ablation table, two trade-off plots,
+and a 300--400 word recommendation of the configuration you would deploy.
 
-\grading Experimental control (2), beam/candidate ablations (2),
-diversity/scoring ablations (2), retrieval ablation (2), and trade-off analysis
-(2).
+\grading Experimental control and predictions (3), beam/candidate ablations
+(2), diversity/scoring ablations (3), retrieval ablation (2), trade-off
+analysis (2), and own-words causal interpretation (2).
 
-\question{10}{End-to-end 2Wiki evaluation}{7}
+\section{Stage VI: Freeze the design and test whether it travels}
+
+The ablations end development. From this point onward, the system is treated
+as a finished design rather than a collection of tunable components. First it
+runs in its 2Wiki development domain; then the identical procedure is moved to
+MuSiQue, where longer chains test whether its behavior scales.
+
+Use the provided normalization functions and macro-average over questions.
+For retrieval, report Recall@$k$ for $k\in\{1,5,10,15\}$, reciprocal
+rank/MRR, supporting-document recall, and supporting-QA recall. For chains,
+report complete-chain recovery, average surviving chains, and average unique
+current answers. For final answers, report EM and token F1 using the best
+accepted alias. For efficiency, report latency per stage, peak GPU memory,
+reranked-candidate count, evidence count, and answer-context tokens. Every
+table states its evaluated-question count, and subgroup aggregates are
+computed from unrounded per-question values.
+
+\question{10}{End-to-end 2Wiki evaluation}{10}
 
 The component experiments now become one complete system in its development
 domain. Select the final configuration using only labeled 2Wiki development
@@ -645,17 +707,19 @@ the answer so retrieval and generation failures can be distinguished.
 On the 80 labeled questions, report decomposition validity, supporting-QA
 recall, complete-chain recovery, EM, F1, average/95th-percentile latency,
 answer-context tokens, and evidence count. Break out EM/F1 by the four 2Wiki
-question types. Include one successful and one failed complete trace.
+question types. Include one successful and one failed complete trace. For the
+failed trace, explain in your own words where the first irreversible error
+occurred and why later stages could not recover from it.
 
 \deliverables \code{results/2wiki\_dev.jsonl},
 \code{predictions/2wiki\_heldout.jsonl}, one main table, one type table, and two
 traces.
 
 \grading Correct frozen run/output files (2), complete metrics (2),
-type-specific analysis (1), trace quality (1), and grounded answer prompting
-(1).
+type-specific analysis (1), trace quality (2), grounded answer prompting (1),
+and own-words failure explanation (2).
 
-\question{11}{MuSiQue transfer and scaling evaluation}{8}
+\question{11}{MuSiQue transfer and scaling evaluation}{12}
 
 The final test is whether the system learned a reusable procedure or a set of
 2Wiki-specific choices. MuSiQue changes both the source distribution and chain
@@ -675,6 +739,9 @@ questions. On the 80 labeled questions:
   \item identify whether the largest transfer loss comes from decomposition,
         first-hop retrieval, later-hop substitution/retrieval, or answer
         generation, using counts from saved traces rather than intuition.
+  \item Explain in your own words why increasing hop count can affect
+        complete-chain recovery differently from answer F1. Separate the
+        effect of longer chains from other differences between the datasets.
 \end{enumerate}
 
 \deliverables Submit:
@@ -686,9 +753,17 @@ questions. On the 80 labeled questions:
 \end{itemize}
 
 \grading Frozen transfer run (2), hop-stratified metrics (2), scaling plots
-(1), cross-dataset comparison (1), and traced error attribution (2).
+(2), cross-dataset comparison (2), traced error attribution (2), and
+own-words scaling explanation (2).
 
-\question{12}{Reproducibility and final submission}{5}
+\section{Stage VII: Hand the system to the next team}
+
+A research result is not finished when its final table is printed. The next
+person must be able to recreate the environment, resume expensive stages,
+trace a prediction to its evidence, and tell development outputs from held-out
+submissions. The project therefore ends where a real system handoff begins.
+
+\question{12}{Reproducibility and final submission}{12}
 
 Your final artifact should allow another student to reproduce a result from a
 fresh Colab runtime and to inspect where a wrong answer arose. Treat this as a
@@ -699,11 +774,14 @@ separate from gold labels.
 Submit one archive or course-repository commit containing:
 
 \begin{enumerate}[label=(\alph*)]
-  \item \code{report.pdf}, organized by Questions 1--12 and limited to 12 pages
-        excluding references and a one-page appendix;
+  \item \code{report.pdf}, organized by Questions 1--12 and limited to 18 pages
+        excluding references and a two-page appendix;
   \item the completed Colab notebook and any Python modules/tests it imports;
   \item all four development/held-out JSONL files from Questions 10--11;
   \item \code{environment.txt} with Python, CUDA, package, and model revisions;
+  \item a one-page ``system story'' in your report that follows one question
+        from input through decomposition, retrieval, \RICR, and final answer,
+        explaining one design choice and one failure mode in your own words;
         and
   \item \code{RUNME.md} with exact commands, seeds, expected runtime, restart
         points, and the final Git commit hash.
@@ -713,10 +791,11 @@ The notebook must run from a fresh Colab runtime using relative paths after
 setting one \code{PACKAGE\_ROOT}. Do not submit downloaded model weights,
 provided embeddings, FAISS indices, or dataset copies.
 
-\grading Report organization/completeness (2), executable code/tests (1),
-required result schemas (1), and environment/RUNME reproducibility (1).
+\grading Report organization/completeness (3), executable code/tests (2),
+required result schemas (2), environment/RUNME reproducibility (2), and the
+own-words system story (3).
 
-\section{Required result schema}
+\subsection{The prediction record passed between stages}
 
 Each prediction file must contain one JSON object per line and preserve the
 input order. Extra diagnostic fields are allowed, but the following fields are
@@ -762,20 +841,20 @@ Held-out files must not contain gold fields.
 \toprule
 \textbf{Component} & \textbf{Points}\\
 \midrule
-Q1. Understand the two data packages & 4\\
-Q2. GSW network and entity reconciliation & 8\\
-Q3. Structured-memory network analysis & 8\\
-Q4. Question decomposition and dependency graphs & 10\\
-Q5. Sparse retrieval baselines & 8\\
-Q6. Dense, hybrid, and dual retrieval & 12\\
-Q7. Reranking analysis & 5\\
-Q8. \RICR implementation & 15\\
-Q9. \RICR ablations & 10\\
-Q10. 2Wiki end-to-end evaluation & 7\\
-Q11. MuSiQue transfer and scaling & 8\\
-Q12. Reproducibility and submission & 5\\
+Q1. Understand the two data packages & 6\\
+Q2. GSW network and entity reconciliation & 12\\
+Q3. Structured-memory network analysis & 12\\
+Q4. Question decomposition and dependency graphs & 14\\
+Q5. Sparse retrieval baselines & 12\\
+Q6. Dense, hybrid, and dual retrieval & 16\\
+Q7. Reranking analysis & 8\\
+Q8. \RICR implementation & 22\\
+Q9. \RICR ablations & 14\\
+Q10. 2Wiki end-to-end evaluation & 10\\
+Q11. MuSiQue transfer and scaling & 12\\
+Q12. Reproducibility and submission & 12\\
 \midrule
-\textbf{Total} & \textbf{100}\\
+\textbf{Total} & \textbf{150}\\
 \bottomrule
 \end{tabularx}
 \end{center}
