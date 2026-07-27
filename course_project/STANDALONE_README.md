@@ -32,8 +32,9 @@ No access to the original GSW-Memory repository is required.
 ├── PROJECT_SPEC.md
 ├── quickstart.py
 ├── requirements-colab.txt
-├── manifest.json
-└── release_manifest.json
+├── tests/
+├── TESTING.md
+└── manifest.json
 ```
 
 ## Colab setup
@@ -106,7 +107,16 @@ the two TODOs in `panini_course/ricr.py`: unique-answer beam pruning and the
 linear RICR search loop. The instructor solution and held-out labels are not
 included.
 
-## Integrity
+## Starter tests
 
-`release_manifest.json` contains SHA-256 hashes for every release artifact.
-Use `python verify_release.py .` to verify a downloaded copy.
+Run the supplied tests before editing the scaffold:
+
+```bash
+pytest -q tests
+```
+
+The retrieval, metrics, and package tests should pass immediately. RICR
+implementation tests are skipped while the two scaffold functions still raise
+`NotImplementedError`; they turn on automatically as those functions are
+implemented. See [TESTING.md](TESTING.md) for the tested behavior and the
+additional tests students must write.

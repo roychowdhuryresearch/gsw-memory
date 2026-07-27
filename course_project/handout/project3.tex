@@ -15,7 +15,7 @@
 \usepackage{fancyhdr}
 \usepackage{microtype}
 \usepackage{listings}
-\usepackage[most]{tcolorbox}
+\usepackage{xspace}
 \usepackage[
   colorlinks=true,
   linkcolor=blue!55!black,
@@ -24,9 +24,6 @@
 ]{hyperref}
 
 \definecolor{uclablue}{HTML}{2774AE}
-\definecolor{uclagold}{HTML}{FFD100}
-\definecolor{lightblue}{HTML}{EAF4FB}
-\definecolor{lightgold}{HTML}{FFF8D8}
 \definecolor{codegray}{HTML}{F5F6F7}
 \definecolor{darkgray}{HTML}{3F4850}
 
@@ -44,21 +41,13 @@
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcolumntype{C}{>{\centering\arraybackslash}p{0.13\textwidth}}
 \newcommand{\code}[1]{\texttt{#1}}
-\newcommand{\RICR}{{\mdseries\textsc{RICR}}}
-\newcommand{\PANINI}{{\mdseries\textsc{Panini}}}
+\newcommand{\RICR}{{\mdseries\textsc{RICR}}\xspace}
+\newcommand{\PANINI}{{\mdseries\textsc{Panini}}\xspace}
 \newcommand{\question}[3]{%
   \subsection[Question #1: #2 (#3 points)]{Question #1: #2 \hfill [#3 points]}%
 }
 \newcommand{\deliverables}{\paragraph{Required output.}}
 \newcommand{\grading}{\paragraph{Point allocation.}}
-
-\tcbset{
-  colback=lightblue,
-  colframe=uclablue,
-  boxrule=0.7pt,
-  arc=2pt,
-  left=7pt,right=7pt,top=5pt,bottom=5pt
-}
 
 \lstset{
   basicstyle=\ttfamily\small,
@@ -93,14 +82,6 @@ Prof.\ Vwani Roychowdhury \hfill UCLA Department of Electrical and Computer Engi
 \vspace{4mm}
 \hrule height 0.8pt
 \vspace{5mm}
-
-\begin{tcolorbox}[colback=lightgold,colframe=uclagold!70!black,title=\textbf{Project in one sentence}]
-Build and evaluate a reproducible multi-hop question-answering system that
-reads a network of Generative Semantic Workspaces (GSWs), compares sparse and
-dense retrieval methods, and implements the paper's beam-search
-\emph{Reasoning Inference Chain Retrieval} (\RICR) algorithm on
-\textbf{100 2WikiMultiHopQA questions and 100 MuSiQue questions}.
-\end{tcolorbox}
 
 \section{Purpose and learning objectives}
 
@@ -225,9 +206,12 @@ directed, labeled edges that retain its stable QA ID, question, answer entity,
 document ID, and relation to its verb-phrase. Do not merge records merely
 because their display strings match.
 
-Also construct an \textbf{entity projection}. Two reconciled entity nodes are
-adjacent when they participate in at least one common event/verb-phrase or a
-grounded QA relation. Store multiplicity as edge weight. All component,
+Also construct an \textbf{entity projection}. The supplied helper normalizes
+entity surface strings by case-folding, removing punctuation, and collapsing
+spaces. Two normalized entity names are adjacent when they answer QA records
+attached to the same verb-phrase. Store repeated co-occurrence as edge weight.
+This is a practical reconciliation rule, not a perfect entity linker. Count
+and discuss at least one possible false merge or missed merge. All component,
 clustering, and assortativity results must state whether they were computed on
 the native graph, its undirected view, or the entity projection.
 
@@ -281,36 +265,137 @@ Use the provided normalization functions. Report:
 Aggregate by macro-average over questions. Include the number of evaluated
 questions in every table. Never average already-rounded subgroup values.
 
+\section{How to build the system}
+
+Build and test the project in the order below. Each stage has a small,
+inspectable output that becomes the input to the next stage; do not begin with
+the complete end-to-end pipeline.
+
+\subsection{Load records and preserve stable identifiers}
+
+Use \code{CoursePackage} to load JSONL records and the supplied matrices.
+Represent graph nodes and retrieval candidates with their stable
+\code{entity\_uid} and \code{qa\_uid}; never use a list position as an
+identifier. Keep document ID, node type, edge direction, role/state text,
+question, answer, and source retrieval score attached to the record. Before
+building an index, assert that every matrix row has exactly one ID in its
+matching ID file and that all IDs are unique.
+
+\subsection{Construct the two graph views}
+
+For the native directed graph, namespace node keys by node type so that an
+entity and a QA record cannot collide. Add an entity node for each entity
+record and a QA node for each QA record. Add the directed verb edge from its
+source entity to the QA node and the directed answer edge from the QA node to
+its answer entity. Preserve the originating document ID on nodes and edges.
+
+For the entity projection, first collect the set of normalized entity names
+that occur in each document. For every unordered pair in that set, add one to
+the pair's co-occurrence weight. Remove self-pairs. Thus an edge weight is the
+number of documents in which the two normalized entities co-occur, not the
+number of times that their strings appear. Test this construction on a
+three-entity hand-written document before processing the supplied corpus.
+
+\subsection{Give every retriever the same interface}
+
+Each retriever should return ordered records of the form
+\code{(qa\_uid, score, rank, source)}. This makes the following methods
+directly comparable.
+
+\begin{enumerate}[label=\arabic*.]
+  \item Fit TF--IDF and BM25 only to the supplied QA question strings. Transform
+        a query with the same tokenizer and return the highest-scoring QA IDs.
+  \item For dense retrieval, L2-normalize the query vector and use inner
+        product against the supplied normalized QA vectors.
+  \item For entity expansion, retrieve entities first and gather the QA IDs
+        adjacent to those entities in the native graph.
+  \item For RRF, assign each candidate its best rank in every source and sum
+        $1/(60+r)$. A candidate absent from a source contributes zero.
+  \item For dual retrieval, take the union of direct QA candidates and
+        entity-expanded QA candidates, deduplicate by \code{qa\_uid}, truncate
+        to the fixed $M=60$ pool, and only then apply the reranker.
+\end{enumerate}
+
+Write a toy corpus with one obviously relevant QA record and verify the rank
+returned by every backend. This catches ID-order and score-direction errors
+before they affect the full experiment.
+
+\subsection{Parse the decomposition into an executable dependency graph}
+
+Parse every generated line into a template ID and text. A placeholder such as
+\code{<ENTITY\_Q1>} creates a dependency on the answer produced by Q1. Reject
+duplicate template IDs, references to missing or future steps, and unresolved
+placeholders. A template that calls for retrieval creates a retrieval node;
+comparison, intersection, or other deterministic operations create operation
+nodes. Templates with no dependency on one another form parallel sequences.
+Topologically sort the graph and save both the raw model text and parsed
+structure so parsing failures can be inspected without rerunning the model.
+
+\subsection{Implement \RICR with a toy retriever first}
+
+A chain contains an immutable ordered tuple of evidence records, the current
+answer, the instantiated sub-question at each hop, and the log scores seen so
+far. Implement the linear search in this order:
+
+\begin{lstlisting}[language=Python]
+beams = retrieve the first instantiated sub-question
+beams = keep the best B distinct normalized answers
+for each remaining template:
+    expansions = []
+    for chain in beams:
+        query = substitute chain.current_answer into the template
+        for candidate in retrieve(query, k):
+            expansions.append(a new chain; do not mutate chain)
+    score every expansion by its log-domain geometric mean
+    beams = globally keep the best B distinct normalized answers
+return beams and the complete trace
+\end{lstlisting}
+
+The pruning input contains as many as $kB$ expansions. Sort it once by
+decreasing chain score, then by the tuple of stable QA IDs. Scan that order and
+keep the first chain for each normalized current answer until $B$ remain. Do
+not prune independently inside each parent beam. When parallel sequences have
+finished, merge their evidence by stable QA ID and retain the provenance from
+the highest-scoring occurrence.
+
+First run this logic with a dictionary-backed toy retriever whose outputs you
+control. After the two-hop, duplicate-answer, tie, empty-result, and $B=1$
+cases pass, replace the toy retriever with the real retrieval interface. Run
+\code{pytest -q tests}; the supplied \RICR tests are initially skipped while
+the two functions contain \code{NotImplementedError} and become active
+automatically after implementation.
+
 \section{Graded questions}
 
-\question{1}{Release integrity and dataset audit}{4}
+\question{1}{Understand the two data packages}{4}
 
-Verify both supplied packages before implementing any algorithm.
+Load both supplied packages before implementing an algorithm.
 
 \begin{enumerate}[label=(\alph*)]
-  \item Run the release verifier and record the release-manifest SHA-256 hash.
   \item Produce a table containing, for each dataset and split, the number of
         questions, unique documents, GSW files, entities, QA records, and
         decomposition-validation examples.
-  \item Show one entity record and one QA record, explaining the stable ID and
+  \item Show one question, entity, and QA record. Explain the stable ID and
         every field that your implementation consumes.
   \item Add an assertion that held-out records contain no answer-label fields:
         \code{answer}, \code{answer\_aliases},
         \code{supporting\_facts}, or \code{evidences}.
+  \item Run \code{pytest -q tests}. Record which tests pass and which RICR
+        tests are skipped before you begin the implementation.
 \end{enumerate}
 
-\deliverables One audit table, two short schema examples, verifier output, and
-the no-leakage assertion in the notebook.
+\deliverables One dataset table, three short schema examples, the no-leakage
+assertion, and the initial test summary in the notebook.
 
-\grading Manifest verification (1), count table (1), schema explanation (1),
-and automated leakage check (1).
+\grading Dataset table (1), schema explanation (1), automated leakage check
+(1), and starter-test run (1).
 
 \question{2}{Construct the native GSW network and entity projection}{8}
 
 Implement a loader that combines the document-level GSWs into the two graph
 views defined above. Preserve node type, document provenance, role/state text,
-QA ID, and direction. Reconcile entities only with the supplied canonical
-entity ID; string equality alone is not a valid reconciliation rule.
+QA ID, and direction in the native graph. For the projection, use the supplied
+surface-name normalization helper and document its limitations.
 
 \begin{enumerate}[label=(\alph*)]
   \item Report native-graph node and edge counts by node/edge type and verify
@@ -319,8 +404,7 @@ entity ID; string equality alone is not a valid reconciliation rule.
         edge count, density, number of self-loops removed, and total edge
         weight.
   \item Add at least three small unit tests: one for direction, one for
-        document provenance, and one showing that duplicate surface strings
-        with different canonical IDs remain distinct.
+        document provenance, and one for projection edge weights.
 \end{enumerate}
 
 \deliverables Construction code, a graph-statistics table for each dataset,
@@ -476,9 +560,9 @@ the deterministic rule from Section 4.2. Return both the deduplicated evidence
 and complete trace: instantiated questions, candidates, scores, pruned chains,
 and selected QA IDs at every hop.
 
-\deliverables Working implementation, at least six unit tests (including
-duplicate answers, ties, $B=1$, empty retrieval, a two-hop chain, and parallel
-sequences), plus one human-readable trace from each dataset.
+\deliverables Working implementation, all supplied \RICR tests passing, at
+least three additional tests of your own (including parallel sequences), plus
+one human-readable trace from each dataset.
 
 \grading First-hop/pruning behavior (3), multi-hop expansion/substitution (4),
 chain scoring (2), parallel evidence merge (2), deterministic trace format
@@ -626,7 +710,7 @@ Held-out files must not contain gold fields.
 \toprule
 \textbf{Component} & \textbf{Points}\\
 \midrule
-Q1. Release integrity and dataset audit & 4\\
+Q1. Understand the two data packages & 4\\
 Q2. Native GSW network and entity projection & 8\\
 Q3. Structured-memory network analysis & 8\\
 Q4. Question decomposition and dependency graphs & 10\\
@@ -657,8 +741,7 @@ Q12. Reproducibility and submission & 5\\
         plotting, and model loading. You may not import an implementation of
         \RICR or copy an answer key.
   \item Follow the course collaboration and academic-integrity policy. Cite
-        all external code, prompts, and written sources. Report any use of
-        generative coding assistants as required by the course policy.
+        all external code, prompts, and written sources.
   \item The course late-submission policy applies. If a released artifact is
         corrupted or a Colab dependency becomes unavailable, post a minimal
         reproducer to the course forum before the deadline.

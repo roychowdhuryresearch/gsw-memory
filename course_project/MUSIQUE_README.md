@@ -30,12 +30,15 @@ Set the notebook's `PACKAGE_ROOT` to this directory and install:
 !pip install -q -r requirements-colab.txt
 ```
 
-Verify every artifact:
+Load the package and run the starter tests:
 
 ```bash
-python verify_release.py .
 python quickstart.py .
+pytest -q tests
 ```
+
+The supplied RICR tests turn on automatically after the scaffold functions are
+implemented. See `TESTING.md` for details.
 
 ## Supplied models
 

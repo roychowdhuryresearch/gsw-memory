@@ -124,9 +124,11 @@ python course_project/scripts/finalize_release.py \
   --decomposition-prompt Panini/decomposition_prompt.txt
 ```
 
-The committed release already contains those outputs. Verify it with:
+The committed release already contains those outputs. Run its quick start and
+student tests with:
 
 ```bash
-python course_project/release/panini_2wiki_100/verify_release.py \
+python course_project/release/panini_2wiki_100/quickstart.py \
   course_project/release/panini_2wiki_100
+pytest -q course_project/release/panini_2wiki_100/tests
 ```

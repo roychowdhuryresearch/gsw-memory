@@ -71,6 +71,6 @@ factual freshness.
 
 ## Reproducibility
 
-`manifest.json` records selection parameters and source checksums.
-`release_manifest.json` records a SHA-256 digest for each distributed file.
-Run `python verify_release.py .` after transfer.
+`manifest.json` records the fixed selection parameters, counts, and stable
+record identifiers. Use `python quickstart.py .` to load the package and
+`pytest -q tests` to run the supplied checks.

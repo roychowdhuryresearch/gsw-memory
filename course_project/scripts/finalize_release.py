@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Copy standalone code/assets into a release and write integrity hashes."""
+"""Copy standalone code and assets into a student release."""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -58,20 +57,25 @@ def write_json(path: Path, value: Any) -> None:
         handle.write("\n")
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def standalone_prompt(source: Path) -> str:
     text = source.read_text(encoding="utf-8").strip()
     if text.startswith('f"""') and text.endswith('"""'):
         text = text[4:-3]
     text = text.replace("{input['question']}", "{question}")
     return text.strip() + "\n"
+
+
+def remove_checksum_fields(value: Any) -> Any:
+    """Remove legacy checksum metadata from student-facing JSON."""
+    if isinstance(value, dict):
+        return {
+            key: remove_checksum_fields(item)
+            for key, item in value.items()
+            if not key.endswith("_sha256")
+        }
+    if isinstance(value, list):
+        return [remove_checksum_fields(item) for item in value]
+    return value
 
 
 def finalize(args: argparse.Namespace) -> dict[str, Any]:
@@ -106,11 +110,20 @@ def finalize(args: argparse.Namespace) -> dict[str, Any]:
     shutil.copy2(project / "PROJECT_SPEC.md", package / "PROJECT_SPEC.md")
     shutil.copy2(args.data_card.resolve(), package / "DATA_CARD.md")
     shutil.copy2(project / "quickstart.py", package / "quickstart.py")
+    shutil.copy2(project / "TESTING.md", package / "TESTING.md")
     shutil.copy2(
         project / "Panini_Course_Project.ipynb",
         package / "Panini_Course_Project.ipynb",
     )
     shutil.copy2(args.readme.resolve(), package / "README.md")
+    target_tests = package / "tests"
+    if target_tests.exists():
+        shutil.rmtree(target_tests)
+    shutil.copytree(
+        project / "tests",
+        target_tests,
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+    )
     handout = project / "handout" / "project3.pdf"
     if handout.exists():
         shutil.copy2(handout, package / "PROJECT_HANDOUT.pdf")
@@ -123,27 +136,25 @@ def finalize(args: argparse.Namespace) -> dict[str, Any]:
     )
     write_json(models_dir / "model_config.json", MODEL_CONFIG)
 
-    verifier = package / "verify_release.py"
-    shutil.copy2(project / "scripts" / "verify_release.py", verifier)
+    # Remove legacy checksum artifacts from previously finalized packages.
+    for obsolete in ("verify_release.py", "release_manifest.json"):
+        path = package / obsolete
+        if path.exists():
+            path.unlink()
 
-    hashes = {
-        str(path.relative_to(package)): sha256_file(path)
-        for path in sorted(package.rglob("*"))
-        if path.is_file()
-        and path.name != "release_manifest.json"
-    }
-    dataset_manifest = json.loads(
-        (package / "manifest.json").read_text(encoding="utf-8")
-    )
-    release_manifest = {
-        "release_version": 1,
+    for relative in ("manifest.json", "embeddings/embedding_manifest.json"):
+        path = package / relative
+        if path.exists():
+            metadata = json.loads(path.read_text(encoding="utf-8"))
+            write_json(path, remove_checksum_fields(metadata))
+
+    dataset_manifest = json.loads((package / "manifest.json").read_text(
+        encoding="utf-8"
+    ))
+    return {
         "dataset_counts": dataset_manifest["counts"],
         "models": MODEL_CONFIG,
-        "artifact_count": len(hashes),
-        "artifacts": hashes,
     }
-    write_json(package / "release_manifest.json", release_manifest)
-    return release_manifest
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -178,11 +189,10 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    manifest = finalize(parse_args(argv))
+    release = finalize(parse_args(argv))
     print(json.dumps(
         {
-            "artifact_count": manifest["artifact_count"],
-            "dataset_counts": manifest["dataset_counts"],
+            "dataset_counts": release["dataset_counts"],
         },
         indent=2,
     ))

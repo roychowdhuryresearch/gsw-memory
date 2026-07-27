@@ -25,7 +25,7 @@ Students do not generate GSWs or corpus embeddings.
 
 | Question | Component | Points |
 |---|---|---:|
-| Q1 | Release integrity and dataset audit | 4 |
+| Q1 | Understand the two data packages | 4 |
 | Q2 | Native GSW network and entity projection | 8 |
 | Q3 | Structured-memory network analysis | 8 |
 | Q4 | Question decomposition and dependency graphs | 10 |
