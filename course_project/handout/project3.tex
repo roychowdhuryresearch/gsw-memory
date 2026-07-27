@@ -284,118 +284,23 @@ Use the provided normalization functions. Report:
 Aggregate by macro-average over questions. Include the number of evaluated
 questions in every table. Never average already-rounded subgroup values.
 
-\section{How to build the system}
-
-Build and test the project in the order below. Each stage has a small,
-inspectable output that becomes the input to the next stage; do not begin with
-the complete end-to-end pipeline.
-
-\subsection{Load records and preserve stable identifiers}
-
-Use \code{CoursePackage} to load JSONL records and the supplied matrices.
-Represent graph nodes and retrieval candidates with their stable
-\code{entity\_uid} and \code{qa\_uid}; never use a list position as an
-identifier. Keep document ID, node type, edge direction, role/state text,
-question, answer, and source retrieval score attached to the record. Before
-building an index, assert that every matrix row has exactly one ID in its
-matching ID file and that all IDs are unique.
-
-\subsection{Construct the graph views and reconciliation comparison}
-
-For the native directed graph, namespace every local node by document and GSW
-filename. Add entity, space/time, and verb-phrase nodes with their original
-attributes. For every grounded QA answer, add an edge from the corresponding
-verb-phrase node to the answer node and use the QA ID as the multiedge key.
-Preserve the question text and originating document ID on the edge.
-
-For the unreconciled projection, collect the distinct answer nodes reached
-from each verb-phrase. Add an undirected edge for every pair in that local
-neighborhood and increment its weight when the pair occurs under another
-verb-phrase. Keep the occurrence UIDs unchanged. Reconciliation is a separate
-mapping from occurrence UID to proposed global entity ID; relabel the
-unreconciled projection with that mapping and aggregate parallel edges. Test
-projection and aggregation on two hand-written documents before processing
-the supplied corpus.
-
-Compare three conditions: no cross-document reconciliation, the supplied
-exact-surface baseline, and your conservative method. Inspect proposed merges
-before interpreting the global topology. A large giant component is not
-evidence that the reconciliation is correct.
-
-\subsection{Give every retriever the same interface}
-
-Each retriever should return ordered records of the form
-\code{(qa\_uid, score, rank, source)}. This makes the following methods
-directly comparable.
-
-\begin{enumerate}[label=\arabic*.]
-  \item Fit TF--IDF and BM25 only to the supplied QA question strings. Transform
-        a query with the same tokenizer and return the highest-scoring QA IDs.
-  \item For dense retrieval, L2-normalize the query vector and use inner
-        product against the supplied normalized QA vectors.
-  \item For entity expansion, retrieve entities first and gather the QA IDs
-        adjacent to those entities in the native graph.
-  \item For RRF, assign each candidate its best rank in every source and sum
-        $1/(60+r)$. A candidate absent from a source contributes zero.
-  \item For dual retrieval, take the union of direct QA candidates and
-        entity-expanded QA candidates, deduplicate by \code{qa\_uid}, truncate
-        to the fixed $M=60$ pool, and only then apply the reranker.
-\end{enumerate}
-
-Write a toy corpus with one obviously relevant QA record and verify the rank
-returned by every backend. This catches ID-order and score-direction errors
-before they affect the full experiment.
-
-\subsection{Parse the decomposition into an executable dependency graph}
-
-Parse every generated line into a template ID and text. A placeholder such as
-\code{<ENTITY\_Q1>} creates a dependency on the answer produced by Q1. Reject
-duplicate template IDs, references to missing or future steps, and unresolved
-placeholders. A template that calls for retrieval creates a retrieval node;
-comparison, intersection, or other deterministic operations create operation
-nodes. Templates with no dependency on one another form parallel sequences.
-Topologically sort the graph and save both the raw model text and parsed
-structure so parsing failures can be inspected without rerunning the model.
-
-\subsection{Implement \RICR with a toy retriever first}
-
-A chain contains an immutable ordered tuple of evidence records, the current
-answer, the instantiated sub-question at each hop, and the log scores seen so
-far. Implement the linear search in this order:
-
-\begin{lstlisting}[language=Python]
-beams = retrieve the first instantiated sub-question
-beams = keep the best B distinct normalized answers
-for each remaining template:
-    expansions = []
-    for chain in beams:
-        query = substitute chain.current_answer into the template
-        for candidate in retrieve(query, k):
-            expansions.append(a new chain; do not mutate chain)
-    score every expansion by its log-domain geometric mean
-    beams = globally keep the best B distinct normalized answers
-return beams and the complete trace
-\end{lstlisting}
-
-The pruning input contains as many as $kB$ expansions. Sort it once by
-decreasing chain score, then by the tuple of stable QA IDs. Scan that order and
-keep the first chain for each normalized current answer until $B$ remain. Do
-not prune independently inside each parent beam. When parallel sequences have
-finished, merge their evidence by stable QA ID and retain the provenance from
-the highest-scoring occurrence.
-
-First run this logic with a dictionary-backed toy retriever whose outputs you
-control. After the two-hop, duplicate-answer, tie, empty-result, and $B=1$
-cases pass, replace the toy retriever with the real retrieval interface. Run
-\code{pytest -q tests}; the supplied \RICR tests are initially skipped while
-the two functions contain \code{NotImplementedError} and become active
-automatically after implementation.
-
 \section{Graded questions}
 
 \question{1}{Understand the two data packages}{4}
 
-Load both supplied packages before implementing an algorithm.
+Imagine that the write-time stage of \PANINI has just finished processing two
+collections of documents. You did not run that stage: you inherit its
+document-level GSWs, flattened entity and QA tables, embeddings, and indices.
+Before treating these files as one memory, you must establish what one row
+means and which identifiers remain valid when records from many documents are
+combined. A retrieval result that points to the wrong embedding row can look
+plausible while silently invalidating every later experiment.
+
+Load both packages with \code{CoursePackage}. Use \code{entity\_uid} and
+\code{qa\_uid} as identifiers rather than list positions. Check that every
+embedding row has exactly one matching ID, IDs are unique, and held-out files
+contain inputs but no grading labels. This audit becomes the trusted boundary
+for all later questions.
 
 \begin{enumerate}[label=(\alph*)]
   \item Produce a table containing, for each dataset and split, the number of
@@ -418,10 +323,19 @@ assertion, and the initial test summary in the notebook.
 
 \question{2}{Build the GSW network and reconcile entities}{8}
 
-Implement a loader for the graph views defined above. Preserve node type,
-document provenance, role/state text, QA ID, and direction in the native
-graph. Keep reconciliation as an explicit mapping so the same unreconciled
-projection can be evaluated under different identity rules.
+The verified records from Question 1 are still hundreds of separate local
+workspaces. To study them as a network, first preserve exactly what was written
+inside each document, and only afterward ask whether two occurrences refer to
+the same real-world entity. Mixing those operations would make it impossible
+to tell whether a global edge came from a GSW or from your identity rule.
+
+Construct the native directed multigraph by namespacing every node with its
+document and GSW filename. Add entity, space/time, and verb-phrase nodes. For
+each grounded QA answer, add a verb-phrase-to-answer edge keyed by QA ID and
+retain question text and provenance. Then project each local verb neighborhood
+onto its answer entities without merging across documents. Reconciliation
+must remain a separate occurrence-UID-to-global-ID mapping so that the same
+unreconciled graph can be evaluated under several identity hypotheses.
 
 \begin{enumerate}[label=(\alph*)]
   \item Report native-graph node and edge counts by node/edge type and verify
@@ -448,9 +362,17 @@ reconciliation method and audit (3), and tests (1).
 
 \question{3}{Analyze the structured-memory network}{8}
 
+Question 2 produces several candidate ``global memories,'' but network
+statistics can make a bad reconciliation look convincing. For example,
+merging every occurrence of a nationality, year, occupation, or ambiguous
+title can manufacture a giant component and high-centrality hubs that were
+never asserted by any document. Your task is therefore not merely to compute
+statistics; it is to decide which observed structure belongs to the local GSWs
+and which was created by the reconciliation rule.
+
 Perform the following analysis separately for 2Wiki and MuSiQue. Compute every
 requested property on the unreconciled projection, exact-surface projection,
-and conservative projection; the native-graph measurements are additional.
+and conservative projection; include native-graph measurements as a reference.
 
 \begin{enumerate}[label=(\alph*)]
   \item Compute weakly connected components of the native graph and connected
@@ -483,12 +405,21 @@ reconciliation artifacts.
 
 \question{4}{Question decomposition and dependency graphs}{10}
 
+The network audit does not yet answer a user's multi-hop question. \RICR first
+turns that question into an executable plan. For example, ``Which director
+died later?'' may create two independent branches that retrieve each director
+and death date, followed by a deterministic comparison. The decomposer emits
+text, but the retrieval system needs a graph whose dependencies and operation
+types are explicit.
+
 Run the supplied 4B decomposer on all 200 questions using the supplied prompt,
-sampling disabled, and the model-config maximum output length. Cache one JSONL
-record per question. Parse numbered sub-questions and
-\code{<ENTITY\_Qn>} placeholders into a directed acyclic dependency graph.
-Retrieval steps and deterministic reasoning-only steps (for example, comparing
-two dates) must be marked separately.
+sampling disabled, and the model-config maximum output length. Cache the raw
+output before parsing so a parser failure never requires another model run.
+Parse every numbered sub-question into a template node. A placeholder such as
+\code{<ENTITY\_Q1>} creates an edge from Q1 to the dependent template. Reject
+duplicate IDs, missing or future references, cycles, and unresolved
+placeholders. Mark retrieval nodes separately from deterministic operations
+such as comparison or intersection, then topologically sort the result.
 
 \begin{enumerate}[label=(\alph*)]
   \item Validate references: every placeholder must point to an earlier
@@ -512,7 +443,17 @@ handling (2), metrics (2), and error analysis (1).
 
 \question{5}{Sparse retrieval baselines}{8}
 
-Using only the supplied metadata, implement and evaluate:
+The dependency graph now tells the system what atomic question to ask, but not
+where to find its answer. Begin with sparse methods because their behavior is
+transparent: when a result fails, you can inspect the matched terms and decide
+whether the problem is wording, entity description, or graph expansion. These
+methods also establish whether later neural components earn their additional
+cost.
+
+Give every backend the same return format,
+\code{(qa\_uid, score, rank, source)}, and build it first on a tiny hand-written
+corpus with one obvious answer. Using only the supplied metadata, implement
+and evaluate:
 
 \begin{enumerate}[label=(\alph*)]
   \item TF--IDF retrieval over concatenated QA question and answer text;
@@ -533,6 +474,14 @@ a short explanation of where entity expansion helps or hurts.
 evaluation (2), and interpretation (1).
 
 \question{6}{Dense, hybrid, and paper-style dual retrieval}{12}
+
+Sparse retrieval exposes a central difficulty of multi-hop search: an atomic
+question may paraphrase the stored QA text, while an entity mention may be the
+best doorway into a relevant local workspace. \PANINI addresses these two
+failure modes with two independent routes---dense QA retrieval and sparse
+entity retrieval followed by local expansion---and joins them before
+reranking. Notice that this expansion uses document-local GSW adjacency from
+Question 2, never the analysis-only reconciled graph.
 
 Load the supplied normalized QA embeddings and FAISS index; do not regenerate
 corpus embeddings. Use the supplied fixed-query embedding when present. If
@@ -560,7 +509,15 @@ reranking/deduplication (2), and evaluation (2).
 
 \question{7}{Does reranking always help?}{5}
 
-Compare three scoring rules on the same $M=60$ candidate pool:
+Question 6 deliberately constructs a broad candidate pool: its goal is recall,
+so high-ranked items from different routes may be redundant or only
+superficially related. The reranker is supposed to repair that ordering using
+the instantiated atomic question. It can also overrule a strong retrieval
+signal and move the first supporting QA downward. Treat reranking as a
+hypothesis to test, not an automatically beneficial step.
+
+Freeze each query's $M=60$ candidate pool so every method sees exactly the same
+QA IDs. Compare three scoring rules:
 \begin{enumerate}[label=(\roman*)]
   \item reranker probability only;
   \item reciprocal retrieval rank only; and
@@ -579,8 +536,33 @@ lexical/entity mismatch.
 
 \question{8}{Implement Reasoning Inference Chain Retrieval}{15}
 
+At this point you have an executable decomposition and a retriever for one
+atomic question. The remaining problem is sequential: the answer selected at
+one hop changes the text of the next query. Greedily keeping only the
+highest-scoring first answer can destroy the correct chain, while retaining
+every candidate causes exponential growth. \RICR resolves this tension with a
+small beam whose chains carry their own instantiated questions, evidence, and
+scores.
+
 Complete \code{prune\_unique\_answers} and
 \code{run\_linear\_ricr} in \code{panini\_course/ricr.py}.
+Represent a chain as an immutable ordered tuple of evidence records, current
+answer, instantiated questions, and hop scores. Implement the search first
+with a dictionary-backed toy retriever whose outputs you control, following
+this structure:
+
+\begin{lstlisting}[language=Python]
+beams = retrieve(first_instantiated_question, k)
+beams = prune_unique_answers(beams, B)
+for template in remaining_templates:
+    expansions = []
+    for chain in beams:
+        query = substitute(template, chain.current_answer)
+        for candidate in retrieve(query, k):
+            expansions.append(new_chain(chain, query, candidate))
+    beams = prune_unique_answers(expansions, B)
+\end{lstlisting}
+
 For each linear sequence:
 
 \begin{enumerate}[label=(\arabic*)]
@@ -595,10 +577,14 @@ For each linear sequence:
         ID while preserving the highest-scoring provenance.
 \end{enumerate}
 
-A candidate from an earlier chain may not be mutated in place. Ties must use
-the deterministic rule from Section 4.2. Return both the deduplicated evidence
-and complete trace: instantiated questions, candidates, scores, pruned chains,
-and selected QA IDs at every hop.
+A candidate from an earlier chain may not be mutated in place. Pruning is
+global across all $kB$ expansions, not performed separately per parent. Sort by
+decreasing geometric-mean score and then stable QA-ID sequence, retaining only
+the first chain for each normalized current answer. Ties must use the
+deterministic rule from Section 4.2. Return both the deduplicated evidence and
+complete trace: instantiated questions, candidates, scores, pruned chains, and
+selected QA IDs at every hop. Only after toy cases pass should you connect the
+real retriever from Question 7.
 
 \deliverables Working implementation, all supplied \RICR tests passing, at
 least three additional tests of your own (including parallel sequences), plus
@@ -610,10 +596,17 @@ chain scoring (2), parallel evidence merge (2), deterministic trace format
 
 \question{9}{\RICR ablation study}{10}
 
-Use a fixed, stratified 20-question subset from each development dataset for
-one-factor-at-a-time ablations. Publish the selected IDs. The default is
-$B=5$, $k=15$, unique-answer pruning enabled, geometric-mean scoring, and the
-best frozen Question 7 retrieval score.
+A working search procedure does not show that its design choices are
+necessary. A larger beam can preserve a correct early hypothesis but increases
+retrieval calls; unique-answer pruning buys diversity but may discard useful
+duplicate evidence; geometric means prevent long chains from winning merely
+because they have more terms. Use controlled ablations to determine which
+mechanisms produce useful accuracy rather than accidental complexity.
+
+Select a fixed, stratified 20-question subset from each development dataset
+and publish the IDs before running experiments. The default is $B=5$, $k=15$,
+unique-answer pruning enabled, geometric-mean scoring, and the best frozen
+Question 7 retrieval score.
 
 \begin{enumerate}[label=(\alph*)]
   \item Beam width: $B\in\{1,3,5\}$.
@@ -637,10 +630,17 @@ diversity/scoring ablations (2), retrieval ablation (2), and trade-off analysis
 
 \question{10}{End-to-end 2Wiki evaluation}{7}
 
-Freeze one final configuration using the 2Wiki development split and run it on
-all 100 2Wiki questions. Generate final answers using only the deduplicated QA
-evidence returned by \RICR; the answering prompt must instruct the model to
-return \code{N/A} when evidence is insufficient.
+The component experiments now become one complete system in its development
+domain. Select the final configuration using only labeled 2Wiki development
+questions, record that choice, and freeze it before producing any held-out
+prediction. This separation matters: otherwise the final score measures
+continued tuning rather than generalization.
+
+Run the frozen system on all 100 2Wiki questions. The answer model may see only
+the deduplicated QA evidence returned by \RICR, never source documents,
+held-out labels, or reconciled-graph neighbors. Its prompt must request
+\code{N/A} when the evidence is insufficient. Save the trace before generating
+the answer so retrieval and generation failures can be distinguished.
 
 On the 80 labeled questions, report decomposition validity, supporting-QA
 recall, complete-chain recovery, EM, F1, average/95th-percentile latency,
@@ -657,9 +657,15 @@ type-specific analysis (1), trace quality (1), and grounded answer prompting
 
 \question{11}{MuSiQue transfer and scaling evaluation}{8}
 
-Without changing retrieval weights, $M$, $k$, $B$, prompts, or score rules,
-replace the 2Wiki package with the MuSiQue package and run all 100 questions.
-On the 80 labeled questions:
+The final test is whether the system learned a reusable procedure or a set of
+2Wiki-specific choices. MuSiQue changes both the source distribution and chain
+length, including three- and four-hop questions. Treat it as a deployment to a
+new collection: package paths may change, but the algorithm and parameters may
+not.
+
+Without changing retrieval weights, $M$, $k$, $B$, prompts, normalization, or
+score rules, replace the 2Wiki package with the MuSiQue package and run all 100
+questions. On the 80 labeled questions:
 
 \begin{enumerate}[label=(\alph*)]
   \item report the same metrics as Question 10, separated into 2-, 3-, and
@@ -683,6 +689,12 @@ On the 80 labeled questions:
 (1), cross-dataset comparison (1), and traced error attribution (2).
 
 \question{12}{Reproducibility and final submission}{5}
+
+Your final artifact should allow another student to reproduce a result from a
+fresh Colab runtime and to inspect where a wrong answer arose. Treat this as a
+handoff of the system rather than a notebook snapshot: paths must be relative,
+expensive stages restartable, configurations frozen in files, and predictions
+separate from gold labels.
 
 Submit one archive or course-repository commit containing:
 
