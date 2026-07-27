@@ -61,5 +61,9 @@ the network, compare retrieval methods, run decomposition, and implement
 unique-answer beam pruning plus the linear RICR loop. Held-out answers and
 supporting evidence are stored separately from this package.
 
+Global entity reconciliation is required only for the network-analysis
+questions. Panini retrieval keeps document-local entity occurrences and must
+not consume edges from the reconciled analysis graph.
+
 MuSiQue is distributed under
 [CC BY 4.0](https://github.com/stonybrooknlp/musique).

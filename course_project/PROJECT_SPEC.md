@@ -21,12 +21,17 @@ The course supplies documents, GSWs, metadata, corpus/fixed-query embeddings,
 FAISS indices, TF-IDF/BM25 indices, and model configuration for each package.
 Students do not generate GSWs or corpus embeddings.
 
+Students implement cross-document entity reconciliation to study how identity
+resolution changes global network properties. This reconciled projection is
+analysis-only. The Panini pipeline retains document-local entity nodes and
+creates cross-document reasoning chains dynamically through RICR.
+
 ## Grading
 
 | Question | Component | Points |
 |---|---|---:|
 | Q1 | Understand the two data packages | 4 |
-| Q2 | Native GSW network and entity projection | 8 |
+| Q2 | GSW network and entity reconciliation | 8 |
 | Q3 | Structured-memory network analysis | 8 |
 | Q4 | Question decomposition and dependency graphs | 10 |
 | Q5 | Sparse retrieval baselines | 8 |

@@ -107,6 +107,12 @@ the two TODOs in `panini_course/ricr.py`: unique-answer beam pruning and the
 linear RICR search loop. The instructor solution and held-out labels are not
 included.
 
+Cross-document entity reconciliation is a separate network-analysis exercise.
+Students compare an unreconciled projection, the supplied exact-surface
+baseline, and their own conservative reconciliation rule. The resulting
+global graphs must not be used by the retrieval or RICR pipeline: Panini keeps
+document-local entity nodes and forms cross-document chains dynamically.
+
 ## Starter tests
 
 Run the supplied tests before editing the scaffold:

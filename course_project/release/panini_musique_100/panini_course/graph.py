@@ -1,4 +1,4 @@
-"""Construct native and reconciled NetworkX views of packaged GSWs."""
+"""Construct native and projected NetworkX views of packaged GSWs."""
 
 from __future__ import annotations
 
@@ -82,11 +82,12 @@ def build_native_gsw_graph(gsw_paths: Iterable[str | Path]):
 
 
 def build_entity_projection(native_graph):
-    """Project verb-phrase neighborhoods into an undirected entity graph.
+    """Build the exact-surface reconciliation baseline.
 
     Nodes with the same canonical surface name are reconciled across documents.
     Edge weights count how often two named nodes participate in the same local
-    verb-phrase neighborhood.
+    verb-phrase neighborhood. This graph is intended for structural analysis;
+    Panini retrieval continues to use document-local entity occurrences.
     """
 
     import networkx as nx
@@ -123,6 +124,37 @@ def build_entity_projection(native_graph):
                 neighbors.append(canonical)
         for left_index, left in enumerate(neighbors):
             for right in neighbors[left_index + 1 :]:
+                if projection.has_edge(left, right):
+                    projection[left][right]["weight"] += 1
+                else:
+                    projection.add_edge(left, right, weight=1)
+    return projection
+
+
+def build_unreconciled_entity_projection(native_graph):
+    """Project local verb neighborhoods without cross-document merging.
+
+    Every document-local entity occurrence retains its stable node UID. Two
+    occurrences are connected when they answer QA records attached to the same
+    verb-phrase node; repeated local co-occurrence increments the edge weight.
+    """
+
+    import networkx as nx
+
+    projection = nx.Graph()
+    for node, attributes in native_graph.nodes(data=True):
+        if attributes.get("node_type") == "verb_phrase":
+            continue
+        projection.add_node(node, **attributes)
+
+    for verb, attributes in native_graph.nodes(data=True):
+        if attributes.get("node_type") != "verb_phrase":
+            continue
+        neighbors = list(dict.fromkeys(native_graph.successors(verb)))
+        for left_index, left in enumerate(neighbors):
+            for right in neighbors[left_index + 1 :]:
+                if left == right:
+                    continue
                 if projection.has_edge(left, right):
                     projection[left][right]["weight"] += 1
                 else:

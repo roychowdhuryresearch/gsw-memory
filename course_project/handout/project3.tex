@@ -198,22 +198,41 @@ dataset IDs and attribution files in all derived outputs.
 
 \section{Fixed definitions and default settings}
 
-\subsection{Graph views}
+\subsection{Graph views and the reconciliation boundary}
 
-For each GSW, construct the \textbf{native directed multigraph}. Entity and
-verb-phrase/event records are nodes. A grounded QA record is represented by
-directed, labeled edges that retain its stable QA ID, question, answer entity,
-document ID, and relation to its verb-phrase. Do not merge records merely
-because their display strings match.
+For each GSW, construct the \textbf{native directed multigraph}. Entity,
+space/time, and verb-phrase/event records are nodes. Each grounded QA answer is
+a directed edge from its verb-phrase node to its answer node. The edge retains
+the stable QA ID, question, document ID, and direction. Do not merge records
+merely because their display strings match.
 
-Also construct an \textbf{entity projection}. The supplied helper normalizes
-entity surface strings by case-folding, removing punctuation, and collapsing
-spaces. Two normalized entity names are adjacent when they answer QA records
-attached to the same verb-phrase. Store repeated co-occurrence as edge weight.
-This is a practical reconciliation rule, not a perfect entity linker. Count
-and discuss at least one possible false merge or missed merge. All component,
-clustering, and assortativity results must state whether they were computed on
-the native graph, its undirected view, or the entity projection.
+Next construct an \textbf{unreconciled entity projection}. Its nodes are the
+document-local entity occurrences identified by their stable UIDs. Two
+occurrences are adjacent when they answer QA records attached to the same
+local verb-phrase; repeated neighborhoods increment edge weight. Finally,
+construct one or more \textbf{analysis-only reconciled projections} by mapping
+occurrence UIDs to proposed cross-document entity IDs and aggregating the
+projected edges.
+
+The supplied exact-surface baseline case-folds, removes punctuation, and
+collapses spaces. Students must implement and justify a more conservative
+reconciliation rule that also uses available type, role/state, and local
+neighborhood evidence. Neither method has complete gold identity labels, so
+evaluate it with a reproducible manual audit and a sensitivity comparison.
+All network results must name the precise graph and reconciliation rule used.
+
+\paragraph{Why the reconciled graph is not used by \PANINI.}
+The paper reconciles entities within a document but does not precompute
+cross-document entity links. Its sparse entity index retains the originating
+document-local node, its dense index retrieves QA pairs directly, and \RICR
+creates cross-document chains at read time by inserting a retrieved answer
+into the next sub-question. A global surface merge can incorrectly join
+homonyms, titles, years, occupations, and nationality values into artificial
+hubs; a conservative rule can instead miss aliases. These errors directly
+distort components and centralities and would contaminate retrieval if treated
+as facts. In this project reconciliation is therefore a network-analysis
+exercise only. Do not use reconciled edges for entity expansion, candidate
+generation, reranking, \RICR, or answer prediction.
 
 \subsection{Retrieval and \RICR defaults}
 
@@ -281,20 +300,27 @@ question, answer, and source retrieval score attached to the record. Before
 building an index, assert that every matrix row has exactly one ID in its
 matching ID file and that all IDs are unique.
 
-\subsection{Construct the two graph views}
+\subsection{Construct the graph views and reconciliation comparison}
 
-For the native directed graph, namespace node keys by node type so that an
-entity and a QA record cannot collide. Add an entity node for each entity
-record and a QA node for each QA record. Add the directed verb edge from its
-source entity to the QA node and the directed answer edge from the QA node to
-its answer entity. Preserve the originating document ID on nodes and edges.
+For the native directed graph, namespace every local node by document and GSW
+filename. Add entity, space/time, and verb-phrase nodes with their original
+attributes. For every grounded QA answer, add an edge from the corresponding
+verb-phrase node to the answer node and use the QA ID as the multiedge key.
+Preserve the question text and originating document ID on the edge.
 
-For the entity projection, first collect the set of normalized entity names
-that occur in each document. For every unordered pair in that set, add one to
-the pair's co-occurrence weight. Remove self-pairs. Thus an edge weight is the
-number of documents in which the two normalized entities co-occur, not the
-number of times that their strings appear. Test this construction on a
-three-entity hand-written document before processing the supplied corpus.
+For the unreconciled projection, collect the distinct answer nodes reached
+from each verb-phrase. Add an undirected edge for every pair in that local
+neighborhood and increment its weight when the pair occurs under another
+verb-phrase. Keep the occurrence UIDs unchanged. Reconciliation is a separate
+mapping from occurrence UID to proposed global entity ID; relabel the
+unreconciled projection with that mapping and aggregate parallel edges. Test
+projection and aggregation on two hand-written documents before processing
+the supplied corpus.
+
+Compare three conditions: no cross-document reconciliation, the supplied
+exact-surface baseline, and your conservative method. Inspect proposed merges
+before interpreting the global topology. A large giant component is not
+evidence that the reconciliation is correct.
 
 \subsection{Give every retriever the same interface}
 
@@ -390,56 +416,70 @@ assertion, and the initial test summary in the notebook.
 \grading Dataset table (1), schema explanation (1), automated leakage check
 (1), and starter-test run (1).
 
-\question{2}{Construct the native GSW network and entity projection}{8}
+\question{2}{Build the GSW network and reconcile entities}{8}
 
-Implement a loader that combines the document-level GSWs into the two graph
-views defined above. Preserve node type, document provenance, role/state text,
-QA ID, and direction in the native graph. For the projection, use the supplied
-surface-name normalization helper and document its limitations.
+Implement a loader for the graph views defined above. Preserve node type,
+document provenance, role/state text, QA ID, and direction in the native
+graph. Keep reconciliation as an explicit mapping so the same unreconciled
+projection can be evaluated under different identity rules.
 
 \begin{enumerate}[label=(\alph*)]
   \item Report native-graph node and edge counts by node/edge type and verify
         them against direct counts from the JSON files.
-  \item Construct the weighted entity projection and report its node count,
-        edge count, density, number of self-loops removed, and total edge
-        weight.
-  \item Add at least three small unit tests: one for direction, one for
-        document provenance, and one for projection edge weights.
+  \item Construct the weighted unreconciled entity projection. Verify that
+        occurrence UIDs from different documents remain distinct, even when
+        their names match.
+  \item Run the exact-surface baseline, then implement a conservative
+        reconciliation rule using surface, type/role compatibility, and local
+        neighborhood evidence. State the decision rule precisely.
+  \item Manually audit a fixed-seed sample of at least 30 proposed
+        cross-document merges. Label each correct, incorrect, or uncertain;
+        report estimated precision with uncertain cases shown separately.
+        Include at least two false-merge and two missed-alias examples.
+  \item Add unit tests for edge direction, provenance, projection weight,
+        cross-document non-merge, intended merge, and homonym non-merge.
 \end{enumerate}
 
-\deliverables Construction code, a graph-statistics table for each dataset,
-and passing tests.
+\deliverables Construction and reconciliation code, the audit table, graph
+counts under all three identity conditions, and passing tests.
 
-\grading Correct native graph (3), correct projection/reconciliation (3),
-validation table (1), and tests (1).
+\grading Correct native graph (2), correct unreconciled projection (2),
+reconciliation method and audit (3), and tests (1).
 
 \question{3}{Analyze the structured-memory network}{8}
 
-Perform the following analysis separately for 2Wiki and MuSiQue:
+Perform the following analysis separately for 2Wiki and MuSiQue. Compute every
+requested property on the unreconciled projection, exact-surface projection,
+and conservative projection; the native-graph measurements are additional.
 
 \begin{enumerate}[label=(\alph*)]
   \item Compute weakly connected components of the native graph and connected
-        components of the entity projection. Report the number of components,
+        components of each entity projection. Report the number of components,
         giant-component size and fraction, isolated nodes, and component-size
-        summary (minimum, median, mean, and maximum).
+        summary (minimum, median, mean, and maximum). Quantify how much each
+        reconciliation rule changes these values.
   \item Plot degree probability mass and complementary cumulative degree
         distributions on log--log axes. State whether the heavy tail, if any,
-        is consistent across datasets; do not claim a power law without a
-        fitted test.
-  \item On the entity projection, report the ten highest nodes under weighted
-        degree, PageRank, and betweenness centrality. Explain at least one
-        disagreement between rankings. Exact betweenness or a documented
-        fixed-seed approximation is acceptable.
+        is consistent across datasets and reconciliation rules; do not claim a
+        power law without a fitted test.
+  \item For each reconciled projection, report the ten highest nodes under
+        weighted degree, PageRank, and betweenness centrality. Audit whether
+        hubs represent entities, common attribute values, or reconciliation
+        errors. Exact betweenness or a documented fixed-seed approximation is
+        acceptable.
   \item Report average clustering and degree assortativity, then visualize one
         complete gold multi-hop path from a development question with node
-        types and edge/QA labels.
+        types and edge/QA labels. Conclude with a specific explanation of why
+        the reconciled projection must not be used by the \PANINI retrieval
+        pipeline.
 \end{enumerate}
 
-\deliverables At least four plots, two summary tables, and a 150--250 word
-cross-dataset interpretation.
+\deliverables At least four plots, two sensitivity tables, and a 200--300 word
+cross-dataset interpretation that separates local GSW structure from
+reconciliation artifacts.
 
-\grading Connectivity (2), degree analysis (2), centrality (2), and
-clustering/assortativity/path visualization (2).
+\grading Connectivity sensitivity (2), degree analysis (2), centrality audit
+(2), and clustering/assortativity/path interpretation (2).
 
 \question{4}{Question decomposition and dependency graphs}{10}
 
@@ -711,7 +751,7 @@ Held-out files must not contain gold fields.
 \textbf{Component} & \textbf{Points}\\
 \midrule
 Q1. Understand the two data packages & 4\\
-Q2. Native GSW network and entity projection & 8\\
+Q2. GSW network and entity reconciliation & 8\\
 Q3. Structured-memory network analysis & 8\\
 Q4. Question decomposition and dependency graphs & 10\\
 Q5. Sparse retrieval baselines & 8\\
