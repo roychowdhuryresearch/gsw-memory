@@ -1,0 +1,159 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Amedeo Escobar",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "composer",
+                    "states": [
+                        "film scores",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1888\u20131973",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "life span",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Italian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born in 1888?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Amedeo Escobar born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died in 1973?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did Amedeo Escobar die?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of Amedeo Escobar?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is an Italian composer?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was Amedeo Escobar's profession?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was a composer of film scores?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

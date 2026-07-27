@@ -1,0 +1,204 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Dana Blankstein-Cohen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "film industry professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "March 3, 1981",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Israeli Academy of Film and Television",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "film industry",
+                        "Israeli"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Israeli",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Middle Eastern"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "film director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "culture entrepreneur",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "cultural sector"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on March 3, 1981?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Dana Blankstein-Cohen born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "director of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the director of the Israeli Academy of Film and Television?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What organization is Dana Blankstein-Cohen the director of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is Dana Blankstein-Cohen's nationality?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Israeli by nationality?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is Dana Blankstein-Cohen's profession?",
+                    "answers": [
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is a film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q9",
+                    "text": "Who is a culture entrepreneur?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

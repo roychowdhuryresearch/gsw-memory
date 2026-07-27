@@ -1,0 +1,218 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Eric Chan Kwok-ki",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "civil servant"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1959",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Hong Kong",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "place of work",
+                        "nationality"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Director of the Chief Executive's Office",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "current position"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Director of Immigration",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "previous position"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "2011\u20132016",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "tenure period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born in 1959?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Eric Chan Kwok-ki born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "works in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who works in Hong Kong?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where does Eric Chan Kwok-ki work?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "holds position",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the Director of the Chief Executive's Office?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What position does Eric Chan Kwok-ki hold?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "held position",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who was the Director of Immigration?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What position did Eric Chan Kwok-ki hold from 2011 to 2016?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "tenure period",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "When did Eric Chan Kwok-ki serve as Director of Immigration?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who served as Director of Immigration from 2011 to 2016?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

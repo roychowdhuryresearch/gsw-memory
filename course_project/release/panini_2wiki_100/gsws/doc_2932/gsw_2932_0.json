@@ -1,0 +1,235 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Monika von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Monika Maria Roberta Antonia Raphaela Habsburg-Lothringen",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "birth name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Duchess de Santangelo",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "noble title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "13 September 1954",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "W\u00fcrzburg",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Otto von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Princess Regina of Saxe-Meiningen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 13 September 1954?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Monika von Habsburg born?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was born in W\u00fcrzburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where was Monika von Habsburg born?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "daughter of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the daughter of Otto von Habsburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Monika von Habsburg the daughter of?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "n\u00e9e",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the birth name of Monika von Habsburg?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was born as Monika Maria Roberta Antonia Raphaela Habsburg-Lothringen?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "holds title",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What title does Monika von Habsburg hold?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who holds the title of Duchess de Santangelo?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

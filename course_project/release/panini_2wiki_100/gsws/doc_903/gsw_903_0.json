@@ -1,0 +1,439 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Henry Gerard Sturt",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "nobility",
+                    "states": [
+                        "British peer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "16 May 1825",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "17 February 1904",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "British",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Conservative Party",
+            "roles": [
+                {
+                    "role": "political party",
+                    "states": [
+                        "British politics"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Henry Sturt",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "1st Baron Alington of Crichel",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "noble title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "15 January 1876",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "title creation date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Lady Augusta Bingham",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "10 September 1853",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "marriage date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "George Charles Bingham, 3rd Earl of Lucan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Evelyn Henrietta Leigh",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "10 February 1892",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "marriage date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 16 May 1825?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Henry Gerard Sturt born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died on 17 February 1904?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did Henry Gerard Sturt die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of Henry Gerard Sturt?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is British?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "political affiliation",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which political party was Henry Gerard Sturt affiliated with?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was affiliated with the Conservative Party?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is the son of Henry Sturt?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Henry Gerard Sturt the son of?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "created title",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who was created 1st Baron Alington of Crichel?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What title was created for Henry Gerard Sturt?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "When was the title 1st Baron Alington of Crichel created?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "married to",
+            "questions": [
+                {
+                    "id": "q14",
+                    "text": "Who did Henry Gerard Sturt marry on 10 September 1853?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q15",
+                    "text": "When did Henry Gerard Sturt marry Lady Augusta Bingham?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "Who was married to Henry Gerard Sturt?",
+                    "answers": [
+                        "e9",
+                        "e12"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "daughter of",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "Who is the daughter of George Charles Bingham, 3rd Earl of Lucan?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q18",
+                    "text": "Who is Lady Augusta Bingham the daughter of?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "married to",
+            "questions": [
+                {
+                    "id": "q19",
+                    "text": "Who did Henry Gerard Sturt marry on 10 February 1892?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q20",
+                    "text": "When did Henry Gerard Sturt marry Evelyn Henrietta Leigh?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

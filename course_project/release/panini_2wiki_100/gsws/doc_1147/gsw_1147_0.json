@@ -1,0 +1,251 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "G\u00fclbahar Hatun",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "royalty",
+                    "states": [
+                        "Ottoman Empire",
+                        "consort"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1432",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1492",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death year",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Sultan Mehmed II",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Ottoman Empire",
+                        "sultan"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Sultan Bayezid II",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Ottoman Empire",
+                        "sultan"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Selim I",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Ottoman Empire",
+                        "sultan"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was G\u00fclbahar Hatun born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born in 1432?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did G\u00fclbahar Hatun die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who died in 1492?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "consort of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who was the consort of Sultan Mehmed II?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was G\u00fclbahar Hatun the consort of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "mother of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who was the mother of Sultan Bayezid II?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was G\u00fclbahar Hatun the mother of?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "grandmother of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who was the grandmother of Selim I?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was G\u00fclbahar Hatun the grandmother of?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

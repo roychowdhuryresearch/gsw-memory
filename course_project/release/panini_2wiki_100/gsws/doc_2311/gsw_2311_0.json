@@ -1,0 +1,379 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Benito Perojo",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "film industry professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Madrid",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace",
+                        "death place"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "14 June 1894",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "11 November 1974",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Spanish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "film director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "film producer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "18 July 1966",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "honor date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Caballero Gran Cruz de la Orden del M\u00e9rito Civil",
+            "roles": [
+                {
+                    "role": "honor",
+                    "states": [
+                        "Spanish honor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Carmen Perojo Carreras",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 14 June 1894?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Benito Perojo born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died on 11 November 1974?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did Benito Perojo die?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where was Benito Perojo born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was born in Madrid?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where did Benito Perojo die?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who died in Madrid?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the nationality of Benito Perojo?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Spanish?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What was Benito Perojo's profession?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who was a film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "Who was a film producer?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "honored on",
+            "questions": [
+                {
+                    "id": "q14",
+                    "text": "When was Benito Perojo honored?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q15",
+                    "text": "Who was honored on 18 July 1966?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "honored with",
+            "questions": [
+                {
+                    "id": "q16",
+                    "text": "What honor was Benito Perojo awarded?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q17",
+                    "text": "Who was awarded the Caballero Gran Cruz de la Orden del M\u00e9rito Civil?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "survived by",
+            "questions": [
+                {
+                    "id": "q18",
+                    "text": "Who was Benito Perojo survived by?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q19",
+                    "text": "Who survived Benito Perojo?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

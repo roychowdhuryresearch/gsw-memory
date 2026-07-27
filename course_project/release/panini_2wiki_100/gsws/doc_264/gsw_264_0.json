@@ -1,0 +1,309 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Edward J. Yates",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "September 16, 1918",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "June 2, 2006",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "television director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "entertainment industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "ABC television program",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "television network"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "American Bandstand",
+            "roles": [
+                {
+                    "role": "television program",
+                    "states": [
+                        "music show",
+                        "1950s-1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "1952",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "1969",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "end year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on September 16, 1918?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Edward J. Yates born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died on June 2, 2006?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did Edward J. Yates die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of Edward J. Yates?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is American?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was Edward J. Yates's profession?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was a television director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "directed",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What program did Edward J. Yates direct?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who directed American Bandstand?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "aired on",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "On which network did American Bandstand air?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What program aired on ABC television program?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "aired from",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "When did American Bandstand start airing?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "When did American Bandstand stop airing?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

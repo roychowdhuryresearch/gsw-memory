@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "A Month of Sundays",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "2010s cinema",
+                        "creative work"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2015",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Anthony LaPaglia",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was A Month of Sundays released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 2015?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "starring",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who stars in A Month of Sundays?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "In which film does Anthony LaPaglia star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

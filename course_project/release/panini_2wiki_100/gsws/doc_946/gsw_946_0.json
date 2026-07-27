@@ -1,0 +1,118 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Last Tango",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "silent film",
+                        "1910s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "directed work"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1918",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1910s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Vyacheslav Viskovsky",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "silent film era"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was The Last Tango released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 1918?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who directed The Last Tango?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film did Vyacheslav Viskovsky direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

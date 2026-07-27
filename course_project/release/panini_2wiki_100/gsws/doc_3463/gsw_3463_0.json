@@ -1,0 +1,256 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Prince Karl Boris Frank Markwart of Leiningen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "17 April 1960",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Prince Karl of Leiningen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Princess Marie Louise of Bulgaria",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Queen Victoria",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "Commonwealth realm"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Commonwealth realms",
+            "roles": [
+                {
+                    "role": "political entity",
+                    "states": [
+                        "monarchical system"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Prince Karl Boris Frank Markwart of Leiningen born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on 17 April 1960?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the son of Prince Karl of Leiningen?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Prince Karl Boris Frank Markwart of Leiningen the son of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the son of Princess Marie Louise of Bulgaria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Prince Karl Boris Frank Markwart of Leiningen the son of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "great-grandson of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is a great-grandson of Queen Victoria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Prince Karl Boris Frank Markwart of Leiningen a great-grandson of?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "in line of succession to the throne of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is in the line of succession to the throne of Canada?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "To which throne is Prince Karl Boris Frank Markwart of Leiningen in line of succession?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "in line of succession to the thrones of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who is in the line of succession to the thrones of the Commonwealth realms?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "To which thrones is Prince Karl Boris Frank Markwart of Leiningen in line of succession?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

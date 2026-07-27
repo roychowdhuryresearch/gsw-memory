@@ -1,0 +1,319 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "John Gustav Adolfi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "silent film era",
+                        "American cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "February 19, 1888",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "May 11, 1933",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "North American",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "silent film director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry",
+                        "silent film era"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "actor",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry",
+                        "silent film era"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "screenwriter",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry",
+                        "silent film era"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "more than 100 productions",
+            "roles": [
+                {
+                    "role": "achievement",
+                    "states": [
+                        "career output",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "1912 film 'Robin Hood'",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "silent film",
+                        "early 20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on February 19, 1888?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was John Gustav Adolfi born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died on May 11, 1933?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did John Gustav Adolfi die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of John Gustav Adolfi?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is an American silent film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was John Gustav Adolfi's profession?",
+                    "answers": [
+                        "e5",
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was a silent film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q9",
+                    "text": "Who was an actor?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was a screenwriter?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "involved in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who was involved in more than 100 productions?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "How many productions was John Gustav Adolfi involved in?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "acted in",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "What film did John Gustav Adolfi act in?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who acted in the 1912 film 'Robin Hood'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

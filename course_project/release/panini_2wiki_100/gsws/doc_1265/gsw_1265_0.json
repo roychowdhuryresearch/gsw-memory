@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "G. Marthandan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "active"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Indian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "South Asian",
+                        "cinema industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Malayalam cinema",
+            "roles": [
+                {
+                    "role": "film industry",
+                    "states": [
+                        "regional cinema",
+                        "Indian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "works in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who works in Malayalam cinema?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What cinema does G. Marthandan work in?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the nationality of G. Marthandan?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is an Indian film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

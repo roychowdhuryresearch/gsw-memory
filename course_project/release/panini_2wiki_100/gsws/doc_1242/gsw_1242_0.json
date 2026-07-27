@@ -1,0 +1,433 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "... Baby One More Time",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "debut single",
+                        "pop genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Britney Spears",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "singer",
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Max Martin",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Rami",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Jive Records",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "record label"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "October 23, 1998",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Nigel Dick",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "music video director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "United Kingdom",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "country"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "British Phonographic Industry",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "certification body"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "1999",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "10 million",
+            "roles": [
+                {
+                    "role": "quantity",
+                    "states": [
+                        "sales figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Just Dance 3",
+            "roles": [
+                {
+                    "role": "video game",
+                    "states": [
+                        "dance game",
+                        "2011"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Bravo magazine",
+            "roles": [
+                {
+                    "role": "publication",
+                    "states": [
+                        "German teen magazine"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "2018",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "performed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who performed '... Baby One More Time'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Britney Spears perform?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who wrote '... Baby One More Time'?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Max Martin write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who produced '... Baby One More Time'?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song did Max Martin and Rami produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who released '... Baby One More Time'?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song did Jive Records release?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "When was '... Baby One More Time' released?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What song was released on October 23, 1998?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who directed the music video for '... Baby One More Time'?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What music video did Nigel Dick direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "certified by",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who certified '... Baby One More Time' as triple-platinum?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What song did the British Phonographic Industry certify as triple-platinum?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "featured in",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "What video game features '... Baby One More Time'?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What song is featured in Just Dance 3?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "voted as",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "What was '... Baby One More Time' voted as by Bravo magazine readers in 2018?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q18",
+                    "text": "What song did Bravo magazine readers vote as the biggest hit since 1992?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

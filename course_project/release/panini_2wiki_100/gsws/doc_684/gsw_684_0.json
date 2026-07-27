@@ -1,0 +1,183 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Back in the U.S.A.",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "musical work",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Chuck Berry",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "musician"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1959",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Linda Ronstadt",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "singer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1978",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who wrote 'Back in the U.S.A.'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Chuck Berry write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 'Back in the U.S.A.' released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song was released in 1959?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "covered by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who covered 'Back in the U.S.A.' in 1978?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song did Linda Ronstadt cover?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "cover released in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "When was Linda Ronstadt's cover of 'Back in the U.S.A.' released?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What cover was released in 1978?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,309 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "She Wants Me",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "comedy genre",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2012",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Josh Gad",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Kristen Ruhlin",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Johnny Messner",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Aaron Yoo",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Melonie Diaz",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Hilary Duff",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Charlie Sheen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Rob Margolies",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "writer",
+                        "director",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was She Wants Me released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 2012?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "stars",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who stars in She Wants Me?",
+                    "answers": [
+                        "e3",
+                        "e4",
+                        "e5",
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "In what film does Josh Gad star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "In what film does Kristen Ruhlin star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "In what film does Johnny Messner star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "In what film does Aaron Yoo star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "In what film does Melonie Diaz star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "features appearances of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who makes appearances in She Wants Me?",
+                    "answers": [
+                        "e8",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "In what film does Hilary Duff make an appearance?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "In what film does Charlie Sheen make an appearance?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "written and directed by",
+            "questions": [
+                {
+                    "id": "q12",
+                    "text": "Who wrote and directed She Wants Me?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "What film did Rob Margolies write and direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

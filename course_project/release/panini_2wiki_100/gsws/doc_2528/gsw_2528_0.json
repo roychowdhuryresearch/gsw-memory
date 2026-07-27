@@ -1,0 +1,317 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Christopher Henderson Clark",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1767",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year",
+                        "18th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "November 21, 1828",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Virginia",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "U.S. state",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "congressman",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "political role",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "lawyer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "legal profession",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "James Clark",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "John Bullock Clark, Sr.",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "John Bullock Clark, Jr.",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born in 1767?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Christopher Henderson Clark born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who died on November 21, 1828?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did Christopher Henderson Clark die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who was from Virginia?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Where was Christopher Henderson Clark from?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was Christopher Henderson Clark's profession?",
+                    "answers": [
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was a congressman and lawyer?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "brother of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who was the brother of James Clark?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was Christopher Henderson Clark's brother?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "uncle of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who was the uncle of John Bullock Clark, Sr.?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who was Christopher Henderson Clark's nephew?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "great-uncle of",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who was the great-uncle of John Bullock Clark, Jr.?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who was Christopher Henderson Clark's great-nephew?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,196 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Taylor Field",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "former airport",
+                        "military airfield"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "industrial park",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "current use"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Ocala",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "Florida"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Florida",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "state",
+                        "USA"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1962",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "closure year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Ocala International Airport- Jim Taylor Field",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "current airport"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located near",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was Taylor Field located?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What was located near Ocala?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "closed in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Taylor Field closed?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What happened in 1962?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "replaced by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What replaced Taylor Field?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What did Ocala International Airport- Jim Taylor Field replace?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "current use",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the current use of the location of Taylor Field?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What location is now an industrial park?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

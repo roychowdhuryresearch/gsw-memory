@@ -1,0 +1,221 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Manhattan Angel",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "American cinema",
+                        "1940s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "musical genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1949",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1940s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "North American cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "musical film",
+            "roles": [
+                {
+                    "role": "genre",
+                    "states": [
+                        "film category",
+                        "musical genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Gloria Jean",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Sweetheart of the Blues",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "original title",
+                        "alternative title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "I Surrender Dear",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "preceding film",
+                        "1940s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Manhattan Angel released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 1949?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "starring",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who starred in Manhattan Angel?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "In which film did Gloria Jean star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "originally called",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What was the original title of Manhattan Angel?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which film was originally called Sweetheart of the Blues?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "made after",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which film was made after I Surrender Dear?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film was made before Manhattan Angel?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,96 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Oh Boy",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "variant",
+                        "ambiguous reference"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Ooh Boy",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "variant",
+                        "ambiguous reference"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "variant",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "alternative name",
+                        "ambiguous reference"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "may refer to",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What may 'Oh Boy' refer to?",
+                    "answers": [
+                        "e1",
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What may 'Ooh Boy' refer to?",
+                    "answers": [
+                        "e1",
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "What may 'variant' refer to?",
+                    "answers": [
+                        "e1",
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

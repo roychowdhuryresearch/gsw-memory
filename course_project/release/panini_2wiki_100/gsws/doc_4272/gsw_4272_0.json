@@ -1,0 +1,333 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "\u1e62afiyy al-Dawla Mu\u1e25ammad ibn \u02bfAli ibn Ja\u02befar ibn Fal\u0101h",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "Fatimid governor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Fatimid",
+            "roles": [
+                {
+                    "role": "dynasty",
+                    "states": [
+                        "Islamic dynasty",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Aleppo",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "historical location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "October 1022",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start of governance",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "April 1023",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "end of governance",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Yumn al-Dawla Sa'adat",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "eunuch",
+                        "citadel governor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Kutama",
+            "roles": [
+                {
+                    "role": "group",
+                    "states": [
+                        "militant Berber group",
+                        "historical military"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Ja'far ibn Fallah",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "Fatimid general"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Abu'l-Najm Badr",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "former governor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Sanad al-Dawla Hasan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "successor governor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "governor of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was the governor of Aleppo?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Where was \u1e62afiyy al-Dawla governor?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "governed from",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did \u1e62afiyy al-Dawla start governing Aleppo?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did \u1e62afiyy al-Dawla stop governing Aleppo?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "citadel governor",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who was the governor of the citadel of Aleppo?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What position did Yumn al-Dawla Sa'adat hold?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "member of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which group did \u1e62afiyy al-Dawla belong to?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was a member of the Kutama?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "grandson of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who was the grandson of Ja'far ibn Fallah?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was \u1e62afiyy al-Dawla's grandfather?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "replaced",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who did \u1e62afiyy al-Dawla and Yumn al-Dawla replace?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who was replaced by \u1e62afiyy al-Dawla and Yumn al-Dawla?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "succeeded by",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who succeeded \u1e62afiyy al-Dawla?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who did Sanad al-Dawla Hasan succeed?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

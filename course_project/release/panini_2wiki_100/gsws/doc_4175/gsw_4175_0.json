@@ -1,0 +1,174 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Red Eagle",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Thai cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "superhero genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2010",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Thai",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Asian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "superhero film",
+            "roles": [
+                {
+                    "role": "genre",
+                    "states": [
+                        "film category",
+                        "action genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Wisit Sasanatieng",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "screenwriter"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "Thai cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was The Red Eagle released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 2010?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who directed The Red Eagle?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film did Wisit Sasanatieng direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who wrote The Red Eagle?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film did Wisit Sasanatieng write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

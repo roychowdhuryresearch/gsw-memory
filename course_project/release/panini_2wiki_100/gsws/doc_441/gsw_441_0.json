@@ -1,0 +1,493 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Francisco Rovira Beleta",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure",
+                        "Spanish cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Barcelona",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace",
+                        "Spanish city"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1913",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "23 June 1999",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Spanish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "Iberian Peninsula"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "screenwriter",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry",
+                        "creative professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "film director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "film industry",
+                        "creative professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Los atracadores",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Spanish cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "12th Berlin International Film Festival",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "film festival",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Los Tarantos",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Spanish cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "1963",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Academy Award",
+            "roles": [
+                {
+                    "role": "award",
+                    "states": [
+                        "film industry",
+                        "prestigious"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Best Foreign Film",
+            "roles": [
+                {
+                    "role": "award category",
+                    "states": [
+                        "Academy Award",
+                        "international cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "El amor brujo",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Spanish cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e15",
+            "name": "5th Moscow International Film Festival",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "film festival",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was Francisco Rovira Beleta born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born in Barcelona?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Francisco Rovira Beleta born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who was born in 1913?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When did Francisco Rovira Beleta die?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who died on 23 June 1999?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the nationality of Francisco Rovira Beleta?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Spanish?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is Francisco Rovira Beleta's profession?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is a Spanish screenwriter?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "Who is a Spanish film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "entered into",
+            "questions": [
+                {
+                    "id": "q12",
+                    "text": "Which film was entered into the 12th Berlin International Film Festival?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "Where was Los atracadores entered?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "nominated for",
+            "questions": [
+                {
+                    "id": "q14",
+                    "text": "Which film was nominated for an Academy Award in the Best Foreign Film category?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q15",
+                    "text": "What award was Los Tarantos nominated for?",
+                    "answers": [
+                        "e12",
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q16",
+                    "text": "When was Los Tarantos released?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q17",
+                    "text": "What film was released in 1963?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "nominated for",
+            "questions": [
+                {
+                    "id": "q18",
+                    "text": "Which film was nominated for the Best Foreign Language Oscar?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q19",
+                    "text": "What award was El amor brujo nominated for?",
+                    "answers": [
+                        "e12",
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v10",
+            "phrase": "entered into",
+            "questions": [
+                {
+                    "id": "q20",
+                    "text": "Which film was entered into the 5th Moscow International Film Festival?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q21",
+                    "text": "Where was El amor brujo entered?",
+                    "answers": [
+                        "e15"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

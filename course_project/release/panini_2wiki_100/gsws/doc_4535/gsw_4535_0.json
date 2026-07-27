@@ -1,0 +1,136 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Rod Hardy",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "creative professional"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "director",
+                    "states": [
+                        "television",
+                        "film"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Melbourne",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace",
+                        "Australia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Australia",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "nationality",
+                        "Oceania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was Rod Hardy born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born in Melbourne?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Rod Hardy's nationality?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is an Australian director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is Rod Hardy's profession?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is a television and film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

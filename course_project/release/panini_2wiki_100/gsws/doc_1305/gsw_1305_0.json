@@ -1,0 +1,214 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Michaela von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Michaela Maria Madeleine Kiliana Habsburg-Lothringen",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "full name",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "13 September 1954",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "W\u00fcrzburg",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Monika von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Otto von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Princess Regina of Saxe-Meiningen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 13 September 1954?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Michaela von Habsburg born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was born in W\u00fcrzburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where was Michaela von Habsburg born?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "twin sister of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the twin sister of Monika von Habsburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Michaela von Habsburg the twin sister of?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "daughter of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the daughter of Otto von Habsburg and Princess Regina of Saxe-Meiningen?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who are the parents of Michaela von Habsburg?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

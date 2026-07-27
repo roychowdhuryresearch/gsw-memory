@@ -1,0 +1,199 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "D\u00e1ith\u00ed Sproule",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "living"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "23 May 1950",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "guitarist",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "musician",
+                        "instrumentalist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "singer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "musician",
+                        "vocalist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "traditional Irish music",
+            "roles": [
+                {
+                    "role": "genre",
+                    "states": [
+                        "music genre",
+                        "cultural"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Claire Sproule",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "living"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was D\u00e1ith\u00ed Sproule born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on 23 May 1950?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is D\u00e1ith\u00ed Sproule's profession?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is a guitarist and singer?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "music genre",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What genre of music does D\u00e1ith\u00ed Sproule perform?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who performs traditional Irish music?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "niece of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the niece of D\u00e1ith\u00ed Sproule?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Claire Sproule's uncle?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

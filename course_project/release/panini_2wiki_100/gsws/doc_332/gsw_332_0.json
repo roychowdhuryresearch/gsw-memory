@@ -1,0 +1,227 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "La Bestia humana",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Argentine cinema",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "adaptation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1957",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Argentina",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "film origin",
+                        "South America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "La B\u00eate Humaine",
+            "roles": [
+                {
+                    "role": "novel",
+                    "states": [
+                        "source material"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "\u00c9mile Zola",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "author",
+                        "French literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "French",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was La Bestia humana released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 1957?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "originated in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where did La Bestia humana originate?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film originated in Argentina?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is La Bestia humana based on?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film is based on La B\u00eate Humaine?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who wrote La B\u00eate Humaine?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What did \u00c9mile Zola write?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the nationality of \u00c9mile Zola?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is a French writer?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

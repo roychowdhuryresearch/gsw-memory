@@ -1,0 +1,159 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Thuringbert",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "nobility",
+                    "states": [
+                        "Count of Hesbaye",
+                        "Count of Wormsgau",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "735\u2013770",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "life span",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Robert I, Count of Hesbaye",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "nobility",
+                    "states": [
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Williswinda",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Robert",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "nobility",
+                    "states": [
+                        "Count of Hesbaye",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born to",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born to Robert I, Count of Hesbaye and Williswinda?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who are the parents of Thuringbert?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "succeeded by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who succeeded Thuringbert as Count of Hesbaye?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Whom did Robert succeed as Count of Hesbaye?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

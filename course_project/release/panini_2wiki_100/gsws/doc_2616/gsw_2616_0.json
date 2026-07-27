@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Boyer",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "candy industry",
+                        "American business"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Altoona, Pennsylvania",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "company headquarters",
+                        "American city"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "downtown district",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "factory location",
+                        "urban area"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Boyer located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company is located in Altoona, Pennsylvania?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "factory located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is the Boyer factory located?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is located in the downtown district?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

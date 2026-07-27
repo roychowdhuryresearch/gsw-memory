@@ -1,0 +1,215 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Athanasios Stavroudis",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "deceased"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "military leader",
+                    "states": [
+                        "Macedonian Struggle",
+                        "Balkan Wars"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "spy",
+                    "states": [
+                        "First World War",
+                        "French army"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Greek",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Macedonian Struggle",
+            "roles": [
+                {
+                    "role": "historical event",
+                    "states": [
+                        "early 20th century",
+                        "Balkan history"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Balkan Wars",
+            "roles": [
+                {
+                    "role": "historical event",
+                    "states": [
+                        "early 20th century",
+                        "Balkan history"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "First World War",
+            "roles": [
+                {
+                    "role": "historical event",
+                    "states": [
+                        "1914-1918",
+                        "global conflict"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "French army",
+            "roles": [
+                {
+                    "role": "military organization",
+                    "states": [
+                        "World War I",
+                        "European military"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "was a chieftain in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was a chieftain in the Macedonian Struggle?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "In which struggle was Athanasios Stavroudis a chieftain?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "fought in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who fought in the Balkan Wars?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "In which wars did Athanasios Stavroudis fight?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "was a spy for",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who was a spy for the French army during the First World War?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "For which army was Athanasios Stavroudis a spy during the First World War?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "had nationality",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was the nationality of Athanasios Stavroudis?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who had Greek nationality?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

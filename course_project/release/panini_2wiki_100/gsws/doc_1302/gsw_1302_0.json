@@ -1,0 +1,262 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Andrea von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Andrea Maria von Habsburg-Lothringen",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "full name",
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Archduchess of Austria",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "noble title",
+                        "Austrian nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Hereditary Countess of Neipperg",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "noble title",
+                        "German nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "30 May 1953",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "W\u00fcrzburg, Bavaria",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace",
+                        "German location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Otto von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Princess Regina of Saxe-Meiningen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 30 May 1953?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Andrea von Habsburg born?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was born in W\u00fcrzburg, Bavaria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where was Andrea von Habsburg born?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "daughter of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the daughter of Otto von Habsburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Andrea von Habsburg the daughter of?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "daughter of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the daughter of Princess Regina of Saxe-Meiningen?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Andrea von Habsburg the daughter of?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "has title",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What title does Andrea von Habsburg hold?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who holds the title Archduchess of Austria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "Who holds the title Hereditary Countess of Neipperg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

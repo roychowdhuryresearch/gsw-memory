@@ -1,0 +1,391 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Herschell Gordon Lewis",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "filmmaker"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "June 15, 1926",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "September 26, 2016",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "splatter",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "horror subgenre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Godfather of Gore",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "nickname"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Lucio Fulci",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "filmmaker"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "exploitation film genres",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "variety"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "juvenile delinquent films",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "exploitation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "nudie-cuties",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "exploitation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "children's films",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "family"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "rural comedy",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "comedy"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "All Movie",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "media"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Herschell Gordon Lewis born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on June 15, 1926?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did Herschell Gordon Lewis die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who died on September 26, 2016?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of Herschell Gordon Lewis?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is an American filmmaker?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "known for creating",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is Herschell Gordon Lewis known for creating?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is known for creating the splatter subgenre?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "called",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is often called the Godfather of Gore?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What title is given to Herschell Gordon Lewis?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "also given to",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who else is given the title Godfather of Gore?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What title is also given to Lucio Fulci?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "included works in",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "What genres did Herschell Gordon Lewis include works in?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who included works in exploitation film genres?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "wrote about",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "Who wrote about Herschell Gordon Lewis' career?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What did All Movie write about?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

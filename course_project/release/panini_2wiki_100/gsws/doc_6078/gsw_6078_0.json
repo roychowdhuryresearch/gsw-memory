@@ -1,0 +1,440 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Spione",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "German cinema",
+                        "silent film",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "espionage thriller"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Spies",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "English translation",
+                        "alternative title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1928",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "German",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Fritz Lang",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "screenwriter"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "German cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Thea von Harbou",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "screenwriter",
+                        "novelist"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "German cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Fritz Lang-film GmbH",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "film production",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Rudolf Klein-Rogge",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "German cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Friedrich-Wilhelm-Murnau-Stiftung",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "film restoration",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "2003-2004",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "restoration period",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "N\u00e1rodn\u00ed Filmov\u00fd Archiv",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "film archive",
+                        "Prague"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Prague",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "Czech Republic"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "English title",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the English title of Spione?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film has the English title 'Spies'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Spione released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film was released in 1928?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who directed Spione?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film did Fritz Lang direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "co-written with",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who co-wrote Spione with Fritz Lang?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film did Thea von Harbou co-write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What company produced Spione?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What film did Fritz Lang-film GmbH produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "restored by",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who restored Spione?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What film did Friedrich-Wilhelm-Murnau-Stiftung restore?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "restoration period",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "When was Spione restored?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What film was restored during 2003-2004?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "held at",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "Where is a high quality nitrate copy of Spione held?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What film's nitrate copy is held at N\u00e1rodn\u00ed Filmov\u00fd Archiv?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "Where is N\u00e1rodn\u00ed Filmov\u00fd Archiv located?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q18",
+                    "text": "What is located in Prague?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,228 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Gamecock",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Italian cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "comedy genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1974",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Italian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "comedy film",
+            "roles": [
+                {
+                    "role": "genre",
+                    "states": [
+                        "film category",
+                        "humorous genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Pasquale Festa Campanile",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "Italian cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Neurotandem",
+            "roles": [
+                {
+                    "role": "play",
+                    "states": [
+                        "comedy genre",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "1968",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "publication year",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed The Gamecock?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Pasquale Festa Campanile direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was The Gamecock released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film was released in 1974?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is The Gamecock based on?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film is based on the play Neurotandem?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "When was the play Neurotandem published?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What play was published in 1968?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

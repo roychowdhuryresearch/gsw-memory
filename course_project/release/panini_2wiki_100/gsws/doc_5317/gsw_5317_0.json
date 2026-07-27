@@ -1,0 +1,219 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Sint-Denijs-Westrem Airport",
+            "roles": [
+                {
+                    "role": "airport",
+                    "states": [
+                        "closed",
+                        "civil",
+                        "military"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Sint-Denijs-Westrem",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "town",
+                        "Belgium"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "3.2 km southwest of Gent",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "relative location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Gent",
+            "roles": [
+                {
+                    "role": "city",
+                    "states": [
+                        "Belgium"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "East Flanders",
+            "roles": [
+                {
+                    "role": "region",
+                    "states": [
+                        "Belgium"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Belgium",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "Europe"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Sint-Denijs-Westrem Airport located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What airport is located in Sint-Denijs-Westrem?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located southwest of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is located 3.2 km southwest of Gent?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where is Sint-Denijs-Westrem Airport located relative to Gent?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What region is Sint-Denijs-Westrem part of?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What town is part of East Flanders?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where is Gent located?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What city is located in East Flanders?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Where is East Flanders located?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What region is located in Belgium?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

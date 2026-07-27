@@ -1,0 +1,113 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Back from the Edge",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "music",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "song",
+                    "states": [
+                        "title track",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2016",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "James Arthur",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "contemporary artist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was the album Back from the Edge released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What album was released in 2016?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "created by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who created the album Back from the Edge?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What album did James Arthur create?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,474 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Dorothee Metlitzki",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Devora Metlitsky",
+            "roles": [
+                {
+                    "role": "alternative name",
+                    "states": [
+                        "alias",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "July 27, 1914",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "April 14, 2001",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Germany",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "nationality",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "author",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "literary field"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "professor of English",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "academic field"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "University of California, Berkeley",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "academic affiliation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Yale University",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "academic affiliation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "medieval English literature and history",
+            "roles": [
+                {
+                    "role": "specialization",
+                    "states": [
+                        "academic field"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Arabic literature and language",
+            "roles": [
+                {
+                    "role": "specialization",
+                    "states": [
+                        "academic field"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Herman Melville",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "literary figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "Zionist",
+            "roles": [
+                {
+                    "role": "political affiliation",
+                    "states": [
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e15",
+            "name": "State of Israel",
+            "roles": [
+                {
+                    "role": "nation",
+                    "states": [
+                        "modern state",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Dorothee Metlitzki born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on July 27, 1914?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did Dorothee Metlitzki die?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who died on April 14, 2001?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where was Dorothee Metlitzki born?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was born in Germany?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What nationality did Dorothee Metlitzki hold?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was an American national?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What was Dorothee Metlitzki's profession?",
+                    "answers": [
+                        "e7",
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was a professor of English?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "worked at",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Where did Dorothee Metlitzki work?",
+                    "answers": [
+                        "e9",
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who worked at Yale University?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "specialized in",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "What did Dorothee Metlitzki specialize in?",
+                    "answers": [
+                        "e11",
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who specialized in medieval English literature and history?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "studied",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "Who studied Herman Melville?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "Who did Dorothee Metlitzki study?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "political affiliation",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "What was Dorothee Metlitzki's political affiliation?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q18",
+                    "text": "Who was a Zionist?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v10",
+            "phrase": "played a role in",
+            "questions": [
+                {
+                    "id": "q19",
+                    "text": "What did Dorothee Metlitzki play a role in founding?",
+                    "answers": [
+                        "e15"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q20",
+                    "text": "Who played a role in the foundation of the modern State of Israel?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

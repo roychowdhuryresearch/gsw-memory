@@ -1,0 +1,511 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Archduke Franz Josef of Austria-Tuscany",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "4 February 1905",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Vienna",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "9 May 1975",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Hernstein, Austria",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "death place"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Archduke Leopold Salvator, Prince of Tuscany",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Infanta Blanca of Spain",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Barcelona",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "residence"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Spanish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "naturalized"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "residence during WWII"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "forestry industry",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "occupation during WWII"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "1955",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "return to Austria"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Archduke Karl Pius",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "Duke of Madrid",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "self-assumed"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 4 February 1905?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Archduke Franz Josef of Austria-Tuscany born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was born in Vienna?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where was Archduke Franz Josef of Austria-Tuscany born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "died on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who died on 9 May 1975?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "When did Archduke Franz Josef of Austria-Tuscany die?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who died in Hernstein, Austria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Where did Archduke Franz Josef of Austria-Tuscany die?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is the son of Archduke Leopold Salvator?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is the son of Infanta Blanca of Spain?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "Who is Archduke Franz Josef of Austria-Tuscany the son of?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "moved to",
+            "questions": [
+                {
+                    "id": "q12",
+                    "text": "Where did Archduke Franz Josef of Austria-Tuscany move to after the fall of the Habsburg monarchy?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "Who moved to Barcelona after the fall of the Habsburg monarchy?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "became a naturalized citizen of",
+            "questions": [
+                {
+                    "id": "q14",
+                    "text": "What nationality did Archduke Franz Josef of Austria-Tuscany acquire?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q15",
+                    "text": "Who became a naturalized Spanish citizen?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "lived in",
+            "questions": [
+                {
+                    "id": "q16",
+                    "text": "Where did Archduke Franz Josef of Austria-Tuscany live during World War II?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q17",
+                    "text": "Who lived in the United States during World War II?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "worked in",
+            "questions": [
+                {
+                    "id": "q18",
+                    "text": "In what industry did Archduke Franz Josef of Austria-Tuscany work during World War II?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q19",
+                    "text": "Who worked in the forestry industry during World War II?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v10",
+            "phrase": "returned to",
+            "questions": [
+                {
+                    "id": "q20",
+                    "text": "When did Archduke Franz Josef of Austria-Tuscany return to Austria?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q21",
+                    "text": "Who returned to Austria in 1955?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v11",
+            "phrase": "inherited pretensions from",
+            "questions": [
+                {
+                    "id": "q22",
+                    "text": "Whose Carlist pretensions to the Spanish throne did Archduke Franz Josef of Austria-Tuscany inherit?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q23",
+                    "text": "Who inherited the Carlist pretensions to the Spanish throne from Archduke Karl Pius?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v12",
+            "phrase": "called himself",
+            "questions": [
+                {
+                    "id": "q24",
+                    "text": "What title did Archduke Franz Josef of Austria-Tuscany assume?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q25",
+                    "text": "Who called himself Duke of Madrid?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

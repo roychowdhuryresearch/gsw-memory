@@ -1,0 +1,403 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Georg Philipp, Prince of Saxe-Gessaphe",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "24 May 1988",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Mexico City, Mexico",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "birthplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Alexander, Prince of Saxe-Gessaphe",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Princess Gisela of Bavaria",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Archduke Sigismund, Grand Duke of Tuscany",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Henri Antoine, Hereditary Prince of Ligne",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Sophie, Hereditary Princess of Liechtenstein",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Duke Friedrich of W\u00fcrttemberg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Prince Amedeo of Belgium, Archduke of Austria-Este",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Ferdinand Zvonimir von Habsburg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Saxon throne",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "royal title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 24 May 1988?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Georg Philipp, Prince of Saxe-Gessaphe born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was born in Mexico City, Mexico?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where was Georg Philipp, Prince of Saxe-Gessaphe born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the son of Alexander, Prince of Saxe-Gessaphe?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is the son of Princess Gisela of Bavaria?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "Who is Georg Philipp, Prince of Saxe-Gessaphe the son of?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "second cousin of",
+            "questions": [
+                {
+                    "id": "q8",
+                    "text": "Who is a second cousin of Archduke Sigismund, Grand Duke of Tuscany?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q9",
+                    "text": "Who is a second cousin of Henri Antoine, Hereditary Prince of Ligne?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who are the second cousins of Georg Philipp, Prince of Saxe-Gessaphe?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "third cousin of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who is a third cousin of Sophie, Hereditary Princess of Liechtenstein?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who is a third cousin of Georg Philipp, Prince of Saxe-Gessaphe?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "fifth cousin of",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who is a fifth cousin of Duke Friedrich of W\u00fcrttemberg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who is a fifth cousin of Georg Philipp, Prince of Saxe-Gessaphe?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "sixth cousin of",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "Who is a sixth cousin of Prince Amedeo of Belgium, Archduke of Austria-Este?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "Who is a sixth cousin of Ferdinand Zvonimir von Habsburg?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q17",
+                    "text": "Who are the sixth cousins of Georg Philipp, Prince of Saxe-Gessaphe?",
+                    "answers": [
+                        "e10",
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "heir to",
+            "questions": [
+                {
+                    "id": "q18",
+                    "text": "Who is the heir to the Saxon throne?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q19",
+                    "text": "What is Georg Philipp, Prince of Saxe-Gessaphe the heir to?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

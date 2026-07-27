@@ -1,0 +1,216 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Sikandar Shah Suri",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Sur dynasty",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1559",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death year",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Sur dynasty",
+            "roles": [
+                {
+                    "role": "dynasty",
+                    "states": [
+                        "Pashtun",
+                        "northern India",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "northern India",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "region",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Ibrahim Shah Suri",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Sur dynasty",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "sultan of Delhi",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "ruler title",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who died in 1559?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When did Sikandar Shah Suri die?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "ruler of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was the ruler of the Sur dynasty?",
+                    "answers": [
+                        "e1",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which dynasty did Sikandar Shah Suri rule?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "became sultan of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who became the sultan of Delhi?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What title did Sikandar Shah Suri hold?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "overthrew",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who did Sikandar Shah Suri overthrow?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who was overthrown by Sikandar Shah Suri?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

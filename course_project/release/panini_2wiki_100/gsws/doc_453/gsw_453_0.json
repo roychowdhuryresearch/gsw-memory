@@ -1,0 +1,227 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "L\u00e9von Sayan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "cultural figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Levon Sanosyan",
+            "roles": [
+                {
+                    "role": "alternative name",
+                    "states": [
+                        "alias"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "December 17, 1934",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "French",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Armenian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "ethnic"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "impresario",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "entertainment industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "producer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "entertainment industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "operatic tenor",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was L\u00e9von Sayan born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on December 17, 1934?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is L\u00e9von Sayan's nationality?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is French and Armenian?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What are L\u00e9von Sayan's professions?",
+                    "answers": [
+                        "e6",
+                        "e7",
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is an impresario, producer, and operatic tenor?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "also known as",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is another name for L\u00e9von Sayan?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is also known as Levon Sanosyan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

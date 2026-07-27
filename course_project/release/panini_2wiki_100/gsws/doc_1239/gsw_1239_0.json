@@ -1,0 +1,332 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "One More Time",
+            "roles": [
+                {
+                    "role": "music group",
+                    "states": [
+                        "Swedish",
+                        "pop genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "One More Time",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "second album",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1994",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Swedish charts",
+            "roles": [
+                {
+                    "role": "chart",
+                    "states": [
+                        "music ranking",
+                        "Sweden"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Song of F\u00eate",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "single",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Get Out",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "single",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "The Dolphin",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "single",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Dazzle Light",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "re-recording",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Sound of Music",
+            "roles": [
+                {
+                    "role": "music group",
+                    "states": [
+                        "previous group",
+                        "Peter Gr\u00f6nvall",
+                        "Nanne Gr\u00f6nvall"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Peter Gr\u00f6nvall",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "member of One More Time",
+                        "member of Sound of Music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Nanne Gr\u00f6nvall",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "member of One More Time",
+                        "member of Sound of Music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was the album One More Time released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What album was released in 1994?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "did not enter",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Which album did not enter the Swedish charts?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What charts did the album One More Time not enter?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released as singles",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which songs were released as singles from the album One More Time?",
+                    "answers": [
+                        "e5",
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "From which album were the songs Song of F\u00eate, Get Out, and The Dolphin released as singles?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "peaked at",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which song from the album One More Time peaked at no. 36 on the Swedish charts?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What position did the song Song of F\u00eate peak at on the Swedish charts?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "re-recording of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Which song was a re-recording of a song included on one of Sound of Music's albums?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What was Dazzle Light a re-recording of?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "members of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who were members of both Sound of Music and One More Time?",
+                    "answers": [
+                        "e10",
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Which groups were Peter Gr\u00f6nvall and Nanne Gr\u00f6nvall members of?",
+                    "answers": [
+                        "e1",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

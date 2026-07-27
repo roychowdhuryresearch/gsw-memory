@@ -1,0 +1,329 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Brian Patrick Kennedy",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "art museum director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "5 November 1961",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Irish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Peabody Essex Museum",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art museum",
+                        "current workplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Toledo Museum of Art",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art museum",
+                        "former workplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Ohio",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "U.S. state",
+                        "former workplace location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Hood Museum of Art",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art museum",
+                        "former workplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "National Gallery of Australia",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art museum",
+                        "former workplace"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Canberra",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "capital city",
+                        "former workplace location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "current residence"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Brian Patrick Kennedy born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on 5 November 1961?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Brian Patrick Kennedy's nationality?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Irish by nationality?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "director of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the director of the Peabody Essex Museum?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What museum is Brian Patrick Kennedy the director of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "was director of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who was the director of the Toledo Museum of Art?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What museum did Brian Patrick Kennedy direct from 2010 to 2019?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "was director of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who was the director of the Hood Museum of Art?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What museum did Brian Patrick Kennedy direct from 2005 to 2010?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "was director of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who was the director of the National Gallery of Australia?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What museum did Brian Patrick Kennedy direct from 1997 to 2004?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "lives in",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Where does Brian Patrick Kennedy currently live?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who currently lives in the United States?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,220 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Guy Tzarfati",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "retired",
+                        "footballer",
+                        "manager"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "28 April 1979",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Israeli",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "person"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Hapoel Be'er Sheva",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "football club"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Sami Tzarfati",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "footballer",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Jackie Tzarfati",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "footballer",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 28 April 1979?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Guy Tzarfati born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Guy Tzarfati's nationality?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Israeli?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "works as",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is Guy Tzarfati's current profession?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who works as the assistant manager of Hapoel Be'er Sheva?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "father of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the father of Guy Tzarfati?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Sami Tzarfati's son?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "brother of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is the brother of Guy Tzarfati?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Jackie's brother?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

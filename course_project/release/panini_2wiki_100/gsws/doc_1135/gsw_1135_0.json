@@ -1,0 +1,229 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Sheila Atim",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "creative professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "actress",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "performing arts"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "singer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "composer",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "former model",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "fashion industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "2018 Laurence Olivier Award for Best Supporting Actress in a Musical",
+            "roles": [
+                {
+                    "role": "award",
+                    "states": [
+                        "theater",
+                        "2018"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Marianne",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "theater role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Girl from the North Country",
+            "roles": [
+                {
+                    "role": "production",
+                    "states": [
+                        "musical",
+                        "original production"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is Sheila Atim's profession?",
+                    "answers": [
+                        "e2",
+                        "e3",
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is an actress, singer, composer, and former model?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "won",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who won the 2018 Laurence Olivier Award for Best Supporting Actress in a Musical?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What award did Sheila Atim win in 2018?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "role as",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What role did Sheila Atim play in Girl from the North Country?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who played the role of Marianne in Girl from the North Country?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "in production",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "In which production did Sheila Atim play Marianne?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who played in the original production of Girl from the North Country?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

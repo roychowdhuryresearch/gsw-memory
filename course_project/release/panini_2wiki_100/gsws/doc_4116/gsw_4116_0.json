@@ -1,0 +1,145 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Can't Forget You",
+            "roles": [
+                {
+                    "role": "single",
+                    "states": [
+                        "music",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Gloria Estefan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "singer",
+                        "songwriter",
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1991",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Into the Light",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "music",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who released 'Can't Forget You'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What single did Gloria Estefan release?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 'Can't Forget You' released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What was released in 1991?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "part of album",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which album includes 'Can't Forget You'?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What single is part of the album 'Into the Light'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

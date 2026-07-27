@@ -1,0 +1,18 @@
+{
+  "decomposer": {
+    "model": "yigitturali/qwen3-8b-qa-decomp-gsw-rank-256-gpt5-golden-large",
+    "prompt": "models/decomposition_prompt.txt",
+    "quantization": "4bit-nf4-recommended-for-colab",
+    "temperature": 0.0
+  },
+  "embedding": {
+    "model": "Qwen/Qwen3-Embedding-8B",
+    "dimension": 4096,
+    "normalized": true,
+    "corpus_embeddings_supplied": true
+  },
+  "reranker": {
+    "model": "Qwen/Qwen3-Reranker-8B",
+    "quantization": "4bit-nf4-recommended-for-colab"
+  }
+}

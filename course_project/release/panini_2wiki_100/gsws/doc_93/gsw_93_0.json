@@ -1,0 +1,66 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "John Donatich",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Yale University Press",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "academic publisher",
+                        "university press"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "Director of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is the Director of Yale University Press?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What organization is John Donatich the Director of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,183 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Moskovskij Komsomolets",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "daily publication",
+                        "Russian media"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Moscow",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "headquarters",
+                        "Russian city"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "one million",
+            "roles": [
+                {
+                    "role": "circulation",
+                    "states": [
+                        "approximate",
+                        "large scale"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "1919",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "founding year",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Russian politics and society",
+            "roles": [
+                {
+                    "role": "topic",
+                    "states": [
+                        "coverage area",
+                        "sensational content"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "based in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Moskovskij Komsomolets based?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What newspaper is based in Moscow?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has a circulation of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the circulation of Moskovskij Komsomolets?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which newspaper has a circulation of approximately one million?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "founded in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was Moskovskij Komsomolets founded?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What newspaper was founded in 1919?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "covers",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What topics does Moskovskij Komsomolets cover?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which newspaper covers Russian politics and society?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

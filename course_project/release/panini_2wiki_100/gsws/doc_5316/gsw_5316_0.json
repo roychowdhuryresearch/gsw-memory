@@ -1,0 +1,239 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Far View Airport",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "airport",
+                        "transportation facility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Hiram",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "village",
+                        "Portage County"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Portage County",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "county",
+                        "Ohio"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Ohio",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "state",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "country",
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "one nautical mile",
+            "roles": [
+                {
+                    "role": "distance",
+                    "states": [
+                        "measurement",
+                        "nautical"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "2 km",
+            "roles": [
+                {
+                    "role": "distance",
+                    "states": [
+                        "measurement",
+                        "metric"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Far View Airport located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is located in Hiram?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What county is Hiram part of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is part of Portage County?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is Portage County located?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What is located in Ohio?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where is Ohio located?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What is located in the United States?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "distance from",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "How far is Far View Airport from the central business district of Hiram?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What is one nautical mile from the central business district of Hiram?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,347 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Polly of the Movies",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "American cinema",
+                        "silent film",
+                        "comedy genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1927",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Scott Pembroke",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Jason Robards",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Gertrude Short",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Corliss Palmer",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Harry Leon Wilson",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "author"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "literature",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Merton of the Movies",
+            "roles": [
+                {
+                    "role": "novel",
+                    "states": [
+                        "literature",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "1922",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "publication year",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed Polly of the Movies?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Scott Pembroke direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "starring",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who starred in Polly of the Movies?",
+                    "answers": [
+                        "e4",
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "In what film did Jason Robards star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "In what film did Gertrude Short star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "In what film did Corliss Palmer star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is Polly of the Movies based on?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film is based on Merton of the Movies?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who wrote Merton of the Movies?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What novel did Harry Leon Wilson write?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "When was Merton of the Movies published?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What novel was published in 1922?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "When was Polly of the Movies released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What film was released in 1927?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

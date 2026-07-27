@@ -1,0 +1,267 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Monster a Go-Go!",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "American cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "science-fiction horror genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1965",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Bill Rebane",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Herschell Gordon Lewis",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Mystery Science Theater 3000",
+            "roles": [
+                {
+                    "role": "television series",
+                    "states": [
+                        "satirical",
+                        "film-riffing"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "1993",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "feature year",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Comedy Central",
+            "roles": [
+                {
+                    "role": "television network",
+                    "states": [
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed Monster a Go-Go!?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Bill Rebane direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "What film did Herschell Gordon Lewis direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q4",
+                    "text": "When was Monster a Go-Go! released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "What film was released in 1965?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "featured in",
+            "questions": [
+                {
+                    "id": "q6",
+                    "text": "What film was featured in Mystery Science Theater 3000?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "Where was Monster a Go-Go! featured?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "aired on",
+            "questions": [
+                {
+                    "id": "q8",
+                    "text": "When was Monster a Go-Go! featured on Mystery Science Theater 3000?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q9",
+                    "text": "What year was Monster a Go-Go! featured on Comedy Central?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "broadcast by",
+            "questions": [
+                {
+                    "id": "q10",
+                    "text": "What network broadcast Mystery Science Theater 3000 featuring Monster a Go-Go!?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "What series featuring Monster a Go-Go! was broadcast by Comedy Central?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

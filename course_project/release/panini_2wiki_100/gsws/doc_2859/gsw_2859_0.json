@@ -1,0 +1,314 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "College Lovers",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "early talkie",
+                        "Pre-Code comedy"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "1930s cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1930",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "First National Pictures",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "film production",
+                        "subsidiary of Warner Bros."
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Warner Bros.",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "film industry",
+                        "parent company"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "John G. Adolfi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Jack Whiting",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Marian Nixon",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Frank McHugh",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Guinn 'Big Boy' Williams",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Earl Baldwin",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "story writer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "produced and released by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who produced and released College Lovers?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did First National Pictures produce and release?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "subsidiary of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is First National Pictures a subsidiary of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which company is a subsidiary of Warner Bros.?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who directed College Lovers?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film did John G. Adolfi direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "stars",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who stars in College Lovers?",
+                    "answers": [
+                        "e6",
+                        "e7",
+                        "e8",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "In what film does Jack Whiting star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q9",
+                    "text": "In what film does Marian Nixon star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "In what film does Frank McHugh star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q11",
+                    "text": "In what film does Guinn 'Big Boy' Williams star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "based on the story by",
+            "questions": [
+                {
+                    "id": "q12",
+                    "text": "Who wrote the story that College Lovers is based on?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q13",
+                    "text": "What film is based on a story by Earl Baldwin?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

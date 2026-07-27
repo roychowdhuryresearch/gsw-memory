@@ -1,0 +1,112 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Step Forward",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Soviet cinema",
+                        "almanac format"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "composed of five novels"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Soviet",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "film origin",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "five novels",
+            "roles": [
+                {
+                    "role": "component",
+                    "states": [
+                        "film structure",
+                        "narrative elements"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "is a film of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of the film Step Forward?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film is of Soviet origin?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "consists of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What does the film Step Forward consist of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which film consists of five novels?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

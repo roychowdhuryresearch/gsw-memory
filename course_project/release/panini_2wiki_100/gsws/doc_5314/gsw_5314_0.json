@@ -1,0 +1,116 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Shkod\u00ebr Airfield",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "airfield",
+                        "transportation infrastructure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Shtoj",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "village",
+                        "geographical area"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Shkod\u00ebr County",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "administrative region",
+                        "Albania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Albania",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "European nation",
+                        "Balkan region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Shkod\u00ebr Airfield located?",
+                    "answers": [
+                        "e2",
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What airfield is located in Shtoj?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "What airfield is located in Shkod\u00ebr County?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What airfield is located in Albania?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

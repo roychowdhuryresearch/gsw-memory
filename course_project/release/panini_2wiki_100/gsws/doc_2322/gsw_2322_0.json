@@ -1,0 +1,381 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Shirin Farhad",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Hindi cinema",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "musical genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1931",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Hindi",
+            "roles": [
+                {
+                    "role": "language",
+                    "states": [
+                        "Indian cinema",
+                        "linguistic attribute"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "sound film",
+            "roles": [
+                {
+                    "role": "film type",
+                    "states": [
+                        "technological milestone",
+                        "early sound era"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Shahnameh",
+            "roles": [
+                {
+                    "role": "literary work",
+                    "states": [
+                        "source material",
+                        "Persian literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Farhad and Shirin",
+            "roles": [
+                {
+                    "role": "story",
+                    "states": [
+                        "love story",
+                        "Persian literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Nizami Ganjavi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "author",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "J.J. Madan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "Indian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Nissar",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "Indian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Jehanara Kajjan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actress",
+                        "Indian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Alam Ara",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "first Indian sound film",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Shirin Farhad released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 1931?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "language",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What language is Shirin Farhad in?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which film is in Hindi?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "type",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What type of film is Shirin Farhad?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which film is a sound film?",
+                    "answers": [
+                        "e1",
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is Shirin Farhad based on?",
+                    "answers": [
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which film is based on the Shahnameh?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who wrote the story of Farhad and Shirin?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What did Nizami Ganjavi write?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who directed Shirin Farhad?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What film did J.J. Madan direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "starred",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who starred in Shirin Farhad?",
+                    "answers": [
+                        "e9",
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "In which film did Nissar and Jehanara Kajjan star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "first sound film",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "What was the first Indian film with sound?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "Which film was released earlier in the same year as Shirin Farhad?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

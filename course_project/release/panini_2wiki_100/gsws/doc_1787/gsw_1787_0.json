@@ -1,0 +1,294 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Weekend Blockbusters",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "film production",
+                        "Indian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Kollam, India",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "company location",
+                        "India"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "2014",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "establishment year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Sophia Paul",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "producer",
+                        "founder"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Bangalore Days",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Malayalam cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "2014",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Kaadu Pookkunna Neram",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Malayalam cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Munthirivallikal Thalirkkumbol",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Malayalam cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "2016",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "based in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Weekend Blockbusters based?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company is based in Kollam, India?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "established in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Weekend Blockbusters established?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What company was established in 2014?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "founded by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who founded Weekend Blockbusters?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What company did Sophia Paul found?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "first production",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was the first production of Weekend Blockbusters?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which company produced Bangalore Days as their first film?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "When was Bangalore Days released?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What film was released in 2014?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "produced in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "When were Kaadu Pookkunna Neram and Munthirivallikal Thalirkkumbol produced?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What films were produced in 2016 by Weekend Blockbusters?",
+                    "answers": [
+                        "e7",
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

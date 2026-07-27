@@ -1,0 +1,273 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Chased by the Dogs",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Egyptian cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "drama genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "The Thief and the Dogs",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "alternative title",
+                        "English translation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1962",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Egyptian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Middle Eastern cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Kamal El Sheikh",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "Egyptian cinema",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Naguib Mahfouz",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "author"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "Egyptian literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "13th Berlin International Film Festival",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "film festival",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "35th Academy Awards",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "award ceremony",
+                        "1960s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed Chased by the Dogs?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Kamal El Sheikh direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Chased by the Dogs based on?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which film is based on a novel by Naguib Mahfouz?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "entered into",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which film was entered into the 13th Berlin International Film Festival?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What event was Chased by the Dogs entered into?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "selected as entry for",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which film was selected as the Egyptian entry for the Best Foreign Language Film at the 35th Academy Awards?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What was Chased by the Dogs selected as an entry for?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "When was Chased by the Dogs released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What film was released in 1962?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

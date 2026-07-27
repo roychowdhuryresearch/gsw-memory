@@ -1,0 +1,183 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "O Valencia!",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "single",
+                        "indie rock"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "The Decemberists",
+            "roles": [
+                {
+                    "role": "band",
+                    "states": [
+                        "indie rock",
+                        "music group"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "The Crane Wife",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "fourth studio album",
+                        "The Decemberists"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Colin Meloy",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "lyricist",
+                        "musician"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "star-crossed lovers",
+            "roles": [
+                {
+                    "role": "theme",
+                    "states": [
+                        "romantic",
+                        "narrative"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who wrote the music for O Valencia!?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did The Decemberists write the music for?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "lyrics by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who wrote the lyrics for O Valencia!?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Colin Meloy write the lyrics for?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "From which album was O Valencia! released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was released from The Crane Wife?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "tells a story of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the theme of O Valencia!?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which song tells a story of star-crossed lovers?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

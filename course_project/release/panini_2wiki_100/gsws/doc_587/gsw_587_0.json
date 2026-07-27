@@ -1,0 +1,198 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Muppets Go To The Movies",
+            "roles": [
+                {
+                    "role": "television special",
+                    "states": [
+                        "American television",
+                        "1980s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "The Muffets Go To The Movies",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "misspelled title",
+                        "alternative title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Fozzie Bear",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "fictional character",
+                        "The Muppets"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "1981",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1980s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "ABC",
+            "roles": [
+                {
+                    "role": "network",
+                    "states": [
+                        "American television network"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "The Great Muppet Caper",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "promotional film",
+                        "The Muppets"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "aired on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When did The Muppets Go To The Movies air?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What aired on ABC in 1981?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "aired on network",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "On which network did The Muppets Go To The Movies air?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What television special aired on ABC?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "misspelled by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who misspelled The Muppets Go To The Movies as The Muffets Go To The Movies?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What did Fozzie Bear misspell?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "used to promote",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What was The Muppets Go To The Movies used to promote?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which television special was used to promote The Great Muppet Caper?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

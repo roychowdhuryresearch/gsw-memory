@@ -1,0 +1,300 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Pepo",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Soviet cinema",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "drama genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1935",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1930s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Soviet",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European cinema",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Gabriel Sundukyan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "playwright",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1876",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "play publication year",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Hamo Beknazarian",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "screenwriter"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Aram Khachaturian",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "composer",
+                        "musician"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "World War II",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "historical event",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Armenian culture",
+            "roles": [
+                {
+                    "role": "cultural identity",
+                    "states": [
+                        "national culture",
+                        "international recognition"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "based on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is Pepo based on?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Which film is based on Gabriel Sundukyan's play?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Pepo released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film was released in 1935?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "scripted and directed by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who scripted and directed Pepo?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film did Hamo Beknazarian script and direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "music composed by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who composed the music for Pepo?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film did Aram Khachaturian compose music for?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "considered the most outstanding film",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What film is considered the most outstanding in Soviet cinema before World War II?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "How is Pepo regarded in Soviet cinema before World War II?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "represents",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What does Pepo represent abroad?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Which film represents Armenian culture abroad?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,129 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "First BanCorp",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "publicly owned",
+                        "financial holding"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "San Juan",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "headquarters",
+                        "city"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Puerto Rico",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "country",
+                        "Caribbean"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is First BanCorp located?",
+                    "answers": [
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company is located in San Juan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "headquartered in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is the headquarters of First BanCorp?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What company has its headquarters in San Juan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "publicly owned",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Is First BanCorp publicly owned?",
+                    "answers": [
+                        "Yes"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What type of ownership does First BanCorp have?",
+                    "answers": [
+                        "publicly owned"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

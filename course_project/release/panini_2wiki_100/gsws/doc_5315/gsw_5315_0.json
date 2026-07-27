@@ -1,0 +1,228 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Mountain View Airport",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "public airport",
+                        "transportation facility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Mountain View",
+            "roles": [
+                {
+                    "role": "city",
+                    "states": [
+                        "Howell County",
+                        "Missouri",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Howell County",
+            "roles": [
+                {
+                    "role": "county",
+                    "states": [
+                        "Missouri",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Missouri",
+            "roles": [
+                {
+                    "role": "state",
+                    "states": [
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "City of Mountain View",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "owner",
+                        "municipal government"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "MNF",
+            "roles": [
+                {
+                    "role": "location identifier",
+                    "states": [
+                        "FAA code"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Mana Island",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "Fiji"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Mountain View Airport located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What airport is located in Mountain View?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "owned by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who owns Mountain View Airport?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What does the City of Mountain View own?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "assigned FAA code",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the FAA code for Mountain View Airport?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which airport has the FAA code MNF?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "assigned IATA code",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the IATA code for the airport on Mana Island?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which location has the IATA code MNF?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

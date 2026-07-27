@@ -1,0 +1,169 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "I Forgot to Remember to Forget",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "country genre",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1955",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Elvis Presley",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "singer",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Stan Kesler",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Charlie Feathers",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "recorded by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who recorded 'I Forgot to Remember to Forget'?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Elvis Presley record?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who wrote 'I Forgot to Remember to Forget'?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Stan Kesler write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "What song did Charlie Feathers write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q6",
+                    "text": "When was 'I Forgot to Remember to Forget' released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "What song was released in 1955?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,103 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Hannah Arnold",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Hannah Waterman King",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Benedict Arnold's children",
+            "roles": [
+                {
+                    "role": "group",
+                    "states": [
+                        "descendants",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "also known as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is also known as Hannah Waterman King?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is another name for Hannah Arnold?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "grandmother of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the grandmother of Benedict Arnold's children?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who are the grandchildren of Hannah Arnold?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

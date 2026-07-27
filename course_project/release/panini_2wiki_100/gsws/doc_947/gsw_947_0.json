@@ -1,0 +1,441 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Last Tango in Paris",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "erotic drama",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "controversial",
+                        "censored"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1972",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Bernardo Bertolucci",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "Italian cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Marlon Brando",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "American cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Maria Schneider",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "French cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Jean-Pierre L\u00e9aud",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative professional",
+                    "states": [
+                        "French cinema",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "film release",
+                        "censorship"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "X rating",
+            "roles": [
+                {
+                    "role": "rating",
+                    "states": [
+                        "MPAA",
+                        "1970s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "NC-17",
+            "roles": [
+                {
+                    "role": "rating",
+                    "states": [
+                        "MPAA",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "1997",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "ratings revision",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Metro-Goldwyn-Mayer",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "film distributor",
+                        "1980s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "1981",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "1980s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "R-rated",
+            "roles": [
+                {
+                    "role": "rating",
+                    "states": [
+                        "censored version",
+                        "1980s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed Last Tango in Paris?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Bernardo Bertolucci direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was Last Tango in Paris released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film was released in 1972?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "stars",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who stars in Last Tango in Paris?",
+                    "answers": [
+                        "e4",
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "In what film did Marlon Brando, Maria Schneider, and Jean-Pierre L\u00e9aud star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where was Last Tango in Paris released?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film was released in the United States?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "given rating",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What rating was given to Last Tango in Paris upon its release in the United States?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What film was given an X rating by the MPAA?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "reclassified as",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What was Last Tango in Paris reclassified as in 1997?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What film was reclassified as NC-17?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who released a censored R-rated cut of Last Tango in Paris in 1981?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What film did Metro-Goldwyn-Mayer release a censored R-rated cut of?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "When did Metro-Goldwyn-Mayer release a censored R-rated cut of Last Tango in Paris?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What film had a censored R-rated cut released in 1981?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

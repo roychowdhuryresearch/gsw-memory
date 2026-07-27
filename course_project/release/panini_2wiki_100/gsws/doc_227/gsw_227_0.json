@@ -1,0 +1,381 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "3 Dots",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Malayalam cinema",
+                        "comedy genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2013",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Sugeeth",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Kunchacko Boban",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "lead role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Biju Menon",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "lead role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Prathap K. Pothan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "supporting role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Narain",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "supporting role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Krishnakumar",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "supporting role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Janani Iyer",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actress",
+                        "female lead"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Anjana Menon",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actress",
+                        "supporting role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Sreedhanya (Gayathri)",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actress",
+                        "supporting role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Satish B Satish",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Ordinary Films",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "production company"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "directed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who directed 3 Dots?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film did Sugeeth direct?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 3 Dots released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film was released in 2013?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who produced 3 Dots?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What film did Satish B Satish produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "produced under",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Under what banner was 3 Dots produced?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film was produced under Ordinary Films?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "stars",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who are the lead actors in 3 Dots?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "In which film do Kunchacko Boban and Biju Menon play lead roles?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "features",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who are the supporting actors in 3 Dots?",
+                    "answers": [
+                        "e6",
+                        "e7",
+                        "e8",
+                        "e10",
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "In which film do Prathap K. Pothan, Narain, and Krishnakumar play supporting roles?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "female lead",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who is the female lead in 3 Dots?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "In which film does Janani Iyer play the female lead?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

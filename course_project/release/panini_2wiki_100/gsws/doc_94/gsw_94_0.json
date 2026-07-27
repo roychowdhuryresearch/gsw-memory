@@ -1,0 +1,144 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "John Farrell",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "professional",
+                        "current figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "director",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "executive role",
+                        "corporate position"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "YouTube",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "technology company",
+                        "media platform"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Latin America",
+            "roles": [
+                {
+                    "role": "region",
+                    "states": [
+                        "geographical area",
+                        "cultural region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "is the director of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is the director of YouTube in Latin America?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What position does John Farrell hold at YouTube?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "works for",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who works for YouTube in Latin America?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Where does John Farrell work?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is John Farrell's directorship located?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is the director of YouTube in Latin America?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

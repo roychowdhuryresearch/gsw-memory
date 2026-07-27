@@ -1,0 +1,122 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Thanatophobia",
+            "roles": [
+                {
+                    "role": "condition",
+                    "states": [
+                        "psychological",
+                        "fear-related"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "fear of death",
+            "roles": [
+                {
+                    "role": "concept",
+                    "states": [
+                        "psychological",
+                        "fear-related"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "being dead",
+            "roles": [
+                {
+                    "role": "state",
+                    "states": [
+                        "psychological",
+                        "fear-related"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "dying",
+            "roles": [
+                {
+                    "role": "process",
+                    "states": [
+                        "psychological",
+                        "fear-related"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "is the fear of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is Thanatophobia the fear of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What condition is the fear of death?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "specifically refers to",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What does Thanatophobia specifically refer to?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What condition specifically refers to being dead or dying?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

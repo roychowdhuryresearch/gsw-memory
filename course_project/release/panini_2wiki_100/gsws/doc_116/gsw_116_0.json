@@ -1,0 +1,305 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "When The Stars Go Blue",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "alternative country",
+                        "popular"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Ryan Adams",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "solo artist",
+                        "former band member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Whiskeytown",
+            "roles": [
+                {
+                    "role": "band",
+                    "states": [
+                        "alternative country"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Gold",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "music album"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "September 25, 2001",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "The Corrs",
+            "roles": [
+                {
+                    "role": "band",
+                    "states": [
+                        "Irish"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Bono",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "U2 member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Tim McGraw",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "country music singer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Venke Knutson",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "Norwegian artist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Kurt Nilsen",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "Norwegian artist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "composed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who composed 'When The Stars Go Blue'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Ryan Adams compose?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "performed by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who originally performed 'When The Stars Go Blue'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Ryan Adams originally perform?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'When The Stars Go Blue' released?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was released on September 25, 2001?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "included in album",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Which album includes 'When The Stars Go Blue'?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song is included in the album 'Gold'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "covered by",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Which artists have covered 'When The Stars Go Blue'?",
+                    "answers": [
+                        "e6",
+                        "e8",
+                        "e9",
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What song did The Corrs, Tim McGraw, Venke Knutson, and Kurt Nilsen cover?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "featured artist",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who is the featured artist with The Corrs on their cover of 'When The Stars Go Blue'?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "On which band's cover of 'When The Stars Go Blue' is Bono featured?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

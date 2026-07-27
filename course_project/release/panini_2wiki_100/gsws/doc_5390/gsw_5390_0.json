@@ -1,0 +1,191 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "All Over Me",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "recorded",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "music",
+                        "single"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Chocolate Starfish",
+            "roles": [
+                {
+                    "role": "music group",
+                    "states": [
+                        "Australian",
+                        "rock"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "October 1993",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "self-titled debut studio album",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "debut",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1994",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "album release year",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "recorded by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who recorded 'All Over Me'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Chocolate Starfish record?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 'All Over Me' released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song was released in October 1993?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "part of album",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What album is 'All Over Me' part of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song is part of the self-titled debut studio album?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "album released in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "When was the self-titled debut studio album released?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What album was released in 1994?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

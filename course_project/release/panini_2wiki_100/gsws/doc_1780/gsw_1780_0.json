@@ -1,0 +1,301 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Munti Wayi",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "Andes"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Ancash Quechua",
+            "roles": [
+                {
+                    "role": "language",
+                    "states": [
+                        "indigenous language",
+                        "Peru"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Monte Huay",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "Hispanicized spelling",
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Cordillera Blanca",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "Andes",
+                        "Peru"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Andes",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "South America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Peru",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "South America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Ancash Region",
+            "roles": [
+                {
+                    "role": "region",
+                    "states": [
+                        "Peru"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Bolognesi Province",
+            "roles": [
+                {
+                    "role": "province",
+                    "states": [
+                        "Ancash Region",
+                        "Peru"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Aquia District",
+            "roles": [
+                {
+                    "role": "district",
+                    "states": [
+                        "Bolognesi Province",
+                        "Peru"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Rahu Kutaq",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "Andes"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Pastu Ruri",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "Andes"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Munti Wayi located?",
+                    "answers": [
+                        "e7",
+                        "e8",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What mountain is located in the Ancash Region?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What mountain range is Munti Wayi part of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is part of the Cordillera Blanca?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "Hispanicized spelling",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the Hispanicized spelling of Munti Wayi?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What mountain is also known as Monte Huay?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "northeast of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is located northeast of Rahu Kutaq?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Where is Munti Wayi located in relation to Rahu Kutaq?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "southeast of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is located southeast of Pastu Ruri?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Where is Munti Wayi located in relation to Pastu Ruri?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

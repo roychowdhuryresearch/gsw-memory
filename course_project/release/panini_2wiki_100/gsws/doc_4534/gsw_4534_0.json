@@ -1,0 +1,200 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Gene A. Smith",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "historian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "North American",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "professor of History",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "academic",
+                        "educator"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "director of the Center for Texas Studies",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "academic leadership",
+                        "educational center"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Texas Christian University",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "educational",
+                        "university"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "books",
+            "roles": [
+                {
+                    "role": "creative work",
+                    "states": [
+                        "authorship",
+                        "literature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Gene A. Smith?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is an American historian?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "holds position",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What position does Gene A. Smith hold at Texas Christian University?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is the professor of History and director of the Center for Texas Studies?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "affiliated with",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "With which university is Gene A. Smith affiliated?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is affiliated with Texas Christian University?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "author of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What has Gene A. Smith authored?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is the author of several books?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

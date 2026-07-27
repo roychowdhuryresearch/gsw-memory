@@ -1,0 +1,317 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Dai Zhou",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "deceased",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "633",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "death year",
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Xuanyin",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "courtesy name",
+                        "Chinese tradition"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Duke Zhong of Dao",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "posthumous name",
+                        "Chinese nobility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Chinese",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Asian",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Sui dynasty",
+            "roles": [
+                {
+                    "role": "dynasty",
+                    "states": [
+                        "historical period",
+                        "Chinese history"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Tang dynasty",
+            "roles": [
+                {
+                    "role": "dynasty",
+                    "states": [
+                        "historical period",
+                        "Chinese history"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Emperor Taizong of Tang",
+            "roles": [
+                {
+                    "role": "ruler",
+                    "states": [
+                        "historical figure",
+                        "Tang dynasty"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "chancellor",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "government role",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "died in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who died in 633?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When did Dai Zhou die?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "courtesy name",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the courtesy name of Dai Zhou?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who has the courtesy name Xuanyin?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "posthumously known as",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What was Dai Zhou posthumously known as?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was posthumously known as Duke Zhong of Dao?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the nationality of Dai Zhou?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Chinese?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "lived in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "During which dynasties did Dai Zhou live?",
+                    "answers": [
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who lived during the Sui dynasty and early Tang dynasty?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "served as",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What position did Dai Zhou serve as during the reign of Emperor Taizong of Tang?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who served as a chancellor during the reign of Emperor Taizong of Tang?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "reign of",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "During whose reign did Dai Zhou serve as chancellor?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who reigned when Dai Zhou served as chancellor?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,250 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "GlobalPost",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "digital journalism",
+                        "international news"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "location",
+                        "origin"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "January 12, 2009",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "founding date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Philip S. Balboni",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "founder"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Charles M. Sennott",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "founder"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "James Foley",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "journalist",
+                        "victim"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "2015",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "acquisition year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "WGBH",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "acquirer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "founded on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was GlobalPost founded?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company was founded on January 12, 2009?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "founded by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who founded GlobalPost?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What did Philip S. Balboni and Charles M. Sennott found?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is GlobalPost located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What company is located in the United States?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "acquired by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who acquired GlobalPost in 2015?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What did WGBH acquire in 2015?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "kidnapped and beheaded",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who was kidnapped and beheaded?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What happened to James Foley?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

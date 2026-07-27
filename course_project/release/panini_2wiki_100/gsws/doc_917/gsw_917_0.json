@@ -1,0 +1,184 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Chicago Daily Journal",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "historical publication",
+                        "American press"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Chicago Evening Journal",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "alternative name",
+                        "historical publication"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Chicago",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "1844",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1929",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "end year",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "1861-1896",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "alternative title period",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was The Chicago Daily Journal published?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What newspaper was published in Chicago?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "published from",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did The Chicago Daily Journal start publishing?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "When did The Chicago Daily Journal stop publishing?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "What newspaper was published from 1844 to 1929?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "known as",
+            "questions": [
+                {
+                    "id": "q6",
+                    "text": "What was The Chicago Daily Journal known as between 1861 and 1896?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "During what period was The Chicago Daily Journal known as the Chicago Evening Journal?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

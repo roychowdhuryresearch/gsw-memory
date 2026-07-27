@@ -1,0 +1,142 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Maria Teresa, Grand Duchess of Luxembourg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "royalty"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Mar\u00eda Teresa Mestre y Batista",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "birth name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "22 March 1956",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Grand Duke Henri",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "royalty"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Maria Teresa, Grand Duchess of Luxembourg born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on 22 March 1956?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "birth name",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the birth name of Maria Teresa, Grand Duchess of Luxembourg?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who has the birth name Mar\u00eda Teresa Mestre y Batista?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "spouse of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the spouse of Grand Duke Henri?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is the spouse of Maria Teresa, Grand Duchess of Luxembourg?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

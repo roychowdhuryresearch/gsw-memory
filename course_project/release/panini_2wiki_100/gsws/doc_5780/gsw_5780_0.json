@@ -1,0 +1,222 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Heart's on Fire",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "single"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Passenger",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "singer-songwriter",
+                        "English"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "14 April 2014",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "United Kingdom",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "release location",
+                        "country"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Whispers",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "fifth studio album",
+                        "2014"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Michael David Rosenberg",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "real name of Passenger"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was 'Heart's on Fire' released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song was released on 14 April 2014?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where was 'Heart's on Fire' released?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song was released in the United Kingdom?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "part of album",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which album includes 'Heart's on Fire'?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song is part of the album 'Whispers'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who wrote 'Heart's on Fire'?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song did Michael David Rosenberg write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "real name of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the real name of Passenger?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Michael David Rosenberg better known as?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

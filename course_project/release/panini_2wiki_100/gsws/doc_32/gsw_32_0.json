@@ -1,0 +1,183 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Ascension Island",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "island",
+                        "geographical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "+247",
+            "roles": [
+                {
+                    "role": "country code",
+                    "states": [
+                        "telephone code",
+                        "communication"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "00",
+            "roles": [
+                {
+                    "role": "international call prefix",
+                    "states": [
+                        "telephone code",
+                        "communication"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "St Helena",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "territory",
+                        "geographical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "+290",
+            "roles": [
+                {
+                    "role": "country code",
+                    "states": [
+                        "telephone code",
+                        "communication"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "has country code",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the country code for Ascension Island?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Which location has the country code +247?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has international call prefix",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the international call prefix for Ascension Island?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which location has the international call prefix 00?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "does not share country code with",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which location does not share the same country code as St Helena?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which location does Ascension Island not share a country code with?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "has country code",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is the country code for St Helena?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which location has the country code +290?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

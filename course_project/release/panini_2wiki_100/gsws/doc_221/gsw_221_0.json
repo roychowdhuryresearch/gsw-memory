@@ -1,0 +1,97 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Dots",
+            "roles": [
+                {
+                    "role": "term",
+                    "states": [
+                        "ambiguous",
+                        "multiple meanings"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "The Dots",
+            "roles": [
+                {
+                    "role": "term",
+                    "states": [
+                        "ambiguous",
+                        "multiple meanings"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "DOTS",
+            "roles": [
+                {
+                    "role": "acronym",
+                    "states": [
+                        "ambiguous",
+                        "multiple meanings"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "may refer to",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What may Dots refer to?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What may The Dots refer to?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "may be an acronym for",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What may DOTS be an acronym for?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

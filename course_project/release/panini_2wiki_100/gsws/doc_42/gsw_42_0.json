@@ -1,0 +1,121 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Dan Milne",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "entertainment industry"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "actor",
+                    "states": [
+                        "British",
+                        "television"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "director",
+                    "states": [
+                        "British",
+                        "entertainment industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "British",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "United Kingdom"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "EastEnders",
+            "roles": [
+                {
+                    "role": "television show",
+                    "states": [
+                        "British",
+                        "soap opera"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Dan Milne?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is British?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "known for role in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Dan Milne known for?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is known for a role in EastEnders?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

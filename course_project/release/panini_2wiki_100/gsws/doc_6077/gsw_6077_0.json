@@ -1,0 +1,75 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Japan",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "country",
+                        "Asian cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1960s",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "decade",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "films produced in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What films were produced in Japan in the 1960s?",
+                    "answers": [
+                        "e1",
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Where were films produced in the 1960s?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "When were films produced in Japan?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

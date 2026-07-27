@@ -1,0 +1,144 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Hotchkiss Ordnance Company",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "armaments manufacturer",
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "English",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "company origin",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Benjamin B. Hotchkiss",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "ordnance engineer",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "person origin",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "founded by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who founded the Hotchkiss Ordnance Company?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company did Benjamin B. Hotchkiss found?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the nationality of the Hotchkiss Ordnance Company?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which company is English?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nationality of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nationality of Benjamin B. Hotchkiss?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is American?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,250 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Alexandros Margaritis",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "racing driver"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Alex",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "nickname",
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Alexander",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "20 September 1984",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Deutsche Tourenwagen Masters",
+            "roles": [
+                {
+                    "role": "championship",
+                    "states": [
+                        "German-based",
+                        "touring car"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "formula single seater racing",
+            "roles": [
+                {
+                    "role": "sport",
+                    "states": [
+                        "racing",
+                        "Europe"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Greek",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "parentage"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "dual nationality",
+            "roles": [
+                {
+                    "role": "attribute",
+                    "states": [
+                        "nationality"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 20 September 1984?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Alexandros Margaritis born?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "competed in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who competed in the Deutsche Tourenwagen Masters?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What championship did Alexandros Margaritis compete in?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "focused on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What type of racing did Alexandros Margaritis focus on before?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who focused on formula single seater racing in Europe?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who has dual nationality?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What nationality does Alexandros Margaritis have?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "parentage",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the parentage of Alexandros Margaritis?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who has Greek parentage?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

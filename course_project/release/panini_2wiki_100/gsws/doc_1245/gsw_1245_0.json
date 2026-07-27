@@ -1,0 +1,253 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "One More Time",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "lead single",
+                        "Eurodance",
+                        "Pop music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "One More Time",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "Eurodance",
+                        "Pop music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Real McCoy",
+            "roles": [
+                {
+                    "role": "music project",
+                    "states": [
+                        "German",
+                        "Eurodance",
+                        "Pop music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Australia",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "music chart",
+                        "certification"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Platinum",
+            "roles": [
+                {
+                    "role": "certification",
+                    "states": [
+                        "music sales",
+                        "Australia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "music chart"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "US",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "music chart"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Hot Dance Club Songs chart",
+            "roles": [
+                {
+                    "role": "music chart",
+                    "states": [
+                        "US"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "lead single from",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the lead single from the album 'One More Time'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "From which album is 'One More Time' the lead single?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the music project behind 'One More Time'?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song is by Real McCoy?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "certified",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What certification did 'One More Time' receive in Australia?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Where was 'One More Time' certified Platinum?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "reached number 1 on",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "On which chart did 'One More Time' reach number 1?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song reached number 1 on the Canadian dance music chart?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "reached number 14 on",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "On which chart did 'One More Time' reach number 14?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What song reached number 14 on the Hot Dance Club Songs chart?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

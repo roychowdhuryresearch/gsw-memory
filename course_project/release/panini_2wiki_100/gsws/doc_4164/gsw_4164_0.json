@@ -1,0 +1,167 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Jamie Curry",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "public figure"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "YouTube personality",
+                    "states": [
+                        "digital media",
+                        "entertainment"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "vlogger",
+                    "states": [
+                        "digital media",
+                        "content creator"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "comedian",
+                    "states": [
+                        "entertainment",
+                        "humor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "26 July 1996",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "New Zealand",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "nationality",
+                        "country"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Jamie's World",
+            "roles": [
+                {
+                    "role": "creative work",
+                    "states": [
+                        "digital media",
+                        "YouTube series"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on 26 July 1996?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Jamie Curry born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Jamie Curry's nationality?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is a New Zealand YouTube personality?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "best known for creating",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is Jamie Curry best known for creating?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is best known for creating Jamie's World?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

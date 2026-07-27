@@ -1,0 +1,113 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Viscount",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "military leader"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "military rank",
+                    "states": [
+                        "Imperial Japanese Army",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Imperial Japanese Army",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "military",
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Field Marshal Gen Sugiyama",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "military leader"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "general in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was a general in the Imperial Japanese Army?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "In which army was Viscount a general?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "father-in-law of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was the father-in-law of Field Marshal Gen Sugiyama?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who was Viscount the father-in-law of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

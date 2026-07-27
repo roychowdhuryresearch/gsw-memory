@@ -1,0 +1,184 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Robert White Johnson",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "musician",
+                        "songwriter"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "United States",
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Nashville",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "residence",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Where Does My Heart Beat Now",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "hit song",
+                        "music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Celine Dion",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "singer",
+                        "musician"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Robert White Johnson?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is an American songwriter and musician?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "based in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is Robert White Johnson based?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is based in Nashville?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "co-wrote",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What song did Robert White Johnson co-write?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who co-wrote 'Where Does My Heart Beat Now'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "performed by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who performed 'Where Does My Heart Beat Now'?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song was a major hit for Celine Dion?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

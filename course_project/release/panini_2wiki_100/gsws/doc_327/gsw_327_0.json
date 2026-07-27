@@ -1,0 +1,112 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Roman Smishko",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "retired",
+                        "professional footballer"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "athlete",
+                    "states": [
+                        "goalkeeper",
+                        "football"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Ukrainian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Bohdan Smishko",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "defender",
+                        "football"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Roman Smishko?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is Ukrainian?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "younger brother of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the younger brother of Bohdan Smishko?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Roman Smishko the younger brother of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

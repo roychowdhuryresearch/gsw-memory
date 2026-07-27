@@ -1,0 +1,221 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Michael Govan",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "museum director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1963",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Los Angeles County Museum of Art",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art museum",
+                        "California"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "2006",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year",
+                        "museum directorship"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Dia Art Foundation",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "art foundation",
+                        "New York City"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "New York City",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born in 1963?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Michael Govan born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "director of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the director of the Los Angeles County Museum of Art?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What institution is Michael Govan the director of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "since",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Since when has Michael Govan been the director of the Los Angeles County Museum of Art?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who has been the director of the Los Angeles County Museum of Art since 2006?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "worked as director of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where did Michael Govan work as the director before the Los Angeles County Museum of Art?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who worked as the director of the Dia Art Foundation?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Where is the Dia Art Foundation located?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What institution is located in New York City?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

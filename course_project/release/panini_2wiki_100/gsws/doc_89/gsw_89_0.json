@@ -1,0 +1,97 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Ian Barry",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "creative professional"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "director",
+                    "states": [
+                        "film industry",
+                        "television industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Australian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Oceania",
+                        "Commonwealth"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Ian Barry?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is an Australian director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Ian Barry's profession?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is a director of film and TV?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

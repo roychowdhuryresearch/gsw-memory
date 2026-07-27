@@ -1,0 +1,121 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Union Airport",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "former civil airport",
+                        "former military airfield"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "north-northeast of Lincoln, Nebraska",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical direction",
+                        "relative location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Lincoln, Nebraska",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "reference point"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "agricultural industrial estate and fields",
+            "roles": [
+                {
+                    "role": "land use",
+                    "states": [
+                        "current use",
+                        "post-airport"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located approximately",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was Union Airport located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is located north-northeast of Lincoln, Nebraska?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "formerly occupied by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What land was formerly occupied by Union Airport?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What formerly occupied the land that is now an agricultural industrial estate and fields?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

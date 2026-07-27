@@ -1,0 +1,181 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Tarcisio Fusco",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "composer",
+                        "Italian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Italian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "film scores",
+            "roles": [
+                {
+                    "role": "profession",
+                    "states": [
+                        "music composition"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Giovanni Fusco",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "composer",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Cecilia Fusco",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "operatic soprano",
+                        "family member"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the nationality of Tarcisio Fusco?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is Italian?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Tarcisio Fusco's profession?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is a composer of film scores?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "brother of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the brother of Giovanni Fusco?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is Tarcisio Fusco's brother?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "uncle of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the uncle of Cecilia Fusco?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Tarcisio Fusco's niece?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

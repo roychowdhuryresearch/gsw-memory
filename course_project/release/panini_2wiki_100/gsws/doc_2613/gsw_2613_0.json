@@ -1,0 +1,181 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Elswick Ordnance Company",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "armaments manufacturing",
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Elswick Ordnance Works",
+            "roles": [
+                {
+                    "role": "alternative name",
+                    "states": [
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "EOC",
+            "roles": [
+                {
+                    "role": "abbreviation",
+                    "states": [
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "British",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "late 19th century",
+            "roles": [
+                {
+                    "role": "time period",
+                    "states": [
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "early 20th century",
+            "roles": [
+                {
+                    "role": "time period",
+                    "states": [
+                        "historical context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "also known as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is another name for Elswick Ordnance Company?",
+                    "answers": [
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What company is also known as Elswick Ordnance Works?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "What company is abbreviated as EOC?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q4",
+                    "text": "What is the nationality of Elswick Ordnance Company?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q5",
+                    "text": "Which British company was involved in armaments manufacturing?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "operated in",
+            "questions": [
+                {
+                    "id": "q6",
+                    "text": "During which time periods did Elswick Ordnance Company operate?",
+                    "answers": [
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "What company operated in the late 19th and early 20th century?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}
