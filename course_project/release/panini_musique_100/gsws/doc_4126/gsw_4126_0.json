@@ -1,0 +1,181 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cedar City, Utah",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "US",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "market",
+            "domestic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "international dealers",
+      "roles": [
+        {
+          "role": "market",
+          "states": [
+            "global",
+            "sales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "APCP mid and high power rocket motors",
+      "roles": [
+        {
+          "role": "product",
+          "states": [
+            "specialization",
+            "aerospace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "rocket kits",
+      "roles": [
+        {
+          "role": "product",
+          "states": [
+            "designed around motors",
+            "aerospace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "headquartered in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the company's headquarters located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What company is headquartered in Cedar City, Utah?",
+          "answers": [],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "sold through",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where are the company's products sold?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What products are sold through US and international dealers?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "specializes in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does the company specialize in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which company specializes in APCP mid and high power rocket motors?",
+          "answers": [],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "designed around",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the rocket kits designed around?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What products are designed around APCP mid and high power rocket motors?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

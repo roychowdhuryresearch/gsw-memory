@@ -1,0 +1,251 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pretty/Groovy",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "compilation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Chet Baker",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "jazz musician",
+            "trumpeter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1953",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1954",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1957",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1958",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "World Pacific",
+      "roles": [
+        {
+          "role": "label",
+          "states": [
+            "record label"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Chet Baker Quartet featuring Russ Freeman",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "10 inch LP",
+            "1953"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded Pretty/Groovy?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Chet Baker record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Pretty/Groovy recorded?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was recorded in 1953, 1954, and 1957?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Pretty/Groovy released?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released in 1958?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which label released Pretty/Groovy?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album did World Pacific release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "compiles tracks from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What album compiles tracks from Chet Baker Quartet featuring Russ Freeman?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What does Pretty/Groovy compile tracks from?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

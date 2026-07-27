@@ -1,0 +1,279 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Krasnovishersky District",
+      "roles": [
+        {
+          "role": "administrative district",
+          "states": [
+            "Perm Krai",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Perm Krai",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eurasia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Krasnovishersky Municipal District",
+      "roles": [
+        {
+          "role": "municipal district",
+          "states": [
+            "Perm Krai",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Vishera River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Komi Republic",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Sverdlovsk Oblast",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Cherdynsky District",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "Perm Krai",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Solikamsky District",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "Perm Krai",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Alexandrovsk",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "krai significance",
+            "Perm Krai",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Krasnovishersk",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "administrative center",
+            "Krasnovishersky District"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Krasnovishersky District located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What district is located in Perm Krai?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "borders with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What regions border Krasnovishersky District?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which district borders with the Komi Republic?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "administrative center",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the administrative center of Krasnovishersky District?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Krasnovishersk is the administrative center of which district?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "accounts for population",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What percentage of the district's population does Krasnovishersk account for?",
+          "answers": [
+            "71.4%"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which town accounts for 71.4% of Krasnovishersky District's population?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

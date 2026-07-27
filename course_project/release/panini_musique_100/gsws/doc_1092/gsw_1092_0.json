@@ -1,0 +1,266 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Kodwo Amissah",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "religious figure"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "prelate",
+          "states": [
+            "Catholic Church",
+            "Ghanaian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 27, 1922",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "September 22, 1991",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ghanaian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "African"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Archbishop of Cape Coast",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "religious title",
+            "Catholic Church"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1959",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "archbishop tenure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Cape Coast",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "archdiocese location",
+            "Ghana"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was John Kodwo Amissah born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on November 27, 1922?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did John Kodwo Amissah die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died on September 22, 1991?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the nationality of John Kodwo Amissah?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a Ghanaian prelate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "served as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What position did John Kodwo Amissah hold?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who served as Archbishop of Cape Coast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "started in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did John Kodwo Amissah start serving as Archbishop of Cape Coast?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who started serving as Archbishop of Cape Coast in 1959?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where is the Archdiocese of Cape Coast located?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What archdiocese is located in Cape Coast?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

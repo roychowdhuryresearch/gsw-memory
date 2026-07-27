@@ -1,0 +1,233 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Hollywood Arms",
+      "roles": [
+        {
+          "role": "play",
+          "states": [
+            "theatrical work",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Carrie Hamilton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "playwright",
+            "creative professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Carol Burnett",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "playwright",
+            "creative professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Goodman Theatre",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "theater venue",
+            "performance location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Broadway",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "theater district",
+            "performance location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2002",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "performance year",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "One More Time",
+      "roles": [
+        {
+          "role": "memoir",
+          "states": [
+            "literary work",
+            "source material"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote Hollywood Arms?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What play did Carrie Hamilton write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What play did Carol Burnett write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "performed at",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Where was Hollywood Arms performed?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What play was performed at the Goodman Theatre?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What play was performed on Broadway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "performed in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Hollywood Arms performed?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What play was performed in 2002?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "adapted from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is Hollywood Arms adapted from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What play is adapted from the memoir 'One More Time'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

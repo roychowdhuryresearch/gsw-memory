@@ -1,0 +1,326 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Crimean Tartars",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "historical migration",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Dobruja",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "migration destination",
+            "historical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1783–1913",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "migration period",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ottoman Empire",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical empire",
+            "migration destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "3.8 million",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "refugees from Russia",
+            "historical migration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Turkey",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "modern nation",
+            "migration destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Balkans",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical migration origin",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Muhacir",
+      "roles": [
+        {
+          "role": "term",
+          "states": [
+            "refugee designation",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1922",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of Ottoman Empire",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "migration origin",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Bulgaria",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "political tension",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "fled to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did the Crimean Tartars flee to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who fled to Dobruja?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "migrated to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did refugees migrate to between 1783 and 1913?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When did refugees migrate to the Ottoman Empire?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "originated from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did at least 3.8 million refugees originate from?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "How many refugees originated from Russia?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did a large proportion of Muslim peoples from the Balkans emigrate to?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who emigrated to present-day Turkey?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "descended from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was half of the urban population of Turkey descended from by 1922?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "By when was half of the urban population of Turkey descended from Muslim refugees from Russia?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "political tension with",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which countries experienced political tension due to migrations?",
+          "answers": [
+            "e6",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What caused political tension between Turkey and Bulgaria?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,179 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Herbert Noel Hollingdale (Noel Hollingdale)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1911",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "2000",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "rugby league footballer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "New South Wales Rugby League competition",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born in 1911?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Herbert Noel Hollingdale born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who died in 2000?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When did Herbert Noel Hollingdale die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Herbert Noel Hollingdale's profession?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was a rugby league footballer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who played in the New South Wales Rugby League competition?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Herbert Noel Hollingdale play?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

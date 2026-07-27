@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Brandon Vick",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States",
+            "political context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Republican Party",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "United States",
+            "political affiliation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Washington House of Representatives",
+      "roles": [
+        {
+          "role": "government body",
+          "states": [
+            "state legislature",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "18th district",
+      "roles": [
+        {
+          "role": "political district",
+          "states": [
+            "Washington State",
+            "legislative context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year",
+            "political context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year",
+            "political context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Ann Rivers",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "The Clark County Republican Party",
+      "roles": [
+        {
+          "role": "political organization",
+          "states": [
+            "local party",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is a member of the Washington House of Representatives?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What government body is Brandon Vick a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "represents",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who represents the 18th district?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which district does Brandon Vick represent?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "first elected in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Brandon Vick first elected to the Washington House of Representatives?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was first elected in 2012 to the Washington House of Representatives?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "ran against",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who did Brandon Vick run against in 2010?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who ran against Ann Rivers in 2010?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "served as chairman of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who served as chairman of The Clark County Republican Party?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What organization did Brandon Vick serve as chairman of?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "political affiliation",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is Brandon Vick's political affiliation?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who is affiliated with the Republican Party?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

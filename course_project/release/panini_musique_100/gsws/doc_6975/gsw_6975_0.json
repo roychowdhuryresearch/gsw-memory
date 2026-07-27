@@ -1,0 +1,275 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Je te dis tout",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "French music",
+            "ballad"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Mylène Farmer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "songwriter",
+            "French"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Laurent Boutonnat",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "composer",
+            "French"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Monkey Me",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "studio album",
+            "ninth album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "album release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "28 January 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "digital release date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "4 March 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "physical release date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "François Hanss",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "director",
+            "music video director"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote 'Je te dis tout'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Mylène Farmer write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "composed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who composed the music for 'Je te dis tout'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Laurent Boutonnat compose?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "from album",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which album is 'Je te dis tout' from?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song is from the album 'Monkey Me'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released digitally on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was 'Je te dis tout' released digitally?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was released digitally on 28 January 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "released physically on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was 'Je te dis tout' released physically?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was released physically on 4 March 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who directed the music video for 'Je te dis tout'?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What music video did François Hanss direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

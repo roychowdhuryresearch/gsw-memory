@@ -1,0 +1,236 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "CFRK-FM",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Canadian",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "92.3 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Fredericton",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "broadcast area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New Brunswick",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "Canadian region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Stingray",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "country music",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "broadcast content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Fredericton's New Country 92.3",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "station branding"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcasts at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What frequency does CFRK-FM broadcast at?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station broadcasts at 92.3 FM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is CFRK-FM located?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station is located in Fredericton, New Brunswick?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who owns CFRK-FM?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station is owned by Stingray?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "airs",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What type of music does CFRK-FM air?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station airs country music?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "branded as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the branding of CFRK-FM?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station is branded as 'Fredericton's New Country 92.3'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,179 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Michel Guerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "politician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2 December 1932",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Senate of France",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "government body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Union for a Popular Movement Party",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "French politics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Michel Guerry born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on 2 December 1932?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Michel Guerry's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is French?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which organization is Michel Guerry a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a member of the Senate of France?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which political party is Michel Guerry a member of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is a member of the Union for a Popular Movement Party?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

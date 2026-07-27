@@ -1,0 +1,139 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Coxs Creek (Coxs Creek (Belfield, New South Wales))",
+      "roles": [
+        {
+          "role": "watercourse",
+          "states": [
+            "geographical feature",
+            "river system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cooks River catchment",
+      "roles": [
+        {
+          "role": "catchment",
+          "states": [
+            "river system",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Inner West of Sydney",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "urban area",
+            "Sydney region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New South Wales",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Australian state",
+            "geographical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Coxs Creek located?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What watercourse is located in the Inner West of Sydney?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What catchment is Coxs Creek part of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What watercourse is part of the Cooks River catchment?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

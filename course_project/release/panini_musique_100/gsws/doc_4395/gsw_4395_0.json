@@ -1,0 +1,194 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "telogen phase",
+      "roles": [
+        {
+          "role": "biological phase",
+          "states": [
+            "resting phase",
+            "shedding phase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "one to four months",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "phase duration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "ten to fifteen percent",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "hair in phase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "epidermal cells",
+      "roles": [
+        {
+          "role": "cell type",
+          "states": [
+            "lining follicle channel"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "follicle",
+      "roles": [
+        {
+          "role": "biological structure",
+          "states": [
+            "dormant phase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "hair (Human hair growth)",
+      "roles": [
+        {
+          "role": "biological structure",
+          "states": [
+            "anchored in place"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "remains dormant for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "How long does the follicle remain dormant during the telogen phase?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What remains dormant for one to four months?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "percentage of hairs in phase",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What percentage of hairs are in the telogen phase at any given time?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "During the telogen phase, what phase are ten to fifteen percent of hairs in?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lining the follicle channel",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What cells line the follicle channel during the telogen phase?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What do epidermal cells line during the telogen phase?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "anchored in place",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is temporarily anchored in place during the telogen phase?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "During the telogen phase, what happens to the hair?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

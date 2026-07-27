@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jonathan Huberdeau",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "June 4, 1993",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Canadian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "ice hockey forward",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Florida Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "National Hockey League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "professional sports league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2011 NHL Entry Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "third overall",
+      "roles": [
+        {
+          "role": "draft position",
+          "states": [
+            "selection rank"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Jonathan Huberdeau born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on June 4, 1993?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Jonathan Huberdeau's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Canadian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "plays as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position does Jonathan Huberdeau play?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who plays as an ice hockey forward?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "plays for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which team does Jonathan Huberdeau play for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who plays for the Florida Panthers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which league is the Florida Panthers part of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which team is part of the National Hockey League?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "selected in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was Jonathan Huberdeau selected?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was selected in the 2011 NHL Entry Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "selected as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was Jonathan Huberdeau's draft position?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was selected third overall?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

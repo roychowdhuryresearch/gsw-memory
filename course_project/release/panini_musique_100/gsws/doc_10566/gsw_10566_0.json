@@ -1,0 +1,270 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Frozen Run",
+      "roles": [
+        {
+          "role": "stream",
+          "states": [
+            "tributary",
+            "natural feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hemlock Creek",
+      "roles": [
+        {
+          "role": "stream",
+          "states": [
+            "natural feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Columbia County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pennsylvania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hemlock Township",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "township",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Frosty Valley",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "valley",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "coldwater fishery",
+      "roles": [
+        {
+          "role": "designation",
+          "states": [
+            "environmental status"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "siltation",
+      "roles": [
+        {
+          "role": "environmental issue",
+          "states": [
+            "pollution",
+            "water quality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "tributary of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Frozen Run a tributary of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What tributary flows into Hemlock Creek?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Frozen Run located?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What stream is located in Columbia County, Pennsylvania, United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "flows through",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Frozen Run flow through?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What stream flows through Hemlock Township and Frosty Valley?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "designated as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Frozen Run designated as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What stream is designated as a coldwater fishery?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "impaired due to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the watershed of Frozen Run impaired due to?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What stream's watershed is impaired due to siltation?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

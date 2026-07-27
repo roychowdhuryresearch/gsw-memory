@@ -1,0 +1,301 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Fredrick Barton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "American novelist",
+            "film critic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Rick Barton",
+      "roles": [
+        {
+          "role": "alias",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New Orleans",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "The El Cholo Feeling Passes",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Courting Pandemonium",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "With Extreme Prejudice",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Black and White on the Rocks",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "reissue title",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "A House Divided",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "In the Wake of the Flagship",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Rowing to Sweden",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "essays",
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "also known as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is also known as Rick Barton?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is Fredrick Barton also known as?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Fredrick Barton's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is an American novelist?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Fredrick Barton a well-known film critic?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a well-known film critic in New Orleans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "author of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the author of 'The El Cholo Feeling Passes'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Fredrick Barton author?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "reissued as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What novel was reissued as 'Black and White on the Rocks'?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is the reissue title of 'With Extreme Prejudice'?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

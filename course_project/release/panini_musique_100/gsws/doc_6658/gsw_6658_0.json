@@ -1,0 +1,326 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Donner Memorial State Park",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state park",
+            "California",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "US state",
+            "geographical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "US",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Donner Camp",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical site",
+            "Sierra Nevada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Donner Party",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "historical group",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "winter of 1846–1847",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "19th century",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Sierra Nevada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "mountain range",
+            "California"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "National Historic Landmark",
+      "roles": [
+        {
+          "role": "designation",
+          "states": [
+            "historical status",
+            "US"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Emigrant Trail Museum",
+      "roles": [
+        {
+          "role": "museum",
+          "states": [
+            "historical museum",
+            "California"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Pioneer Monument",
+      "roles": [
+        {
+          "role": "monument",
+          "states": [
+            "historical monument",
+            "California"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Emigrant Trail",
+      "roles": [
+        {
+          "role": "trail",
+          "states": [
+            "historical route",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Donner Memorial State Park located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What state park is located in California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "preserves the site of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does Donner Memorial State Park preserve?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which state park preserves the site of Donner Camp?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "trapped during",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When were members of the Donner Party trapped?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was trapped during the winter of 1846–1847?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "designated as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What designation does the Sierra Nevada site have?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which site has been designated a National Historic Landmark?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "contains",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does Donner Memorial State Park contain?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which state park contains the Emigrant Trail Museum?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "dedicated to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "To whom is the Pioneer Monument dedicated?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What monument is dedicated to the travelers of the Emigrant Trail?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

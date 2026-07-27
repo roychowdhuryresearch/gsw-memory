@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Table of Ranks",
+      "roles": [
+        {
+          "role": "system",
+          "states": [
+            "formal list",
+            "Imperial Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Peter the Great",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "ruler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1722",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "introduction year",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "boyars",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "hereditary nobility",
+            "Imperial Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "11 November 1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "abolition date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bolshevik government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "newly established",
+            "post-revolutionary Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "introduced by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who introduced the Table of Ranks?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Peter the Great introduce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "introduced in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Table of Ranks introduced?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was introduced in 1722?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "abolished on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the Table of Ranks abolished?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was abolished on 11 November 1917?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "abolished by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who abolished the Table of Ranks?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did the Bolshevik government abolish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "struggle with",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was Peter the Great in a struggle with?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who struggled with the boyars?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

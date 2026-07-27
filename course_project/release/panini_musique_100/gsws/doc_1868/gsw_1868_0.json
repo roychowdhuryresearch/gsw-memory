@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "St Paul's Cathedral",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "religious site",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Holland (Henry Scott Holland)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "clergy",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "May 1910",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "King Edward VII",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "monarch",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Death the King of Terrors",
+      "roles": [
+        {
+          "role": "sermon",
+          "states": [
+            "religious discourse",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Death is nothing at all",
+      "roles": [
+        {
+          "role": "writing",
+          "states": [
+            "literary work",
+            "philosophical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "delivered a sermon at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Holland deliver a sermon in May 1910?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who delivered a sermon at St Paul's Cathedral in May 1910?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "in May 1910",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Holland deliver a sermon at St Paul's Cathedral?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event took place in May 1910 at St Paul's Cathedral?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "following the death of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Whose death was followed by a sermon delivered by Holland?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event followed the death of King Edward VII?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "titled",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the title of the sermon delivered by Holland?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which sermon is titled 'Death the King of Terrors'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "drawn from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What writing is drawn from Holland's discussion in the sermon?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "From which sermon is 'Death is nothing at all' drawn?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

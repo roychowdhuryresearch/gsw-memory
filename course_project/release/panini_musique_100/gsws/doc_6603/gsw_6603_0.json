@@ -1,0 +1,310 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "My School Daze",
+      "roles": [
+        {
+          "role": "television drama",
+          "states": [
+            "Singaporean",
+            "Chinese language"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "drama genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "simplified Chinese",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "written form"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "书包太重",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Chinese title",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Singapore",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "drama setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mediacorp Channel 8",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "Singaporean",
+            "broadcaster"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "29 April 2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "premiere date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "26 May 2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "20 episodes",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "episode count"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "weekday night at 9:00 pm",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "broadcast time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "education system",
+      "roles": [
+        {
+          "role": "theme",
+          "states": [
+            "Singaporean context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has Chinese title",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the Chinese title of My School Daze?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What drama has the Chinese title 书包太重?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "premiered on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did My School Daze premiere?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What drama premiered on 29 April 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "ended on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did My School Daze end?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What drama ended on 26 May 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcast on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "On which channel was My School Daze broadcast?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What drama was broadcast on Mediacorp Channel 8?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "consists of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many episodes does My School Daze consist of?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What drama consists of 20 episodes?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "reflects",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What does My School Daze reflect?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which drama reflects the education system in Singapore?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

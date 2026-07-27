@@ -1,80 +1,55 @@
-# Project: Structured Memory Networks and Reasoning-Chain Retrieval
+# Course Project: Structured Memory Networks and RICR
 
-## Learning objectives
+The canonical specification is [PROJECT_HANDOUT.pdf](PROJECT_HANDOUT.pdf).
+The handout contains the precise algorithms, metrics, output schema,
+deliverables, and point allocation.
 
-By the end of this project, students should be able to:
+## Required datasets
 
-1. Construct and characterize a heterogeneous network from GSW JSON records.
-2. Compare lexical, sparse, dense, and hybrid information retrieval methods.
-3. Use a supplied neural decomposer and reranker in a reproducible pipeline.
-4. Implement beam-search reasoning over entity-linked QA chains.
-5. Evaluate retrieval quality, end-to-end accuracy, efficiency, and scaling.
+Students run the same frozen pipeline on two independently packaged subsets:
 
-## Part 1 — GSW network construction and analysis (25%)
+- **2WikiMultiHopQA:** 100 questions, with 25 each from bridge-comparison,
+  comparison, compositional, and inference.
+- **MuSiQue:** 100 questions, stratified as 50 two-hop, 30 three-hop, and
+  20 four-hop questions.
 
-Construct the native entity/verb-phrase network and a reconciled corpus-level
-entity projection. Report node and edge counts, degree distributions,
-components, GCC statistics, centrality, PageRank, clustering, and
-assortativity. Visualize at least one complete multi-hop reasoning path.
+Each dataset has 80 labeled development questions and 20 held-out questions.
+Algorithm choices and hyperparameters are selected on 2Wiki development and
+then frozen before the MuSiQue transfer evaluation.
 
-## Part 2 — Question decomposition (10%)
+The course supplies documents, GSWs, metadata, corpus/fixed-query embeddings,
+FAISS indices, TF-IDF/BM25 indices, and model configuration for each package.
+Students do not generate GSWs or corpus embeddings.
 
-Run the supplied fine-tuned Qwen decomposer with deterministic decoding. Parse
-`<ENTITY_Qn>` references into a dependency graph, identify parallel retrieval
-chains, validate the generated plan, and compare a subset against
-instructor-reviewed decompositions.
+## Grading
 
-## Part 3 — Retrieval methods (25%)
+| Question | Component | Points |
+|---|---|---:|
+| Q1 | Release integrity and dataset audit | 4 |
+| Q2 | Native GSW network and entity projection | 8 |
+| Q3 | Structured-memory network analysis | 8 |
+| Q4 | Question decomposition and dependency graphs | 10 |
+| Q5 | Sparse retrieval baselines | 8 |
+| Q6 | Dense, hybrid, and paper-style dual retrieval | 12 |
+| Q7 | Reranking analysis | 5 |
+| Q8 | RICR implementation | 15 |
+| Q9 | RICR ablations | 10 |
+| Q10 | 2Wiki end-to-end evaluation | 7 |
+| Q11 | MuSiQue transfer and scaling | 8 |
+| Q12 | Reproducibility and submission | 5 |
+|  | **Total** | **100** |
 
-Implement and compare:
+## Required models
 
-1. TF-IDF over QA-pair text.
-2. BM25 over QA-pair text.
-3. BM25 over entity names, roles, and states, followed by attached-QA
-   expansion.
-4. Dense search over supplied QA embeddings.
-5. Hybrid retrieval using normalized score fusion and Reciprocal Rank Fusion.
-6. Paper-style dual retrieval followed by the supplied Qwen reranker.
+- Default decomposer:
+  [`yigitturali/GSW-QA-Decomposer-Qwen3-4B`](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
+- Optional decomposer:
+  [`yigitturali/GSW-QA-Decomposer-Qwen3-8B`](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
+- Query encoder for uncached instantiated questions:
+  `Qwen/Qwen3-Embedding-8B`
+- Reranker: `Qwen/Qwen3-Reranker-8B`
+- Evidence-grounded answer model: `Qwen/Qwen3-4B`
 
-Students load the provided embedding tables and indices; embedding generation
-is outside the project scope.
-
-## Part 4 — RICR (25%)
-
-Implement Reasoning Inference Chain Retrieval:
-
-1. Retrieve candidates for the first atomic sub-question.
-2. Retain the top `B` chains with unique current answers.
-3. Substitute each answer into the next sub-question.
-4. Expand every beam with the top `k` reranked candidates.
-5. Score each chain with the geometric mean of hop scores.
-6. Prune to the top `B` chains with unique current answers.
-7. Combine and deduplicate evidence from parallel sub-question sequences.
-
-Required ablations include beam width, unique-answer pruning, last-hop versus
-geometric-mean scoring, and retrieval-backend choice.
-
-## Part 5 — Evaluation and analysis (15%)
-
-Report per-hop Recall@k, MRR, supporting-document recall, supporting-QA recall,
-complete-chain recovery, answer Exact Match/F1, latency, and evidence size.
-Compare gold and predicted decompositions and evaluate performance as
-distractor documents are progressively added.
-
-## Execution constraints
-
-- The required workflow must run in Google Colab.
-- Models are loaded sequentially rather than simultaneously.
-- Every expensive stage writes a restartable artifact.
-- Inference uses deterministic settings unless an experiment explicitly
-  studies decoding.
-- No paid API is required.
-
-## Submission
-
-Students submit:
-
-1. Completed Colab notebooks or equivalent Python modules.
-2. A report organized by the numbered project questions.
-3. `ricr_results.jsonl` in the instructor-provided schema.
-4. A short reproducibility manifest containing package and model versions.
+The required workflow must run in free-tier Google Colab. Models are loaded
+sequentially, expensive stages produce restartable JSONL files, and no paid
+API is required.

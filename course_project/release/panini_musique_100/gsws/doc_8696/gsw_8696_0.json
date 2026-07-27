@@ -1,0 +1,160 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oh Yeah (Oh Yeah (Charles Mingus album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz music",
+            "1960s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "musical composition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1962",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Charles Mingus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "composer",
+            "bassist"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "jazz music",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1961",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Oh Yeah released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released in 1962?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Oh Yeah recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was recorded in 1961?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who created Oh Yeah?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album did Charles Mingus create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

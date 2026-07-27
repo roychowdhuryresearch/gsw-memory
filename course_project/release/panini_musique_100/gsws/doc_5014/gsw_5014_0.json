@@ -1,0 +1,351 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "First debate",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political debate",
+            "2004 U.S. presidential election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "September 30",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "2004"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "University of Miami",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event location",
+            "educational institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Jim Lehrer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "moderator",
+            "journalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "PBS",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "media organization",
+            "public broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "John Kerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "2004 U.S. presidential candidate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "George W. Bush",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "2004 U.S. presidential candidate",
+            "U.S. President"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2003 Invasion of Iraq",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "military conflict",
+            "Iraq War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "United Kingdom",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "ally",
+            "Iraq War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "ally",
+            "Iraq War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "ally",
+            "Iraq War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the first debate held?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held on September 30?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was the first debate held?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was located at the University of Miami?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "moderated by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who moderated the first debate?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event did Jim Lehrer moderate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "works for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who does Jim Lehrer work for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who works for PBS?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "accused of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who accused George W. Bush of failing to gain international support?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was accused by John Kerry of failing to gain international support?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "supported by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which countries supported the U.S. during the 2003 Invasion of Iraq?",
+          "answers": [
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What event was supported by the United Kingdom, Australia, and Poland?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who won the first debate?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What did John Kerry win?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

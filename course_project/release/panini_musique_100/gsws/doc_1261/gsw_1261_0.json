@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Range Creek",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "natural watercourse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Book Cliffs",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "mountain range",
+            "Utah"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Emery County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Utah"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Utah",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Colorado River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "major watercourse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Green River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "tributary of Colorado River"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "rises in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where does Range Creek rise?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What rises in the Book Cliffs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Book Cliffs located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Emery County?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "flows into",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Range Creek flow into?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What flows into the Green River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "tributary of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is a tributary of the Colorado River?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What river is the Green River a tributary of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

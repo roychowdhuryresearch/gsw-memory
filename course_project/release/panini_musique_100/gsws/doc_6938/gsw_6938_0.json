@@ -1,0 +1,364 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Johnson Bademosi",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "July 23, 1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "football cornerback",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports",
+            "NFL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "special teamer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports",
+            "NFL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Houston Texans",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NFL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "National Football League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Cleveland Browns",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NFL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Gonzaga College High School",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "high school"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Stanford University",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "university"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Johnson Bademosi born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on July 23, 1990?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Johnson Bademosi's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "plays as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position does Johnson Bademosi play?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who plays as a football cornerback and special teamer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "plays for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which team does Johnson Bademosi play for?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who plays for the Houston Texans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which league is the Houston Texans part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What team is part of the National Football League?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "signed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who signed Johnson Bademosi in 2012?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When was Johnson Bademosi signed by the Cleveland Browns?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "attended",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where did Johnson Bademosi attend high school?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who attended Gonzaga College High School?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "played college football for",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Where did Johnson Bademosi play college football?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who played college football for Stanford University?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

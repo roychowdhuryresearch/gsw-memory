@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Department of Higher Education and Training",
+      "roles": [
+        {
+          "role": "government department",
+          "states": [
+            "South African government",
+            "post-secondary education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "South African government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "national government",
+            "Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "universities",
+      "roles": [
+        {
+          "role": "educational institutions",
+          "states": [
+            "higher education",
+            "South Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Jacob Zuma",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "President of South Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Department of Education",
+      "roles": [
+        {
+          "role": "government department",
+          "states": [
+            "former department",
+            "South African government"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "oversees",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does the Department of Higher Education and Training oversee?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which department oversees universities in South Africa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Department of Higher Education and Training created?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was created in 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "after the election of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the Department of Higher Education and Training created?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was elected when the Department of Higher Education and Training was created?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "divided from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What department was divided to create the Department of Higher Education and Training?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was the Department of Education divided into?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

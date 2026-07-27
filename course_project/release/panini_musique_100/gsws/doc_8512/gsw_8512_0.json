@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oglahty (Oglakhty)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "mountain range",
+            "burial complex",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tashtyk culture",
+      "roles": [
+        {
+          "role": "cultural group",
+          "states": [
+            "historical culture",
+            "archaeological context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "60 km north of Minusinsk, Khakassia, Russia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical location",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Yenisei River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1st century BC",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical period",
+            "burial date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "A.V. Adrianov",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "archaeologist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1903",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "survey date",
+            "early 20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hermitage Museum",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "museum",
+            "Saint Petersburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Saint Petersburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Russia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Oglahty located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located 60 km north of Minusinsk, Khakassia, Russia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "on the right bank of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is located on the right bank of the Yenisei River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where is Oglahty located in relation to the Yenisei River?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "dated to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When are the Oglahty burials dated to?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is dated to the 1st century BC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "surveyed by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who first surveyed the Oglahty burials?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did A.V. Adrianov survey in 1903?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "preserved in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where are the artifacts from the Oglahty complex preserved?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is preserved in the Hermitage Museum?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,280 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Victoria (Queen Victoria)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure",
+            "British royalty"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Osborne House",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Isle of Wight",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical location",
+            "British territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "22 January 1901",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "81",
+      "roles": [
+        {
+          "role": "age",
+          "states": [
+            "age at death"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "King Edward VII",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "British royalty",
+            "monarch"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Emperor Wilhelm II of Germany",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "German royalty",
+            "monarch"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Turri",
+      "roles": [
+        {
+          "role": "animal",
+          "states": [
+            "pet",
+            "Pomeranian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "spent Christmas at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Victoria spend Christmas of 1900?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who spent Christmas of 1900 at Osborne House?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Osborne House located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located on the Isle of Wight?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Victoria die?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who died on 22 January 1901?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "age at death",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Victoria's age at death?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who died at the age of 81?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "present at deathbed",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was present at Victoria's deathbed?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "At whose deathbed were King Edward VII and Emperor Wilhelm II present?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "last request",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Victoria's last request?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Whose last request was to have Turri laid upon her deathbed?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

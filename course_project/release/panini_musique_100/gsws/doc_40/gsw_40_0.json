@@ -1,0 +1,219 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Minsk Region",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "administrative division",
+            "Belarus"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Minsk Voblasć",
+      "roles": [
+        {
+          "role": "alternative name",
+          "states": [
+            "Belarusian language"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Minsk Oblast",
+      "roles": [
+        {
+          "role": "alternative name",
+          "states": [
+            "Russian language"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Minsk",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "administrative center",
+            "Belarus"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Belarus",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "population data year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1,411,500",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "as of 2011"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is an alternative name for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is an alternative name for Minsk Region?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What region is also known as Minsk Voblasć?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What region is also known as Minsk Oblast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has administrative center",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "What is the administrative center of Minsk Region?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which region has Minsk as its administrative center?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is located in",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "Where is Minsk Region located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What region is located in Belarus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "had a population of",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "What was the population of Minsk Region in 2011?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Which region had a population of 1,411,500 in 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

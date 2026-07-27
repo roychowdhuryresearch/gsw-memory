@@ -1,0 +1,278 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Michael 'Mike' Rowe (Michael Rowe)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "creative professional"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "comedian",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "television writer",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "producer",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Becker",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "The Nanny",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Futurama",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "animated series",
+            "science fiction genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Paranormal Action Squad",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "animated series",
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Family Guy",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "animated series",
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "The PJs",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "animated series",
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "A Race to His Credit",
+      "roles": [
+        {
+          "role": "episode",
+          "states": [
+            "television episode",
+            "comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Michael 'Mike' Rowe's nationality?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is an American television writer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "wrote for",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which shows did Michael 'Mike' Rowe write for?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who wrote for Becker?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Who wrote for The Nanny?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who wrote for Futurama?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who wrote for Paranormal Action Squad?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who wrote for Family Guy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "wrote episode",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which episode of The PJs did Michael 'Mike' Rowe write?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who wrote the episode 'A Race to His Credit'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

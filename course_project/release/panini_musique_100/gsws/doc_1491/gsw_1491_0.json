@@ -1,0 +1,160 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WRNX",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "American",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "100.9 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "radio frequency",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Amherst, Massachusetts",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "licensed location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "iHeartMedia",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "CC Licenses, LLC",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "license holder",
+            "media industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to serve",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What location is WRNX licensed to serve?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station is licensed to serve Amherst, Massachusetts?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who owns WRNX?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station is owned by iHeartMedia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcast license held by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who holds the broadcast license for WRNX?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station's broadcast license is held by CC Licenses, LLC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

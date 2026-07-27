@@ -1,0 +1,349 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Paul Kane",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "self-educated"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Toronto",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "historical name: York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Grand Tour",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "study trip",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1845",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "voyage start year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1846 to 1848",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "voyage duration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Sault Ste. Marie",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "voyage destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Hudson's Bay Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "supporter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Rocky Mountains",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "voyage route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Fort Vancouver",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "voyage destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Fort Victoria",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "voyage destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "grew up in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Paul Kane grow up?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who grew up in Toronto?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "undertook voyage in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Paul Kane undertake his first voyage?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who undertook a voyage in 1845?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "undertook voyage from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did Paul Kane's first voyage start?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who undertook a voyage from Toronto?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "voyage destination",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the destination of Paul Kane's first voyage?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who traveled to Sault Ste. Marie?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "supported by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who supported Paul Kane's second voyage?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who did the Hudson's Bay Company support?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "voyage duration",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the duration of Paul Kane's second voyage?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who undertook a voyage from 1846 to 1848?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "voyage route",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What route did Paul Kane's second voyage take?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who traveled across the Rocky Mountains?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "voyage destination",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What were the destinations of Paul Kane's second voyage?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who traveled to Fort Vancouver and Fort Victoria?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

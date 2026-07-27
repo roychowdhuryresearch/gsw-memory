@@ -1,0 +1,269 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Hello Tomorrow (Hello Tomorrow (album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "studio album",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Dave Koz",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "saxophone player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Concord Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "October 19, 2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "This Guy's in Love with You",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "track",
+            "album content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Billboard Jazz Albums chart",
+      "roles": [
+        {
+          "role": "chart",
+          "states": [
+            "music ranking",
+            "Billboard"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "November 30, 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "chart peak date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "54th Grammy Awards",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "award ceremony",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Best Pop Instrumental Album",
+      "roles": [
+        {
+          "role": "award category",
+          "states": [
+            "Grammy category",
+            "music award"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released Hello Tomorrow?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released by Concord Records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Hello Tomorrow released?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released on October 19, 2010?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "provided vocals on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who provided vocals on 'This Guy's in Love with You'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song did Dave Koz provide vocals on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "peaked at number 1 on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What album peaked at number 1 on the Billboard Jazz Albums chart?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Hello Tomorrow peak at number 1?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nominated for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What album was nominated for Best Pop Instrumental Album at the 54th Grammy Awards?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What category was Hello Tomorrow nominated for at the 54th Grammy Awards?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

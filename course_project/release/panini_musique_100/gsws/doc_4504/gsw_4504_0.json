@@ -1,0 +1,145 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Push Play (Push Play (EP))",
+      "roles": [
+        {
+          "role": "music release",
+          "states": [
+            "independent release",
+            "EP"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Sara Niemietz",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "songwriter",
+            "actress"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "W. G. Snuffy Walden",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "producer",
+            "Emmy Award winner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "six original songs",
+      "roles": [
+        {
+          "role": "content",
+          "states": [
+            "music tracks"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who produced Push Play?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Sara Niemietz and W. G. Snuffy Walden produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "consists of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does Push Play consist of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which music release consists of six original songs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "release type",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What type of release is Push Play?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which EP is an independent release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

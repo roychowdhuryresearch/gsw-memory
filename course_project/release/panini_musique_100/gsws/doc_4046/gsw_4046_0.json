@@ -1,0 +1,305 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Josep Vicenç Foix i Mas (Josep Vicenç Foix)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "28 January 1893",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "29 January 1987",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Barcelona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Catalan",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "cultural identity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "poet",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "literary figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "writer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "literary figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "essayist",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "literary figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "J.V. Foix",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "abbreviation",
+            "pen name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on 28 January 1893?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Josep Vicenç Foix i Mas born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who died on 29 January 1987?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When did Josep Vicenç Foix i Mas die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was born in Barcelona?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where was Josep Vicenç Foix i Mas born?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the nationality of Josep Vicenç Foix i Mas?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is Catalan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the profession of Josep Vicenç Foix i Mas?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is a Catalan poet?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who is a Catalan writer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who is a Catalan essayist?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "signed as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What abbreviation did Josep Vicenç Foix i Mas use?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who signed their work as J.V. Foix?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

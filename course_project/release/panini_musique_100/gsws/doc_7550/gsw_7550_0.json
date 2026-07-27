@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Three Gut Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "independent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Guelph, Ontario, Canada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters",
+            "Canadian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "founding year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lisa Moran",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "founder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tyler Clarke Burke",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "founder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Constantines",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "associated act"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2001",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Outside Music",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "distributor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "founded in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Three Gut Records founded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was founded in 1999?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who founded Three Gut Records?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Lisa Moran and Tyler Clarke Burke found?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Three Gut Records based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What record label is based in Guelph, Ontario, Canada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who released the Constantines' self-titled album in 2001?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Three Gut Records release in 2001?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "distributed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who distributed Three Gut Records' releases?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did Outside Music distribute?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

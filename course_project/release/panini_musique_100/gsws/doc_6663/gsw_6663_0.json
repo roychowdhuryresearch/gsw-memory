@@ -1,0 +1,371 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Gerschenkron (Alexander Gerschenkron)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "academic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Odessa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "historical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Russian Empire",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical state",
+            "birthplace context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Russian Civil War",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "1917-1922"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1920",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "emigration year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Austria",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "emigration destination",
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "University of Vienna",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution",
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1928",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Anschluss",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "1938"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1938",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "emigration year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "emigration destination",
+            "country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Gerschenkron born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Odessa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What was Odessa part of when Gerschenkron was born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which city was part of the Russian Empire?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "fled during",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "During which event did Gerschenkron flee the country?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who fled during the Russian Civil War?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Gerschenkron emigrate to in 1920?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who emigrated to Austria in 1920?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "attended",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which university did Gerschenkron attend?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who attended the University of Vienna?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "earned a doctorate in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did Gerschenkron earn his doctorate?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who earned a doctorate in 1928?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "emigrated after",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "After which event did Gerschenkron emigrate to the United States?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who emigrated after the Anschluss?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "emigrated in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When did Gerschenkron emigrate to the United States?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who emigrated to the United States in 1938?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

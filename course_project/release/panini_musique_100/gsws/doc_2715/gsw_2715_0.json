@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Loimijoki",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Finland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "Nordic region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kokemäenjoki",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "main river"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pyhäjärvi",
+      "roles": [
+        {
+          "role": "lake",
+          "states": [
+            "source location",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tammela",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "source location",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Huittinen",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "mouth location",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Forssa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "dam location",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Jokioinen",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "dam location",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Loimaa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "dam location",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the river Loimijoki located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What river is located in Finland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "tributary of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the longest tributary of the river Kokemäenjoki?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which river is Loimijoki a tributary of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "originates at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where does the river Loimijoki originate?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What river originates at the lake Pyhäjärvi?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "joins",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where does the river Loimijoki join the river Kokemäenjoki?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What river joins the river Kokemäenjoki in Huittinen?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "has dams at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where does the river Loimijoki have dams?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What river has dams at Forssa, Jokioinen, and Loimaa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

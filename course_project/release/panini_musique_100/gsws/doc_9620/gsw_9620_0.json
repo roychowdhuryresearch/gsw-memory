@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Portrait of Greta Moll",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "artwork",
+            "early 20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Henri Matisse",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1908",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation year",
+            "early 20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "National Gallery",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "art museum",
+            "public collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "London",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "painted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who painted the Portrait of Greta Moll?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Henri Matisse paint in 1908?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Portrait of Greta Moll created?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What painting was created in 1908?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of collection",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which collection is the Portrait of Greta Moll part of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What painting is part of the National Gallery collection?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is the National Gallery located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located in London?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

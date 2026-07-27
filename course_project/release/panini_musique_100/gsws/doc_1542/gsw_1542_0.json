@@ -1,0 +1,310 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Somalia (Somalia at the 2008 Summer Olympics)",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "participant",
+            "Olympics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2008 Summer Olympics",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "international",
+            "sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Beijing",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "host city",
+            "Olympics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "China",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "host nation",
+            "Olympics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1972 Games",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "Olympics debut",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Samiya Yuusf Omar",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "sprinter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Abdinasir Said Ibrahim",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "long-distance runner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Mogadishu",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "training location",
+            "Somalia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Somali Civil War",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "conflict",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "graphic novel",
+      "roles": [
+        {
+          "role": "creative work",
+          "states": [
+            "biographical",
+            "posthumous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sent a delegation to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which country sent a delegation to the 2008 Summer Olympics?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did Somalia send a delegation in 2008?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "hosted in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where were the 2008 Summer Olympics hosted?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was hosted in Beijing in 2008?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "included athletes",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which athletes were included in Somalia's 2008 Olympic delegation?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which country's delegation included Samiya Yuusf Omar and Abdinasir Said Ibrahim?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "trained in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Samiya Yuusf Omar train?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who trained in Mogadishu?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "occurred during",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What event occurred during Samiya Yuusf Omar's training?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "During what event did Samiya Yuusf Omar train?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "featured in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Samiya Yuusf Omar featured in after her death?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was featured in a graphic novel?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

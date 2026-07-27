@@ -1,0 +1,287 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Automobiles Ettore Bugatti (Bugatti)",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "car manufacturer",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1909",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "founding year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Molsheim, Alsace",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "founding location",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Ettore Bugatti",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "industrial designer",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Italian-born",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "birth origin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Type 35 Grand Prix cars",
+      "roles": [
+        {
+          "role": "car model",
+          "states": [
+            "famous model",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Type 41 'Royale'",
+      "roles": [
+        {
+          "role": "car model",
+          "states": [
+            "famous model",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Type 57 'Atlantic'",
+      "roles": [
+        {
+          "role": "car model",
+          "states": [
+            "famous model",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Type 55 sports car",
+      "roles": [
+        {
+          "role": "car model",
+          "states": [
+            "famous model",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "founded in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Automobiles Ettore Bugatti founded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What company was founded in 1909?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who founded Automobiles Ettore Bugatti?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Ettore Bugatti found?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Automobiles Ettore Bugatti founded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What company was founded in Molsheim, Alsace?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the nationality of Automobiles Ettore Bugatti?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which company is French?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "famous models",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What are some famous models of Automobiles Ettore Bugatti?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which company produced the Type 35 Grand Prix cars?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

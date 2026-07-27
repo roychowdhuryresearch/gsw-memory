@@ -1,0 +1,195 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Push, Nevada",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "mystery genre",
+            "interactive"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ben Affleck",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "creator",
+            "film industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Sean Bailey",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "creator",
+            "co-producer",
+            "film industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Matt Damon",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "co-producer",
+            "film industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Chris Moore",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "co-producer",
+            "film industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "$1,045,000",
+      "roles": [
+        {
+          "role": "prize",
+          "states": [
+            "monetary value"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who created Push, Nevada?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Ben Affleck create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What did Sean Bailey create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "co-produced by",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Who co-produced Push, Nevada?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What did Matt Damon co-produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Chris Moore co-produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "offered prize",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What prize was offered in Push, Nevada?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which show offered a prize of $1,045,000?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

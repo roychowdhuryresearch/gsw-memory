@@ -1,0 +1,245 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Radulphe",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "medieval period"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "religious figure",
+          "states": [
+            "monk",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "France",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rhine Valley",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Second Crusade",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1147–49",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "event duration",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Jews",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "religious group",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Christian religion",
+      "roles": [
+        {
+          "role": "religion",
+          "states": [
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "travelled to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who travelled to the Rhine Valley?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did Radulphe travel to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "participated in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who participated in the Second Crusade?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event did Radulphe participate in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "occurred during",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did the Second Crusade occur?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event occurred during 1147–49?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "preached against",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who did Radulphe preach against?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who preached against the Jews?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "enemies of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who were considered enemies of the Christian religion?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What religion considered the Jews as enemies?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

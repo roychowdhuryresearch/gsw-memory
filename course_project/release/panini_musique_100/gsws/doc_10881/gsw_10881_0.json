@@ -1,0 +1,174 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "RSFSR (Russian Soviet Federative Socialist Republic)",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "sovereign state",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 7, 1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment date",
+            "October Revolution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1918",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "constitution adoption year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1922",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "treaty signing year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Treaty on the Creation of the USSR",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "foundational document",
+            "USSR"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Russian SFSR",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "historical entity",
+            "USSR constituent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "established on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the RSFSR established?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was established on November 7, 1917?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "adopted its first constitution in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did the RSFSR adopt its first constitution?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What happened in 1918 regarding the RSFSR?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "signed the Treaty on the Creation of the USSR in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did the Russian SFSR sign the Treaty on the Creation of the USSR?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What treaty did the Russian SFSR sign in 1922?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

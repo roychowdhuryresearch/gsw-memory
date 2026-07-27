@@ -1,0 +1,122 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Marianne and Juliane",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "creative work",
+            "collaboration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "von Trotta",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director",
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Barbara Sukowa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actress",
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "six more films",
+      "roles": [
+        {
+          "role": "film count",
+          "states": [
+            "collaboration",
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "worked with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who worked with von Trotta on Marianne and Juliane?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who did Barbara Sukowa work with on Marianne and Juliane?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "collaborated on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many more films did von Trotta and Barbara Sukowa collaborate on after Marianne and Juliane?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who collaborated on six more films after Marianne and Juliane?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

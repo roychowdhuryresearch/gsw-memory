@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pima County Natural Resources, Parks and Recreation",
+      "roles": [
+        {
+          "role": "agency",
+          "states": [
+            "governmental",
+            "local"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Pima County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative region",
+            "Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Arizona",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "USA",
+            "Southwestern"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Tucson",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "urban area",
+            "Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "manages",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does Pima County Natural Resources, Parks and Recreation manage?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who manages the natural resources, parks, and recreation offerings in Pima County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Pima County located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What county is located in Arizona?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "includes",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What city is included in Pima County's management?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which county includes Tucson in its management?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

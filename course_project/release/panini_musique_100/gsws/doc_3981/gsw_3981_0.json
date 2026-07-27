@@ -1,0 +1,160 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Darwinius",
+      "roles": [
+        {
+          "role": "genus",
+          "states": [
+            "paleontological",
+            "named in honor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Charles Darwin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "naturalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "masillae",
+      "roles": [
+        {
+          "role": "species name",
+          "states": [
+            "paleontological",
+            "honors location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Messel",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "fossil site",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "modern lemur",
+      "roles": [
+        {
+          "role": "animal",
+          "states": [
+            "similar appearance",
+            "primate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "named in commemoration of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What genus was named in commemoration of Charles Darwin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was Darwinius named in commemoration of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "species name honors",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does the species name 'masillae' honor?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What species name honors Messel?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "appeared similar to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What creature appeared similar to a modern lemur?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What does Darwinius appear similar to?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

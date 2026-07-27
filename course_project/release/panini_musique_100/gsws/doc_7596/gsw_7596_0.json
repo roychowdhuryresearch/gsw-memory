@@ -1,0 +1,161 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Imagination (Imagination (La Toya Jackson song))",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "musical work",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "La Toya Jackson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Imagination",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "musical album",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "7\" single",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "physical media",
+            "music release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "12\" single",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "physical media",
+            "music release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed 'Imagination'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did La Toya Jackson perform?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "taken from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which album is the song 'Imagination' taken from?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song is taken from the album 'Imagination'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "In what formats was the remixed version of 'Imagination' released?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song was released as a 7\" and 12\" single?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

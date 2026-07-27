@@ -1,0 +1,421 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Neil Patrick Harris",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "June 15, 1973",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "actor",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "writer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "producer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "comedian",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "magician",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "singer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Doogie Howser, M.D.",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "1989-1993"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Barney Stinson",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "How I Met Your Mother"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "How I Met Your Mother",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "2005-2014"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Count Olaf",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "A Series of Unfortunate Events"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "A Series of Unfortunate Events",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "2017-present"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "four Emmy Awards",
+      "roles": [
+        {
+          "role": "award nomination",
+          "states": [
+            "television"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on June 15, 1973?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Neil Patrick Harris born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Neil Patrick Harris's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What are Neil Patrick Harris's professions?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is an actor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who is a writer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is a producer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Who is a comedian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is a magician?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who is a singer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played character",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Who played the title character on Doogie Howser, M.D.?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "Who played Barney Stinson?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who played Count Olaf?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "Which character did Neil Patrick Harris play on How I Met Your Mother?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which character did Neil Patrick Harris play in A Series of Unfortunate Events?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nominated for",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "For what was Neil Patrick Harris nominated?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who was nominated for four Emmy Awards?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

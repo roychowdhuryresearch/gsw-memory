@@ -1,0 +1,270 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Changes Two",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Charles Mingus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "composer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "27, 28, and 30 December 1974",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording dates",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Atlantic Studios",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "recording studio",
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "New York City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Changes One",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Atlantic Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1993",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "CD release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Rhino Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Changes Two recorded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was recorded on 27, 28, and 30 December 1974?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Changes Two recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was recorded at Atlantic Studios?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who initially released Changes Two?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album did Atlantic Records initially release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "issued on CD by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who issued Changes Two on CD in 1993?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album did Rhino Records issue on CD in 1993?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "resulted in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What sessions resulted in the album Changes One?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What album resulted from the same sessions as Changes Two?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

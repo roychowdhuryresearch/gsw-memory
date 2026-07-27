@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nelson Mandela Muntz (Nelson Muntz)",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "animated series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "The Simpsons",
+      "roles": [
+        {
+          "role": "TV series",
+          "states": [
+            "animated",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Nancy Cartwright",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "voice actor",
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Season 1",
+      "roles": [
+        {
+          "role": "season",
+          "states": [
+            "first season",
+            "TV series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Bart the General",
+      "roles": [
+        {
+          "role": "episode",
+          "states": [
+            "The Simpsons",
+            "Season 1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bart Simpson",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "animated series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "appears in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which TV series does Nelson Mandela Muntz appear in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which character appears in The Simpsons?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "voiced by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who voices Nelson Mandela Muntz?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which character is voiced by Nancy Cartwright?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "introduced in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Nelson Mandela Muntz introduced?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which character was introduced in Season 1?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "episode",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "In which episode was Nelson Mandela Muntz introduced?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which character was introduced in the episode 'Bart the General'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "friend of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who is an on-and-off friend of Bart Simpson?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is Nelson Mandela Muntz an on-and-off friend of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

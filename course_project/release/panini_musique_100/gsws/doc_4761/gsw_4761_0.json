@@ -1,0 +1,196 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Koerner, Ray & Glover",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "blues genre",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Minneapolis, Minnesota",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "\"Spider\" John Koerner",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "guitarist",
+            "vocalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Dave \"Snaker\" Ray",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "guitarist",
+            "vocalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tony \"Little Sun\" Glover",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "harmonica player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1960s",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "folk music revival",
+            "blues revival"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "originated in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Koerner, Ray & Glover originate?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What music group originated in Minneapolis, Minnesota?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is a member of Koerner, Ray & Glover?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which group is \"Spider\" John Koerner a member of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which group is Dave \"Snaker\" Ray a member of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which group is Tony \"Little Sun\" Glover a member of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "active during",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Koerner, Ray & Glover active?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What music group was active during the 1960s?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

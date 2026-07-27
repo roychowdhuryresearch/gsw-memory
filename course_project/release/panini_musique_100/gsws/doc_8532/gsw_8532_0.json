@@ -1,0 +1,192 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John and Elizabeth Shaw Sundy House",
+      "roles": [
+        {
+          "role": "building",
+          "states": [
+            "historic home",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Delray Beach",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Florida"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Florida",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "106 South Swinton Avenue",
+      "roles": [
+        {
+          "role": "address",
+          "states": [
+            "specific location",
+            "Delray Beach"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "January 16, 1992",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "registration date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "U.S. National Register of Historic Places",
+      "roles": [
+        {
+          "role": "registry",
+          "states": [
+            "historic preservation",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the John and Elizabeth Shaw Sundy House located?",
+          "answers": [
+            "e2",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What historic home is located at 106 South Swinton Avenue?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "added to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the John and Elizabeth Shaw Sundy House added to the U.S. National Register of Historic Places?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was added to the U.S. National Register of Historic Places on January 16, 1992?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What registry is the John and Elizabeth Shaw Sundy House part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is part of the U.S. National Register of Historic Places?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

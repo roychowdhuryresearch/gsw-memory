@@ -1,0 +1,342 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Warsaw Pact countries",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "Eastern Europe",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Eastern Europe",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geopolitical region",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Soviet satellite states (Dissolution of the Soviet Union)",
+      "roles": [
+        {
+          "role": "political status",
+          "states": [
+            "Cold War era",
+            "Soviet influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Soviet Red Army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "World War II",
+            "Soviet Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1945",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of World War II",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hungarian Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "1956",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Prague Spring",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "1968",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Brezhnev Doctrine",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "Soviet Union",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Gorbachev",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Soviet leader",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Sinatra Doctrine",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "Soviet Union",
+            "Cold War era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Frank Sinatra",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "My Way",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "Frank Sinatra",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recognized as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What were the Warsaw Pact countries recognized as?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which countries were recognized as Soviet satellite states?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "occupied by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who occupied the Warsaw Pact countries in 1945?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did the Soviet Red Army occupy in 1945?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "suppressed by military force",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What events were suppressed by military force?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "How were the Hungarian Revolution and Prague Spring suppressed?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "abandoned by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who abandoned the Brezhnev Doctrine?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Gorbachev abandon?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "replaced with",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the Brezhnev Doctrine replaced with?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What replaced the Brezhnev Doctrine?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "referenced in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What song is referenced in the name 'Sinatra Doctrine'?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which doctrine references the song 'My Way'?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

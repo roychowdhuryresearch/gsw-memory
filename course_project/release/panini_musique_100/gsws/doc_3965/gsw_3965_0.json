@@ -1,0 +1,105 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Darlings (Darlings (Kevin Drew album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music",
+            "solo album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kevin Drew",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "Broken Social Scene co-founder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "March 18, 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "second solo album by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the second solo album by Kevin Drew?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who released the album Darlings?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the album Darlings released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released on March 18, 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

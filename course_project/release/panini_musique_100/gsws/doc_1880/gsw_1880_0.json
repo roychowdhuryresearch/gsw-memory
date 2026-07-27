@@ -1,0 +1,254 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "NHL on ABC",
+      "roles": [
+        {
+          "role": "broadcasting brand",
+          "states": [
+            "sports broadcasting",
+            "television"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "National Hockey League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "ice hockey",
+            "North American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American Broadcasting Company",
+      "roles": [
+        {
+          "role": "television network",
+          "states": [
+            "American",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1992–93 season",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "NHL season",
+            "early 1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "ESPN",
+      "roles": [
+        {
+          "role": "television network",
+          "states": [
+            "sports broadcasting",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "February 6, 2000",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "broadcast resumption",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Stanley Cup playoffs",
+      "roles": [
+        {
+          "role": "sports event",
+          "states": [
+            "ice hockey",
+            "NHL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcasted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What network broadcasted NHL games?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did the American Broadcasting Company broadcast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first broadcasted in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did ABC first broadcast NHL games?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was first broadcasted by ABC during the 1992–93 season?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "resumed broadcasting on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did ABC resume broadcasting NHL games?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What resumed broadcasting on February 6, 2000?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "joint contract with",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who did ABC have a joint contract with for NHL broadcasts?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who had a joint contract with ESPN for NHL broadcasts?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "rights to select games from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did ABC have rights to select games from?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who had rights to select games from the Stanley Cup playoffs?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

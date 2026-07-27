@@ -1,0 +1,255 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Electrochemical Society (Electrochemical Society)",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "learned society",
+            "scientific association"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters location",
+            "country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "electrochemistry",
+      "roles": [
+        {
+          "role": "field",
+          "states": [
+            "scientific field",
+            "research area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "solid-state science and technology",
+      "roles": [
+        {
+          "role": "field",
+          "states": [
+            "scientific field",
+            "research area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "more than 8,000",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "membership size",
+            "individual members"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "over 70 countries",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "global presence",
+            "membership distribution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "roughly 100",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "membership size",
+            "corporate members"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "corporations and laboratories",
+      "roles": [
+        {
+          "role": "organization type",
+          "states": [
+            "corporate members",
+            "scientific entities"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is The Electrochemical Society based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What organization is based in the United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "supports scientific inquiry in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What fields does The Electrochemical Society support scientific inquiry in?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which organization supports scientific inquiry in electrochemistry and solid-state science and technology?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "has individual membership of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many individual members does The Electrochemical Society have?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which organization has more than 8,000 individual members?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "has members in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "In how many countries does The Electrochemical Society have members?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which organization has members in over 70 countries?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "has corporate membership of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many corporations and laboratories hold corporate membership in The Electrochemical Society?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which organization has roughly 100 corporate members?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Crystal (Crystal (Ahmad Jamal album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music",
+            "jazz genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ahmad Jamal",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "jazz pianist",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1987",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Atlantic",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded the album Crystal?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Ahmad Jamal record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the album Crystal recorded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was recorded in 1987?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which label released the album Crystal?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released on the Atlantic label?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

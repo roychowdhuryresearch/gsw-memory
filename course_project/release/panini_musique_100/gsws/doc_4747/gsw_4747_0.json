@@ -1,0 +1,158 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Virginia (Virginia, Lempira)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "Honduras"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Lempira",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "department",
+            "Honduras"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Honduras",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Central America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "El Salvador",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Central America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Virginians",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "residents",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Virginia located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What town is located in Lempira?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "shares a border with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What country does Virginia share a border with?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What town in Honduras shares a border with El Salvador?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "travel to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where do many Virginians travel to for shopping?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who travels to El Salvador for shopping?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

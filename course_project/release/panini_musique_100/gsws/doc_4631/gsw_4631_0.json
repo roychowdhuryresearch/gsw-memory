@@ -1,0 +1,141 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Bamboo Among the Oaks",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "Hmong American literature",
+            "anthology"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2002",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Minnesota Historical Society Press",
+      "roles": [
+        {
+          "role": "publisher",
+          "states": [
+            "publishing house"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Paj Ntaub Voice",
+      "roles": [
+        {
+          "role": "journal",
+          "states": [
+            "Hmoob literary journal"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Bamboo Among the Oaks published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was published in 2002?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who published Bamboo Among the Oaks?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did the Minnesota Historical Society Press publish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "first appeared in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did many pieces of Bamboo Among the Oaks first appear?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What first appeared in the Paj Ntaub Voice journal?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

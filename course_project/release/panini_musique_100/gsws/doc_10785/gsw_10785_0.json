@@ -1,0 +1,300 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Portrait of Pietro Aretino (Portrait of Pietro Aretino)",
+      "roles": [
+        {
+          "role": "artwork",
+          "states": [
+            "painting",
+            "Renaissance period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Pietro Aretino",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Renaissance poet",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Titian",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "Renaissance painter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "around 1545",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation date",
+            "Renaissance period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Cosimo I de' Medici",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "patron",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "sali di Venere",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "gallery",
+            "Palazzo Pitti"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Palazzo Pitti",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "museum",
+            "Florence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Florence",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Italy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "painted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who painted The Portrait of Pietro Aretino?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Titian paint?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "depicts",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is depicted in The Portrait of Pietro Aretino?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What artwork depicts Pietro Aretino?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created around",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was The Portrait of Pietro Aretino created?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was created around 1545?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "possibly for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was The Portrait of Pietro Aretino possibly created for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What artwork was possibly created for Cosimo I de' Medici?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is The Portrait of Pietro Aretino located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What artwork is located in the sali di Venere?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the sali di Venere part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What part of Palazzo Pitti is the sali di Venere?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where is Palazzo Pitti located?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is located in Florence?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

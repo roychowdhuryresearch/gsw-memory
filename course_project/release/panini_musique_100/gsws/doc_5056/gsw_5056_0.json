@@ -1,0 +1,382 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Falling Waters (Falling Waters, West Virginia)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "census-designated place",
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Potomac River",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Berkeley County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "administrative region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "West Virginia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Williamsport Pike",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "road",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "US 11",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "highway",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Martinsburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "urban area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "876",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population count",
+            "demographic data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1887",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Scientific American",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "magazine",
+            "scientific journal"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "first U.S. railroad",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "historical construction",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "1814",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "construction year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is located on the Potomac River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is Falling Waters located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Falling Waters located?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Berkeley County, West Virginia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located along",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is located along Williamsport Pike (US 11)?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Falling Waters located along?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "north of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is north of Martinsburg?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where is Falling Waters located in relation to Martinsburg?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the population of Falling Waters in 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In what year was the population of Falling Waters 876?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "claimed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who claimed that the first U.S. railroad was built in Falling Waters?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did Scientific American claim in 1887?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "built in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was built in Falling Waters in 1814?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Where was the first U.S. railroad built?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

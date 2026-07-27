@@ -1,0 +1,302 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Beaverdell",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "unincorporated settlement",
+            "Southern Interior of British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Monashee Country",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Southern Interior of British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "British Columbia",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Okanagan Valley",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Boundary Country",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "West Kettle River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Kelowna",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Rock Creek",
+      "roles": [
+        {
+          "role": "settlement",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "British Columbia Highway 33",
+      "roles": [
+        {
+          "role": "highway",
+          "states": [
+            "British Columbia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Beaverdell located?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the Monashee Country?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "lies to the east of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What lies to the east of the Okanagan Valley?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is to the west of Beaverdell?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "north of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is north of the Boundary Country?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is south of Beaverdell?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "midway along",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is located midway along the West Kettle River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where is Beaverdell located along the West Kettle River?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "between",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is located between Kelowna and Rock Creek?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What are the two locations between which Beaverdell is located?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "along",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is located along British Columbia Highway 33?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which highway is Beaverdell located along?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ira C. Allen Mansion",
+      "roles": [
+        {
+          "role": "property",
+          "states": [
+            "historic",
+            "architectural"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Green",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical feature",
+            "Fair Haven"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Fair Haven",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "Vermont"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Vermont",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Fair Haven Green Historic District",
+      "roles": [
+        {
+          "role": "historic district",
+          "states": [
+            "contributing property",
+            "Fair Haven"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Ira C. Allen Mansion located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located on the Green in Fair Haven?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What historic district is the Ira C. Allen Mansion a part of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is a contributing property to the Fair Haven Green Historic District?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Fair Haven located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What town is located in Vermont?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What state is part of the United States?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What country is Vermont part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

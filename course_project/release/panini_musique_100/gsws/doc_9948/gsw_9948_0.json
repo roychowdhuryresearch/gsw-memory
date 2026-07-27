@@ -1,0 +1,198 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "When It's Time",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "musical work",
+            "single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Green Day",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "American",
+            "rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American Idiot",
+      "roles": [
+        {
+          "role": "musical",
+          "states": [
+            "stage adaptation",
+            "concept album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2004",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "concept album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United Kingdom",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "release location",
+            "charting location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "68",
+      "roles": [
+        {
+          "role": "chart position",
+          "states": [
+            "UK Singles Chart"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed 'When It's Time'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did Green Day perform?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What musical is 'When It's Time' part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song is part of 'American Idiot'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was 'When It's Time' released as a single?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song was released as a single in the United Kingdom?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "reached chart position",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What chart position did 'When It's Time' reach in the UK?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What song reached no. 68 on the UK Singles Chart?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

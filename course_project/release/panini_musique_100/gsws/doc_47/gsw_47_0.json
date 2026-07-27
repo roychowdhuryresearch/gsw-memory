@@ -1,0 +1,260 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sant Martí d'Empúries",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "entity of L'Escala",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "L'Escala",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "location in Spain"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Empúries",
+      "roles": [
+        {
+          "role": "ruins",
+          "states": [
+            "historical site",
+            "ancient settlement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "6th century BC",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment period",
+            "ancient history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Ancient Greeks",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "historical civilization",
+            "founders"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1079",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "relocation year",
+            "medieval period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Castelló d'Empúries",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "medieval town",
+            "safer location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is an entity of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Sant Martí d'Empúries an entity of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What entity is part of L'Escala?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located next to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is located next to the ruins of Empúries?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What are the ruins next to Sant Martí d'Empúries?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "established by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who established the settlement of Empúries?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did the Ancient Greeks establish in the 6th century BC?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the settlement of Empúries established?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was established in the 6th century BC?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "moved to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did Empúries move to in 1079?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What moved to Castelló d'Empúries in 1079?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "moved in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did Empúries move to Castelló d'Empúries?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What happened in 1079 regarding Empúries?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,189 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Saxon (Sky Saxon)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "the Seeds",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Billy Corgan",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "the Smashing Pumpkins",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "collaboration year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Superchrist",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "music video"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Austin, Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "performance location",
+            "recording location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "collaborated with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who collaborated with Billy Corgan in 2008?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who did Saxon and the Seeds collaborate with in 2008?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "appeared in music video",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who appeared in the music video of the Smashing Pumpkins' song 'Superchrist'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which music video did Saxon appear in?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "last performance and recording",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Sky Saxon's last performance and recording?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was done in Austin, Texas by Sky Saxon?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

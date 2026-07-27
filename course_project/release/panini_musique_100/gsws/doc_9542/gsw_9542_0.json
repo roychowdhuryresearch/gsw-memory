@@ -1,0 +1,327 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sambur (Marvin R. Sambur)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "educated individual",
+            "engineer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "City College of New York",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution",
+            "New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "B.S. in electrical engineering",
+      "roles": [
+        {
+          "role": "degree",
+          "states": [
+            "undergraduate degree",
+            "engineering"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1968",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Bell Labs",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "technical staff",
+            "research and development"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Murray Hill, New Jersey",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "workplace location",
+            "New Jersey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "M.S. in electrical engineering",
+      "roles": [
+        {
+          "role": "degree",
+          "states": [
+            "graduate degree",
+            "engineering"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Massachusetts Institute of Technology",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution",
+            "Massachusetts"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Ph.D. in electrical engineering",
+      "roles": [
+        {
+          "role": "degree",
+          "states": [
+            "doctoral degree",
+            "engineering"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1972",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "educated at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Sambur educated?",
+          "answers": [
+            "e2",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was educated at the City College of New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Who was educated at the Massachusetts Institute of Technology?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "received degree",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "What degree did Sambur receive from the City College of New York?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What degree did Sambur receive from MIT in 1969?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What degree did Sambur receive from MIT in 1972?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "graduated in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Sambur graduate with a B.S. in electrical engineering?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "When did Sambur receive his M.S. in electrical engineering?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "When did Sambur receive his Ph.D. in electrical engineering?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "joined",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "Where did Sambur join the technical staff?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who joined the technical staff of Bell Labs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Where is Bell Labs located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "What organization is located in Murray Hill, New Jersey?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

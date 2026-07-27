@@ -1,0 +1,673 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.82in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage[most]{tcolorbox}
+\usepackage[
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  urlcolor=blue!55!black,
+  citecolor=blue!55!black
+]{hyperref}
+
+\definecolor{uclablue}{HTML}{2774AE}
+\definecolor{uclagold}{HTML}{FFD100}
+\definecolor{lightblue}{HTML}{EAF4FB}
+\definecolor{lightgold}{HTML}{FFF8D8}
+\definecolor{codegray}{HTML}{F5F6F7}
+\definecolor{darkgray}{HTML}{3F4850}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textit{ECE 232E --- Summer 2026}}
+\rhead{\textit{PANINI Course Project}}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+
+\setlist[itemize]{leftmargin=1.5em,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.8em,itemsep=3pt,topsep=3pt}
+\setlist[description]{leftmargin=1.4em,itemsep=3pt,topsep=3pt}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}p{0.13\textwidth}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\RICR}{{\mdseries\textsc{RICR}}}
+\newcommand{\PANINI}{{\mdseries\textsc{Panini}}}
+\newcommand{\question}[3]{%
+  \subsection[Question #1: #2 (#3 points)]{Question #1: #2 \hfill [#3 points]}%
+}
+\newcommand{\deliverables}{\paragraph{Required output.}}
+\newcommand{\grading}{\paragraph{Point allocation.}}
+
+\tcbset{
+  colback=lightblue,
+  colframe=uclablue,
+  boxrule=0.7pt,
+  arc=2pt,
+  left=7pt,right=7pt,top=5pt,bottom=5pt
+}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  rulecolor=\color{black!18},
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false,
+  keywordstyle=\color{uclablue}\bfseries,
+  commentstyle=\color{darkgray}
+}
+
+\begin{document}
+
+\begin{center}
+{\large\bfseries Large Scale Social and Complex Networks: Design and Algorithms}\\[2pt]
+{\large\bfseries ECE 232E --- Summer 2026}\\[3pt]
+Prof.\ Vwani Roychowdhury \hfill UCLA Department of Electrical and Computer Engineering
+\end{center}
+\vspace{2mm}
+\hrule height 0.8pt
+\vspace{4mm}
+\begin{center}
+  {\Huge\bfseries Course Project}\\[3pt]
+  {\LARGE\bfseries Structured Memory Networks and}\\[2pt]
+  {\LARGE\bfseries Reasoning Inference Chain Retrieval}\\[5pt]
+  {\large Based on \PANINI: Continual Learning in Token Space via Structured Memory}\\[5pt]
+  {\large\bfseries 100 points}\\[2pt]
+  {\large Due Saturday, August 15, 2026 at 11:59 PM Pacific Time}
+\end{center}
+\vspace{4mm}
+\hrule height 0.8pt
+\vspace{5mm}
+
+\begin{tcolorbox}[colback=lightgold,colframe=uclagold!70!black,title=\textbf{Project in one sentence}]
+Build and evaluate a reproducible multi-hop question-answering system that
+reads a network of Generative Semantic Workspaces (GSWs), compares sparse and
+dense retrieval methods, and implements the paper's beam-search
+\emph{Reasoning Inference Chain Retrieval} (\RICR) algorithm on
+\textbf{100 2WikiMultiHopQA questions and 100 MuSiQue questions}.
+\end{tcolorbox}
+
+\section{Purpose and learning objectives}
+
+Standard retrieval-augmented generation stores document chunks and asks a
+language model to repeatedly reason over retrieved text. \PANINI instead
+converts documents into GSWs: heterogeneous semantic networks containing
+entities, verb-phrase/event nodes, roles, states, and grounded question--answer
+(QA) edges. At inference time, \RICR decomposes a multi-hop query and searches
+for compact chains of QA pairs through this structured memory.
+
+This project connects the \PANINI framework to core topics from ECE 232E:
+heterogeneous graph construction, network projection, connectivity,
+centrality, ranking, sparse and dense search, beam search, scaling, and
+controlled experimental evaluation. By the end of the project, you should be
+able to:
+
+\begin{enumerate}
+  \item construct and characterize corpus-level networks from document-level
+        GSWs;
+  \item compare TF--IDF, BM25, dense, hybrid, and structure-aware retrieval;
+  \item execute and validate a neural question-decomposition plan;
+  \item implement \RICR with chain scoring and diversity-preserving pruning;
+  \item analyze generalization from 2WikiMultiHopQA to MuSiQue; and
+  \item report accuracy, retrieval quality, latency, evidence size, and
+        failure modes reproducibly.
+\end{enumerate}
+
+\section{Reading, repository, and compute}
+
+\paragraph{Required reading.}
+Read Sections 1--4 and Algorithm 1 of
+\href{https://arxiv.org/abs/2602.15156}{\PANINI: Continual Learning in Token
+Space via Structured Memory}. The GSW representation, dual indexing,
+decomposition notation, chain scoring, and \RICR pruning rule in the paper are
+part of the project specification.
+
+\paragraph{Student repository.}
+The self-contained starter repository is:
+\begin{center}
+\url{https://github.com/YigitTurali/panini-course-project}
+\end{center}
+The Colab notebook, artifact loaders, graph utilities, metrics, embeddings,
+indices, and model configuration are supplied. Students do \textbf{not} need
+access to the research codebase.
+
+\paragraph{Models.}
+Use the model identifiers in \code{models/model\_config.json}. The required
+free-tier configuration uses:
+\begin{itemize}
+  \item \href{https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B}
+        {GSW-QA-Decomposer-Qwen3-4B} for decomposition;
+  \item supplied Qwen3-Embedding-8B corpus and fixed-query embeddings;
+  \item \href{https://huggingface.co/Qwen/Qwen3-Reranker-8B}
+        {Qwen3-Reranker-8B} in 4-bit mode for reranking; and
+  \item \href{https://huggingface.co/Qwen/Qwen3-4B}
+        {Qwen3-4B} in 4-bit mode for evidence-grounded final answers.
+\end{itemize}
+The
+\href{https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B}
+{8B decomposer} is optional and receives no automatic accuracy advantage.
+Do not keep the decomposer, reranker, query encoder, and answer model resident
+on the GPU simultaneously. Save outputs to JSONL, unload the current model,
+clear GPU memory, and then begin the next stage.
+
+\paragraph{Compute policy.}
+The required path must run on a free Google Colab GPU. No paid API is required
+or permitted for the required results. Corpus GSWs, embeddings, and indices
+are supplied; regenerating them is outside the project scope.
+
+\section{Datasets and evaluation protocol}
+
+You will receive two independent 100-question packages with the same directory
+contract and stable IDs.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}l C C C Y@{}}
+\toprule
+\textbf{Dataset} & \textbf{Development} & \textbf{Held out} & \textbf{Total}
+& \textbf{Required stratification}\\
+\midrule
+2WikiMultiHopQA & 80 & 20 & 100 &
+25 bridge-comparison, 25 comparison, 25 compositional, and 25 inference
+questions; each category has 20 development and 5 held-out questions.\\
+MuSiQue & 80 & 20 & 100 &
+50 two-hop, 30 three-hop, and 20 four-hop questions; development/held-out
+counts are respectively 40/10, 24/6, and 16/4.\\
+\bottomrule
+\end{tabularx}
+\caption{Required course subsets.}
+\end{table}
+
+\begin{itemize}
+  \item The \textbf{development split} includes questions, answers, aliases,
+        supporting evidence, and context-document IDs. It may be used for
+        debugging and tables in the report.
+  \item The \textbf{held-out split} includes questions and document IDs but
+        withholds answers and supporting evidence. Do not manually search for,
+        reconstruct, or import these labels.
+  \item Select algorithms and default hyperparameters using only the 2Wiki
+        development split. Freeze them before running MuSiQue. MuSiQue is the
+        required cross-dataset transfer evaluation.
+  \item Run the final frozen system once on all 200 questions. Report metrics
+        locally for the 160 development questions; the teaching staff will
+        score the 40 held-out predictions.
+\end{itemize}
+
+MuSiQue is distributed under
+\href{https://github.com/stonybrooknlp/musique}{CC BY 4.0}; 2WikiMultiHopQA is
+distributed under
+\href{https://github.com/Alab-NII/2wikimultihop}{Apache 2.0}. Retain the
+dataset IDs and attribution files in all derived outputs.
+
+\section{Fixed definitions and default settings}
+
+\subsection{Graph views}
+
+For each GSW, construct the \textbf{native directed multigraph}. Entity and
+verb-phrase/event records are nodes. A grounded QA record is represented by
+directed, labeled edges that retain its stable QA ID, question, answer entity,
+document ID, and relation to its verb-phrase. Do not merge records merely
+because their display strings match.
+
+Also construct an \textbf{entity projection}. Two reconciled entity nodes are
+adjacent when they participate in at least one common event/verb-phrase or a
+grounded QA relation. Store multiplicity as edge weight. All component,
+clustering, and assortativity results must state whether they were computed on
+the native graph, its undirected view, or the entity projection.
+
+\subsection{Retrieval and \RICR defaults}
+
+Unless a question explicitly requests an ablation, use:
+
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Random seed & 232\\
+Dense similarity & inner product of L2-normalized vectors\\
+Reciprocal Rank Fusion & $\operatorname{RRF}(d)=\sum_r 1/(60+r(d))$\\
+Pre-rerank candidate pool & $M=60$ unique QA records\\
+Candidates returned per hop & $k=15$\\
+Beam width & $B=5$\\
+Chain score & geometric mean of hop scores\\
+Generation & deterministic; sampling disabled\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For a length-$t$ chain $C=(e_1,\ldots,e_t)$ with positive hop scores
+$s_1,\ldots,s_t$, use
+\begin{equation}
+  \operatorname{score}(C)
+  = \left(\prod_{\ell=1}^{t}\max(s_\ell,\epsilon)\right)^{1/t}
+  = \exp\left(\frac{1}{t}\sum_{\ell=1}^{t}
+    \log\max(s_\ell,\epsilon)\right),
+  \qquad \epsilon=10^{-12}.
+\end{equation}
+The log-domain form is recommended. At every pruning step, sort by decreasing
+chain score and use the stable QA-ID sequence as the deterministic tie-breaker.
+Retain at most one chain per normalized \emph{current answer}.
+
+\subsection{Metrics}
+
+Use the provided normalization functions. Report:
+\begin{description}
+  \item[Retrieval:] Recall@$k$ for $k\in\{1,5,10,15\}$, reciprocal rank/MRR,
+        supporting-document recall, and supporting-QA recall.
+  \item[Chains:] complete-chain recovery (all required supporting hops occur in
+        one surviving chain), average surviving chains, and average unique
+        current answers.
+  \item[Answers:] Exact Match (EM) and token F1, giving each question the
+        maximum score over its accepted answer aliases.
+  \item[Efficiency:] wall-clock latency per stage, peak GPU memory when a model
+        is used, number of reranked candidates, number of returned QA pairs,
+        and answer-model input tokens.
+\end{description}
+Aggregate by macro-average over questions. Include the number of evaluated
+questions in every table. Never average already-rounded subgroup values.
+
+\section{Graded questions}
+
+\question{1}{Release integrity and dataset audit}{4}
+
+Verify both supplied packages before implementing any algorithm.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Run the release verifier and record the release-manifest SHA-256 hash.
+  \item Produce a table containing, for each dataset and split, the number of
+        questions, unique documents, GSW files, entities, QA records, and
+        decomposition-validation examples.
+  \item Show one entity record and one QA record, explaining the stable ID and
+        every field that your implementation consumes.
+  \item Add an assertion that held-out records contain no answer-label fields:
+        \code{answer}, \code{answer\_aliases},
+        \code{supporting\_facts}, or \code{evidences}.
+\end{enumerate}
+
+\deliverables One audit table, two short schema examples, verifier output, and
+the no-leakage assertion in the notebook.
+
+\grading Manifest verification (1), count table (1), schema explanation (1),
+and automated leakage check (1).
+
+\question{2}{Construct the native GSW network and entity projection}{8}
+
+Implement a loader that combines the document-level GSWs into the two graph
+views defined above. Preserve node type, document provenance, role/state text,
+QA ID, and direction. Reconcile entities only with the supplied canonical
+entity ID; string equality alone is not a valid reconciliation rule.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Report native-graph node and edge counts by node/edge type and verify
+        them against direct counts from the JSON files.
+  \item Construct the weighted entity projection and report its node count,
+        edge count, density, number of self-loops removed, and total edge
+        weight.
+  \item Add at least three small unit tests: one for direction, one for
+        document provenance, and one showing that duplicate surface strings
+        with different canonical IDs remain distinct.
+\end{enumerate}
+
+\deliverables Construction code, a graph-statistics table for each dataset,
+and passing tests.
+
+\grading Correct native graph (3), correct projection/reconciliation (3),
+validation table (1), and tests (1).
+
+\question{3}{Analyze the structured-memory network}{8}
+
+Perform the following analysis separately for 2Wiki and MuSiQue:
+
+\begin{enumerate}[label=(\alph*)]
+  \item Compute weakly connected components of the native graph and connected
+        components of the entity projection. Report the number of components,
+        giant-component size and fraction, isolated nodes, and component-size
+        summary (minimum, median, mean, and maximum).
+  \item Plot degree probability mass and complementary cumulative degree
+        distributions on log--log axes. State whether the heavy tail, if any,
+        is consistent across datasets; do not claim a power law without a
+        fitted test.
+  \item On the entity projection, report the ten highest nodes under weighted
+        degree, PageRank, and betweenness centrality. Explain at least one
+        disagreement between rankings. Exact betweenness or a documented
+        fixed-seed approximation is acceptable.
+  \item Report average clustering and degree assortativity, then visualize one
+        complete gold multi-hop path from a development question with node
+        types and edge/QA labels.
+\end{enumerate}
+
+\deliverables At least four plots, two summary tables, and a 150--250 word
+cross-dataset interpretation.
+
+\grading Connectivity (2), degree analysis (2), centrality (2), and
+clustering/assortativity/path visualization (2).
+
+\question{4}{Question decomposition and dependency graphs}{10}
+
+Run the supplied 4B decomposer on all 200 questions using the supplied prompt,
+sampling disabled, and the model-config maximum output length. Cache one JSONL
+record per question. Parse numbered sub-questions and
+\code{<ENTITY\_Qn>} placeholders into a directed acyclic dependency graph.
+Retrieval steps and deterministic reasoning-only steps (for example, comparing
+two dates) must be marked separately.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Validate references: every placeholder must point to an earlier
+        sub-question, the graph must be acyclic, and every retrieval node must
+        contain a nonempty natural-language question.
+  \item Identify independent linear sequences that may run in parallel and
+        record the deterministic operations needed to combine their answers.
+  \item On the public reviewed decomposition subset, report valid-plan rate,
+        sub-question-count exact match, dependency-edge precision/recall/F1,
+        and retrieval-vs-reasoning node accuracy.
+  \item Analyze two errors from each dataset. Distinguish malformed output,
+        wrong dependency, missing hop, extra hop, and semantically incorrect
+        atomic question.
+\end{enumerate}
+
+\deliverables \code{decompositions.jsonl}, parser tests, a metric table, and
+four concise error analyses.
+
+\grading Inference and caching (2), parser/validation (3), parallel-sequence
+handling (2), metrics (2), and error analysis (1).
+
+\question{5}{Sparse retrieval baselines}{8}
+
+Using only the supplied metadata, implement and evaluate:
+
+\begin{enumerate}[label=(\alph*)]
+  \item TF--IDF retrieval over concatenated QA question and answer text;
+  \item BM25 retrieval over the same QA text; and
+  \item BM25 entity retrieval over surface name, aliases, roles, and states,
+        followed by expansion to QA records attached to each retrieved entity.
+\end{enumerate}
+
+Use identical text normalization within a method across datasets. State all
+tokenization and BM25 parameters. Evaluate the gold atomic sub-questions from
+the development splits at $k\in\{1,5,10,15\}$. Report Recall@$k$ and MRR
+overall, by 2Wiki question type, and by MuSiQue hop count.
+
+\deliverables One implementation per method, a complete retrieval table, and
+a short explanation of where entity expansion helps or hurts.
+
+\grading Correct TF--IDF/BM25 QA search (3), correct entity expansion (2),
+evaluation (2), and interpretation (1).
+
+\question{6}{Dense, hybrid, and paper-style dual retrieval}{12}
+
+Load the supplied normalized QA embeddings and FAISS index; do not regenerate
+corpus embeddings. Use the supplied fixed-query embedding when present. If
+answer substitution creates a new query, encode it with the configured query
+encoder and cache it by exact normalized query string.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Implement dense QA retrieval and verify that a manual inner-product
+        calculation agrees with FAISS for at least five queries.
+  \item Implement RRF over TF--IDF, BM25-QA, and dense rankings with constant
+        60. Deduplicate by stable QA ID.
+  \item Implement paper-style dual retrieval: union QA records obtained from
+        BM25 entity expansion and dense QA search, deduplicate to a pre-rerank
+        pool of at most $M=60$, rerank against the instantiated atomic question,
+        and return the top $k=15$.
+  \item Compare all methods using the Question 5 protocol. Add mean and
+        95th-percentile retrieval latency and the average candidate count.
+\end{enumerate}
+
+\deliverables Search code, FAISS consistency test, performance/latency tables,
+and the saved top-15 retrieval trace for every development atomic question.
+
+\grading Dense retrieval (3), RRF (2), dual candidate construction (3),
+reranking/deduplication (2), and evaluation (2).
+
+\question{7}{Does reranking always help?}{5}
+
+Compare three scoring rules on the same $M=60$ candidate pool:
+\begin{enumerate}[label=(\roman*)]
+  \item reranker probability only;
+  \item reciprocal retrieval rank only; and
+  \item $0.5$ reranker probability $+\,0.5$ reciprocal retrieval rank.
+\end{enumerate}
+Use rank reciprocal $1/r$ after assigning each candidate its best pre-rerank
+rank. Report Recall@15 and MRR for each dataset. Find one query for which
+reranking improves the first relevant rank and one for which it worsens it.
+For each, show the top five candidates before and after scoring and explain the
+lexical/entity mismatch.
+
+\deliverables One comparison table and two annotated retrieval traces.
+
+\grading Controlled comparison (2), traces (2), and evidence-based explanation
+(1).
+
+\question{8}{Implement Reasoning Inference Chain Retrieval}{15}
+
+Complete \code{prune\_unique\_answers} and
+\code{run\_linear\_ricr} in \code{panini\_course/ricr.py}.
+For each linear sequence:
+
+\begin{enumerate}[label=(\arabic*)]
+  \item retrieve $k$ candidates for the first instantiated sub-question;
+  \item retain the top $B$ chains with distinct normalized current answers;
+  \item substitute each current answer into the next dependent sub-question;
+  \item expand all surviving chains by $k$ candidates;
+  \item update the geometric-mean chain score in the log domain;
+  \item globally prune the $kB$ expansions to $B$ distinct current answers;
+  \item repeat until the sequence ends; and
+  \item combine parallel sequences by deduplicating evidence using stable QA
+        ID while preserving the highest-scoring provenance.
+\end{enumerate}
+
+A candidate from an earlier chain may not be mutated in place. Ties must use
+the deterministic rule from Section 4.2. Return both the deduplicated evidence
+and complete trace: instantiated questions, candidates, scores, pruned chains,
+and selected QA IDs at every hop.
+
+\deliverables Working implementation, at least six unit tests (including
+duplicate answers, ties, $B=1$, empty retrieval, a two-hop chain, and parallel
+sequences), plus one human-readable trace from each dataset.
+
+\grading First-hop/pruning behavior (3), multi-hop expansion/substitution (4),
+chain scoring (2), parallel evidence merge (2), deterministic trace format
+(1), and tests/edge cases (3).
+
+\question{9}{\RICR ablation study}{10}
+
+Use a fixed, stratified 20-question subset from each development dataset for
+one-factor-at-a-time ablations. Publish the selected IDs. The default is
+$B=5$, $k=15$, unique-answer pruning enabled, geometric-mean scoring, and the
+best frozen Question 7 retrieval score.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Beam width: $B\in\{1,3,5\}$.
+  \item Candidates per hop: $k\in\{5,15\}$.
+  \item Diversity: unique-answer pruning on versus off.
+  \item Chain scoring: geometric mean versus last-hop score.
+  \item Retrieval: BM25-QA, dense QA, RRF hybrid, and paper-style dual
+        retrieval.
+\end{enumerate}
+
+Report supporting-QA recall, complete-chain recovery, answer EM/F1, mean
+latency, and mean evidence count. Plot accuracy versus latency and accuracy
+versus evidence size. Change only the named factor in each comparison.
+
+\deliverables One ablation table, two trade-off plots, and a 200--300 word
+recommendation of the configuration you would deploy.
+
+\grading Experimental control (2), beam/candidate ablations (2),
+diversity/scoring ablations (2), retrieval ablation (2), and trade-off analysis
+(2).
+
+\question{10}{End-to-end 2Wiki evaluation}{7}
+
+Freeze one final configuration using the 2Wiki development split and run it on
+all 100 2Wiki questions. Generate final answers using only the deduplicated QA
+evidence returned by \RICR; the answering prompt must instruct the model to
+return \code{N/A} when evidence is insufficient.
+
+On the 80 labeled questions, report decomposition validity, supporting-QA
+recall, complete-chain recovery, EM, F1, average/95th-percentile latency,
+answer-context tokens, and evidence count. Break out EM/F1 by the four 2Wiki
+question types. Include one successful and one failed complete trace.
+
+\deliverables \code{results/2wiki\_dev.jsonl},
+\code{predictions/2wiki\_heldout.jsonl}, one main table, one type table, and two
+traces.
+
+\grading Correct frozen run/output files (2), complete metrics (2),
+type-specific analysis (1), trace quality (1), and grounded answer prompting
+(1).
+
+\question{11}{MuSiQue transfer and scaling evaluation}{8}
+
+Without changing retrieval weights, $M$, $k$, $B$, prompts, or score rules,
+replace the 2Wiki package with the MuSiQue package and run all 100 questions.
+On the 80 labeled questions:
+
+\begin{enumerate}[label=(\alph*)]
+  \item report the same metrics as Question 10, separated into 2-, 3-, and
+        4-hop groups;
+  \item plot complete-chain recovery and F1 against hop count;
+  \item compare 2Wiki and MuSiQue under the same frozen configuration; and
+  \item identify whether the largest transfer loss comes from decomposition,
+        first-hop retrieval, later-hop substitution/retrieval, or answer
+        generation, using counts from saved traces rather than intuition.
+\end{enumerate}
+
+\deliverables Submit:
+\begin{itemize}
+  \item \code{results/musique\_dev.jsonl} and
+        \code{predictions/musique\_heldout.jsonl};
+  \item a hop-count table and two scaling plots; and
+  \item a quantitative transfer-error analysis.
+\end{itemize}
+
+\grading Frozen transfer run (2), hop-stratified metrics (2), scaling plots
+(1), cross-dataset comparison (1), and traced error attribution (2).
+
+\question{12}{Reproducibility and final submission}{5}
+
+Submit one archive or course-repository commit containing:
+
+\begin{enumerate}[label=(\alph*)]
+  \item \code{report.pdf}, organized by Questions 1--12 and limited to 12 pages
+        excluding references and a one-page appendix;
+  \item the completed Colab notebook and any Python modules/tests it imports;
+  \item all four development/held-out JSONL files from Questions 10--11;
+  \item \code{environment.txt} with Python, CUDA, package, and model revisions;
+        and
+  \item \code{RUNME.md} with exact commands, seeds, expected runtime, restart
+        points, and the final Git commit hash.
+\end{enumerate}
+
+The notebook must run from a fresh Colab runtime using relative paths after
+setting one \code{PACKAGE\_ROOT}. Do not submit downloaded model weights,
+provided embeddings, FAISS indices, or dataset copies.
+
+\grading Report organization/completeness (2), executable code/tests (1),
+required result schemas (1), and environment/RUNME reproducibility (1).
+
+\section{Required result schema}
+
+Each prediction file must contain one JSON object per line and preserve the
+input order. Extra diagnostic fields are allowed, but the following fields are
+required:
+
+\begin{lstlisting}[language=Python]
+{
+  "dataset": "2wiki" | "musique",
+  "split": "development" | "held_out",
+  "question_id": "...",
+  "question": "...",
+  "predicted_decomposition": [...],
+  "decomposition_valid": true,
+  "retrieval_backend": "dual_hybrid",
+  "beam_width": 5,
+  "candidates_per_hop": 15,
+  "chains": [
+    {
+      "qa_ids": ["...", "..."],
+      "answers": ["...", "..."],
+      "hop_scores": [0.91, 0.87],
+      "chain_score": 0.8898
+    }
+  ],
+  "evidence_qa_ids": ["...", "..."],
+  "predicted_answer": "...",
+  "latency_ms": {
+    "decomposition": 0.0,
+    "retrieval_ricr": 0.0,
+    "answer": 0.0
+  },
+  "answer_context_tokens": 0
+}
+\end{lstlisting}
+
+Development files may additionally contain gold labels and computed metrics.
+Held-out files must not contain gold fields.
+
+\section{Grading summary}
+
+\begin{center}
+\begin{tabularx}{0.96\textwidth}{@{}Y r@{}}
+\toprule
+\textbf{Component} & \textbf{Points}\\
+\midrule
+Q1. Release integrity and dataset audit & 4\\
+Q2. Native GSW network and entity projection & 8\\
+Q3. Structured-memory network analysis & 8\\
+Q4. Question decomposition and dependency graphs & 10\\
+Q5. Sparse retrieval baselines & 8\\
+Q6. Dense, hybrid, and dual retrieval & 12\\
+Q7. Reranking analysis & 5\\
+Q8. \RICR implementation & 15\\
+Q9. \RICR ablations & 10\\
+Q10. 2Wiki end-to-end evaluation & 7\\
+Q11. MuSiQue transfer and scaling & 8\\
+Q12. Reproducibility and submission & 5\\
+\midrule
+\textbf{Total} & \textbf{100}\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{General grading and conduct}
+
+\begin{itemize}
+  \item A table or plot without axis labels, units, evaluated-question count,
+        or a caption receives at most half credit for that item.
+  \item Results that cannot be reproduced from the submitted code receive no
+        implementation credit, even if the reported values are plausible.
+  \item Clearly label any deviation from the required settings. An additional
+        experiment does not replace a required one.
+  \item You may use standard libraries for graph storage, TF--IDF, BM25, FAISS,
+        plotting, and model loading. You may not import an implementation of
+        \RICR or copy an answer key.
+  \item Follow the course collaboration and academic-integrity policy. Cite
+        all external code, prompts, and written sources. Report any use of
+        generative coding assistants as required by the course policy.
+  \item The course late-submission policy applies. If a released artifact is
+        corrupted or a Colab dependency becomes unavailable, post a minimal
+        reproducer to the course forum before the deadline.
+\end{itemize}
+
+\vfill
+\begin{center}
+\textit{The goal is not merely to obtain a final answer. Your system should
+make the network path, evidence, score, and failure mode inspectable.}
+\end{center}
+
+\end{document}

@@ -1,0 +1,231 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Central Station",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transport hub",
+            "Brasília"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Brasília",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital city",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rodoferroviária",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "interstate bus station",
+            "Brasília"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Eixo Monumental",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "landmark",
+            "Brasília"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "July 2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "opening date",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Saída Sul",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "South Exit",
+            "Brasília"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Parkshopping Mall",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "shopping center",
+            "Brasília"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Federal District",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative region",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Rodoferroviária located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located at the western end of the Eixo Monumental?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "opened in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the new bus station opened?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What opened in July 2010?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located near",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is located near Parkshopping Mall?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is near the South Exit?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "used to leave",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is used to leave the Federal District?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is the purpose of the bus station at Saída Sul?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

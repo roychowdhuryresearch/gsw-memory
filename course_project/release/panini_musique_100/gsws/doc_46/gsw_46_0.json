@@ -1,0 +1,185 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "English (List of territorial entities where English is an official language)",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "official language",
+            "global context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "reference year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "54",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "sovereign states count",
+            "2015"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "27",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "non-sovereign entities count",
+            "2015"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "sovereign states",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "independent",
+            "global context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "non-sovereign entities",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "dependent",
+            "global context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "country subdivisions",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "regional level",
+            "global context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "official language in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "In how many sovereign states was English an official language in 2015?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In how many non-sovereign entities was English an official language in 2015?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What language was an official language in 54 sovereign states in 2015?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What language was an official language in 27 non-sovereign entities in 2015?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "declared official language",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What language have many country subdivisions declared as an official language?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which entities have declared English an official language at the local or regional level?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

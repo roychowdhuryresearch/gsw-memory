@@ -1,0 +1,333 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "You Can't Always Get What You Want",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "music",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "The Rolling Stones",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "music group",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Let It Bleed",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music album",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mick Jagger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Keith Richards",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Rolling Stone magazine",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "music magazine",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2004",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "500 Greatest Songs of All Time",
+      "roles": [
+        {
+          "role": "list",
+          "states": [
+            "music ranking",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "100th greatest song",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "music ranking",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed 'You Can't Always Get What You Want'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did The Rolling Stones perform?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was 'You Can't Always Get What You Want' released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song was released in 1969?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of album",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which album includes 'You Can't Always Get What You Want'?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song is part of the album 'Let It Bleed'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who wrote 'You Can't Always Get What You Want'?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What song did Mick Jagger and Keith Richards write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "ranked by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who ranked 'You Can't Always Get What You Want' as the 100th greatest song?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What song did Rolling Stone magazine rank as the 100th greatest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "included in list",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "In which list was 'You Can't Always Get What You Want' included?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What song is included in the '500 Greatest Songs of All Time' list?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When was the '500 Greatest Songs of All Time' list published?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What list was published in 2004?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,200 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Diadochi",
+      "roles": [
+        {
+          "role": "historical group",
+          "states": [
+            "successors of Alexander the Great",
+            "Hellenistic period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Alexander the Great",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Macedonian ruler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "323–272 BC",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "historical period",
+            "Hellenistic period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pyrrhus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Hellenistic ruler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Diodorus Siculus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historian",
+            "ancient Greek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Plutarch",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "biographer",
+            "ancient Greek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "wrote a history of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote a history of the Diadochi?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did the author write about?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "period from death of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What period does the history cover starting from the death of Alexander the Great?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Whose death marks the beginning of the period covered in the history?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "used by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who used the history of the Diadochi as a source?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Diodorus Siculus and Plutarch use as a source?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "war with",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What event marks the end of the period covered in the history?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was involved in the war that marks the end of the period covered in the history?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

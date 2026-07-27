@@ -1,0 +1,261 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Best Day Ever (Best Day Ever (mixtape))",
+      "roles": [
+        {
+          "role": "mixtape",
+          "states": [
+            "music release",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Mac Miller",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "March 11, 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "ID Labs",
+      "roles": [
+        {
+          "role": "producer",
+          "states": [
+            "music production",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "16 songs",
+      "roles": [
+        {
+          "role": "content",
+          "states": [
+            "track count",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "nine producers",
+      "roles": [
+        {
+          "role": "contributors",
+          "states": [
+            "music production",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "20,000 viewers",
+      "roles": [
+        {
+          "role": "audience",
+          "states": [
+            "live stream",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released Best Day Ever?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Mac Miller release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Best Day Ever released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was released on March 11, 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who predominantly produced Best Day Ever?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did ID Labs predominantly produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "consists of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many songs does Best Day Ever consist of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What mixtape consists of 16 songs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many producers worked on Best Day Ever?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did nine producers work on?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "joined for live stream",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How many viewers joined Mac Miller for a live stream?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who did 20,000 viewers join for a live stream?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

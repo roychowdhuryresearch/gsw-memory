@@ -1,0 +1,248 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Eric Penn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "educated individual"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "William Penn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "cricketer",
+            "businessman"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "John Penn and Sons",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "engineering company",
+            "historical business"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "John Penn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "founder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Greenwich, London",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "business location",
+            "historical place"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Eton College",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "prestigious school",
+            "historical education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Trinity College, Cambridge",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "prestigious university",
+            "historical education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "eldest son of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the eldest son of William Penn?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is Eric Penn the eldest son of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ran the company",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who ran the company John Penn and Sons?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What company did William Penn run?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who founded John Penn and Sons?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did John Penn found?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was John Penn and Sons based?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What company was based in Greenwich, London?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "educated at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was Eric Penn educated?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was educated at Eton College?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who was educated at Trinity College, Cambridge?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

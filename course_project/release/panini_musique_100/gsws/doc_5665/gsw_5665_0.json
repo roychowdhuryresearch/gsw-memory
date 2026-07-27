@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Top Gun Anthem",
+      "roles": [
+        {
+          "role": "musical composition",
+          "states": [
+            "instrumental rock",
+            "film theme"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1986",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Top Gun",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1980s",
+            "American cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Harold Faltermeyer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "composer",
+            "music writer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Steve Stevens",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "guitarist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "theme for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the theme for the 1986 film Top Gun?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film is Top Gun Anthem the theme for?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Top Gun released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film was released in 1986?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who wrote the music for Top Gun Anthem?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Harold Faltermeyer write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played guitar on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who played guitar on the recording of Top Gun Anthem?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Steve Stevens play guitar on?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,328 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Wayne Gretzky",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "ice hockey player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hart Trophy (Hart Memorial Trophy)",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "ice hockey",
+            "MVP"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "nine times",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "record",
+            "award wins"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "eight consecutively",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "consecutive wins",
+            "award wins"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Barry Bonds",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "seven times",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "award wins",
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Edmonton Oilers",
+      "roles": [
+        {
+          "role": "team",
+          "states": [
+            "ice hockey",
+            "NHL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Mark Messier",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "ice hockey player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Major League Baseball",
+      "roles": [
+        {
+          "role": "league",
+          "states": [
+            "North American",
+            "professional sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "National Basketball Association",
+      "roles": [
+        {
+          "role": "league",
+          "states": [
+            "North American",
+            "professional sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "National Football League",
+      "roles": [
+        {
+          "role": "league",
+          "states": [
+            "North American",
+            "professional sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "won the award",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who won the Hart Trophy a record nine times?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "How many times did Wayne Gretzky win the Hart Trophy?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "won consecutively",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many times did Wayne Gretzky win the Hart Trophy consecutively?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who won the Hart Trophy eight times consecutively?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "named MVP",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who has been named MVP more times than any other player in the history of the other three North American major professional leagues?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which leagues has Wayne Gretzky been named MVP more times than any other player?",
+          "answers": [
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "won the MVP award",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who won the MVP award seven times in the MLB?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "How many times did Barry Bonds win the MVP award in the MLB?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "teammate of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was Wayne Gretzky's teammate on the Edmonton Oilers?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was Mark Messier's teammate on the Edmonton Oilers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "won the Hart Trophy with more than one team",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which players won the Hart Trophy with more than one team?",
+          "answers": [
+            "e1",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did Wayne Gretzky and Mark Messier achieve with the Hart Trophy?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

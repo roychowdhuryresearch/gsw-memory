@@ -1,0 +1,348 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Xavi",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "footballer",
+            "Catalan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Terrassa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "Catalonia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Barcelona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Catalonia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Catalonia",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "autonomous community",
+            "Spain"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "FC Barcelona",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football club",
+            "La Liga"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "La Masia",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "youth academy",
+            "FC Barcelona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Joaquim",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "former footballer",
+            "father of Xavi"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Sabadell",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football club",
+            "first division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Josep Maria Gonzalvo",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "football coach",
+            "Barcelona B"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Barcelona B",
+      "roles": [
+        {
+          "role": "team",
+          "states": [
+            "reserve team",
+            "FC Barcelona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Second Division",
+      "roles": [
+        {
+          "role": "league",
+          "states": [
+            "football league",
+            "Spain"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Xavi born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Terrassa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "product of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is a product of FC Barcelona's La Masia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What youth system did Xavi come from?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "joined at age",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "At what age did Xavi join La Masia?",
+          "answers": [
+            "11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who joined La Masia at the age of 11?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "father of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the father of Xavi?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is Joaquim's son?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which team did Joaquim play for?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who played for Sabadell?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "key member of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was a key member of Josep Maria Gonzalvo's Barcelona B team?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which team was Xavi a key member of?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "won promotion to",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What did Barcelona B achieve under Josep Maria Gonzalvo?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which team won promotion to the Second Division?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

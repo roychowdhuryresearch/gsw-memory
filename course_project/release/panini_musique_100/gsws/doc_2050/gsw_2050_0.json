@@ -1,0 +1,365 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Newport News (Newport News, Virginia)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hampton Roads metropolitan area",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "metropolitan area",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Virginia Peninsula",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "peninsula",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "James River",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Skiffe's Creek",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "creek",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Newport News Point",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "point",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Warwick County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "eight original shires of Virginia",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "historical",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "House of Burgesses",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "legislative body",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "British Colony of Virginia",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "colonial",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "King Charles I",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "monarch",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1634",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "formation year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "included in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What metropolitan area is Newport News included in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is included in the Hampton Roads metropolitan area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Newport News located?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What city is located on the Virginia Peninsula and the James River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "extends from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "From where does Newport News extend?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What city extends from Skiffe's Creek?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Newport News once a part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What city was once part of Warwick County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "formed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who formed the eight original shires of Virginia?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did the House of Burgesses form in 1634?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "ordered by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who ordered the formation of the eight original shires of Virginia?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did King Charles I order in 1634?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "formed in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When were the eight original shires of Virginia formed?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What was formed in 1634?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

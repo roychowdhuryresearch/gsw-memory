@@ -1,0 +1,278 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nice for What",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "upbeat",
+            "bounce genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "three minutes thirty seconds",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "song length"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lauryn Hill",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ex-Factor",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "sampled",
+            "1998"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Drag Rap",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "sampled",
+            "1986"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Showboys",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "creators of Drag Rap"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Get Your Roll On",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "sampled",
+            "2000"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Big Tymers",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "creators of Get Your Roll On"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Big Freedia",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "featured performer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Drake",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has a length of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the length of 'Nice for What'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which song has a length of three minutes thirty seconds?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "samples",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What songs does 'Nice for What' sample?",
+          "answers": [
+            "e4",
+            "e5",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which song samples 'Ex-Factor'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which song samples 'Drag Rap'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which song samples 'Get Your Roll On'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "features clips from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is featured in 'Nice for What'?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which song features clips from Big Freedia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "sings about",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does Lauryn Hill sing about in the hook of Drake's song?",
+          "answers": [
+            "cutting loose in the midst of a relationship"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who sings about 'cutting loose in the midst of a relationship' in Drake's song?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

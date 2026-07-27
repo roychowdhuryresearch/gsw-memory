@@ -2,6 +2,10 @@
 
 [Open the student notebook in Google Colab](https://colab.research.google.com/github/YigitTurali/panini-course-project/blob/main/Panini_Course_Project.ipynb).
 
+[Read the complete 100-point project handout](PROJECT_HANDOUT.pdf). The
+handout uses this 100-question 2Wiki package and the companion 100-question
+MuSiQue package at `packages/panini_musique_100`.
+
 This folder is self-contained. It includes the selected 2WikiMultiHopQA
 questions, source documents, GSW JSON networks, flattened entity/QA metadata,
 Qwen3-Embedding-8B vectors, dense/TF-IDF/BM25 indices, model configuration,
@@ -21,6 +25,8 @@ No access to the original GSW-Memory repository is required.
 ├── indices/
 ├── models/
 ├── panini_course/
+├── packages/
+│   └── panini_musique_100/
 ├── Panini_Course_Project.ipynb
 ├── DATA_CARD.md
 ├── PROJECT_SPEC.md
@@ -45,6 +51,9 @@ from panini_course import CoursePackage
 
 package = CoursePackage(".")
 print(package.manifest["counts"])
+
+musique_package = CoursePackage("packages/panini_musique_100")
+print(musique_package.manifest["counts"])
 ```
 
 Verify the supplied retrieval artifacts without loading any Qwen model:
@@ -84,8 +93,10 @@ decomposition prompt. Models should be loaded sequentially in Colab:
      is the higher-capacity option.
 2. 4-bit Qwen query encoder for uncached instantiated queries.
 3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B).
+4. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
+   final answers.
 
-Do not keep all three models resident simultaneously.
+Do not keep multiple neural models resident simultaneously.
 
 ## Student implementation boundary
 

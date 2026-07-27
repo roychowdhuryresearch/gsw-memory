@@ -1,0 +1,337 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nashville",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Knoxville",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "former capital",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kingston",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "former capital",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Murfreesboro",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "former capital",
+            "Tennessee",
+            "sixth-largest city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Memphis",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "largest city",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Chattanooga",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "significant population center",
+            "eastern Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Clarksville",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "significant population center",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Great Smoky Mountains",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical feature",
+            "eastern Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "c. 1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "metropolitan area status",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "108,755",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "Murfreesboro",
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of Tennessee?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which state has Nashville as its capital?",
+          "answers": [
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "former capital of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which cities have served as the capital of Tennessee?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What state had Knoxville, Kingston, and Murfreesboro as former capitals?",
+          "answers": [
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "largest city in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the largest city in Tennessee?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which state has Memphis as its largest city?",
+          "answers": [
+            "Tennessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "metropolitan area status since",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Since when has Nashville's metropolitan area been the largest in Tennessee?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What happened in c. 1990 regarding Nashville?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "population of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the population of Murfreesboro?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which city in Tennessee has a population of 108,755?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "located near",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which cities are located near the Great Smoky Mountains?",
+          "answers": [
+            "e6",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What geographical feature is near Chattanooga and Knoxville?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "distance from",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "How far is Clarksville from Nashville?",
+          "answers": [
+            "45 miles",
+            "72 km"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which city is 45 miles northwest of Nashville?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

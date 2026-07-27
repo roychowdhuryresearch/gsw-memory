@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Executive Order 12148",
+      "roles": [
+        {
+          "role": "executive order",
+          "states": [
+            "U.S. government",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Jimmy Carter",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "U.S. President",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "July 20, 1979",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "enactment date",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Federal Emergency Management Agency",
+      "roles": [
+        {
+          "role": "agency",
+          "states": [
+            "U.S. government",
+            "emergency management"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Executive Order 12127",
+      "roles": [
+        {
+          "role": "executive order",
+          "states": [
+            "U.S. government",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "federal agencies",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "U.S. government",
+            "emergency preparedness"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "executive departments",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "U.S. government",
+            "administrative structure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "independent agency",
+      "roles": [
+        {
+          "role": "agency type",
+          "states": [
+            "U.S. government",
+            "autonomous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "presidentially-declared disaster",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "U.S. government",
+            "emergency situation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "enacted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who enacted Executive Order 12148?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Jimmy Carter enact on July 20, 1979?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "enacted on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Executive Order 12148 enacted?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was enacted on July 20, 1979?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was created by Executive Order 12127?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which executive order created FEMA?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "combined into",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What were several federal agencies combined into?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What combined several federal agencies?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "established as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was FEMA established as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which agency was established as an independent agency?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lead federal agency in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is FEMA the lead federal agency in?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which agency is the lead federal agency in a presidentially-declared disaster?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Here in My Heart (Here in My Heart (Tiffany song))",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "musical work",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tiffany",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New Inside",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "studio album",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sung by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who sings 'Here in My Heart'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song is sung by Tiffany?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released as a single from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "From which album was 'Here in My Heart' released as a single?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song was released as a single from 'New Inside'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was 'Here in My Heart' released?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song was released in 1990?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

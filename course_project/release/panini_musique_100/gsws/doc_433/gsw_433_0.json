@@ -1,0 +1,166 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "William Pitt",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Prime Minister",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Birmingham (Priestley Riots)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "James Watt",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "industrialist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "eighteenth century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "not initiated by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who did not initiate the riots?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was not initiated by William Pitt's administration?",
+          "answers": [
+            "riots"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "wrote about",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who wrote about the riots in Birmingham?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did James Watt write about?",
+          "answers": [
+            "riots"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "divided into two parties",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did the riots do to Birmingham?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What city was divided into two parties due to the riots?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "more conservative than",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did Birmingham become after the riots?",
+          "answers": [
+            "more conservative"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was Birmingham more conservative than after the riots?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

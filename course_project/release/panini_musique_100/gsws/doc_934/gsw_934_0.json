@@ -1,0 +1,193 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "NATO",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "military alliance",
+            "Cold War period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Warsaw Pact",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "military alliance",
+            "Cold War period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Cold War participant",
+            "NATO member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Soviet Union",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Cold War participant",
+            "Warsaw Pact member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "36 years",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "Cold War duration",
+            "conflict avoidance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Europe",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "Cold War theater",
+            "geopolitical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Cold War",
+      "roles": [
+        {
+          "role": "historical event",
+          "states": [
+            "global conflict",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "never directly waged war against",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who never directly waged war against the Warsaw Pact in Europe?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who did NATO never directly wage war against in Europe?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "implemented strategic policies",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who implemented strategic policies aimed at the containment of the Soviet Union in Europe?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who did the United States implement strategic policies against in Europe?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "fighting for influence within",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was fighting for influence within the wider Cold War on the international stage?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "During which event were the United States and the Soviet Union fighting for influence?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

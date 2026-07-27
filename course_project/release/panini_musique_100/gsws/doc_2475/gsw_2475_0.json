@@ -1,0 +1,327 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Battle of Turckheim",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical battle",
+            "Franco-Dutch War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "5 January 1675",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "17th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Colmar",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "battle location",
+            "Alsace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Turckheim",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "battle location",
+            "Alsace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Alsace",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical region",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "French army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "combatant",
+            "Franco-Dutch War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Viscount of Turenne",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military commander",
+            "French army"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Austria",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "combatant",
+            "Franco-Dutch War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Brandenburg",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "combatant",
+            "Franco-Dutch War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Alexander von Bournonville",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military commander",
+            "Austrian army"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Frederick William, Elector of Brandenburg",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military commander",
+            "Brandenburg army"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "occurred on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the Battle of Turckheim occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event occurred on 5 January 1675?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "took place between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did the Battle of Turckheim take place?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What battle took place between Colmar and Turckheim?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Colmar located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Turckheim located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "commanded by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who commanded the French army at the Battle of Turckheim?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which army was commanded by the Viscount of Turenne?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "fought against",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who did the French army fight against at the Battle of Turckheim?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which army fought against Austria and Brandenburg?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who led the Austrian army at the Battle of Turckheim?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who led the Brandenburg army at the Battle of Turckheim?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

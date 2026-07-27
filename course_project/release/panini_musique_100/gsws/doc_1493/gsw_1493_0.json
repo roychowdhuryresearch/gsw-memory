@@ -1,0 +1,349 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WHOS",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "licensed",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "800 AM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "AM band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Big Talker",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "station branding"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Decatur, Alabama, United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "licensed location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "iHeartMedia, Inc.",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Capstar TX Limited Partnership",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "license holder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Huntsville, Alabama",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "market area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "WBHP",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "simulcast partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1230 AM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "AM band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "106.5 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "FM band",
+            "broadcast translator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "WQRV-HD2",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "HD Radio",
+            "simulcast partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Madison, Alabama",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "studio location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "West Decatur, Alabama",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transmitter location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to serve",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is WHOS licensed to serve?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to serve Decatur, Alabama?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who owns WHOS?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What does iHeartMedia, Inc. own?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcast license held by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who holds the broadcast license for WHOS?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What does Capstar TX Limited Partnership hold?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "simulcast on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What stations is WHOS simulcast on?",
+          "answers": [
+            "e8",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is simulcast on WBHP?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where are the studios of WHOS located?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is located in Madison, Alabama?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "transmitter located in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where is the transmitter of WHOS located?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What has a transmitter located in West Decatur, Alabama?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

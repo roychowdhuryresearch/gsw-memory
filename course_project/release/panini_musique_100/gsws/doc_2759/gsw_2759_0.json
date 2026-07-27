@@ -1,0 +1,386 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Aaron Ekblad",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "February 7, 1996",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Canadian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "ice hockey defenceman",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports",
+            "NHL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Florida Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "National Hockey League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "professional sports league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2011 Ontario Hockey League entry draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2014 NHL Entry Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2015 NHL All-Star Game",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Calder Memorial Trophy",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "NHL",
+            "rookie award"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2014–15 season",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "NHL season"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on February 7, 1996?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Aaron Ekblad born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Aaron Ekblad's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Canadian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Aaron Ekblad's profession?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is an ice hockey defenceman?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "plays for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which team does Aaron Ekblad play for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who plays for the Florida Panthers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which league is the Florida Panthers part of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What team is part of the NHL?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "selected first overall in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was selected first overall in the 2011 OHL entry draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When was Aaron Ekblad selected first overall?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "selected first overall by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who was selected first overall by the Florida Panthers in the 2014 NHL Entry Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which team selected Aaron Ekblad first overall in the 2014 NHL Entry Draft?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "selected for",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Who was selected for the 2015 NHL All-Star Game?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which event was Aaron Ekblad selected for?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "earned",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Who earned the Calder Memorial Trophy in the 2014–15 season?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What did Aaron Ekblad earn in the 2014–15 season?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

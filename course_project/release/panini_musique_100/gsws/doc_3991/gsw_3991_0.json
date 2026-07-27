@@ -1,0 +1,129 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Henbury Meteorites Conservation Reserve",
+      "roles": [
+        {
+          "role": "protected area",
+          "states": [
+            "conservation site",
+            "natural reserve"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Northern Territory",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "Australian region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ghan",
+      "roles": [
+        {
+          "role": "locality",
+          "states": [
+            "settlement",
+            "Northern Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Henbury Meteorites Conservation Reserve located?",
+          "answers": [
+            "e2",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the Northern Territory?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What is located in the locality of Ghan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "What is part of Australia?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which country is the Northern Territory part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

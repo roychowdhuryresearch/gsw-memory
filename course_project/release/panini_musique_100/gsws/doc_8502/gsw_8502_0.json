@@ -1,0 +1,362 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "A Burial At Ornans",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "19th-century",
+            "French art"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "realism",
+            "historical significance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "A Funeral At Ornans",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1849–50",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "creation period",
+            "19th-century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gustave Courbet",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "September 1848",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "19th-century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ornans",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "event location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Paris Salon",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "art exhibition",
+            "19th-century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1850–51",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "exhibition period",
+            "19th-century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Musée d'Orsay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "museum",
+            "current display"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Paris, France",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who created A Burial At Ornans?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Gustave Courbet create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "alternative title",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the alternative title of A Burial At Ornans?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What painting is also known as A Funeral At Ornans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was A Burial At Ornans created?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was created in 1849–50?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "records event",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What event does A Burial At Ornans record?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What painting records the event in September 1848?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "exhibited at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was A Burial At Ornans exhibited?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was exhibited at the Paris Salon?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "exhibited in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was A Burial At Ornans exhibited?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was exhibited in 1850–51?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "displayed at",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where is A Burial At Ornans currently displayed?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is currently displayed at the Musée d'Orsay?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Where is the Musée d'Orsay located?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What museum is located in Paris, France?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

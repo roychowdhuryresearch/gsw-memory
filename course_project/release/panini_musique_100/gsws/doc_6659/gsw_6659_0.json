@@ -1,0 +1,348 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "William III of Orange",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "ruler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "King of England",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "monarch",
+            "historical title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Louis XIV",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "ruler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Dutch Republic",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical state",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1672",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical event",
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "League of Augsburg",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "coalition",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Huguenots",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "religious group",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Edict of Nantes",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "historical",
+            "religious freedom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Calvinist",
+      "roles": [
+        {
+          "role": "religion",
+          "states": [
+            "Protestant",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "French-speaking Calvinist churches",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "religious",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "became King of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who became King of England?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What title did William III of Orange hold?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "opponent of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was the strongest opponent of Louis XIV?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was Louis XIV's opponent?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "attacked",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who attacked the Dutch Republic in 1672?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did the French attack in 1672?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "formed",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who formed the League of Augsburg?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did William III of Orange form?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "considered as attractive for exile",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What country did many Huguenots consider attractive for exile?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who considered the Dutch Republic attractive for exile?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "revocation of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was revoked that affected the Huguenots?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did the revocation of the Edict of Nantes affect?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "found",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What did many Huguenots find in the Dutch Republic?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who found many French-speaking Calvinist churches in the Dutch Republic?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

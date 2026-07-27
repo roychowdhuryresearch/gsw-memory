@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Fall (Fall (Serena Ryder song))",
+      "roles": [
+        {
+          "role": "single",
+          "states": [
+            "music",
+            "popular"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Serena Ryder",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Canadian",
+            "recording artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Harmony",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music",
+            "2012 release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "November 27, 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "music video",
+      "roles": [
+        {
+          "role": "creative work",
+          "states": [
+            "visual",
+            "accompanying"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed 'Fall'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What single did Serena Ryder perform?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of album",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which album includes the single 'Fall'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What single is part of the album 'Harmony'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was 'Fall' released?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was released on November 27, 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "accompanied by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What accompanied the release of 'Fall'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What single was accompanied by a music video?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

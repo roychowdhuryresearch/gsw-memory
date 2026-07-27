@@ -1,0 +1,375 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "adolescents (Adolescence)",
+      "roles": [
+        {
+          "role": "demographic group",
+          "states": [
+            "youth",
+            "media consumers"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "computers",
+      "roles": [
+        {
+          "role": "device",
+          "states": [
+            "technology",
+            "media access"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "cell phones",
+      "roles": [
+        {
+          "role": "device",
+          "states": [
+            "technology",
+            "media access"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "stereos",
+      "roles": [
+        {
+          "role": "device",
+          "states": [
+            "technology",
+            "media access"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "televisions",
+      "roles": [
+        {
+          "role": "device",
+          "states": [
+            "technology",
+            "media access"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "American households",
+      "roles": [
+        {
+          "role": "demographic group",
+          "states": [
+            "media ownership",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Internet",
+      "roles": [
+        {
+          "role": "technology",
+          "states": [
+            "media access",
+            "online activities"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "video games",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "entertainment",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "email",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "communication",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "instant messaging",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "communication",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "social networking sites",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "social interaction",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "news sources",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "information",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "music",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "entertainment",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "videos",
+      "roles": [
+        {
+          "role": "online activity",
+          "states": [
+            "entertainment",
+            "high usage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "last decade",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "recent history",
+            "media usage increase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "use devices",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who uses computers, cell phones, stereos, and televisions?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What devices do adolescents use?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "have access to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who has access to the Internet?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What do more than three-quarters of all adolescents' homes have access to?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "use the Internet",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who uses the Internet at least occasionally?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What do more than 90% of American adolescents use at least occasionally?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "engage in online activities",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What online activities have the highest rates of use among adolescents?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who engages in video games, email, instant messaging, social networking sites, news sources, music, and videos?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "increased media exposure",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Whose media exposure has increased over the past decade?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What has increased for adolescents over the past decade?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,245 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "When I Was a Boy",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music album",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1993",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jane Siberry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "Canadian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "The Speckless Sky",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music album",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1985",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was 'When I Was a Boy' released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released in 1993?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who created 'When I Was a Boy'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album did Jane Siberry create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "most famous album",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Jane Siberry's most famous album internationally?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Whose most famous album internationally is 'When I Was a Boy'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "commercially successful in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was 'When I Was a Boy' commercially successful?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album was commercially successful in Canada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was 'The Speckless Sky' released?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What album was released in 1985?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "bigger hit than",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which album was a bigger hit in Canada than 'When I Was a Boy'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What album was 'The Speckless Sky' a bigger hit than in Canada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

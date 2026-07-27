@@ -1,0 +1,389 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dufferin Street bridges",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "vehicular bridges",
+            "Toronto"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Toronto",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ontario",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "railway corridor",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Gardiner Expressway",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "expressway",
+            "Toronto"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Exhibition Place",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event venue",
+            "Toronto"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "closure year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2013-2014",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "construction period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "early 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "traffic resumption"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2016",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "reconstruction start"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "March 2019",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "current status"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Bailey bridges",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "temporary structure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "CNE grounds",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event venue",
+            "Toronto"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where are the Dufferin Street bridges located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Toronto?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "carry over",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What do the Dufferin Street bridges carry over?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What carries over the railway corridor and Gardiner Expressway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "closed to vehicular traffic in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did the Dufferin Street bridges close to vehicular traffic?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What closed to vehicular traffic in 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "temporary structures built in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When were temporary structures built for the Dufferin Street bridges?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was built in 2013-2014 for the Dufferin Street bridges?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "traffic resumed in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did traffic resume on the Dufferin Street bridges?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What resumed in early 2014 on the Dufferin Street bridges?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "rebuilt starting in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did the reconstruction of the Dufferin Street bridges start?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What started reconstruction in 2016?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "status as of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the status of the Dufferin Street bridges as of March 2019?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "As of March 2019, what is the status of the spans over the Gardiner Expressway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

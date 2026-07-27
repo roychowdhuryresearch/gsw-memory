@@ -1,0 +1,304 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pete Rose",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player",
+            "record holder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Major League (List of Major League Baseball career hits leaders)",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "baseball league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "4,256",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "career hits",
+            "record"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ty Cobb",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "4,000",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "career hits"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "George Davis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "switch hitter",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2,000",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "career hits"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1902 season",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "baseball season"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Ichiro Suzuki",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player",
+            "active leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "holds the record for most career hits",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who holds the Major League record for most career hits?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What record does Pete Rose hold?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has career hits",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many career hits does Pete Rose have?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who has 4,256 career hits?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "has career hits",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many career hits does Ty Cobb have?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who has 4,000 career hits?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "first switch hitter to collect",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was the first switch hitter to collect 2,000 hits?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What milestone did George Davis achieve as a switch hitter?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "achieved during",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did George Davis collect 2,000 hits?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did George Davis achieve during the 1902 season?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "current active leader",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who is the current active leader in career hits?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is Ichiro Suzuki's status in career hits?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

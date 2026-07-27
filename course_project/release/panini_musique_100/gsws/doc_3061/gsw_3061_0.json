@@ -1,0 +1,143 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Frank Aaen",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "economist",
+            "educated individual"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "master's degree in economics",
+      "roles": [
+        {
+          "role": "academic degree",
+          "states": [
+            "higher education",
+            "economics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Aalborg University",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "university",
+            "Denmark"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1985",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "holds a degree",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who holds a master's degree in economics?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What degree does Frank Aaen hold?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "graduated from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Frank Aaen receive his master's degree?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who graduated from Aalborg University?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "graduated in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Frank Aaen receive his master's degree?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who graduated in 1985?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

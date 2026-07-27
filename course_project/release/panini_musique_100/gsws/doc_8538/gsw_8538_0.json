@@ -1,0 +1,256 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Woodland Beach (Woodland Beach, Delaware)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "unincorporated community",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kent County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Delaware",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Delaware Bay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "bay",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Smyrna",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "Delaware"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Delaware Route 6",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "road",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Woodland Beach Wildlife Area",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "wildlife area",
+            "protected area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Woodland Beach located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Kent County, Delaware, United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "along",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is along the Delaware Bay?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Woodland Beach along?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "east of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is east of Smyrna?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Woodland Beach in relation to Smyrna?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "terminus of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the eastern terminus of Delaware Route 6?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What road has its eastern terminus at Woodland Beach?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is the Woodland Beach Wildlife Area located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is located in Woodland Beach?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

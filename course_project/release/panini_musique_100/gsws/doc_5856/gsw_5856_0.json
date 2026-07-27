@@ -1,0 +1,195 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sunbaker",
+      "roles": [
+        {
+          "role": "photograph",
+          "states": [
+            "black-and-white",
+            "iconic"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "Australian modernist photography"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1937",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Max Dupain",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "photographer",
+            "modernist"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "Australian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Australian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "cultural context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "beach",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "photograph setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Sunbaker created?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was created in 1937?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "photographed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who photographed Sunbaker?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Max Dupain photograph?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "depicts",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Sunbaker depict?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which photograph depicts a beach?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "described as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How has Sunbaker been described?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What photograph has been described as quintessentially Australian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,332 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Alluvial (Alluvial (horse))",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "racehorse",
+            "half-sister"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Buckpasser",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "U.S. Racing Hall of Fame inductee",
+            "sire"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Tom Fool",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "1953 United States Horse of the Year",
+            "sire"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Bayou",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "mare",
+            "dam"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Hill Prince",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "sire"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Batteur",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "graded stakes race winner",
+            "filly"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Santa Monica Handicap",
+      "roles": [
+        {
+          "role": "race",
+          "states": [
+            "won by Batteur"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Santa Margarita Handicap",
+      "roles": [
+        {
+          "role": "race",
+          "states": [
+            "won by Batteur"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Santa Maria Handicap",
+      "roles": [
+        {
+          "role": "race",
+          "states": [
+            "won by Batteur"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Santa Barbara Handicap",
+      "roles": [
+        {
+          "role": "race",
+          "states": [
+            "won by Batteur"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "New York Handicap",
+      "roles": [
+        {
+          "role": "race",
+          "states": [
+            "won by Batteur"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sired by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who sired Alluvial?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was sired by Buckpasser?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "sired by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who sired Buckpasser?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was sired by Tom Fool?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "out of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the dam of Alluvial?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is out of Bayou?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "half-sister to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the half-sister of Batteur?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is Batteur a half-sister to?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which races did Batteur win?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who won the Santa Monica Handicap?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who won the Santa Margarita Handicap?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who won the Santa Maria Handicap?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "Who won the Santa Barbara Handicap?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who won the New York Handicap?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

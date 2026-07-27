@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The New Road",
+      "roles": [
+        {
+          "role": "novel",
+          "states": [
+            "historical novel",
+            "Scottish literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Neil Munro",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "Scottish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "BBC",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "broadcaster",
+            "British"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Para Handy",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "comic character",
+            "Scottish literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote The New Road?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What novel did Neil Munro write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "adapted as a television serial by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who adapted The New Road as a television serial?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did the BBC adapt as a television serial?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "creator of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the creator of Para Handy?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What character did Neil Munro create?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

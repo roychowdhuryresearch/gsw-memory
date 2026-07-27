@@ -1,0 +1,323 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Luke -- Acts (Acts of the Apostles)",
+      "roles": [
+        {
+          "role": "text",
+          "states": [
+            "theological work",
+            "Christian scripture"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Messiah",
+      "roles": [
+        {
+          "role": "religious figure",
+          "states": [
+            "Jewish tradition",
+            "Christian belief"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jews",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "religious community",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gentiles",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "non-Jewish",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Christ",
+      "roles": [
+        {
+          "role": "religious figure",
+          "states": [
+            "Christian belief",
+            "central figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Romans",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "historical context",
+            "external arbiters"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Jesus",
+      "roles": [
+        {
+          "role": "religious figure",
+          "states": [
+            "Jewish",
+            "Christian belief"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Jesus movement",
+      "roles": [
+        {
+          "role": "religious movement",
+          "states": [
+            "early Christianity",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "addresses theological problem",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What theological problem does Luke -- Acts address?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which text addresses the theological problem of how the Messiah of the Jews came to have a non-Jewish church?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "message sent to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "To whom was the message of Christ sent according to Luke -- Acts?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What message was sent to the Gentiles according to Luke -- Acts?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "rejected by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who rejected the message of Christ according to Luke -- Acts?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did the Jews reject according to Luke -- Acts?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "defense of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Luke -- Acts a defense of?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which text serves as a defense of the Jesus movement?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "addressed to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "To whom are the speeches and sermons in Acts addressed?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What group is addressed by the bulk of the speeches and sermons in Acts?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "serving as arbiters",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who served as external arbiters on disputes concerning Jewish customs and law?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What role did the Romans play in disputes concerning Jewish customs and law?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "portrayed as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "How does Luke portray the Christians?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who are portrayed as a sect of the Jews in Luke -- Acts?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "celebrating Jewishness",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Whose Jewishness is celebrated in Luke -- Acts?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What aspect of Jesus and his immediate followers is celebrated in Luke -- Acts?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

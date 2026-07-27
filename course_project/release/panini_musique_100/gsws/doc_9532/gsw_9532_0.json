@@ -1,0 +1,192 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Meenakshi Sundararajan Engineering College",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "engineering college",
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "MSEC",
+      "roles": [
+        {
+          "role": "abbreviation",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kodambakkam",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "neighborhood",
+            "Chennai"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Chennai",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "urban area",
+            "Tamil Nadu"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tamil Nadu",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Indian state",
+            "southern India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2001",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "founding year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "abbreviated as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the abbreviation of Meenakshi Sundararajan Engineering College?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does MSEC stand for?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Meenakshi Sundararajan Engineering College located?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What educational institution is located in Kodambakkam?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "founded in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Meenakshi Sundararajan Engineering College founded?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was founded in 2001?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

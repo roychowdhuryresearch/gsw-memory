@@ -1,0 +1,406 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Intrall",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "automotive industry",
+            "Russo-British"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "International Truck Alliance",
+      "roles": [
+        {
+          "role": "alternative name",
+          "states": [
+            "company alias"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "London, England",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "manufacturing site",
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "end of 2003",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "acquisition date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Daewoo Motor Poland",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "automotive industry",
+            "Polish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lublin",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "factory location",
+            "Poland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "January 2004 to 2007",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "operation period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Intrall Poland",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "subsidiary",
+            "Polish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2005",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "production start year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "FSC Lublin",
+      "roles": [
+        {
+          "role": "vehicle model",
+          "states": [
+            "produced by Intrall"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Honker",
+      "roles": [
+        {
+          "role": "vehicle model",
+          "states": [
+            "produced by Intrall"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "acquisition year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Praga",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "Czech",
+            "truck models"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Intrall Lubo",
+      "roles": [
+        {
+          "role": "vehicle model",
+          "states": [
+            "commercial van/truck",
+            "developed by Intrall"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "headquartered in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Intrall headquartered?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which company is headquartered in London, England?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "manufactures in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where does Intrall manufacture?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which company manufactures in Poland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "acquired factory from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who did Intrall acquire a factory from at the end of 2003?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which company acquired a factory from Daewoo Motor Poland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "operated as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the name of the company operating from January 2004 to 2007?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "When did Intrall Poland operate?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "produced models",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which models were produced by Intrall in 2005?",
+          "answers": [
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "When did Intrall start producing FSC Lublin and Honker models?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "acquired rights to produce",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What did Intrall acquire the rights to produce in 2006?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When did Intrall acquire the rights to produce Praga models?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "developed",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What new vehicle did Intrall develop?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who developed the Intrall Lubo?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

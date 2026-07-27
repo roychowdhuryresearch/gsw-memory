@@ -1,0 +1,162 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Kiri Territory",
+      "roles": [
+        {
+          "role": "administrative region",
+          "states": [
+            "geographical entity",
+            "Democratic Republic of the Congo"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Mai-Ndombe District",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "administrative division",
+            "Democratic Republic of the Congo"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Bandundu Province",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "administrative division",
+            "Democratic Republic of the Congo"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Democratic Republic of the Congo",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "Central Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Kiri",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "headquarters",
+            "Kiri Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Kiri Territory located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Mai-Ndombe District?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What district is part of Bandundu Province?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What province is Mai-Ndombe District part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "headquarters in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is the headquarters of Kiri Territory?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is headquartered in the town of Kiri?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

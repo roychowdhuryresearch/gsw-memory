@@ -1,0 +1,251 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ski Party",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "American cinema",
+            "1960s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "sex comedy genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1965",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Alan Rafkin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Frankie Avalon",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Dwayne Hickman",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "American International Pictures",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "film distributor",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Ski Party released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film was released in 1965?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who directed Ski Party?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film did Alan Rafkin direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "starring",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who starred in Ski Party?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In what film did Frankie Avalon star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "In what film did Dwayne Hickman star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "Who released Ski Party?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What film was released by American International Pictures?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

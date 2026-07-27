@@ -1,0 +1,234 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Parramatta River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "estuary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Sydney",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Australia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New South Wales",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "Australia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "continent",
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Sydney Harbour",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "harbour",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Port Jackson",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "port",
+            "water body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lane Cove River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Duck River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Parramatta River located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What river is located in Sydney, New South Wales, Australia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "main tributary of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the main tributary of Sydney Harbour?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the Parramatta River a main tributary of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "branch of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Sydney Harbour a branch of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is a branch of Port Jackson?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "secondary tributaries include",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the secondary tributaries of the Parramatta River?",
+          "answers": [
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which river includes Lane Cove and Duck rivers as secondary tributaries?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

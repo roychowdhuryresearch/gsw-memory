@@ -1,0 +1,256 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jews",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "global",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Middle East",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Fertile Crescent",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical",
+            "geographical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "4,000 years",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical",
+            "genetic heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "common genetic pool",
+      "roles": [
+        {
+          "role": "genetic attribute",
+          "states": [
+            "shared",
+            "ancestral origin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "culture",
+      "roles": [
+        {
+          "role": "cultural attribute",
+          "states": [
+            "shared",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "tradition",
+      "roles": [
+        {
+          "role": "cultural attribute",
+          "states": [
+            "shared",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "language",
+      "roles": [
+        {
+          "role": "cultural attribute",
+          "states": [
+            "shared",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "originates in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where do most Jews' genetic heritage originate?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What ethnic group's genetic heritage originates in the Middle East?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "resemblance to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "To which peoples do Jews bear their strongest genetic resemblance?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which ethnic group bears a strong genetic resemblance to the peoples of the Fertile Crescent?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "dating back",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How far back does the common genetic pool of Jews date?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What time period does the common genetic pool of Jews date back to?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "share",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What do different Jewish groups share?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which ethnic group shares a common genetic pool?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "maintained",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What have Jews maintained despite long-term separation?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which ethnic group maintained a common culture, tradition, and language?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

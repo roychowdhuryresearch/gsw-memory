@@ -1,0 +1,141 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Michael J. Barron",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "legal professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1933",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Milwaukee County Circuit Court",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "judicial body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Wisconsin State Assembly",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "legislative body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born in 1933?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Michael J. Barron born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "former chief judge of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was the former chief judge of the Milwaukee County Circuit Court?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What position did Michael J. Barron hold in the Milwaukee County Circuit Court?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "former member of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was a former member of the Wisconsin State Assembly?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What legislative body was Michael J. Barron a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

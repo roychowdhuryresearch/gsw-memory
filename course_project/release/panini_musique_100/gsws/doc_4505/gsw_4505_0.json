@@ -1,0 +1,392 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ray Hackett",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "musician",
+          "states": [
+            "radio broadcast leader",
+            "dance orchestra leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Raymond William Hackett",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "birth name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "5 November 1909",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Carlin, Nevada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "29 March 1987",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Santa Rosa, California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "death place"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "University of Nevada, Reno",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "San Francisco Bay Area",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "career location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1928",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "career start"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "mid 1970s",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "career end"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on 5 November 1909?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Ray Hackett born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was born in Carlin, Nevada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where was Ray Hackett born?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who died on 29 March 1987?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When did Ray Hackett die?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who died in Santa Rosa, California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Ray Hackett die?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the nationality of Ray Hackett?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "attended",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where did Ray Hackett attend university?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who attended the University of Nevada, Reno?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "career in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where did Ray Hackett spend most of his professional career?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who had a career in the San Francisco Bay Area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "career start",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When did Ray Hackett's career start?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Whose career started in 1928?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "career end",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "When did Ray Hackett's career end?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Whose career ended in the mid 1970s?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

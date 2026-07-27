@@ -1,0 +1,348 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Emil Haraszti",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1885",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1958",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Hungarian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "birth nationality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "adopted nationality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "music critic",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "literary profession"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "author",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "literary profession"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "National Conservatory of Music in Budapest",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "University of Budapest",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "France",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born in 1885?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Emil Haraszti born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who died in 1958?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When did Emil Haraszti die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Emil Haraszti's birth nationality?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was Hungarian by birth?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What nationality did Emil Haraszti adopt?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who adopted French nationality?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Emil Haraszti's profession?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was a music critic?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who was an author?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "director of",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Who was the director of the National Conservatory of Music in Budapest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "What institution was Emil Haraszti a director of?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "scholar at",
+      "questions": [
+        {
+          "id": "q14",
+          "text": "Who was a scholar at the University of Budapest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "Where was Emil Haraszti a scholar?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "lived in",
+      "questions": [
+        {
+          "id": "q16",
+          "text": "Where did Emil Haraszti live much of his life?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q17",
+          "text": "Who lived much of their life in France?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

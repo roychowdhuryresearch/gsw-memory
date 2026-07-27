@@ -1,0 +1,422 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Brazil",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "football team",
+            "World Cup winner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "football team",
+            "World Cup finalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rose Bowl",
+      "roles": [
+        {
+          "role": "stadium",
+          "states": [
+            "football venue",
+            "World Cup final location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pasadena, California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "World Cup final location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Los Angeles",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "nearby city",
+            "California"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "World Cup (1994 FIFA World Cup)",
+      "roles": [
+        {
+          "role": "tournament",
+          "states": [
+            "football",
+            "international competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "penalty shootout",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "football",
+            "match decider"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Greece",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "first World Cup appearance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Nigeria",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "first World Cup appearance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Saudi Arabia",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "first World Cup appearance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "first World Cup appearance",
+            "post-Soviet Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "unified team",
+            "post-reunification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "1990",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "German reunification",
+            "post-World Cup victory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "West Germany",
+      "roles": [
+        {
+          "role": "nation",
+          "states": [
+            "World Cup winner",
+            "pre-reunification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "won the tournament",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who won the World Cup?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What tournament did Brazil win?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "beat in penalty shootout",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did Brazil beat in a penalty shootout?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "How did Brazil win against Italy?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "held at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was the World Cup final held?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event was held at the Rose Bowl?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is the Rose Bowl located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located in Pasadena, California?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "first World Cup appearance",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which nations made their first World Cup appearance?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was significant about Greece, Nigeria, Saudi Arabia, and Russia in this World Cup?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "unified team",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which country participated as a unified team?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was significant about Germany's participation?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "reunified in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When was Germany reunified?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What happened in 1990 related to Germany?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "victory in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When did West Germany achieve World Cup victory?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What did West Germany achieve in 1990?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

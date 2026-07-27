@@ -1,0 +1,378 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mitro Repo",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "Finnish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "September 3, 1958",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Finnish Orthodox Christian priest",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "religious leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "European Parliament",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "political body",
+            "European Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of term"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Social Democratic Party",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "Finnish politics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "independent candidate",
+      "roles": [
+        {
+          "role": "political status",
+          "states": [
+            "non-affiliated"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2014 election",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "over 70,000 votes",
+      "roles": [
+        {
+          "role": "vote count",
+          "states": [
+            "2009 election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "less than 9,000 votes",
+      "roles": [
+        {
+          "role": "vote count",
+          "states": [
+            "2014 election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Mitro Repo born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on September 3, 1958?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Mitro Repo's profession?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is a Finnish Orthodox Christian priest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which organization was Mitro Repo a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was a member of the European Parliament?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "elected in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Mitro Repo elected to the European Parliament?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was elected to the European Parliament in 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "term ended in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Mitro Repo's term in the European Parliament end?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Whose term in the European Parliament ended in 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "ran as",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Mitro Repo's political status during the election?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who ran as an independent candidate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "on the ticket of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which party's ticket did Mitro Repo run on?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who ran on the Social Democratic Party's ticket?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "received votes",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "How many votes did Mitro Repo receive in the 2009 election?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who received over 70,000 votes in the 2009 election?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q17",
+          "text": "How many votes did Mitro Repo receive in the 2014 election?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who received less than 9,000 votes in the 2014 election?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

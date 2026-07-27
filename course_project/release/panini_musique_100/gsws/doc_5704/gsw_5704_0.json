@@ -1,0 +1,263 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Le ruisseau noir",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "oil-on-canvas",
+            "landscape"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "French art",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "The Black Stream",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "English translation",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Stream in a Ravine",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "English translation",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gustave Courbet",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "French"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "19th century",
+            "painter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1865",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Musée d'Orsay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "museum",
+            "art exhibition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Paris",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "also known as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Le ruisseau noir also known as in English?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What painting is also known as 'The Black Stream'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What painting is also known as 'Stream in a Ravine'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "painted by",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Who painted Le ruisseau noir?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What did Gustave Courbet paint?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "When was Le ruisseau noir created?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What painting was created in 1865?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "held at",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "Where is Le ruisseau noir held?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What painting is held at the Musée d'Orsay?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "Where is the Musée d'Orsay located?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What museum is located in Paris?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

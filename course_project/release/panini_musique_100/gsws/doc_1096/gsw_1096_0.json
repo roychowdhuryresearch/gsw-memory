@@ -1,0 +1,309 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Livinus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Christian missionary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Irish nobility",
+      "roles": [
+        {
+          "role": "social class",
+          "states": [
+            "noble",
+            "Ireland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ireland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "origin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "England",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "study location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Saint Augustine of Canterbury",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Christian saint"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ghent",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "preaching location",
+            "Belgium"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Zeeland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "preaching location",
+            "Netherlands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Esse",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "attack location",
+            "near Geraardsbergen"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Geraardsbergen",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "nearby location",
+            "Belgium"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "pagans",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "attackers",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born from Irish nobility?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What nobility was Livinus born from?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "studied in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Livinus study?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who studied in England?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "visited",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who did Livinus visit in England?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who visited Saint Augustine of Canterbury?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "preached in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Livinus preach?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who preached in Ghent and Zeeland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "attacked in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was Livinus attacked?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was attacked in Esse?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "attacked by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who attacked Livinus?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was attacked by pagans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

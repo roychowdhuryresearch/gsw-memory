@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "wrestling match (Professional wrestling)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sporting event",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "3 falls",
+      "roles": [
+        {
+          "role": "rule",
+          "states": [
+            "historical standard",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "5 falls",
+      "roles": [
+        {
+          "role": "rule",
+          "states": [
+            "historical standard",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "one fall",
+      "roles": [
+        {
+          "role": "rule",
+          "states": [
+            "modern standard",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "20-minute time limit",
+      "roles": [
+        {
+          "role": "time limit",
+          "states": [
+            "standard match",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "10- to 30-minute time limit",
+      "roles": [
+        {
+          "role": "time limit",
+          "states": [
+            "standard match",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "one hour",
+      "roles": [
+        {
+          "role": "time limit",
+          "states": [
+            "title match",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "British wrestling matches",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sporting event",
+            "wrestling",
+            "British"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Admiral-Lord Mountevans rules",
+      "roles": [
+        {
+          "role": "rule",
+          "states": [
+            "British wrestling",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "historically wrestled to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was the historical standard for wrestling matches?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What type of matches were historically wrestled to 3 or 5 falls?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "modern standard",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the modern standard for wrestling matches?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What type of matches are set for one fall as a modern standard?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "time limit for standard matches",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the time limit for standard wrestling matches?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What type of matches have a 10- to 30-minute time limit?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "time limit for title matches",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the time limit for title wrestling matches?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What type of matches can go for up to one hour?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "held under",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What rules are British wrestling matches held under?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What type of matches are held under Admiral-Lord Mountevans rules?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

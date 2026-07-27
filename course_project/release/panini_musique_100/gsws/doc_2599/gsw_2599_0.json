@@ -1,0 +1,388 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Robert \"Bob\" Shad (Bob Shad)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Abraham Shadrinsky",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "birth name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "February 12, 1920",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "March 13, 1985",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "record producer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "record label owner",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Big Brother and the Holding Company",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "rock band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Janis Joplin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Time Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Brent Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Mainstream Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Robert \"Bob\" Shad born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on February 12, 1920?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Robert \"Bob\" Shad die?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died on March 13, 1985?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "birth name",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Robert \"Bob\" Shad's birth name?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was born as Abraham Shadrinsky?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Robert \"Bob\" Shad's nationality?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Robert \"Bob\" Shad's profession?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was a record producer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who was a record label owner?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "produced album",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Who produced the first album by Big Brother and the Holding Company?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "What album did Robert \"Bob\" Shad produce?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "featured artist",
+      "questions": [
+        {
+          "id": "q14",
+          "text": "Who was featured in the first album by Big Brother and the Holding Company?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "In which band's album was Janis Joplin featured?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "successful labels",
+      "questions": [
+        {
+          "id": "q16",
+          "text": "What were some of Robert \"Bob\" Shad's successful labels?",
+          "answers": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q17",
+          "text": "Who owned Time Records, Brent Records, and Mainstream Records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

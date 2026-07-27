@@ -1,0 +1,224 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cumbria",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "National Park",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "protected area",
+            "England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Scafell Pike",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "mountain",
+            "highest in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Wast Water",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "body of water",
+            "deepest in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Windermere",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "body of water",
+            "longest in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located within",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is located within Cumbria?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is the National Park located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "contains",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does the National Park contain?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which park contains Scafell Pike?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which park contains Wast Water?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which park contains Windermere?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "highest mountain",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the highest mountain in England?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is Scafell Pike known for?",
+          "answers": [
+            "highest mountain in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "deepest body of water",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the deepest body of water in England?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is Wast Water known for?",
+          "answers": [
+            "deepest body of water in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "longest body of water",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the longest body of water in England?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is Windermere known for?",
+          "answers": [
+            "longest body of water in England"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

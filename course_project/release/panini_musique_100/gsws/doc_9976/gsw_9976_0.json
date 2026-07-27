@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "top three picks",
+      "roles": [
+        {
+          "role": "draft position",
+          "states": [
+            "lottery determined",
+            "NBA draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "lottery (NBA draft lottery)",
+      "roles": [
+        {
+          "role": "system",
+          "states": [
+            "draft selection",
+            "NBA draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "14 teams",
+      "roles": [
+        {
+          "role": "team group",
+          "states": [
+            "non-playoff",
+            "NBA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "team with the worst record",
+      "roles": [
+        {
+          "role": "team",
+          "states": [
+            "highest draft chance",
+            "NBA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "first-round draft order",
+      "roles": [
+        {
+          "role": "draft order",
+          "states": [
+            "inverse win-loss",
+            "NBA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "subsequent rounds",
+      "roles": [
+        {
+          "role": "draft rounds",
+          "states": [
+            "non-lottery determined",
+            "NBA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "decided by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What are the top three picks decided by?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does the lottery decide?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "chosen from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where are the top three picks chosen from?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is chosen from the 14 teams that do not make the playoffs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "has the best chance to obtain",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who has the best chance to obtain a higher draft pick?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What does the team with the worst record have the best chance to obtain?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "is in inverse order of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the first-round draft order in inverse order of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is in inverse order of the win-loss record for the remaining teams?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "does not determine",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does the lottery not determine?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is not determined by the lottery?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,264 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Michael H. S. Good (Michael Good (footballer))",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "athlete",
+          "states": [
+            "footballer",
+            "professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1 July 1875",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "after 1904",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Scottish",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "British"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Small Heath",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football club",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Preston North End",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football club",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Bristol City",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football club",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "71",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "appearances",
+            "Football League"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Michael H. S. Good born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on 1 July 1875?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died after",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Michael H. S. Good die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died after 1904?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the nationality of Michael H. S. Good?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is Scottish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which clubs did Michael H. S. Good play for?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who played for Small Heath, Preston North End, and Bristol City?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "made appearances",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many appearances did Michael H. S. Good make in the Football League?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who made 71 appearances in the Football League?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

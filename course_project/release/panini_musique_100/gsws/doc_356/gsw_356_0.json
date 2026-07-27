@@ -1,0 +1,160 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pak Tam Chung",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical area",
+            "Sai Kung Peninsula"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Sai Kung Peninsula",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "peninsula",
+            "New Territories"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New Territories",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region",
+            "Hong Kong"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Hong Kong",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "administrative region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Sai Kung District",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "district",
+            "Hong Kong"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Pak Tam Chung located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the Sai Kung Peninsula?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is part of the New Territories?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the Sai Kung Peninsula part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "administratively under",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which district is Pak Tam Chung administratively under?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What area is administratively under Sai Kung District?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

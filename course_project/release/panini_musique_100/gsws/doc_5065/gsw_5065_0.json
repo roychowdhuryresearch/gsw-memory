@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Justice (Justice, West Virginia)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "census-designated place",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Mingo County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "West Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "West Virginia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "U.S. Route 52",
+      "roles": [
+        {
+          "role": "transportation route",
+          "states": [
+            "highway",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Gilbert",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "West Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "24851",
+      "roles": [
+        {
+          "role": "postal code",
+          "states": [
+            "ZIP code",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "412",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Justice located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Mingo County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is located on U.S. Route 52?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where is U.S. Route 52 located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "southeast of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is southeast of Gilbert?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Justice located in relation to Gilbert?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "has postal code",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the postal code of Justice?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which location has the postal code 24851?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "population as of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the population of Justice as of 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which year was the population of Justice 412?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

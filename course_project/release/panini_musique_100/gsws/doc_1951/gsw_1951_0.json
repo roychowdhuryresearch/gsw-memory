@@ -1,0 +1,167 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "AFC (2020 AFC U-23 Championship qualification)",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "football association",
+            "Asian football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "47",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "total member associations",
+            "AFC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "44",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "teams entered",
+            "competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Thailand",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "tournament host",
+            "AFC competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "member associations of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "How many member associations does the AFC have?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which organization has 47 member associations?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "teams entered",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many teams entered the competition?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What competition did 44 teams enter?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "hosted by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which country hosted the final tournament?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What tournament was hosted by Thailand?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "participated in qualification",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which country participated in qualification despite automatically qualifying?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Thailand do despite automatically qualifying?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,352 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "VideoKids",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "Euro disco",
+            "Italo disco",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "The Netherlands",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin",
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1984",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "formation year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Peter Slaghuis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1991",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bianca Bonelli",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Je veux l'amour",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "solo hit single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Woodpeckers from Space",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "famous song"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "The Invasion of the Spacepeckers",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "released in 1984"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Satellite",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "released in 1985"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "formed in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was VideoKids formed?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What music group was formed in 1984?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "originated from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did VideoKids originate from?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What music group originated from The Netherlands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who led VideoKids?",
+          "answers": [
+            "e4",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which music group was led by Peter Slaghuis and Bianca Bonelli?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Peter Slaghuis die?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who died in 1991?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "had a solo hit single",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What solo hit single did Bianca Bonelli have?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who had a solo hit single called 'Je veux l'amour'?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "famous for",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What song is VideoKids most famous for?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which music group is famous for 'Woodpeckers from Space'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "released",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What albums did VideoKids release?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who released 'The Invasion of the Spacepeckers' and 'Satellite'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When was 'The Invasion of the Spacepeckers' released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "When was 'Satellite' released?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

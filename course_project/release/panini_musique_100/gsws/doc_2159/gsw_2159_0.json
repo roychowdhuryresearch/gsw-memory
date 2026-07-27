@@ -1,0 +1,261 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Supreme Court of India (List of sitting judges of the Supreme Court of India)",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial body",
+            "highest court"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Republic of India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "25",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "current judges",
+            "judicial count"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "31",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "maximum strength",
+            "judicial capacity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "65",
+      "roles": [
+        {
+          "role": "age",
+          "states": [
+            "retirement age",
+            "judicial retirement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Chief Justice of India",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "judicial position",
+            "leadership role"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Constitution of India",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "legal framework",
+            "governing document"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Supreme Court of India located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the Republic of India?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "current number of judges",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many judges are currently in the Supreme Court of India?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the current number of judges in the Supreme Court of India?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "maximum strength",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the maximum strength of judges in the Supreme Court of India?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is the maximum number of judges allowed in the Supreme Court of India?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "retirement age",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "At what age do judges of the Supreme Court of India retire?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is the retirement age for judges of the Supreme Court of India?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "includes",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who is included among the judges of the Supreme Court of India?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What position is included among the judges of the Supreme Court of India?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "governed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What document governs the retirement age of judges in the Supreme Court of India?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is governed by the Constitution of India regarding the Supreme Court?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

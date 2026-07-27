@@ -1,0 +1,442 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Battle of Waterloo",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical battle",
+            "Napoleonic Wars"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "18 June 1815",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "battle date",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Waterloo",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "battle location",
+            "present-day Belgium"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Belgium",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "modern nation",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United Kingdom of the Netherlands",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "historical nation",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "French army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Napoleonic Wars",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Napoleon Bonaparte",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military leader",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Seventh Coalition",
+      "roles": [
+        {
+          "role": "military alliance",
+          "states": [
+            "Napoleonic Wars",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "British-led Allied army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Seventh Coalition",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Duke of Wellington",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military leader",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Prussian army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Seventh Coalition",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Gebhard Leberecht von Blücher",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military leader",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Napoleonic Wars",
+      "roles": [
+        {
+          "role": "conflict",
+          "states": [
+            "historical period",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "20 years",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "conflict duration",
+            "Napoleonic Wars"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "fought on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the Battle of Waterloo fought?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What battle was fought on 18 June 1815?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located near",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was the Battle of Waterloo located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What battle was located near Waterloo?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Belgium part of during the Battle of Waterloo?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What country was the United Kingdom of the Netherlands part of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "commanded by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who commanded the French army at the Battle of Waterloo?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What army was commanded by Napoleon Bonaparte?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "defeated by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who defeated the French army at the Battle of Waterloo?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What army was defeated by the Seventh Coalition?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who led the British-led Allied army?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What army was led by the Duke of Wellington?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who led the Prussian army?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What army was led by Gebhard Leberecht von Blücher?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "marked the end of",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What did the Battle of Waterloo mark the end of?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What event marked the end of the Napoleonic Wars?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "lasted for",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "How long did the Napoleonic Wars last?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What conflict lasted for 20 years?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

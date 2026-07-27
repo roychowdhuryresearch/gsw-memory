@@ -1,0 +1,501 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Toronto Coach Terminal",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transport hub",
+            "central bus station"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Toronto",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "Canadian city",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ontario",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "Canadian province",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North American country",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "610 Bay Street",
+      "roles": [
+        {
+          "role": "address",
+          "states": [
+            "street address",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Toronto Coach Terminal Inc.",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "subsidiary",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Toronto Transit Commission",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "public transit",
+            "owner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "July 8, 2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "lease date",
+            "event date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Coach Canada",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus line",
+            "lessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Greyhound Canada",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus line",
+            "lessee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "$1.2 million",
+      "roles": [
+        {
+          "role": "amount",
+          "states": [
+            "annual lease",
+            "financial"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1931",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "opening year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Gray Coach Terminal",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "former name",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Art Deco",
+      "roles": [
+        {
+          "role": "style",
+          "states": [
+            "architectural style",
+            "design"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Gray Coach",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "interurban bus service",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e16",
+      "name": "Gray Line Terminal",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "former terminal",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Toronto Coach Terminal located?",
+          "answers": [
+            "e5",
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located at 610 Bay Street?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who owns the Toronto Coach Terminal?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What does Toronto Coach Terminal Inc. own?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "subsidiary of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is a subsidiary of the Toronto Transit Commission?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is the parent organization of Toronto Coach Terminal Inc.?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "leased to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was the Toronto Coach Terminal leased to on July 8, 2012?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was leased to Coach Canada and Greyhound Canada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "leased for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How much was the Toronto Coach Terminal leased for annually?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was leased for $1.2 million annually?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "opened in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was the Toronto Coach Terminal opened?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What opened in 1931?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "formerly known as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was the former name of the Toronto Coach Terminal?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is the current name of the Gray Coach Terminal?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "designed in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "In what style was the Toronto Coach Terminal designed?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What is an example of an Art Deco style terminal?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "home base for",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "What was the home base for Gray Coach?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What company used the Toronto Coach Terminal as its home base?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "replaced",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What did the Toronto Coach Terminal replace?",
+          "answers": [
+            "e16"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "What was replaced by the Toronto Coach Terminal?",
+          "answers": [
+            "e16"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

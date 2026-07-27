@@ -1,0 +1,372 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Star Trek: The Motion Picture",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "American cinema",
+            "science fiction genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1979",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Robert Wise",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gene Roddenberry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "creator",
+            "producer",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Star Trek",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "science fiction genre",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Admiral James T. Kirk",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "Star Trek universe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "William Shatner",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "USS Enterprise",
+      "roles": [
+        {
+          "role": "starship",
+          "states": [
+            "fictional",
+            "Star Trek universe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "V'Ger",
+      "roles": [
+        {
+          "role": "entity",
+          "states": [
+            "alien cloud",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Earth",
+      "roles": [
+        {
+          "role": "planet",
+          "states": [
+            "real",
+            "setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "twenty-third century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "fictional",
+            "future setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who directed Star Trek: The Motion Picture?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film did Robert Wise direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Star Trek: The Motion Picture released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film was released in 1979?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who created the television series Star Trek?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Gene Roddenberry create?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who produced Star Trek: The Motion Picture?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What film did Gene Roddenberry produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "stars",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who stars as Admiral James T. Kirk in Star Trek: The Motion Picture?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What character does William Shatner play in Star Trek: The Motion Picture?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "set in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When is Star Trek: The Motion Picture set?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What film is set in the twenty-third century?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "approaches",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What approaches Earth in Star Trek: The Motion Picture?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Where does V'Ger approach in Star Trek: The Motion Picture?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "command of",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Who assumes command of the USS Enterprise in Star Trek: The Motion Picture?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What starship does Admiral James T. Kirk command in Star Trek: The Motion Picture?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

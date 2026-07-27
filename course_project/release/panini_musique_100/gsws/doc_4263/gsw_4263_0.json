@@ -1,0 +1,372 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WMMW",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "licensed",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1470 AM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "AM band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Meriden, Connecticut",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "license location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "talk radio format",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "610 WSNG",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "simulcast partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Torrington",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "station location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1360 WDRC (AM)",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "home base",
+            "simulcast partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hartford",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "station location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Red Wolf Broadcasting",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Fox News Radio",
+      "roles": [
+        {
+          "role": "network",
+          "states": [
+            "programming source"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Talk Radio Network",
+      "roles": [
+        {
+          "role": "network",
+          "states": [
+            "programming source"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Westwood One",
+      "roles": [
+        {
+          "role": "network",
+          "states": [
+            "programming source"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Michael Savage",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "syndicated program host"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is WMMW licensed to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to Meriden, Connecticut?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "broadcasts on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What frequency does WMMW broadcast on?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station broadcasts on 1470 AM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcasts in format",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What format does WMMW broadcast in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station broadcasts in a talk radio format?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of simulcast with",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What stations are part of the simulcast with WMMW?",
+          "answers": [
+            "e5",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station is part of a simulcast with 610 WSNG and 1360 WDRC (AM)?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who owns WMMW?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What radio station is owned by Red Wolf Broadcasting?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "features programming from",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What networks provide programming for WMMW?",
+          "answers": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which radio station features programming from Fox News Radio?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "features syndicated programs by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who is a syndicated program host featured on WMMW?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which radio station features syndicated programs by Michael Savage?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,205 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Beaches of Agnès",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "French cinema",
+            "2000s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "documentary genre",
+            "autobiographical essay"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Agnès Varda",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director",
+            "creative professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Faces Places",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "documentary genre",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "80th birthday",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "personal milestone"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who directed The Beaches of Agnès?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film did Agnès Varda direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was The Beaches of Agnès released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film was released in 2008?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "celebrates",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What event does The Beaches of Agnès celebrate?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What film celebrates Agnès Varda's 80th birthday?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "followed by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What film followed The Beaches of Agnès?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What film was released after The Beaches of Agnès?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,263 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "San Diego",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "tourist destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Balboa Park",
+      "roles": [
+        {
+          "role": "tourist attraction",
+          "states": [
+            "park",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Belmont amusement park",
+      "roles": [
+        {
+          "role": "tourist attraction",
+          "states": [
+            "amusement park",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "San Diego Zoo",
+      "roles": [
+        {
+          "role": "tourist attraction",
+          "states": [
+            "zoo",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "San Diego Zoo Safari Park",
+      "roles": [
+        {
+          "role": "tourist attraction",
+          "states": [
+            "safari park",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "SeaWorld San Diego",
+      "roles": [
+        {
+          "role": "tourist attraction",
+          "states": [
+            "theme park",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Mission San Diego de Alcala",
+      "roles": [
+        {
+          "role": "historic site",
+          "states": [
+            "mission",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Old Town San Diego State Historic Park",
+      "roles": [
+        {
+          "role": "historic site",
+          "states": [
+            "state park",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "San Diego Beer Week",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "annual",
+            "beer festival",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "November",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "month",
+            "event timing"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "America's Craft Beer Capital",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "nickname",
+            "San Diego"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Balboa Park located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in San Diego?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "held in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When is San Diego Beer Week held?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event is held in November?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is San Diego known as?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which city is known as America's Craft Beer Capital?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,305 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Brest-Litovsk",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical event location",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "historical entity",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Central Powers",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "World War I",
+            "historical alliance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Imperial Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "historical entity",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Ottoman Empire",
+      "roles": [
+        {
+          "role": "empire",
+          "states": [
+            "historical entity",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bolsheviks",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "Russian Revolution",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "German Empire",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "historical entity",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Vladimir Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political leader",
+            "Russian Revolution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Wilhelm II",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "German Emperor",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Petrograd",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical city",
+            "Russian Revolution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical year",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "armistice signed at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was the armistice between Russia and the Central Powers signed?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What significant event took place at Brest-Litovsk in 1917?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "conceded to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did the Central Powers concede to Imperial Germany and the Ottoman Empire?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who received concessions from the Central Powers?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "made peace with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who did the Bolsheviks make peace with?",
+          "answers": [
+            "e7",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who made peace with the German Empire and the Central Powers?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "sponsored by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was Vladimir Lenin sponsored by?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who did Wilhelm II sponsor?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "returned to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did Lenin return to with German sponsorship?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who returned to Petrograd with German sponsorship?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

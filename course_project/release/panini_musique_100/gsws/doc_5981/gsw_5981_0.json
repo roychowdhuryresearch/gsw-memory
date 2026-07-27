@@ -1,0 +1,387 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Paul Chomnycky",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "Canadian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Vancouver, Canada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ukrainian-immigrant father",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "parent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canadian-born mother",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "parent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1996",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "University of British Columbia",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1980",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "graduation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Commerce",
+      "roles": [
+        {
+          "role": "degree",
+          "states": [
+            "bachelor's degree"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "accountant",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "former"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Order of St. Basil the Great",
+      "roles": [
+        {
+          "role": "religious order",
+          "states": [
+            "monastic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Basilian monastery in New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "monastic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Paul Chomnycky born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Vancouver, Canada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "child of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the child of a Ukrainian-immigrant father?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is the child of a Canadian-born mother?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Paul Chomnycky's parents die?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who died in 1996?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "graduated from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Paul Chomnycky graduate from?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who graduated from the University of British Columbia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "graduated in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Paul Chomnycky graduate?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who graduated in 1980?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "degree in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What degree did Paul Chomnycky earn?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who earned a degree in Commerce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "worked as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What profession did Paul Chomnycky work as?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who worked as an accountant?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Which order did Paul Chomnycky join?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who is a member of the Order of St. Basil the Great?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "worked in",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Where did Paul Chomnycky work in the monastery?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who worked in the Basilian monastery in New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

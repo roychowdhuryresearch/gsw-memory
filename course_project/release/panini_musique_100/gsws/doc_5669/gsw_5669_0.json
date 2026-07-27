@@ -1,0 +1,346 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mikko Raita",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "music professional",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Helsinki",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Finland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Nordic country",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "music mixing and recording engineer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "producer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "guitar player",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Studio Kekkonen",
+      "roles": [
+        {
+          "role": "business",
+          "states": [
+            "recording studio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Apocalyptica",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "music band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Sunrise Avenue",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "music band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Tuomo",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Deep Insight",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "music band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Bleak",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "music band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Ana Johnsson",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Stratovarius",
+      "roles": [
+        {
+          "role": "client",
+          "states": [
+            "music band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Mikko Raita based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is based in Helsinki?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Mikko Raita's profession?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is a music mixing and recording engineer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Who is a producer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a guitar player?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "co-owner of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What studio is Mikko Raita a co-owner of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is a co-owner of Studio Kekkonen?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "clients include",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who are some of Mikko Raita's clients?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is a client of Mikko Raita?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

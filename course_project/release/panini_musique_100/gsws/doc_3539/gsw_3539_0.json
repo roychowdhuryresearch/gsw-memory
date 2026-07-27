@@ -1,0 +1,411 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cleveland Indians",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "American",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cleveland, Ohio",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "team base",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Major League Baseball",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "professional sports",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "American League Central division",
+      "roles": [
+        {
+          "role": "division",
+          "states": [
+            "MLB",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Progressive Field",
+      "roles": [
+        {
+          "role": "stadium",
+          "states": [
+            "home field",
+            "Cleveland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Goodyear Ballpark",
+      "roles": [
+        {
+          "role": "facility",
+          "states": [
+            "spring training",
+            "Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Goodyear, Arizona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "spring training",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1901",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "major league franchise"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1920",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "World Series championship",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1948",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "World Series championship",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "10",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "Central Division titles",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "six",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "American League pennants",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where are the Cleveland Indians based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team is based in Cleveland, Ohio?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "compete in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "In which league do the Cleveland Indians compete?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which team competes in Major League Baseball?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which division are the Cleveland Indians a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which team is a member of the American League Central division?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "play at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where do the Cleveland Indians play their home games?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which team plays at Progressive Field?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "spring training at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is the Cleveland Indians' spring training facility?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which team has its spring training at Goodyear Ballpark?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When were the Cleveland Indians established as a major league franchise?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which team was established in 1901?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "won World Series in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When did the Cleveland Indians win the World Series?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which team won the World Series in 1920 and 1948?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "won Central Division titles",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "How many Central Division titles have the Cleveland Indians won?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which team has won 10 Central Division titles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "won American League pennants",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "How many American League pennants have the Cleveland Indians won?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Which team has won six American League pennants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

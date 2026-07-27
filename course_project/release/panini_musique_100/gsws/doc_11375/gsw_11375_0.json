@@ -1,0 +1,285 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Meir Atlas",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure",
+            "rabbi"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1848–1926",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "life span",
+            "19th-20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Telz Yeshiva",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "religious"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "pre-World War II Europe",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical period",
+            "geographical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "halachic authority",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "religious authority",
+            "Jewish law"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "responsa",
+      "roles": [
+        {
+          "role": "literary work",
+          "states": [
+            "religious texts",
+            "Jewish law"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lithuanian rabbis",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "religious leaders",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Meir Atlas born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in 1848?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Meir Atlas die?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died in 1926?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "founded",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did Meir Atlas found?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who founded the Telz Yeshiva?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "rabbi of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was the rabbi of numerous communities in pre-World War II Europe?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What role did Meir Atlas have in pre-World War II Europe?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "authored",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did Meir Atlas author?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who authored many responsa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "was a",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Meir Atlas known as?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was an outstanding halachic authority?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which group was Meir Atlas a part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was one of the foremost Lithuanian rabbis?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

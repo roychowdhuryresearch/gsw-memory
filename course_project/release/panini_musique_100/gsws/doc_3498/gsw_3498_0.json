@@ -1,0 +1,215 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Orpheus Club (Orpheus Club of Philadelphia)",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "men's singing club",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Philadelphia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Pennsylvania",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Pennsylvania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "December 7, 1872",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "founding date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Musical Fund Hall",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "performance venue",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Locust Street",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "street",
+            "Philadelphia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Orpheus Club located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What organization is located in Philadelphia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "founded on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Orpheus Club founded?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was founded on December 7, 1872?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "performed at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did the Orpheus Club perform on its founding date?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What organization performed at the Musical Fund Hall?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is the Musical Fund Hall located?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located on Locust Street?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

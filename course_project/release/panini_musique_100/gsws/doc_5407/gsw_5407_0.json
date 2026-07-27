@@ -1,0 +1,250 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "kilikiti",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "traditional",
+            "similar to cricket"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tuvalu",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "Pacific Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ano",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "popular",
+            "specific to Tuvalu"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "pandanus leaves",
+      "roles": [
+        {
+          "role": "material",
+          "states": [
+            "used in Ano balls"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "late 19th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "foot racing",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "traditional",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "lance throwing",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "traditional",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "quarterstaff fencing",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "traditional",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "wrestling",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "traditional",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Christian missionaries",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "historical",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "played in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What traditional sport is played in Tuvalu?",
+          "answers": [
+            "e1",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is kilikiti played?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Where is Ano played?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "made from",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "What are the balls used in Ano made from?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What sport uses balls made from pandanus leaves?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "disapproved by",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "Who disapproved of traditional sports in the late 19th century?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What did Christian missionaries disapprove of in the late 19th century?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

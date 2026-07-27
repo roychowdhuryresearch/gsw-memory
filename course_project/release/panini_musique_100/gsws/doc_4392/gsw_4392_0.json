@@ -1,0 +1,446 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nicolaus Schuback",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "February 18, 1700",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jork",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "July 28, 1783",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Hamburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "death place",
+            "mayoral location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nationality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "lawyer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "legal profession"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "mayor",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "political position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "October 29, 1754",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start of mayoral term"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "August 28, 1782",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of mayoral term"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "special coin",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "commemorative item"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "funeral",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "memorial event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on February 18, 1700?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Nicolaus Schuback born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was born in Jork?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where was Nicolaus Schuback born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who died on July 28, 1783?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When did Nicolaus Schuback die?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who died in Hamburg?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Nicolaus Schuback die?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Nicolaus Schuback's nationality?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was from Germany?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Nicolaus Schuback's profession?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was a lawyer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "mayor of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who was the mayor of Hamburg?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What position did Nicolaus Schuback hold in Hamburg?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "mayoral term start",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When did Nicolaus Schuback start his term as mayor?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who started their mayoral term on October 29, 1754?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "mayoral term end",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "When did Nicolaus Schuback end his term as mayor?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who ended their mayoral term on August 28, 1782?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "commemorated by",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What was minted to commemorate Nicolaus Schuback's death?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Who was commemorated by a special coin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v11",
+      "phrase": "attended by",
+      "questions": [
+        {
+          "id": "q21",
+          "text": "What event was attended by people who received a special coin?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q22",
+          "text": "Who attended Nicolaus Schuback's funeral?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

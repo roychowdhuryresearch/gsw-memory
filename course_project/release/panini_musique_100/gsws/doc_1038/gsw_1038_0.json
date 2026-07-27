@@ -1,0 +1,128 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Lubigi",
+      "roles": [
+        {
+          "role": "wetland",
+          "states": [
+            "swampy",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kampala",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "capital city",
+            "largest city",
+            "Uganda"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Uganda",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "East Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located on outskirts of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is located on the outskirts of Kampala?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is Lubigi located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the capital of Uganda?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which country has Kampala as its capital?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "largest city of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the largest city of Uganda?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which country has Kampala as its largest city?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

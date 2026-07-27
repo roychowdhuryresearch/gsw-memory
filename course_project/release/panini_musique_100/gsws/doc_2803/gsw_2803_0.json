@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Vatican City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city-state",
+            "modern"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Lateran Treaty",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "historical document",
+            "1929"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "11 February 1929",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "treaty signing date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Vatican Hill",
+      "roles": [
+        {
+          "role": "geographic location",
+          "states": [
+            "historical",
+            "origin of name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Vatica or Vaticum",
+      "roles": [
+        {
+          "role": "Etruscan settlement",
+          "states": [
+            "historical",
+            "origin of name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "vaticanus ager",
+      "roles": [
+        {
+          "role": "Roman term",
+          "states": [
+            "historical",
+            "territory name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "first used in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the name Vatican City first used?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What name was first used in the Lateran Treaty?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "signed on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Lateran Treaty signed?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What treaty was signed on 11 February 1929?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "name derived from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the name Vatican derived from?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What name is derived from Vatica or Vaticum?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is Vatican City located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located on Vatican Hill?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

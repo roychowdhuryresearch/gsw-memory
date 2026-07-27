@@ -1,0 +1,287 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oulu–Kontiomäki railway",
+      "roles": [
+        {
+          "role": "railway line",
+          "states": [
+            "transport infrastructure",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Finland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country",
+            "Nordic region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Finnish Rail Administration",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "railway management",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Oulu",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "location",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Kontiomäki",
+      "roles": [
+        {
+          "role": "station",
+          "states": [
+            "railway junction",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Paltamo",
+      "roles": [
+        {
+          "role": "municipality",
+          "states": [
+            "location",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Kajaani",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "location",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Oulu River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "Finland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Oulu rail traffic control center",
+      "roles": [
+        {
+          "role": "facility",
+          "states": [
+            "traffic control",
+            "Oulu"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Oulu railway station",
+      "roles": [
+        {
+          "role": "station",
+          "states": [
+            "railway facility",
+            "Oulu"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "owned and maintained by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who owns and maintains the Oulu–Kontiomäki railway?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does the Finnish Rail Administration own and maintain?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "connects to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does the Oulu–Kontiomäki railway connect to?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which railway line connects Oulu to Kontiomäki?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is the Kontiomäki station located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is located in Paltamo municipality?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "controlled via",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How is the traffic on the Oulu–Kontiomäki railway controlled?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What does the Oulu rail traffic control center control?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "follows",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which river does the Oulu–Kontiomäki railway follow?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What follows the south shore of the Oulu River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

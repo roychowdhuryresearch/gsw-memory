@@ -1,0 +1,316 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "2009 FIFA Beach Soccer World Cup",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports tournament",
+            "beach soccer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "fifth edition",
+      "roles": [
+        {
+          "role": "ordinal",
+          "states": [
+            "FIFA Beach Soccer World Cup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "FIFA",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "governing body",
+            "football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Beach Soccer World Championships",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "pre-FIFA governance",
+            "beach soccer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1995",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "beach soccer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Dubai",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "host city",
+            "United Arab Emirates"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "United Arab Emirates",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "host nation",
+            "Middle East"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "16 November 2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date",
+            "tournament"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "22 November 2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date",
+            "tournament"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Brazil",
+      "roles": [
+        {
+          "role": "team",
+          "states": [
+            "winner",
+            "beach soccer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "fourth consecutive title",
+      "roles": [
+        {
+          "role": "achievement",
+          "states": [
+            "FIFA Beach Soccer World Cup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "thirteenth title overall",
+      "roles": [
+        {
+          "role": "achievement",
+          "states": [
+            "beach soccer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "governed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who governed the 2009 FIFA Beach Soccer World Cup?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was governed by FIFA?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "held in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was the 2009 FIFA Beach Soccer World Cup held?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was held in Dubai?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "won by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who won the 2009 FIFA Beach Soccer World Cup?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event was won by Brazil?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "took place between",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the 2009 FIFA Beach Soccer World Cup take place?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event took place between 16 November 2009 and 22 November 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the Beach Soccer World Cup established?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was established in 1995?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

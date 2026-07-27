@@ -1,0 +1,157 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Harald Offerdal",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Norwegian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Labour Party",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "Norwegian politics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Balestrand",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "municipality",
+            "Norway"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2011–2015",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "term period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2015–2019",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "term period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "elected mayor of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was elected mayor of Balestrand?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where was Harald Offerdal elected mayor?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which party is Harald Offerdal a member of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is a member of the Labour Party?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "term period",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the term period for Harald Offerdal's first term as mayor?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was the term period for Harald Offerdal's second term as mayor?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

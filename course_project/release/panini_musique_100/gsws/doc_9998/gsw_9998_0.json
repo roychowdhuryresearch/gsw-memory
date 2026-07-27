@@ -1,0 +1,227 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "KJIL",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Christian",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "99.1 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcasting frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Copeland, Kansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "licensed location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Dodge City, Kansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "service area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Garden City, Kansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "service area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Liberal, Kansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "service area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Great Plains Christian Radio",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "owner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcasts on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What frequency does KJIL broadcast on?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station broadcasts on 99.1 FM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is KJIL licensed to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which radio station is licensed to Copeland, Kansas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "serves",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What areas does KJIL serve?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which radio station serves Dodge City, Kansas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Which radio station serves Garden City, Kansas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station serves Liberal, Kansas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who owns KJIL?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station is owned by Great Plains Christian Radio?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

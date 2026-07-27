@@ -1,0 +1,245 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Eleanor Swift",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "legal professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Yale Law School",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational institution",
+            "law school"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Judge M. Joseph Blumenfeld",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "judge",
+            "U.S. District Court"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "U.S. District Court in Hartford",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial institution",
+            "Hartford"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Chief Judge David L. Bazelon",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "judge",
+            "U.S. Court of Appeals"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "U.S. Court of Appeals for the D.C. Circuit",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial institution",
+            "D.C. Circuit"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Houston",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Texas"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Vinson & Elkins",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "law firm"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "graduated from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Eleanor Swift graduate from?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who graduated from Yale Law School?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "clerked for",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did Eleanor Swift clerk for at the U.S. District Court in Hartford?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who clerked for Judge M. Joseph Blumenfeld?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Who did Eleanor Swift clerk for at the U.S. Court of Appeals for the D.C. Circuit?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who clerked for Chief Judge David L. Bazelon?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "practiced law in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Eleanor Swift practice law?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who practiced law in Houston?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "worked at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did Eleanor Swift work?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who worked at Vinson & Elkins?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

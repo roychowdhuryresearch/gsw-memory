@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Haysville (Haysville, Pennsylvania)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "borough",
+            "municipality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Allegheny County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Pennsylvania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ohio River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "natural feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "U.S.",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "70",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2010 census",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "census",
+            "demographic data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "least-populated municipality",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "population rank",
+            "Allegheny County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "130",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "total municipalities",
+            "Allegheny County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Haysville located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Allegheny County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "along",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is along the Ohio River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What river is Haysville along?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "population according to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the population of Haysville according to the 2010 census?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "According to which census was the population of Haysville 70?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "least-populated municipality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the least-populated municipality in Allegheny County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What status does Haysville hold in Allegheny County?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "out of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Out of how many municipalities is Haysville the least-populated?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is the total number of municipalities in Allegheny County?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

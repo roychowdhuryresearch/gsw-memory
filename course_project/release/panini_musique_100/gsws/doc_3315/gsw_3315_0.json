@@ -1,0 +1,232 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Biscaccianti (Eliza Biscaccianti)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "performer",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1853",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "performance year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "South America",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "performance location",
+            "continent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lima, Peru",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "performance location",
+            "city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Milan",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "teaching location",
+            "city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Paris",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence location",
+            "city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Rossini",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "composer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "home for artists",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "residence",
+            "supported by foundation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed in South America in 1853?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did Biscaccianti perform in 1853?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "taught singing in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Biscaccianti teach singing after retiring?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who taught singing in Milan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lived in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did Biscaccianti live in her elder years?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who lived in a home for artists in Paris?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "supported by foundation in memory of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was supported by a foundation in memory of Rossini?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is the foundation in memory of that supported the home for artists?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

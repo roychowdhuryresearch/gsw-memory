@@ -1,0 +1,257 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Maureen Payne",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "cricketer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1997",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "South Africa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "cricket team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New Zealand",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "cricket team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1971–72",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "cricket series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "five Tests",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "cricket matches"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "eight wickets",
+      "roles": [
+        {
+          "role": "achievement",
+          "states": [
+            "cricket statistics"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who died in 1997?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did Maureen Payne die?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the nationality of Maureen Payne?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is a cricketer from South Africa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "captained against",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who did Maureen Payne captain against in 1971–72?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who captained the South Africa team against New Zealand in 1971–72?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played in series",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Maureen Payne play against New Zealand?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who played in the series against New Zealand in 1971–72?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "appeared in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many Tests did Maureen Payne appear in?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who appeared in five Tests for South Africa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "claimed",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How many wickets did Maureen Payne claim?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who claimed eight wickets for South Africa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

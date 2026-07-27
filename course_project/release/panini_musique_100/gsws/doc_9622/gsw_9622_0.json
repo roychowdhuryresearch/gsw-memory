@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jean-François Miniac",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "contemporary figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Solidor",
+      "roles": [
+        {
+          "role": "pen name",
+          "states": [
+            "alias",
+            "creative identity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1967",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "February 17, 1967",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Paris",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "capital city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "residence",
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "French",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "cultural identity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "comic book creator",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "writer",
+            "artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on February 17, 1967?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Jean-François Miniac born?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was born in Paris?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where was Jean-François Miniac born?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is known as Solidor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is the pen name of Jean-François Miniac?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the nationality of Jean-François Miniac?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is French?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the profession of Jean-François Miniac?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is a comic book creator?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lives in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where does Jean-François Miniac live?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who lives in France?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

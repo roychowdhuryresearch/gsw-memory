@@ -1,0 +1,347 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Chester \"Chet\" Arthur Stiles (Chester Stiles)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "criminal",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "September 14, 1970",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Louisville, Kentucky",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2003",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "video creation date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Nevada desert",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "video discovery location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "video discovery year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Pahrump, Nevada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "FBI",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "law enforcement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Las Vegas Police",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "law enforcement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "October 17, 2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "court appearance date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on September 14, 1970?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Chester \"Chet\" Arthur Stiles born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was born in Louisville, Kentucky?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where was Chester \"Chet\" Arthur Stiles born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "video made in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the video involving Chester \"Chet\" Arthur Stiles made?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was made in 2003?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "video discovered in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was the video involving Chester \"Chet\" Arthur Stiles discovered?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was discovered in the Nevada desert?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "video surfaced in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the video involving Chester \"Chet\" Arthur Stiles surface?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What surfaced in 2007?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where was Chester \"Chet\" Arthur Stiles based?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was based in Pahrump, Nevada?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "manhunt launched by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who launched the manhunt for Chester \"Chet\" Arthur Stiles?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What did the FBI and Las Vegas Police launch?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "appeared in court on",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When did Chester \"Chet\" Arthur Stiles appear in court?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who appeared in court on October 17, 2007?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

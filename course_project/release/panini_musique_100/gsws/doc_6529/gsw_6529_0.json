@@ -1,0 +1,280 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Soul Train",
+      "roles": [
+        {
+          "role": "television program",
+          "states": [
+            "American",
+            "music-dance show"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "October 2, 1971",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "premiere date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "March 25, 2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "final episode date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "35 years",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "broadcast period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "R&B, soul, dance/pop, hip hop",
+      "roles": [
+        {
+          "role": "music genres",
+          "states": [
+            "primary focus"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "funk, jazz, disco, gospel",
+      "roles": [
+        {
+          "role": "music genres",
+          "states": [
+            "also featured"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Don Cornelius",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "creator",
+            "first host",
+            "executive producer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "aired from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did Soul Train first air?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did Soul Train air its final episode?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "aired for",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How long did Soul Train air?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What show aired for 35 years?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "featured performances by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What music genres were primarily featured on Soul Train?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What show primarily featured R&B, soul, dance/pop, and hip hop artists?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "also featured",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What other music genres appeared on Soul Train?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What show also featured funk, jazz, disco, and gospel artists?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who created Soul Train?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What show was created by Don Cornelius?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "hosted by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was the first host of Soul Train?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What show was first hosted by Don Cornelius?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "executive produced by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who was the executive producer of Soul Train?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What show was executive produced by Don Cornelius?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

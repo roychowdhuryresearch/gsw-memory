@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Greatest Story Ever Told",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "American cinema",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "George Stevens",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director",
+            "American cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Max von Sydow",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "Swedish nationality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Jesus",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "religious figure",
+            "Christianity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Ingmar Bergman",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director",
+            "Swedish cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "English-language film",
+      "roles": [
+        {
+          "role": "film category",
+          "states": [
+            "language",
+            "international cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "cast as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was cast as Jesus in The Greatest Story Ever Told?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In which film was Max von Sydow cast as Jesus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who directed The Greatest Story Ever Told?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film did George Stevens direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "known for performances in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Max von Sydow known for before The Greatest Story Ever Told?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was known for performances in Ingmar Bergman's films?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "never appeared in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "In what type of film had Max von Sydow never appeared before The Greatest Story Ever Told?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who had never appeared in an English-language film before The Greatest Story Ever Told?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

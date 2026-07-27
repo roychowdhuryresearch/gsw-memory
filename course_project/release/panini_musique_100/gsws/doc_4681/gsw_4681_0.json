@@ -1,0 +1,336 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Chucky",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "doll"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tiffany (Tiffany Valentine)",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "doll"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Glen",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "child of Chucky and Tiffany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Glenda",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "alternate personality of Glen"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Heart of Damballa",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "fictional",
+            "magical item"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Seed of Chucky",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "horror",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Hollywood",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "film setting",
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Tiffany Ray",
+      "roles": [
+        {
+          "role": "alias",
+          "states": [
+            "fictional",
+            "used by Tiffany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Jennifer Tilly",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actress",
+            "plays Tiffany in film"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "split personality",
+      "roles": [
+        {
+          "role": "condition",
+          "states": [
+            "psychological",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "brought back by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who brought back Chucky and Tiffany?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who were brought back by their child?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "reads inscription on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did Glen read the inscription on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who read the inscription on the Heart of Damballa?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "focuses on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Seed of Chucky focus on?",
+          "answers": [
+            "e1",
+            "e2",
+            "e3",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which film focuses on Chucky and Tiffany's capers in Hollywood?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "plans to transport soul into",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who plans to transport her soul into Jennifer Tilly?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Whose body does Tiffany plan to transport her soul into?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "has split personality",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who has a split personality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What condition does Glen/Glenda have?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "decides to remain",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who decides to remain a doll?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What does Chucky decide to remain as?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "leaves",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who leaves Chucky?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who does Tiffany leave?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

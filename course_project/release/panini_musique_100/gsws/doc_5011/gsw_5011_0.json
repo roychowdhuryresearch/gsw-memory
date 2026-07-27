@@ -1,0 +1,103 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cullinan (Rolls-Royce Cullinan)",
+      "roles": [
+        {
+          "role": "product",
+          "states": [
+            "automobile",
+            "Rolls-Royce"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "second half of 2018",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "production start date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "first quarter of 2019",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "delivery start date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "series production begins",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When is the series production of the Cullinan expected to begin?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is expected to begin in the second half of 2018?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "customer deliveries start",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When will the first customer deliveries of the Cullinan take place?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What will take place in the first quarter of 2019?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

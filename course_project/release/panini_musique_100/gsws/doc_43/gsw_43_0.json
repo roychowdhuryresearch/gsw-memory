@@ -1,0 +1,276 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Taputapuatea",
+      "roles": [
+        {
+          "role": "commune",
+          "states": [
+            "French Polynesia",
+            "Pacific Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "French Polynesia",
+      "roles": [
+        {
+          "role": "territory",
+          "states": [
+            "overseas territory",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pacific Ocean",
+      "roles": [
+        {
+          "role": "ocean",
+          "states": [
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Raiatea",
+      "roles": [
+        {
+          "role": "island",
+          "states": [
+            "Leeward Islands",
+            "Society Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Leeward Islands",
+      "roles": [
+        {
+          "role": "subdivision",
+          "states": [
+            "Society Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Society Islands",
+      "roles": [
+        {
+          "role": "archipelago",
+          "states": [
+            "French Polynesia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2017",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "census year",
+            "UNESCO inscription year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "4,792",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data",
+            "2017"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "UNESCO World Heritage Sites",
+      "roles": [
+        {
+          "role": "list",
+          "states": [
+            "cultural heritage",
+            "global recognition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Taputapuatea marae",
+      "roles": [
+        {
+          "role": "cultural site",
+          "states": [
+            "UNESCO World Heritage Site",
+            "2017"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Taputapuatea located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located on the island of Raiatea?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is part of the Leeward Islands?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What are the Leeward Islands part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the population of Taputapuatea in 2017?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which year did Taputapuatea have a population of 4,792?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "inscribed on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Taputapuatea inscribed on the UNESCO World Heritage Sites list?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was inscribed on the UNESCO World Heritage Sites list in 2017?",
+          "answers": [
+            "e1",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

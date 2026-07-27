@@ -1,0 +1,238 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Loekman Hakim",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cianjur, West Java, Indonesia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "December 30, 1975",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Eman Sulaeman",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "parent",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Iis Martini",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "parent",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Rika Nurhayati",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "spouse",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "SMP 5 Bandung",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "educational institution",
+            "Indonesian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born in Cianjur, West Java, Indonesia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where was Loekman Hakim born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was born on December 30, 1975?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When was Loekman Hakim born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "child of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the child of Eman Sulaeman and Iis Martini?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who are the parents of Loekman Hakim?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "married to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is Loekman Hakim married to?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is married to Rika Nurhayati?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "worked at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did Eman Sulaeman work?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who worked at SMP 5 Bandung?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

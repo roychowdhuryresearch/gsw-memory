@@ -1,0 +1,363 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "New York (New York City)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "economic hub"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "television industry",
+      "roles": [
+        {
+          "role": "industry",
+          "states": [
+            "developed in New York",
+            "significant employer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "ABC",
+      "roles": [
+        {
+          "role": "broadcast network",
+          "states": [
+            "headquartered in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "CBS",
+      "roles": [
+        {
+          "role": "broadcast network",
+          "states": [
+            "headquartered in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "NBC",
+      "roles": [
+        {
+          "role": "broadcast network",
+          "states": [
+            "headquartered in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "MTV",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Fox News",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "HBO",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Showtime",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Bravo",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Food Network",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "AMC",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Comedy Central",
+      "roles": [
+        {
+          "role": "cable network",
+          "states": [
+            "based in New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "NYCTV",
+      "roles": [
+        {
+          "role": "public broadcast service",
+          "states": [
+            "operated by City of New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Emmy Award-winning shows",
+      "roles": [
+        {
+          "role": "television shows",
+          "states": [
+            "original",
+            "produced by NYCTV"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "developed in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did the television industry develop?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What industry developed in New York?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "headquartered in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is ABC headquartered?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which broadcast network is headquartered in New York?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is MTV based?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which cable network is based in New York?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "operated by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who operates NYCTV?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What public broadcast service is operated by the City of New York?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who produced Emmy Award-winning shows?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did NYCTV produce?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

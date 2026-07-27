@@ -1,0 +1,304 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WKSE",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Top 40",
+            "CHR",
+            "Western New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "98.5 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "radio frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "KISS 98.5",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "radio station branding"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Buffalo and Niagara Falls region",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "service area",
+            "Western New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Grand Island, New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transmitter location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Greater Toronto Area",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "market area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Entercom Communications",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Corporate Parkway, Amherst, New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "studio location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "WBLK",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "historical reference"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "CKIS",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "competitor",
+            "CHR/Top 40"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "branded as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is WKSE branded as?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station is branded as KISS 98.5?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "serves",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which area does WKSE serve?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station serves the Buffalo and Niagara Falls region?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "transmitter located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is the transmitter of WKSE located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which radio station has its transmitter located on Grand Island, New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who owns WKSE?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station is owned by Entercom Communications?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "studios located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where are the studios of WKSE located?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station has studios located on Corporate Parkway in Amherst, New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "competes with",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which radio station does WKSE compete with in the Greater Toronto Area?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which radio station competes with CKIS in the Greater Toronto Area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

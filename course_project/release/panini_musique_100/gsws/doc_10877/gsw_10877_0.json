@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Vladimir Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "revolutionary leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "7 November 1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "revolution date",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Provisional Government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "Russian",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "October Revolution (Russian Revolution)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "Russian history",
+            "1917"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "February Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "Russian history",
+            "1917"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "soviets",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "local councils",
+            "workers and peasants"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "White Army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Liberal and monarchist",
+            "Russian Civil War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Red Army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Bolshevik",
+            "Russian Civil War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Russian Civil War",
+      "roles": [
+        {
+          "role": "war",
+          "states": [
+            "Russian history",
+            "post-1917"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who led the October Revolution?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What revolution did Vladimir Lenin lead?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "occurred on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did the October Revolution occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event occurred on 7 November 1917?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "replaced",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did the October Revolution replace?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What replaced the Provisional Government?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "instigated in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What revolution was instigated in February?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "When was the February Revolution instigated?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "went to war against",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who went to war against the Bolsheviks' Red Army?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who did the White Army go to war against?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the series of battles between the White Army and the Red Army known as?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is the Russian Civil War known for?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

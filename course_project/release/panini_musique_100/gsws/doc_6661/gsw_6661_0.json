@@ -1,0 +1,139 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Zimbabweans",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "nationality",
+            "African"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "London",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Harare North",
+      "roles": [
+        {
+          "role": "nickname",
+          "states": [
+            "informal name",
+            "cultural reference"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "decade",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "duration",
+            "10 years"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "emigration",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "migration",
+            "socio-political"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "refer to as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What do Zimbabweans refer to London as?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who refers to London as Harare North?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "after",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What happened after a decade of emigration?",
+          "answers": [
+            "e1",
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event preceded Zimbabweans referring to London as Harare North?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

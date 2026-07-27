@@ -1,0 +1,411 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Philadelphia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "transport hub"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Greyhound Lines",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "transportation",
+            "bus service"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Philadelphia Greyhound Terminal",
+      "roles": [
+        {
+          "role": "facility",
+          "states": [
+            "bus terminal",
+            "transportation hub"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1001 Filbert Street",
+      "roles": [
+        {
+          "role": "address",
+          "states": [
+            "location",
+            "Center City Philadelphia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Center City Philadelphia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "neighborhood",
+            "Philadelphia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "historical data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Port Authority Bus Terminal",
+      "roles": [
+        {
+          "role": "facility",
+          "states": [
+            "bus terminal",
+            "New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "transport hub"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Bieber Tourways",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Capitol Trailways",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Martz Trailways",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Peter Pan Bus Lines",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Susquehanna Trailways",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "New Jersey Transit",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "transportation",
+            "bus division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Megabus",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e16",
+      "name": "Bolt Bus",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "bus service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "operates service to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What company operates service to points east of the Mississippi River?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where does Greyhound Lines operate service to?",
+          "answers": [
+            "points east of the Mississippi River"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Philadelphia Greyhound Terminal located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located at 1001 Filbert Street?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "second busiest terminal in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the second busiest Greyhound terminal in the United States in 2006?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In what year was the Philadelphia Greyhound Terminal the second busiest in the United States?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "busiest terminal",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the busiest Greyhound terminal in the United States in 2006?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where is the Port Authority Bus Terminal located?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "provides service to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which companies provide service to the Center City Greyhound terminal?",
+          "answers": [
+            "e9",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where do Bieber Tourways, Capitol Trailways, Martz Trailways, Peter Pan Bus Lines, Susquehanna Trailways, and New Jersey Transit provide service to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "other services include",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What other services include Megabus and Bolt Bus?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which companies are included in other services at the Philadelphia Greyhound Terminal?",
+          "answers": [
+            "e15",
+            "e16"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

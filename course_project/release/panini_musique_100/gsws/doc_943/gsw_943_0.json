@@ -1,0 +1,196 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oklahoma City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "principal city",
+            "urban area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Oklahoma City Metropolitan Statistical Area",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "metropolitan area",
+            "statistical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Central Oklahoma",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Oklahoma",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "US state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "population rank year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "42nd largest",
+      "roles": [
+        {
+          "role": "rank",
+          "states": [
+            "population rank",
+            "national rank"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is the principal city of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the principal city of the Oklahoma City Metropolitan Statistical Area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What area is Oklahoma City the principal city of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Oklahoma City Metropolitan Statistical Area located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Central Oklahoma?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is the state's largest urbanized area",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the state's largest urbanized area in Oklahoma?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What state has Oklahoma City as its largest urbanized area?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "was the 42nd largest in the nation as of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the 42nd largest metropolitan area in the nation as of 2012?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What rank did the Oklahoma City Metropolitan Statistical Area hold in 2012?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

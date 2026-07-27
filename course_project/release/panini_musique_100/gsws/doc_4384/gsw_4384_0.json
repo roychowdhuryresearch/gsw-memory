@@ -1,0 +1,397 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Hamburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Jutland Peninsula",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical feature",
+            "northern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Continental Europe",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Scandinavia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region",
+            "northern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "North Sea",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sea",
+            "western Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Baltic Sea",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sea",
+            "northeastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "River Elbe",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "central Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Alster",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Bille",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Binnenalster",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "lake",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Außenalster",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "lake",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Neuwerk",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Scharhörn",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Nigehörn",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Hamburg Wadden Sea National Park",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "national park",
+            "Hamburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Hamburg located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is located at the southern fanning-out of the Jutland Peninsula?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "on the River",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which river is Hamburg on?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What city is on the River Elbe?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "confluence with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which rivers meet at Hamburg?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where do the Alster and Bille rivers meet?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "formed by damming",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What lakes are formed by damming the River Alster?",
+          "answers": [
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "How were the Binnenalster and Außenalster formed?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which islands are part of the city of Hamburg?",
+          "answers": [
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What city are the islands of Neuwerk, Scharhörn, and Nigehörn part of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where is the Hamburg Wadden Sea National Park located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What national park is located in Hamburg?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

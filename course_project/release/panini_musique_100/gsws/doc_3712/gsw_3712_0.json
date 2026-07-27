@@ -1,0 +1,292 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Greeks from Cyprus (Greeks)",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Cypriot",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "English-speaking world",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "destination",
+            "emigration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "British Empire",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "colonizer",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Turkish invasion of Cyprus",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "1974",
+            "conflict"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1974",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "invasion",
+            "emigration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "mid-1974 to 1977",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "population decrease"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Middle East",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "destination",
+            "emigration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1990s",
+      "roles": [
+        {
+          "role": "decade",
+          "states": [
+            "population stabilization"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "urban",
+      "roles": [
+        {
+          "role": "population distribution",
+          "states": [
+            "current",
+            "Greek Cypriots"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Greeks from Cyprus emigrate to?",
+          "answers": [
+            "e2",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who emigrated to the English-speaking world?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "colonized by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who colonized Cyprus?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did the British Empire colonize?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "followed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What event was followed by waves of emigration?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What followed the Turkish invasion of Cyprus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "decreased between",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the population of Cyprus decrease?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What happened to the population of Cyprus between mid-1974 and 1977?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "stabilized in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the population decrease taper off?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What happened to the population in the 1990s?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "is urban",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the current population distribution of Greek Cypriots?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who is mostly urban today?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

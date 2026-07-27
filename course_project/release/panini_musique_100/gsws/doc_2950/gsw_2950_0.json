@@ -1,0 +1,221 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sam Theard",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "blues singer",
+            "songwriter",
+            "New Orleans-born"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Fleecie Moore",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "associated with Louis Jordan",
+            "non-lyricist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Louis Jordan (Let the Good Times Roll (Louis Jordan song))",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "associated with Fleecie Moore"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Reet, Petite, and Gone",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1947",
+            "featuring Louis Jordan and the Tympany Five"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1947",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "film release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "New Orleans",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace of Sam Theard"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote the song?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Sam Theard write?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "co-credited to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was the song co-credited to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was Fleecie Moore co-credited with?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "performed in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who performed in the film Reet, Petite, and Gone?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What film did Louis Jordan perform in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the film Reet, Petite, and Gone released?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What film was released in 1947?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was Sam Theard born?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was born in New Orleans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

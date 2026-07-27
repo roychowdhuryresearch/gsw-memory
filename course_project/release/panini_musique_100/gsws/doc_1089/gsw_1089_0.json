@@ -1,0 +1,217 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Abdul Rehman Makki",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "public figure",
+            "speaker"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "war on terror",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political",
+            "global conflict"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "America",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "initiator",
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Afghanistan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "affected",
+            "conflict zone"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Iraq",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "affected",
+            "conflict zone"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Pakistan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "affected",
+            "conflict zone"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "thousands of innocents",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "victims",
+            "casualties"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "stated that",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who stated that the war on terror caused deaths in Afghanistan, Iraq, and Pakistan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Abdul Rehman Makki state about the war on terror?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "started by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who started the war on terror?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did America start?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "caused the death of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What caused the death of thousands of innocents?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who were affected by the war on terror?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "affected countries",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which countries were affected by the war on terror?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event affected Afghanistan, Iraq, and Pakistan?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,200 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The National Dream (The National Dream (book))",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "non-fiction",
+            "Canadian literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1970",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Pierre Berton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "Canadian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canadian Pacific Railway",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "railway",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1871",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1881",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was The National Dream published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What book was published in 1970?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who wrote The National Dream?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What book did Pierre Berton write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "describes",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does The National Dream describe?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which book describes the Canadian Pacific Railway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "planning and commencement period",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the planning and commencement period of the Canadian Pacific Railway described in The National Dream?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What railway's planning and commencement period is from 1871 to 1881?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

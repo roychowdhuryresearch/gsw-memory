@@ -1,0 +1,217 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Treaty of Barcelona (Treaty of Barcelona (1493))",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "historical agreement",
+            "15th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "19 January 1493",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "signing date",
+            "15th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation",
+            "historical participant"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Crown of Aragon",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical kingdom",
+            "15th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Roussillon",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical territory",
+            "15th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Cerdagne",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical territory",
+            "15th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "signed on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the Treaty of Barcelona signed?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What treaty was signed on 19 January 1493?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which countries were involved in the Treaty of Barcelona?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What treaty involved France and the Crown of Aragon?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "returned to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What regions were returned to the Crown of Aragon?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "To whom were Roussillon and Cerdagne returned?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "vowed to maintain neutrality",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the Crown of Aragon vow in the Treaty of Barcelona?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which treaty included a vow of neutrality during French invasions of Italy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

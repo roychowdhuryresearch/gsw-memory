@@ -1,0 +1,467 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Savannah (Savannah, Georgia)",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "oldest city",
+            "historical city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Georgia",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "U.S. state",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Chatham County",
+      "roles": [
+        {
+          "role": "county",
+          "states": [
+            "location",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1733",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Savannah River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "British colonial capital",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "historical status",
+            "colonial period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Province of Georgia",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "historical region",
+            "colonial period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "first state capital",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "historical status",
+            "statehood period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "American Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "American Civil War",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "industrial center",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "economic role",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Atlantic seaport",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "geographical role",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "fifth-largest city",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "population rank",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "third-largest metropolitan area",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "population rank",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Savannah located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is located in Georgia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "county seat of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the county seat of Chatham County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which county has Savannah as its county seat?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Savannah established?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What city was established in 1733?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What river is Savannah located on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What city is located on the Savannah River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "became the British colonial capital of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What city became the British colonial capital of the Province of Georgia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was Savannah's role in the Province of Georgia?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "became the first state capital of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What city became the first state capital of Georgia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was Savannah's role in Georgia?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "strategic port city in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "In which events was Savannah a strategic port city?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What role did Savannah play in the American Revolution?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "is an industrial center and",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What is Savannah's role today?",
+          "answers": [
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which city is an industrial center and an important Atlantic seaport?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "is Georgia's fifth-largest city and",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "What is Savannah's rank among Georgia's cities?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Which city is Georgia's fifth-largest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "third-largest metropolitan area",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What is Savannah's rank among Georgia's metropolitan areas?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Which city has the third-largest metropolitan area in Georgia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

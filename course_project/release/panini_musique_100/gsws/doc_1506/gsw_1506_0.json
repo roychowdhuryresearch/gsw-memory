@@ -1,0 +1,307 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Emmaville (Emmaville, Minnesota)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "unincorporated community",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hubbard County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Minnesota",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Park Rapids",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Lake George",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "lake",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Hubbard County Roads 4 and 24",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "road junction",
+            "transport infrastructure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Clay Township",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "township",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Lake Emma Township",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "township",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "4",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "minimum estimate",
+            "demographic data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "29",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "maximum estimate",
+            "demographic data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Emmaville located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Hubbard County, Minnesota, United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "halfway between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is halfway between Park Rapids and Lake George?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where is Emmaville located in relation to Park Rapids and Lake George?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located at junction of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Emmaville located in terms of road junctions?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is located at the junction of Hubbard County Roads 4 and 24?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "within townships",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which townships is Emmaville located within?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located within Clay Township and Lake Emma Township?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "population estimate",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the population estimate range for Emmaville?",
+          "answers": [
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What location has a population estimate between 4 and 29?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,324 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jersey City (Jersey City, New Jersey)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "populous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New Jersey",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Newark",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "most populous in New Jersey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Hudson County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2016",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "population estimate year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "264,152",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "247,597",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "6.7%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "population increase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "77th",
+      "roles": [
+        {
+          "role": "rank",
+          "states": [
+            "national population rank"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Jersey City located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is located in New Jersey?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "most populous city in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the most populous city in New Jersey?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Newark's status in New Jersey?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "seat of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the seat of Hudson County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What county is Jersey City the seat of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Jersey City's population in 2016?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In what year was Jersey City's population 264,152?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Jersey City's population in 2010?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In what year was Jersey City's population 247,597?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "population increase",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the population increase of Jersey City since 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What percentage increase did Jersey City experience since 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "ranked",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is Jersey City's national population rank?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which city is ranked 77th in the nation by population?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

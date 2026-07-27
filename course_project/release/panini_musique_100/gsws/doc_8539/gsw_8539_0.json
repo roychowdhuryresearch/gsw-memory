@@ -1,0 +1,206 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "20th Century Fox",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "film production",
+            "controversy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ko Phi Phi Leh",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "natural setting",
+            "film location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "beach (The Beach (film))",
+      "roles": [
+        {
+          "role": "natural feature",
+          "states": [
+            "altered",
+            "damaged"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "tsunami of 2004",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "natural disaster",
+            "restoration impact"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "environmentalists",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "lawsuit filers",
+            "ecosystem protection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "altered by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was altered by 20th Century Fox?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who altered the beach?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the beach located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What natural feature is located in Ko Phi Phi Leh?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "damaged by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was damaged by the film production?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who caused damage to the beach?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "filed lawsuits",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who filed lawsuits against 20th Century Fox?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did environmentalists do in response to the beach alteration?",
+          "answers": [
+            "v4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "impacted by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What event impacted the damaged area?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was impacted by the tsunami of 2004?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

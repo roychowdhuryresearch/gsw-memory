@@ -1,0 +1,157 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Barefoot on the Beach",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "smooth jazz",
+            "1990s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "music album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Michael Franks",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer-songwriter",
+            "American"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "musician",
+          "states": [
+            "smooth jazz"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Windham Hill Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released Barefoot on the Beach?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released by Windham Hill Records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Barefoot on the Beach released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released in 1999?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who created Barefoot on the Beach?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album did Michael Franks create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

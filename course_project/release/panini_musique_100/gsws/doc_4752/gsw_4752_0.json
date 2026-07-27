@@ -1,0 +1,105 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Lots More Blues, Rags and Hollers",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "musical work",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Koerner, Ray & Glover",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "blues trio",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1964",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released the album Lots More Blues, Rags and Hollers?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Koerner, Ray & Glover release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the album Lots More Blues, Rags and Hollers released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released in 1964?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

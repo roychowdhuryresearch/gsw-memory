@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "78 rpm records",
+      "roles": [
+        {
+          "role": "media format",
+          "states": [
+            "audio playback",
+            "collectable",
+            "nostalgia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1950s",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context",
+            "mid-20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ewing Dunbar Nunn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "inventor",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Audiophile Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "founded in 1950s",
+            "specialized in audio quality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "33 1/3 rpm LPs",
+      "roles": [
+        {
+          "role": "media format",
+          "states": [
+            "standard format",
+            "vinyl records"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "vinyl (Phonograph record)",
+      "roles": [
+        {
+          "role": "material",
+          "states": [
+            "used in records",
+            "modern alternative to shellac"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "shellac",
+      "roles": [
+        {
+          "role": "material",
+          "states": [
+            "traditional record material",
+            "wider grooves"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Bell Records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "active in late 1950s",
+            "budget-priced records"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "7\" microgrooved records",
+      "roles": [
+        {
+          "role": "media format",
+          "states": [
+            "released by Bell Records",
+            "78 rpm"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who founded Audiophile Records?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Ewing Dunbar Nunn found?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What records were released by Audiophile Records?",
+          "answers": [
+            "e1",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who released 78 rpm records and 33 1/3 rpm LPs?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "made of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What material are the 78 rpm records made of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What records are made of vinyl?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When were the 7\" microgrooved records released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was released in the late 1950s by Bell Records?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

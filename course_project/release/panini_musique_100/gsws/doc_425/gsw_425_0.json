@@ -1,0 +1,263 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "New Jersey Department of Education",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "educational",
+            "governmental"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "District Factor Group",
+      "roles": [
+        {
+          "role": "classification system",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "A",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "lowest socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "B",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "CD",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "DE",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "FG",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "GH",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "I",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "J",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "highest socioeconomic status",
+            "educational classification"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "classified by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who classifies districts into District Factor Groups?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does the New Jersey Department of Education classify districts into?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "organized into",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What are districts organized into by socioeconomic characteristics?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What organizes districts by socioeconomic characteristics?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lowest group",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the lowest District Factor Group?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which group represents the lowest socioeconomic status?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "highest group",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the highest District Factor Group?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which group represents the highest socioeconomic status?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

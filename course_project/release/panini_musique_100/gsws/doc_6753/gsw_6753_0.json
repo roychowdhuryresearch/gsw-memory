@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Taxi Orange",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "reality show",
+            "alternative to Big Brother"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Austria",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "ORF",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "public broadcaster",
+            "Austrian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Big Brother",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "reality show",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "orange taxi",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "means of exit",
+            "interaction with outside world"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcast by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which channel broadcast Taxi Orange?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What show was broadcast by ORF?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "popular in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Taxi Orange popular?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What show was popular in Austria?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "alternative to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What show was an alternative to Big Brother?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What show is Taxi Orange an alternative to?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "allowed to leave in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How were participants allowed to leave the environment in Taxi Orange?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was the purpose of the orange taxi in Taxi Orange?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

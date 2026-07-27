@@ -1,0 +1,278 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Gallagher",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1919–1980",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "life span",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ronald Robinson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "historian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1920–1999",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "life span",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "European imperialism (Imperialism)",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "historical concept",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "British Empire",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical empire",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "World War I",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "early 20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "constructed framework for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who constructed a framework for understanding European imperialism?",
+          "answers": [
+            "e1",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did John Gallagher and Ronald Robinson construct a framework for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "life span",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the life span of John Gallagher?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who lived from 1919 to 1980?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What is the life span of Ronald Robinson?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who lived from 1920 to 1999?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "influential in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was European imperialism influential in?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was influential in European imperialism?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "rejected notion of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did Europeans reject the notion of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who rejected the notion of formal, legal control in imperialism?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "emigration, trade, and capital",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where did the bulk of British emigration, trade, and capital go?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What went to areas outside the formal British Empire?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "grew significantly",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What grew significantly because of imperialism?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Why did the world's economy grow significantly before World War I?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

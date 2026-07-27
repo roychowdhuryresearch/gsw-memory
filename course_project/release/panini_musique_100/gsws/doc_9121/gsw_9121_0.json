@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pierre Bayle",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Huguenot refugee",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Netherlands",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "Huguenot refuge"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rotterdam",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "teaching location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Historical and Critical Dictionary",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "multi-volume",
+            "masterpiece"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "US Library of Congress",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "library",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Huguenot (Huguenots)",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "French Protestant",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Dutch Revolt",
+      "roles": [
+        {
+          "role": "historical event",
+          "states": [
+            "rebellion",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Saint Nicolas",
+      "roles": [
+        {
+          "role": "saint",
+          "states": [
+            "patron saint",
+            "feast celebration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Sint Nicolaas",
+      "roles": [
+        {
+          "role": "tradition",
+          "states": [
+            "Dutch feast",
+            "Sinterklaas"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "taught in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Pierre Bayle teach?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who taught in Rotterdam?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "wrote and published",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did Pierre Bayle write and publish?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who wrote and published the Historical and Critical Dictionary?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "included in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is included in the 100 foundational texts of the US Library of Congress?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is the Historical and Critical Dictionary included?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "associated with",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which group is associated with the Dutch Revolt?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event are the Huguenots associated with?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "celebration of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is celebrated by some Huguenot families?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who celebrates Saint Nicolas?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "similar to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the celebration of Saint Nicolas similar to?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is Sint Nicolaas similar to?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,206 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Shirley Abicair",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Melbourne, Victoria, Australia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "Australia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1935",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "possible birth year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Wing Commander",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "military rank",
+            "RAAF"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "RAAF",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "military",
+            "Australia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Shirley Abicair born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Melbourne, Victoria, Australia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "possible birth year",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is a possible birth year for Shirley Abicair?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who might have been born in 1935?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "daughter of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the daughter of a Wing Commander in the RAAF?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Whose daughter is Shirley Abicair?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "military rank",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What military rank did Shirley Abicair's father hold?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who held the military rank of Wing Commander?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What organization was Shirley Abicair's father part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was part of the RAAF?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

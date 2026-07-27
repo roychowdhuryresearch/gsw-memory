@@ -42,6 +42,12 @@ MODEL_CONFIG = {
         "model": "Qwen/Qwen3-Reranker-8B",
         "quantization": "4bit-nf4-recommended-for-colab",
     },
+    "answer_model": {
+        "model": "Qwen/Qwen3-4B",
+        "quantization": "4bit-nf4-recommended-for-colab",
+        "evidence_only": True,
+        "insufficient_evidence_token": "N/A",
+    },
 }
 
 
@@ -98,16 +104,16 @@ def finalize(args: argparse.Namespace) -> dict[str, Any]:
         package / "requirements-colab.txt",
     )
     shutil.copy2(project / "PROJECT_SPEC.md", package / "PROJECT_SPEC.md")
-    shutil.copy2(project / "DATA_CARD.md", package / "DATA_CARD.md")
+    shutil.copy2(args.data_card.resolve(), package / "DATA_CARD.md")
     shutil.copy2(project / "quickstart.py", package / "quickstart.py")
     shutil.copy2(
         project / "Panini_Course_Project.ipynb",
         package / "Panini_Course_Project.ipynb",
     )
-    shutil.copy2(
-        project / "STANDALONE_README.md",
-        package / "README.md",
-    )
+    shutil.copy2(args.readme.resolve(), package / "README.md")
+    handout = project / "handout" / "project3.pdf"
+    if handout.exists():
+        shutil.copy2(handout, package / "PROJECT_HANDOUT.pdf")
 
     models_dir = package / "models"
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -157,6 +163,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         help="Separate destination for held-out labels and full decompositions.",
     )
     parser.add_argument("--decomposition-prompt", type=Path, required=True)
+    parser.add_argument(
+        "--readme",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "STANDALONE_README.md",
+    )
+    parser.add_argument(
+        "--data-card",
+        type=Path,
+        default=Path(__file__).resolve().parents[1] / "DATA_CARD.md",
+    )
     return parser.parse_args(argv)
 
 

@@ -1,0 +1,301 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dr. Rózsa Hoffmann (Rózsa Hoffmann)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "politician",
+            "educator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "22 January 1948",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hungarian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Secretary of State for Education",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "government position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Ministry of National Resources",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "government ministry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2 June 2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "27 February 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Secretary of State for Public Education",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "government position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "28 February 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "June 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on 22 January 1948?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Dr. Rózsa Hoffmann born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the nationality of Dr. Rózsa Hoffmann?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Hungarian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "held position",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position did Dr. Rózsa Hoffmann hold from 2 June 2010 to 27 February 2013?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who held the position of Secretary of State for Education?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which ministry was the Secretary of State for Education part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What position was part of the Ministry of National Resources?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "appointed on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Dr. Rózsa Hoffmann appointed Secretary of State for Public Education?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was appointed on 28 February 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "held until",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Until when did Dr. Rózsa Hoffmann hold the position of Secretary of State for Public Education?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who held a position until June 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

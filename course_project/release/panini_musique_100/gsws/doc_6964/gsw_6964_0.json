@@ -1,0 +1,250 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Kate Kellaway",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "journalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Bill Kellaway",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "parent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Deborah Kellaway",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "parent",
+            "teacher"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lucy Kellaway",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "journalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Camden School for Girls",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "school"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Lady Margaret Hall, Oxford",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "university"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "English",
+      "roles": [
+        {
+          "role": "subject",
+          "states": [
+            "academic",
+            "language"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "daughter of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the daughter of Bill and Deborah Kellaway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who are the parents of Kate Kellaway?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "sibling of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the sibling of Lucy Kellaway?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is the sibling of Kate Kellaway?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "educated at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Kate Kellaway educated?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was educated at Camden School for Girls?",
+          "answers": [
+            "e1",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who was educated at Lady Margaret Hall, Oxford?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "studied",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "What did Kate Kellaway study at Lady Margaret Hall, Oxford?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Who studied English at Lady Margaret Hall, Oxford?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "teacher at",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "Where was Deborah Kellaway a teacher?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who was a teacher at Camden School for Girls?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,326 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Battle of Seven Oaks",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical battle",
+            "Pemmican War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "19 June 1816",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Seven Oaks",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical site",
+            "present day Winnipeg, Manitoba"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Métis",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "belligerent",
+            "North West Company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "North West Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "belligerent",
+            "historical company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hudson's Bay Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "belligerent",
+            "historical company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Cuthbert Grant",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "commander",
+            "Métis leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Robert Semple",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "commander",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "21",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "casualties and losses",
+            "Hudson's Bay Company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Battle of Seven Oaks National Historic Site of Canada",
+      "roles": [
+        {
+          "role": "site",
+          "states": [
+            "official name",
+            "designated 1920"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1920",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "designation year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "occurred on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the Battle of Seven Oaks occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event occurred on 19 June 1816?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "took place at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did the Battle of Seven Oaks take place?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event took place at Seven Oaks?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "resulted in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the result of the Battle of Seven Oaks?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which battle resulted in a decisive Métis / North West Company victory?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "commanded by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who commanded the Métis at the Battle of Seven Oaks?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who commanded the Hudson's Bay Company at the Battle of Seven Oaks?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "casualties and losses",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many casualties and losses did the Hudson's Bay Company suffer at the Battle of Seven Oaks?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which battle resulted in 21 casualties and losses for the Hudson's Bay Company?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "designated as",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the official name of the site designated in 1920?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When was the Battle of Seven Oaks National Historic Site of Canada designated?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,146 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ansidei Madonna",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "artwork",
+            "main painting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Saint John the Baptist Preaching",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "artwork",
+            "predella"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "National Gallery",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "art museum",
+            "London"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "London",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "capital city",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Ansidei Madonna located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What painting is located at the National Gallery?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Saint John the Baptist Preaching located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What painting is located at the National Gallery?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is the National Gallery located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is located in London?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

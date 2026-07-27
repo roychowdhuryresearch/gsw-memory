@@ -1,0 +1,341 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Detroit",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1802",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "incorporation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "74",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "total mayors"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Louis Miriani",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Republican Party"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1957 to 1962",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "term of office"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1973",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Coleman Young",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "first black mayor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Dennis Archer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "former Michigan Supreme Court Justice"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "three casinos",
+      "roles": [
+        {
+          "role": "entity",
+          "states": [
+            "redevelopment plan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "casino resort hotels",
+      "roles": [
+        {
+          "role": "entity",
+          "states": [
+            "major establishments"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "incorporated in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Detroit incorporated?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city was incorporated in 1802?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "had a total of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many mayors has Detroit had?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which city had a total of 74 mayors?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "last Republican mayor",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was Detroit's last Republican mayor?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which city had Louis Miriani as its last Republican mayor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "served from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Louis Miriani serve as mayor?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who served as mayor from 1957 to 1962?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "elected first black mayor",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was elected as Detroit's first black mayor?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which city elected Coleman Young as its first black mayor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "refocused on redevelopment",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who refocused Detroit on redevelopment?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did Dennis Archer refocus Detroit on?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "established operations in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When did casino resort hotels establish operations in Detroit?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What established operations in Detroit by 2008?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

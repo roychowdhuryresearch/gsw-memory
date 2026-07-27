@@ -1,0 +1,368 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Richmond area (Richmond, Virginia)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical area",
+            "Virginia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Amtrak",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "rail service",
+            "transportation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Staples Mill Road Station",
+      "roles": [
+        {
+          "role": "railroad station",
+          "states": [
+            "suburban",
+            "Richmond area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Main Street Station",
+      "roles": [
+        {
+          "role": "railroad station",
+          "states": [
+            "historic",
+            "Richmond city limits"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2004",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "renovation year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "service status",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Washington, D.C.",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Philadelphia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Raleigh",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Durham",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Savannah",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Newport News",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Williamsburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Florida",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "served by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which railroad stations are served by Amtrak in the Richmond area?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who serves the railroad stations in the Richmond area?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Staples Mill Road Station located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What station is located on a major north-south freight line?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "renovated in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the Main Street Station renovated?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What station was renovated in 2004?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "receives trains to and from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which station receives trains to and from Newport News and Williamsburg?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where do trains from Main Street Station go to and from?",
+          "answers": [
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "receives more trains",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which station receives more trains overall?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What does the Staples Mill Road Station receive more of?",
+          "answers": [
+            "trains"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

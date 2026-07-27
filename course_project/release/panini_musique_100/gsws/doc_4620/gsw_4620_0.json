@@ -1,0 +1,384 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "KGLK",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "classic rock format",
+            "licensed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "107.5 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Eagle @ 107-5",
+      "roles": [
+        {
+          "role": "brand name",
+          "states": [
+            "station branding"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lake Jackson, Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "license location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "KHPT",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "simulcast partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "106.9 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Conroe, Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "simulcast location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Cox Media Group",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "KTHT",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "cluster member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "KKBQ",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "cluster member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Houston metropolitan area",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "surveyed area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Suite 2300, 1990 Post Oak Blvd, Uptown district, Houston, Texas, United States",
+      "roles": [
+        {
+          "role": "address",
+          "states": [
+            "headquarters location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Liverpool, TX",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "main transmitter location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "KKBQ backup site",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "backup transmitter site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is KGLK licensed to?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station is licensed to Lake Jackson, Texas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "simulcast on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What station is KGLK simulcast on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which station simulcasts on 106.9 FM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who owns KGLK?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station is owned by Cox Media Group?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of cluster",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What stations are part of the same cluster as KGLK?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which cluster includes KTHT, KHPT, and KKBQ?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "headquartered at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is 'The Eagle' headquartered?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is headquartered at Suite 2300, 1990 Post Oak Blvd?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "main transmitter located at",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where are KGLK's main transmitter facilities located?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What station has its main transmitter near Liverpool, TX?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "backup transmitter site",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where is KGLK's backup transmitter site located?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What station has a backup transmitter site co-located at the KKBQ backup site?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

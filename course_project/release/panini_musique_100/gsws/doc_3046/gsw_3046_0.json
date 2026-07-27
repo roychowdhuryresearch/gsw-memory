@@ -1,0 +1,255 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tijuana Jazz",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz genre",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Gary McFarland",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Clark Terry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1965",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Impulse! label",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "UK",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "HMV label",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "CLP3541",
+      "roles": [
+        {
+          "role": "catalog number",
+          "states": [
+            "album identifier",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded Tijuana Jazz?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Gary McFarland and Clark Terry record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Tijuana Jazz recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was recorded in 1965?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which label released Tijuana Jazz?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released by the Impulse! label?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was Tijuana Jazz released as CLP3541?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album was released in the UK as CLP3541?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "catalog number",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the catalog number of Tijuana Jazz in the UK?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which album has the catalog number CLP3541?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

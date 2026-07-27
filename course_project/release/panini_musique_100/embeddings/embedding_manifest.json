@@ -1,0 +1,35 @@
+{
+  "model": "Qwen/Qwen3-Embedding-8B",
+  "dtype_during_inference": "bfloat16",
+  "stored_dtype": "float16",
+  "dimension": 4096,
+  "normalized": true,
+  "instruction_format": "Instruct: {task}\\nQuery: {text}",
+  "max_length": 512,
+  "tables": {
+    "entity": {
+      "rows": 8260,
+      "dimension": 4096,
+      "dtype": "float16",
+      "matrix_sha256": "fee558d3440985775b2042a5d78715002f8c8ae0f21a1609782fd9c9c3e6c152",
+      "ids_sha256": "8a00a879136a884ef836c7f4655d31f7158d27ded31b66a1c540092dbd915370",
+      "task": "Given an entity name and its contextual roles/states, create an embedding that captures the entity's identity for semantic search and retrieval. Use the roles and states to determine similarity."
+    },
+    "qa": {
+      "rows": 9991,
+      "dimension": 4096,
+      "dtype": "float16",
+      "matrix_sha256": "9c47ae51407ae48ff8ea8dd640d21925fac24eef7e4f7f17414614f520b957de",
+      "ids_sha256": "acf84f16ed181ee21c946578498d70b2609dee9dcfc0f21e12f3b6b38647c2f5",
+      "task": "Given a question-answer pair, create an embedding that captures the semantic meaning for similarity comparison with user queries."
+    },
+    "query": {
+      "rows": 280,
+      "dimension": 4096,
+      "dtype": "float16",
+      "matrix_sha256": "1061496f2eda712021657dbeb50769697356b6cf77ebba83e99cabe8afe0a248",
+      "ids_sha256": "6b08b38805d4217b828bab4299a02fa3ed59fef9f599564eab3536ddd4740a38",
+      "task": "Given a query, create an embedding that captures the semantic meaning for similarity comparison with QA pairs."
+    }
+  }
+}

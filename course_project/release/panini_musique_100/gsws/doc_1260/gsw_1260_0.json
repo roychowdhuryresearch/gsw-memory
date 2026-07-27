@@ -1,0 +1,338 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Minnehaha Creek",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "waterway"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "22 miles",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "length",
+            "imperial"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "35 km",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "length",
+            "metric"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mississippi River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "major waterway"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Gray's Bay Dam",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "dam",
+            "starting point"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Lake Minnetonka",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "lake",
+            "source"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Minnetonka",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "suburban"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hopkins",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "suburban"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Saint Louis Park",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "suburban"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Edina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "suburban"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Minneapolis",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "urban"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Minnehaha Falls",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "waterfall",
+            "natural attraction"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Minnehaha Park",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "park",
+            "recreational area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "flows into",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does Minnehaha Creek flow into?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What flows into the Mississippi River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "starts at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where does Minnehaha Creek start?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What starts at Gray's Bay Dam?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "flows through",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What cities does Minnehaha Creek flow through?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What flows through Minnetonka, Hopkins, Saint Louis Park, Edina, and Minneapolis?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "flows over",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What does Minnehaha Creek flow over?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What flows over Minnehaha Falls?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is Minnehaha Falls located?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is located in Minnehaha Park?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

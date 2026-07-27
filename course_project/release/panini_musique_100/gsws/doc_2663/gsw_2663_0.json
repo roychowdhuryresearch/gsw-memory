@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Barton Premium (Barton Premium Blend)",
+      "roles": [
+        {
+          "role": "product",
+          "states": [
+            "whiskey",
+            "alcoholic beverage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kentucky Blended whiskey",
+      "roles": [
+        {
+          "role": "type",
+          "states": [
+            "whiskey category"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Bardstown, Kentucky",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "production location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Sazerac Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "producer",
+            "beverage industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Barton 1792 Distillery",
+      "roles": [
+        {
+          "role": "facility",
+          "states": [
+            "distillery",
+            "production site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "16 oz pint bottles",
+      "roles": [
+        {
+          "role": "packaging",
+          "states": [
+            "glass",
+            "size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "750ml bottles",
+      "roles": [
+        {
+          "role": "packaging",
+          "states": [
+            "glass",
+            "size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1-liter bottles",
+      "roles": [
+        {
+          "role": "packaging",
+          "states": [
+            "glass",
+            "size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1.75L bottles",
+      "roles": [
+        {
+          "role": "packaging",
+          "states": [
+            "plastic",
+            "size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "produced in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Barton Premium produced?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is produced in Bardstown, Kentucky?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who produces Barton Premium?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What does the Sazerac Company produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "produced at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Barton Premium produced?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is produced at Barton 1792 Distillery?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "type of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What type of whiskey is Barton Premium?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which whiskey is a Kentucky Blended whiskey?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "sold in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "In what packaging sizes is Barton Premium sold?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What whiskey is sold in 16 oz pint bottles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

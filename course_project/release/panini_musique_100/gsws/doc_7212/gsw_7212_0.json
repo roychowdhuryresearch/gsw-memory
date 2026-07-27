@@ -1,0 +1,242 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Gmina Włodawa",
+      "roles": [
+        {
+          "role": "administrative district",
+          "states": [
+            "rural",
+            "Polish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Włodawa County",
+      "roles": [
+        {
+          "role": "county",
+          "states": [
+            "Polish",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lublin Voivodeship",
+      "roles": [
+        {
+          "role": "voivodeship",
+          "states": [
+            "Polish",
+            "administrative region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European",
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Belarus",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European",
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ukraine",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European",
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Włodawa",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "Polish",
+            "administrative seat"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Gmina Włodawa located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Włodawa County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What is located in Lublin Voivodeship?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Poland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "borders",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Gmina Włodawa border?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What borders Belarus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What borders Ukraine?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "seat of",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "What is the seat of Gmina Włodawa?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What is Włodawa the seat of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "not part of",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "What is not part of the territory of Gmina Włodawa?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What territory is Włodawa not part of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

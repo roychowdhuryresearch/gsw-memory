@@ -1,0 +1,145 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Marian reforms",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "military reform",
+            "Roman Republic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "107 BC",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of reform",
+            "ancient history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Gaius Marius",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "statesman",
+            "general",
+            "Roman Republic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Roman Republic",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "ancient Rome",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "initiated by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who initiated the Marian reforms?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What reforms did Gaius Marius initiate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "occurred in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did the Marian reforms occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What occurred in 107 BC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was part of the Roman Republic?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What political entity were the Marian reforms part of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

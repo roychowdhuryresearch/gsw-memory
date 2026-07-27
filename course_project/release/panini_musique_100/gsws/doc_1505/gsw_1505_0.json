@@ -1,0 +1,210 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WHRZ-LP",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "non-commercial",
+            "low-power FM"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "104.1 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "FM band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Z",
+      "roles": [
+        {
+          "role": "nickname",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Spartanburg, South Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "broadcast location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "FCC",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "licensing authority"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "47 watts",
+      "roles": [
+        {
+          "role": "power",
+          "states": [
+            "effective radiated power"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "0.047 kW",
+      "roles": [
+        {
+          "role": "power",
+          "states": [
+            "effective radiated power"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is WHRZ-LP also known as?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station is known as The Z?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is WHRZ-LP located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which radio station is located in Spartanburg, South Carolina?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "licensed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who licenses WHRZ-LP?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which radio station is licensed by the FCC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcasts with",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the ERP of WHRZ-LP?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station broadcasts with an ERP of 47 watts?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

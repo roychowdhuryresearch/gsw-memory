@@ -1,0 +1,256 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "CNN/YouTube presidential debates",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "televised debates",
+            "political"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "political context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Democratic Party installment",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political",
+            "debate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Charleston, South Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "debate location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "July 23, 2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "air date",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Republican Party installment",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political",
+            "debate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "St. Petersburg, Florida",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "debate location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "November 28, 2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "air date",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "YouTube",
+      "roles": [
+        {
+          "role": "platform",
+          "states": [
+            "video sharing",
+            "digital media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "aired on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the Democratic Party installment air?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What aired on July 23, 2007?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "When did the Republican Party installment air?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What aired on November 28, 2007?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "took place in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did the Democratic Party installment take place?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What took place in Charleston, South Carolina?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Where did the Republican Party installment take place?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What took place in St. Petersburg, Florida?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "questions submitted through",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Through what platform were questions submitted for the debates?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was submitted through YouTube for the debates?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

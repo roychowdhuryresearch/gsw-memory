@@ -1,0 +1,470 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "2000",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "4,564",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1,979",
+      "roles": [
+        {
+          "role": "households",
+          "states": [
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1,258",
+      "roles": [
+        {
+          "role": "families",
+          "states": [
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1,762.4",
+      "roles": [
+        {
+          "role": "population density",
+          "states": [
+            "people per square mile",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "680.4",
+      "roles": [
+        {
+          "role": "population density",
+          "states": [
+            "people per km²",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2,191",
+      "roles": [
+        {
+          "role": "housing units",
+          "states": [
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "846.0",
+      "roles": [
+        {
+          "role": "housing density",
+          "states": [
+            "units per square mile",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "326.6",
+      "roles": [
+        {
+          "role": "housing density",
+          "states": [
+            "units per km²",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "97.98%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "White",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "0.64%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "African American",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "0.33%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "Native American",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "0.20%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "Asian",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "0.07%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "other races",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "0.79%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "two or more races",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e16",
+      "name": "0.53%",
+      "roles": [
+        {
+          "role": "ethnic makeup",
+          "states": [
+            "Hispanic or Latino",
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was the population in 2000?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In which year was the population 4,564?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "households in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many households were there in 2000?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In which year were there 1,979 households?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "families in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many families were there in 2000?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which year were there 1,258 families?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "population density in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the population density per square mile in 2000?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was the population density per km² in 2000?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "housing units in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many housing units were there in 2000?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which year were there 2,191 housing units?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "housing density in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the housing density per square mile in 2000?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was the housing density per km² in 2000?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "racial makeup in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What percentage of the population was White in 2000?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What percentage of the population was African American in 2000?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "What percentage of the population was Native American in 2000?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What percentage of the population was Asian in 2000?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q17",
+          "text": "What percentage of the population was from other races in 2000?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What percentage of the population was from two or more races in 2000?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "ethnic makeup in",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What percentage of the population was Hispanic or Latino in 2000?",
+          "answers": [
+            "e16"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

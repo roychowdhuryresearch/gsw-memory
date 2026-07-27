@@ -1,0 +1,182 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Julian Marshall (Julian Marshall (journalist))",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "journalist",
+            "broadcaster"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "British",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "BBC",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "media",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Newshour",
+      "roles": [
+        {
+          "role": "program",
+          "states": [
+            "radio show",
+            "news"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "BBC World Service",
+      "roles": [
+        {
+          "role": "service",
+          "states": [
+            "international broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "works for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who works for the BBC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where does Julian Marshall work?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Julian Marshall's nationality?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is British?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "presents",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who presents Newshour?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What program does Julian Marshall present?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcast on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is Newshour broadcast?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What program is broadcast on the BBC World Service?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

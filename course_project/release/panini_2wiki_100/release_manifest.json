@@ -33,14 +33,21 @@
     "reranker": {
       "model": "Qwen/Qwen3-Reranker-8B",
       "quantization": "4bit-nf4-recommended-for-colab"
+    },
+    "answer_model": {
+      "model": "Qwen/Qwen3-4B",
+      "quantization": "4bit-nf4-recommended-for-colab",
+      "evidence_only": true,
+      "insufficient_evidence_token": "N/A"
     }
   },
-  "artifact_count": 810,
+  "artifact_count": 811,
   "artifacts": {
     "DATA_CARD.md": "1d71c954045cec6d1d559380e8e1522240cd038375f12f0d00248ee9c82c3366",
-    "PROJECT_SPEC.md": "ad98b029698257d1048e6d96fdeb9f8ffe92f220107aa99dbe33b6d53f507504",
-    "Panini_Course_Project.ipynb": "80ea51a04b58193f5d441002995bae374057ef3a3271ff7c32c8b9f4849fefb3",
-    "README.md": "4bef4474ed255d3a29b4a72ca78c4a0e84b149145a85e483676ed4df8e687556",
+    "PROJECT_HANDOUT.pdf": "d69ff51877f5f60b44480800d127e862f6f1ce53d39bb2aab15a429949e236fa",
+    "PROJECT_SPEC.md": "b3a83f1dff90d5b448dd128a877ceb63cc97ece72a48fb8f560301622197dedd",
+    "Panini_Course_Project.ipynb": "dc55f0ee911ae8c1a998c568a54349c8c09151f4bee97619475a4a06ce832d08",
+    "README.md": "f38880f86d07f5d5980a1d8c3edab52b0800f521d7b48cd6af6a4a39846f9b1a",
     "documents.jsonl": "737e125c029dbd0866583d8cc76ae5a732a07228b27543f453b24a59b70fe81d",
     "embeddings/embedding_manifest.json": "311bb1643b632d724eb5ba809b4c18e2c39fc6fde3ba8ce157bf663bd3beb262",
     "embeddings/entity_embeddings.npy": "ed75b8f48e878004ec01d10554d0c82b8fc4b1681c15029f97a15e80abcb9cc6",
@@ -831,7 +838,7 @@
     "metadata/entities.jsonl": "e509a2656ea2b09f5fdd204e81cc77eec814105f010683812463cef68a7afdcf",
     "metadata/qa_pairs.jsonl": "1603ed650ac4e9654fcdc17d4cc9f182c818eb48dade000fc0530844a593675a",
     "models/decomposition_prompt.txt": "26782685ca94657cba11fbe6defaca36b2f061fe355a57a44df3c09ab7a2b540",
-    "models/model_config.json": "c5767e54a9b7c9aa70cbf35d2b76f75a8fea1686d1866fae548343655bbec397",
+    "models/model_config.json": "70b14d647eea1a7fef841aee142f402671e154143d73b68a35f5c0179f7ca818",
     "panini_course/__init__.py": "f5e777c00fa7aa1cda2442b2dadf3bc22e8430815f118cffd2a6c9cd0370370c",
     "panini_course/artifacts.py": "879029799505cf162ebcb03456ed1a515fb5a9b9bb9e332cfc13e2788ec54d12",
     "panini_course/graph.py": "5af7af00f993a52f5e08b693c26d4ab23ff7a6f7302a1686b6a2e75d49869d4e",

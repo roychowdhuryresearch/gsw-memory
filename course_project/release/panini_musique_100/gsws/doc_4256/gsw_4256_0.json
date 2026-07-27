@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "CKGL",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Canadian",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "570 AM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "AM band",
+            "broadcasting frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kitchener, Ontario",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "broadcasting location",
+            "Canadian city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "News/Talk",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "radio format",
+            "content type"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "570 News",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "on-air branding",
+            "radio station identity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Rogers Media",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media conglomerate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcasts at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What frequency does CKGL broadcast at?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station broadcasts at 570 AM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is CKGL located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station is located in Kitchener, Ontario?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcasts format",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What format does CKGL broadcast?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station broadcasts a News/Talk format?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "branded as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is CKGL branded as on-air?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station is branded as 570 News?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who owns CKGL?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What radio station is owned by Rogers Media?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

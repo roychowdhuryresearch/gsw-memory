@@ -1,0 +1,292 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "E. Denise Simmons",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cambridge, Massachusetts",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "2008–2009",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "mayoral term"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Kenneth Reeves",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "African-American",
+      "roles": [
+        {
+          "role": "ethnicity",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "lesbian",
+      "roles": [
+        {
+          "role": "sexual orientation",
+          "states": [
+            "LGBTQ+"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "gay",
+      "roles": [
+        {
+          "role": "sexual orientation",
+          "states": [
+            "LGBTQ+"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "mayor",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "political position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "city manager",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "administrative position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "served as mayor of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who served as mayor of Cambridge, Massachusetts?",
+          "answers": [
+            "e1",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did E. Denise Simmons serve as mayor?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first openly lesbian African-American mayor",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was the first openly lesbian African-American mayor in the United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was E. Denise Simmons known for being the first of?",
+          "answers": [
+            "e6",
+            "e5",
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "first openly gay African-American mayor",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was the first openly gay African-American mayor in the United States?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was Kenneth Reeves known for being the first of?",
+          "answers": [
+            "e7",
+            "e5",
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "mayoral term",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did E. Denise Simmons serve her first mayoral term?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who served a mayoral term during 2008–2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "head of the city's legislative body",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What position did E. Denise Simmons hold as mayor?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who served as head of the city's legislative body in Cambridge?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "city's chief executive officer",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who serves as the city's chief executive officer in Cambridge?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What role does the city manager have in Cambridge?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,229 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ashkenazi Jews",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "genetic subgroup",
+            "homogeneous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "study year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical Jewish population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical Jewish population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Hungary",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical Jewish population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Lithuania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical Jewish population"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Haredi Jews",
+      "roles": [
+        {
+          "role": "religious group",
+          "states": [
+            "Jewish sect",
+            "endogamous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hasidic sects",
+      "roles": [
+        {
+          "role": "religious sect",
+          "states": [
+            "Jewish sect",
+            "endogamous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "found to be",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was found to be a homogeneous genetic subgroup in 2006?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When were Ashkenazi Jews found to be a homogeneous genetic subgroup?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "originated from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Ashkenazi Jews originate from?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which ethnic group originated from Poland, Russia, Hungary, and Lithuania?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "marry exclusively",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who do many Haredi Jews marry exclusively?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who marries exclusively fellow Ashkenazi Jews?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "members of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who are members of Hasidic sects?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which sects have members that are Haredi Jews?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

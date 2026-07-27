@@ -1,0 +1,288 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jonathan Edwards",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "religious leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Northampton, Massachusetts",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical location",
+            "religious revival"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Puritan",
+      "roles": [
+        {
+          "role": "religious affiliation",
+          "states": [
+            "historical context",
+            "Calvinist roots"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Calvinist",
+      "roles": [
+        {
+          "role": "religious affiliation",
+          "states": [
+            "historical context",
+            "Puritan roots"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "George Whitefield",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "religious leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "England",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "colonies",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical context",
+            "preaching area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Millennial church",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "religious belief",
+            "equality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "blacks",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "historical context",
+            "equality belief"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "whites",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "historical context",
+            "equality belief"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "began revival in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who began the revival in Northampton, Massachusetts?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did Jonathan Edwards begin the revival?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "came from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What religious roots did Jonathan Edwards come from?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who came from Puritan and Calvinist roots?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "visited from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who visited from England?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where did George Whitefield visit from?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "traveled throughout",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who traveled throughout the colonies?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did George Whitefield travel throughout?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "believed in equality in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who believed that blacks would acquire equality with whites in the Millennial church?",
+          "answers": [
+            "e1",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In what context did Jonathan Edwards and George Whitefield believe blacks would acquire equality with whites?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

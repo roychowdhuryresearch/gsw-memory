@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Kennedy (Lucy Kennedy)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "middle child"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Sandycove, Dublin",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "residential area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "John Kennedy",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "father"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "The Lucy Kennedy Show",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "entertainment",
+            "featuring John Kennedy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "grew up in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Kennedy grow up?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who grew up in Sandycove, Dublin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "father of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the father of Kennedy?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is John Kennedy the father of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "featured on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which show featured John Kennedy as a pianist?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was featured on The Lucy Kennedy Show as a pianist?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

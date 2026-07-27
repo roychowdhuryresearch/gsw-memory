@@ -1,0 +1,355 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "New Haven (New Haven, Connecticut)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "historical sports location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "19th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New York Giants",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NFL team",
+            "historical presence in New Haven"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "National Football League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "professional sports league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1973 to 1974",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "historical period",
+            "sports event duration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Yale Bowl",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "New Haven Arena",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1926",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "construction year",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1972",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "demolition year",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "New Haven Coliseum",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1972–2002",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "operational period",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Yale Field",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "1928–present",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "operational period",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "home to sports teams",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What city has been home to professional sports teams?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What has New Haven been home to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "played at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did the New York Giants play from 1973 to 1974?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which team played at the Yale Bowl from 1973 to 1974?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "constructed in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the New Haven Arena constructed?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was constructed in 1926?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "demolished in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the New Haven Arena demolished?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was demolished in 1972?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "operational from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the New Haven Coliseum operational?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was operational from 1972 to 2002?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "operational since",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Since when has Yale Field been operational?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What has been operational since 1928?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

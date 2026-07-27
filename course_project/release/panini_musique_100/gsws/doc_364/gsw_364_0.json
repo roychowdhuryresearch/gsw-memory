@@ -1,0 +1,266 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tumaraa",
+      "roles": [
+        {
+          "role": "commune",
+          "states": [
+            "French Polynesia",
+            "least populous on Raiatea"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "French Polynesia",
+      "roles": [
+        {
+          "role": "territory",
+          "states": [
+            "overseas territory of France",
+            "Pacific Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation",
+            "colonial power"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pacific Ocean",
+      "roles": [
+        {
+          "role": "ocean",
+          "states": [
+            "location of French Polynesia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Raiatea",
+      "roles": [
+        {
+          "role": "island",
+          "states": [
+            "location of Tumaraa",
+            "part of Leeward Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Leeward Islands",
+      "roles": [
+        {
+          "role": "island group",
+          "states": [
+            "part of Society Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Society Islands",
+      "roles": [
+        {
+          "role": "archipelago",
+          "states": [
+            "includes Leeward Islands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "3,721",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2017 census",
+            "Tumaraa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is a commune of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Tumaraa a commune of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which commune is part of French Polynesia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "is located on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the commune of Tumaraa located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located on the island of Raiatea?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What are the Leeward Islands part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which island group is part of the Society Islands?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "had a population of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the population of Tumaraa in 2017?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which commune had a population of 3,721 in 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "census year",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the census that recorded Tumaraa's population?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event took place in 2017 related to Tumaraa?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

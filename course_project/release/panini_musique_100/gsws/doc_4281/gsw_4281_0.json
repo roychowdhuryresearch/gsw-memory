@@ -1,0 +1,261 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mays (Willie Mays)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "National League (NL) Most Valuable Player (MVP) awards",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "baseball",
+            "prestigious"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "660 home runs",
+      "roles": [
+        {
+          "role": "achievement",
+          "states": [
+            "career total",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "third",
+      "roles": [
+        {
+          "role": "rank",
+          "states": [
+            "at retirement",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "fifth",
+      "roles": [
+        {
+          "role": "rank",
+          "states": [
+            "current",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "12 Gold Glove awards",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "baseball",
+            "defensive"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1957",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "award introduction",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who won two National League (NL) Most Valuable Player (MVP) awards?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What awards did Mays win?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ended career with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who ended their career with 660 home runs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "How many home runs did Mays end his career with?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "ranked at retirement",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was Mays' rank in home runs at the time of his retirement?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was ranked third in home runs at the time of retirement?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "currently ranked",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Mays' current rank in home runs?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is currently ranked fifth in home runs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who won a record-tying 12 Gold Glove awards?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What awards did Mays win a record-tying number of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "introduced in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was the Gold Glove award introduced?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What award was introduced in 1957?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,238 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Boiron",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "manufacturer",
+            "homeopathic products"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "France",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters",
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "59 countries",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "operating presence",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2004",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "early 2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2,779",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "workforce size",
+            "employment"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "€ 313 million",
+      "roles": [
+        {
+          "role": "amount",
+          "states": [
+            "turnover",
+            "financial"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "CAC Small 90",
+      "roles": [
+        {
+          "role": "stock index",
+          "states": [
+            "membership",
+            "financial market"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "headquartered in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Boiron headquartered?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which company is headquartered in France?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "operating presence in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "In how many countries does Boiron have an operating presence?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which company has an operating presence in 59 countries?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "employed",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many people did Boiron employ in 2004?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which company employed 2,779 people in 2004?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "turnover of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Boiron's turnover in 2004?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which company had a turnover of € 313 million in 2004?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which stock index is Boiron a member of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which company is a member of the CAC Small 90 stock index?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

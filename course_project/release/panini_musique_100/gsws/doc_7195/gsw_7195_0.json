@@ -1,0 +1,239 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Have n't Met You Yet (Haven't Met You Yet)",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "single",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Michael Bublé",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "Canadian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Crazy Love",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "fourth album",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "August 31, 2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Alan Chang",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Amy Foster-Gilles",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Luisana Lopilato",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "fiancée",
+            "wife",
+            "actress"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "first single from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the first single from Crazy Love?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "From which album is 'Have n't Met You Yet' the first single?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was 'Have n't Met You Yet' released?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song was released on August 31, 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "co-wrote",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who co-wrote 'Have n't Met You Yet'?",
+          "answers": [
+            "e2",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song did Michael Bublé, Alan Chang, and Amy Foster-Gilles co-write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "dedicated to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "To whom did Michael Bublé dedicate 'Have n't Met You Yet'?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What song did Michael Bublé dedicate to Luisana Lopilato?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "appears as love interest in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who appears as Michael Bublé's love interest in the music video for 'Have n't Met You Yet'?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which music video does Luisana Lopilato appear as the love interest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,176 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Alice",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "literary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tweedle brothers",
+      "roles": [
+        {
+          "role": "characters",
+          "states": [
+            "fictional",
+            "literary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Red King",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "literary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "dream (Through the Looking-Glass)",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "speculative",
+            "literary theme"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "final poem",
+      "roles": [
+        {
+          "role": "literary work",
+          "states": [
+            "epilogue",
+            "suggestive"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "life",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "philosophical",
+            "metaphorical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "speculated by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who speculated that everything may have been a dream of the Red King?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did the Tweedle brothers speculate about?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "dream of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Whose dream might Alice be a part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who might be a figment of the Red King's dream?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "suggests",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does the final poem suggest about life?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What suggests that life itself is but a dream?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

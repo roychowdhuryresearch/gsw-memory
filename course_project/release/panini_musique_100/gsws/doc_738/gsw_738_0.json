@@ -1,0 +1,462 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Zachary Harrison Wheeler (Zack Wheeler)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "May 30, 1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "professional baseball pitcher",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "sports",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "New York Mets",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Major League Baseball",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "professional sports"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "San Francisco Giants",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "sixth overall pick",
+      "roles": [
+        {
+          "role": "draft position",
+          "states": [
+            "2009 MLB Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2009 MLB Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "trade year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "debut year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "East Paulding High School",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "secondary education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Dallas, Georgia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "hometown"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Zachary Harrison Wheeler born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on May 30, 1990?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Zachary Harrison Wheeler's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Zachary Harrison Wheeler's profession?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a professional baseball pitcher?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "plays for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which team does Zachary Harrison Wheeler play for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who plays for the New York Mets?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What league is the New York Mets part of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which teams are part of Major League Baseball?",
+          "answers": [
+            "e5",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "drafted by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who drafted Zachary Harrison Wheeler?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was drafted by the San Francisco Giants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "draft position",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was Zachary Harrison Wheeler's draft position?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was the sixth overall pick in the 2009 MLB Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "traded to",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When was Zachary Harrison Wheeler traded to the Mets?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who was traded to the Mets in 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "debuted in",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "When did Zachary Harrison Wheeler make his major league debut?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who made their major league debut in 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "attended",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "Where did Zachary Harrison Wheeler attend high school?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Who attended East Paulding High School?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v11",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q21",
+          "text": "Where is East Paulding High School located?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q22",
+          "text": "What is located in Dallas, Georgia?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

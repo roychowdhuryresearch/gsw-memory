@@ -1,0 +1,289 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Podollan (Jason Podollan)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "ice hockey player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1994 NHL Entry Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "draft event",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "31st overall",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "draft position",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Florida Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Western Hockey League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "ice hockey",
+            "junior league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Spokane Chiefs",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "WHL team",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "National Hockey League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "professional league",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Toronto Maple Leafs",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Los Angeles Kings",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "New York Islanders",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "drafted in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was drafted in the 1994 NHL Entry Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Podollan drafted?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "drafted by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who drafted Podollan?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who did the Florida Panthers draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "drafted from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which team was Podollan drafted from?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was drafted from the Spokane Chiefs?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who played in the National Hockey League?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Podollan play?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which teams did Podollan play for?",
+          "answers": [
+            "e4",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who played for the Florida Panthers, Toronto Maple Leafs, Los Angeles Kings, and New York Islanders?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

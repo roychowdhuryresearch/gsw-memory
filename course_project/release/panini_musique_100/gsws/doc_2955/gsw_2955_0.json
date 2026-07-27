@@ -1,0 +1,270 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Live at Lincoln Hall",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "live recording",
+            "first live album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Joe Pug",
+      "roles": [
+        {
+          "role": "musician",
+          "states": [
+            "album artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lincoln Hall",
+      "roles": [
+        {
+          "role": "venue",
+          "states": [
+            "recording location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Chicago",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Strand of Oaks",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "guest appearance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Deep Dark Wells",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "cover song"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Start Again",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "original song"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Harvey 'Tex' Thomas Young",
+      "roles": [
+        {
+          "role": "musician",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Live at Lincoln Hall recorded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was recorded at Lincoln Hall?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Lincoln Hall located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What venue is located in Chicago?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "guest appearance by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who made a guest appearance on Live at Lincoln Hall?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "On which album did Strand of Oaks make a guest appearance?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "cover song",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the cover song on Live at Lincoln Hall?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "On which album is 'Deep Dark Wells' a cover song?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "based on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What song is 'Deep Dark Wells' based on?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which song is based on 'Start Again'?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who wrote 'Start Again'?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What song did Harvey 'Tex' Thomas Young write?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

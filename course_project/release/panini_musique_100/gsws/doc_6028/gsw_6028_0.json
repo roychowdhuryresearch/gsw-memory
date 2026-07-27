@@ -1,0 +1,310 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Money in the Bank (2018)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "WWE",
+            "wrestling event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "June 17, 2018",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Allstate Arena",
+      "roles": [
+        {
+          "role": "venue",
+          "states": [
+            "event location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Rosemont, Illinois",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "WWE",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "promoter",
+            "wrestling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Raw",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "WWE"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "SmackDown",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "WWE"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Gold Bond Ultimate",
+      "roles": [
+        {
+          "role": "sponsor",
+          "states": [
+            "event sponsor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "15,214",
+      "roles": [
+        {
+          "role": "attendance",
+          "states": [
+            "event attendance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Money in the Bank (2018) held?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held on June 17, 2018?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Money in the Bank (2018) located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was located at Allstate Arena?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "took place in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "In which city did Money in the Bank (2018) take place?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event took place in Rosemont, Illinois?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "promoted by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who promoted Money in the Bank (2018)?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event was promoted by WWE?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "featured brands",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which brands were featured in Money in the Bank (2018)?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event featured the Raw and SmackDown brands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "sponsored by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who sponsored Money in the Bank (2018)?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What event was sponsored by Gold Bond Ultimate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "had attendance of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was the attendance of Money in the Bank (2018)?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which event had an attendance of 15,214?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

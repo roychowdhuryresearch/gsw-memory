@@ -1,0 +1,242 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Golden 8",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz genre",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kenny Clarke",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American",
+            "jazz drummer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Francy Boland",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "Belgian",
+            "jazz composer",
+            "pianist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Köln",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "recording location",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1961",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Blue Note",
+      "roles": [
+        {
+          "role": "label",
+          "states": [
+            "music label",
+            "jazz"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Kenny Clarke/Francy Boland Big Band",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "jazz ensemble",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was The Golden 8 recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was recorded in Köln?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in year",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was The Golden 8 recorded?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was recorded in 1961?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which label released The Golden 8?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released on Blue Note?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "established relationship leading to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did The Golden 8 establish the relationship for?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album led to the formation of the Kenny Clarke/Francy Boland Big Band?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who created The Golden 8?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What album did Kenny Clarke and Francy Boland create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

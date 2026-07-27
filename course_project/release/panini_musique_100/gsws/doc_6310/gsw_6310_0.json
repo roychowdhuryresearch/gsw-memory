@@ -1,0 +1,388 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Day By Day (Day by Day (Yolanda Adams album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "gospel music",
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Yolanda Adams",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "gospel singer",
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Victory",
+      "roles": [
+        {
+          "role": "single",
+          "states": [
+            "music track",
+            "featured in film"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "The Gospel",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "feature film",
+            "music feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Be Blessed",
+      "roles": [
+        {
+          "role": "single",
+          "states": [
+            "music track",
+            "award-winning"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Grammy award",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "music award",
+            "prestigious"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Best Gospel Performance",
+      "roles": [
+        {
+          "role": "award category",
+          "states": [
+            "music award",
+            "gospel music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Someone Watching Over You",
+      "roles": [
+        {
+          "role": "single",
+          "states": [
+            "music track",
+            "released"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "This Too Shall Pass",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "music track",
+            "music video"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Crystal Lewis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "duet partner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Sisters: The Story Goes On",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "compilation album",
+            "1996 release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1996",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who created the album Day By Day?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Yolanda Adams create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "featured in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which single from Day By Day was featured in the movie The Gospel?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In which movie was the single Victory featured?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which single won a Grammy award for Best Gospel Performance?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What award did Be Blessed win?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which song was released as a single from Day By Day?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was Someone Watching Over You released as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "music video released for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which song had a music video released for it?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was released for This Too Shall Pass?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "originally recorded as a duet with",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was This Too Shall Pass originally recorded as a duet with?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What song did Crystal Lewis originally record as a duet?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "included in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which album included the song This Too Shall Pass?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What song was included in the album Sisters: The Story Goes On?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When was the album Sisters: The Story Goes On released?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What album was released in 1996?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

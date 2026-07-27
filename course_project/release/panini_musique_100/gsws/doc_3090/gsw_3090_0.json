@@ -1,0 +1,178 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Reconquista River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "watercourse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Spanish",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "translation",
+            "name language"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Río Reconquista",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "Spanish name",
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Buenos Aires",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "location",
+            "Argentina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Argentina",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "South America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Riachuelo",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "watercourse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Reconquista River located?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What river is located in Buenos Aires, Argentina?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "Spanish name",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the Spanish name of the Reconquista River?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What river has the Spanish name 'Río Reconquista'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "contaminated watercourse",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is one of the most contaminated watercourses in Argentina?",
+          "answers": [
+            "e1",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is the status of the Reconquista River in terms of contamination?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

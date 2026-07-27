@@ -1,0 +1,274 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "2017 Atlantic City mayoral election",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political event",
+            "election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 7, 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Atlantic City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "New Jersey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New Jersey",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "June 6, 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "primary election date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Don Guardian",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Republican"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Frank Gilliam",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Democratic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "city councilman",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "political position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the 2017 Atlantic City mayoral election held?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held on November 7, 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the 2017 Atlantic City mayoral election held?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event is located in Atlantic City?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "primary elections held on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When were the primary elections for the 2017 Atlantic City mayoral election held?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event had primary elections held on June 6, 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "lost re-election to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who did Don Guardian lose re-election to?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who lost re-election to Frank Gilliam?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "political affiliation",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is Don Guardian's political affiliation?",
+          "answers": [
+            "Republican"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is Frank Gilliam's political affiliation?",
+          "answers": [
+            "Democratic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "held position",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What position did Frank Gilliam hold?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who held the position of city councilman?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,309 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "original version of the series",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "premiere",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "ABC",
+      "roles": [
+        {
+          "role": "television network",
+          "states": [
+            "broadcasting",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Wednesday, October 27, 1954",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "premiere date",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Big Three television networks",
+      "roles": [
+        {
+          "role": "television network group",
+          "states": [
+            "broadcasting",
+            "1950s-1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of regular broadcast",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "36-year span",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "broadcast duration",
+            "1950s-1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "two-year hiatus",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "break in broadcasting",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1984 until 1985",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "hiatus period",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Sunday",
+      "roles": [
+        {
+          "role": "day",
+          "states": [
+            "broadcast day",
+            "25 years"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1991 until 1997",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "infrequent airing",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "premiered on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the original version of the series premiere?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What premiered on Wednesday, October 27, 1954?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "broadcast on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which network broadcast the original version of the series?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did ABC broadcast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "aired on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "On which day was the series broadcast for 25 years?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was broadcast on Sunday for 25 years?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcast until",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Until when was the series broadcast regularly?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was broadcast until 1990?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "hiatus from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the series on a two-year hiatus?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was on hiatus from 1984 until 1985?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "aired infrequently",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did the series air infrequently?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What aired infrequently from 1991 until 1997?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

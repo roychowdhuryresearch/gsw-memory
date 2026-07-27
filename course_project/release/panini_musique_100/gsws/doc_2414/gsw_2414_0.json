@@ -1,0 +1,248 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "genome-wide genetic study",
+      "roles": [
+        {
+          "role": "study",
+          "states": [
+            "genetic research",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Behar et al.",
+      "roles": [
+        {
+          "role": "research group",
+          "states": [
+            "authors",
+            "2010 study"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jewish groups",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Ashkenazim included",
+            "genetic study subject"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ashkenazim (Ashkenazi Jews)",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Jewish subgroup",
+            "genetic study subject"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "non-Jewish ethnic populations",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "comparison group",
+            "genetic study subject"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Levant",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Middle East",
+            "genetic origin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "ancient Hebrew and Israelite residents",
+      "roles": [
+        {
+          "role": "historical group",
+          "states": [
+            "Levant origin",
+            "Jewish ancestry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Indian Jews",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "excluded from study",
+            "Jewish subgroup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Ethiopian Jews",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "excluded from study",
+            "Jewish subgroup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "carried out by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who carried out the genome-wide genetic study?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What study was carried out by Behar et al.?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "examined genetic relationships among",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did the genome-wide genetic study examine?",
+          "answers": [
+            "e3",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which study examined genetic relationships among Jewish groups?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "have a close genetic relationship with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who do contemporary Jews have a close genetic relationship with?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which group has a close genetic relationship with people from the Levant?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "descend from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who are the Jewish people historically formulated to descend from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which historical group are the Jewish people said to descend from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

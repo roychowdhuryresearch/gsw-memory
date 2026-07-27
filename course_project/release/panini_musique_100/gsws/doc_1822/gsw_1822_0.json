@@ -1,0 +1,151 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Have You Seen Drum Recently?",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "South African cinema",
+            "1980s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "documentary genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1989",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Drum",
+      "roles": [
+        {
+          "role": "magazine",
+          "states": [
+            "cultural publication",
+            "South African"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "South Africa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "African continent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Have You Seen Drum Recently? released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film was released in 1989?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "documents",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does Have You Seen Drum Recently? document?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which film documents the Drum magazine?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "contribution to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Drum magazine contribute to?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which magazine contributed to the cultural and political life of South Africa?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

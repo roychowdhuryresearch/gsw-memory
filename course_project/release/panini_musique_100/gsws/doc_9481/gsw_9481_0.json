@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "United States presidential election of 2008 (2008 United States presidential election)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political event",
+            "56th quadrennial"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 4, 2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election date",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Democratic ticket",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "political party",
+            "2008 election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Barack Obama",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Senator from Illinois"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Joe Biden",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Senator from Delaware"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Republican ticket",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "political party",
+            "2008 election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "John McCain",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Senator from Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Sarah Palin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Governor of Alaska"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "first African American president",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "historical achievement",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the United States presidential election of 2008 held?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held on November 4, 2008?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "defeated",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did the Democratic ticket defeat in the 2008 election?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was defeated by the Democratic ticket in the 2008 election?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "included",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was included in the Democratic ticket in 2008?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which ticket included Barack Obama and Joe Biden in 2008?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "included",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was included in the Republican ticket in 2008?",
+          "answers": [
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which ticket included John McCain and Sarah Palin in 2008?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "became",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who became the first African American president?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What title did Barack Obama achieve in 2008?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,302 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Twinkler",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "American cinema",
+            "silent film",
+            "crime drama"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "1910s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1916",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1910s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Edward Sloman",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1910s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "William Russell",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1910s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Charlotte Burton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American cinema",
+            "1910s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Henry Leverage",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Sing Sing",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "prison"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "auto theft",
+      "roles": [
+        {
+          "role": "crime",
+          "states": [],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who directed The Twinkler?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film did Edward Sloman direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "stars",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who stars in The Twinkler?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In what film did William Russell star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "In what film did Charlotte Burton star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "incarcerated in",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "Where was Henry Leverage incarcerated?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who was incarcerated in Sing Sing?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "for",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "For what crime was Henry Leverage incarcerated?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Who was incarcerated for auto theft?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "When was The Twinkler released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What film was released in 1916?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

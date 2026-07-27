@@ -1,0 +1,270 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Vladimir Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "political leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Bolsheviks",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "historical",
+            "Russian Revolution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Soviet state (Russian Soviet Federative Socialist Republic)",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "historical",
+            "established"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "7 November 1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment date",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Russian Provisional Government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "historical",
+            "overthrown"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Russian Republic",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "historical",
+            "predecessor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "October Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical",
+            "revolution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Sovdepia",
+      "roles": [
+        {
+          "role": "nickname",
+          "states": [
+            "mocking",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Soviets of Workers' and Peasants' Deputies",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical",
+            "nascent state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who led the Bolsheviks?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which group was led by Vladimir Lenin?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "established on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the Soviet state established?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was established on 7 November 1917?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "overthrown during",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What government was overthrown during the October Revolution?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "During which event was the Russian Provisional Government overthrown?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "governed",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the Russian Provisional Government govern?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who governed the Russian Republic before the Soviet state?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "mocking label for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the mocking label 'Sovdepia' used for?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What nickname was given to the Soviets of Workers' and Peasants' Deputies?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

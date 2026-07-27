@@ -1,0 +1,294 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Commander-in-Chief, Portsmouth",
+      "roles": [
+        {
+          "role": "military position",
+          "states": [
+            "British Navy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Commander-in-Chief, Plymouth",
+      "roles": [
+        {
+          "role": "military position",
+          "states": [
+            "British Navy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Commander-in-Chief, Naval Home Command",
+      "roles": [
+        {
+          "role": "military position",
+          "states": [
+            "British Navy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Second Sea Lord",
+      "roles": [
+        {
+          "role": "military position",
+          "states": [
+            "British Navy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "First Sea Lord",
+      "roles": [
+        {
+          "role": "military position",
+          "states": [
+            "British Navy",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "HMS Victory",
+      "roles": [
+        {
+          "role": "ship",
+          "states": [
+            "British Navy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of merger",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1994",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of amalgamation",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of discontinuation",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "merged with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What position was merged with Commander-in-Chief, Portsmouth in 1969?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "With which position was Commander-in-Chief, Plymouth merged in 1969?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "formed",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What was formed by merging Commander-in-Chief, Portsmouth and Commander-in-Chief, Plymouth?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "How was Commander-in-Chief, Naval Home Command formed?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "amalgamated with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position was amalgamated with Second Sea Lord in 1994?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "With which position was Commander-in-Chief, Naval Home Command amalgamated in 1994?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "discontinued",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When were all distinct Commander-in-Chief appointments discontinued?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What happened to all distinct Commander-in-Chief appointments in 2012?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "vested in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "In whom was full operational command vested after 2012?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was vested in the First Sea Lord after 2012?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "flies his flag from",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "From which ship does the First Sea Lord fly his flag?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who flies his flag from HMS Victory?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,154 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "smooth jazz",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "instrumental",
+            "related to soft AC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "AC (Adult contemporary music)",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "adult contemporary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "George Benson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "crossover artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Kenny G",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "crossover artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Dave Koz",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "crossover artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "soft AC",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "soft adult contemporary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "considered a form of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was smooth jazz considered a form of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which music genre was considered a form of AC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "crossover hits",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which artists had crossover hits played on both smooth jazz and soft AC stations?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "On which stations were George Benson's crossover hits played?",
+          "answers": [
+            "e1",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

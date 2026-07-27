@@ -1,0 +1,251 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "That Certain Something",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "Australian cinema",
+            "1940s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "musical genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1941",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1940s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Australian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "cinema",
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Clarence G. Badger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "silent era",
+            "1940s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Megan Edwards",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Thelma Grigg",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "film director",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who directed That Certain Something?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film did Clarence G. Badger direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was That Certain Something released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film was released in 1941?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "starring",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who starred in That Certain Something?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In what film did Megan Edwards and Thelma Grigg star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "last film directed by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the last film directed by Clarence G. Badger?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who directed their last film as That Certain Something?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nationality of director",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the nationality of the film director in That Certain Something?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which film features an American film director?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

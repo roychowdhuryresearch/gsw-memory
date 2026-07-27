@@ -1,0 +1,245 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pyrrhus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "military leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rome (Roman Republic)",
+      "roles": [
+        {
+          "role": "entity",
+          "states": [
+            "ancient civilization",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "275 BC",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical event",
+            "ancient period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Battle of Beneventum",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "military conflict",
+            "historical battle"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Pyrrhic victory",
+      "roles": [
+        {
+          "role": "term",
+          "states": [
+            "historical term",
+            "military context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "found position untenable in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Pyrrhus find his position untenable?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who found their position untenable in Italy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "refused to negotiate with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who refused to negotiate with Pyrrhus?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who did Rome refuse to negotiate with?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "withdrew from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who withdrew from Italy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where did Pyrrhus withdraw from?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "occurred in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the Battle of Beneventum occur?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What battle occurred in 275 BC?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "realized army exhausted by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who realized their army was exhausted by years of foreign campaigns?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did Pyrrhus realize about his army?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "term derived from",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What term is derived from Pyrrhus's experiences?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is the origin of the term 'Pyrrhic victory'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,355 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "2018 FIFA World Cup",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "international tournament",
+            "football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Чемпионат мира по футболу 2018",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Russian language",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "host country",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "14 June -- 15 July",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "event duration",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "32",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "participating teams",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "5",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "confederations",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "12",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "venues",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "11",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "host cities",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2014",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "previous tournament",
+            "FIFA World Cup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2022",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "next tournament",
+            "FIFA World Cup"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "hosted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which country hosted the 2018 FIFA World Cup?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was hosted by Russia in 2018?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "held from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the 2018 FIFA World Cup held?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was held from 14 June to 15 July 2018?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "number of teams",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many teams participated in the 2018 FIFA World Cup?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which event did 32 teams participate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "number of confederations",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many confederations were represented in the 2018 FIFA World Cup?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In which event were 5 confederations represented?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "number of venues",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many venues were used for the 2018 FIFA World Cup?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which event were 12 venues used?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "number of host cities",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How many host cities were there for the 2018 FIFA World Cup?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "In which event were 11 host cities involved?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "previous tournament",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was the previous FIFA World Cup before 2018?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which event followed the 2014 FIFA World Cup?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "next tournament",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What was the next FIFA World Cup after 2018?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which event preceded the 2022 FIFA World Cup?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}
