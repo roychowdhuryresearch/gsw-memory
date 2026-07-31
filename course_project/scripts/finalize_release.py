@@ -127,6 +127,9 @@ def finalize(args: argparse.Namespace) -> dict[str, Any]:
     handout = project / "handout" / "project3.pdf"
     if handout.exists():
         shutil.copy2(handout, package / "PROJECT_HANDOUT.pdf")
+    handout_source = project / "handout" / "project3.tex"
+    if handout_source.exists():
+        shutil.copy2(handout_source, package / "PROJECT_HANDOUT.tex")
 
     models_dir = package / "models"
     models_dir.mkdir(parents=True, exist_ok=True)

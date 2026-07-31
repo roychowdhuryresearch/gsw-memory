@@ -5,6 +5,7 @@
 [Read the complete 150-point project handout](PROJECT_HANDOUT.pdf). The
 handout uses this 100-question 2Wiki package and the companion 100-question
 MuSiQue package at `packages/panini_musique_100`.
+Its editable LaTeX source is included as `PROJECT_HANDOUT.tex`.
 
 This folder is self-contained. It includes the selected 2WikiMultiHopQA
 questions, source documents, GSW JSON networks, flattened entity/QA metadata,
@@ -29,6 +30,7 @@ No access to the original GSW-Memory repository is required.
 │   └── panini_musique_100/
 ├── Panini_Course_Project.ipynb
 ├── DATA_CARD.md
+├── PROJECT_HANDOUT.tex
 ├── PROJECT_SPEC.md
 ├── quickstart.py
 ├── requirements-colab.txt
