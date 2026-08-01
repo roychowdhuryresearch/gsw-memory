@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 
@@ -41,6 +42,16 @@ def main() -> int:
         action="store_true",
         help="Never keep the 8B encoder and 8B reranker resident together.",
     )
+    parser.add_argument(
+        "--free-colab-profile",
+        action="store_true",
+        help="Force the 4B reranker and T4-safe batch/length settings.",
+    )
+    parser.add_argument(
+        "--rerank-batch-size",
+        type=int,
+        help="Override reranker batch size without changing model or scores.",
+    )
     parser.add_argument("--work-root", type=Path, default=HERE / "full_run")
     args = parser.parse_args()
 
@@ -59,6 +70,15 @@ def main() -> int:
         jobs.append((dataset, package, questions, cache_root))
 
     config = RunConfig()
+    if args.free_colab_profile:
+        config = replace(
+            config,
+            reranker_model=config.free_colab_reranker_model,
+            rerank_batch_size=config.free_colab_rerank_batch_size,
+            rerank_max_length=config.free_colab_rerank_max_length,
+        )
+    if args.rerank_batch_size is not None:
+        config = replace(config, rerank_batch_size=args.rerank_batch_size)
     if args.stage in {"decompose", "all"}:
         run_decomposition_stage(jobs, config)
     if args.stage in {"retrieve", "all"}:

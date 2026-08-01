@@ -15,7 +15,7 @@ contains a reference RICR implementation.
 
 That earlier notebook is retained as a compact smoke demonstration. Use
 `Panini_Full_Answer_Key_Colab.ipynb` for the graded Questions 1--12 workflow and
-the low-memory encoder/reranker schedule.
+the supplied-query-embedding, single-resident-model schedule.
 
 `COLAB_FEASIBILITY.md` records the measured 4-bit GPU memory and timing checks,
 the recommended shard size, and the limitations of free Colab runtimes.

@@ -5,8 +5,8 @@
     "cuda": true,
     "name": "NVIDIA RTX A6000",
     "total_gib": 47.402,
-    "allocated_gib": 0.0,
-    "peak_allocated_gib": 7.107
+    "allocated_gib": 0.008,
+    "peak_allocated_gib": 7.074
   },
   "packages": {
     "torch": "2.10.0",
@@ -36,7 +36,8 @@
     "free_colab_rerank_max_length": 256,
     "reranker_model": "Qwen/Qwen3-Reranker-8B",
     "free_colab_reranker_model": "Qwen/Qwen3-Reranker-4B",
-    "reranker_8b_minimum_gib": 18.0,
+    "reranker_8b_minimum_gib": 14.5,
+    "multi_dependency_threshold": 0.3,
     "max_new_tokens": 768
   }
 }

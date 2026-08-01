@@ -204,6 +204,7 @@ class QueryEmbeddingStore:
             return self.by_text[text]
         except KeyError as error:
             raise KeyError(
-                "No supplied embedding for this instantiated query. Use the "
-                "provided Qwen query encoder helper and cache the result."
+                "No supplied embedding for this query. In a required run this "
+                "means the decomposition or RICR trace diverged from the "
+                "specified deterministic pipeline."
             ) from error

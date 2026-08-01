@@ -11,6 +11,7 @@ import nbformat as nbf
 
 HERE = Path(__file__).resolve().parent
 OUTPUT = HERE / "Panini_Full_Answer_Key_Colab.ipynb"
+STUDENT_LIKE_OUTPUT = HERE / "Panini_Student_Like_Solution.ipynb"
 
 
 def md(text: str):
@@ -108,7 +109,9 @@ def main() -> int:
                 if not (SOURCE_ROOT / 'course_project').exists():
                     raise FileNotFoundError('Set PANINI_SOURCE_ROOT to the gsw-memory checkout.')
                 sys.path.insert(0, str(SOURCE_ROOT / 'course_project/src'))
-                WORK_ROOT = SOURCE_ROOT / 'course_project/instructor/full_run'
+                WORK_ROOT = Path(os.environ.get(
+                    'PANINI_WORK_ROOT',
+                    SOURCE_ROOT / 'course_project/instructor/full_run_v4'))
                 PACKAGE_ROOTS = {
                     '2wiki': SOURCE_ROOT / 'course_project/release/panini_2wiki_100',
                     'musique': SOURCE_ROOT / 'course_project/release/panini_musique_100',
@@ -378,12 +381,12 @@ def main() -> int:
 
             Raw model text is appended before parsing. Validation rejects empty
             plans, future or missing references, and malformed nodes. A
-            placeholder creates a dependency edge. Retrieval nodes with one
-            retrieval parent form linear RICR branches; deterministic comparison
-            and intersection nodes are retained for the final answer model.
-            Multi-parent retrieval joins are not issued as corpus queries,
-            because a comparison such as “which date is later?” is reasoning
-            over already retrieved values rather than new evidence search.
+            placeholder creates a dependency edge. Retrieval nodes form weakly
+            connected components that are processed in topological order. A
+            component may converge: a retrieval node referencing Q1 and Q2 must
+            receive both parent bindings before it issues its concrete query.
+            Deterministic comparison and intersection nodes remain distinct
+            because they combine retrieved values rather than search memory.
             """
         ),
         code(
@@ -536,12 +539,12 @@ def main() -> int:
             """
             ## Questions 6–7 — dense, RRF, dual retrieval, and reranking (24 points)
 
-            Stage B alternates the 4-bit query encoder and reranker by RICR
-            depth round, so the two models are never resident together. It
-            uses Qwen3-Reranker-8B on GPUs with at least 18 GiB and the official
-            Qwen3-Reranker-4B fallback on a 15 GiB T4; every trace records the
-            selected checkpoint. It warms the exact gold atomic queries and
-            then runs every predicted plan.
+            All query vectors reached by the required deterministic runs are
+            supplied, so Stage B loads no embedding model. It loads the 4-bit
+            Qwen3-Reranker-8B alone with batch size 1 and 256-token inputs; if a
+            particular T4 raises an OOM, it records and uses the official 4B
+            fallback. It warms the exact gold atomic-query rankings and then
+            runs every predicted plan.
             Each query cache stores BM25, dense, RRF, reranker-only,
             retrieval-only, and 0.5/0.5 hybrid rankings over the same dual pool.
             The fixed candidate pool makes the Question 7 comparison controlled.
@@ -659,49 +662,61 @@ def main() -> int:
             """
             ## Question 8 — complete RICR implementation (22 points)
 
-            Every retained chain is immutable in meaning: expansion creates a
-            new list of evidence and answer bindings. Scores use a log-domain
-            geometric mean. After each hop, all `kB` expansions are sorted
-            globally, then at most one chain per normalized current answer is
-            retained. Parent-local pruning would reserve capacity for weak
-            parents; global pruning lets the best hypotheses compete directly.
-            Unique-answer pruning uses the beam for different downstream
-            substitutions instead of spelling variants of the same answer.
+            The reference solution executes connected retrieval DAGs, not
+            independent linear branches. It topologically processes a component;
+            a multi-parent node ranks Cartesian products by harmonic mean before
+            substituting all parents. Intermediate hops keep the best state per
+            namespaced answer entity, whereas the final hop keeps QA records
+            directly. Evidence is the deduplicated union from every surviving
+            final beam. These are the exact research-code semantics at a smaller
+            corpus/model scale.
             """
         ),
         code(
             """
             toy_plan = [
-                {'question': 'Who founded the lab?', 'requires_retrieval': True},
-                {'question': 'When did <ENTITY_Q1> publish?', 'requires_retrieval': True},
+                {'question': 'Who founded lab A?', 'requires_retrieval': True},
+                {'question': 'Who founded lab B?', 'requires_retrieval': True},
+                {'question': 'Who published first, <ENTITY_Q1> or <ENTITY_Q2>?',
+                 'requires_retrieval': True},
             ]
             toy = {
-                'Who founded the lab?': [
-                    {'qa_uid':'q1','answer':'Ada','question':'founder','score':0.90},
-                    {'qa_uid':'q2','answer':'Grace','question':'founder','score':0.80}],
-                'When did Ada publish?': [
-                    {'qa_uid':'q3','answer':'1843','question':'date','score':0.70},
-                    {'qa_uid':'q4','answer':'1842','question':'date','score':0.60}],
-                'When did Grace publish?': [
-                    {'qa_uid':'q5','answer':'1952','question':'date','score':0.95},
-                    {'qa_uid':'q6','answer':'1843','question':'date','score':0.50}],
+                'Who founded lab A?': [
+                    {'qa_uid':'q1','answer_names':['Ada'],'answer_ids':['d1::e1'],
+                     'question':'founder A','document_id':'d1','score':0.90},
+                    {'qa_uid':'q2','answer_names':['Alan'],'answer_ids':['d2::e1'],
+                     'question':'founder A','document_id':'d2','score':0.60}],
+                'Who founded lab B?': [
+                    {'qa_uid':'q3','answer_names':['Grace'],'answer_ids':['d3::e1'],
+                     'question':'founder B','document_id':'d3','score':0.80},
+                    {'qa_uid':'q4','answer_names':['Katherine'],'answer_ids':['d4::e1'],
+                     'question':'founder B','document_id':'d4','score':0.70}],
+                'Who published first, Ada or Grace?': [
+                    {'qa_uid':'q5','answer_names':['Ada'],'answer_ids':['d1::e1'],
+                     'question':'comparison','document_id':'d5','score':0.95}],
+                'Who published first, Ada or Katherine?': [
+                    {'qa_uid':'q6','answer_names':['Ada'],'answer_ids':['d1::e1'],
+                     'question':'comparison','document_id':'d6','score':0.75}],
             }
-            toy_result = execute_plan(toy_plan, lambda query, k: toy[query][:k],
-                                      replace(CONFIG, beam_width=2, candidates_per_hop=2))
-            display(pd.DataFrame(toy_result['branch_traces'][0]['hops'][-1]['kept']))
-            print(json.dumps(toy_result['branch_traces'], indent=2))
+            toy_result = execute_panini_plan(
+                toy_plan, lambda query, k: toy[query][:k],
+                replace(CONFIG, beam_width=2, candidates_per_hop=2),
+                original_question='Who published first?')
+            display(pd.DataFrame(toy_result['component_traces'][0]['steps'][-1]['kept']))
+            print(json.dumps(toy_result['component_traces'], indent=2))
+            print('all-final-beam evidence:', [row['qa_uid'] for row in toy_result['evidence']])
             """
         ),
         md(
             """
-            **Hand calculation.** Hop 1 keeps Ada (0.90) and Grace (0.80).
-            Hop 2 creates four paths before pruning: Ada→1843 has
-            `sqrt(.90×.70)=.794`; Ada→1842 has `.735`; Grace→1952 has `.872`;
-            Grace→1843 has `.632`. Global score order is 1952, 1843-from-Ada,
-            1842, 1843-from-Grace. With `B=2`, the retained answers are 1952 and
-            1843; the lower duplicate 1843 is removed. A last-hop product would
-            systematically shrink with path length, while the geometric mean
-            compares average hop confidence on one scale.
+            **Hand calculation.** The normalized root scores are Ada `.95`,
+            Alan `.80`, Grace `.90`, and Katherine `.85`. The four parent
+            products have harmonic scores `.924`, `.897`, `.847`, and `.824` in
+            that order, so `B=2` sends only `Ada + Grace` and `Ada + Katherine`
+            to the converging retrieval node. Both final QA records answer Ada,
+            but final-hop selection does not entity-deduplicate them. Their
+            parent evidence also remains in the context because evidence is
+            collected from both final beams, not just the best one.
             """
         ),
         md(
@@ -711,7 +726,8 @@ def main() -> int:
             The fixed-seed subset contains 20 development questions per
             dataset. Before seeing results, the directional predictions are:
             narrower beams and `k=5` reduce latency but lower chain recovery;
-            disabling unique-answer pruning lowers answer diversity; last-hop
+            disabling intermediate entity grouping lowers substitution diversity;
+            removing the multi-parent threshold increases joint queries; last-hop
             scoring is less stable because it forgets early weak links; BM25
             loses paraphrases; dense-only loses entity-doorway candidates; RRF
             is competitive but lacks the cross-encoder's joint judgment.
@@ -724,6 +740,7 @@ def main() -> int:
                 {'configuration':'beam_3', 'prediction':'between beam 1 and beam 5'},
                 {'configuration':'k_5', 'prediction':'lower recall and reranking cost'},
                 {'configuration':'unique_off', 'prediction':'fewer distinct substitutions'},
+                {'configuration':'parent_threshold_off', 'prediction':'more joint queries and latency'},
                 {'configuration':'last_hop', 'prediction':'unstable; ignores weak early evidence'},
                 {'configuration':'bm25', 'prediction':'loses paraphrased evidence'},
                 {'configuration':'dense', 'prediction':'loses entity-doorway candidates'},
@@ -782,10 +799,12 @@ def main() -> int:
 
             Stage C unloads retrieval models, loads only the 4-bit Qwen3-4B
             answerer, and supplies deduplicated evidence from all surviving
-            RICR chains. It never receives source documents, graph
-            neighbors, or labels. The configuration is identical for both
-            datasets. Outputs are split into 80-row development and 20-row
-            held-out files per dataset.
+            RICR chains, including answer role/state strings. It uses the same
+            four-message one-shot `Thought:`/`Answer:` prompt as the research
+            evaluator and does not add an N/A instruction for these answerable
+            splits. It never receives source documents, graph neighbors, or
+            labels. The configuration is identical for both datasets. Outputs
+            are split into 80-row development and 20-row held-out files.
             """
         ),
         code(
@@ -901,12 +920,12 @@ def main() -> int:
         md(
             """
             **System story.** A user question first becomes a validated
-            dependency graph. Each retrieval branch starts from a concrete
-            atomic question. BM25 entity expansion and dense QA search create a
-            union candidate pool; the reranker and retrieval prior order it.
-            RICR keeps several answer-distinct chains, substitutes each current
-            answer into the next template, and globally prunes after every hop.
-            Evidence from all surviving branches is deduplicated by stable QA
+            dependency graph. Each retrieval component is topologically
+            executed; converging nodes combine parent beams before substituting
+            all answers. BM25 entity expansion and dense QA search create a
+            union candidate pool, and the reranker orders it. RICR groups
+            intermediate answer entities but retains final QA alternatives.
+            Evidence from all surviving final beams is deduplicated by stable QA
             ID before it becomes the answer model's only context. This design
             preserves provenance and makes
             failures inspectable. Its main protection is beam diversity: a
@@ -924,7 +943,44 @@ def main() -> int:
     # Hide the embedded implementation by default without hiding its source.
     notebook["cells"][4]["metadata"] = {"jupyter": {"source_hidden": True}}
     nbf.write(notebook, OUTPUT)
+    student_like = nbf.from_dict(notebook)
+    student_like["metadata"]["colab"]["name"] = "Panini Student-Like Reference Solution"
+    student_like["cells"][0]["source"] = dedent(
+        """
+        # PANINI course project — student-like reference solution and Colab run
+
+        This notebook presents one complete, reproducible solution to Questions
+        1–12. It audits both 100-question packages, constructs and analyzes the
+        alternative memory graphs, evaluates retrieval, implements connected-DAG
+        RICR, runs the neural system on all 200 questions, performs the required
+        ablations, and writes the four submission JSONL files. Expensive work is
+        appended to Drive after every question, so `Run all` can be repeated
+        after a Colab interruption without losing completed records.
+        """
+    ).strip()
+    student_labels = {
+        "## Reference implementation library": "## Solution implementation",
+        "**Reference explanation.**": "**Explanation.**",
+        "**Reference interpretation.**": "**Interpretation.**",
+        "**Reference error analysis.**": "**Error analysis.**",
+        "**Reference recommendation.**": "**Recommendation.**",
+        "**Reference transfer interpretation.**": "**Transfer interpretation.**",
+    }
+    for cell in student_like["cells"]:
+        if cell["cell_type"] == "markdown":
+            for old, new in student_labels.items():
+                cell["source"] = cell["source"].replace(old, new)
+        elif cell["cell_type"] == "code":
+            cell["source"] = cell["source"].replace(
+                "Instructor reference pipeline used by the full Colab answer key.",
+                "Complete pipeline used by this Colab solution.",
+            ).replace(
+                "Fixed, independently labeled 30-pair audit used for the answer key.",
+                "Fixed, independently labeled 30-pair reconciliation audit.",
+            )
+    nbf.write(student_like, STUDENT_LIKE_OUTPUT)
     print(OUTPUT)
+    print(STUDENT_LIKE_OUTPUT)
     return 0
 
 

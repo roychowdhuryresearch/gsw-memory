@@ -20,9 +20,9 @@ Each dataset has 80 labeled development questions and 20 held-out questions.
 Algorithm choices and hyperparameters are selected on 2Wiki development and
 then frozen before the MuSiQue transfer evaluation.
 
-The course supplies documents, GSWs, metadata, corpus/fixed-query embeddings,
+The course supplies documents, GSWs, metadata, corpus/reference-run query embeddings,
 FAISS indices, TF-IDF/BM25 indices, and model configuration for each package.
-Students do not generate GSWs or corpus embeddings.
+Students do not generate GSWs or embeddings.
 
 Students implement cross-document entity reconciliation to study how identity
 resolution changes global network properties. This reconciled projection is
@@ -53,8 +53,6 @@ creates cross-document reasoning chains dynamically through RICR.
   [`yigitturali/GSW-QA-Decomposer-Qwen3-4B`](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
 - Optional decomposer:
   [`yigitturali/GSW-QA-Decomposer-Qwen3-8B`](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
-- Query encoder for uncached instantiated questions:
-  `Qwen/Qwen3-Embedding-8B`
 - Reranker: `Qwen/Qwen3-Reranker-8B`
 - Evidence-grounded answer model: `Qwen/Qwen3-4B`
 

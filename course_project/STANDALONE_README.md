@@ -79,10 +79,10 @@ Corpus embedding generation is complete and is not a student task:
 - matching stable-ID JSON files
 - float16 FAISS indices under `indices/`
 
-The fixed query table covers all original questions and decomposition
-templates. RICR may create new answer-instantiated sub-questions at runtime;
-use `QwenQueryEncoder` only for those previously unseen query strings and
-cache the resulting vectors.
+The query table covers original questions, decomposition templates, and the
+answer-instantiated queries reached by the required default and ablation
+runs. Students do not generate embeddings. A missing query in a required run
+means the plan or RICR trace diverged from the specified deterministic path.
 
 ## Supplied model checkpoints
 
@@ -94,12 +94,11 @@ decomposition prompt. Models should be loaded sequentially in Colab:
      is the free-tier Colab default.
    - [Qwen3-8B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
      is the higher-capacity option.
-2. 4-bit Qwen query encoder for uncached instantiated queries.
-3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B) on GPUs
-   with at least 18 GiB, or the
+2. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B) in 4-bit
+   mode, loaded by itself on a 15 GiB T4, or the
    [Qwen3-Reranker-4B](https://huggingface.co/Qwen/Qwen3-Reranker-4B)
-   fallback on a 15 GiB T4. Use batch size 1 and 256-token inputs on T4.
-4. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
+   4B fallback after an actual OOM. Use batch size 1 and 256-token inputs on T4.
+3. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
    final answers.
 
 Do not keep multiple neural models resident simultaneously.
@@ -108,9 +107,10 @@ Do not keep multiple neural models resident simultaneously.
 
 The package supplies artifact loaders, retrieval backends, graph parsing
 helpers, model wrappers, metrics, and RICR data structures. Students implement
-the two TODOs in `panini_course/ricr.py`: unique-answer beam pruning and the
-linear RICR search loop. The instructor solution and held-out labels are not
-included.
+the TODOs in `panini_course/ricr.py`: retrieval-DAG identification and the full
+PANINI RICR executor, including multi-parent beam combination, distinct
+intermediate/final-hop pruning, singleton fallback, and all-final-beam
+evidence. The instructor solution and held-out labels are not included.
 
 Cross-document entity reconciliation is a separate network-analysis exercise.
 Students compare an unreconciled projection, the supplied exact-surface
@@ -127,7 +127,7 @@ pytest -q tests
 ```
 
 The retrieval, metrics, and package tests should pass immediately. RICR
-implementation tests are skipped while the two scaffold functions still raise
+implementation tests are skipped while the scaffold functions still raise
 `NotImplementedError`; they turn on automatically as those functions are
 implemented. See [TESTING.md](TESTING.md) for the tested behavior and the
 additional tests students must write.

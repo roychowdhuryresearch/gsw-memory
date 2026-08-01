@@ -77,7 +77,7 @@ Prof.\ Vwani Roychowdhury \hfill UCLA Department of Electrical and Computer Engi
   {\LARGE\bfseries Reasoning Inference Chain Retrieval}\\[5pt]
   {\large Based on \PANINI: Continual Learning in Token Space via Structured Memory}\\[5pt]
   {\large\bfseries 150 points}\\[2pt]
-  {\large Due Saturday, August 15, 2026 at 11:59 PM Pacific Time}
+  {\large Due Friday, August 28, 2026 at 11:59 PM Pacific Time}
 \end{center}
 \vspace{4mm}
 \hrule height 0.8pt
@@ -132,22 +132,24 @@ free-tier configuration uses:
 \begin{itemize}
   \item \href{https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B}
         {GSW-QA-Decomposer-Qwen3-4B} for decomposition;
-  \item supplied Qwen3-Embedding-8B corpus and fixed-query embeddings;
+  \item supplied Qwen3-Embedding-8B corpus embeddings and a query table that
+        includes the instantiated queries reached by the required runs;
   \item \href{https://huggingface.co/Qwen/Qwen3-Reranker-8B}
-        {Qwen3-Reranker-8B} in 4-bit mode for reranking; and
+        {Qwen3-Reranker-8B} in 4-bit mode for reranking, loaded by itself on a
+        free T4 (the 4B checkpoint is an OOM fallback); and
   \item \href{https://huggingface.co/Qwen/Qwen3-4B}
         {Qwen3-4B} in 4-bit mode for evidence-grounded final answers.
 \end{itemize}
 The
 \href{https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B}
 {8B decomposer} is optional and receives no automatic accuracy advantage.
-Do not keep the decomposer, reranker, query encoder, and answer model resident
-on the GPU simultaneously. Save outputs to JSONL, unload the current model,
+Do not generate embeddings. Keep only the decomposer, reranker, or answer
+model resident at one time. Save outputs to JSONL, unload the current model,
 clear GPU memory, and then begin the next stage.
 
 \paragraph{Compute policy.}
 The required path must run on a free Google Colab GPU. No paid API is required
-or permitted for the required results. Corpus GSWs, embeddings, and indices
+for the required results. Corpus GSWs, embeddings, and indices
 are supplied; regenerating them is outside the project scope.
 
 \section{Stage I: The memory arrives}
@@ -295,7 +297,7 @@ unreconciled graph can be evaluated under several identity hypotheses.
   \item Run the exact-surface baseline, then implement a conservative
         reconciliation rule using surface, type/role compatibility, and local
         neighborhood evidence. State the decision rule precisely.
-  \item Manually audit a fixed-seed sample of at least 30 proposed
+  \item Manually audit a fixed-seed sample of at least 15 proposed
         cross-document merges. Label each correct, incorrect, or uncertain;
         report estimated precision with uncertain cases shown separately.
         Include at least two false-merge and two missed-alias examples.
@@ -324,9 +326,16 @@ never asserted by any document. Your task is therefore not merely to compute
 statistics; it is to decide which observed structure belongs to the local GSWs
 and which was created by the reconciliation rule.
 
-Perform the following analysis separately for 2Wiki and MuSiQue. Compute every
-requested property on the unreconciled projection, exact-surface projection,
-and conservative projection; include native-graph measurements as a reference.
+Perform the full analysis below on 2Wiki. Compute every requested property on
+the unreconciled projection, exact-surface projection, and conservative
+projection; include native-graph measurements as a reference. For MuSiQue,
+provide a compact transfer summary rather than repeating the full analysis:
+report the number of components, giant-component fraction, isolated nodes,
+average and maximum degree, and the five highest weighted-degree nodes for the
+three entity projections. Briefly state which structural observations from
+2Wiki do and do not transfer to MuSiQue. You do not need to repeat the degree
+distribution plots, PageRank/betweenness rankings, clustering, or assortativity
+analysis for MuSiQue.
 
 \begin{enumerate}[label=(\alph*)]
   \item Compute weakly connected components of the native graph and connected
@@ -336,8 +345,8 @@ and conservative projection; include native-graph measurements as a reference.
         reconciliation rule changes these values.
   \item Plot degree probability mass and complementary cumulative degree
         distributions on log--log axes. State whether the heavy tail, if any,
-        is consistent across datasets and reconciliation rules; do not claim a
-        power law without a fitted test.
+        is consistent across reconciliation rules; do not claim a power law
+        without a fitted test.
   \item For each reconciled projection, report the ten highest nodes under
         weighted degree, PageRank, and betweenness centrality. Audit whether
         hubs represent entities, common attribute values, or reconciliation
@@ -354,9 +363,9 @@ and conservative projection; include native-graph measurements as a reference.
         alone.
 \end{enumerate}
 
-\deliverables At least four plots, two sensitivity tables, and a 200--300 word
-cross-dataset interpretation plus a 150--200 word hub explanation that
-separates local GSW structure from
+\deliverables At least four 2Wiki plots, two 2Wiki sensitivity tables, one
+compact MuSiQue transfer table, and a 200--300 word cross-dataset interpretation
+plus a 150--200 word hub explanation that separates local GSW structure from
 reconciliation artifacts.
 
 \grading Connectivity sensitivity (3), degree analysis (2), centrality audit
@@ -401,8 +410,11 @@ such as comparison or intersection, then topologically sort the result.
   \item Validate references: every placeholder must point to an earlier
         sub-question, the graph must be acyclic, and every retrieval node must
         contain a nonempty natural-language question.
-  \item Identify independent linear sequences that may run in parallel and
-        record the deterministic operations needed to combine their answers.
+  \item Find weakly connected components of retrieval nodes and topologically
+        order each component. A component may be a converging DAG: if Q3
+        references both \code{<ENTITY\_Q1>} and \code{<ENTITY\_Q2>}, Q1 and Q2
+        are two parents of Q3, not two independent linear sequences. Record
+        deterministic nodes separately because they are not retrieval hops.
   \item On the public reviewed decomposition subset, report valid-plan rate,
         sub-question-count exact match, dependency-edge precision/recall/F1,
         and retrieval-vs-reasoning node accuracy.
@@ -417,7 +429,7 @@ such as comparison or intersection, then topologically sort the result.
 \deliverables \code{decompositions.jsonl}, parser tests, a metric table, and
 four concise error analyses, plus one annotated hand-worked plan.
 
-\grading Inference and caching (2), parser/validation (3), parallel-sequence
+\grading Inference and caching (2), parser/validation (3), retrieval-DAG
 handling (2), metrics (2), error analysis (2), and own-words plan explanation
 (3).
 
@@ -486,9 +498,12 @@ reranking. Notice that this expansion uses document-local GSW adjacency from
 Question 2, never the analysis-only reconciled graph.
 
 Load the supplied normalized QA embeddings and FAISS index; do not regenerate
-corpus embeddings. Use the supplied fixed-query embedding when present. If
-answer substitution creates a new query, encode it with the configured query
-encoder and cache it by exact normalized query string.
+embeddings. The query table contains original questions, reviewed templates,
+and answer-instantiated queries reached by the required default and ablation
+runs. Look up each query by its exact normalized string. A missing query in a
+required run indicates that the produced plan or RICR state diverged from the
+specified deterministic pipeline; report that trace instead of loading an
+embedding model.
 
 \begin{enumerate}[label=(\alph*)]
   \item Implement dense QA retrieval and verify that a manual inner-product
@@ -551,88 +566,89 @@ creating a new query that may lead to a different document. Every retained
 hypothesis therefore becomes a chain with its own evidence, instantiated
 questions, answers, and scores.
 
-Use beam width $B=5$ and $k=15$ candidates per hop unless an ablation says
-otherwise. For a length-$t$ chain $C=(e_1,\ldots,e_t)$ with positive hop
-scores $s_1,\ldots,s_t$, score the whole path by
+Use beam width $B=5$ and $k=15$ unique QA candidates per hop unless an
+ablation says otherwise. As in the implementation accompanying the paper,
+first map each reranker score to
+$\tilde{s}_\ell=\max(10^{-6},\min(1,(s_\ell+1)/2))$. For a length-$t$ chain
+$C=(e_1,\ldots,e_t)$, score the whole path by
 \begin{equation}
   \operatorname{score}(C)
-  = \left(\prod_{\ell=1}^{t}\max(s_\ell,\epsilon)\right)^{1/t}
+  = \left(\prod_{\ell=1}^{t}\tilde{s}_\ell\right)^{1/t}
   = \exp\left(\frac{1}{t}\sum_{\ell=1}^{t}
-    \log\max(s_\ell,\epsilon)\right),
-  \qquad \epsilon=10^{-12}.
+    \log\tilde{s}_\ell\right).
 \end{equation}
-Compute this geometric mean in the log domain. At every pruning point, sort
-by decreasing chain score and then by stable QA-ID sequence. Retain at most
-one chain for each normalized current answer. These rules make the search
-deterministic and prevent many differently worded copies of the same answer
-from occupying the beam.
+Compute this geometric mean in the log domain and use the last-hop score and
+stable QA-ID sequence as deterministic tie breakers. The grouping rule is
+different at intermediate and final hops; Question 8 defines both cases.
 
 \question{8}{Implement Reasoning Inference Chain Retrieval}{22}
 
 At this point you have an executable decomposition and a retriever for one
-atomic question. The remaining problem is sequential: the answer selected at
-one hop changes the text of the next query. Greedily keeping only the
-highest-scoring first answer can destroy the correct chain, while retaining
-every candidate causes exponential growth. \RICR resolves this tension with a
-small beam whose chains carry their own instantiated questions, evidence, and
-scores.
+atomic question. The remaining object is not necessarily a line: two root
+questions can feed a later retrieval question. Greedily keeping one root or
+executing the roots as unrelated chains loses the joint substitution needed
+by that converging node. Complete \code{identify\_retrieval\_components} and
+\code{run\_panini\_ricr} in \code{panini\_course/ricr.py}. Each immutable
+state must carry its answer chosen for every completed node, ordered QA
+evidence, last-hop score, and whole-chain score.
 
-Complete \code{prune\_unique\_answers} and
-\code{run\_linear\_ricr} in \code{panini\_course/ricr.py}.
-Represent a chain as an immutable ordered tuple of evidence records, current
-answer, instantiated questions, and hop scores. Implement the search first
-with a dictionary-backed toy retriever whose outputs you control, following
-this structure:
+Process every connected retrieval component in deterministic topological
+order. A root starts with an empty state. A one-parent node receives that
+parent's beam. For a node with parents $p_1,\ldots,p_m$, form the Cartesian
+product of their beams and score a parent tuple by
+\begin{equation}
+ H(s_1,\ldots,s_m)=\frac{m}{\sum_{j=1}^{m}1/s_j}.
+\end{equation}
+Sort all tuples, examine the top $B$, and keep those with $H\geq0.3$; if none
+passes, retain the single best tuple. Merge the selected parents' answer maps
+and ordered evidence, substitute \emph{all} referenced answers into the child
+template, and only then issue retrieval.
 
-\begin{lstlisting}[language=Python]
-beams = retrieve(first_instantiated_question, k)
-beams = prune_unique_answers(beams, B)
-for template in remaining_templates:
-    expansions = []
-    for chain in beams:
-        query = substitute(template, chain.current_answer)
-        for candidate in retrieve(query, k):
-            expansions.append(new_chain(chain, query, candidate))
-    beams = prune_unique_answers(expansions, B)
-\end{lstlisting}
-
-For each linear sequence:
-
+The following distinction is required, not an optional optimization:
 \begin{enumerate}[label=(\arabic*)]
-  \item retrieve $k$ candidates for the first instantiated sub-question;
-  \item retain the top $B$ chains with distinct normalized current answers;
-  \item substitute each current answer into the next dependent sub-question;
-  \item expand all surviving chains by $k$ candidates;
-  \item update the geometric-mean chain score in the log domain;
-  \item globally prune the $kB$ expansions to $B$ distinct current answers;
-  \item repeat until the sequence ends; and
-  \item combine parallel sequences by deduplicating evidence using stable QA
-        ID while preserving the highest-scoring provenance.
-  \item Hand-work a two-hop example with $B=2$ and $k=2$, showing all
-        expansions before and after global pruning.
-  \item Explain in your own words why pruning separately inside each parent
-        beam is not equivalent to global pruning, why unique-answer pruning
-        promotes useful diversity, and why a geometric mean is used for chain
-        scores.
+  \item At every \textbf{intermediate retrieval hop}, expand each returned QA
+        record over its answer entities. Group the expansions by stable answer
+        ID, keep the best chain for each entity, then globally retain the top
+        $B$. If no stable ID exists, group by normalized answer name.
+  \item At the \textbf{final retrieval hop} of a component, do not group by
+        answer entity. A QA record is the expansion unit; score every QA-level
+        chain and retain the top $B$. This preserves different evidence pairs
+        that happen to yield the same surface answer.
+  \item The supplied IDs \code{e1}, \code{e2}, and so on are local to a GSW.
+        Namespace them with document identity before grouping. Do not use the
+        analysis-only reconciled graph from Questions 2--3 to invent global
+        IDs.
+  \item If the plan has no multi-question retrieval component, follow the
+        implementation's fallback: retrieve the original user question
+        directly rather than treating a singleton rewrite as a chain.
+  \item After every component finishes, build answer context from the union
+        of evidence in \emph{all surviving final beams}, deduplicated by stable
+        QA ID. Do not send only the best beam or only its last QA pair.
 \end{enumerate}
 
-A candidate from an earlier chain may not be mutated in place. Pruning is
-global across all $kB$ expansions, not performed separately per parent. Sort by
-decreasing geometric-mean score and then stable QA-ID sequence, retaining only
-the first chain for each normalized current answer. Ties must use the
-deterministic rule stated at the beginning of Stage V. Return both the
-deduplicated evidence and complete trace: instantiated questions, candidates,
-scores, pruned chains, and selected QA IDs at every hop. Only after toy cases
-pass should you connect the real retriever from Question 7.
+Implement against a dictionary-backed toy retriever before connecting
+Question 7. Your tests must include a converging two-parent DAG, harmonic-mean
+threshold fallback, two QA records sharing one intermediate entity, two final
+QA records sharing one answer, namespaced local IDs, singleton fallback, and
+evidence contributed only by the second-best final beam. Hand-work one
+two-parent example with $B=2$ and $k=2$, listing the parent Cartesian products,
+harmonic scores, concrete child queries, final expansions, and retained beams.
 
-\deliverables Working implementation, all supplied \RICR tests passing, at
-least three additional tests of your own (including parallel sequences), plus
-one human-readable trace from each dataset, the hand-worked beam, and a
-200--300 word design explanation.
+Return the complete trace: components, dependency lists, concrete queries,
+candidates, chain and harmonic scores, pruned states, final QA IDs, and
+deduplicated evidence. In 250--350 words, explain in your own words (i) why
+independent linear execution is wrong for a converging retrieval node, (ii)
+why intermediate entity grouping and final QA-level selection intentionally
+differ, and (iii) why using raw document-local IDs would silently corrupt
+diversity.
 
-\grading First-hop/pruning behavior (4), multi-hop expansion/substitution (5),
-chain scoring (3), parallel evidence merge (3), deterministic trace format
-(2), tests/edge cases (3), and own-words design explanation (2).
+\deliverables Working DAG implementation, all supplied \RICR tests passing,
+at least three additional tests, one trace from each dataset, the hand-worked
+DAG beam, and the design explanation.
+
+\grading DAG/component execution (4), parent combination and substitution
+(4), intermediate/final pruning rules (5), scoring and deterministic trace
+(3), all-beam evidence/fallback (2), tests (2), and own-words explanation (2).
 
 \question{9}{\RICR ablation study}{14}
 
@@ -645,8 +661,10 @@ mechanisms produce useful accuracy rather than accidental complexity.
 
 Select a fixed, stratified 20-question subset from each development dataset
 and publish the IDs before running experiments. The default is $B=5$, $k=15$,
-unique-answer pruning enabled, geometric-mean scoring, and the best frozen
-Question 7 retrieval score.
+intermediate entity grouping enabled, multi-parent threshold $0.3$, and
+geometric-mean scoring. Freeze the best Question 7 ordering on the paper-style
+dual candidate pool; the reference run uses the measured reranker/retrieval
+hybrid rather than assuming model probability alone is calibrated.
 
 Before running the experiments, write one directional prediction for each
 ablation below and justify it in your own words. Afterward, compare the
@@ -656,8 +674,11 @@ traces.
 \begin{enumerate}[label=(\alph*)]
   \item Beam width: $B\in\{1,3,5\}$.
   \item Candidates per hop: $k\in\{5,15\}$.
-  \item Diversity: unique-answer pruning on versus off.
+  \item Diversity: intermediate entity grouping on versus off. Final-hop
+        QA-level selection remains unchanged in both conditions.
   \item Chain scoring: geometric mean versus last-hop score.
+  \item Converging nodes: multi-parent threshold $0.3$ versus no threshold,
+        evaluated on the questions whose plans contain such a node.
   \item Retrieval: BM25-QA, dense QA, RRF hybrid, and paper-style dual
         retrieval.
 \end{enumerate}
@@ -670,7 +691,7 @@ versus evidence size. Change only the named factor in each comparison.
 and a 300--400 word recommendation of the configuration you would deploy.
 
 \grading Experimental control and predictions (3), beam/candidate ablations
-(2), diversity/scoring ablations (3), retrieval ablation (2), trade-off
+(2), diversity/scoring/parent ablations (3), retrieval ablation (2), trade-off
 analysis (2), and own-words causal interpretation (2).
 
 \section{Stage VI: Freeze the design and test whether it travels}
@@ -700,9 +721,17 @@ continued tuning rather than generalization.
 
 Run the frozen system on all 100 2Wiki questions. The answer model may see only
 the deduplicated QA evidence returned by \RICR, never source documents,
-held-out labels, or reconciled-graph neighbors. Its prompt must request
-\code{N/A} when the evidence is insufficient. Save the trace before generating
-the answer so retrieval and generation failures can be distinguished.
+held-out labels, or reconciled-graph neighbors. Format each evidence item as
+\code{Q: <stored question> A: <all answer names> <answer role/states>}. Use the
+supplied four-message answer-prompt helper unchanged: its system message asks
+for methodical reasoning beginning after \code{Thought:} and a concise
+\code{Answer:}; its one-shot example connects Neville A. Stanton to the
+University of Southampton and the year 1862; and the final user message
+contains all evidence, the original question, and \code{Thought:}. These are
+answerable 2Wiki questions, so do \textbf{not} add an \code{N/A} or
+\code{No Answer} instruction. Parse only the text after the last
+\code{Answer:}. Save the retrieval trace before generation so retrieval and
+generation failures can be distinguished.
 
 On the 80 labeled questions, report decomposition validity, supporting-QA
 recall, complete-chain recovery, EM, F1, average/95th-percentile latency,

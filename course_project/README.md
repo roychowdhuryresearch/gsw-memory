@@ -5,8 +5,8 @@ This directory contains the in-progress course project based on:
 > Panini: Continual Learning in Token Space via Structured Memory
 
 The project studies Generative Semantic Workspaces (GSWs) as typed networks and
-then implements Reasoning Inference Chain Retrieval (RICR) over a small,
-controlled 2WikiMultiHopQA corpus.
+then implements Reasoning Inference Chain Retrieval (RICR) over controlled
+100-question 2WikiMultiHopQA and MuSiQue packages.
 
 ## Course-scale pipeline
 
@@ -20,8 +20,8 @@ question
   -> evidence and answer evaluation
 ```
 
-Students do **not** generate corpus embeddings. The instructors provide aligned
-entity, QA-pair, and query/sub-question embedding artifacts. Student code loads
+Students do **not** generate embeddings. The instructors provide aligned
+entity, QA-pair, and reference-run query embedding artifacts. Student code loads
 these artifacts and implements search, fusion, reranking, and chain traversal.
 
 The supplied decomposition checkpoints are:

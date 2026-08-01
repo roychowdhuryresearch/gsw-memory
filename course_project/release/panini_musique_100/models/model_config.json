@@ -23,7 +23,7 @@
   "reranker": {
     "model": "Qwen/Qwen3-Reranker-8B",
     "free_colab_t4_fallback": "Qwen/Qwen3-Reranker-4B",
-    "use_8b_at_or_above_gib": 18,
+    "use_8b_at_or_above_gib": 14.5,
     "quantization": "4bit-nf4-recommended-for-colab",
     "free_colab_batch_size": 1,
     "free_colab_max_length": 256
@@ -32,6 +32,8 @@
     "model": "Qwen/Qwen3-4B",
     "quantization": "4bit-nf4-recommended-for-colab",
     "evidence_only": true,
-    "insufficient_evidence_token": "N/A"
+    "prompt_protocol": "panini-four-message-one-shot-thought-answer",
+    "allow_no_answer_on_answerable_splits": false,
+    "max_new_tokens": 512
   }
 }

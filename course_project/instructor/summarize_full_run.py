@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import sys
 import shutil
 from pathlib import Path
@@ -41,8 +42,12 @@ def markdown_table(rows: list[dict]) -> str:
 
 
 def main() -> int:
-    work_root = HERE / "full_run"
-    artifact_root = HERE / "full_run_outputs"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--work-root", type=Path, default=HERE / "full_run_v4")
+    parser.add_argument("--artifact-root", type=Path, default=HERE / "full_run_outputs")
+    args = parser.parse_args()
+    work_root = args.work_root.resolve()
+    artifact_root = args.artifact_root.resolve()
     artifact_root.mkdir(parents=True, exist_ok=True)
     packages = {
         "2wiki": CoursePackage(PROJECT / "release" / "panini_2wiki_100"),
@@ -144,6 +149,11 @@ was measured on an RTX A6000 and must not be presented as Colab T4 speed.
 ## Ablations
 
 {markdown_table(ablation_rows)}
+
+The ablation `retrieval_seconds` column is resume-cache accounting from this
+reference run, not a cold end-to-end latency comparison. Use a fresh timed
+Colab run for latency conclusions; EM, F1, and chain recovery are the intended
+comparative outputs of this table.
 
 ## Required files
 

@@ -19,6 +19,7 @@ import sys
 import time
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, replace
+from itertools import product
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -49,7 +50,9 @@ class RunConfig:
     free_colab_rerank_max_length: int = 256
     reranker_model: str = "Qwen/Qwen3-Reranker-8B"
     free_colab_reranker_model: str = "Qwen/Qwen3-Reranker-4B"
-    reranker_8b_minimum_gib: float = 18.0
+    # The 8B reranker fits a 15 GiB T4 in 4-bit mode when loaded alone.
+    reranker_8b_minimum_gib: float = 14.5
+    multi_dependency_threshold: float = 0.3
     max_new_tokens: int = 768
 
 
@@ -740,7 +743,7 @@ def run_branch(
     return beams, trace
 
 
-def execute_plan(
+def _discarded_linear_execute_plan(
     plan: Sequence[Mapping[str, Any]],
     retrieve,
     config: RunConfig,
@@ -748,6 +751,12 @@ def execute_plan(
     unique_answers: bool = True,
     score_rule: str = "geometric_mean",
 ) -> dict[str, Any]:
+    """Pre-audit linear approximation retained only to document the old failure.
+
+    The production and answer-key paths call :func:`execute_panini_plan`.
+    Keeping this private helper makes old cached traces readable without
+    presenting the approximation as PANINI.
+    """
     branches, warnings = retrieval_branches(plan)
     all_beams, branch_traces = [], []
     for branch in branches:
@@ -777,6 +786,343 @@ def execute_plan(
         "warnings": warnings,
         "chains": [beam for beams in all_beams for beam in beams],
         "branch_traces": branch_traces,
+        "evidence": list(evidence.values()),
+    }
+
+
+def retrieval_components(
+    plan: Sequence[Mapping[str, Any]],
+) -> list[list[int]]:
+    """Return retrieval-node connected components in topological order.
+
+    This is the student-scale equivalent of
+    ``ChainFollowingMultiHopQA.identify_reasoning_chains``.  Unlike the old
+    linear-branch helper, a component may contain a converging DAG node with
+    two or more retrieval parents.
+    """
+
+    retrieval_ids = {
+        index
+        for index, row in enumerate(plan, start=1)
+        if bool(row.get("requires_retrieval", True))
+    }
+    parents: dict[int, list[int]] = {}
+    children: dict[int, list[int]] = {index: [] for index in retrieval_ids}
+    for index in sorted(retrieval_ids):
+        refs = [int(value) for value in PLACEHOLDER.findall(str(plan[index - 1]["question"]))]
+        parents[index] = [value for value in refs if value in retrieval_ids]
+        for parent in parents[index]:
+            children[parent].append(index)
+
+    components: list[list[int]] = []
+    visited: set[int] = set()
+    for start in sorted(retrieval_ids):
+        if start in visited:
+            continue
+        component: set[int] = set()
+        stack = [start]
+        while stack:
+            current = stack.pop()
+            if current in component:
+                continue
+            component.add(current)
+            stack.extend(parents.get(current, []))
+            stack.extend(children.get(current, []))
+        visited.update(component)
+        indegree = {
+            node: len([parent for parent in parents[node] if parent in component])
+            for node in component
+        }
+        queue = sorted(node for node, degree in indegree.items() if degree == 0)
+        ordered: list[int] = []
+        while queue:
+            node = queue.pop(0)
+            ordered.append(node)
+            for child in sorted(children.get(node, [])):
+                if child not in component:
+                    continue
+                indegree[child] -= 1
+                if indegree[child] == 0:
+                    queue.append(child)
+                    queue.sort()
+        if len(ordered) != len(component):
+            raise ValueError(f"retrieval dependency cycle in {sorted(component)}")
+        # The research implementation treats singleton retrieval questions as
+        # the simple-retrieval fallback rather than as a reasoning chain.
+        if len(ordered) > 1:
+            components.append(ordered)
+    return components
+
+
+def _panini_harmonic_mean(scores: Sequence[float]) -> float:
+    valid = [float(score) for score in scores if float(score) > 1e-6]
+    return len(valid) / sum(1.0 / score for score in valid) if valid else 1e-6
+
+
+def _panini_chain_score(
+    steps: Sequence[Mapping[str, Any]], score_rule: str = "geometric_mean"
+) -> float:
+    normalized = [
+        max(1e-6, min(1.0, 0.5 * (float(step.get("score", 0.0)) + 1.0)))
+        for step in steps
+    ]
+    if not normalized:
+        return 1e-6
+    if score_rule == "last_hop":
+        return normalized[-1]
+    return math.exp(sum(math.log(score) for score in normalized) / len(normalized))
+
+
+def _panini_state_key(state: Mapping[str, Any]) -> tuple[Any, ...]:
+    return (
+        -float(state.get("chain_score", 0.0)),
+        -float(state.get("last_hop_score", 0.0)),
+        tuple(step["qa_uid"] for step in state.get("steps", [])),
+    )
+
+
+def _combine_parent_states(
+    parent_groups: Sequence[Sequence[Mapping[str, Any]]],
+    beam_width: int,
+    threshold: float,
+) -> list[dict[str, Any]]:
+    combinations: list[tuple[float, tuple[Mapping[str, Any], ...]]] = []
+    for states in product(*parent_groups):
+        score = _panini_harmonic_mean(
+            [float(state.get("chain_score", 0.5)) for state in states]
+        )
+        combinations.append((score, states))
+    combinations.sort(
+        key=lambda item: (
+            -item[0],
+            tuple(
+                tuple(step["qa_uid"] for step in state.get("steps", []))
+                for state in item[1]
+            ),
+        )
+    )
+    selected = [item for item in combinations[:beam_width] if item[0] >= threshold]
+    if not selected and combinations:
+        selected = combinations[:1]
+    merged: list[dict[str, Any]] = []
+    for harmonic_score, states in selected:
+        answers: dict[int, Any] = {}
+        steps: list[dict[str, Any]] = []
+        for state in states:
+            answers.update(state.get("answers", {}))
+            for step in state.get("steps", []):
+                # Match the research code: parent evidence lists are merged
+                # before chain scoring. Formatting deduplicates final evidence.
+                steps.append(dict(step))
+        merged.append(
+            {
+                "answers": answers,
+                "steps": steps,
+                "chain_score": harmonic_score,
+                "pre_combination_score": harmonic_score,
+            }
+        )
+    return merged
+
+
+def execute_panini_plan(
+    plan: Sequence[Mapping[str, Any]],
+    retrieve_qa,
+    config: RunConfig,
+    *,
+    original_question: str | None = None,
+    unique_answers: bool = True,
+    score_rule: str = "geometric_mean",
+) -> dict[str, Any]:
+    """Execute the real PANINI DAG semantics with course-scale retrieval.
+
+    ``retrieve_qa`` returns QA records, each retaining all answer names, stable
+    answer IDs, role states, and one reranker score.  Intermediate hops keep
+    the best state per answer entity.  A converging retrieval node combines
+    parent beams by harmonic mean.  The final retrieval hop keeps QA-level
+    alternatives and evidence is deduplicated from *all* final beams.
+    """
+
+    components = retrieval_components(plan)
+    if not components:
+        fallback_query = original_question or next(
+            (
+                str(row.get("question", ""))
+                for row in plan
+                if bool(row.get("requires_retrieval", True))
+            ),
+            "",
+        )
+        candidates = (
+            list(retrieve_qa(fallback_query, config.candidates_per_hop))
+            if fallback_query
+            else []
+        )
+        evidence = [dict(candidate) for candidate in candidates]
+        chains = [
+            {
+                "answers": {1: list(candidate.get("answer_names", []))},
+                "steps": [dict(candidate)],
+                "chain_score": _panini_chain_score([candidate], score_rule),
+                "last_hop_score": float(candidate.get("score", 0.0)),
+            }
+            for candidate in candidates[: config.beam_width]
+        ]
+        return {
+            "components": [],
+            "warnings": [],
+            "chains": chains,
+            "component_traces": [],
+            "fallback": True,
+            "fallback_query": fallback_query,
+            "evidence": evidence,
+        }
+    final_states: list[dict[str, Any]] = []
+    component_traces: list[dict[str, Any]] = []
+    warnings: list[str] = []
+    for component in components:
+        completed: dict[int, list[dict[str, Any]]] = {}
+        step_traces: list[dict[str, Any]] = []
+        for position, step_id in enumerate(component):
+            template = str(plan[step_id - 1]["question"])
+            refs = [int(value) for value in PLACEHOLDER.findall(template)]
+            dependencies = [value for value in refs if value in component]
+            unresolved_reasoning = [value for value in refs if value not in component]
+            if unresolved_reasoning:
+                warnings.append(
+                    f"Q{step_id} references non-retrieval steps {unresolved_reasoning}"
+                )
+            if not dependencies:
+                prior_states = [
+                    {"answers": {}, "steps": [], "chain_score": 1.0}
+                ]
+            elif len(dependencies) == 1:
+                prior_states = [dict(state) for state in completed.get(dependencies[0], [])]
+            else:
+                parent_groups = [completed.get(parent, [])[: config.beam_width] for parent in dependencies]
+                prior_states = _combine_parent_states(
+                    parent_groups,
+                    config.beam_width,
+                    config.multi_dependency_threshold,
+                ) if all(parent_groups) else []
+
+            expansions: list[dict[str, Any]] = []
+            issued_queries: list[str] = []
+            final_hop = position == len(component) - 1
+            for state in prior_states:
+                missing = [ref for ref in refs if ref not in state["answers"]]
+                if missing:
+                    warnings.append(
+                        f"Q{step_id} could not resolve placeholders {missing}; state skipped"
+                    )
+                    continue
+                concrete = PLACEHOLDER.sub(
+                    lambda match: (
+                        ", ".join(state["answers"][int(match.group(1))])
+                        if isinstance(state["answers"][int(match.group(1))], list)
+                        else str(state["answers"][int(match.group(1))])
+                    ),
+                    template,
+                )
+                issued_queries.append(concrete)
+                candidates = list(retrieve_qa(concrete, config.candidates_per_hop))
+                if final_hop:
+                    for candidate in candidates:
+                        answers = dict(state["answers"])
+                        names = list(candidate.get("answer_names", []))
+                        if names:
+                            # The research executor keeps the full final answer
+                            # list because no later placeholder consumes it.
+                            answers[step_id] = names
+                        steps = [*state["steps"], dict(candidate)]
+                        expansions.append(
+                            {
+                                "answers": answers,
+                                "steps": steps,
+                                "chain_score": _panini_chain_score(steps, score_rule),
+                                "last_hop_score": float(candidate.get("score", 0.0)),
+                            }
+                        )
+                elif unique_answers:
+                    per_entity: dict[str, dict[str, Any]] = {}
+                    for candidate in candidates:
+                        names = list(candidate.get("answer_names", []))
+                        ids = list(candidate.get("answer_ids", []))
+                        for answer_index, answer in enumerate(names):
+                            if not answer:
+                                continue
+                            entity_key = (
+                                str(ids[answer_index])
+                                if answer_index < len(ids) and ids[answer_index]
+                                else normalize_text(answer)
+                            )
+                            answers = dict(state["answers"])
+                            answers[step_id] = answer
+                            steps = [*state["steps"], dict(candidate)]
+                            new_state = {
+                                "answers": answers,
+                                "steps": steps,
+                                "chain_score": _panini_chain_score(steps, score_rule),
+                                "last_hop_score": float(candidate.get("score", 0.0)),
+                            }
+                            previous = per_entity.get(entity_key)
+                            if previous is None or _panini_state_key(new_state) < _panini_state_key(previous):
+                                per_entity[entity_key] = new_state
+                    expansions.extend(per_entity.values())
+                else:
+                    for candidate in candidates:
+                        names = list(candidate.get("answer_names", []))
+                        for answer in names:
+                            if not answer:
+                                continue
+                            answers = dict(state["answers"])
+                            answers[step_id] = answer
+                            steps = [*state["steps"], dict(candidate)]
+                            expansions.append(
+                                {
+                                    "answers": answers,
+                                    "steps": steps,
+                                    "chain_score": _panini_chain_score(steps, score_rule),
+                                    "last_hop_score": float(candidate.get("score", 0.0)),
+                                }
+                            )
+            expansions.sort(key=_panini_state_key)
+            beams = expansions[: config.beam_width]
+            completed[step_id] = beams
+            step_traces.append(
+                {
+                    "step_id": step_id,
+                    "template": template,
+                    "dependencies": dependencies,
+                    "parent_states": len(prior_states),
+                    "issued_queries": issued_queries,
+                    "expansions": len(expansions),
+                    "final_hop": final_hop,
+                    "kept": [
+                        {
+                            "qa_ids": [step["qa_uid"] for step in state["steps"]],
+                            "answers": dict(state["answers"]),
+                            "score": state["chain_score"],
+                        }
+                        for state in beams
+                    ],
+                }
+            )
+        component_final = completed.get(component[-1], []) if component else []
+        final_states.extend(component_final)
+        component_traces.append({"step_ids": component, "steps": step_traces})
+
+    evidence: dict[str, dict[str, Any]] = {}
+    for state in final_states:
+        for step in state.get("steps", []):
+            previous = evidence.get(step["qa_uid"])
+            if previous is None or float(step.get("score", 0.0)) > float(previous.get("score", 0.0)):
+                evidence[step["qa_uid"]] = dict(step)
+    return {
+        "components": components,
+        "warnings": warnings,
+        "chains": final_states,
+        "component_traces": component_traces,
         "evidence": list(evidence.values()),
     }
 
@@ -1146,6 +1492,75 @@ class NeuralRetrievalCache:
     def candidates(self, query: str, top_k: int, backend: str = "dual_hybrid"):
         return self.compute(query)["rankings"][backend][:top_k]
 
+    def qa_candidates(
+        self, query: str, top_k: int, backend: str = "reranker_only"
+    ) -> list[dict[str, Any]]:
+        """Return top unique QA pairs without flattening their answer entities.
+
+        RICR expands answer entities only at intermediate hops. Flattening QA
+        rows before the executor changes both top-k and final-hop behavior, so
+        this adapter reconstructs the record shape used by the research code.
+        """
+
+        key = normalize_text(query)
+        if backend in {"bm25", "dense", "rrf"} and key not in self.records:
+            # Baseline ablations do not require a cross-encoder. Avoid scoring
+            # an unused dual pool merely to obtain a BM25/dense/RRF ranking.
+            from panini_course import reciprocal_rank_fusion
+
+            pool = self.config.retrieval_pool
+            bm25 = self.qa_bm25.search(query, pool)
+            if backend == "bm25":
+                hits = bm25
+            else:
+                dense = self.qa_dense.search(self.vector(query), pool)
+                if backend == "dense":
+                    hits = dense
+                else:
+                    tfidf = self.qa_tfidf.search(query, pool)
+                    hits = reciprocal_rank_fusion(
+                        [tfidf, bm25, dense],
+                        rank_constant=self.config.rrf_constant,
+                        top_k=pool,
+                    )
+            ranking = self._expand_answers(hits)
+        else:
+            ranking = self.compute(query)["rankings"][backend]
+        candidates: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        for hit in ranking:
+            qa_uid = str(hit["qa_uid"])
+            if qa_uid in seen:
+                continue
+            seen.add(qa_uid)
+            row = self.qa_by_id[qa_uid]
+            candidates.append(
+                {
+                    "qa_uid": qa_uid,
+                    "question": row["question"],
+                    "document_id": row["document_id"],
+                    "answer_names": list(row.get("answer_names", [])),
+                    # GSW node IDs (e1, e2, ...) are document-local. Namespacing
+                    # prevents unrelated e1 nodes from collapsing during the
+                    # per-entity beam step. Cross-document identity remains an
+                    # explicit reconciliation limitation for students to study.
+                    "answer_ids": [
+                        f"{row['document_id']}::{local_id}"
+                        for local_id in row.get("answer_local_ids", [])
+                    ],
+                    "answer_role_states": list(
+                        row.get("answer_role_states", [])
+                    ),
+                    "score": float(hit["score"]),
+                    "retrieval_rank": hit.get("retrieval_rank", hit.get("rank")),
+                    "routes": list(hit.get("routes", [])),
+                    "source": hit.get("source", backend),
+                }
+            )
+            if len(candidates) >= top_k:
+                break
+        return candidates
+
 
 def run_neural_retrieval_stage(
     jobs: Sequence[tuple[str, Any, Sequence[Mapping[str, Any]], Path]],
@@ -1205,14 +1620,21 @@ def run_neural_retrieval_stage(
                 continue
             started = time.perf_counter()
             try:
-                result = execute_plan(
+                result = execute_panini_plan(
                     plan_record["predicted_decomposition"],
-                    lambda query, k: retrieval.candidates(query, k, backend),
+                    lambda query, k: retrieval.qa_candidates(query, k, backend),
                     config,
+                    original_question=str(question["question"]),
                 )
                 error = None
             except Exception as exception:
-                result = {"branches": [], "warnings": [], "chains": [], "evidence": []}
+                result = {
+                    "components": [],
+                    "warnings": [],
+                    "chains": [],
+                    "component_traces": [],
+                    "evidence": [],
+                }
                 error = repr(exception)
             append_jsonl(
                 trace_path,
@@ -1221,6 +1643,7 @@ def run_neural_retrieval_stage(
                     "question_id": qid,
                     "question": question["question"],
                     "predicted_decomposition": plan_record["predicted_decomposition"],
+                    "backend": backend,
                     "reranker_model": config.reranker_model,
                     **result,
                     "error": error,
@@ -1248,6 +1671,7 @@ def run_neural_retrieval_stage(
                 ("k_5", replace(config, candidates_per_hop=5), "dual_hybrid", True, "geometric_mean"),
                 ("unique_off", config, "dual_hybrid", False, "geometric_mean"),
                 ("last_hop", config, "dual_hybrid", True, "last_hop"),
+                ("parent_threshold_off", replace(config, multi_dependency_threshold=0.0), "dual_hybrid", True, "geometric_mean"),
                 ("bm25", config, "bm25", True, "geometric_mean"),
                 ("dense", config, "dense", True, "geometric_mean"),
                 ("rrf", config, "rrf", True, "geometric_mean"),
@@ -1262,12 +1686,13 @@ def run_neural_retrieval_stage(
                     if not plan_record or not plan_record.get("decomposition_valid"):
                         continue
                     started = time.perf_counter()
-                    result = execute_plan(
+                    result = execute_panini_plan(
                         plan_record["predicted_decomposition"],
-                        lambda query, k, selected=ablation_backend: retrieval.candidates(
+                        lambda query, k, selected=ablation_backend: retrieval.qa_candidates(
                             query, k, selected
                         ),
                         ablation_config,
+                        original_question=str(question["question"]),
                         unique_answers=unique,
                         score_rule=score_rule,
                     )
@@ -1305,7 +1730,14 @@ def _scheduled_retrieval_configuration(
     score_rule: str,
     warm_gold_atomic_queries: bool = False,
 ) -> None:
-    """Execute one configuration without co-resident encoder and reranker."""
+    """Execute the faithful DAG engine while loading one GPU model at a time.
+
+    Each round replays the deterministic executor from cached rankings.  A
+    callback records the first uncached queries exposed at the current DAG
+    frontier; those queries are embedded and reranked in two separate GPU
+    phases.  Replaying avoids maintaining a second, subtly different RICR
+    implementation solely for low-memory Colab runtimes.
+    """
 
     import torch
     from panini_course.qwen_models import QwenQueryEncoder, QwenReranker
@@ -1321,24 +1753,21 @@ def _scheduled_retrieval_configuration(
             rerank_batch_size=config.free_colab_rerank_batch_size,
             rerank_max_length=config.free_colab_rerank_max_length,
         )
-    print(
-        f"[low-memory] {total_gib:.1f} GiB GPU; reranker={reranker_model}",
-        flush=True,
-    )
+    print(f"[low-memory] {total_gib:.1f} GiB GPU; reranker={reranker_model}", flush=True)
+
     contexts: list[dict[str, Any]] = []
     for dataset, package, questions, cache_root in jobs:
         output_path = cache_root / output_name
-        existing = read_jsonl(output_path)
         completed = {
-            row["question_id"]
-            for row in existing
+            str(row["question_id"])
+            for row in read_jsonl(output_path)
             if row.get("configuration", configuration_name) == configuration_name
         }
         plans = {
-            row["question_id"]: row
+            str(row["question_id"]): row
             for row in read_jsonl(cache_root / "decompositions.jsonl")
         }
-        states: dict[str, dict[str, Any]] = {}
+        pending: dict[str, dict[str, Any]] = {}
         for question in questions:
             qid = str(question["question_id"])
             if qid in completed:
@@ -1359,16 +1788,9 @@ def _scheduled_retrieval_configuration(
                     },
                 )
                 continue
-            plan = plan_record["predicted_decomposition"]
-            branch_ids, warnings = retrieval_branches(plan)
-            states[qid] = {
+            pending[qid] = {
                 "question": question,
-                "plan": plan,
-                "warnings": warnings,
-                "branches": [
-                    {"step_ids": ids, "hop_index": 0, "beams": [], "trace": []}
-                    for ids in branch_ids
-                ],
+                "plan": plan_record["predicted_decomposition"],
                 "started": time.perf_counter(),
             }
         contexts.append(
@@ -1377,83 +1799,122 @@ def _scheduled_retrieval_configuration(
                 "package": package,
                 "cache_root": cache_root,
                 "output_path": output_path,
-                "states": states,
+                "pending": pending,
                 "qa_rows": package.qa_pairs(),
-                "wrote": set(),
             }
         )
 
     round_number = 0
-    while True:
+    while any(context["pending"] for context in contexts):
         round_number += 1
-        queries_by_dataset: dict[str, list[str]] = {}
-        any_pending = False
-        for context in contexts:
-            queries: list[str] = []
-            if warm_gold_atomic_queries and round_number == 1:
-                for question in context["package"].questions("public"):
-                    queries.extend(task["question"] for task in atomic_tasks(question))
-            for state in context["states"].values():
-                for branch in state["branches"]:
-                    pending = pending_branch_queries(state["plan"], branch)
-                    queries.extend(pending)
-                    any_pending = any_pending or bool(pending)
-            queries_by_dataset[context["dataset"]] = list(dict.fromkeys(queries))
-        if not any_pending and not (
-            warm_gold_atomic_queries and round_number == 1
-        ):
-            break
-
-        missing_vectors: dict[str, list[str]] = {}
+        discoveries: dict[str, list[str]] = {}
+        finished: list[tuple[dict[str, Any], str, dict[str, Any]]] = []
         for context in contexts:
             cache = NeuralRetrievalCache(
                 context["package"], context["cache_root"], config, None, None
             )
             missing: list[str] = []
-            for query in queries_by_dataset[context["dataset"]]:
-                try:
-                    cache.vector(query)
-                except RuntimeError:
-                    missing.append(query)
-            missing_vectors[context["dataset"]] = missing
+            if warm_gold_atomic_queries and round_number == 1:
+                for public_question in context["package"].questions("public"):
+                    for task in atomic_tasks(public_question):
+                        if normalize_text(task["question"]) not in cache.records:
+                            missing.append(task["question"])
+            for qid, state in context["pending"].items():
+                state_missing: list[str] = []
 
-        vector_misses = sum(map(len, missing_vectors.values()))
-        print(
-            f"[low-memory round {round_number}] query-vector misses: {vector_misses}",
-            flush=True,
-        )
-        if vector_misses:
-            encoder = QwenQueryEncoder(
-                quantized=True, dtype=dtype, device_map="auto"
-            )
-            for context in contexts:
-                cache = NeuralRetrievalCache(
-                    context["package"], context["cache_root"], config, encoder, None
+                def cached_retrieve(query, k, selected=backend):
+                    if selected in {"bm25", "dense", "rrf"}:
+                        return cache.qa_candidates(query, k, selected)
+                    if normalize_text(query) not in cache.records:
+                        state_missing.append(query)
+                        return []
+                    return cache.qa_candidates(query, k, selected)
+
+                result = execute_panini_plan(
+                    state["plan"],
+                    cached_retrieve,
+                    config,
+                    original_question=str(state["question"]["question"]),
+                    unique_answers=unique_answers,
+                    score_rule=score_rule,
                 )
-                for query in missing_vectors[context["dataset"]]:
-                    cache.vector(query)
-            # The last cache owns an encoder reference; release it before the
-            # CUDA cleanup or the next model can inherit the old reservation.
-            del cache, encoder
-            release_gpu()
+                missing.extend(state_missing)
+                if not state_missing:
+                    finished.append((context, qid, result))
+            discoveries[context["dataset"]] = list(dict.fromkeys(missing))
 
-        ranking_misses: dict[str, list[str]] = {}
+        for context, qid, result in finished:
+            state = context["pending"].pop(qid)
+            cache = NeuralRetrievalCache(
+                context["package"], context["cache_root"], config, None, None
+            )
+            issued_queries = {
+                query
+                for component in result.get("component_traces", [])
+                for step in component.get("steps", [])
+                for query in step.get("issued_queries", [])
+            }
+            if result.get("fallback_query"):
+                issued_queries.add(result["fallback_query"])
+            query_seconds = sum(
+                float(cache.records.get(normalize_text(query), {}).get("seconds", 0.0))
+                + float(cache.vector_records.get(normalize_text(query), {}).get("seconds", 0.0))
+                for query in issued_queries
+            )
+            record = {
+                "dataset": context["dataset"],
+                "configuration": configuration_name,
+                "question_id": qid,
+                "question": state["question"]["question"],
+                "predicted_decomposition": state["plan"],
+                "backend": backend,
+                "reranker_model": reranker_model,
+                "beam_width": config.beam_width,
+                "candidates_per_hop": config.candidates_per_hop,
+                "unique_answers": unique_answers,
+                "score_rule": score_rule,
+                **result,
+                "error": None,
+                "seconds": query_seconds or (time.perf_counter() - state["started"]),
+                "scheduled_wall_seconds": time.perf_counter() - state["started"],
+            }
+            if output_name == "ablation_traces.jsonl":
+                record.update(score_trace(state["question"], result, context["qa_rows"]))
+            append_jsonl(context["output_path"], record)
+
+        new_queries = sum(map(len, discoveries.values()))
+        print(f"[low-memory round {round_number}] ranking misses: {new_queries}", flush=True)
+        if not new_queries:
+            # All remaining questions must have been written above. This guard
+            # prevents an accidental infinite loop if that invariant changes.
+            if any(context["pending"] for context in contexts):
+                raise RuntimeError("RICR scheduler stalled without discovering a query")
+            break
+
+        vector_misses: dict[str, list[str]] = {}
         for context in contexts:
             cache = NeuralRetrievalCache(
                 context["package"], context["cache_root"], config, None, None
             )
-            ranking_misses[context["dataset"]] = [
-                query
-                for query in queries_by_dataset[context["dataset"]]
-                if normalize_text(query) not in cache.records
-            ]
-        rerank_misses = sum(map(len, ranking_misses.values()))
-        print(
-            f"[low-memory round {round_number}] reranking misses: {rerank_misses}",
-            flush=True,
-        )
-        reranker = None
-        if rerank_misses:
+            missing_vectors: list[str] = []
+            for query in discoveries[context["dataset"]]:
+                try:
+                    cache.vector(query)
+                except RuntimeError:
+                    missing_vectors.append(query)
+            vector_misses[context["dataset"]] = missing_vectors
+        if sum(map(len, vector_misses.values())):
+            encoder = QwenQueryEncoder(quantized=True, dtype=dtype, device_map="auto")
+            for context in contexts:
+                cache = NeuralRetrievalCache(
+                    context["package"], context["cache_root"], config, encoder, None
+                )
+                for query in vector_misses[context["dataset"]]:
+                    cache.vector(query)
+            del cache, encoder
+            release_gpu()
+
+        try:
             reranker = QwenReranker(
                 model_name=reranker_model,
                 quantized=True,
@@ -1461,86 +1922,39 @@ def _scheduled_retrieval_configuration(
                 device_map="auto",
                 max_length=config.rerank_max_length,
             )
-        caches: dict[str, NeuralRetrievalCache] = {}
+        except RuntimeError as exception:
+            if (
+                "out of memory" not in str(exception).casefold()
+                or reranker_model == config.free_colab_reranker_model
+            ):
+                raise
+            release_gpu()
+            reranker_model = config.free_colab_reranker_model
+            config = replace(
+                config,
+                rerank_batch_size=config.free_colab_rerank_batch_size,
+                rerank_max_length=config.free_colab_rerank_max_length,
+            )
+            print(
+                f"[low-memory] 8B OOM; falling back to {reranker_model}",
+                flush=True,
+            )
+            reranker = QwenReranker(
+                model_name=reranker_model,
+                quantized=True,
+                dtype=dtype,
+                device_map="auto",
+                max_length=config.rerank_max_length,
+            )
         for context in contexts:
             cache = NeuralRetrievalCache(
                 context["package"], context["cache_root"], config, None, reranker
             )
-            caches[context["dataset"]] = cache
-            for query in ranking_misses[context["dataset"]]:
-                cache.compute(query)
-
-        for context in contexts:
-            cache = caches[context["dataset"]]
-            for qid, state in context["states"].items():
-                if qid in context["wrote"]:
-                    continue
-                for branch in state["branches"]:
-                    if pending_branch_queries(state["plan"], branch):
-                        advance_branch_one_hop(
-                            state["plan"],
-                            branch,
-                            lambda query, k, selected=backend: cache.candidates(
-                                query, k, selected
-                            ),
-                            beam_width=config.beam_width,
-                            candidates_per_hop=config.candidates_per_hop,
-                            unique_answers=unique_answers,
-                            score_rule=score_rule,
-                        )
-                finished = all(
-                    branch["hop_index"] >= len(branch["step_ids"])
-                    or (branch["hop_index"] > 0 and not branch["beams"])
-                    for branch in state["branches"]
-                )
-                if finished:
-                    result = result_from_branch_states(
-                        state["branches"], state["warnings"]
-                    )
-                    issued_queries = {
-                        query
-                        for branch in result["branch_traces"]
-                        for hop in branch["hops"]
-                        for query in hop["issued_queries"]
-                    }
-                    query_seconds = 0.0
-                    for query in issued_queries:
-                        key = normalize_text(query)
-                        query_seconds += float(
-                            cache.records.get(key, {}).get("seconds", 0.0)
-                        )
-                        query_seconds += float(
-                            cache.vector_records.get(key, {}).get("seconds", 0.0)
-                        )
-                    record = {
-                        "dataset": context["dataset"],
-                        "configuration": configuration_name,
-                        "question_id": qid,
-                        "question": state["question"]["question"],
-                        "predicted_decomposition": state["plan"],
-                        "backend": backend,
-                        "reranker_model": reranker_model,
-                        "beam_width": config.beam_width,
-                        "candidates_per_hop": config.candidates_per_hop,
-                        "unique_answers": unique_answers,
-                        "score_rule": score_rule,
-                        **result,
-                        "error": None,
-                        "seconds": query_seconds,
-                        "scheduled_wall_seconds": time.perf_counter() - state["started"],
-                    }
-                    if output_name == "ablation_traces.jsonl":
-                        record.update(
-                            score_trace(
-                                state["question"], result, context["qa_rows"]
-                            )
-                        )
-                    append_jsonl(context["output_path"], record)
-                    context["wrote"].add(qid)
-        del caches, cache
-        if reranker is not None:
-            del reranker
-            release_gpu()
+            for query in discoveries[context["dataset"]]:
+                if normalize_text(query) not in cache.records:
+                    cache.compute(query)
+        del cache, reranker
+        release_gpu()
 
 
 def run_neural_retrieval_stage_low_memory(
@@ -1549,7 +1963,7 @@ def run_neural_retrieval_stage_low_memory(
     *,
     run_ablations: bool = True,
 ) -> None:
-    """Free-tier path: alternate encoder and reranker by RICR depth round."""
+    """Free-tier path: replay DAG frontiers from supplied vectors and cached rankings."""
 
     _scheduled_retrieval_configuration(
         jobs,
@@ -1570,6 +1984,7 @@ def run_neural_retrieval_stage_low_memory(
         ("k_5", replace(config, candidates_per_hop=5), "dual_hybrid", True, "geometric_mean"),
         ("unique_off", config, "dual_hybrid", False, "geometric_mean"),
         ("last_hop", config, "dual_hybrid", True, "last_hop"),
+        ("parent_threshold_off", replace(config, multi_dependency_threshold=0.0), "dual_hybrid", True, "geometric_mean"),
         ("bm25", config, "bm25", True, "geometric_mean"),
         ("dense", config, "dense", True, "geometric_mean"),
         ("rrf", config, "rrf", True, "geometric_mean"),
@@ -1605,25 +2020,13 @@ def score_trace(question: Mapping[str, Any], trace: Mapping[str, Any], qa_rows) 
     ]
     all_chain_ids = {step["qa_uid"] for step in all_chain_steps}
     gold_answer_sequence = [normalize_text(answer) for answer in evidence_answers(question)]
-    final_beams_by_branch = [
-        branch.get("hops", [])[-1].get("kept", [])
-        for branch in trace.get("branch_traces", [])
-        if branch.get("hops")
-    ]
-    if len(final_beams_by_branch) == 1:
-        complete_chain = any(
-            all(answer in [normalize_text(value) for value in beam.get("answers", [])]
-                for answer in gold_answer_sequence)
-            for beam in final_beams_by_branch[0]
-        )
-    else:
-        retained_answers = {
-            normalize_text(answer)
-            for branch in final_beams_by_branch
-            for beam in branch
-            for answer in beam.get("answers", [])
-        }
-        complete_chain = all(answer in retained_answers for answer in gold_answer_sequence)
+    retained_answers = {
+        normalize_text(answer)
+        for chain in trace.get("chains", [])
+        for answer_value in chain.get("answers", {}).values()
+        for answer in (answer_value if isinstance(answer_value, list) else [answer_value])
+    }
+    complete_chain = all(answer in retained_answers for answer in gold_answer_sequence)
     gold_ids = gold_qa_ids(question, qa_rows)
     document_by_qa = {str(row["qa_uid"]): row.get("document_id") for row in qa_rows}
     support_docs = set(question.get("supporting_document_ids", [])) or {
@@ -1640,19 +2043,35 @@ def score_trace(question: Mapping[str, Any], trace: Mapping[str, Any], qa_rows) 
         ),
         "complete_chain_recovery": float(complete_chain),
         "answer_in_selected_evidence": max(
-            (exact_match(row.get("answer", ""), gold_answers) for row in trace.get("evidence", [])),
+            (
+                exact_match(answer, gold_answers)
+                for row in trace.get("evidence", [])
+                for answer in row.get("answer_names", [row.get("answer", "")])
+            ),
             default=0.0,
         ),
         "selected_evidence_count": len(selected_ids),
         "surviving_chains": len(trace.get("chains", [])),
         "unique_current_answers": len(
             {
-                normalize_text(chain["steps"][-1]["answer"])
+                normalize_text(answer)
                 for chain in trace.get("chains", [])
                 if chain.get("steps")
+                for answer in chain["steps"][-1].get(
+                    "answer_names", [chain["steps"][-1].get("answer", "")]
+                )
             }
         ),
     }
+
+
+def format_answer_evidence(row: Mapping[str, Any]) -> str:
+    """Format one QA record exactly as the PANINI answer prompt expects."""
+
+    answers = ", ".join(row.get("answer_names", [])) or str(row.get("answer", ""))
+    roles = ", ".join(row.get("answer_role_states", []))
+    formatted = f"Q: {row['question']} A: {answers}"
+    return f"{formatted} {roles}" if roles else formatted
 
 
 def run_answer_stage(
@@ -1685,21 +2104,25 @@ def run_answer_stage(
                 continue
             trace = traces.get(qid, {"chains": [], "evidence": [], "seconds": 0.0})
             evidence = [
-                f"Q: {row['question']} A: {row['answer']}"
-                for row in trace.get("evidence", [])
+                format_answer_evidence(row) for row in trace.get("evidence", [])
             ]
             started = time.perf_counter()
-            prediction = answerer.answer(str(question["question"]), evidence)
+            answer_trace = answerer.answer_with_trace(
+                str(question["question"]), evidence
+            )
+            prediction = str(answer_trace["answer"])
             answer_seconds = time.perf_counter() - started
             context = "\n".join(evidence)
             context_tokens = len(answerer.tokenizer(context).input_ids)
             plan_record = plans.get(qid, {})
             issued_queries = {
                 query
-                for branch in trace.get("branch_traces", [])
-                for hop in branch.get("hops", [])
-                for query in hop.get("issued_queries", [])
+                for component in trace.get("component_traces", [])
+                for step in component.get("steps", [])
+                for query in step.get("issued_queries", [])
             }
+            if trace.get("fallback_query"):
+                issued_queries.add(trace["fallback_query"])
             record: dict[str, Any] = {
                 "dataset": dataset,
                 "split": "development" if qid in public_ids else "held_out",
@@ -1707,7 +2130,7 @@ def run_answer_stage(
                 "question": question["question"],
                 "predicted_decomposition": plan_record.get("predicted_decomposition", []),
                 "decomposition_valid": bool(plan_record.get("decomposition_valid", False)),
-                "retrieval_backend": "dual_hybrid",
+                "retrieval_backend": trace.get("backend", "dual_hybrid"),
                 "reranker_model": trace.get(
                     "reranker_model", config.reranker_model
                 ),
@@ -1716,14 +2139,19 @@ def run_answer_stage(
                 "chains": [
                     {
                         "qa_ids": [step["qa_uid"] for step in chain.get("steps", [])],
-                        "answers": [step["answer"] for step in chain.get("steps", [])],
+                        "answers": [
+                            list(step.get("answer_names", [step.get("answer", "")]))
+                            for step in chain.get("steps", [])
+                        ],
                         "hop_scores": [step["score"] for step in chain.get("steps", [])],
-                        "chain_score": chain.get("score", 0.0),
+                        "chain_score": chain.get("chain_score", chain.get("score", 0.0)),
                     }
                     for chain in trace.get("chains", [])
                 ],
                 "evidence_qa_ids": [row["qa_uid"] for row in trace.get("evidence", [])],
+                "answer_evidence": evidence,
                 "predicted_answer": prediction,
+                "answer_response": answer_trace["response"],
                 "latency_ms": {
                     "decomposition": 1000 * float(plan_record.get("seconds", 0.0)),
                     "retrieval_ricr": 1000 * float(trace.get("seconds", 0.0)),
@@ -1776,8 +2204,7 @@ def run_answer_stage(
                 if key in completed_ablations:
                     continue
                 evidence = [
-                    f"Q: {item['question']} A: {item['answer']}"
-                    for item in row.get("evidence", [])
+                    format_answer_evidence(item) for item in row.get("evidence", [])
                 ]
                 started = time.perf_counter()
                 prediction = answerer.answer(row["question"], evidence)

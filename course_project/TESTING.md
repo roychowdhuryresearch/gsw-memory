@@ -7,24 +7,25 @@ pytest -q tests
 ```
 
 Before you implement RICR, the package, graph, embedding, and retrieval tests
-should pass. Tests that depend on the two RICR TODOs are automatically skipped
+should pass. Tests that depend on the RICR TODOs are automatically skipped
 and report:
 
 ```text
-Complete the two RICR TODOs to enable this test.
+Complete run_panini_ricr to enable this test.
 ```
 
-After implementing `prune_unique_answers` and `run_linear_ricr`, run the same
+After implementing `identify_retrieval_components` and `run_panini_ricr`, run the same
 command again. The skipped tests will enable automatically. They check:
 
-- answer normalization and duplicate-answer pruning;
-- deterministic tie handling;
-- empty retrieval results;
-- answer substitution across hops;
-- geometric-mean chain scores; and
-- the `B=1` case.
+- topological ordering of a converging retrieval DAG;
+- substitution of all parent answers at a multi-parent node;
+- harmonic-mean parent-beam combination;
+- intermediate entity grouping versus final QA-level selection;
+- evidence collected from every surviving final beam; and
+- the original-question fallback for singleton plans.
 
 The supplied tests are examples, not the complete grading suite. Add your own
 tests for reconciliation (intended merges, homonym non-merges, and edge-weight
-aggregation), parallel decomposition branches, repeated QA IDs, malformed
-placeholders, and the specific failure cases you find during evaluation.
+aggregation), document-namespaced local IDs, parent combinations below the
+quality threshold, repeated QA IDs, malformed placeholders, and the specific
+failure cases you find during evaluation.
