@@ -243,3 +243,74 @@ class QwenReranker:
                 probabilities = torch.softmax(binary, dim=1)[:, 1]
             scores.extend(probabilities.float().cpu().tolist())
         return scores
+
+
+class QwenAnswerer:
+    """Generate a short answer using only retrieved GSW QA evidence."""
+
+    def __init__(
+        self,
+        model_name: str = "Qwen/Qwen3-4B",
+        *,
+        quantized: bool = True,
+        dtype: str = "bfloat16",
+        device_map: str = "auto",
+    ):
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name, padding_side="left"
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            **_model_kwargs(
+                dtype=dtype, quantized=quantized, device_map=device_map
+            ),
+        ).eval()
+
+    def answer(
+        self,
+        question: str,
+        evidence: Sequence[str],
+        *,
+        max_new_tokens: int = 96,
+    ) -> str:
+        import torch
+
+        evidence_text = "\n".join(
+            f"{index}. {item}" for index, item in enumerate(evidence, start=1)
+        )
+        messages = [
+            {
+                "role": "system",
+                "content": (
+                    "Answer only from the supplied GSW QA evidence. Return a "
+                    "short answer without explanation. If the evidence is "
+                    "insufficient, return exactly N/A."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"Question: {question}\n\nGSW QA evidence:\n"
+                    f"{evidence_text}"
+                ),
+            },
+        ]
+        text = self.tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+            enable_thinking=False,
+        )
+        inputs = self.tokenizer(text, return_tensors="pt").to(self.model.device)
+        with torch.inference_mode():
+            generated = self.model.generate(
+                **inputs,
+                do_sample=False,
+                max_new_tokens=max_new_tokens,
+            )
+        return self.tokenizer.decode(
+            generated[0, inputs["input_ids"].shape[1] :],
+            skip_special_tokens=True,
+        ).strip()
