@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "KFGY",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "commercial",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Healdsburg, California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "license location",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Santa Rosa, California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "broadcast area",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "92.9 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency",
+            "radio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "K300AO",
+      "roles": [
+        {
+          "role": "translator",
+          "states": [
+            "broadcasting entity",
+            "radio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "107.9 MHz",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency",
+            "radio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is KFGY licensed to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to Healdsburg, California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "broadcasting to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where does KFGY broadcast to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station broadcasts to the Santa Rosa, California area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcast on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "On what frequency does KFGY broadcast?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station broadcasts on 92.9 FM?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "also broadcast on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What frequency is KFGY also broadcast on?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station is also broadcast on 107.9 MHz?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is translator K300AO licensed to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What translator is licensed to Santa Rosa?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

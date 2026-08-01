@@ -1,0 +1,280 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Henry, an American Legend",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "children's literature",
+            "1960s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "picture book"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ezra Jack Keats",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "illustrator"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "John Henry",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "legendary figure",
+            "miner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1965",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "steam drill",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "industrial equipment"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "20-pound hammer",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "tool"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "100 dollars",
+      "roles": [
+        {
+          "role": "reward",
+          "states": [
+            "competition prize"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "new clothes",
+      "roles": [
+        {
+          "role": "reward",
+          "states": [
+            "competition prize"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote John Henry, an American Legend?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What book did Ezra Jack Keats write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was John Henry, an American Legend published?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What book was published in 1965?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "competed against",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did John Henry compete against?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who competed against the steam drill?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "used",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did John Henry use in the competition?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who used a 20-pound hammer?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who won the competition?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did John Henry win?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

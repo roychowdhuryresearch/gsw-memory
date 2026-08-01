@@ -1,0 +1,457 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Richard Timothy Jones",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "January 16, 1972",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Laveinio",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "film character"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "The Wood",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "dramatic film",
+                        "1990s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "1999",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Mike",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "film character"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Why Did I Get Married?",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "dramatic film",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "2007",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Why Did I Get Married Too?",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "dramatic film",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "2010",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Bruce Van Exel",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "television character"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Judging Amy",
+            "roles": [
+                {
+                    "role": "television series",
+                    "states": [
+                        "CBS",
+                        "1990s",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "1999 to 2005",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "airing period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Richard Timothy Jones born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on January 16, 1972?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the nationality of Richard Timothy Jones?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is an American actor?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "portrayed",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who portrayed Laveinio in The Wood?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which character did Richard Timothy Jones portray in The Wood?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "When was The Wood released?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film was released in 1999?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "portrayed",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who portrayed Mike in Why Did I Get Married?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Which character did Richard Timothy Jones portray in Why Did I Get Married?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "When was Why Did I Get Married? released?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What film was released in 2007?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "portrayed",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who portrayed Mike in Why Did I Get Married Too?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Which character did Richard Timothy Jones portray in Why Did I Get Married Too?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "When was Why Did I Get Married Too? released?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What film was released in 2010?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v9",
+            "phrase": "portrayed",
+            "questions": [
+                {
+                    "id": "q17",
+                    "text": "Who portrayed Bruce Van Exel in Judging Amy?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q18",
+                    "text": "Which character did Richard Timothy Jones portray in Judging Amy?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v10",
+            "phrase": "aired from",
+            "questions": [
+                {
+                    "id": "q19",
+                    "text": "When did Judging Amy air?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q20",
+                    "text": "What television series aired from 1999 to 2005?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

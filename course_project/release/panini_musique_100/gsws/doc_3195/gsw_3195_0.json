@@ -1,0 +1,282 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Truth About Men",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "studio album",
+            "country music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tracy Byrd",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Paul Overstreet",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Rory Lee Feek",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tim Johnson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2003",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "RCA Nashville",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Drinkin' Bone",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "How'd I Wind Up in Jamaica",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Lately (Been Dreamin' 'bout Babies)",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "single",
+            "not on album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released The Truth About Men?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released by RCA Nashville?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was The Truth About Men released?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released in 2003?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who wrote The Truth About Men?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Paul Overstreet, Rory Lee Feek, and Tim Johnson write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "features singles",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What singles are featured on The Truth About Men?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which album features the singles 'Drinkin' Bone' and 'How'd I Wind Up in Jamaica'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "charted with",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What single did Tracy Byrd chart with before the release of The Truth About Men?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who charted with the single 'Lately (Been Dreamin' 'bout Babies)'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

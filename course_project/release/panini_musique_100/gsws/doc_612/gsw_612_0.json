@@ -1,0 +1,396 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Biłgoraj County",
+      "roles": [
+        {
+          "role": "administrative unit",
+          "states": [
+            "territorial administration",
+            "local government",
+            "Poland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Lublin Voivodeship",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "eastern Poland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "January 1, 1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1998",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "reform year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Biłgoraj",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "administrative seat",
+            "largest town"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lublin",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "regional capital"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Tarnogród",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "south of Biłgoraj"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Józefów",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "east of Biłgoraj"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Frampol",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "north of Biłgoraj"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Biłgoraj County located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Lublin Voivodeship?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "established on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Biłgoraj County established?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was established on January 1, 1999?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "result of reforms in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the result of the Polish local government reforms in 1998?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When were the reforms that led to the establishment of Biłgoraj County passed?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "administrative seat",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the administrative seat of Biłgoraj County?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which county has Biłgoraj as its administrative seat?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "largest town",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the largest town in Biłgoraj County?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which county has Biłgoraj as its largest town?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lies south of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which town lies south of the regional capital Lublin?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Where does Biłgoraj lie in relation to Lublin?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "contains town",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which county contains the town of Tarnogród?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What towns are contained in Biłgoraj County?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "lies south of",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Which town lies south of Biłgoraj?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Where does Tarnogród lie in relation to Biłgoraj?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "lies east of",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Which town lies east of Biłgoraj?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Where does Józefów lie in relation to Biłgoraj?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "lies north of",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "Which town lies north of Biłgoraj?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Where does Frampol lie in relation to Biłgoraj?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

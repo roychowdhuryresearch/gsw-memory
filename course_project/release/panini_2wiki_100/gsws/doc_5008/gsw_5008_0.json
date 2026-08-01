@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Cocaine Blues",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "Western Swing",
+                        "musical work"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "T. J. 'Red' Arnall",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "musical professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Little Sadie",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "traditional",
+                        "musical work"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who wrote 'Cocaine Blues'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did T. J. 'Red' Arnall write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "reworking of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is 'Cocaine Blues' a reworking of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which song is a reworking of 'Little Sadie'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

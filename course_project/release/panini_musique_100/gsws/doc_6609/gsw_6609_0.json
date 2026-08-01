@@ -1,0 +1,287 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Paul Augustine Leyden (Paul Leyden)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "actor",
+            "producer",
+            "screenwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "16 December 1972",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Australian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Simon Frasier",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "soap opera character"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "As the World Turns",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "daytime soap opera"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Maneater",
+      "roles": [
+        {
+          "role": "mini series",
+          "states": [
+            "television series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "The Young and the Restless",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "soap opera"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Blake",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "soap opera character"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Paul Augustine Leyden born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on 16 December 1972?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the nationality of Paul Augustine Leyden?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Australian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "played role",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who played the role of Simon Frasier?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What role did Paul Augustine Leyden play?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "appeared in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "In which show did Paul Augustine Leyden play Simon Frasier?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who appeared in As the World Turns?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "played in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "In which mini series did Paul Augustine Leyden play Simon?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who played in the 2009 mini series Maneater?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "had a role in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "In which show did Paul Augustine Leyden have a brief stint as Blake?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who had a brief stint on The Young and the Restless?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

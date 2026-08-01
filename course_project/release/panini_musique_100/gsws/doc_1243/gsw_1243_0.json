@@ -1,0 +1,233 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Moorea-Maiao",
+      "roles": [
+        {
+          "role": "commune",
+          "states": [
+            "French Polynesia",
+            "Pacific Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "French Polynesia",
+      "roles": [
+        {
+          "role": "territory",
+          "states": [
+            "overseas territory",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pacific Ocean",
+      "roles": [
+        {
+          "role": "ocean",
+          "states": [
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Windward Islands",
+      "roles": [
+        {
+          "role": "administrative subdivision",
+          "states": [
+            "French Polynesia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "17,816",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is a commune of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Moorea-Maiao a commune of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which commune is part of French Polynesia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "is an overseas territory of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is French Polynesia an overseas territory of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which overseas territory belongs to France?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Moorea-Maiao located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is located in the Pacific Ocean?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "in the administrative subdivision of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which administrative subdivision is Moorea-Maiao part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is part of the Windward Islands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "had a population of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the population of Moorea-Maiao in 2017?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which location had a population of 17,816 in 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

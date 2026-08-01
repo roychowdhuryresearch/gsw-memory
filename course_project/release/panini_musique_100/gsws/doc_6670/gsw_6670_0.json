@@ -1,0 +1,239 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Armenian Genocide",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "early 20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Armenians (Armenia)",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "diaspora",
+            "cultural preservation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location of diaspora",
+            "post-Genocide"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "kef style Armenian dance music",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "cultural preservation",
+            "diaspora music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Western Armenia",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "cultural origin",
+            "historical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Middle Eastern countries",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "emigration origin",
+            "cultural influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Turkey",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "emigration origin",
+            "cultural influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "caused emigration",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What event caused the emigration of Armenians?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did the Armenian Genocide cause?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "settlement in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Armenians settle after the Genocide?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who settled in the United States post-Genocide?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "popular music style",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What music style was popular in the post-Genocide Armenian community in the United States?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which community was the kef style Armenian dance music popular?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "preserved folk songs and dances",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the kef style Armenian dance music preserve?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What preserved the folk songs and dances of Western Armenia?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "emigrated from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "From which countries did Armenians emigrate?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who emigrated from Turkey and other Middle Eastern countries?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

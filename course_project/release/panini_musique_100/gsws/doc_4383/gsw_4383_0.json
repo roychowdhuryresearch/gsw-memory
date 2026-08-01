@@ -1,0 +1,318 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "English Channel",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "geographical feature",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "la Manche",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "French name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ärmelkanal",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "German name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mor Breizh",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "Breton name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mor Bretannek",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "Cornish name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "southern England",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "northern France",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "North Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "geographical feature",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Atlantic Ocean",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "geographical feature",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "French name",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the French name for the English Channel?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What body of water is called 'la Manche' in French?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "German name",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the German name for the English Channel?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What body of water is called 'Ärmelkanal' in German?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "Breton name",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the Breton name for the English Channel?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What body of water is called 'Mor Breizh' in Breton?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "Cornish name",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the Cornish name for the English Channel?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What body of water is called 'Mor Bretannek' in Cornish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "separates",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What body of water separates southern England from northern France?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What does the English Channel separate?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "links",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What body of water links the southern part of the North Sea to the Atlantic Ocean?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What does the English Channel link?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "busiest shipping area",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the busiest shipping area in the world?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is notable about the English Channel in terms of shipping?",
+          "answers": [
+            "busiest shipping area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

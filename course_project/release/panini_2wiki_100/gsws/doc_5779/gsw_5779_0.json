@@ -1,0 +1,121 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Heart on Fire",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "Eurovision Song Contest"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Ruslana",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "Eurovision performer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Eurovision Song Contest 2005",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "music competition",
+                        "2005"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "2005",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "year",
+                        "Eurovision"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "performed at",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What song did Ruslana perform at the Eurovision Song Contest 2005?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who performed 'Heart on Fire' at the Eurovision Song Contest 2005?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "held in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was the Eurovision Song Contest 2005 held?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What event was held in 2005?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

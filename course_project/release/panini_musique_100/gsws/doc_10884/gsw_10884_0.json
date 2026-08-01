@@ -1,0 +1,306 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Provisional Government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "state power",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "soviets",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "socialist",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "socialists",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "lower classes",
+      "roles": [
+        {
+          "role": "social class",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "urban middle class",
+      "roles": [
+        {
+          "role": "social class",
+          "states": [
+            "left-leaning",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bolsheviks (Russian Revolution)",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "socialist",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Vladimir Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political leader",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Red Guards",
+      "roles": [
+        {
+          "role": "military organization",
+          "states": [
+            "historical entity",
+            "precursor to Red Army"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Red Army",
+      "roles": [
+        {
+          "role": "military organization",
+          "states": [
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "historical context",
+            "World War I"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who led the soviets?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did the socialists lead?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "held state power",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who held state power during the dual power period?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did the Provisional Government hold during the dual power period?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who led the Bolsheviks?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What political party was led by Vladimir Lenin?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "turned into",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the Bolsheviks turn the workers' militias into?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who turned the workers' militias into the Red Guards?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "exerted control over",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who exerted control over the Red Guards?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did the Bolsheviks exert control over?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "fighting the war with",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who did the Provisional Government choose to continue fighting the war with?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which government chose to continue fighting the war with Germany?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

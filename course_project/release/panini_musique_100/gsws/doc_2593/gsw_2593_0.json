@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Main Attraction (The Main Attraction (album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "musical work",
+            "jazz genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Grant Green",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "jazz guitarist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States",
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1976",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "recording year",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Kudu label",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry",
+            "jazz"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded The Main Attraction?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Grant Green record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was The Main Attraction recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was recorded in 1976?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "On which label was The Main Attraction released?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released on the Kudu label?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "nationality of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the nationality of Grant Green?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is an American jazz guitarist?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,308 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tjaarke Maas",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "painter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tasmania, Australia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "childhood location",
+            "immigration destination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Netherlands",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country of origin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Willem de Kooning Academy",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "art school",
+            "education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Rotterdam",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "education location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "education location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "icon painting",
+      "roles": [
+        {
+          "role": "art form",
+          "states": [
+            "influence",
+            "art style"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Russian sacred art",
+      "roles": [
+        {
+          "role": "art form",
+          "states": [
+            "influence",
+            "cultural influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "literature",
+      "roles": [
+        {
+          "role": "field",
+          "states": [
+            "influence",
+            "cultural influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "philosophy",
+      "roles": [
+        {
+          "role": "field",
+          "states": [
+            "influence",
+            "cultural influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "immigrated from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Tjaarke Maas' family immigrate from?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who immigrated from the Netherlands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "studied at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Tjaarke Maas study?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who studied at Willem de Kooning Academy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Willem de Kooning Academy located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What institution is located in Rotterdam?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "continued studies in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Tjaarke Maas continue her studies?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who continued studies in New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "introduced to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What art form was Tjaarke Maas introduced to in New York?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was introduced to icon painting?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "influenced by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What influenced Tjaarke Maas' life and work?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Whose life and work was influenced by Russian sacred art, literature, and philosophy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,245 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Port Blair",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital",
+            "notified town",
+            "administrative center"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Andaman and Nicobar Islands",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "union territory",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Bay of Bengal",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "body of water",
+            "Indian Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "South Andaman",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Andaman and Nicobar Police",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "law enforcement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Andaman and Nicobar Command",
+      "roles": [
+        {
+          "role": "military command",
+          "states": [
+            "integrated tri-command",
+            "armed forces"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of the Andaman and Nicobar Islands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Port Blair is the capital of which territory?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Port Blair located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in the Bay of Bengal?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "administrative sub-division of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the administrative sub-division of the Andaman and Nicobar Islands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Port Blair is the administrative sub-division of which islands?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "headquarters of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the headquarters of the district of South Andaman?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Port Blair is the headquarters of which district?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "houses",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does Port Blair house?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where are the headquarters of the Andaman and Nicobar Police located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Where is the Andaman and Nicobar Command located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

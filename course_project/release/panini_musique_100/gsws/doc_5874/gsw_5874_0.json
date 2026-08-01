@@ -1,0 +1,300 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Río Rico (Río Rico, Tamaulipas)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "Mexican geography"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Rio Grande",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "North American geography"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Tamaulipas",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Mexican state",
+            "geographical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Horcón Tract",
+      "roles": [
+        {
+          "role": "land",
+          "states": [
+            "geographical area",
+            "historical land cession"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "North American country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Mexico",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "North American country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1977",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Boundary Treaty of 1970",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "international agreement",
+            "historical document"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located along",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What town is located along the Rio Grande?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is Río Rico located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "In which state is Río Rico located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What town is located in Tamaulipas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "partially occupies",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Río Rico partially occupy?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What town partially occupies the Horcón Tract?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "ceded by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who ceded the Horcón Tract to Mexico?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did the United States cede to Mexico?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "ceded to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "To whom was the Horcón Tract ceded?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was ceded to Mexico by the United States?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "under the terms of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Under the terms of which treaty was the Horcón Tract ceded?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was ceded under the terms of the Boundary Treaty of 1970?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When was the Horcón Tract ceded to Mexico?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What happened in 1977 regarding the Horcón Tract?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

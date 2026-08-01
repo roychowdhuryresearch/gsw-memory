@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "October 13, 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date",
+            "filming period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 21, 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date",
+            "filming period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Wilmington, North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Dockside Restaurant & Bar",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "restaurant"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Bridge Tender Marina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "marina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Wrightsville Beach",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "beach"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "October 20, 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "specific filming date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hanover Seaside Club",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "club"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "downtown Wilmington",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "filming location",
+            "urban area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "filming started on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did filming start in Wilmington, North Carolina?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did filming start on October 13, 2014?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "filming ended on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did filming end in Wilmington, North Carolina?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where did filming end on November 21, 2014?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "filming location",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was filming conducted near Wrightsville Beach?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What locations were used for filming near Wrightsville Beach?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "filming took place on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did filming take place at Hanover Seaside Club?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did filming take place on October 20, 2014?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "filming moved to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did filming move to after Wrightsville Beach?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What location did filming move to in Wilmington?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,100 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "river",
+            "roles": [
+                {
+                    "role": "geographical feature",
+                    "states": [
+                        "natural feature",
+                        "water body"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Takamatsu",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "urban area"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Kagawa",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "prefecture",
+                        "administrative region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Japan",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "nation",
+                        "East Asia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is the river located?",
+                    "answers": [
+                        "e2",
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What geographical feature is located in Takamatsu, Kagawa, Japan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

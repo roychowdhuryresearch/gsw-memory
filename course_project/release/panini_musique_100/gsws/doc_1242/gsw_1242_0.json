@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pettai (Pettai, Karaikal)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "village",
+            "Pondicherry Union Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Pondicherry Union Territory",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative region",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Thirunallar Taluk",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "Karaikal District",
+            "Pondicherry Union Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Karaikal District",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "Pondicherry Union Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Arasalar River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Karaikal town",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "Pondicherry Union Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Thirunallar",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "Pondicherry Union Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Pettai located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What village is located in Pondicherry Union Territory?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "under administrative division",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which administrative division is Pettai under?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What village is under Thirunallar Taluk?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "situated on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which river is Pettai situated on?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What village is situated on the Arasalar River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "west of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is located to the west of Karaikal town?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where is Pettai located in relation to Karaikal town?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "south of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is located to the south of Thirunallar?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where is Pettai located in relation to Thirunallar?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,412 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Durham Bulls",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "minor league",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "International League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "baseball",
+            "minor league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Durham Bulls Athletic Park",
+      "roles": [
+        {
+          "role": "stadium",
+          "states": [
+            "home venue",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Durham, North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "home city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Tampa Bay Rays",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "major league",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1902",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Durham Tobacconists",
+      "roles": [
+        {
+          "role": "former name",
+          "states": [
+            "historical",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1988",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "film release year",
+            "cultural impact"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Bull Durham",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "baseball",
+            "cultural impact"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Kevin Costner",
+      "roles": [
+        {
+          "role": "actor",
+          "states": [
+            "film industry",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Tim Robbins",
+      "roles": [
+        {
+          "role": "actor",
+          "states": [
+            "film industry",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Susan Sarandon",
+      "roles": [
+        {
+          "role": "actor",
+          "states": [
+            "film industry",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "plays in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which league do the Durham Bulls play in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team plays in the International League?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "play home games at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where do the Durham Bulls play their home games?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which team plays their home games at Durham Bulls Athletic Park?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is Durham Bulls Athletic Park located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is located in Durham, North Carolina?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "affiliate of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which major league team are the Durham Bulls affiliated with?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which minor league team is affiliated with the Tampa Bay Rays?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When were the Durham Bulls established?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What team was established in 1902?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "formerly known as",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the original name of the Durham Bulls?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which team was formerly known as the Durham Tobacconists?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "became famous after",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What event made the Durham Bulls internationally famous?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which team became famous after the release of Bull Durham?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When was the movie Bull Durham released?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What movie was released in 1988?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "starred",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Who starred in the movie Bull Durham?",
+          "answers": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "In which movie did Kevin Costner, Tim Robbins, and Susan Sarandon star?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

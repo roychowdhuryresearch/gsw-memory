@@ -1,0 +1,208 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Julian year (Year)",
+      "roles": [
+        {
+          "role": "time unit",
+          "states": [
+            "astronomy",
+            "scientific context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "365.25 days",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "exact length",
+            "Julian year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Julian century",
+      "roles": [
+        {
+          "role": "time unit",
+          "states": [
+            "astronomy",
+            "scientific context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "36,525 days",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "exact length",
+            "Julian century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Julian millennium",
+      "roles": [
+        {
+          "role": "time unit",
+          "states": [
+            "astronomy",
+            "scientific context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "365,250 days",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "exact length",
+            "Julian millennium"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "light-year",
+      "roles": [
+        {
+          "role": "distance unit",
+          "states": [
+            "astronomy",
+            "scientific context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "defined as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the Julian year defined as?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What time unit is defined as 365.25 days?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "duration of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the duration of a Julian century?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What time unit has a duration of 36,525 days?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What is the duration of a Julian millennium?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What time unit has a duration of 365,250 days?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "used in computation of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the Julian year used in the computation of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What uses the Julian year in its computation?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

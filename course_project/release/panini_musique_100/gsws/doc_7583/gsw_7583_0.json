@@ -1,0 +1,184 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oh My Love",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "musical work",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "John Lennon",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Yoko Ono",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Imagine",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "musical work",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1971",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote 'Oh My Love'?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did John Lennon and Yoko Ono write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "appeared on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "On which album did 'Oh My Love' appear?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song appeared on the 'Imagine' album?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the 'Imagine' album released?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was released in 1971?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "only songwriting collaboration on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the only songwriting collaboration on the 'Imagine' album?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "On which album is 'Oh My Love' the only songwriting collaboration?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,239 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Irish Channel (Irish Channel, New Orleans)",
+      "roles": [
+        {
+          "role": "neighborhood",
+          "states": [
+            "New Orleans",
+            "Central City/Garden District Area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New Orleans",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "Louisiana",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Magazine Street",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "north"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "First Street",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "east"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mississippi River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "boundary",
+            "south"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Toledano Street",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "west"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Central City/Garden District Area",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "New Orleans"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Irish Channel located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What neighborhood is located in New Orleans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "subdistrict of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the Irish Channel a subdistrict of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What neighborhood is a subdistrict of the Central City/Garden District Area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "bounded by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the northern boundary of the Irish Channel?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What neighborhood is bounded by Magazine Street to the north?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What is the eastern boundary of the Irish Channel?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What neighborhood is bounded by First Street to the east?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What is the southern boundary of the Irish Channel?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What neighborhood is bounded by the Mississippi River to the south?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What is the western boundary of the Irish Channel?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What neighborhood is bounded by Toledano Street to the west?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

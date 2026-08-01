@@ -1,0 +1,274 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Carolina Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NFL",
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Charlotte Hornets",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NBA",
+            "basketball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Carolina Hurricanes",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Charlotte",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Raleigh",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Stanley Cup",
+      "roles": [
+        {
+          "role": "trophy",
+          "states": [
+            "NHL championship",
+            "ice hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "sports achievement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Charlotte Hounds",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "Major League Lacrosse",
+            "lacrosse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where are the Carolina Panthers based?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which sports team is based in Charlotte?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where are the Charlotte Hornets based?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which sports team is based in Charlotte?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where are the Carolina Hurricanes based?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which sports team is based in Raleigh?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which team won the Stanley Cup in 2006?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did the Carolina Hurricanes win in 2006?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is the Charlotte Hounds located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which sports team is located in Charlotte?",
+          "answers": [
+            "e2",
+            "e3",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

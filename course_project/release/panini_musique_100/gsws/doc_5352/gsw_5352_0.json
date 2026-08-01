@@ -1,0 +1,455 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Beyoncé Giselle Knowles-Carter (Beyoncé)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "celebrity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "September 4, 1981",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "singer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "songwriter",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "record producer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "actress",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "film industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Houston, Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Destiny's Child",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "R&B",
+            "girl group"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Mathew Knowles",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "manager",
+            "family member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Dangerously in Love",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "debut album",
+            "solo career"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "2003",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "five Grammy Awards",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "music industry",
+            "prestigious"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Crazy in Love",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "Billboard Hot 100",
+            "number-one single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Baby Boy",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "Billboard Hot 100",
+            "number-one single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on September 4, 1981?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Beyoncé Giselle Knowles-Carter born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Beyoncé Giselle Knowles-Carter's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is an American singer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What are Beyoncé Giselle Knowles-Carter's professions?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a singer, songwriter, record producer, and actress?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was Beyoncé Giselle Knowles-Carter born?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was born in Houston, Texas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "lead singer of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was the lead singer of Destiny's Child?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which group had Beyoncé Giselle Knowles-Carter as the lead singer?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "managed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who managed Destiny's Child?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was Mathew Knowles managing?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "released",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What album did Beyoncé release in 2003?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "When was Dangerously in Love released?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "won",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "How many Grammy Awards did Dangerously in Love win?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which album won five Grammy Awards?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "features",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Which singles from Dangerously in Love reached number one on the Billboard Hot 100?",
+          "answers": [
+            "e14",
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Which album features the singles 'Crazy in Love' and 'Baby Boy'?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

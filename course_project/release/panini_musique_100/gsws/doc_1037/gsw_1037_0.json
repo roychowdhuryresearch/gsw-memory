@@ -1,0 +1,535 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Boston",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "capital",
+            "largest city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Commonwealth of Massachusetts",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Suffolk County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "end of county government"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "48 square miles",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "area",
+            "city proper"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "655,884",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population",
+            "2014"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "New England",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "24th largest city",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "size",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Greater Boston",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "metropolitan area",
+            "economic and cultural anchor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "4.7 million",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population",
+            "metropolitan area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "tenth-largest metropolitan statistical area",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "size",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "8.1 million",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population",
+            "commuting region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "sixth-largest combined statistical area",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "size",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is the capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of the Commonwealth of Massachusetts?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is Boston the capital of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "is the largest city in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the largest city in the Commonwealth of Massachusetts?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Boston the largest city in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "served as the historic county seat of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What city served as the historic county seat of Suffolk County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Boston serve as the historic county seat of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "disbanded county government in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Massachusetts disband county government?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What happened in Massachusetts in 1999?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "covers an area of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the area of the city proper of Boston?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What city covers an area of 48 square miles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "had an estimated population of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the estimated population of Boston in 2014?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What city had an estimated population of 655,884 in 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "is the largest city in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the largest city in New England?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What region is Boston the largest city in?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "is the 24th largest city in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What is the 24th largest city in the United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What ranking does Boston hold among cities in the United States?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "is the economic and cultural anchor of",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "What is the economic and cultural anchor of Greater Boston?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What does Boston serve as the economic and cultural anchor of?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "is home to",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What is the population of Greater Boston?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "What metropolitan area is home to 4.7 million people?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v11",
+      "phrase": "is the tenth-largest metropolitan statistical area in",
+      "questions": [
+        {
+          "id": "q21",
+          "text": "What is the tenth-largest metropolitan statistical area in the United States?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q22",
+          "text": "What ranking does Greater Boston hold among metropolitan statistical areas in the United States?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v12",
+      "phrase": "as a commuting region is home to",
+      "questions": [
+        {
+          "id": "q23",
+          "text": "What is the population of Greater Boston as a commuting region?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q24",
+          "text": "What region is home to 8.1 million people as a commuting region?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v13",
+      "phrase": "is the sixth-largest combined statistical area in",
+      "questions": [
+        {
+          "id": "q25",
+          "text": "What is the sixth-largest combined statistical area in the United States?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q26",
+          "text": "What ranking does Greater Boston hold among combined statistical areas in the United States?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

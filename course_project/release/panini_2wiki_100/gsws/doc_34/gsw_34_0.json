@@ -1,0 +1,161 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "satellite tournament",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "sporting event",
+                        "competitive tour"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "minor tournament",
+            "roles": [
+                {
+                    "role": "event type",
+                    "states": [
+                        "sporting event",
+                        "competitive tour"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "series",
+            "roles": [
+                {
+                    "role": "event group",
+                    "states": [
+                        "sporting events",
+                        "same country or region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "country",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical area",
+                        "event location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "region",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical area",
+                        "event location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "is a type of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is a satellite tournament a type of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What type of tournament is a minor tournament?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "forms a series",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What forms a series in the same country or region?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What does a series consist of in the same country or region?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "played in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is a series of satellite tournaments played?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What is played in the same country or region?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

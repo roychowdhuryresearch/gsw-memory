@@ -1,0 +1,232 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Kerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Secretary of State"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "State Department",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "government",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hillary Clinton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "former Secretary of State"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gallup poll",
+      "roles": [
+        {
+          "role": "survey",
+          "states": [
+            "public opinion",
+            "approval ratings"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Foreign Policy Magazine",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media",
+            "international relations"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "survey year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lawrence Eagleburger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "former Secretary of State"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Ivory Tower survey",
+      "roles": [
+        {
+          "role": "survey",
+          "states": [
+            "academic",
+            "international relations"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "earned a reputation for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who earned a reputation for being aloof in the State Department?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What reputation did John Kerry earn in the State Department?",
+          "answers": [
+            "being aloof, keeping to himself, and not bothering to read staff memos"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "compared to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was morale lower under compared to John Kerry?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Under whose leadership was morale lower than under Hillary Clinton according to department employees?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "found high approval ratings for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who had high approval ratings according to a Gallup poll after six months in the State Department?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did the Gallup poll find about John Kerry's approval ratings?",
+          "answers": [
+            "high approval ratings"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "tied for 11th place",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who tied for 11th place in the 2014 Ivory Tower survey?",
+          "answers": [
+            "e1",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In what survey did John Kerry and Lawrence Eagleburger tie for 11th place?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Gold Hill (Gold Hill, North Carolina)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "unincorporated community",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "southeastern Rowan County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county region",
+            "North Carolina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "southeastern United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Cabarrus County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "North Carolina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Yadkin River",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "North Carolina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "U.S. Highway 52",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "highway",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Old Beatty Ford Road",
+      "roles": [
+        {
+          "role": "infrastructure",
+          "states": [
+            "road",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "19th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical era",
+            "1800s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Salisbury",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "North Carolina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Gold Hill located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in southeastern Rowan County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "near",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is near Cabarrus County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Gold Hill near?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "served by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What serves Gold Hill?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What does U.S. Highway 52 serve?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "gold found in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was gold found in the 19th century?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was found in Gold Hill in the 19th century?",
+          "answers": [
+            "gold"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "outside",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is outside Salisbury?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where is Gold Hill located in relation to Salisbury?",
+          "answers": [
+            "outside"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

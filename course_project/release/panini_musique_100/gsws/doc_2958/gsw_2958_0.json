@@ -1,0 +1,361 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Live from Austin, TX (Live from Austin, TX (Norah Jones DVD))",
+      "roles": [
+        {
+          "role": "DVD",
+          "states": [
+            "music recording",
+            "live performance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Norah Jones",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "September 2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "recording location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "vinyl double",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "physical media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "CD",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "physical media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "PBS Austin City Limits",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "music program"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "The Handsome Band",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "collaborator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "J. Walter Hawkes",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "special guest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "M. Ward",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "special guest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Hi-Definition",
+      "roles": [
+        {
+          "role": "video quality",
+          "states": [
+            "recording quality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "DTS 5.1 Surround Sound",
+      "roles": [
+        {
+          "role": "audio quality",
+          "states": [
+            "sound format"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Live from Austin, TX released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was released in September 2008?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "recorded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Live from Austin, TX recorded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was recorded in Texas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released in formats",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "In what formats was Live from Austin, TX released?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was released in vinyl double and CD formats?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of series",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What series is Live from Austin, TX part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is part of the PBS Austin City Limits series?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "performed with",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who did Norah Jones perform with on Live from Austin, TX?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who performed with Norah Jones on Live from Austin, TX?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "video quality",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the video quality of Live from Austin, TX?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What has Hi-Definition video quality?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "audio quality",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the audio quality of Live from Austin, TX?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What has DTS 5.1 Surround Sound audio quality?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

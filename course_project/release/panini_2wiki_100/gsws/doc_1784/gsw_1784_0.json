@@ -1,0 +1,266 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Blanchview",
+            "roles": [
+                {
+                    "role": "locality",
+                    "states": [
+                        "geographical location",
+                        "Lockyer Valley Region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Lockyer Valley Region",
+            "roles": [
+                {
+                    "role": "region",
+                    "states": [
+                        "Queensland",
+                        "Australia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Queensland",
+            "roles": [
+                {
+                    "role": "state",
+                    "states": [
+                        "Australia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Australia",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "Oceania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "229",
+            "roles": [
+                {
+                    "role": "population",
+                    "states": [
+                        "Blanchview"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Mount Tabletop",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "adjacent suburb of Rangeville"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Rangeville",
+            "roles": [
+                {
+                    "role": "suburb",
+                    "states": [
+                        "adjacent to Blanchview"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Mount Davidson",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "600 metres",
+            "roles": [
+                {
+                    "role": "elevation",
+                    "states": [
+                        "Mount Tabletop",
+                        "Mount Davidson"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Blanchview located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What locality is in the Lockyer Valley Region?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "population of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the population of Blanchview?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which locality has a population of 229?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "features",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What does the southern half of Blanchview feature?",
+                    "answers": [
+                        "e6",
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which locality features Mount Tabletop and Mount Davidson?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "adjacent to",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What suburb is adjacent to Blanchview?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which locality is adjacent to Rangeville?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "elevation of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the elevation of Mount Tabletop?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What is the elevation of Mount Davidson?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

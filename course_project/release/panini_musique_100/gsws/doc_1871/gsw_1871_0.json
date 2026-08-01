@@ -1,0 +1,244 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "ABC Riverina",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "ABC Local Radio",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Wagga Wagga",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "base location",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Riverina",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "broadcast area",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Murrumbidgee Irrigation Area",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "broadcast area",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Griffith",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Goulburn",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Leeton",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is ABC Riverina based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is based in Wagga Wagga?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "broadcasts to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which regions does ABC Riverina broadcast to?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station broadcasts to the Riverina?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What radio station broadcasts to the Murrumbidgee Irrigation Area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "includes towns and cities",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "Which towns and cities are included in ABC Riverina's broadcast area?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Which radio station includes Griffith in its broadcast area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station includes Goulburn in its broadcast area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Which radio station includes Leeton in its broadcast area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station includes Hay in its broadcast area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

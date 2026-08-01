@@ -1,0 +1,152 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Minnesota History Center",
+      "roles": [
+        {
+          "role": "museum",
+          "states": [
+            "public building",
+            "cultural institution"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "library",
+          "states": [
+            "public building",
+            "cultural institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Minnesota Historical Society",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "historical society",
+            "cultural institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Saint Paul, Minnesota",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Minnesota",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "U.S. state",
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "serves as headquarters of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What serves as the headquarters of the Minnesota Historical Society?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What organization has its headquarters at the Minnesota History Center?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located near",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Minnesota History Center located near?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located near downtown Saint Paul, Minnesota?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "considered one of the finest public buildings in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is considered one of Minnesota's finest public buildings?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What state is the Minnesota History Center considered one of the finest public buildings in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

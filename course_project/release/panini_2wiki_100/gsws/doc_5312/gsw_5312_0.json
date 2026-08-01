@@ -1,0 +1,251 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Mountain View Airport",
+            "roles": [
+                {
+                    "role": "airport",
+                    "states": [
+                        "public",
+                        "transportation facility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Harry E. Wilcox Memorial Field",
+            "roles": [
+                {
+                    "role": "alternative name",
+                    "states": [
+                        "airport name",
+                        "commemorative"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Mountain View",
+            "roles": [
+                {
+                    "role": "city",
+                    "states": [
+                        "location",
+                        "urban area"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Stone County",
+            "roles": [
+                {
+                    "role": "county",
+                    "states": [
+                        "administrative division",
+                        "Arkansas"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Arkansas",
+            "roles": [
+                {
+                    "role": "state",
+                    "states": [
+                        "U.S. state",
+                        "southern region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "United States",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "nation",
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "City of Mountain View",
+            "roles": [
+                {
+                    "role": "owner",
+                    "states": [
+                        "municipal government",
+                        "administrative entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "two miles",
+            "roles": [
+                {
+                    "role": "distance",
+                    "states": [
+                        "proximity",
+                        "measurement"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "3 km",
+            "roles": [
+                {
+                    "role": "distance",
+                    "states": [
+                        "proximity",
+                        "metric measurement"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "also known as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is another name for Mountain View Airport?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What airport is also known as Harry E. Wilcox Memorial Field?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is Mountain View Airport located?",
+                    "answers": [
+                        "e3",
+                        "e4",
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What airport is located in Mountain View, Stone County, Arkansas, United States?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "owned by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who owns Mountain View Airport?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What does the City of Mountain View own?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "distance from",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "How far is Mountain View Airport from the central business district of Mountain View?",
+                    "answers": [
+                        "e8",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What is located two miles east of the central business district of Mountain View?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,254 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WKDM 1380 (WKDM)",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "ethnic brokered",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New York City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "licensed location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Multicultural Broadcasting",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "owner",
+            "media industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mandarin Chinese",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "broadcast language",
+            "weekday programming"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mexican Spanish",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "broadcast language",
+            "weekend programming"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Mexican audience",
+      "roles": [
+        {
+          "role": "audience",
+          "states": [
+            "target audience",
+            "weekend programming"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Carlstadt, New Jersey",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transmitting facility location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is WKDM 1380 licensed to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to New York City?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who owns WKDM 1380?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station is owned by Multicultural Broadcasting?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "broadcasts in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What language does WKDM 1380 broadcast in during weekdays?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What language does WKDM 1380 broadcast in during weekends?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What radio station broadcasts in Mandarin Chinese?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station broadcasts in Mexican Spanish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "target audience",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who is the target audience for WKDM 1380's weekend programming?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What radio station targets a Mexican audience on weekends?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "transmitting facility located in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where is the transmitting facility of WKDM 1380 located?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What radio station has its transmitting facility in Carlstadt, New Jersey?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

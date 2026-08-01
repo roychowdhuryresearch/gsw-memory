@@ -1,0 +1,328 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Fuck You",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Forget You",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "clean version",
+                        "alternative title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "FU",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "clean version",
+                        "alternative title"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "CeeLo Green",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "American",
+                        "recording artist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Bruno Mars",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "The Smeezingtons",
+            "roles": [
+                {
+                    "role": "group",
+                    "states": [
+                        "music producers",
+                        "songwriters"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Brody Brown",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "August 19, 2010",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "The Lady Killer",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "CeeLo Green",
+                        "2010"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "United Kingdom",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "music charts",
+                        "international success"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Billboard Hot 100",
+            "roles": [
+                {
+                    "role": "chart",
+                    "states": [
+                        "music industry",
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who wrote 'Fuck You'?",
+                    "answers": [
+                        "e4",
+                        "e5",
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What did Bruno Mars write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who produced 'Fuck You'?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What did The Smeezingtons produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'Fuck You' released?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was released on August 19, 2010?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "first single from",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What album is 'Fuck You' the first single from?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What is the first single from 'The Lady Killer'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "topped charts in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Where did 'Fuck You' top the charts?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What song topped the charts in the United Kingdom?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "reached number two on",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What chart did 'Fuck You' reach number two on?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What song reached number two on the Billboard Hot 100?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

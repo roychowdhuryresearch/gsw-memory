@@ -1,0 +1,251 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Defunkt",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "active",
+            "founded in 1978"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Joseph Bowie",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "founder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1978",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "founding year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New York City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "founding location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "punk rock",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "funk",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "jazz",
+      "roles": [
+        {
+          "role": "music genre",
+          "states": [
+            "influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who founded Defunkt?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What musical group did Joseph Bowie found?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "founded in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Defunkt founded?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was founded in 1978?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "founded in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Defunkt founded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was founded in New York City?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "In which country is New York City located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What city is located in the United States?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "influenced by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What music genres influence Defunkt's music?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which musical group is influenced by punk rock, funk, and jazz?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

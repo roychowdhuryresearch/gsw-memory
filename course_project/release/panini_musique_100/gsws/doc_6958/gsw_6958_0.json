@@ -1,0 +1,289 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dweezil Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Los Angeles, California",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Frank Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gail Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "family member",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Moon Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sibling",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Diva Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sibling",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Ahmet Zappa",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sibling",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Lala Sloatman",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actress",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Sicilian, Greek, Arab, French",
+      "roles": [
+        {
+          "role": "ethnicity",
+          "states": [
+            "Frank Zappa's ancestry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "French, Irish, Danish",
+      "roles": [
+        {
+          "role": "ethnicity",
+          "states": [
+            "Gail Zappa's ancestry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Dweezil Zappa born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Los Angeles, California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "child of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who are the parents of Dweezil Zappa?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is the child of Frank Zappa and Gail Zappa?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "sibling of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who are the siblings of Dweezil Zappa?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is a sibling of Moon Zappa?",
+          "answers": [
+            "e1",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "cousin of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the cousin of Lala Sloatman?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is a cousin of Dweezil Zappa?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "ancestry",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the ancestry of Frank Zappa?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is the ancestry of Gail Zappa?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

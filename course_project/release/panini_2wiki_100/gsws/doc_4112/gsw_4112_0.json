@@ -1,0 +1,284 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Katy Too",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "musical work",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Johnny Cash",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "historical figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Sun Records",
+            "roles": [
+                {
+                    "role": "record label",
+                    "states": [
+                        "music industry",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "May 28, 1958",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "recording date",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "June 1959",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Columbia",
+            "roles": [
+                {
+                    "role": "record label",
+                    "states": [
+                        "music industry",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "I Forgot to Remember to Forget",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "musical work",
+                        "1950s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "co-written and recorded by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who co-wrote and recorded 'Katy Too'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Johnny Cash co-write and record?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "recorded at",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where was 'Katy Too' recorded?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song was recorded at Sun Records?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "recorded on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'Katy Too' recorded?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was recorded on May 28, 1958?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who released 'Katy Too' as a single?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song did Sun Records release as a single?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "When was 'Katy Too' released?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What song was released in June 1959?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "opposite side",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What song was on the opposite side of 'Katy Too'?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "On which single's opposite side was 'I Forgot to Remember to Forget'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "left for",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Which label did Johnny Cash leave Sun Records for?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who left Sun Records for Columbia?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

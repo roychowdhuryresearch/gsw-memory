@@ -1,0 +1,175 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Slava",
+            "roles": [
+                {
+                    "role": "river",
+                    "states": [
+                        "geographical feature",
+                        "Romania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Tulcea County",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "administrative region",
+                        "Romania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Romania",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "European nation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Lunca",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "settlement",
+                        "Romania"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Lake Golovi\u021ba",
+            "roles": [
+                {
+                    "role": "lake",
+                    "states": [
+                        "former lagoon",
+                        "Black Sea"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Black Sea",
+            "roles": [
+                {
+                    "role": "sea",
+                    "states": [
+                        "body of water",
+                        "Europe"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is the Slava river located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What river is located in Tulcea County?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "discharges into",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Into what does the Slava river discharge?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What river discharges into Lake Golovi\u021ba?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "near",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is near Lunca?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What location is near the Slava river?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

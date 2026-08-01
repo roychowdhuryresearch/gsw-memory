@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sgro (Giovanni Sgro)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "migrant",
+            "professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Seminara",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "Italian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "birth country",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "destination country",
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1952",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "emigration year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "painter and decorator",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "trade",
+            "craft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "FILEF",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "migrant federation",
+            "Italian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Federation of Italian Migrant",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "full name",
+            "Italian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Sgro born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Seminara?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Sgro emigrate to?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who emigrated to Australia in 1952?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "emigrated in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Sgro emigrate to Australia?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who emigrated in 1952?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Sgro's profession?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was a painter and decorator?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "founding President of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What organization was Sgro the founding President of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was the founding President of FILEF?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "full name",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the full name of FILEF?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What organization is known as the Federation of Italian Migrant?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

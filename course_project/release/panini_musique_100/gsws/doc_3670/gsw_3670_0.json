@@ -1,0 +1,165 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Martha Rountree",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "creator",
+            "moderator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Chuck Todd",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "moderator",
+            "political director"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "NBC News (Meet the Press)",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "moderator tenure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "hosted by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was the program hosted by?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What program did Martha Rountree host?",
+          "answers": [],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "moderator since",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who has been the moderator since 2014?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Since when has Chuck Todd been the moderator?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "serves as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position does Chuck Todd serve as?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who serves as political director for NBC News?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "political director for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the political director for NBC News?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "For which organization is Chuck Todd the political director?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

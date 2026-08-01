@@ -1,0 +1,236 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Great American Bash",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "wrestling event",
+            "2008"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Chris Jericho",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Shawn Michaels",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "NXT TakeOver: Rival",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "wrestling event",
+            "2015"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Sami Zayn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Kevin Owens",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "NXT Championship",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "wrestling title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "declared the winner",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was declared the winner at the Great American Bash in 2008?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "At which event was Chris Jericho declared the winner?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "could not defend himself",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who could not defend himself due to excessive blood loss at the Great American Bash in 2008?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Why could Shawn Michaels not defend himself at the Great American Bash in 2008?",
+          "answers": [
+            "excessive blood loss",
+            "impaired vision"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "stopped the match",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "At which event was the match stopped when Sami Zayn could not defend himself?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was involved in the match that was stopped at NXT TakeOver: Rival in 2015?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "sustained an injury",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who sustained an injury at NXT TakeOver: Rival in 2015?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What happened to Sami Zayn at NXT TakeOver: Rival in 2015?",
+          "answers": [
+            "sustained an injury"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "competed for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What title was competed for by Sami Zayn and Kevin Owens at NXT TakeOver: Rival in 2015?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who competed for the NXT Championship at NXT TakeOver: Rival in 2015?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

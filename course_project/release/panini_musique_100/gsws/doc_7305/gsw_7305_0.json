@@ -1,0 +1,182 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Huszárik (Zoltán Huszárik)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "only child"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Domony",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "Hungary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hungary",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "birth country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Huszárik's father",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "parent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Huszárik's mother",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "widowed",
+            "parent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Huszárik born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Domony?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in country",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "In which country was Huszárik born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was born in Hungary?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "father died when",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Huszárik's father die?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Whose father died when he was two years old?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "relationship with mother",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What kind of relationship did Huszárik have with his mother?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who had an adoring relationship with his widowed mother?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

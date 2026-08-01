@@ -1,0 +1,274 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sadie Plant",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "cultural historian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "University of Warwick",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "academic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1997",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of career change"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Zeros + Ones",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "published work",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1997",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Financial Times",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Wired",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Blueprint",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Dazed and Confused",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Winter 2000–2001",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "issue date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Time",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "left",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who left the University of Warwick in 1997?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did Sadie Plant leave the University of Warwick?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What book did Sadie Plant publish in 1997?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who published 'Zeros + Ones' in 1997?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "wrote articles for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which publications did Sadie Plant write articles for?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who wrote articles for the Financial Times?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "interviewed in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was interviewed in the Winter 2000–2001 issue of Time?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "When was Sadie Plant interviewed in Time?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

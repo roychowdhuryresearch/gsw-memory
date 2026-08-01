@@ -1,0 +1,307 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "TSFSR",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical",
+            "Soviet Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1922",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1936",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "dissolution year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Armenian SSR (Armenia)",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "Soviet Union",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Azerbaijan SSR",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "Soviet Union",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Georgian SSR",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "Soviet Union",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Armenians",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Soviet Union",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Moscow",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital",
+            "Soviet Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Vladimir Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Soviet leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Joseph Stalin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Soviet leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Ottoman Empire",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical",
+            "pre-Soviet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "existed from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the TSFSR exist?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What existed from 1922 to 1936?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "divided into",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What was the TSFSR divided into?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which entities were formed from the division of the TSFSR?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "received provisions from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who received provisions from Moscow?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who did Armenians receive provisions from?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "took the reins of power after",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who took the reins of power after Vladimir Lenin?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who did Joseph Stalin succeed in power?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "contrasted with",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Soviet rule contrasted with for Armenians?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What contrasted with the turbulent final years of the Ottoman Empire?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

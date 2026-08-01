@@ -1,0 +1,255 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Marianus I",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ruler",
+                    "states": [
+                        "Judge of Arborea",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Mariano de Zori",
+            "roles": [
+                {
+                    "role": "alias",
+                    "states": [
+                        "alternative name",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Arborea",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "historical region",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Francisco de Vico",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historian",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1000 \u2013 20",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "estimated reign period",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Giovanni Francesco Fara",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historian",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "1050",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "estimated reign period",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Lacon",
+            "roles": [
+                {
+                    "role": "family",
+                    "states": [
+                        "noble family",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "known as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is known as Mariano de Zori?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is another name for Marianus I?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "Judge of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was a Judge of Arborea?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What position did Marianus I hold?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "estimated reign period",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the estimated reign period of Marianus I according to Francisco de Vico?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who estimated the reign period of Marianus I to be 1000 \u2013 20?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q7",
+                    "text": "What is the estimated reign period of Marianus I according to Giovanni Francesco Fara?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who estimated the reign period of Marianus I to be around 1050?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "head of dynasty",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who stood at the head of Arborea's first dynasty?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What dynasty did Marianus I lead?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

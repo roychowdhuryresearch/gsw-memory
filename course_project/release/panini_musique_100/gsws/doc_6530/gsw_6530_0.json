@@ -1,0 +1,340 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Una Mas",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "One More Time",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "English translation",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kenny Dorham",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "trumpeter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1963",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Blue Note",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "jazz",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "BLP 4127",
+      "roles": [
+        {
+          "role": "catalog number",
+          "states": [
+            "Blue Note",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "BST 84127",
+      "roles": [
+        {
+          "role": "catalog number",
+          "states": [
+            "Blue Note",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "If Ever I Would Leave You",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz ballad"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Loewe/Lerner",
+      "roles": [
+        {
+          "role": "composer",
+          "states": [
+            "musical",
+            "Camelot"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Camelot",
+      "roles": [
+        {
+          "role": "musical",
+          "states": [
+            "theater",
+            "Loewe/Lerner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Una Mas released?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released in 1963?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "titled",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the English title of Una Mas?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album has the English title 'One More Time'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who created Una Mas?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Kenny Dorham create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who released Una Mas?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album did Blue Note release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "catalog numbers",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What are the catalog numbers for Una Mas?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What album has the catalog number BLP 4127?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What album has the catalog number BST 84127?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "composed by",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Who composed 'If Ever I Would Leave You'?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "What did Loewe/Lerner compose?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q14",
+          "text": "What musical is 'If Ever I Would Leave You' part of?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "What composition is part of Camelot?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,250 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cyprus Popular Bank",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "banking group",
+            "defunct"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Marfin Popular Bank",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "former name",
+            "banking group"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Bank of Cyprus",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "banking group"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "March 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "closure date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "May 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "shareholder status date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ms Andri Antoniadou",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Special Administrator",
+            "banking professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Chris Pavlou",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Special Administrator",
+            "banking professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Marfin Investment Group",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "former major shareholder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was Cyprus Popular Bank known as from 2006 to 2011?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which bank was known as Marfin Popular Bank from 2006 to 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "shuttered in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Cyprus Popular Bank shuttered?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What happened to Cyprus Popular Bank in March 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "merged into",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the 'good' part of Cyprus Popular Bank merged into?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which bank merged with the 'good' part of Cyprus Popular Bank?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "Special Administrator",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was the Special Administrator of the legacy entity from March 2013 to March 2015?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who took over as Special Administrator in April 2015?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "pursuing legal action against",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who is the legacy entity pursuing legal action against?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is pursuing legal action against Marfin Investment Group?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

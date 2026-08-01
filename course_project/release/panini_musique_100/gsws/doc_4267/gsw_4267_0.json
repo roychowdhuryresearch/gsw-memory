@@ -1,0 +1,298 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WCZX",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "licensed",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hyde Park, New York",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "licensed location",
+            "New York state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Mid-Hudson Valley",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "service area",
+            "New York state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Townsquare Media",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "97.7 MHz",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "300 watts ERP",
+      "roles": [
+        {
+          "role": "power",
+          "states": [
+            "broadcast power"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Illinois Mountain master tower",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transmission site",
+            "Marlborough, New York"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Pendell Road",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "studio location",
+            "Town of Poughkeepsie"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is WCZX licensed to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to Hyde Park, New York?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "serving",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What region does WCZX serve?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which radio station serves the Mid-Hudson Valley?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who owns WCZX?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station is owned by Townsquare Media?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcasts on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What frequency does WCZX broadcast on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station broadcasts on 97.7 MHz?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "broadcast power",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the broadcast power of WCZX?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station has a broadcast power of 300 watts ERP?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "transmits from",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where does WCZX transmit from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What radio station transmits from the Illinois Mountain master tower?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "studio location",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where are the studios of WCZX located?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What radio station has studios on Pendell Road in the Town of Poughkeepsie?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

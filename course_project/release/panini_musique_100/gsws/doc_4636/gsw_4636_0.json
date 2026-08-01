@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Hokkien",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "Chinese variety",
+            "linguistic feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Standard Mandarin",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "Chinese variety",
+            "linguistic feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Cantonese",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "Chinese variety",
+            "linguistic feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "/t/ initial",
+      "roles": [
+        {
+          "role": "phoneme",
+          "states": [
+            "linguistic feature",
+            "historical retention"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "/tʂ/ (Pinyin 'zh')",
+      "roles": [
+        {
+          "role": "phoneme",
+          "states": [
+            "linguistic feature",
+            "Mandarin pronunciation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "6th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context",
+            "phoneme change"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has more consonants than",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which language has more consonants than Standard Mandarin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which language has more consonants than Cantonese?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "vowels similar to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which language has vowels similar to Standard Mandarin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which language's vowels are similar to those of Hokkien?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "retains pronunciation",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which language retains the /t/ initial pronunciation?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What pronunciation does Hokkien retain that is no longer found in other Chinese varieties?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "changed to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the /t/ initial change to in Mandarin?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was the original pronunciation before it changed to /tʂ/ in Mandarin?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "disappeared before",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the /t/ initial disappear in other Chinese varieties?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What phoneme disappeared before the 6th century in other Chinese varieties?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,166 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Isa Khan Niazi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "noble"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "ethnicity",
+                    "states": [
+                        "Pashtun"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Sher Shah Suri",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "ruler"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Islam Shah Suri",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "ruler"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Sur dynasty",
+            "roles": [
+                {
+                    "role": "dynasty",
+                    "states": [
+                        "historical period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Mughal Empire",
+            "roles": [
+                {
+                    "role": "empire",
+                    "states": [
+                        "historical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "noble in the courts of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was a noble in the courts of Sher Shah Suri and Islam Shah Suri?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "In whose courts was Isa Khan Niazi a noble?",
+                    "answers": [
+                        "e2",
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "member of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was a member of the Sur dynasty?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which dynasty was Isa Khan Niazi associated with?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "fought against",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who fought against the Mughal Empire?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which empire did Isa Khan Niazi fight against?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

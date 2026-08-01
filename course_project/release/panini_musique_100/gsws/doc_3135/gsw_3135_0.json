@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "female buddy film",
+      "roles": [
+        {
+          "role": "film genre",
+          "states": [
+            "cinema",
+            "female-centric"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Thelma & Louise",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "notable",
+            "female buddy film"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Butch Cassidy and the Sundance Kid",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "popular impact",
+            "comparison"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "early 1990s",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "cinema",
+            "release era"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Evelyn Couch",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "female friendship",
+            "Fried Green Tomatoes"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ninny Threadgoode",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "female friendship",
+            "Fried Green Tomatoes"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Fried Green Tomatoes",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "female friendship",
+            "influence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Waiting to Exhale",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "female buddy film",
+            "popular duo"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Walking and Talking",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "female buddy film",
+            "popular duo"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "notable film",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is a notable female buddy film?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What type of film is Thelma & Louise?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "compared to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What film is Thelma & Louise compared to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film is compared to Butch Cassidy and the Sundance Kid?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "set in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Thelma & Louise have a popular impact?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What film had a popular impact in the early 1990s?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "features friendship",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which film features the friendship between Evelyn Couch and Ninny Threadgoode?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who are the characters in Fried Green Tomatoes that share a friendship?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "popular duo",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which films feature popular female duos?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What type of films are Waiting to Exhale and Walking and Talking?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

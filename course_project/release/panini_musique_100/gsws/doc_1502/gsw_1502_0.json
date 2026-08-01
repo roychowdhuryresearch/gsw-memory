@@ -1,0 +1,234 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WNDE",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "broadcast",
+            "sports format"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1260 AM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "AM band"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Indianapolis",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Indiana"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Indianapolis metropolitan area",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "service area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1924",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "broadcast start year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "iHeartMedia",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Capstar TX LLC",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "license holder"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is WNDE licensed to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed to Indianapolis?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "serving",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What area does WNDE serve?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station serves the Indianapolis metropolitan area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "began broadcasting in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did WNDE begin broadcasting?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station began broadcasting in 1924?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who owns WNDE?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station is owned by iHeartMedia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "broadcast license held by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who holds the broadcast license for WNDE?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What radio station's broadcast license is held by Capstar TX LLC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

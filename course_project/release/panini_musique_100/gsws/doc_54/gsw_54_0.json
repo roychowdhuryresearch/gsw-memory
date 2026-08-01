@@ -1,0 +1,235 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Saulkrasti Municipality",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "municipality",
+            "Latvia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Vidzeme",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Latvia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Latvia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Baltic state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "formation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Saulkrasti",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "administrative centre",
+            "Latvia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Saulkrasti parish",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "parish",
+            "Latvia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Saulkrasti Municipality located?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What municipality is located in Vidzeme?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "formed in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Saulkrasti Municipality formed?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was formed in 2009?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "administrative centre",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the administrative centre of Saulkrasti Municipality?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which municipality has Saulkrasti as its administrative centre?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "created from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was created from the countryside territory of Saulkrasti town?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was Saulkrasti parish created from?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "created in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Saulkrasti parish created?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was created in 2010?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

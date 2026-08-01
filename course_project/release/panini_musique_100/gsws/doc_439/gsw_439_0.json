@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "James Watt",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "engineer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "University of Glasgow",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "steam engine",
+      "roles": [
+        {
+          "role": "technology",
+          "states": [
+            "industrial",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "separate condenser",
+      "roles": [
+        {
+          "role": "invention",
+          "states": [
+            "engineering",
+            "energy efficiency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "rotary motion",
+      "roles": [
+        {
+          "role": "mechanical concept",
+          "states": [
+            "engineering",
+            "motion"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "worked at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did James Watt work as an instrument maker?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who worked at the University of Glasgow as an instrument maker?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "interested in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What technology was James Watt interested in?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was interested in the technology of steam engines?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "introduced",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did James Watt introduce to improve steam engines?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who introduced the separate condenser?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "adapted to produce",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did James Watt adapt his engine to produce?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who adapted his engine to produce rotary motion?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

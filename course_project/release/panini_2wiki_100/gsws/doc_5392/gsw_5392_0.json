@@ -1,0 +1,199 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Cry Over Me",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "single",
+                        "2000s music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Meat Loaf",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "2006",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "album release year",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Diane Warren",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "songwriter",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "7 May 2007",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "single release date",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "UK",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "release location",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "second single from",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the second single from Meat Loaf's 2006 album?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "From which album is 'Cry Over Me' the second single?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "written by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who wrote 'Cry Over Me'?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song did Diane Warren write?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'Cry Over Me' released in the UK?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song was released on 7 May 2007 in the UK?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where was 'Cry Over Me' released on 7 May 2007?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What song was released in the UK on 7 May 2007?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

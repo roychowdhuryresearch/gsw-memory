@@ -1,0 +1,401 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Kerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Senate member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2004 presidential election",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political event",
+            "election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "National Journal",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "media",
+            "political analysis"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2003",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "political analysis"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Senate Democratic caucus",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "political group",
+            "U.S. Senate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Social Security",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "U.S. policy",
+            "social welfare"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "abortion rights",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "social issue",
+            "reproductive rights"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "same-sex marriage",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "social issue",
+            "marriage equality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "capital punishment",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "legal issue",
+            "criminal justice"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "gun control laws",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "legal issue",
+            "firearms regulation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "trade agreements",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "economic policy",
+            "international trade"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "North American Free Trade Agreement",
+      "roles": [
+        {
+          "role": "agreement",
+          "states": [
+            "trade agreement",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Most Favored Nation status for China",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "trade policy",
+            "international relations"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Central American Free Trade Agreement",
+      "roles": [
+        {
+          "role": "agreement",
+          "states": [
+            "trade agreement",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "voting record",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Whose voting record is on the left within the Senate Democratic caucus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is John Kerry's voting record within the Senate Democratic caucus?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "portrayed as",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How was John Kerry portrayed during the 2004 presidential election?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was portrayed as a staunch liberal during the 2004 presidential election?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "rated by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who rated John Kerry as the top Senate liberal in 2003?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was rated as the top Senate liberal by the National Journal in 2003?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "opposes",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What does John Kerry oppose?",
+          "answers": [
+            "e6",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who opposes privatizing Social Security?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "supports",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What policies does John Kerry support?",
+          "answers": [
+            "e7",
+            "e8",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who supports abortion rights for adult women and minors?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "supported",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What trade agreement did John Kerry support?",
+          "answers": [
+            "e12",
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who supported the North American Free Trade Agreement?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "opposed",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What trade agreement did John Kerry oppose?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who opposed the Central American Free Trade Agreement?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,219 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nigerian State",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "federated",
+            "Nigeria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Federal Government of Nigeria",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "federal",
+            "Nigeria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "36 States (States of Nigeria)",
+      "roles": [
+        {
+          "role": "political division",
+          "states": [
+            "Nigeria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Federal Capital Territory",
+      "roles": [
+        {
+          "role": "territory",
+          "states": [
+            "Nigeria",
+            "not a state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "774 Local Government Areas",
+      "roles": [
+        {
+          "role": "administrative division",
+          "states": [
+            "Nigeria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Nigerian Constitution",
+      "roles": [
+        {
+          "role": "legal document",
+          "states": [
+            "Nigeria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "shares sovereignty with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What shares sovereignty with the Federal Government of Nigeria?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "With whom does a Nigerian State share sovereignty?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "bound together by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What are the 36 States in Nigeria bound together by?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is bound together by a federal agreement?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "under the direct control of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is under the direct control of the Federal Government of Nigeria?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who has direct control over the Federal Capital Territory?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "divided into",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the States in Nigeria divided into?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is divided into 774 Local Government Areas?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "have the power to ratify",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What do states in Nigeria have the power to ratify?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who has the power to ratify constitutional amendments?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

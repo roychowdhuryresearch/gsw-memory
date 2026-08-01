@@ -1,0 +1,348 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Okhrana",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "secret police",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Bolshevik party",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "political party",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lenin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political leader",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Roman Malinovsky",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "police spy",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Duma",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "Russian legislative body",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1914",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical",
+            "pre-revolutionary period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical",
+            "revolutionary period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "General V. F. Dzhunkovsky",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Deputy Minister of the Interior",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "World War I",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "global conflict",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "February Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "revolution",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "attempted to promote",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who attempted to promote the Bolshevik party?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which party did the Okhrana attempt to promote?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "helped in his bid to become a delegate to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did the Okhrana help to become a delegate to the Duma?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What position did Roman Malinovsky aim for with the help of the Okhrana?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "led the Bolshevik delegation in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who led the Bolshevik delegation in the Fourth Duma until 1914?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which delegation did Roman Malinovsky lead until 1914?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "banned police spies within",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who banned police spies within the military?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did General V. F. Dzhunkovsky ban?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "shifted attention to countering",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did the Okhrana shift attention to countering at the beginning of World War I?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who did the Okhrana shift attention to countering during World War I?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "funded revolutionary groups",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who funded Russian revolutionary groups to destabilize the nation?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did Germany do to destabilize Russia?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "took by surprise",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What event took the Okhrana by surprise?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was taken by surprise by the February Revolution?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

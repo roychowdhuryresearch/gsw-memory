@@ -1,0 +1,304 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Puerto Rico Trench",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "oceanic trench",
+            "Atlantic Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Caribbean Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "location",
+            "Atlantic Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Atlantic Ocean",
+      "roles": [
+        {
+          "role": "ocean",
+          "states": [
+            "location",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lesser Antilles subduction zone",
+      "roles": [
+        {
+          "role": "geological feature",
+          "states": [
+            "subduction zone",
+            "Caribbean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Cuba",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Caribbean",
+            "island nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hispaniola",
+      "roles": [
+        {
+          "role": "island",
+          "states": [
+            "Caribbean",
+            "shared by two countries"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Cayman Trench",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "oceanic trench",
+            "Caribbean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Central America",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical area",
+            "Americas"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "800 kilometres",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "length",
+            "distance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "8,648 metres",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "depth",
+            "maximum"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Milwaukee Deep",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "deepest point",
+            "Atlantic Ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located on the boundary between",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Puerto Rico Trench located?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located on the boundary between the Caribbean Sea and the Atlantic Ocean?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "associated with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the Puerto Rico Trench associated with?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is associated with the Lesser Antilles subduction zone?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "extends west between",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What extends west between Cuba and Hispaniola?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where does the major transform fault zone extend?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "has a maximum depth of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the maximum depth of the Puerto Rico Trench?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which trench has a maximum depth of 8,648 metres?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "deepest point in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the deepest point in the Atlantic Ocean?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where is Milwaukee Deep located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

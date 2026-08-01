@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "La fida ninfa",
+      "roles": [
+        {
+          "role": "opera",
+          "states": [
+            "musical work",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Antonio Vivaldi",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "composer",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Scipione Maffei",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "librettist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Teatro Filarmonico",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "opera house",
+            "historical venue"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Verona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Italy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "6 January 1732",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "premiere date",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Alma oppressa de sorte crudele",
+      "roles": [
+        {
+          "role": "aria",
+          "states": [
+            "musical piece",
+            "opera component"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Soul oppressed by cruel fate",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "English translation",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "composed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who composed La fida ninfa?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What opera did Antonio Vivaldi compose?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "libretto by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who wrote the libretto for La fida ninfa?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What opera's libretto was written by Scipione Maffei?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "premiered at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was La fida ninfa first performed?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What opera premiered at Teatro Filarmonico?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is Teatro Filarmonico located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located in Verona?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "premiered on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did La fida ninfa premiere?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What premiered on 6 January 1732?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "English title",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the English title of 'Alma oppressa de sorte crudele'?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What aria has the English title 'Soul oppressed by cruel fate'?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

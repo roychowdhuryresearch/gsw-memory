@@ -1,0 +1,166 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "\u021aerova",
+            "roles": [
+                {
+                    "role": "river",
+                    "states": [
+                        "tributary",
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "B\u00e2rzava",
+            "roles": [
+                {
+                    "role": "river",
+                    "states": [
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Romania",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "location",
+                        "European country"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Re\u0219i\u021ba",
+            "roles": [
+                {
+                    "role": "city",
+                    "states": [
+                        "location",
+                        "urban area"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "tributary of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What river is the \u021aerova a tributary of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is a tributary of the B\u00e2rzava?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is the river \u021aerova located?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What river is located in Romania?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "discharges into",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where does the \u021aerova discharge into?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What river discharges into the B\u00e2rzava?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "discharges in city",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "In which city does the \u021aerova discharge?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What river discharges in the city of Re\u0219i\u021ba?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,247 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Short Change",
+      "roles": [
+        {
+          "role": "television program",
+          "states": [
+            "consumer affairs",
+            "children's programming"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "BBC One",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "British television",
+            "original broadcaster"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "CBBC Channel",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "British television",
+            "children's programming"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Watchdog",
+      "roles": [
+        {
+          "role": "television program",
+          "states": [
+            "consumer affairs",
+            "prime-time show"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "20 February 1994",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "first air date",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "9 July 2005",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "last air date",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "13 series",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "total series",
+            "program duration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcast on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What channel was Short Change broadcast on?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What program was broadcast on BBC One?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What program was broadcast on CBBC Channel?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first aired on",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "When did Short Change first air?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What program first aired on 20 February 1994?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "last episode broadcast on",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "When was the last episode of Short Change broadcast?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "What program had its last episode broadcast on 9 July 2005?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "had series",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "How many series did Short Change have?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What program had 13 series?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "version of",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "What is Short Change a version of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What program is a version of Watchdog aimed at children?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "CBS",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "media company",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "UK",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Oriole Records",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "record label",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1964",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "EMI",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "music company",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Epic",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music label",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Okeh",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music label",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Columbia",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music label",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1968",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "established UK distribution",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who established UK distribution in 1964?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did CBS establish UK distribution?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "acquired",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did CBS acquire in 1964?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who acquired Oriole Records in 1964?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "distributed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which labels were distributed by EMI on the Columbia label in the UK?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who distributed Epic and Okeh label material on the Columbia label in the UK?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "distribution deal expired",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the distribution deal with EMI expire?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What expired in 1968?",
+          "answers": [
+            "v4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "took over distribution",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who took over distribution in 1968?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "When did CBS take over distribution?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,254 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Heather Denise Gibson",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "economist",
+                        "current professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Scottish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "British Isles"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Director-Advisor",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "financial sector",
+                        "current role"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Bank of Greece",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "financial institution",
+                        "Greece"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "2011",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year",
+                        "21st century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Euclid Tsakalotos",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "politician",
+                        "former official"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Greek",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "Mediterranean"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Minister of Finance",
+            "roles": [
+                {
+                    "role": "position",
+                    "states": [
+                        "government",
+                        "financial sector"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "serving as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is serving as Director-Advisor to the Bank of Greece?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What position does Heather Denise Gibson hold?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "advisor to",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the Director-Advisor to the Bank of Greece?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which organization is Heather Denise Gibson advising?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "since",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Since when has Heather Denise Gibson been serving as Director-Advisor?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who has been serving as Director-Advisor since 2011?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "spouse of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the spouse of Euclid Tsakalotos?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Heather Denise Gibson married to?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "former position",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What was Euclid Tsakalotos's former position?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who was the former Greek Minister of Finance?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

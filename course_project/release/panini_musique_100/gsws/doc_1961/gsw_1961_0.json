@@ -1,0 +1,334 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "FIFA Council",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports governing body",
+            "football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "decision period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end year",
+            "decision period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Gianni Infantino",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "FIFA president",
+            "sports executive"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "March 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "confirmation date",
+            "decision period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Europe",
+      "roles": [
+        {
+          "role": "continent",
+          "states": [
+            "UEFA",
+            "football confederation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Asia",
+      "roles": [
+        {
+          "role": "continent",
+          "states": [
+            "AFC",
+            "football confederation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "2018 World Cup host",
+            "UEFA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Qatar",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "2022 World Cup host",
+            "AFC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2026 World Cup (2026 FIFA World Cup)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "future tournament",
+            "football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "CONCACAF",
+      "roles": [
+        {
+          "role": "confederation",
+          "states": [
+            "North America",
+            "last hosted in 1994"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "CAF",
+      "roles": [
+        {
+          "role": "confederation",
+          "states": [
+            "Africa",
+            "last hosted in 2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "CONMEBOL",
+      "roles": [
+        {
+          "role": "confederation",
+          "states": [
+            "South America",
+            "last hosted in 2014"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "OFC",
+      "roles": [
+        {
+          "role": "confederation",
+          "states": [
+            "Oceania",
+            "never hosted before"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "decision period",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the FIFA Council make decisions on hosting rotation limitations?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What decisions did the FIFA Council make between 2013 and 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "confirmed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who confirmed the exclusion of Europe and Asia from the 2026 World Cup bidding?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Gianni Infantino confirm in March 2017?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "hosted by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which countries hosted the World Cup in 2018 and 2022?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What events did Russia and Qatar host?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "eligible to host",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which confederations are eligible to host the 2026 World Cup?",
+          "answers": [
+            "e11",
+            "e12",
+            "e13",
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event could CONCACAF, CAF, CONMEBOL, or OFC host?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

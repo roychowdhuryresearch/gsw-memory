@@ -1,0 +1,210 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "federation (Federalism)",
+      "roles": [
+        {
+          "role": "political structure",
+          "states": [
+            "general concept",
+            "governmental"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Brazil",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South America",
+            "federal system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1988 Constitution",
+      "roles": [
+        {
+          "role": "legal document",
+          "states": [
+            "Brazilian law",
+            "constitutional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Union",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "federal level",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "States",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "regional level",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "municipalities",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "local level",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Mexico",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America",
+            "federal system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "municipio libre",
+      "roles": [
+        {
+          "role": "political concept",
+          "states": [
+            "autonomous entity",
+            "Mexico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "included in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What did the 1988 Constitution include as autonomous political entities?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In which document are the municipalities included as autonomous political entities?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What are the components of the Brazilian federation?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which federation includes the Union, States, and municipalities?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "granted full-autonomy by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What grants full-autonomy to Mexican municipalities?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which entities are granted full-autonomy by the Mexican federal constitution?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

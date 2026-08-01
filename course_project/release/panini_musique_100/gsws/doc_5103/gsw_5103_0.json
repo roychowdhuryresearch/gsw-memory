@@ -1,0 +1,255 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Elizabeth (Elizabeth II)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "royalty",
+            "mother"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Prince Charles",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "royalty",
+            "child of Elizabeth"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "14 November 1948",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "King",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "royalty",
+            "monarch"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "letters patent",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "royal decree",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "royal prince or princess",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "royalty",
+            "noble title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Princess Anne",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "royalty",
+            "child of Elizabeth"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1950",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "gave birth to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who gave birth to Prince Charles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who did Elizabeth give birth to on 14 November 1948?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Prince Charles born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was born on 14 November 1948?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "issued",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did the King issue one month before 14 November 1948?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who issued the letters patent?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "allowed to use the title",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What title were Elizabeth's children allowed to use?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was allowed to use the title of a royal prince or princess?",
+          "answers": [
+            "e2",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Princess Anne born?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was born in 1950?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

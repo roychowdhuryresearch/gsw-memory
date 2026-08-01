@@ -1,0 +1,383 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "San Juan (San Juan, Puerto Rico)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Puerto Rico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "north-eastern coast of Puerto Rico",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Atlantic Ocean",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "ocean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Caguas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Puerto Rico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Trujillo Alto",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Puerto Rico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Guaynabo",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Puerto Rico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Puerto Rico"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "76.93 square miles",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "total area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "29.11 square miles",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "water area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "San Juan Bay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "water body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Condado Lagoon",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "natural lagoon"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "San José Lagoon",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "natural lagoon"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located along",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is San Juan located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is located along the north-eastern coast of Puerto Rico?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "lies south of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What lies south of the Atlantic Ocean?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where does San Juan lie in relation to the Atlantic Ocean?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lies north of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What lies north of Caguas and Trujillo Alto?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where does San Juan lie in relation to Caguas and Trujillo Alto?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "lies east of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What lies east of Guaynabo?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where does San Juan lie in relation to Guaynabo?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "lies west of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What lies west of Carolina?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where does San Juan lie in relation to Carolina?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "occupies an area of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the total area of San Juan?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which city occupies an area of 76.93 square miles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "has a water area of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the water area of San Juan?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which city has a water area of 29.11 square miles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "main water bodies",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What are the main water bodies of San Juan?",
+          "answers": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which city has San Juan Bay, Condado Lagoon, and San José Lagoon as its main water bodies?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

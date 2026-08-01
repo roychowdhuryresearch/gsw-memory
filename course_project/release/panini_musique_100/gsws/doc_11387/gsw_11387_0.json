@@ -1,0 +1,300 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "A Child's Garden of Verses",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "poetry collection",
+            "children's literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Robert Louis Stevenson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "Scottish"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1885",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "first publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Penny Whistles",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "original title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Foreign Children",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "The Lamplighter",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "The Land of Counterpane",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Bed in Summer",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "My Shadow",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "The Swing",
+      "roles": [
+        {
+          "role": "poem",
+          "states": [
+            "included in collection"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote A Child's Garden of Verses?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Robert Louis Stevenson write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first published in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was A Child's Garden of Verses first published?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was first published in 1885?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "originally titled",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the original title of A Child's Garden of Verses?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What book was originally titled Penny Whistles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "includes poem",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What poems are included in A Child's Garden of Verses?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which collection includes the poem Foreign Children?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Which collection includes the poem The Lamplighter?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which collection includes the poem The Land of Counterpane?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Which collection includes the poem Bed in Summer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which collection includes the poem My Shadow?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "Which collection includes the poem The Swing?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

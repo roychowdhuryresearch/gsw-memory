@@ -1,0 +1,210 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Bambouseraie de Prafrance",
+      "roles": [
+        {
+          "role": "botanical garden",
+          "states": [
+            "private",
+            "specializes in bamboos"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "34 hectares",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "size",
+            "metric"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "84 acres",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "size",
+            "imperial"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Générargues",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Anduze",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "nearby town",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Gard",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "department",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Languedoc-Roussillon",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical region",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Bambouseraie de Prafrance located?",
+          "answers": [
+            "e4",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What botanical garden is located in Générargues?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "size",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the size of the Bambouseraie de Prafrance in hectares?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the size of the Bambouseraie de Prafrance in acres?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "near",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is near the Bambouseraie de Prafrance?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What botanical garden is near Anduze?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

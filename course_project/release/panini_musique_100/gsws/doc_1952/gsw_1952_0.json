@@ -1,0 +1,253 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "That Dam",
+      "roles": [
+        {
+          "role": "stupa",
+          "states": [
+            "large",
+            "historical site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Lao ທາດດຳ",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "Lao language",
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Black Stupa",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "English translation",
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Vientiane",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital city",
+            "Laos"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Laos",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Southeast Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "seven-headed nāga",
+      "roles": [
+        {
+          "role": "mythical creature",
+          "states": [
+            "protector",
+            "legendary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Siamese army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "historical",
+            "invader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1827",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical event",
+            "invasion year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is That Dam located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Vientiane?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "alternative name",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the Lao name for That Dam?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the English translation of Lao ທາດດຳ?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "believed to be inhabited by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is That Dam believed to be inhabited by?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which stupa is believed to be inhabited by a seven-headed nāga?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "protected from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who did the seven-headed nāga try to protect Laotians from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was the Siamese army trying to invade in 1827?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "invasion year",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the Siamese army invade Laos?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What happened in 1827 related to That Dam?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

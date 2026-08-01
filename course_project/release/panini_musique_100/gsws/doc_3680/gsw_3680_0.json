@@ -1,0 +1,316 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Edinburgh Military Tattoo (Royal Edinburgh Military Tattoo)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "military",
+            "cultural"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1949",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "first public military tattoo",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ross Bandstand, Princes Street Gardens",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event location",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1950",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "first official event",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Edinburgh Castle esplanade",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "event location",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "6,000 spectators",
+      "roles": [
+        {
+          "role": "audience size",
+          "states": [
+            "historical",
+            "event attendance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1952",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "capacity increase",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "7,700",
+      "roles": [
+        {
+          "role": "audience capacity",
+          "states": [
+            "historical",
+            "event attendance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "160,000",
+      "roles": [
+        {
+          "role": "total audience",
+          "states": [
+            "historical",
+            "event attendance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "first public military tattoo",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the first public military tattoo in Edinburgh?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event took place in 1949?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "held at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was the first public military tattoo held?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event was held at Ross Bandstand, Princes Street Gardens?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "first official event",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the first official Edinburgh Military Tattoo held?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event was first officially held in 1950?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "held at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was the first official Edinburgh Military Tattoo held?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event was held at the Edinburgh Castle esplanade?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "audience size",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many spectators attended the first official Edinburgh Military Tattoo?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event had 6,000 spectators?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "capacity increase",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was the capacity of the stands increased?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What happened in 1952 regarding the Edinburgh Military Tattoo?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "total audience",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was the total audience for the multiple live performances?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "How many people watched the multiple live performances?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

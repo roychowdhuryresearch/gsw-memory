@@ -1,0 +1,279 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Don't You (Forget About Me)",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "pop genre",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1985",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Simple Minds",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "Scottish",
+            "rock genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Scottish",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "The Breakfast Club",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1980s",
+            "John Hughes film"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Keith Forsey",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "producer",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Steve Schiff",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "guitarist",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Nina Hagen band",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "associated act",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "performed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who performed 'Don't You (Forget About Me)'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did Simple Minds perform?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was 'Don't You (Forget About Me)' released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song was released in 1985?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "featured in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What film featured 'Don't You (Forget About Me)'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song was featured in The Breakfast Club?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who wrote 'Don't You (Forget About Me)'?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Keith Forsey and Steve Schiff write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "composed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who composed 'Don't You (Forget About Me)'?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did Keith Forsey and Steve Schiff compose?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which band was Steve Schiff a member of?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was a member of the Nina Hagen band?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

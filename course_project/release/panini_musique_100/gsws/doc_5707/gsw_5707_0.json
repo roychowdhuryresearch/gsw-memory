@@ -1,0 +1,301 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Confess, Doctor Corda",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "West German cinema",
+            "1950s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "crime genre",
+            "film noir"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Gestehen Sie, Dr. Corda",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "German title",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1958",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "West German",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "European cinema",
+            "post-war period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "crime film",
+      "roles": [
+        {
+          "role": "genre",
+          "states": [
+            "film category",
+            "crime genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Josef von Báky",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film director"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "West German cinema",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Hardy Krüger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "West German cinema",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Elisabeth Müller",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "West German cinema",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Lucie Mannheim",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative professional",
+          "states": [
+            "West German cinema",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "German title",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the German title of Confess, Doctor Corda?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What film has the German title 'Gestehen Sie, Dr. Corda'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Confess, Doctor Corda released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What film was released in 1958?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who directed Confess, Doctor Corda?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What film did Josef von Báky direct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "starred",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who starred in Confess, Doctor Corda?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In what film did Hardy Krüger star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "In what film did Elisabeth Müller star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In what film did Lucie Mannheim star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,143 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Salt Song",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz genre",
+            "musical work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Stanley Turrentine",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "jazz saxophonist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "CTI Note",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Eumir Deodato",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "orchestra arranger"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded Salt Song?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Stanley Turrentine record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which label released Salt Song?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released by CTI Note?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "arranged by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who arranged the orchestra for Salt Song?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album's orchestra was arranged by Eumir Deodato?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

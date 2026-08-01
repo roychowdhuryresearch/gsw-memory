@@ -1,0 +1,345 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Detroit",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "most populous in Michigan",
+            "largest on US-Canada border"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Michigan",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "US state",
+            "Midwest region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Midwest",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "US region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Wayne County",
+      "roles": [
+        {
+          "role": "county",
+          "states": [
+            "most populous in Michigan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Metro Detroit",
+      "roles": [
+        {
+          "role": "metropolitan area",
+          "states": [
+            "home to 5.3 million people",
+            "fourteenth-most populous in US"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Detroit River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "major port",
+            "connects Great Lakes to Saint Lawrence Seaway"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Great Lakes",
+      "roles": [
+        {
+          "role": "lake system",
+          "states": [
+            "connected to Saint Lawrence Seaway"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Saint Lawrence Seaway",
+      "roles": [
+        {
+          "role": "seaway",
+          "states": [
+            "connected to Great Lakes"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Chicago",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "largest in Midwest",
+            "largest economic region in Midwest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location of Detroit",
+            "location of Michigan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "bordered by Detroit"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is the most populous city in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the most populous city in Michigan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In which state is Detroit the most populous city?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "is the largest city on the border of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the largest city on the United States–Canada border?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which border is Detroit the largest city on?",
+          "answers": [
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is the seat of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the seat of Wayne County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which county is Detroit the seat of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "is home to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What metropolitan area is home to 5.3 million people?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "How many people live in Metro Detroit?",
+          "answers": [
+            "5.3 million"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "is a major port on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What city is a major port on the Detroit River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which river is Detroit a major port on?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "connects to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What does the Detroit River connect to?",
+          "answers": [
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What connects the Great Lakes to the Saint Lawrence Seaway?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "anchors the second-largest economic region in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What city anchors the second-largest economic region in the Midwest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which economic region does Detroit anchor?",
+          "answers": [
+            "Midwest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

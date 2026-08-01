@@ -1,0 +1,311 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Battle of Soor",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical battle",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "30 September 1745",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Frederick the Great",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military leader",
+            "Prussian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Prussian army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Prussian",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Austro-Saxon army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "Austrian",
+            "Saxon",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Prince Charles Alexander of Lorraine",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military leader",
+            "Austrian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Second Silesian War",
+      "roles": [
+        {
+          "role": "conflict",
+          "states": [
+            "part of War of the Austrian Succession",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Soor",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "battle site",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Hajnice",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "modern name",
+            "Czech Republic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Czech Republic",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "modern location",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "occurred on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did the Battle of Soor occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event occurred on 30 September 1745?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who led the Prussian army in the Battle of Soor?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which army was led by Frederick the Great?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "led by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who led the Austro-Saxon army in the Battle of Soor?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which army was led by Prince Charles Alexander of Lorraine?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What larger conflict was the Battle of Soor part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which battle was part of the Second Silesian War?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "occurred in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did the Battle of Soor occur?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event occurred in Soor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "modern location",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the modern location of Soor?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which historical location is now in the Czech Republic?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

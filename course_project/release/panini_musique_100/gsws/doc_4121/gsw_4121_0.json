@@ -1,0 +1,256 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Taylorville (Taylorville, Alberta)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "unincorporated community",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cardston County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Alberta",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "Canadian region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North American nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Highway 501",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "road",
+            "transportation route"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Cardston",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "town",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "May 17, 1900",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "school opening date",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "The Church of Jesus Christ of Latter-day Saints",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "religious organization",
+            "Christian denomination"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Taylorville located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Cardston County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is located on Highway 501?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where is Highway 501 located?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "southeast of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is located southeast of Cardston?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Taylorville located in relation to Cardston?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "opened on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the first school in Taylorville open?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What opened on May 17, 1900?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "served as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did the first school in Taylorville later serve as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What served as a chapel for The Church of Jesus Christ of Latter-day Saints?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

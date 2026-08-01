@@ -1,0 +1,202 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Lake County (Lake County, Oregon)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Oregon"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "high desert region",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "desert",
+            "Oregon Outback"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Oregon Outback",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "desert",
+            "Oregon"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Great Basin",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical area",
+            "Northwestern edge"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Lakeview",
+      "roles": [
+        {
+          "role": "community",
+          "states": [
+            "southern Lake County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Paisley",
+      "roles": [
+        {
+          "role": "community",
+          "states": [
+            "southern Lake County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Christmas Valley",
+      "roles": [
+        {
+          "role": "community",
+          "states": [
+            "northern Lake County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Fort Rock",
+      "roles": [
+        {
+          "role": "community",
+          "states": [
+            "northern Lake County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Silver Lake",
+      "roles": [
+        {
+          "role": "community",
+          "states": [
+            "northern Lake County"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Lake County located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What county is located in the Oregon Outback?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "divided between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What communities is Lake County divided between?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which county is divided between the communities around Lakeview and Paisley to the south and Christmas Valley, Fort Rock, and Silver Lake to the north?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

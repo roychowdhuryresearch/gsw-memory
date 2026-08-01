@@ -1,0 +1,273 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Catawissa Creek (List of tributaries of Catawissa Creek)",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "creek",
+            "tributary of Susquehanna River"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Susquehanna River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "receives tributaries"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Luzerne County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Schuylkill County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Columbia County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Little Catawissa Creek",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "Catawissa Creek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Tomhicken Creek",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "Catawissa Creek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Scotch Run",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "Catawissa Creek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Beaver Run",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "Catawissa Creek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Messers Run",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "tributary",
+            "Catawissa Creek"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "flows into",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does Catawissa Creek flow into?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which creek flows into the Susquehanna River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "flows through",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which counties does Catawissa Creek flow through?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What flows through Luzerne, Schuylkill, and Columbia counties?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "largest tributaries by length",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What are the largest tributaries of Catawissa Creek by length?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which creek has Little Catawissa Creek as one of its largest tributaries by length?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "largest tributaries by watershed area",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the largest tributaries of Catawissa Creek by watershed area?",
+          "answers": [
+            "e7",
+            "e6",
+            "e9",
+            "e8",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which creek has Tomhicken Creek as one of its largest tributaries by watershed area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

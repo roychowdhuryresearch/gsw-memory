@@ -1,0 +1,289 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Snake River (Snake River (St. Croix River tributary))",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "water body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Aitkin County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Kanabec County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mille Lacs County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Pine County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Mora, Minnesota",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "St. Croix River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "geographical feature",
+            "water body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Pine City, Minnesota",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Minnesota"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1,009 square miles",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "drainage area",
+            "measurement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "13 miles",
+      "roles": [
+        {
+          "role": "distance",
+          "states": [
+            "measurement",
+            "proximity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "drains",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does the Snake River drain?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which river drains a 1,009 square miles area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "flows through",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which counties does the Snake River flow through?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What river flows through Aitkin, Kanabec, Mille Lacs, and Pine counties?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "turns eastward near",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where does the Snake River turn eastward?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What river turns eastward near Mora, Minnesota?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "drains into",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Into which river does the Snake River drain?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What river drains into the St. Croix River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located east of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How far east of Pine City, Minnesota is the confluence of the Snake River and the St. Croix River?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is located 13 miles east of Pine City, Minnesota?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

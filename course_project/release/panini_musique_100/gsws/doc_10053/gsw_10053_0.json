@@ -1,0 +1,105 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Arthur Carlaw",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New Zealand",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "sports history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "rugby league",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "team sport",
+            "New Zealand"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "played a role in the establishment of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who played a role in the establishment of rugby league in New Zealand?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What sport did Arthur Carlaw help establish in New Zealand?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "represented",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did Arthur Carlaw represent?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who represented New Zealand in rugby league?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

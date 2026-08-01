@@ -1,0 +1,195 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "sports league",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "team",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "division",
+      "roles": [
+        {
+          "role": "category",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "ranking (Sports league ranking)",
+      "roles": [
+        {
+          "role": "attribute",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "won-lost record",
+      "roles": [
+        {
+          "role": "metric",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "points-based ranking system",
+      "roles": [
+        {
+          "role": "system",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "points per win",
+      "roles": [
+        {
+          "role": "metric",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "points per tie",
+      "roles": [
+        {
+          "role": "metric",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "none for a loss",
+      "roles": [
+        {
+          "role": "metric",
+          "states": [
+            "sports context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "ranking based on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the ranking of a team based on?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What uses a won-lost record for ranking?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "awarded points",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How are points awarded in a points-based ranking system?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What system awards points per win and tie?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,315 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ohio",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "US state",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New Mexico",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "US state",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Iowa",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "US state",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Bush",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Democrats",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "US politics",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "provisional ballots",
+      "roles": [
+        {
+          "role": "voting method",
+          "states": [
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Electoral College",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "US election system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "House of Representatives",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "US government",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Ken Blackwell",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "Ohio Secretary of State"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "John Kerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2000 election",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "US presidential election"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Al Gore",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "2000 election context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "decided by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What state decided the election outcome?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Ohio decide?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "announced by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who announced the statistical impossibility for Democrats to win in Ohio?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Ken Blackwell announce?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "conceded by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who conceded defeat in the election?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did John Kerry concede?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "won by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who won the presidency despite losing the popular vote in 2000?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Bush win in 2000?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "lost popular vote to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who lost the popular vote to Al Gore in 2000?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who did Bush lose the popular vote to in 2000?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

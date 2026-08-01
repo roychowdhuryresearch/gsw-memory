@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Japanese title",
+            "roles": [
+                {
+                    "role": "title",
+                    "states": [
+                        "language-specific",
+                        "film attribute"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "deciduous tree",
+            "roles": [
+                {
+                    "role": "meaning",
+                    "states": [
+                        "translation",
+                        "film title meaning"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "tree without leaves",
+            "roles": [
+                {
+                    "role": "meaning",
+                    "states": [
+                        "alternative translation",
+                        "film title meaning"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "means",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What does the Japanese title mean?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Which title means 'deciduous tree'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "rather than",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the alternative meaning of the Japanese title?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which title means 'tree without leaves'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

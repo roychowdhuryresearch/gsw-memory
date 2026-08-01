@@ -1,0 +1,221 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "The Watch House",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "fiction",
+            "1970s literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1977",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Robert Westall",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Anne",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "teenager"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "watch house",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "fictional setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "ghost",
+      "roles": [
+        {
+          "role": "entity",
+          "states": [
+            "supernatural",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote The Watch House?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What book did Robert Westall write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was The Watch House published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What book was published in 1977?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "features character",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is a character in The Watch House?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which book does the character Anne appear?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "set in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is The Watch House set?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What book is set in the watch house?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "haunted by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who haunts the watch house in The Watch House?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What entity haunts the watch house?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

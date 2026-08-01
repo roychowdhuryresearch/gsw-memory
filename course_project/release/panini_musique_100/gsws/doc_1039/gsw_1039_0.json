@@ -1,0 +1,197 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Shizuoka Prefecture",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative division",
+            "Japan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Japan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "East Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Chūbu region",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Honshu",
+            "Japan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Honshu",
+      "roles": [
+        {
+          "role": "island",
+          "states": [
+            "Japan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Shizuoka",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "capital",
+            "Shizuoka Prefecture"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hamamatsu",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "largest city by population",
+            "Shizuoka Prefecture"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Shizuoka Prefecture located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What prefecture is located in the Chūbu region?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What region is part of Honshu?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What island is the Chūbu region part of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the capital of Shizuoka Prefecture?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which prefecture has Shizuoka as its capital?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "largest city by population",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the largest city by population in Shizuoka Prefecture?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In which prefecture is Hamamatsu the largest city by population?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

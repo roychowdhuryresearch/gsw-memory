@@ -1,0 +1,144 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Las Cruces Sun-News",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "daily publication",
+                        "media"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1881",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "founding year",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Las Cruces",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "New Mexico"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "New Mexico",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "state",
+                        "USA"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "founded in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was the Las Cruces Sun-News founded?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What newspaper was founded in 1881?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is the Las Cruces Sun-News published?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What newspaper is published in Las Cruces?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "In which state is Las Cruces located?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What city in New Mexico is the Las Cruces Sun-News published?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

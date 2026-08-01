@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "tungsten-filament lamps (Incandescent light bulb)",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "lighting",
+            "resistive load"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "100-watt, 120-volt lamp",
+      "roles": [
+        {
+          "role": "object",
+          "states": [
+            "specific lamp",
+            "resistive load"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "144 ohms",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "resistance",
+            "hot-filament"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "9.5 ohms",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "resistance",
+            "cold-filament"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "TRIAC dimmers",
+      "roles": [
+        {
+          "role": "device",
+          "states": [
+            "brightness control",
+            "phase-control"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "T rating symbol",
+      "roles": [
+        {
+          "role": "symbol",
+          "states": [
+            "electrical contacts",
+            "inrush current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "0.10 seconds",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "current stabilization",
+            "lamp operation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "0.13 seconds",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "brightness achievement",
+            "lamp operation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has hot-filament resistance of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the hot-filament resistance of a 100-watt, 120-volt lamp?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which lamp has a hot-filament resistance of 144 ohms?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has cold-filament resistance of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the cold-filament resistance of a 100-watt, 120-volt lamp?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which lamp has a cold-filament resistance of 9.5 ohms?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "controlled by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What can control the brightness of tungsten-filament lamps?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What type of lamps can TRIAC dimmers control?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "indicates design for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What does the T rating symbol indicate?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What symbol indicates design for circuits with high inrush current?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "current stabilizes in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How long does it take for the current to stabilize in a 100-watt, 120-volt lamp?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What happens in 0.10 seconds for a 100-watt, 120-volt lamp?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "reaches 90% brightness in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How long does it take for a 100-watt, 120-volt lamp to reach 90% of its full brightness?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What happens in 0.13 seconds for a 100-watt, 120-volt lamp?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

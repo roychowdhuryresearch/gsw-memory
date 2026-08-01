@@ -1,0 +1,332 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Świecie County",
+      "roles": [
+        {
+          "role": "administrative unit",
+          "states": [
+            "territorial administration",
+            "local government"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kuyavian-Pomeranian Voivodeship",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "north-central Poland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "January 1, 1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1998",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "reform year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Świecie",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "administrative seat",
+            "largest town"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Toruń",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "nearby city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Bydgoszcz",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "nearby city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Nowe",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "town in county"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Świecie County located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Kuyavian-Pomeranian Voivodeship?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "established on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Świecie County established?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was established on January 1, 1999?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "result of reforms in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the result of the Polish local government reforms in 1998?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When were the reforms that led to the creation of Świecie County?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "administrative seat",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the administrative seat of Świecie County?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which county has Świecie as its administrative seat?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "largest town",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the largest town in Świecie County?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which county has Świecie as its largest town?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lies north of",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What lies north of Toruń?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Where is Świecie located in relation to Toruń?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "lies north-east of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What lies north-east of Bydgoszcz?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Where is Świecie located in relation to Bydgoszcz?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "town in county",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What is another town in Świecie County?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which county is Nowe a town in?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

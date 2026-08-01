@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Néstor Isaías Chávez Silva (Néstor Chávez)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Major League Baseball",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports league",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "right-handed",
+      "roles": [
+        {
+          "role": "attribute",
+          "states": [
+            "pitching hand",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "starting pitcher",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "baseball",
+            "player role"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "San Francisco Giants",
+      "roles": [
+        {
+          "role": "team",
+          "states": [
+            "baseball",
+            "MLB team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1967",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "season year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who played for the San Francisco Giants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team did Néstor Isaías Chávez Silva play for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "in the year",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Néstor Isaías Chávez Silva play for the San Francisco Giants?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who played for the San Francisco Giants in 1967?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "position",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position did Néstor Isaías Chávez Silva play?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was a starting pitcher for the San Francisco Giants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "pitching hand",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Néstor Isaías Chávez Silva's pitching hand?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was a right-handed pitcher for the San Francisco Giants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

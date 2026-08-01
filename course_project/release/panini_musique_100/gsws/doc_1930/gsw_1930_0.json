@@ -1,0 +1,219 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Darwin (Darwin, Northern Territory)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital city",
+            "Australian city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Northern Territory",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "Australian region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Oceania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Timor Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "sea",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "142,300",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "demographic data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Top End",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "northern region",
+            "Australian geography"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of the Northern Territory?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which region is Darwin the capital of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Darwin located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What city is located in Australia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "situated on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What sea is Darwin situated on?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which city is situated on the Timor Sea?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "has population of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the population of Darwin?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which city has a population of 142,300?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "regional centre of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the regional centre of the Top End?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which region has Darwin as its regional centre?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

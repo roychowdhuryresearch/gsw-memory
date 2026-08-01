@@ -1,0 +1,287 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Michael Jackson: The Life of an Icon",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "documentary",
+            "biographical"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "film about Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Michael Jackson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "pop singer",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "David Gest",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "producer",
+            "friend of Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "The Jackson 5",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "beginning of career"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Katherine Jackson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "mother of Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Tito Jackson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sibling of Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Rebbie Jackson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sibling of Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Whitney Houston",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "inspired by Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Smokey Robinson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "inspired by Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Dionne Warwick",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "inspired by Michael Jackson"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "November 2, 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "film release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who produced Michael Jackson: The Life of an Icon?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did David Gest produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "features footage of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does Michael Jackson: The Life of an Icon feature footage of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which film features footage of The Jackson 5?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "interviews with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is interviewed in Michael Jackson: The Life of an Icon?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which film are Katherine, Tito, and Rebbie Jackson interviewed?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Michael Jackson: The Life of an Icon released?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What film was released on November 2, 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

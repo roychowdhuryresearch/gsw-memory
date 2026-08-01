@@ -1,0 +1,344 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "University College of North Wales",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "historical name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "University of Wales, Bangor",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "current name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "University of Edinburgh",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Adam Mickiewicz University in Poznań",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "University College London",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "IBM UK Scientific Centre in Winchester",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "research center"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "University College Dublin",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "University of Wales, Bangor",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1986",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1997",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2000",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "University of Essex",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "studied at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did he study?",
+          "answers": [
+            "e1",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who studied at the University College of North Wales?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Who studied at the University of Edinburgh?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "worked at",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Where did he work?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Who worked at the Adam Mickiewicz University in Poznań?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who worked at University College London?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who worked at the IBM UK Scientific Centre in Winchester?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who worked at University College Dublin?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "became a lecturer in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did he become a lecturer in linguistics at the University of Wales, Bangor?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who became a lecturer in linguistics at the University of Wales, Bangor in 1986?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "awarded a Personal Chair",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was he awarded a Personal Chair?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was awarded a Personal Chair in 1997?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "moved to",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When did he move to the University of Essex?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who moved to the University of Essex in 2000?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

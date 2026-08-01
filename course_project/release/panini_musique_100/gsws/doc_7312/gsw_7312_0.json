@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tompion",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "racehorse",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Tom Fool",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "Hall of Fame",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Count Fleet",
+      "roles": [
+        {
+          "role": "horse",
+          "states": [
+            "Triple Crown champion",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1943",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "Triple Crown year",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Cornelius Vanderbilt Whitney",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "owner",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Robert L. Wheeler",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "trainer",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sired by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who sired Tompion?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which horse was sired by Tom Fool?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "damsire",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the damsire of Tompion?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which horse has Count Fleet as its damsire?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "Triple Crown champion in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Count Fleet the Triple Crown champion?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was the Triple Crown champion in 1943?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who owned Tompion during his racing career?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which horse was owned by Cornelius Vanderbilt Whitney?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "trained by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who trained Tompion during his racing career?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which horse was trained by Robert L. Wheeler?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

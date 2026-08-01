@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Clarks River National Wildlife Refuge",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "wildlife refuge",
+            "natural area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "bottomland hardwood forest",
+      "roles": [
+        {
+          "role": "ecosystem",
+          "states": [
+            "forest type",
+            "natural habitat"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "western Kentucky",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical area",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Benton",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "nearby city",
+            "Kentucky"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "East Fork of the Clarks River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "water body",
+            "Kentucky"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "over 200 different species of migratory birds",
+      "roles": [
+        {
+          "role": "wildlife",
+          "states": [
+            "biodiversity",
+            "seasonal inhabitants"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "overcup oaks, bald cypress, and tupelo-gum",
+      "roles": [
+        {
+          "role": "flora",
+          "states": [
+            "dominant species",
+            "bottomland"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "willow oak, swamp chestnut oak, red oak, sweet gum, sycamore, ash, and elm",
+      "roles": [
+        {
+          "role": "flora",
+          "states": [
+            "species",
+            "higher ground"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Clarks River National Wildlife Refuge located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in western Kentucky?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "near",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is near Benton?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What city is near Clarks River National Wildlife Refuge?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lies along",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What lies along the East Fork of the Clarks River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What river does Clarks River National Wildlife Refuge lie along?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "home to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is a seasonal home to over 200 different species of migratory birds?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What wildlife refuge is home to migratory birds?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "dominated by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is dominated by overcup oaks, bald cypress, and tupelo-gum?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What species dominate the bottomland hardwood forest?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "covered with",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What areas are covered with willow oak, swamp chestnut oak, red oak, sweet gum, sycamore, ash, and elm?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What species cover the slightly higher, better drained areas?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

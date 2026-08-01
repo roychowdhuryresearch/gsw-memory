@@ -1,0 +1,402 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "672",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "304",
+      "roles": [
+        {
+          "role": "households",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "164",
+      "roles": [
+        {
+          "role": "families",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "700.0",
+      "roles": [
+        {
+          "role": "population density",
+          "states": [
+            "inhabitants per square mile",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "270.3",
+      "roles": [
+        {
+          "role": "population density",
+          "states": [
+            "inhabitants per km2",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "336",
+      "roles": [
+        {
+          "role": "housing units",
+          "states": [
+            "census data",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "350.0",
+      "roles": [
+        {
+          "role": "housing density",
+          "states": [
+            "units per square mile",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "135.1",
+      "roles": [
+        {
+          "role": "housing density",
+          "states": [
+            "units per km2",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "99.7%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "White",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "0.1%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "other races",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "0.1%",
+      "roles": [
+        {
+          "role": "racial makeup",
+          "states": [
+            "two or more races",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "0.6%",
+      "roles": [
+        {
+          "role": "ethnic makeup",
+          "states": [
+            "Hispanic or Latino",
+            "2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was the population in 2010?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "In which year was the population 672?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "number of households in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many households were there in 2010?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In which year were there 304 households?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "number of families in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many families were there in 2010?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which year were there 164 families?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "population density in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the population density per square mile in 2010?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was the population density per km2 in 2010?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "number of housing units in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many housing units were there in 2010?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which year were there 336 housing units?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "housing density in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the housing density per square mile in 2010?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was the housing density per km2 in 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "racial makeup in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What percentage of the population was White in 2010?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What percentage of the population was from other races in 2010?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "What percentage of the population was from two or more races in 2010?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "ethnic makeup in",
+      "questions": [
+        {
+          "id": "q16",
+          "text": "What percentage of the population was Hispanic or Latino in 2010?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

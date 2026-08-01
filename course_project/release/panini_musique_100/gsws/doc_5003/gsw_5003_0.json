@@ -1,0 +1,426 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "John Kerry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2004 presidential campaign",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political campaign",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "George W. Bush",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American",
+            "President"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Iraq War",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "military conflict",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "John Edwards",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American",
+            "Senator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "35 electoral votes",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "election result"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Dick Cheney",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American",
+            "Vice President"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Senate Committee on Small Business and Entrepreneurship",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "U.S. Senate committee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Foreign Relations Committee",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "U.S. Senate committee"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "2009",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "January 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "month and year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "Barack Obama",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American",
+            "President"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Hillary Clinton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "American",
+            "Secretary of State"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e16",
+      "name": "February 1, 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "specific date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "criticized for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who criticized George W. Bush for the Iraq War?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did John Kerry criticize George W. Bush for?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "running mate",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was John Kerry's running mate in the 2004 presidential campaign?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was the running mate of John Edwards in the 2004 presidential campaign?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lost the election",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who lost the election in the 2004 presidential campaign?",
+          "answers": [
+            "e1",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was the result of John Kerry and John Edwards in the 2004 presidential campaign?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "became Chairman of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What position did John Kerry assume in 2007?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who became Chairman of the Senate Committee on Small Business and Entrepreneurship in 2007?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "nominated by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who nominated John Kerry to succeed Hillary Clinton?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was nominated by Barack Obama to succeed Hillary Clinton?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "succeeded",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who did John Kerry succeed as Secretary of State?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who succeeded Hillary Clinton as Secretary of State?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "assumed office on",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When did John Kerry assume the office of Secretary of State?",
+          "answers": [
+            "e16"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who assumed the office of Secretary of State on February 1, 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

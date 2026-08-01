@@ -1,0 +1,105 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Julian P. Kanter Political Commercial Archive",
+      "roles": [
+        {
+          "role": "archive",
+          "states": [
+            "political commercials",
+            "research resource"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "University of Oklahoma",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Save America's Treasures",
+      "roles": [
+        {
+          "role": "project",
+          "states": [
+            "preservation",
+            "cultural heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Julian P. Kanter Political Commercial Archive located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What archive is located at the University of Oklahoma?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "designated as an official project by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What archive has been designated as an official project by Save America's Treasures?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which organization designated the Julian P. Kanter Political Commercial Archive as an official project?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

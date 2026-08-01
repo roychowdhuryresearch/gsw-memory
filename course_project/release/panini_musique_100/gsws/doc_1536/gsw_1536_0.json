@@ -1,0 +1,324 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pat Quinn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "politician",
+            "Democratic Governor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "March 9, 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "legislation signed date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "July 1, 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "legislation effective date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Illinois (Capital punishment in Illinois)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "death penalty",
+      "roles": [
+        {
+          "role": "legal concept",
+          "states": [
+            "abolished"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "fifteen inmates",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "death row",
+            "Illinois"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "life imprisonment",
+      "roles": [
+        {
+          "role": "legal sentence",
+          "states": [
+            "commuted sentence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2010 gubernatorial campaign",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "political campaign"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Republican candidate",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political opponent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "50.4%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "vote share"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "signed legislation to abolish",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who signed legislation to abolish the death penalty in Illinois?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Pat Quinn sign legislation to abolish?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "legislation signed on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the legislation to abolish the death penalty signed?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What happened on March 9, 2011?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "legislation effective on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did the legislation to abolish the death penalty take effect?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What happened on July 1, 2011?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "commuted sentences to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did Pat Quinn commute the death sentences to?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Whose sentences were commuted to life imprisonment?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "criticized for signing",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was criticized for signing the bill to abolish the death penalty?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was Pat Quinn criticized for?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "supported during campaign",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What did Pat Quinn support during the 2010 gubernatorial campaign?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When did Pat Quinn express support for the death penalty?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "defeated with vote share",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who did Pat Quinn defeat with 50.4% of the vote?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What was Pat Quinn's vote share in the election?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

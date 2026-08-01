@@ -1,0 +1,359 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Royals Stadium",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Truman Sports Complex",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports complex",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Municipal Stadium (Municipal Stadium (Kansas City, Missouri))",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "sports venue",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Texas Rangers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "baseball",
+            "Major League"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "October 4, 1972",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Ted Williams",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball manager",
+            "Hall of Famer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Amos Otis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Ed Kirkpatrick",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Gene Tenace",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Oakland A's",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "baseball",
+            "Major League"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "John Mayberry",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1972",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "baseball season"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "moved to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did the Royals move after the 1972 season?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team moved to Royals Stadium after the 1972 season?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "won the final game at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who won the final game at Municipal Stadium?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where did the Royals win their final game of the 1972 season?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "managed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who managed the final Major League game at Municipal Stadium?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which game was the final Major League game managed by Ted Williams?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "scored the final run at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who scored the final run at Municipal Stadium?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where did Amos Otis score the final run?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "had the final hit at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who had the final hit at Municipal Stadium?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Where did Ed Kirkpatrick have the final hit?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "hit the final home run at",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who hit the final home run at Municipal Stadium?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Where did Gene Tenace hit the final home run?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "hit the final Royals home run at",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who hit the final Royals home run at Municipal Stadium?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Where did John Mayberry hit the final Royals home run?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

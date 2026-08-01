@@ -1,0 +1,334 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Street Corner Symphony (Street Corner Symphony (group))",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "a cappella",
+            "contestant"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Nashville, Tennessee",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "base location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Sing-Off",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "reality show",
+            "NBC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "second season",
+      "roles": [
+        {
+          "role": "season",
+          "states": [
+            "competition season"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "second place",
+      "roles": [
+        {
+          "role": "competition result",
+          "states": [
+            "runner-up"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Committed",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "a cappella",
+            "winner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Huntsville, Alabama",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "base location",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "formation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Southeastern United States",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "origin region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Tennessee",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "origin state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Alabama",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "origin state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Florida",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "origin state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Street Corner Symphony based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What music group is based in Nashville, Tennessee?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "competed in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which show did Street Corner Symphony compete in?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who competed in the second season of The Sing-Off?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "finished in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What place did Street Corner Symphony finish in The Sing-Off?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who finished in second place in The Sing-Off?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "won by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who won The Sing-Off against Street Corner Symphony?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which group did Committed defeat in The Sing-Off?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "formed in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Street Corner Symphony formed?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What group was formed in 2010?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "originated from",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where are the members of Street Corner Symphony from?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which group has members from the Southeastern United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,215 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "German-Soviet Frontier Treaty",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "historical agreement",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European power",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Soviet Union",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European power",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Adolf Hitler",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "German leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Operation Barbarossa",
+      "roles": [
+        {
+          "role": "military operation",
+          "states": [
+            "World War II",
+            "German invasion"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "22 June 1941",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event date",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Eastern Poland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "delineated spheres of interest",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What did the German-Soviet Frontier Treaty delineate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which treaty delineated the spheres of interest between Germany and the Soviet Union?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ended by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who ended the German-Soviet Frontier Treaty?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Adolf Hitler end?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "launched on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Operation Barbarossa launched?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What operation was launched on 22 June 1941?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "attacked",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did Germany attack during Operation Barbarossa?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who attacked Eastern Poland during Operation Barbarossa?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

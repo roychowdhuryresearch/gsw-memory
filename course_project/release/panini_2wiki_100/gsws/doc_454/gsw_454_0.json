@@ -1,0 +1,65 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Gaius Julius Aquila",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "Roman Empire"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Roman Empire",
+            "roles": [
+                {
+                    "role": "historical period",
+                    "states": [
+                        "ancient civilization"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "lived during",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who lived during the Roman Empire?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "During which period did Gaius Julius Aquila live?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

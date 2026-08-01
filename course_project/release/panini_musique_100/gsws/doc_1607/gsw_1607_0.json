@@ -1,0 +1,326 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tallahassee (Tallahassee, Florida)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "capital"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Florida",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Leon County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1824",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2016",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "population data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "190,894",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population",
+            "city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "379,627",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "population",
+            "metropolitan area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Florida Panhandle",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Florida Big Bend",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Southwest Georgia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of Florida?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Tallahassee is the capital of which state?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "county seat of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the county seat of Leon County?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Tallahassee is the county seat of which county?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "became the capital in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Tallahassee become the capital of Florida?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What happened in 1824 in Florida?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the population of Tallahassee in 2016?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In which year was the population of Tallahassee 190,894?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "metropolitan population in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the population of the Tallahassee metropolitan area in 2016?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which year was the population of the Tallahassee metropolitan area 379,627?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "largest city in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the largest city in the Florida Panhandle?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Tallahassee is the largest city in which region?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "main center for trade and agriculture in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the main center for trade and agriculture in the Florida Big Bend?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Tallahassee is the main center for trade and agriculture in which regions?",
+          "answers": [
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

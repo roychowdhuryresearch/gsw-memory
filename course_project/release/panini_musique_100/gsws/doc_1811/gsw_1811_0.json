@@ -1,0 +1,268 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oklahoma City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "MSA region",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "metropolitan statistical area",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Tinker Air Force Base",
+      "roles": [
+        {
+          "role": "employer",
+          "states": [
+            "military",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "27,000",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "employees",
+            "Tinker Air Force Base"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "University of Oklahoma",
+      "roles": [
+        {
+          "role": "employer",
+          "states": [
+            "educational institution",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "11,900",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "employees",
+            "University of Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "University of Central Oklahoma",
+      "roles": [
+        {
+          "role": "employer",
+          "states": [
+            "educational institution",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2,900",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "employees",
+            "University of Central Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Norman Regional Hospital",
+      "roles": [
+        {
+          "role": "employer",
+          "states": [
+            "healthcare",
+            "Oklahoma"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2,800",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "employees",
+            "Norman Regional Hospital"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Tinker Air Force Base located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the MSA region?",
+          "answers": [
+            "e3",
+            "e5",
+            "e7",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "employs",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many people does Tinker Air Force Base employ?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which employer has 27,000 employees?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "How many people does the University of Oklahoma employ?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which employer has 11,900 employees?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "How many people does the University of Central Oklahoma employ?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which employer has 2,900 employees?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "How many people does Norman Regional Hospital employ?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which employer has 2,800 employees?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

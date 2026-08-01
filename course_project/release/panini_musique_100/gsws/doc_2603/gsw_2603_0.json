@@ -1,0 +1,176 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jessamine (Jessamine (band))",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "American",
+            "post-rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kranky records",
+      "roles": [
+        {
+          "role": "record label",
+          "states": [
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1994",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1998",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1997",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "compilation release year",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Another Fictionalized History",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "compilation",
+            "self-released"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded albums for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which band recorded albums for Kranky records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "For which record label did Jessamine record albums?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "active between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Jessamine active?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which band was active between 1994 and 1998?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "released compilation album",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What compilation album did Jessamine release in 1997?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When did Jessamine release 'Another Fictionalized History'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,184 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sazerac",
+      "roles": [
+        {
+          "role": "cocktail",
+          "states": [
+            "New Orleans",
+            "variation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New Orleans",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin",
+            "cultural context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "cognac",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "original",
+            "alcoholic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "whiskey",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "variation",
+            "alcoholic"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Sazerac de Forge et Fils",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "cognac",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "originated in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did the Sazerac cocktail originate?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What cocktail originated in New Orleans?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "named after",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the Sazerac cocktail named after?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which cocktail is named after the Sazerac de Forge et Fils brand?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "original ingredient",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the original main ingredient of the Sazerac cocktail?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which cocktail originally used cognac as its main ingredient?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "variation of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "The Sazerac is a variation of which types of cocktails?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which cocktail is a variation of cognac or whiskey cocktails?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

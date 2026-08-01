@@ -1,0 +1,240 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Toyota Racing Development",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "in-house tuning shop",
+            "automotive industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "TRD",
+      "roles": [
+        {
+          "role": "abbreviation",
+          "states": [
+            "alternative name",
+            "Toyota Racing Development"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Toyota",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "automotive manufacturer",
+            "global presence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lexus",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "luxury vehicles",
+            "Toyota division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Scion",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "discontinued",
+            "Toyota division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "F-Sport",
+      "roles": [
+        {
+          "role": "label",
+          "states": [
+            "performance parts",
+            "Lexus vehicles"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "F",
+      "roles": [
+        {
+          "role": "label",
+          "states": [
+            "performance models",
+            "Lexus vehicles"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is the in-house tuning shop for",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the in-house tuning shop for Toyota, Lexus, and formerly Scion?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "For which brands is Toyota Racing Development the in-house tuning shop?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "abbreviation of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the abbreviation of Toyota Racing Development?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What does TRD stand for?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "produces tuning products and accessories",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Toyota Racing Development produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who produces various tuning products and accessories?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "performance parts labeled as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are performance parts for Lexus vehicles labeled as?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which label is used for performance parts of Lexus vehicles?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "performance models labeled as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What are performance Lexus models labeled as?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which label is used for performance models of Lexus?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

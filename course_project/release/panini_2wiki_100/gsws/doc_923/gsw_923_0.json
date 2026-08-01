@@ -1,0 +1,103 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Chappell & Co.",
+            "roles": [
+                {
+                    "role": "company",
+                    "states": [
+                        "English",
+                        "historical"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "music",
+            "roles": [
+                {
+                    "role": "product",
+                    "states": [
+                        "published"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "pianos",
+            "roles": [
+                {
+                    "role": "product",
+                    "states": [
+                        "manufactured"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "published",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What did Chappell & Co. publish?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who published music?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "manufactured",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What did Chappell & Co. manufacture?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who manufactured pianos?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

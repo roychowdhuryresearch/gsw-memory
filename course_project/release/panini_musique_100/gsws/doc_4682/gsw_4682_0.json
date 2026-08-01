@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "George Peppard",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "film character"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Paul Varjak (Breakfast at Tiffany's (film))",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "film character",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Fred",
+      "roles": [
+        {
+          "role": "nickname",
+          "states": [
+            "character nickname",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Holly",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "film character",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Writer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "fictional profession",
+            "film character"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2E",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "film character",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "portrayed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who portrayed Paul Varjak?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which character was portrayed by George Peppard?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "nicknamed",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Paul Varjak's nickname?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is nicknamed Fred?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "nicknamed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who nicknamed Paul Varjak as Fred?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who did Holly nickname Fred?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Paul Varjak's profession?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is a writer in the film?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "kept man of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who is the kept man of 2E?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is 2E's kept man?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

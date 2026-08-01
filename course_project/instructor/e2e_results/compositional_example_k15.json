@@ -1,0 +1,730 @@
+{
+  "question_id": "246a2cd60bda11eba7f7acde48001122",
+  "question": "What is the cause of death of Sophie Gurney's father?",
+  "gold_answer": "multiple sclerosis",
+  "prediction": "Emily Pryor",
+  "exact_match": 0.0,
+  "token_f1": 0.0,
+  "models": {
+    "decomposer": "yigitturali/GSW-QA-Decomposer-Qwen3-4B",
+    "embedding": "Qwen/Qwen3-Embedding-8B",
+    "reranker": "Qwen/Qwen3-Reranker-8B"
+  },
+  "decomposition": [
+    {
+      "question": "Who was Sophie Gurney's father?",
+      "requires_retrieval": true
+    },
+    {
+      "question": "What was <ENTITY_Q1>'s cause of death?",
+      "requires_retrieval": true
+    }
+  ],
+  "beams": [
+    {
+      "score": 0.542167236653046,
+      "answers_by_step": {
+        "1": "Sophie Jane Gurney",
+        "2": "Emily Pryor"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Emily Pryor",
+          "score": 0.671875
+        }
+      ]
+    },
+    {
+      "score": 0.542167236653046,
+      "answers_by_step": {
+        "1": "Sophie Jane Gurney",
+        "2": "Lucy Pryor"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Lucy Pryor",
+          "score": 0.671875
+        }
+      ]
+    },
+    {
+      "score": 0.542167236653046,
+      "answers_by_step": {
+        "1": "Sophie Jane Gurney",
+        "2": "Nelly Pryor"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Nelly Pryor",
+          "score": 0.671875
+        }
+      ]
+    },
+    {
+      "score": 0.542167236653046,
+      "answers_by_step": {
+        "1": "Sophie Jane Gurney",
+        "2": "William Pryor"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "William Pryor",
+          "score": 0.671875
+        }
+      ]
+    },
+    {
+      "score": 0.5163347388080721,
+      "answers_by_step": {
+        "1": "Sophie Jane Gurney",
+        "2": "Gwen Darwin"
+      },
+      "steps": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5255::gsw_5255_0.json::v10::q20",
+          "question": "Who were the parents of Elisabeth and Sophie Jane Raverat?",
+          "answer": "Gwen Darwin",
+          "score": 0.609375
+        }
+      ]
+    }
+  ],
+  "retrieval_trace": [
+    {
+      "query": "Who was Sophie Gurney's father?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 79,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v5::q9",
+          "question": "Who was Sophie Jane Gurney married to in 1940?",
+          "answer": "Mark Pryor",
+          "score": 0.4375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v2::q3",
+          "question": "When did Sophie Jane Gurney die?",
+          "answer": "10 June 2011",
+          "score": 0.421875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v4::q7",
+          "question": "Who is the great-granddaughter of Charles Darwin?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.421875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v12::q23",
+          "question": "Which group was Sophie Jane Gurney a member of?",
+          "answer": "21 Group of artists",
+          "score": 0.408203125
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q1",
+          "question": "When was Sophie Jane Gurney born?",
+          "answer": "20 December 1919",
+          "score": 0.408203125
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v4::q8",
+          "question": "Who is Charles Darwin the great-grandfather of?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.408203125
+        },
+        {
+          "qa_uid": "doc_902::gsw_902_0.json::v3::q6",
+          "question": "Who is Napier George Henry Sturt the son of?",
+          "answer": "Humphrey Sturt",
+          "score": 0.408203125
+        },
+        {
+          "qa_uid": "doc_5260::gsw_5260_0.json::v6::q12",
+          "question": "What book was published in 1995?",
+          "answer": "My Father, Enver Hoxha",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v11::q21",
+          "question": "Where did Sophie Jane Gurney move to after retirement?",
+          "answer": "Totnes, Devon",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v10::q20",
+          "question": "Who worked at the University of Hong Kong?",
+          "answer": "Henry Charles Horton Gurney",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v9::q18",
+          "question": "Who was Henry Charles Horton Gurney married to?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_5260::gsw_5260_0.json::v6::q11",
+          "question": "When was 'My Father, Enver Hoxha' published?",
+          "answer": "1995",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_5366::gsw_5366_0.json::v8::q16",
+          "question": "Who starred in Blackboard Jungle?",
+          "answer": "Sir Sidney Poitier",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_901::gsw_901_0.json::v3::q6",
+          "question": "Who is Humphrey Napier Sturt the son of?",
+          "answer": "Henry Sturt",
+          "score": 0.3203125
+        }
+      ],
+      "seconds": 2.0377932749688625
+    },
+    {
+      "query": "What was Mark Pryor's cause of death?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 41,
+      "reranked_candidate_count": 47,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_2149::gsw_2149_0.json::v9::q19",
+          "question": "Who died in Los Angeles County, California?",
+          "answer": "Jay Marchant",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v2::q4",
+          "question": "What did Etan Boritzer write?",
+          "answer": "What is God?",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v3::q5",
+          "question": "When was 'What is God?' published?",
+          "answer": "1989",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v7::q13",
+          "question": "Who did Nelly Pryor marry?",
+          "answer": "Philip Trevelyan",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3174::gsw_3174_0.json::v10::q23",
+          "question": "Who died of cancer?",
+          "answer": "Frank Ripploh",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_444::gsw_444_0.json::v9::q17",
+          "question": "What illness did Leopoldo Torres Ríos suffer from?",
+          "answer": "lung cancer",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_739::gsw_739_0.json::v7::q14",
+          "question": "Who died of lung cancer?",
+          "answer": "Lai Sun Cheung",
+          "score": 0.26953125
+        },
+        {
+          "qa_uid": "doc_882::gsw_882_0.json::v2::q3",
+          "question": "Who died on July 9, 1993?",
+          "answer": "Garry Hoy",
+          "score": 0.26953125
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v3::q6",
+          "question": "What book was published in 1989?",
+          "answer": "What is God?",
+          "score": 0.255859375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Emily Pryor",
+          "score": 0.25
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "William Pryor",
+          "score": 0.25
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Lucy Pryor",
+          "score": 0.25
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Nelly Pryor",
+          "score": 0.25
+        },
+        {
+          "qa_uid": "doc_1272::gsw_1272_0.json::v10::q19",
+          "question": "What did Eric XIV likely die of?",
+          "answer": "arsenic poisoning",
+          "score": 0.2333984375
+        },
+        {
+          "qa_uid": "doc_1508::gsw_1508_0.json::v4::q7",
+          "question": "Since when has Prince Edward held the title of Duke of Kent?",
+          "answer": "1942",
+          "score": 0.2333984375
+        }
+      ],
+      "seconds": 1.1099396795034409
+    },
+    {
+      "query": "What was Sophie Jane Gurney's cause of death?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 73,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Emily Pryor",
+          "score": 0.671875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "William Pryor",
+          "score": 0.671875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Lucy Pryor",
+          "score": 0.671875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v6::q11",
+          "question": "Who are the children of Sophie Jane Gurney and Mark Pryor?",
+          "answer": "Nelly Pryor",
+          "score": 0.671875
+        },
+        {
+          "qa_uid": "doc_5255::gsw_5255_0.json::v10::q20",
+          "question": "Who were the parents of Elisabeth and Sophie Jane Raverat?",
+          "answer": "Jacques Pierre Paul Raverat",
+          "score": 0.609375
+        },
+        {
+          "qa_uid": "doc_5255::gsw_5255_0.json::v10::q20",
+          "question": "Who were the parents of Elisabeth and Sophie Jane Raverat?",
+          "answer": "Gwen Darwin",
+          "score": 0.609375
+        },
+        {
+          "qa_uid": "doc_4855::gsw_4855_0.json::v13::q25",
+          "question": "What did Will Inman die of?",
+          "answer": "Parkinson's disease",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v2::q3",
+          "question": "Who wrote 'What is God?'",
+          "answer": "Etan Boritzer",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_5255::gsw_5255_0.json::v13::q25",
+          "question": "What did Jacques Pierre Paul Raverat die from?",
+          "answer": "multiple sclerosis",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_769::gsw_769_0.json::v7::q14",
+          "question": "Who died of bubonic plague?",
+          "answer": "Marianus V",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_1272::gsw_1272_0.json::v10::q19",
+          "question": "What did Eric XIV likely die of?",
+          "answer": "arsenic poisoning",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v11::q21",
+          "question": "Where did Sophie Jane Gurney move to after retirement?",
+          "answer": "Totnes, Devon",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v12::q23",
+          "question": "Which group was Sophie Jane Gurney a member of?",
+          "answer": "21 Group of artists",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v4::q7",
+          "question": "Who is the great-granddaughter of Charles Darwin?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v4::q8",
+          "question": "Who is Charles Darwin the great-grandfather of?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.294921875
+        }
+      ],
+      "seconds": 1.7620469219982624
+    },
+    {
+      "query": "What was 10 June 2011's cause of death?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 50,
+      "reranked_candidate_count": 50,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_1468::gsw_1468_0.json::v2::q3",
+          "question": "When did Albert Anthony Visetti die?",
+          "answer": "10 July 1928",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v3::q6",
+          "question": "What book was published in 1989?",
+          "answer": "What is God?",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_444::gsw_444_0.json::v9::q17",
+          "question": "What illness did Leopoldo Torres Ríos suffer from?",
+          "answer": "lung cancer",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_47::gsw_47_0.json::v2::q3",
+          "question": "When did Michael Curtiz die?",
+          "answer": "April 11, 1962",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_1979::gsw_1979_0.json::v2::q3",
+          "question": "When did Ladislav Smoljak die?",
+          "answer": "6 June 2010",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_2149::gsw_2149_0.json::v2::q4",
+          "question": "When did Jay Marchant die?",
+          "answer": "June 14, 1962",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_69::gsw_69_0.json::v2::q4",
+          "question": "When did Zhao Shoushan die?",
+          "answer": "20 June 1965",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_739::gsw_739_0.json::v2::q3",
+          "question": "When did Lai Sun Cheung die?",
+          "answer": "20 June 2010",
+          "score": 0.36328125
+        },
+        {
+          "qa_uid": "doc_1980::gsw_1980_0.json::v2::q4",
+          "question": "When did Pavel Vondruška die?",
+          "answer": "5 February 2011",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3174::gsw_3174_0.json::v10::q23",
+          "question": "Who died of cancer?",
+          "answer": "Frank Ripploh",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_3289::gsw_3289_0.json::v7::q13",
+          "question": "What did Archduke Rainer of Austria die from?",
+          "answer": "blood-poisoning",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_4736::gsw_4736_0.json::v2::q4",
+          "question": "When did Rijk de Gooyer die?",
+          "answer": "2 November 2011",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v2::q3",
+          "question": "When did Sophie Jane Gurney die?",
+          "answer": "10 June 2011",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_739::gsw_739_0.json::v7::q14",
+          "question": "Who died of lung cancer?",
+          "answer": "Lai Sun Cheung",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_1272::gsw_1272_0.json::v10::q19",
+          "question": "What did Eric XIV likely die of?",
+          "answer": "arsenic poisoning",
+          "score": 0.333984375
+        }
+      ],
+      "seconds": 1.4525193609297276
+    },
+    {
+      "query": "What was 20 December 1919's cause of death?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 55,
+      "reranked_candidate_count": 55,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_4410::gsw_4410_0.json::v1::q1",
+          "question": "Who was born on 19 December 1862?",
+          "answer": "Peter Samuel George Mackenzie",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_4854::gsw_4854_0.json::v2::q4",
+          "question": "When did John Divane die?",
+          "answer": "1 December 1888",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q1",
+          "question": "When was Sophie Jane Gurney born?",
+          "answer": "20 December 1919",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_677::gsw_677_0.json::v1::q2",
+          "question": "Who was born on December 10, 1919?",
+          "answer": "Alexander Mair Courage Jr.",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_739::gsw_739_0.json::v2::q3",
+          "question": "When did Lai Sun Cheung die?",
+          "answer": "20 June 2010",
+          "score": 0.3203125
+        },
+        {
+          "qa_uid": "doc_1272::gsw_1272_0.json::v10::q19",
+          "question": "What did Eric XIV likely die of?",
+          "answer": "arsenic poisoning",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_3289::gsw_3289_0.json::v7::q13",
+          "question": "What did Archduke Rainer of Austria die from?",
+          "answer": "blood-poisoning",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_901::gsw_901_0.json::v2::q4",
+          "question": "Who died on 30 July 1919?",
+          "answer": "Humphrey Napier Sturt",
+          "score": 0.306640625
+        },
+        {
+          "qa_uid": "doc_1508::gsw_1508_0.json::v4::q7",
+          "question": "Since when has Prince Edward held the title of Duke of Kent?",
+          "answer": "1942",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_444::gsw_444_0.json::v9::q18",
+          "question": "Who suffered from lung cancer?",
+          "answer": "Leopoldo Torres Ríos",
+          "score": 0.294921875
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v1::q2",
+          "question": "Who was born on 20 December 1919?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_769::gsw_769_0.json::v7::q14",
+          "question": "Who died of bubonic plague?",
+          "answer": "Marianus V",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_877::gsw_877_0.json::v1::q2",
+          "question": "Who was born on December 20, 1923?",
+          "answer": "Rodney Amateau",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_901::gsw_901_0.json::v2::q3",
+          "question": "When did Humphrey Napier Sturt die?",
+          "answer": "30 July 1919",
+          "score": 0.28125
+        },
+        {
+          "qa_uid": "doc_2682::gsw_2682_0.json::v2::q3",
+          "question": "Who died on April 8, 1919?",
+          "answer": "Thomas Barnard Flint",
+          "score": 0.26953125
+        }
+      ],
+      "seconds": 1.588261291384697
+    },
+    {
+      "query": "What was 21 Group of artists's cause of death?",
+      "query_embedding_source": "runtime_qwen",
+      "retrieved_qa_count": 60,
+      "reranked_candidate_count": 62,
+      "top_candidates": [
+        {
+          "qa_uid": "doc_463::gsw_463_0.json::v1::q2",
+          "question": "Which organization is Mehdi Abrishamchi a member of?",
+          "answer": "People's Mujahedin of Iran",
+          "score": 0.408203125
+        },
+        {
+          "qa_uid": "doc_229::gsw_229_0.json::v2::q4",
+          "question": "When did Hans Barthold Andresen Butenschøn die?",
+          "answer": "28 November 1971",
+          "score": 0.392578125
+        },
+        {
+          "qa_uid": "doc_463::gsw_463_0.json::v1::q1",
+          "question": "Who is a member of the People's Mujahedin of Iran?",
+          "answer": "Mehdi Abrishamchi",
+          "score": 0.376953125
+        },
+        {
+          "qa_uid": "doc_1508::gsw_1508_0.json::v4::q7",
+          "question": "Since when has Prince Edward held the title of Duke of Kent?",
+          "answer": "1942",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_29::gsw_29_0.json::v3::q10",
+          "question": "What band was Billy Milano the singer of?",
+          "answer": "United Forces",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_444::gsw_444_0.json::v9::q18",
+          "question": "Who suffered from lung cancer?",
+          "answer": "Leopoldo Torres Ríos",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v12::q24",
+          "question": "Who was a member of the 21 Group of artists?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.349609375
+        },
+        {
+          "qa_uid": "doc_2966::gsw_2966_0.json::v2::q3",
+          "question": "When did George Rodney, 3rd Baron Rodney die?",
+          "answer": "21 June 1842",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_5257::gsw_5257_0.json::v2::q4",
+          "question": "Who died on 10 June 2011?",
+          "answer": "Sophie Jane Gurney",
+          "score": 0.333984375
+        },
+        {
+          "qa_uid": "doc_29::gsw_29_0.json::v3::q5",
+          "question": "Who is the singer of M.O.D.?",
+          "answer": "Billy Milano",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_3174::gsw_3174_0.json::v10::q23",
+          "question": "Who died of cancer?",
+          "answer": "Frank Ripploh",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v2::q4",
+          "question": "What did Etan Boritzer write?",
+          "answer": "What is God?",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_3::gsw_3_0.json::v3::q5",
+          "question": "When was 'What is God?' published?",
+          "answer": "1989",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_4693::gsw_4693_0.json::v4::q7",
+          "question": "Who died in Barcelona?",
+          "answer": "Jeanne Mandello",
+          "score": 0.2451171875
+        },
+        {
+          "qa_uid": "doc_739::gsw_739_0.json::v7::q14",
+          "question": "Who died of lung cancer?",
+          "answer": "Lai Sun Cheung",
+          "score": 0.2451171875
+        }
+      ],
+      "seconds": 1.7778564281761646
+    }
+  ],
+  "timings": {
+    "decomposition_seconds": 12.210887297987938,
+    "retrieval_and_ricr_seconds": 9.729932997375727
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Constitutional Movement",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "right wing",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United Kingdom",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "political context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1979",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "formation year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Andrew Fountaine",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "founder",
+            "political figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "National Front Constitutional Movement",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "splinter group",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "National Front",
+      "roles": [
+        {
+          "role": "political group",
+          "states": [
+            "historical",
+            "right wing"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1980",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "membership count year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2000 members",
+      "roles": [
+        {
+          "role": "membership count",
+          "states": [
+            "claimed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "formed in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the Constitutional Movement formed?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What political group was formed in 1979?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "founded by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who founded the Constitutional Movement?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Andrew Fountaine found?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "splinter group of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the National Front Constitutional Movement a splinter group of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What splinter group came from the National Front?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "claimed membership",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many members did the Constitutional Movement claim to have by 1980?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which political group claimed to have 2000 members by 1980?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

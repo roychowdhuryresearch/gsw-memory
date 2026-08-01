@@ -1,0 +1,288 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Clerke Rocks",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "group of islands",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "South Georgia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "British Overseas Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Office Boys",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "part of Clerke Rocks"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Nobby",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "part of Clerke Rocks"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Islote Llamativo",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Spanish name",
+            "alternative name for Nobby"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Roca Notable",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Spanish name",
+            "alternative name for Nobby"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "British Overseas Territory",
+      "roles": [
+        {
+          "role": "political status",
+          "states": [
+            "territorial status",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "South Georgia and the South Sandwich Islands",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "territory",
+            "British Overseas Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Argentina",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "sovereign state",
+            "South American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Tierra del Fuego Province",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "part of Argentina"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located southeast of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where are the Clerke Rocks located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located southeast of South Georgia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "includes",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What islands are included in the Clerke Rocks?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which group of islands includes The Office Boys and Nobby?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "Spanish name",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the Spanish name for Nobby?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which island is also known as Islote Llamativo or Roca Notable?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "belongs to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "To which territory do the Clerke Rocks belong?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What belongs to the British Overseas Territory of South Georgia and the South Sandwich Islands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "claimed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which country claims the Clerke Rocks as part of its territory?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What does Argentina claim as part of Tierra del Fuego Province?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

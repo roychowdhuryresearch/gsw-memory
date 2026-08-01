@@ -1,0 +1,261 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Green Bay Packers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "American football",
+            "professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Green Bay, Wisconsin",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "team base",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "National Football League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports league",
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "National Football Conference North division",
+      "roles": [
+        {
+          "role": "division",
+          "states": [
+            "NFL",
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1919",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Lambeau Field",
+      "roles": [
+        {
+          "role": "stadium",
+          "states": [
+            "home games",
+            "since 1957"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1957",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "stadium opening year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Green Bay Packers based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team is based in Green Bay, Wisconsin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "competes in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "In which league do the Green Bay Packers compete?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which team competes in the National Football League?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "member of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which division is the Green Bay Packers a member of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which team is a member of the National Football Conference North division?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the Green Bay Packers established?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which team was established in 1919?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "home games played at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where have the Green Bay Packers played their home games since 1957?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which team plays their home games at Lambeau Field?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "opened in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was Lambeau Field opened?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What stadium opened in 1957?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

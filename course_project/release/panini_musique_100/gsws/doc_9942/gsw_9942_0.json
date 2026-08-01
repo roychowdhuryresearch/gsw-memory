@@ -1,0 +1,276 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Cassata",
+      "roles": [
+        {
+          "role": "food",
+          "states": [
+            "traditional sweet",
+            "Sicilian cuisine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Cassata siciliana",
+      "roles": [
+        {
+          "role": "food",
+          "states": [
+            "alternative name",
+            "Sicilian cuisine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Sicily",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "origin",
+            "Italian region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "sponge cake",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "fruit juices",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "liqueur",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "ricotta cheese",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "candied fruit",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "marzipan",
+      "roles": [
+        {
+          "role": "ingredient",
+          "states": [
+            "component of Cassata"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Neapolitan ice cream",
+      "roles": [
+        {
+          "role": "food",
+          "states": [
+            "contains candied or dried fruit and nuts"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "originates from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where does Cassata originate from?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What traditional sweet originates from Sicily?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "alternative name",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is another name for Cassata?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Cassata siciliana also known as?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "contains",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What ingredients does Cassata contain?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which food contains sponge cake, fruit juices, liqueur, ricotta cheese, candied fruit, and marzipan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "related to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Cassata related to in terms of filling?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What food is related to Cassata in terms of filling?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

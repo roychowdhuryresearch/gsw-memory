@@ -1,0 +1,337 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Protestants (Protestantism)",
+      "roles": [
+        {
+          "role": "religious group",
+          "states": [
+            "Christian denomination",
+            "global presence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "900 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "current estimate",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "2.4 billion",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "current estimate",
+            "global",
+            "Christians"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "census year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "800 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "300 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "Sub-Saharan Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "260 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "Americas"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "140 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "Asia-Pacific region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "100 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 estimate",
+            "Middle East-North Africa"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "40%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "of Christians",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "11.6%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "of world population",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "13%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "of world population",
+            "global"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "current population",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the current population of Protestants worldwide?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which religious group has a population of 900 million?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "percentage of Christians",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What percentage of Christians are Protestants?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which religious group accounts for 40% of Christians?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "percentage of world population",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What percentage of the world population are Protestants?",
+          "answers": [
+            "e12",
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which religious group accounts for 11.6% to 13% of the world population?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "2010 population distribution",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many Protestants were there in Sub-Saharan Africa in 2010?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "How many Protestants were there in the Americas in 2010?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "How many Protestants were there in the Asia-Pacific region in 2010?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "How many Protestants were there in Europe in 2010?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "How many Protestants were there in the Middle East-North Africa in 2010?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

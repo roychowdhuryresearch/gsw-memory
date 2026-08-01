@@ -1,0 +1,241 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Roger E. Kanet (Roger Kanet)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "academic",
+            "author",
+            "researcher"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Cold War",
+      "roles": [
+        {
+          "role": "historical period",
+          "states": [
+            "20th century",
+            "geopolitical tension"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "nationalism",
+      "roles": [
+        {
+          "role": "topic",
+          "states": [
+            "political science",
+            "current research focus"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Russian foreign policy",
+      "roles": [
+        {
+          "role": "topic",
+          "states": [
+            "political science",
+            "current research focus"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "University of Illinois at Urbana-Champaign",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "academic",
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "University of Miami",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "academic",
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the nationality of Roger E. Kanet?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is American?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "focused on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did Roger E. Kanet focus on before 1994?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who focused on the Cold War before 1994?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "researches",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does Roger E. Kanet research now?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who researches nationalism and Russian foreign policy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "held position at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was Roger E. Kanet the Associate Vice Chancellor and Chair of the Political Science Department?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was the Associate Vice Chancellor and Chair of the Political Science Department at the University of Illinois at Urbana-Champaign?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "was Dean at",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was Roger E. Kanet the Dean of the School of International Studies?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was the Dean of the School of International Studies at the University of Miami?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,281 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Costo (Tim Costo)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "athlete",
+            "baseball player"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1990 Amateur Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Cleveland Indians",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "baseball team",
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Cincinnati Reds",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "baseball team",
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "St. Louis Cardinals",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "baseball team",
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Toronto Blue Jays",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "baseball team",
+            "MLB"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Chattanooga, Tennessee",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "The McCallie School",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "educational institution",
+            "high school"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "drafted in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was drafted in the 1990 Amateur Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Costo drafted?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "drafted by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who drafted Costo?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who did the Cleveland Indians draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which teams did Costo play for?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who played for the Cleveland Indians?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who played for the Cincinnati Reds?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who played for the St. Louis Cardinals?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Who played for the Toronto Blue Jays?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "lives in",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "Where does Costo live?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Who lives in Chattanooga, Tennessee?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "works as",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "What is Costo's profession?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "Who is the Head Baseball coach at The McCallie School?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

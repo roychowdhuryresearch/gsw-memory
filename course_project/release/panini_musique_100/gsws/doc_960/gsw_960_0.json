@@ -1,0 +1,156 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Šiauliai",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "fourth largest",
+            "Lithuania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Lithuania",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "107,086",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "as of current data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1994 to 2010",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Šiauliai County",
+      "roles": [
+        {
+          "role": "administrative region",
+          "states": [
+            "Lithuania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Šiauliai located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What city is located in Lithuania?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "population of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the population of Šiauliai?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which city has a population of 107,086?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "capital of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the capital of Šiauliai County from 1994 to 2010?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "During which period was Šiauliai the capital of Šiauliai County?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

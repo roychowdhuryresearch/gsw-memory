@@ -1,0 +1,321 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "WrestleMania 21",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "wrestling event",
+            "2005"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2005",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Chris Jericho",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler",
+            "inventor of match"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Raw brand",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "wrestling brand",
+            "WWE"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Edge",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "wrestler",
+            "winner"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Money in the Bank ladder match",
+      "roles": [
+        {
+          "role": "match",
+          "states": [
+            "wrestling match",
+            "WWE"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Money in the Bank pay-per-view",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "wrestling event",
+            "debut"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "July",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event month"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "WWE Championship",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "wrestling title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "World Heavyweight Championship",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "wrestling title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "contested at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was the first Money in the Bank ladder match contested?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was contested at WrestleMania 21?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "invented by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who invented the Money in the Bank ladder match?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Chris Jericho invent?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "exclusive to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which brand was the Money in the Bank ladder match exclusive to in 2005?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was exclusive to the Raw brand in 2005?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "won by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who won the inaugural Money in the Bank ladder match?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Edge win?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "debuted in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the Money in the Bank pay-per-view debut?",
+          "answers": [
+            "e7",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What debuted in July 2010?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "contract for",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was one of the contracts for in the Money in the Bank pay-per-view?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What title could be won with a contract from the Money in the Bank pay-per-view?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,105 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Caspar Babypants",
+            "roles": [
+                {
+                    "role": "stage name",
+                    "states": [
+                        "music industry",
+                        "children's music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Chris Ballew",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "children's music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "The Presidents of the United States of America",
+            "roles": [
+                {
+                    "role": "band",
+                    "states": [
+                        "music industry",
+                        "rock music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "stage name of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is the stage name of Chris Ballew?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who uses the stage name Caspar Babypants?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "singer of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is the singer of The Presidents of the United States of America?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Which band is Chris Ballew the singer of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

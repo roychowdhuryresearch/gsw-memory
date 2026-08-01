@@ -1,0 +1,155 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Reporters (Reporters (TV programme))",
+      "roles": [
+        {
+          "role": "television programme",
+          "states": [
+            "analytical",
+            "weekly"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "BBC News",
+      "roles": [
+        {
+          "role": "television network",
+          "states": [
+            "British",
+            "news"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "BBC Breakfast",
+      "roles": [
+        {
+          "role": "television programme",
+          "states": [
+            "morning show",
+            "BBC One"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "BBC One",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "British",
+            "BBC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "BBC World News",
+      "roles": [
+        {
+          "role": "television channel",
+          "states": [
+            "international",
+            "BBC"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "shown on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Reporters shown?",
+          "answers": [
+            "e2",
+            "e3",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What programme is shown on BBC News?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "What programme is shown during BBC Breakfast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What programme is shown on BBC World News?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "during",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When is Reporters shown on BBC One?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is shown during BBC Breakfast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

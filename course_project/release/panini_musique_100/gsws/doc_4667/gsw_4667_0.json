@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Saturday Breakfast",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "New Zealand",
+            "news and talkshow"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Breakfast",
+      "roles": [
+        {
+          "role": "television show",
+          "states": [
+            "inspiration",
+            "news and talkshow"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "3 September 2011",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date",
+            "broadcast"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "15 December 2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date",
+            "broadcast"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "TV One",
+      "roles": [
+        {
+          "role": "television network",
+          "states": [
+            "New Zealand",
+            "broadcaster"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What show is Saturday Breakfast based on?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which show is based on Breakfast?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "aired from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Saturday Breakfast start airing?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What show started airing on 3 September 2011?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "aired until",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Saturday Breakfast stop airing?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What show stopped airing on 15 December 2012?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "aired on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "On which network did Saturday Breakfast air?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What show aired on TV One?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

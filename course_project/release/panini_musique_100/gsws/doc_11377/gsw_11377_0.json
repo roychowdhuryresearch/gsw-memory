@@ -1,0 +1,219 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "One More Time (One More Time (book))",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "memoir",
+            "creative work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Carol Burnett",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "comedian",
+            "author"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Random House",
+      "roles": [
+        {
+          "role": "publisher",
+          "states": [
+            "publishing company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1986",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "New York Times",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "media outlet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "non-fiction bestseller",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "bestseller list"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote One More Time?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What book did Carol Burnett write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who published One More Time?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What book did Random House publish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was One More Time published?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What book was published in 1986?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "bestseller on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What list did One More Time become a bestseller on?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What book became a bestseller on the New York Times list?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "status as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What status did One More Time achieve?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What book achieved the status of non-fiction bestseller?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

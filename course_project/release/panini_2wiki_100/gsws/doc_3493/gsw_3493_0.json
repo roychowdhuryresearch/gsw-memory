@@ -1,0 +1,190 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "F\u00e9lix De Jesus Jorge Estevez",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "athlete"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "athlete",
+                    "states": [
+                        "baseball player",
+                        "professional"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "January 2, 1994",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Dominican",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "Caribbean",
+                        "Latin American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Minnesota Twins",
+            "roles": [
+                {
+                    "role": "sports team",
+                    "states": [
+                        "MLB",
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Major League Baseball",
+            "roles": [
+                {
+                    "role": "sports league",
+                    "states": [
+                        "professional",
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born on January 2, 1994?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was F\u00e9lix De Jesus Jorge Estevez born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the nationality of F\u00e9lix De Jesus Jorge Estevez?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Dominican?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "played for",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which team did F\u00e9lix De Jesus Jorge Estevez play for?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who played for the Minnesota Twins?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "played in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "In which league did F\u00e9lix De Jesus Jorge Estevez play?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who played in Major League Baseball?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

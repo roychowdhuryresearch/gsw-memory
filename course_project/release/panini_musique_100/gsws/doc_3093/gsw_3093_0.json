@@ -1,0 +1,180 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Toongabbie Creek",
+      "roles": [
+        {
+          "role": "watercourse",
+          "states": [
+            "urban",
+            "part of Parramatta River catchment"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Parramatta River catchment",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Greater Western Sydney",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "urban area",
+            "New South Wales"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New South Wales",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Australian state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Toongabbie Creek part of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What watercourse is part of the Parramatta River catchment?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Toongabbie Creek located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Greater Western Sydney?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Greater Western Sydney part of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What urban area is part of New South Wales?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is New South Wales part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What state is part of Australia?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

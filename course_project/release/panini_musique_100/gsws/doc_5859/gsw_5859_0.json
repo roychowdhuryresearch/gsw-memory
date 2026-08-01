@@ -1,0 +1,184 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Liza and David",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "reality TV",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "VH1",
+      "roles": [
+        {
+          "role": "network",
+          "states": [
+            "television",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "2002",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "planned air date",
+            "2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Liza Minnelli",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "celebrity",
+            "entertainer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "David Gest",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "celebrity",
+            "producer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "slated to air on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Liza and David slated to air?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was slated to air on VH1 in 2002?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "featured",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did Liza and David feature?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What series featured Liza Minnelli and David Gest?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "aired on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "On which network was Liza and David slated to air?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What series was slated to air on VH1?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "then-husband of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was David Gest the then-husband of?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was the then-husband of Liza Minnelli?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,378 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pidhirtsi Castle",
+      "roles": [
+        {
+          "role": "structure",
+          "states": [
+            "residential",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Pidhirtsi",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "village",
+            "Ukraine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lviv Oblast",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "province",
+            "Ukraine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ukraine",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Lviv",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "Ukraine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Guillaume Le Vasseur de Beauplan",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "architect",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1635–1640",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "construction period",
+            "17th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Polish-Lithuanian Commonwealth",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "historical",
+            "Eastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Grand Crown Hetman",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "military",
+            "Polish-Lithuanian Commonwealth"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Stanisław Koniecpolski",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "nobility",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Kingdom of Poland",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "historical",
+            "Eastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "palace-garden complex",
+      "roles": [
+        {
+          "role": "structure type",
+          "states": [
+            "architectural",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "eastern borderlands",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical",
+            "Polish-Lithuanian Commonwealth"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Pidhirtsi Castle located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Pidhirtsi?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "constructed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who constructed Pidhirtsi Castle?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Guillaume Le Vasseur de Beauplan construct?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "constructed between",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Pidhirtsi Castle constructed?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was constructed between 1635–1640?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "ordered by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who ordered the construction of Pidhirtsi Castle?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Stanisław Koniecpolski order?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Pidhirtsi Castle part of?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was part of the Kingdom of Poland?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "regarded as",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is Pidhirtsi Castle regarded as?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is regarded as the most valuable palace-garden complex?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Where is Lviv Oblast located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What region is located in Ukraine?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

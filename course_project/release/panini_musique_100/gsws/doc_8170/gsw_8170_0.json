@@ -1,0 +1,210 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Elmo (Elmo, Montana)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "census-designated place",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Salish",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "indigenous language",
+            "cultural context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "sqʷe",
+      "roles": [
+        {
+          "role": "name",
+          "states": [
+            "Salish name",
+            "cultural context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lake County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative region",
+            "Montana"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Montana",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "143",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "census data",
+            "2000"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2000",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "census year",
+            "temporal context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "named in Salish",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the Salish name for Elmo?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What place is named sqʷe in Salish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Elmo located?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Lake County, Montana, United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "population in 2000",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the population of Elmo in 2000?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which place had a population of 143 in 2000?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

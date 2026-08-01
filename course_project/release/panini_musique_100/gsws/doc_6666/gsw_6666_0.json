@@ -1,0 +1,120 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sri Lankan passports (Sri Lankan passport)",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "travel document",
+            "international travel"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "citizens of Sri Lanka",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "nationality",
+            "passport holders"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Sri Lanka",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asian country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Department of Immigration and Emigration",
+      "roles": [
+        {
+          "role": "government agency",
+          "states": [
+            "passport issuing authority",
+            "Sri Lanka"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "issued to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who are Sri Lankan passports issued to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is issued to citizens of Sri Lanka?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "responsible for issuing",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is responsible for issuing Sri Lankan passports?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is the Department of Immigration and Emigration responsible for issuing?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

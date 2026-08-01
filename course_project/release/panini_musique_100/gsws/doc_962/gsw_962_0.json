@@ -1,0 +1,347 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Charles Mingus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Nogales, Arizona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Charles Mingus Sr.",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "military",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "sergeant",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "military rank",
+            "U.S. Army"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Watts, Los Angeles",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "residence",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Chinese British subject",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "maternal grandfather",
+            "Hong Kong"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "African-American",
+      "roles": [
+        {
+          "role": "ethnicity",
+          "states": [
+            "maternal grandmother",
+            "southern United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "German immigrant",
+      "roles": [
+        {
+          "role": "ancestry",
+          "states": [
+            "founding patriarch",
+            "family history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "German American",
+      "roles": [
+        {
+          "role": "ancestry",
+          "states": [
+            "family heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "African American",
+      "roles": [
+        {
+          "role": "ancestry",
+          "states": [
+            "family heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Native American",
+      "roles": [
+        {
+          "role": "ancestry",
+          "states": [
+            "family heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Charles Mingus born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Nogales, Arizona?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "raised in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Charles Mingus raised?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was raised in Watts, Los Angeles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "father",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the father of Charles Mingus?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is Charles Mingus Sr. the father of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "military rank",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the military rank of Charles Mingus Sr.?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who held the rank of sergeant in the U.S. Army?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "maternal grandfather",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the nationality of Charles Mingus's maternal grandfather?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who had a Chinese British subject as a maternal grandfather?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "maternal grandmother",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was the ethnicity of Charles Mingus's maternal grandmother?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who had an African-American maternal grandmother?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "ancestry",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What ancestries are part of Charles Mingus's family heritage?",
+          "answers": [
+            "e9",
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who has German American, African American, and Native American ancestry?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

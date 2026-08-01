@@ -1,0 +1,130 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "High Court (Indian High Courts Act 1861)",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial system",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Chief Justice",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "judicial role",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "judges",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "judicial role",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "President of India",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "government role",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "has a",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What position does a High Court have?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which institution has a Chief Justice?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Which institution has judges?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "defined by",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Who defines the number of judges in a High Court?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "What does the President of India define in the judicial system?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,235 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Little More (Royalty)",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "music",
+                        "creative work"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Chris Brown",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "American",
+                        "recording artist"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Royalty",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "seventh studio album",
+                        "music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "The Audibles",
+            "roles": [
+                {
+                    "role": "music producer",
+                    "states": [
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Poo Bear",
+            "roles": [
+                {
+                    "role": "music producer",
+                    "states": [
+                        "music industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "91",
+            "roles": [
+                {
+                    "role": "chart position",
+                    "states": [
+                        "US Billboard Hot 100"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "32",
+            "roles": [
+                {
+                    "role": "chart position",
+                    "states": [
+                        "US Hot R&B/Hip-Hop Songs"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "performed by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who performed 'Little More (Royalty)'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What song did Chris Brown perform?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "included in album",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Which album includes 'Little More (Royalty)'?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What song is included in the album 'Royalty'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who produced 'Little More (Royalty)'?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song did The Audibles and Poo Bear produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "peaked at position",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What position did 'Little More (Royalty)' peak at on the US Billboard Hot 100?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Which song peaked at number 91 on the US Billboard Hot 100?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "peaked at position",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What position did 'Little More (Royalty)' peak at on the US Hot R&B/Hip-Hop Songs chart?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Which song peaked at number 32 on the US Hot R&B/Hip-Hop Songs chart?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

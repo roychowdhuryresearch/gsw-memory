@@ -1,0 +1,262 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Veronica 'Ronnie' Miller (The Last Song)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "fictional character",
+            "teenager"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Miley Cyrus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actress",
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Steve Miller",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "fictional character",
+            "father"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Greg Kinnear",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "entertainment industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "fictional setting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Juilliard School",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "music school"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "three years prior",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "past event",
+            "relative time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "portrayed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who portrays Veronica 'Ronnie' Miller?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which character is portrayed by Miley Cyrus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "father of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the father of Veronica 'Ronnie' Miller?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Steve Miller the father of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "portrayed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who portrays Steve Miller?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which character is portrayed by Greg Kinnear?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "moved to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Steve Miller move to?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who moved to North Carolina?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "interested in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which institution is interested in Ronnie?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who is Juilliard School interested in?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "occurred",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did Steve Miller move to North Carolina?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What event occurred three years prior?",
+          "answers": [
+            "e3",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

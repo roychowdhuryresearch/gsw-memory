@@ -1,0 +1,142 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pithecanthropus Erectus (Pithecanthropus Erectus (album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "1950s"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "music album"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1956",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Charles Mingus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "composer",
+            "bassist"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "musician",
+          "states": [
+            "jazz"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Pithecanthropus Erectus released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released in 1956?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who created Pithecanthropus Erectus?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album did Charles Mingus create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "taught arrangements by ear",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How did Charles Mingus teach arrangements for Pithecanthropus Erectus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album did Charles Mingus teach arrangements by ear?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

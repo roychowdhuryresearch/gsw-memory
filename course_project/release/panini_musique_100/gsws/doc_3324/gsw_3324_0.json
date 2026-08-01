@@ -1,0 +1,269 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Home Alone Tonight",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "country music",
+            "duet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Luke Bryan",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "American",
+            "country music artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Karen Fairchild",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "American",
+            "country music artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Little Big Town",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "American",
+            "country music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Kill the Lights",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "fifth studio album",
+            "2015"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "album release"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Billboard Hot Country Songs chart",
+      "roles": [
+        {
+          "role": "chart",
+          "states": [
+            "music chart",
+            "Billboard"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "number 33",
+      "roles": [
+        {
+          "role": "chart position",
+          "states": [
+            "entry position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "November 23, 2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "single release date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "recorded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who recorded 'Home Alone Tonight'?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did Luke Bryan and Karen Fairchild record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of album",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which album includes 'Home Alone Tonight'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What songs are part of the album 'Kill the Lights'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "charted on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "On which chart did 'Home Alone Tonight' appear?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song appeared on the Billboard Hot Country Songs chart?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "entered chart at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "At what position did 'Home Alone Tonight' enter the chart?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What song entered the chart at number 33?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "released as single",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was 'Home Alone Tonight' released as a single?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What song was released as a single on November 23, 2015?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

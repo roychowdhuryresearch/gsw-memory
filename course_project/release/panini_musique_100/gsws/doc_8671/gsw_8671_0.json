@@ -1,0 +1,297 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Groovy Situation",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "musical work",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "creation year",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Russell Lewis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Herman Davis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Mel and Tim",
+      "roles": [
+        {
+          "role": "musical group",
+          "states": [
+            "recording artists"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Gene Chandler",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer",
+            "producer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Mercury Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1970",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote 'Groovy Situation'?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Russell Lewis and Herman Davis write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first recorded by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who first recorded 'Groovy Situation'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What song did Mel and Tim first record?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "became a hit single when recorded by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who recorded 'Groovy Situation' as a hit single?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What song did Gene Chandler record as a hit single?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who produced Gene Chandler's version of 'Groovy Situation'?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Gene Chandler produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Gene Chandler's version of 'Groovy Situation' released?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was released in 1970?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "recorded on",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was 'Groovy Situation' first recorded?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What was recorded in 1969?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which record label released Gene Chandler's version of 'Groovy Situation'?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What did Mercury Records release?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

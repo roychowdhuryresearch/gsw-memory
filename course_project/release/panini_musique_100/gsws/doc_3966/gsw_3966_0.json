@@ -1,0 +1,278 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "GMC PD-4501 Scenicruiser (PD-4501 Scenicruiser)",
+      "roles": [
+        {
+          "role": "vehicle",
+          "states": [
+            "bus",
+            "historical model"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "General Motors",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "manufacturer",
+            "automotive industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "The Greyhound Corporation",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "transportation",
+            "bus operator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "July 1954",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start of service",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "mid-70's",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of service",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1954",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start of production",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1956",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of production",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1,001",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "units produced",
+            "historical data"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "manufactured by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who manufactured the GMC PD-4501 Scenicruiser?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did General Motors manufacture?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "used by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who used the GMC PD-4501 Scenicruiser?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What vehicle did The Greyhound Corporation use?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "in service from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did the GMC PD-4501 Scenicruiser enter service?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What vehicle entered service in July 1954?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "in service until",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the GMC PD-4501 Scenicruiser end its service?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What vehicle was in service until the mid-70's?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "produced between",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the GMC PD-4501 Scenicruiser produced?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What vehicle was produced between 1954 and 1956?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "units produced",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How many GMC PD-4501 Scenicruisers were produced?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What vehicle had 1,001 units produced?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

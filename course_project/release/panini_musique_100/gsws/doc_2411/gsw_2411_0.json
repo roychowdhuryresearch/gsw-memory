@@ -1,0 +1,342 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nebel et al.",
+      "roles": [
+        {
+          "role": "research group",
+          "states": [
+            "genetic study",
+            "early 2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2001",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "study publication year",
+            "early 2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ashkenazi Jewish populations (Ashkenazi Jews)",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Jewish ancestry",
+            "Near Eastern"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Sephardic Jewish populations",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "Jewish ancestry",
+            "Near Eastern"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Near Eastern ancestries",
+      "roles": [
+        {
+          "role": "ancestry",
+          "states": [
+            "paternal lineage",
+            "shared by Jewish populations"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Fertile Crescent",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical region",
+            "Middle East"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Eu 19 (R1a) chromosomes",
+      "roles": [
+        {
+          "role": "genetic marker",
+          "states": [
+            "Y-chromosome haplogroup",
+            "Central and Eastern European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Central and Eastern Europeans",
+      "roles": [
+        {
+          "role": "ethnic group",
+          "states": [
+            "high frequency of R1a",
+            "European ancestry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "12.7%",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "R1a in Ashkenazi Jews",
+            "genetic study"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "2005",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "study publication year",
+            "mid 2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "11.5%",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "R1a1a in Ashkenazi Jews",
+            "genetic study"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "R1a1a (M17+)",
+      "roles": [
+        {
+          "role": "genetic marker",
+          "states": [
+            "dominant Y-chromosome haplogroup",
+            "Central and Eastern European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the study by Nebel et al. published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What study was published in 2001?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "share ancestries",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which Jewish populations share the same overall paternal Near Eastern ancestries?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What ancestries do Ashkenazi and Sephardic Jewish populations share?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "related to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "To which groups are Jews more closely related according to the study?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which region are Jews more closely related to according to the study?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "found in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the frequency of Eu 19 (R1a) chromosomes in Ashkenazi Jews?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which genetic marker is found at 12.7% frequency in Ashkenazi Jews?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the later study by Nebel et al. published?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What study was published in 2005?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "belonging to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What percentage of male Ashkenazim belong to R1a1a (M17+)?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which genetic marker do 11.5% of male Ashkenazim belong to?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

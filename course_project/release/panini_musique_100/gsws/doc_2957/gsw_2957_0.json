@@ -1,0 +1,254 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Rock Garden (Rock Garden (album))",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "solo album",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "King's X",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "rock band",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ty Tabor",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "guitarist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Alien Beans studio",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "recording studio",
+            "music production"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Katy, TX",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Texas"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "March 2005",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date",
+            "recording period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "June 2006",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end date",
+            "recording period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Rock Garden released?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released in 2006?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who created Rock Garden?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Ty Tabor create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "recorded at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Rock Garden recorded?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was recorded at Alien Beans studio?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where is Alien Beans studio located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is located in Katy, TX?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "recording period",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did the recording of Rock Garden start?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "When did the recording of Rock Garden end?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

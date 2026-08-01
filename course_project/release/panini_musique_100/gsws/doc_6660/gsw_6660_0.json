@@ -1,0 +1,271 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "1718",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "historical event",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "700 Europeans",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "initial population",
+            "Louisiana"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Louisiana (French colonization of the Americas)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical region",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mississippi Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "colonial enterprise",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "800 Europeans",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "new settlers",
+            "Louisiana"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "John Law",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Germans",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "emigrants",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Alsatian region",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical region",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Swiss",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "emigrants",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was the European population in Louisiana in 1718?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where was the population of 700 Europeans in 1718?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "arranged for ships to bring",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who arranged for ships to bring 800 Europeans to Louisiana?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "How many Europeans did the Mississippi Company arrange to bring to Louisiana?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "landed in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where did 800 Europeans land in 1718?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who landed in Louisiana in 1718?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "encouraged to emigrate",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who encouraged Germans and Swiss to emigrate?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who were encouraged by John Law to emigrate?",
+          "answers": [
+            "e7",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "recently fallen under French rule",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which region had recently fallen under French rule?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What happened to the Alsatian region recently?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

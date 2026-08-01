@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Wittenberg (Wittenberg (district))",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "geographical location",
+            "Saxony-Anhalt"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Saxony-Anhalt",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "federal state",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Anhalt-Bitterfeld",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "neighboring district",
+            "Saxony-Anhalt"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Dessau-Roßlau",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "district-free city",
+            "Saxony-Anhalt"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Potsdam-Mittelmark",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "neighboring district",
+            "Brandenburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Teltow-Fläming",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "neighboring district",
+            "Brandenburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Elbe-Elster",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "neighboring district",
+            "Brandenburg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Nordsachsen",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "neighboring district",
+            "Free State of Saxony"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Brandenburg",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "federal state",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Free State of Saxony",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "federal state",
+            "Germany"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Wittenberg located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What district is located in Saxony-Anhalt?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "neighboring district",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What are the neighboring districts of Wittenberg?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which district neighbors Anhalt-Bitterfeld?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which district neighbors Dessau-Roßlau?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which district neighbors Potsdam-Mittelmark?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Which district neighbors Teltow-Fläming?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which district neighbors Elbe-Elster?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Which district neighbors Nordsachsen?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,195 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mill Creek (Mill Creek (Loyalsock Creek tributary))",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "stream",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Loyalsock Creek",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "creek",
+            "water body"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lycoming County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Sullivan County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Pennsylvania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Mill Run",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "stream",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is a tributary of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Mill Creek a tributary of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which tributary flows into Loyalsock Creek?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Mill Creek located?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What geographical feature is located in Lycoming and Sullivan counties?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is a stream in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Mill Run a stream in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which stream is part of the Loyalsock Creek drainage basin?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

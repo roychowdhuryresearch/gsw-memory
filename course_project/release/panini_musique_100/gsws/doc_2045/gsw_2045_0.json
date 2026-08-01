@@ -1,0 +1,347 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Virginia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Maryland",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "bordering state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Washington, D.C.",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. capital",
+            "bordering entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Atlantic Ocean",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "ocean",
+            "eastern border"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "North Carolina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "bordering state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Tennessee",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "bordering state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Kentucky",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "bordering state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "West Virginia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state",
+            "bordering state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Potomac River",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "river",
+            "geographical feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "36° 30′ parallel north",
+      "roles": [
+        {
+          "role": "geographical coordinate",
+          "states": [
+            "southern border",
+            "latitude"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1893",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "border settlement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "U.S. Supreme Court",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial body",
+            "legal authority"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "bordered by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What states border Virginia?",
+          "answers": [
+            "e2",
+            "e3",
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which state is bordered by Maryland, Washington, D.C., North Carolina, Tennessee, Kentucky, and West Virginia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "eastern border",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What forms the eastern border of Virginia?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which state has the Atlantic Ocean as its eastern border?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "boundary extends to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where does Virginia's boundary with Maryland and Washington, D.C. extend to?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which state's boundary extends to the low-water mark of the south shore of the Potomac River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "southern border defined by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What defines the southern border of Virginia?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which state's southern border is defined by the 36° 30′ parallel north?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "border dispute settled in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was the border dispute between Virginia and Tennessee settled?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which states had a border dispute settled in 1893?",
+          "answers": [
+            "e1",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "dispute brought to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where was the border dispute between Virginia and Tennessee brought to?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which institution settled the border dispute between Virginia and Tennessee?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

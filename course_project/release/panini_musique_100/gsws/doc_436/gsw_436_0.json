@@ -1,0 +1,199 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "New Jersey Department of Education",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "educational",
+            "governmental"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "District Factor Group",
+      "roles": [
+        {
+          "role": "classification system",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "DE",
+      "roles": [
+        {
+          "role": "classification",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "fifth-highest",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "eight groups",
+      "roles": [
+        {
+          "role": "total categories",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "A, B, CD, DE, FG, GH, I, J",
+      "roles": [
+        {
+          "role": "classification categories",
+          "states": [
+            "socioeconomic",
+            "educational"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "classified by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who classifies districts into District Factor Groups?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does the New Jersey Department of Education classify?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ranked as",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the rank of District Factor Group DE?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which classification is ranked as the fifth-highest?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "total number of groups",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many groups are there in the District Factor Group classification?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is the total number of groups in the classification system?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "categories are",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the categories in the District Factor Group classification?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which classification system includes categories A, B, CD, DE, FG, GH, I, J?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

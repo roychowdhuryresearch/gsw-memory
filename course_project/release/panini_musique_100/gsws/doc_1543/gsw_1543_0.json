@@ -1,0 +1,331 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Thomas Trantino",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "convicted murderer",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "February 11, 1938",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lodi, New Jersey",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "crime location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1963",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "crime date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "two police officers",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "victims"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "death by electrocution",
+      "roles": [
+        {
+          "role": "sentence",
+          "states": [
+            "initial sentence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "life in prison",
+      "roles": [
+        {
+          "role": "sentence",
+          "states": [
+            "commuted sentence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1970s",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "death penalty abolished"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2002",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Thomas Trantino born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on February 11, 1938?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "committed crime in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Thomas Trantino commit the crime?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who committed a crime in Lodi, New Jersey?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "committed crime in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Thomas Trantino commit the crime?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who committed a crime in 1963?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "victims were",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who were the victims of Thomas Trantino's crime?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was responsible for the deaths of two police officers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "initially sentenced to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Thomas Trantino initially sentenced to?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was initially sentenced to death by electrocution?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "sentence commuted to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Thomas Trantino's sentence commuted to?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who had their sentence commuted to life in prison?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "death penalty abolished in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When was the death penalty abolished, affecting Thomas Trantino's sentence?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What significant legal change occurred in the 1970s affecting Thomas Trantino?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "released from prison in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "When was Thomas Trantino released from prison?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who was released from prison in 2002?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

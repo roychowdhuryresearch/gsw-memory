@@ -1,0 +1,212 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "HX 72 (Convoy HX 72)",
+      "roles": [
+        {
+          "role": "convoy",
+          "states": [
+            "North Atlantic",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "North Atlantic",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical area",
+            "maritime"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "HX series",
+      "roles": [
+        {
+          "role": "convoy series",
+          "states": [
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "World War II",
+      "roles": [
+        {
+          "role": "historical event",
+          "states": [
+            "global conflict",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "43 ships",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "convoy composition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "11 ships",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "sunk"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "German U-boats",
+      "roles": [
+        {
+          "role": "military unit",
+          "states": [
+            "naval",
+            "World War II"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What series is HX 72 part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which convoy is part of the HX series?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "occurred during",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "During which event did HX 72 occur?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What convoy occurred during World War II?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "comprised",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many ships comprised HX 72?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which convoy comprised 43 ships?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "sunk by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many ships were sunk by German U-boats in HX 72?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who sunk 11 ships in HX 72?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,263 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Roméo et Juliette",
+      "roles": [
+        {
+          "role": "opera",
+          "states": [
+            "French opera",
+            "19th century"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "creative work",
+          "states": [
+            "musical composition",
+            "based on literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Charles Gounod",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "composer",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jules Barbier",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "librettist",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Michel Carré",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "librettist",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "William Shakespeare",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "playwright",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Théâtre Lyrique",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "opera house",
+            "Paris"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "27 April 1867",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "premiere date",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Romeo and Juliet",
+      "roles": [
+        {
+          "role": "play",
+          "states": [
+            "literary work",
+            "Shakespearean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "composed by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who composed Roméo et Juliette?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Charles Gounod compose?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "libretto by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who wrote the libretto for Roméo et Juliette?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Jules Barbier and Michel Carré write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "based on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is Roméo et Juliette based on?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What opera is based on Romeo and Juliet?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "premiered at",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was Roméo et Juliette first performed?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What opera premiered at Théâtre Lyrique?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "premiered on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When was Roméo et Juliette first performed?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What opera premiered on 27 April 1867?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

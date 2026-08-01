@@ -1,0 +1,215 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Union of Utrecht",
+      "roles": [
+        {
+          "role": "agreement",
+          "states": [
+            "historical document",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1579",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of agreement",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "northern provinces of the Low Countries",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical region",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Spanish army",
+      "roles": [
+        {
+          "role": "military force",
+          "states": [
+            "historical military",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Act of Abjuration",
+      "roles": [
+        {
+          "role": "declaration",
+          "states": [
+            "historical document",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1581",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of declaration",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Philip II",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "monarch",
+            "16th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "signed",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What did the northern provinces of the Low Countries sign in 1579?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was the Union of Utrecht signed?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "promised to support each other against",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who did the northern provinces of the Low Countries promise to support each other against?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was the Spanish army opposed by in the Union of Utrecht?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "followed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What followed the Union of Utrecht?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did the Act of Abjuration follow?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "declared independence from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did the Act of Abjuration declare?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "From whom did the provinces declare independence in the Act of Abjuration?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

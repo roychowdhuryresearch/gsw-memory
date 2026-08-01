@@ -1,0 +1,260 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "CKIS-FM",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Canadian",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "92.5 MHz",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "broadcast frequency"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Toronto, Ontario",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "broadcast location",
+            "Canadian city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Rogers Media",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "owner",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Top 40 (CHR)",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "music genre",
+            "radio format"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "KiSS 92.5",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "station branding"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "CKFM-FM",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "Canadian",
+            "broadcasting entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcasts at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What frequency does CKIS-FM broadcast at?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which radio station broadcasts at 92.5 MHz?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is CKIS-FM located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which radio station is located in Toronto, Ontario?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who owns CKIS-FM?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What radio station is owned by Rogers Media?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "broadcasts format",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What format does CKIS-FM broadcast?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which radio station broadcasts a Top 40 (CHR) format?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "branded as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is CKIS-FM branded as?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which radio station is branded as KiSS 92.5?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "licensed to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Which city is CKIS-FM licensed to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What radio station is licensed to the city of Toronto?",
+          "answers": [
+            "e1",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

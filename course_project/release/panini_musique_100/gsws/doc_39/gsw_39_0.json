@@ -1,0 +1,257 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Warsaw Pact",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "military alliance",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Czechoslovakia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "East Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Poland",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "West Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Western Europe",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "NATO",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "military alliance",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Soviet Union",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Eastern Europe",
+            "Cold War"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "March 1954",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "Cold War",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sought to create security pact with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which countries did Czechoslovakia seek to create a security pact with?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who sought to create a security pact with East Germany and Poland?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "protested against re-militarization of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which countries protested against the re-militarization of West Germany?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Czechoslovakia, East Germany, and Poland protest against?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "put in place as a consequence of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was put in place as a consequence of the rearming of West Germany inside NATO?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Why was the Warsaw Pact put in place?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "feared German militarism",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who feared German militarism as a direct threat?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did the Soviet Union fear as a direct threat?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "requested admission to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who requested admission to NATO in March 1954?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did the Soviet Union request in March 1954?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,156 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Deanwood",
+      "roles": [
+        {
+          "role": "neighborhood",
+          "states": [
+            "urban area",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Northeast Washington, D.C.",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical area",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Eastern Avenue",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Kenilworth Avenue",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Division Avenue",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Nannie Helen Burroughs Avenue",
+      "roles": [
+        {
+          "role": "street",
+          "states": [
+            "boundary",
+            "Washington, D.C."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Deanwood located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What neighborhood is located in Northeast Washington, D.C.?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "bounded by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What streets bound Deanwood?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What neighborhood is bounded by Eastern Avenue, Kenilworth Avenue, Division Avenue, and Nannie Helen Burroughs Avenue?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,374 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Gal Gadot",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "actress",
+            "model"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "April 30, 1985",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Israeli",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "Middle Eastern"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Wonder Woman",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "DC Extended Universe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "DC Extended Universe",
+      "roles": [
+        {
+          "role": "franchise",
+          "states": [
+            "film series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Batman v Superman: Dawn of Justice",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "2016",
+            "superhero genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Wonder Woman",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "2017",
+            "superhero genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Justice League",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "superhero genre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Gisele Yashar",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "fictional",
+            "The Fast and the Furious franchise"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "The Fast and the Furious franchise",
+      "roles": [
+        {
+          "role": "franchise",
+          "states": [
+            "film series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on April 30, 1985?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Gal Gadot born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Gal Gadot's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Israeli?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "known for role",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What role is Gal Gadot known for?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is known for the role of Wonder Woman?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of franchise",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which franchise is Wonder Woman part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What character is part of the DC Extended Universe?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "appeared in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "In which film did Gal Gadot appear as Wonder Woman in 2016?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who appeared in Batman v Superman: Dawn of Justice?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lead role in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "In which film did Gal Gadot have the lead role in 2017?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who had the lead role in Wonder Woman (2017)?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "reprise role in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "In which film will Gal Gadot reprise her role as Wonder Woman?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who will reprise their role in Justice League?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "appeared as",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Which character did Gal Gadot appear as in The Fast and the Furious franchise?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who appeared as Gisele Yashar?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "part of franchise",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Which franchise is Gisele Yashar part of?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What character is part of The Fast and the Furious franchise?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

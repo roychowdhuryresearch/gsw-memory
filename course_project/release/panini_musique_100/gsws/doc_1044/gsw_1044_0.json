@@ -1,0 +1,366 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pennsylvania",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "US state",
+            "geographical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "33rd-largest",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "by area",
+            "US states"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "6th-most populous",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "by population",
+            "US states",
+            "2010 census"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "9th-most densely populated",
+      "roles": [
+        {
+          "role": "ranking",
+          "states": [
+            "by population density",
+            "US states"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Philadelphia",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "most populous",
+            "in Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1,567,872",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "Philadelphia",
+            "2010 census"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Pittsburgh",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "second most populous",
+            "in Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "303,625",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "Pittsburgh",
+            "2010 census"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Harrisburg",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "capital",
+            "10th largest in Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "140 miles",
+      "roles": [
+        {
+          "role": "distance",
+          "states": [
+            "waterfront",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Lake Erie",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "waterfront",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Delaware Estuary",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "waterfront",
+            "Pennsylvania"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "ranked by area",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the area ranking of Pennsylvania among US states?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which state is the 33rd-largest by area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ranked by population",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the population ranking of Pennsylvania among US states according to the 2010 census?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which state is the 6th-most populous according to the 2010 census?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "ranked by population density",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the population density ranking of Pennsylvania among US states?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which state is the 9th-most densely populated?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "most populous city",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the most populous city in Pennsylvania?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which city in Pennsylvania has a population of 1,567,872?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "second most populous city",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the second most populous city in Pennsylvania?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which city in Pennsylvania has a population of 303,625?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "state capital",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the capital of Pennsylvania?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which city is the capital of Pennsylvania?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "waterfront along",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "How many miles of waterfront does Pennsylvania have?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which bodies of water does Pennsylvania have waterfront along?",
+          "answers": [
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

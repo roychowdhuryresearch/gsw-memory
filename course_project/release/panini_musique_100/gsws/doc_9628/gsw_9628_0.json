@@ -1,0 +1,112 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "A Winter Scene with Skaters near a Castle",
+      "roles": [
+        {
+          "role": "painting",
+          "states": [
+            "oil-on-oak",
+            "artwork"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1608–1609",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "creation period",
+            "17th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hendrick Avercamp",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "historical figure"
+          ],
+          "chunk_id": null
+        },
+        {
+          "role": "nationality",
+          "states": [
+            "Dutch"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who created A Winter Scene with Skaters near a Castle?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Hendrick Avercamp create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "created between",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was A Winter Scene with Skaters near a Castle created?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was created between 1608 and 1609?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

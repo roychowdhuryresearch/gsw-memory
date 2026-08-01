@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "American Federal Building",
+      "roles": [
+        {
+          "role": "building",
+          "states": [
+            "iconic",
+            "office building"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American Federal Savings and Loan Building",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Coral Gables Building",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Round Building",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "alternative name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "downtown Orlando, Florida",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "seven-story",
+      "roles": [
+        {
+          "role": "attribute",
+          "states": [
+            "building height"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1963",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "completion year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "cast concrete brise soleil",
+      "roles": [
+        {
+          "role": "architectural feature",
+          "states": [
+            "design element"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "also known as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What are the alternative names for the American Federal Building?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What building is also known as the American Federal Savings and Loan Building?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the American Federal Building located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What building is located in downtown Orlando, Florida?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "completed in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was the American Federal Building completed?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What building was completed in 1963?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "features",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What architectural feature does the American Federal Building have?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which building features a cast concrete brise soleil?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "has height",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the height of the American Federal Building?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which building is seven stories tall?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

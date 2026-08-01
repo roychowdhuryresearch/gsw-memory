@@ -1,0 +1,341 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Russian Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "1917"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Russia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Tsarist autocracy",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "political system",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Soviet Union",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "political entity",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Nicholas II of Russia",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "monarch"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Russian Provisional Government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "interim government",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "October 1917",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "month and year",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Red Guard",
+      "roles": [
+        {
+          "role": "military group",
+          "states": [
+            "armed group",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Bolshevik Party",
+      "roles": [
+        {
+          "role": "political party",
+          "states": [
+            "historical",
+            "revolutionary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Saint Petersburg",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "historical name Petrograd"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "former Russian Empire",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "historical region",
+            "empire"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "occurred in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did the Russian Revolution occur?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event occurred in Russia in 1917?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "destroyed",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did the Russian Revolution destroy?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event destroyed the Tsarist autocracy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "led to the creation of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What did the Russian Revolution lead to the creation of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event led to the creation of the Soviet Union?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "abdication of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Whose abdication led to the establishment of the Russian Provisional Government?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was established following the abdication of Nicholas II of Russia?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "seized control of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did the Red Guard seize control of in October 1917?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who seized control of Saint Petersburg in October 1917?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "directed by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who directed the Red Guard?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What group was directed by the Bolshevik Party?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

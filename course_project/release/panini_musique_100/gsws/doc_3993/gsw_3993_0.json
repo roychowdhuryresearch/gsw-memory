@@ -1,0 +1,234 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mycenae (Mycenae, New York)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "hamlet",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Town of Manlius",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "municipality",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Onondaga County",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "county",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "USA",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "New York Route 5",
+      "roles": [
+        {
+          "role": "road",
+          "states": [
+            "transportation",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Route 290",
+      "roles": [
+        {
+          "role": "road",
+          "states": [
+            "transportation",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "43° 02' 56\" North, 75° 55' 50\" West",
+      "roles": [
+        {
+          "role": "coordinates",
+          "states": [
+            "geographical location",
+            "modern period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "ancient Greek city of Mycenae",
+      "roles": [
+        {
+          "role": "historical location",
+          "states": [
+            "ancient city",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Mycenae located?",
+          "answers": [
+            "e2",
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in the Town of Manlius?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "meeting point of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What roads meet at Mycenae?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where do New York Route 5 and Route 290 meet?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "coordinates",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What are the coordinates of Mycenae?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What location is at 43° 02' 56\" North, 75° 55' 50\" West?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "named after",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Mycenae named after?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What location is named after the ancient Greek city of Mycenae?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,65 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "menstrual disorder",
+            "roles": [
+                {
+                    "role": "medical condition",
+                    "states": [
+                        "abnormal condition",
+                        "women's health"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "menstrual cycle",
+            "roles": [
+                {
+                    "role": "biological process",
+                    "states": [
+                        "women's health"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "is an abnormal condition in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is an abnormal condition in a woman's menstrual cycle?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "In what biological process is a menstrual disorder an abnormal condition?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

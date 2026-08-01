@@ -1,0 +1,318 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sofia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital city",
+            "largest city",
+            "Bulgaria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Bulgaria",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country",
+            "Balkan region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1.3 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "city population",
+            "Sofia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1.7 million",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "metropolitan area population",
+            "Sofia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Vitosha Mountain",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "mountain",
+            "near Sofia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Balkan peninsula",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical region",
+            "Southeast Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Black Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "sea",
+            "Eastern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Adriatic Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "sea",
+            "Southern Europe"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Aegean Sea",
+      "roles": [
+        {
+          "role": "body of water",
+          "states": [
+            "sea",
+            "Eastern Mediterranean"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is the capital of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the capital of Bulgaria?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Sofia is the capital of which country?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has a population of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the population of Sofia?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which city has a population of 1.3 million?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "has a metropolitan population of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the metropolitan population of Sofia?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which city's metropolitan area has a population of 1.7 million?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "located at the foot of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What mountain is Sofia located at the foot of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which city is located at the foot of Vitosha Mountain?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is Sofia located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which city is located in the Balkan peninsula?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "midway between",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What seas is Sofia midway between?",
+          "answers": [
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which city is midway between the Black Sea and the Adriatic Sea?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "closest to",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which sea is Sofia closest to?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which city is closest to the Aegean Sea?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

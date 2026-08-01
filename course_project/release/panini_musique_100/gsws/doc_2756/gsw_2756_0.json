@@ -1,0 +1,301 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Bank of America Stadium",
+      "roles": [
+        {
+          "role": "stadium",
+          "states": [
+            "sports venue",
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "75,523",
+      "roles": [
+        {
+          "role": "capacity",
+          "states": [
+            "seating capacity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "33 acres",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "land size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "uptown Charlotte, North Carolina, United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Carolina Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NFL team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "National Football League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1996",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "opening year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Ericsson Stadium",
+      "roles": [
+        {
+          "role": "former name",
+          "states": [
+            "original name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "2004",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "naming rights acquisition year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Danny Morrison",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "former president",
+            "Carolina Panthers"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Bank of America Stadium located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What stadium is located in uptown Charlotte, North Carolina, United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "home facility of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the home facility of the Carolina Panthers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which team uses Bank of America Stadium as their home facility?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "opened in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Bank of America Stadium open?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What stadium opened in 1996?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "formerly known as",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Bank of America Stadium formerly known as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which stadium was formerly known as Ericsson Stadium?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "naming rights acquired in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Bank of America acquire the naming rights to the stadium?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event related to naming rights occurred in 2004?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "called",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who called Bank of America Stadium a 'classic American stadium'?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did Danny Morrison call a 'classic American stadium'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dooley Wilson",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "American-born"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Sam",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "film character"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "drummer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "piano",
+      "roles": [
+        {
+          "role": "instrument",
+          "states": [
+            "musical instrument"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "producer Wallis",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "film producer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Hazel Scott",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Lena Horne",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Ella Fitzgerald",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "played",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who played Sam?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What character did Dooley Wilson play?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What was Dooley Wilson's profession?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was a drummer?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "faked playing",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What instrument did Dooley Wilson fake playing?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who faked playing the piano?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "considered dubbing",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who considered dubbing over Wilson's voice?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Whose voice did producer Wallis consider dubbing over?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "considered casting",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who did producer Wallis consider casting as a female character?",
+          "answers": [
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who considered casting Hazel Scott, Lena Horne, or Ella Fitzgerald?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

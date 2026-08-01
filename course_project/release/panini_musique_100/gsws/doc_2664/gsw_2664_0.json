@@ -1,0 +1,239 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Ten High",
+      "roles": [
+        {
+          "role": "brand",
+          "states": [
+            "American whiskey",
+            "alcoholic beverage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1930s",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "introduction period",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hiram Walker & Sons",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "original producer",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Barton Brands",
+      "roles": [
+        {
+          "role": "division",
+          "states": [
+            "current producer",
+            "Sazerac Company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Sazerac Company",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "parent company",
+            "beverage industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "barrel storage location",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "aging process",
+            "whiskey production"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "ten ricks high",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "storage height",
+            "aging method"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "introduced in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Ten High introduced?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was introduced in the 1930s?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "introduced by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who introduced Ten High?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Hiram Walker & Sons introduce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "produced by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who currently produces Ten High?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What does Barton Brands produce?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is Barton Brands a part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which division is part of the Sazerac Company?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "refers to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does the name 'Ten High' refer to?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which brand name refers to a barrel storage location at least ten ricks high?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

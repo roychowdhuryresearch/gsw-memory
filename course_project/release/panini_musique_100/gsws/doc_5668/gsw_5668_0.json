@@ -1,0 +1,355 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Atomic Playboys",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "studio album",
+            "music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Steve Stevens",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "guitarist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1989",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Warner Bros. Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "August 5, 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "reissue date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Rock Candy Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "No. 119",
+      "roles": [
+        {
+          "role": "chart position",
+          "states": [
+            "Billboard 200",
+            "U.S. chart"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "H.R. Giger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "artist",
+            "surrealist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Xenomorph",
+      "roles": [
+        {
+          "role": "creature",
+          "states": [
+            "fictional",
+            "Alien film series"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Alien film series",
+      "roles": [
+        {
+          "role": "film series",
+          "states": [
+            "science fiction",
+            "cinema"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "released by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who released Atomic Playboys?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album was released by Warner Bros. Records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Atomic Playboys released?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What album was released in 1989?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "reissued on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Atomic Playboys reissued?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What album was reissued on August 5, 2013?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "reissued by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who reissued Atomic Playboys?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What album was reissued by Rock Candy Records?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "reached",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What position did Atomic Playboys reach on the Billboard 200?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What album reached No. 119 on the Billboard 200?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "cover art by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who created the cover art for Atomic Playboys?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What album's cover art was created by H.R. Giger?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "designed",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who designed the Xenomorph creature?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What did H.R. Giger design?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "appears in",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "In what film series does the Xenomorph appear?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What creature appears in the Alien film series?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

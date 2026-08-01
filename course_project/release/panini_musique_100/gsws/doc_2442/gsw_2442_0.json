@@ -1,0 +1,90 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "South Africa",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "geopolitical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1991",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "great white sharks (Shark sanctuary)",
+      "roles": [
+        {
+          "role": "species",
+          "states": [
+            "marine animal",
+            "protected species"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "declared legally protected",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What species did South Africa declare legally protected in 1991?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did South Africa declare great white sharks legally protected?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Which country declared great white sharks legally protected in 1991?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

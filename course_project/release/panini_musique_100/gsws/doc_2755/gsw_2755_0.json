@@ -1,0 +1,407 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Corban Knight",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "professional athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "September 10, 1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Canadian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "North American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Barys Nur-Sultan",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "KHL team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Kontinental Hockey League",
+      "roles": [
+        {
+          "role": "sports league",
+          "states": [
+            "international league"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Florida Panthers",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2009 NHL Entry Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Calgary Flames",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "NHL team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "University of North Dakota",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "college hockey"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Hobey Baker Award",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "college hockey award"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2012–13",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "academic year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Corban Knight born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on September 10, 1990?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Corban Knight's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Canadian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "plays for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which team does Corban Knight play for?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who plays for Barys Nur-Sultan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of league",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which league is Barys Nur-Sultan part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What team is part of the Kontinental Hockey League?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "drafted by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who drafted Corban Knight?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who was drafted by the Florida Panthers?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "drafted in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was Corban Knight drafted?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was drafted in the 2009 NHL Entry Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "traded to",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which team was Corban Knight traded to?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was traded to the Calgary Flames?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Where did Corban Knight play college hockey?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who played for the University of North Dakota?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "finalist for",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "What award was Corban Knight a finalist for?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who was a finalist for the Hobey Baker Award?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "in academic year",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "When was Corban Knight a finalist for the Hobey Baker Award?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Who was a finalist for the Hobey Baker Award in 2012–13?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

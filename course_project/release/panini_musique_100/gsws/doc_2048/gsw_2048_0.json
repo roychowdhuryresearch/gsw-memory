@@ -1,0 +1,236 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Addison Transit Center",
+      "roles": [
+        {
+          "role": "transit station",
+          "states": [
+            "bus-only",
+            "future rail station"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Quorum Drive",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "street",
+            "Addison"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Addison Road",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "street",
+            "Addison"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Addison, Texas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1999",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "opening year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Silver Line",
+      "roles": [
+        {
+          "role": "rail line",
+          "states": [
+            "future development"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "DART's 2030 Transit System Plan",
+      "roles": [
+        {
+          "role": "plan",
+          "states": [
+            "future transit development"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located along",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Addison Transit Center located?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located along Quorum Drive and Addison Road?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Addison Transit Center located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in Addison, Texas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "opened in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Addison Transit Center open?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What opened in 1999?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What will Addison Transit Center become part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is part of DART's 2030 Transit System Plan?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "future rail station on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What future rail line will Addison Transit Center be on?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What will be a future rail station on the Silver Line?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

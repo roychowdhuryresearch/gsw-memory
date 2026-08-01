@@ -1,0 +1,290 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Bruce Leung Siu-lung",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "Hong Kong cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Leung Choi-sang",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "birth name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "April 28, 1948",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Hong Kong",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "film industry",
+                        "martial arts cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Bruce Leung",
+            "roles": [
+                {
+                    "role": "alias",
+                    "states": [
+                        "stage name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Bruce Liang",
+            "roles": [
+                {
+                    "role": "alias",
+                    "states": [
+                        "stage name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Bruce Leong",
+            "roles": [
+                {
+                    "role": "alias",
+                    "states": [
+                        "stage name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Bruceploitation",
+            "roles": [
+                {
+                    "role": "film genre",
+                    "states": [
+                        "subgenre",
+                        "post-Bruce Lee"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Bruce Lee",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "martial artist",
+                        "influential figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Bruce Leung Siu-lung born?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on April 28, 1948?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "birth name",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is the birth name of Bruce Leung Siu-lung?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who has the birth name Leung Choi-sang?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "appeared in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "In what type of movies did Bruce Leung Siu-lung appear?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who appeared in many Hong Kong martial arts movies?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "also known as",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What are the stage names of Bruce Leung Siu-lung?",
+                    "answers": [
+                        "e5",
+                        "e6",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is also known as Bruce Leung, Bruce Liang, or Bruce Leong?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "grouped among",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "In what subgenre is Bruce Leung Siu-lung grouped?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is grouped among the Bruceploitation actors?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "influenced by",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who influenced the Bruceploitation subgenre?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What subgenre was influenced by Bruce Lee?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

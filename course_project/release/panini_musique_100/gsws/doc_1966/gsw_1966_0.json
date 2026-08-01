@@ -1,0 +1,388 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "1986 FIFA World Cup",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports event",
+            "international competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "13th FIFA World Cup",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "ordinal event",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Mexico",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "host country",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "31 May to 29 June 1986",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "event duration",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "24-team format",
+      "roles": [
+        {
+          "role": "format",
+          "states": [
+            "tournament structure",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Spain",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "previous host",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Colombia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "original host",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1982",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "resignation year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "May 1983",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "selection year",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Hispanophonic country",
+      "roles": [
+        {
+          "role": "language group",
+          "states": [
+            "Spanish-speaking",
+            "cultural context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Argentina",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "previous host",
+            "sports event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1978",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event year",
+            "1970s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was the 1986 FIFA World Cup held?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held in Mexico?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "took place from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did the 1986 FIFA World Cup take place?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What event took place from 31 May to 29 June 1986?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "featured format",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What format did the 1986 FIFA World Cup feature?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event featured a 24-team format?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "originally chosen to host",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which country was originally chosen to host the 1986 FIFA World Cup?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What event was Colombia originally chosen to host?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "resigned in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Colombia resign from hosting the 1986 FIFA World Cup?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What happened in 1982 regarding the 1986 FIFA World Cup?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "selected as host in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was Mexico selected as the host for the 1986 FIFA World Cup?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What event was Mexico selected to host in May 1983?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "previously hosted by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which countries previously hosted the FIFA World Cup before 1986?",
+          "answers": [
+            "e6",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What event did Spain and Argentina previously host?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "hosted by a Hispanophonic country",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Which FIFA World Cup was hosted by a Hispanophonic country?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What type of country hosted the 1986 FIFA World Cup?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,220 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Philibert Bouttats",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "Flemish",
+            "engraver",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Frederik Bouttats the Younger",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Antwerp",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "historical location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "about the year 1650",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year",
+            "approximate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "72",
+      "roles": [
+        {
+          "role": "age",
+          "states": [
+            "age at death"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "portraits",
+      "roles": [
+        {
+          "role": "artwork type",
+          "states": [
+            "engraving"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "son of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the son of Frederik Bouttats the Younger?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is Philibert Bouttats the son of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where was Philibert Bouttats born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was born in Antwerp?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "born around",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Philibert Bouttats born?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was born around the year 1650?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "died at age",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "At what age did Philibert Bouttats die?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who died at the age of 72?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "created",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What type of artwork did Philibert Bouttats create?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who created portraits?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

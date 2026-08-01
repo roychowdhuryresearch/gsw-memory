@@ -1,0 +1,300 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Lorne Michaels",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "television producer",
+            "SNL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Peter Aykroyd",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Dan Aykroyd",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "SNL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Jim Downey",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Brian Doyle-Murray",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Bill Murray",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "SNL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Don Novello",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Tom Schiller",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Alan Zweibel",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Paul Shaffer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Harry Shearer",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "actor",
+            "SNL cast member"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "brother of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the brother of Dan Aykroyd?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is Peter Aykroyd the brother of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Who is the brother of Bill Murray?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Brian Doyle-Murray the brother of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "upgraded to featured cast member",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was upgraded to featured cast member status by Lorne Michaels?",
+          "answers": [
+            "e2",
+            "e4",
+            "e5",
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who upgraded Peter Aykroyd to featured cast member status?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "joined the cast",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who joined the SNL cast from the band?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which band member joined the SNL cast?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "promoted to repertory status",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who was promoted to repertory status during the season?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What status was Harry Shearer promoted to during the season?",
+          "answers": [
+            "repertory status"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

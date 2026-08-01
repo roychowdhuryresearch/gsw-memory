@@ -1,0 +1,199 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Trashed",
+            "roles": [
+                {
+                    "role": "song",
+                    "states": [
+                        "debut solo single",
+                        "music"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Skin",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "musician",
+                        "ex-Skunk Anansie front woman"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "June 2003",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "2000s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Fleshwounds",
+            "roles": [
+                {
+                    "role": "album",
+                    "states": [
+                        "music album"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "CD single",
+            "roles": [
+                {
+                    "role": "format",
+                    "states": [
+                        "physical media",
+                        "music distribution"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "DVD single",
+            "roles": [
+                {
+                    "role": "format",
+                    "states": [
+                        "physical media",
+                        "music distribution"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released by",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who released 'Trashed'?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What did Skin release?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 'Trashed' released?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What was released in June 2003?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "taken from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Which album is 'Trashed' taken from?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What song is taken from 'Fleshwounds'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "On what formats was 'Trashed' released?",
+                    "answers": [
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What was released on CD single and DVD single?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

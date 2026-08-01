@@ -1,0 +1,246 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Victoria (Victoria (Australia))",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "Australian state",
+            "geographically diverse"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Gippsland",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "wet",
+            "temperate climate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Victorian alpine areas",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "snow-covered",
+            "alpine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mount Bogong",
+      "roles": [
+        {
+          "role": "mountain",
+          "states": [
+            "highest peak in Victoria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1,986 m (6,516 ft)",
+      "roles": [
+        {
+          "role": "height",
+          "states": [
+            "elevation of Mount Bogong"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Murray River system",
+      "roles": [
+        {
+          "role": "river system",
+          "states": [
+            "notable",
+            "in Victoria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "pink heath",
+      "roles": [
+        {
+          "role": "flower",
+          "states": [
+            "state flower of Victoria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Leadbeater's possum",
+      "roles": [
+        {
+          "role": "animal",
+          "states": [
+            "state animal of Victoria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "helmeted honeyeater",
+      "roles": [
+        {
+          "role": "bird",
+          "states": [
+            "state bird of Victoria"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "contains",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does Victoria contain?",
+          "answers": [
+            "e2",
+            "e3",
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which location contains Gippsland, Victorian alpine areas, and the Murray River system?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "highest peak",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the highest peak in Victoria?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where is Mount Bogong the highest peak?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "elevation",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the elevation of Mount Bogong?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which mountain has an elevation of 1,986 m (6,516 ft)?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "state symbols",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the state symbols of Victoria?",
+          "answers": [
+            "e7",
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which state has the pink heath, Leadbeater's possum, and helmeted honeyeater as symbols?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

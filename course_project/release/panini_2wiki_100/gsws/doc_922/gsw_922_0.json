@@ -1,0 +1,158 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Alamogordo Daily News",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "daily publication",
+                        "local news"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1898",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "founding year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Alamogordo",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "publication location",
+                        "New Mexico"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "New Mexico",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "U.S. state"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Associated Press",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "news agency",
+                        "syndicated content provider"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "founded in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was the Alamogordo Daily News founded?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What newspaper was founded in 1898?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is the Alamogordo Daily News published?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What newspaper is published in Alamogordo?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "carries content from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What news agency provides content to the Alamogordo Daily News?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which newspaper carries content from the Associated Press?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

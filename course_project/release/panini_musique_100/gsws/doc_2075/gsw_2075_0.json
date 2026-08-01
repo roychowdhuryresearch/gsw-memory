@@ -1,0 +1,291 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Casa Loma",
+      "roles": [
+        {
+          "role": "building",
+          "states": [
+            "Gothic Revival style",
+            "historic house museum",
+            "landmark"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Hill House",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Spanish translation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "midtown Toronto",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "urban area",
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ontario",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Canada",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1911 to 1914",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "construction period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Sir Henry Pellatt",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "financier",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "E. J. Lennox",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "architect",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "140 metres",
+      "roles": [
+        {
+          "role": "measurement",
+          "states": [
+            "elevation",
+            "above sea level"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "translated as",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is Casa Loma translated as in Spanish?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is the Spanish translation of Hill House?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is Casa Loma located?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is located in midtown Toronto?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "constructed from",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Casa Loma constructed?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was constructed from 1911 to 1914?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "residence for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was Casa Loma constructed as a residence for?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was constructed as a residence for Sir Henry Pellatt?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "designed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who designed Casa Loma?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did E. J. Lennox design?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "elevation",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the elevation of Casa Loma?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is located at an elevation of 140 metres above sea level?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

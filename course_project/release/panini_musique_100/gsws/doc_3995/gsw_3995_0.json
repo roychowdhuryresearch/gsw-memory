@@ -1,0 +1,194 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mycenae House",
+      "roles": [
+        {
+          "role": "community centre",
+          "states": [
+            "current use",
+            "cultural site"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "former convent building",
+      "roles": [
+        {
+          "role": "building type",
+          "states": [
+            "historical use"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Woodlands House",
+      "roles": [
+        {
+          "role": "Georgian villa",
+          "states": [
+            "architectural style",
+            "adjacent location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mycenae Road",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "street",
+            "Greenwich"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Westcombe Park",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "neighborhood",
+            "Greenwich"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Greenwich",
+      "roles": [
+        {
+          "role": "borough",
+          "states": [
+            "London",
+            "administrative division"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "London",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "capital",
+            "United Kingdom"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Mycenae House located?",
+          "answers": [
+            "e4",
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in Mycenae Road?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "adjacent to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is adjacent to Woodlands House?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Mycenae House adjacent to?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "current use",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the current use of the former convent building?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is Mycenae House currently used as?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

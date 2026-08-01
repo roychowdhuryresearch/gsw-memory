@@ -1,0 +1,350 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Highway to Heaven",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "American",
+            "drama",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "NBC",
+      "roles": [
+        {
+          "role": "network",
+          "states": [
+            "American",
+            "broadcaster"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1984 to 1989",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "airing period",
+            "1980s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "five seasons",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "series length"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "111 episodes",
+      "roles": [
+        {
+          "role": "episode count",
+          "states": [
+            "series total"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Michael Landon",
+      "roles": [
+        {
+          "role": "actor",
+          "states": [
+            "American",
+            "television"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Jonathan Smith",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "angel",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Victor French",
+      "roles": [
+        {
+          "role": "actor",
+          "states": [
+            "American",
+            "television"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Mark Gordon",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "retired policeman",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Little House on the Prairie",
+      "roles": [
+        {
+          "role": "television series",
+          "states": [
+            "American",
+            "historical drama"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "The Boss",
+      "roles": [
+        {
+          "role": "character",
+          "states": [
+            "God",
+            "fictional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "aired on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What network aired Highway to Heaven?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What series aired on NBC?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ran from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Highway to Heaven run?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What series ran from 1984 to 1989?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "starred",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who starred in Highway to Heaven?",
+          "answers": [
+            "e6",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In what series did Michael Landon star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "In what series did Victor French star?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "Who played Jonathan Smith?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "What character did Michael Landon play?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who played Mark Gordon?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "What character did Victor French play?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "co-starred in",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "Who co-starred with Michael Landon in Little House on the Prairie?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "In what series did Victor French co-star with Michael Landon?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "given assignments by",
+      "questions": [
+        {
+          "id": "q14",
+          "text": "Who gave assignments to Jonathan and Mark?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q15",
+          "text": "Who were given assignments by The Boss?",
+          "answers": [
+            "e7",
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

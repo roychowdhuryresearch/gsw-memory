@@ -1,0 +1,237 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Victorian Football League",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "sports league",
+            "historical entity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1897",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "inception year",
+            "19th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "19th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Australian football competition",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "finals series (AFL Grand Final)",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports",
+            "competition format"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "top four teams",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "sports ranking",
+            "competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "round robin tournament",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports format",
+            "competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "inception of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the Victorian Football League founded?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was founded in 1897?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "evolved from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did the concept of a 'grand' final evolve from?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What evolved from the Victorian Football League's experimentation?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "adopted approach",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What approach did the Australian football competition adopt in the 19th century?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which competition adopted the approach that the team on top of the ladder was declared the premiers?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "played between",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was played between the top four teams at the end of the season?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who participated in the finals series?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "scheduled",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What did the VFL schedule for 1897?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "When did the VFL schedule a round robin tournament?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

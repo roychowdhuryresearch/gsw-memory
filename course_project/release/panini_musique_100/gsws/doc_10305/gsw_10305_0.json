@@ -1,0 +1,261 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pierre Berton",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "journalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Klondike mining camps",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "historical",
+            "mining"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "University of British Columbia",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "university"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "The Ubyssey",
+      "roles": [
+        {
+          "role": "publication",
+          "states": [
+            "student paper",
+            "university"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Vancouver",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Canada"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "21",
+      "roles": [
+        {
+          "role": "age",
+          "states": [
+            "youngest city editor",
+            "Canadian daily"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Second World War",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical",
+            "global conflict"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "worked in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where did Pierre Berton work during his years as a history major?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who worked in Klondike mining camps?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "studied at",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Pierre Berton study as a history major?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who studied at the University of British Columbia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "worked on",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What student paper did Pierre Berton work on?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who worked on The Ubyssey?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "youngest city editor",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was the youngest city editor on any Canadian daily at age 21?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "At what age was Pierre Berton the youngest city editor?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "worked in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where did Pierre Berton spend his early newspaper career?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who spent their early newspaper career in Vancouver?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "replaced during",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What event led to Pierre Berton replacing editorial staff?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who replaced editorial staff during the Second World War?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

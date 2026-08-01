@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Interliner",
+      "roles": [
+        {
+          "role": "transport system",
+          "states": [
+            "express bus",
+            "Netherlands"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Netherlands",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "European"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "railroad system",
+      "roles": [
+        {
+          "role": "transport system",
+          "states": [
+            "backbone",
+            "medium and long distance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "long distance buses",
+      "roles": [
+        {
+          "role": "transport mode",
+          "states": [
+            "complementary",
+            "public transport"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Interliner express bus system located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What express bus system is located in the Netherlands?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "backbone of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the backbone of medium and long distance public transport in the Netherlands?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In which country is the railroad system the backbone of medium and long distance public transport?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "used complementarily",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What transport mode is used complementarily to the railroad system in the Netherlands?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "How are long distance buses used in relation to the railroad system in the Netherlands?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

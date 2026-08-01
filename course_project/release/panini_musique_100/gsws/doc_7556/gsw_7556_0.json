@@ -1,0 +1,144 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Marc Bolan",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "songwriter"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "20th Century Boy",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "music",
+            "lyrical content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Friends say it's fine, friends say it's good / Everybody says it's just like Robin Hood",
+      "roles": [
+        {
+          "role": "lyric",
+          "states": [
+            "first line",
+            "song content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "just like rock 'n' roll",
+      "roles": [
+        {
+          "role": "misquoted lyric",
+          "states": [
+            "common misquote",
+            "song content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who wrote 20th Century Boy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What song did Marc Bolan write?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first line",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the first line of 20th Century Boy?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which song has the first line 'Friends say it's fine, friends say it's good / Everybody says it's just like Robin Hood'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "misquoted as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the common misquote of the first line of 20th Century Boy?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which song's first line is often misquoted as 'just like rock 'n' roll'?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

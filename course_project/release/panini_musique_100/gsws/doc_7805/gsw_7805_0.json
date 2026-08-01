@@ -1,0 +1,221 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Two Mile Square Reservation",
+      "roles": [
+        {
+          "role": "land tract",
+          "states": [
+            "historical",
+            "Ohio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ohio",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "U.S. state"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Native Americans",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "historical",
+            "indigenous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States of America",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "nation",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Treaty of Greenville",
+      "roles": [
+        {
+          "role": "treaty",
+          "states": [
+            "historical",
+            "1795"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1795",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "ceded by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who ceded the Two Mile Square Reservation?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Native Americans cede?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "ceded to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "To whom was the Two Mile Square Reservation ceded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was ceded to the United States of America?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What treaty was the cession of the Two Mile Square Reservation part of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was part of the Treaty of Greenville?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "occurred in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did the Treaty of Greenville occur?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What occurred in 1795?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is the Two Mile Square Reservation located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is located in Ohio?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

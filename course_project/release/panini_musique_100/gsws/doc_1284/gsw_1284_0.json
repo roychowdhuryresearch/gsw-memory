@@ -1,0 +1,89 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Oak Lawn (Oak Lawn, Illinois)",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "suburb",
+            "residential area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Chicago",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "urban area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located southwest of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Oak Lawn located southwest of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What suburb is located southwest of Chicago?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "shares borders with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What suburb shares borders with Chicago?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What city does Oak Lawn share borders with?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

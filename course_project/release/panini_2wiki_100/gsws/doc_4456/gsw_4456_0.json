@@ -1,0 +1,104 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Other Women's Movement",
+            "roles": [
+                {
+                    "role": "book",
+                    "states": [
+                        "published work",
+                        "2005"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2005",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "publication year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "labor feminism",
+            "roles": [
+                {
+                    "role": "term",
+                    "states": [
+                        "concept",
+                        "feminism"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "coined the term",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What term did 'The Other Women's Movement' coin?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Which book coined the term 'labor feminism'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When was 'The Other Women's Movement' published?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What book was published in 2005?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

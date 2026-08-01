@@ -1,0 +1,317 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "ABC World News Tonight",
+      "roles": [
+        {
+          "role": "television program",
+          "states": [
+            "news program",
+            "evening broadcast"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "ABC News",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "news division",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American Broadcasting Company",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "television network",
+            "media company"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "David Muir",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "news anchor",
+            "media personality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Cecilia Vega",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "news anchor",
+            "media personality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Tom Llamas",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "news anchor",
+            "media personality"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "September 2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start date",
+            "broadcast change"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "January 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "appointment date",
+            "anchor change"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "broadcast by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What program is broadcast by ABC News?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who broadcasts ABC World News Tonight?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is ABC News a part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What organization is part of the American Broadcasting Company?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where is the American Broadcasting Company located?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What company is located in the United States?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "anchored by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who anchors the weekday broadcasts of ABC World News Tonight?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What program is anchored by David Muir?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "rotated as anchors",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who rotated as anchors for the weekend editions of ABC World News Tonight?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What role did Cecilia Vega and Tom Llamas have on ABC World News Tonight?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "named sole weekend anchor",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was named the sole weekend anchor of ABC World News Tonight in January 2017?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "When was Tom Llamas named the sole weekend anchor?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "since",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Since when has David Muir been anchoring the weekday broadcasts?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What started in September 2014 regarding ABC World News Tonight?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

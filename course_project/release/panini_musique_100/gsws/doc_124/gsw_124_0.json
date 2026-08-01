@@ -1,0 +1,366 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Minneapolis",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Mississippi River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Minnesota River",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "river",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Saint Paul",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "state capital",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Chain of Lakes",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "lake system",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Grand Rounds National Scenic Byway",
+      "roles": [
+        {
+          "role": "geographical feature",
+          "states": [
+            "scenic byway",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2018",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year",
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "6 Fortune 500 companies",
+      "roles": [
+        {
+          "role": "business entity",
+          "states": [
+            "corporate presence",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Twin Cities",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "metropolitan area",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Chicago",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Seattle",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "global city",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "economic classification",
+            "global economy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "lies on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What city lies on the Mississippi River?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where does Minneapolis lie?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "confluence with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What river is at the confluence with the Mississippi River near Minneapolis?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What river is the Mississippi River at the confluence with near Minneapolis?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "adjoins",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What city adjoins Minneapolis?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What city does Saint Paul adjoin?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "connected by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the lakes in Minneapolis connected by?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What connects the lakes in Minneapolis?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "home to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What city was home to 6 Fortune 500 companies in 2018?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What was Minneapolis home to in 2018?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "primary business center between",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the primary business center between Chicago and Seattle?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Between which cities is Minneapolis the primary business center?",
+          "answers": [
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "categorized as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is Minneapolis categorized as in the global economy?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What city is categorized as a global city?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

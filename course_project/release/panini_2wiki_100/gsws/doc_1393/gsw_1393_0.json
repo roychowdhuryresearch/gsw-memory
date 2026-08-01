@@ -1,0 +1,249 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Mount Hardisty",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "summit",
+                        "Canadian Rockies"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Athabasca River valley",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical feature",
+                        "Jasper National Park"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Jasper National Park",
+            "roles": [
+                {
+                    "role": "national park",
+                    "states": [
+                        "protected area",
+                        "Alberta"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Canadian Rockies",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "geographical feature",
+                        "Canada"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Alberta",
+            "roles": [
+                {
+                    "role": "province",
+                    "states": [
+                        "Canadian region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Mount Kerkeslin",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "summit",
+                        "Maligne Range"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Maligne Range",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "geographical feature",
+                        "Canadian Rockies"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Icefields Parkway",
+            "roles": [
+                {
+                    "role": "road",
+                    "states": [
+                        "scenic route",
+                        "Canadian Rockies"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Mount Hardisty located?",
+                    "answers": [
+                        "e2",
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What mountain is located in the Athabasca River valley?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What mountain range is Mount Hardisty part of?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What mountains are part of the Maligne Range?",
+                    "answers": [
+                        "e1",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "nearest higher peak",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the nearest higher peak to Mount Hardisty?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Which mountain is the nearest higher peak to Mount Kerkeslin?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "visible from",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "From where is Mount Hardisty visible?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What mountains are visible from the Icefields Parkway?",
+                    "answers": [
+                        "e1",
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

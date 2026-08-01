@@ -1,0 +1,431 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Editor",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Canadian cinema",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "creative work",
+                    "states": [
+                        "black comedy",
+                        "giallo genre"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2014",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release year",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "film origin",
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Astron-6",
+            "roles": [
+                {
+                    "role": "production company",
+                    "states": [
+                        "film production",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Paz de la Huerta",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Adam Brooks",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Laurence R. Harvey",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Udo Kier",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "actor",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "giallo",
+            "roles": [
+                {
+                    "role": "genre",
+                    "states": [
+                        "cinematic subgenre",
+                        "Italian origin"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Italy",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "genre origin",
+                        "European cinema"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "Winnipeg, Manitoba",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "filming location",
+                        "Canada"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Kenora, Ontario",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "filming location",
+                        "Canada"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "2014 Toronto International Film Festival",
+            "roles": [
+                {
+                    "role": "event",
+                    "states": [
+                        "film premiere",
+                        "film festival"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e14",
+            "name": "September 8, 2015",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "home video release",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was The Editor released?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What film was released in 2014?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "produced by",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who produced The Editor?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What film did Astron-6 produce?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "stars",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who stars in The Editor?",
+                    "answers": [
+                        "e5",
+                        "e6",
+                        "e7",
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "In what film does Paz de la Huerta star?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "is a genre of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What genre is The Editor?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What film is a giallo?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "originated in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Where did the giallo genre originate?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What genre originated in Italy?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "filmed in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Where was The Editor filmed?",
+                    "answers": [
+                        "e11",
+                        "e12"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What film was filmed in Winnipeg, Manitoba?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "premiered at",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Where did The Editor premiere?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What film premiered at the 2014 Toronto International Film Festival?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "released on home video",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "When was The Editor released on home video?",
+                    "answers": [
+                        "e14"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What film was released on home video on September 8, 2015?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

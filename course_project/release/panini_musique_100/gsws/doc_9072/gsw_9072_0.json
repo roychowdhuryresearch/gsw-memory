@@ -1,0 +1,326 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Government Degree College (Government Degree College Kathua)",
+      "roles": [
+        {
+          "role": "educational institution",
+          "states": [
+            "co-ed",
+            "college"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kathua",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Jammu and Kashmir",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Jammu and Kashmir",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "state",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "University of Jammu",
+      "roles": [
+        {
+          "role": "university",
+          "states": [
+            "affiliated institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "3000+ students",
+      "roles": [
+        {
+          "role": "student body",
+          "states": [
+            "annual enrollment"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "+2 marks",
+      "roles": [
+        {
+          "role": "academic criteria",
+          "states": [
+            "admission requirement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "3 km",
+      "roles": [
+        {
+          "role": "distance",
+          "states": [
+            "from city center"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Sciences, Arts, Firshries, Computer Sciences (BCA)",
+      "roles": [
+        {
+          "role": "academic programs",
+          "states": [
+            "offered courses"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "boys and girls",
+      "roles": [
+        {
+          "role": "hostel facilities",
+          "states": [
+            "gender inclusive"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Government Degree College located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What educational institution is located in Kathua?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "affiliated to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What university is Government Degree College affiliated to?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which college is affiliated to the University of Jammu?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "offers courses in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What courses does Government Degree College offer?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which college offers courses in Sciences, Arts, Firshries, and Computer Sciences (BCA)?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "has annual enrollment of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "How many students are enrolled annually at Government Degree College?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which college has an annual enrollment of 3000+ students?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "admission based on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the admission criteria for Government Degree College?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which college has admission based on +2 marks?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "provides hostel facilities for",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who does Government Degree College provide hostel facilities for?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which college provides hostel facilities for boys and girls?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "distance from city center",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "How far is Government Degree College from the heart of Kathua city?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is 3 km away from the heart of Kathua city?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,269 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Matthieu Chedid",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Boulogne-Billancourt",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hauts-de-Seine",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative region",
+            "France"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "France",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Louis Chedid",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "French singer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Andrée Chedid",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "writer",
+            "poet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Egypt",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "birthplace of Andrée Chedid"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Lebanese",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "descent of Andrée Chedid"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Émilie Chedid",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "music video director",
+            "concert director"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Matthieu Chedid born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Boulogne-Billancourt?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "son of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the son of Louis Chedid?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is Matthieu Chedid the son of?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "grandson of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the grandson of Andrée Chedid?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is Matthieu Chedid the grandson of?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "sister of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the sister of Matthieu Chedid?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is Émilie Chedid the sister of?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "wrote lyrics for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who wrote lyrics for Matthieu Chedid?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "For whom did Andrée Chedid write lyrics?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

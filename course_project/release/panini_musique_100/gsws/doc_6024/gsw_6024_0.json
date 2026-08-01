@@ -1,0 +1,203 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "banking (History of banking)",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "financial system",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "money",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "financial system",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "grain-money",
+      "roles": [
+        {
+          "role": "type of money",
+          "states": [
+            "ancient",
+            "barter system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "food cattle-money",
+      "roles": [
+        {
+          "role": "type of money",
+          "states": [
+            "ancient",
+            "barter system"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "9000 BC",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "ancient period",
+            "approximate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Davies",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "historical reference"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "intertwined with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is intertwined with the history of money?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is the history of banking intertwined with?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "used from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What types of money were used from around 9000 BC?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When were grain-money and food cattle-money used?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "understood as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What were grain-money and food cattle-money understood as?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What types of money were understood as things to be used for barter?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "referenced by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who referenced the use of ancient types of money?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Davies reference?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

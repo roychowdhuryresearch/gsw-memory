@@ -1,0 +1,560 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sadie Smith",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "birth name",
+            "individual"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Zadie Smith",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "current name",
+            "individual"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Willesden",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "London borough"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Brent",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "borough",
+            "London"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Jamaican",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "maternal heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "English",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "paternal heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Yvonne Bailey",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "mother",
+            "Jamaican"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Harvey Smith",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "father",
+            "English"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "emigration year",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Doc Brown",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "brother",
+            "rapper",
+            "comedian"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Luc Skyz",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "brother",
+            "rapper"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "tap dancing",
+      "roles": [
+        {
+          "role": "activity",
+          "states": [
+            "childhood interest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "musical theatre",
+      "roles": [
+        {
+          "role": "career",
+          "states": [
+            "teenage ambition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "jazz singer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "university job"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "journalist",
+      "roles": [
+        {
+          "role": "career",
+          "states": [
+            "aspiration"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e16",
+      "name": "literature",
+      "roles": [
+        {
+          "role": "interest",
+          "states": [
+            "principal interest"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was Sadie Smith born?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in Willesden?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "changed name to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did Sadie Smith change her name to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who changed their name to Zadie Smith?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "mother",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who is the mother of Zadie Smith?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who is Yvonne Bailey the mother of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "father",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the father of Zadie Smith?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is Harvey Smith the father of?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Yvonne Bailey emigrate to England?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who emigrated to England in 1969?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "half-sister",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who has a half-sister?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What is the relationship of Zadie Smith to her half-sister?",
+          "answers": [
+            "half-sister"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "half-brother",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who has a half-brother?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What is the relationship of Zadie Smith to her half-brother?",
+          "answers": [
+            "half-brother"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "brother",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Who is Doc Brown's sibling?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who is Luc Skyz's sibling?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "fond of",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "What was Zadie Smith fond of as a child?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who was fond of tap dancing as a child?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v10",
+      "phrase": "considered career in",
+      "questions": [
+        {
+          "id": "q19",
+          "text": "What career did Zadie Smith consider in her teenage years?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q20",
+          "text": "Who considered a career in musical theatre?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v11",
+      "phrase": "worked as",
+      "questions": [
+        {
+          "id": "q21",
+          "text": "What job did Zadie Smith have while at university?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q22",
+          "text": "Who worked as a jazz singer while at university?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v12",
+      "phrase": "aspired to be",
+      "questions": [
+        {
+          "id": "q23",
+          "text": "What did Zadie Smith aspire to be?",
+          "answers": [
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q24",
+          "text": "Who aspired to be a journalist?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v13",
+      "phrase": "principal interest",
+      "questions": [
+        {
+          "id": "q25",
+          "text": "What emerged as Zadie Smith's principal interest?",
+          "answers": [
+            "e16"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q26",
+          "text": "Who had literature as their principal interest?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

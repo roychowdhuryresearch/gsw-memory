@@ -1,0 +1,382 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "A Modern Jazz Symposium of Music and Poetry",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "1950s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Charles Mingus",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "jazz musician",
+            "bassist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Scenes in the City",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz",
+            "narration included"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Mel Stewart",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "narrator",
+            "actor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Lonne Elder",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "actor"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Langston Hughes",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "writer",
+            "poet"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Duke's Choice",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz",
+            "reappears"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "I X Love",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz",
+            "1963"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Mingus Mingus Mingus Mingus Mingus",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "1963"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Nouroog",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz",
+            "suite component"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Slippers",
+      "roles": [
+        {
+          "role": "composition",
+          "states": [
+            "jazz",
+            "suite component"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Open Letter to Duke",
+      "roles": [
+        {
+          "role": "suite",
+          "states": [
+            "jazz",
+            "Mingus Ah Um"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Mingus Ah Um",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "jazz",
+            "1959"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "created by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who created A Modern Jazz Symposium of Music and Poetry?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What album did Charles Mingus create?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "narrated by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who narrated Scenes in the City?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Mel Stewart narrate?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who wrote Scenes in the City?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What did Lonne Elder write?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "assisted by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who assisted in writing Scenes in the City?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Langston Hughes assist in writing?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "reappears as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What does Duke's Choice reappear as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What composition reappears as I X Love?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "included in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What suite includes Nouroog, Duke's Choice, and Slippers?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What compositions are included in Open Letter to Duke?",
+          "answers": [
+            "e10",
+            "e7",
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What album is Open Letter to Duke part of?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "What suite is part of Mingus Ah Um?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

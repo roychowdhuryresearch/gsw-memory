@@ -1,0 +1,309 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Arizona",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "state",
+            "United States",
+            "southwestern region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Phoenix",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "capital city",
+            "largest city",
+            "Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Four Corners",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "geographical area",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Utah",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "United States",
+            "Four Corners region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Colorado",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "United States",
+            "Four Corners region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "New Mexico",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "United States",
+            "Four Corners region"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Nevada",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "United States",
+            "western neighbor of Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "California",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "United States",
+            "western neighbor of Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Sonora",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Mexico",
+            "southern neighbor of Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Baja California",
+      "roles": [
+        {
+          "role": "state",
+          "states": [
+            "Mexico",
+            "southwestern neighbor of Arizona"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is a state in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What country is Arizona a state in?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which state in the United States is located in the southwestern region?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "capital and largest city",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is the capital and largest city of Arizona?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Phoenix is the capital and largest city of which state?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "shares the Four Corners region with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which states share the Four Corners region with Arizona?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Arizona shares the Four Corners region with which states?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "neighboring states",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are the neighboring states of Arizona to the west?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which state is a western neighbor of Nevada and California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "neighboring Mexican states",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What are the neighboring Mexican states to the south and southwest of Arizona?",
+          "answers": [
+            "e10",
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which state in the United States has Sonora and Baja California as neighboring Mexican states?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,370 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Etan Boritzer",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "writer",
+                        "American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "1950",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "What is God?",
+            "roles": [
+                {
+                    "role": "book",
+                    "states": [
+                        "children's literature",
+                        "published"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "1989",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "publication year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "What is?",
+            "roles": [
+                {
+                    "role": "book series",
+                    "states": [
+                        "children's literature",
+                        "character education"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Wade Junior High School",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "educational",
+                        "Bronx, New York"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Bronx, New York",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "educational",
+                        "USA"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Venice, California",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "residence",
+                        "USA"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "The Teachings of the Buddha",
+            "roles": [
+                {
+                    "role": "topic",
+                    "states": [
+                        "spiritual",
+                        "Buddhism"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "John F. Kennedy",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "assassinated"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "New York City Department of Education",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "educational",
+                        "government"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was born in 1950?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was Etan Boritzer born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "wrote",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who wrote 'What is God?'",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What did Etan Boritzer write?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When was 'What is God?' published?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What book was published in 1989?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "lives in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where does Etan Boritzer live?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who lives in Venice, California?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "teaches",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What does Etan Boritzer teach?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who teaches 'The Teachings of the Buddha'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "first published",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "When was Etan Boritzer first published?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "Who was first published in 1963?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "attended",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Where did Etan Boritzer attend school?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "Who attended Wade Junior High School?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v8",
+            "phrase": "included in anthology",
+            "questions": [
+                {
+                    "id": "q15",
+                    "text": "Whose essay was included in a special anthology?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q16",
+                    "text": "What was included in a special anthology by the New York City Department of Education?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

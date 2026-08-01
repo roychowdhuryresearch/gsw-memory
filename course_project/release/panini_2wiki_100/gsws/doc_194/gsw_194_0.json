@@ -1,0 +1,350 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Lamman Rucker",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "actor"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "October 6, 1971",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "birth date"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "American",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "United States"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "As the World Turns",
+            "roles": [
+                {
+                    "role": "television show",
+                    "states": [
+                        "daytime soap opera"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "All My Children",
+            "roles": [
+                {
+                    "role": "television show",
+                    "states": [
+                        "daytime soap opera"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Tyler Perry",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "film director",
+                        "producer"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Why Did I Get Married?",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Tyler Perry film"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Why Did I Get Married Too?",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Tyler Perry film"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "Meet the Browns",
+            "roles": [
+                {
+                    "role": "film",
+                    "states": [
+                        "Tyler Perry film"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "Meet the Browns (TV series)",
+            "roles": [
+                {
+                    "role": "television show",
+                    "states": [
+                        "adaptation"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "2016",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e12",
+            "name": "Jacob Greenleaf",
+            "roles": [
+                {
+                    "role": "character",
+                    "states": [
+                        "Greenleaf series"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e13",
+            "name": "Greenleaf",
+            "roles": [
+                {
+                    "role": "television show",
+                    "states": [
+                        "drama series",
+                        "Oprah Winfrey Network"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Lamman Rucker born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born on October 6, 1971?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "has nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Lamman Rucker's nationality?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is an American actor?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "began career on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "On which shows did Lamman Rucker begin his career?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who began their career on 'As the World Turns' and 'All My Children'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "acted in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "In which films did Lamman Rucker act?",
+                    "answers": [
+                        "e7",
+                        "e8",
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who acted in 'Why Did I Get Married?' and 'Why Did I Get Married Too?'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "starred as",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who starred as Jacob Greenleaf in 'Greenleaf'?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Which character did Lamman Rucker play in 'Greenleaf'?",
+                    "answers": [
+                        "e12"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "started in",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "When did Lamman Rucker start starring in 'Greenleaf'?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What show did Lamman Rucker start starring in 2016?",
+                    "answers": [
+                        "e13"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

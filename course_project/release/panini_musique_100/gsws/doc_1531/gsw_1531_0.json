@@ -1,0 +1,298 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Thirty nations",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "participants",
+            "Winter Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Winter Games",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New Zealand",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "first-time participant",
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Portugal",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "first-time participant",
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Australia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "returned participant",
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Germany",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "returned participant",
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Japan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "returned participant",
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "South Korea",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "non-participant",
+            "1952 Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Liechtenstein",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "non-participant",
+            "1952 Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Turkey",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "non-participant",
+            "1952 Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "1948",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "1952 (1952 Winter Olympics)",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "Winter Olympic Games"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "sent competitors",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Which nations sent competitors to the Winter Games?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did thirty nations do at the Winter Games?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first-time participant",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Which countries participated for the first time in the Winter Olympic Games?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was New Zealand's status in the Winter Olympic Games?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "returned after 16-year absence",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which countries returned to the Winter Olympic Games after a 16-year absence?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was Australia's status in the Winter Olympic Games?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "competed in 1948 but not in 1952",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which countries competed in the 1948 Winter Olympic Games but not in 1952?",
+          "answers": [
+            "e8",
+            "e9",
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was South Korea's participation status in the 1952 Winter Olympic Games?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

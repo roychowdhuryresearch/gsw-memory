@@ -1,0 +1,373 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "William Shakespeare",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "deceased"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "John Shakespeare",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "father"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Mary Arden",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "mother"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Snitterfield",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace of John Shakespeare"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Stratford-upon-Avon",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace",
+            "baptism place"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "26 April 1564",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "baptism date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "23 April",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "traditional birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Saint George's Day",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "traditional observance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1616",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "affluent landowning farmer",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "Mary Arden's father"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "alderman",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "John Shakespeare"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "glover",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "John Shakespeare"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "son of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the son of John Shakespeare?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is the son of Mary Arden?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Who is William Shakespeare's father?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is William Shakespeare's mother?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was William Shakespeare born?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was born in Stratford-upon-Avon?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "baptised on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was William Shakespeare baptised?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was baptised on 26 April 1564?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "traditionally observed birth date",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the traditional birth date of William Shakespeare?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Whose traditional birth date is 23 April?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did William Shakespeare die?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who died in 1616?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "profession",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was John Shakespeare's profession?",
+          "answers": [
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was an alderman and glover?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "daughter of",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Who is the daughter of an affluent landowning farmer?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Who is Mary Arden's father?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

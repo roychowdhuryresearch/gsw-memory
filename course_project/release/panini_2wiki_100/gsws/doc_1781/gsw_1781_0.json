@@ -1,0 +1,261 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Mount Heng",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "Five Great Mountains of China"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Hengshan",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "Chinese name",
+                        "alternative name"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "north-central China",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical region"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Shanxi Province",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "province",
+                        "China"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Northern Heng Shan",
+            "roles": [
+                {
+                    "role": "name",
+                    "states": [
+                        "alternative name",
+                        "Shanxi Province"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Hunan Province",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "province",
+                        "China"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Southern Heng Shan",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature",
+                        "Five Sacred Mountains"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "known as",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What is Mount Heng also known as?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What mountain is known as Hengshan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is Mount Heng located?",
+                    "answers": [
+                        "e3",
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What mountain is located in north-central China?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "alternative name",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is the alternative name for Heng Shan in Shanxi Province?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What is the Northern Heng Shan also known as?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where is the Southern Heng Shan located?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What mountain is located in Hunan Province?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Which mountains are part of the Five Great Mountains of China?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What is Mount Heng part of?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Which mountains are part of the Five Sacred Mountains?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What is the Southern Heng Shan part of?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

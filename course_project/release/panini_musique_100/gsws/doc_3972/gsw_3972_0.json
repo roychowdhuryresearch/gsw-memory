@@ -1,0 +1,238 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Peggy (Peggy Olson)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "fictional character",
+            "advertising professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Junior Copywriter",
+      "roles": [
+        {
+          "role": "job title",
+          "states": [
+            "advertising",
+            "career advancement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Clearasil account",
+      "roles": [
+        {
+          "role": "business account",
+          "states": [
+            "advertising",
+            "client"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Thanksgiving 1960",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "holiday",
+            "1960s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "St. Mary's Hospital",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "medical facility",
+            "Brooklyn"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Brooklyn",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "New York City",
+            "borough"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "baby boy",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "newborn",
+            "Peggy's child"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "promoted to",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was promoted to Junior Copywriter?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What position was Peggy promoted to?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "heading up",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What account is Peggy heading up?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is heading up the Clearasil account?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "takes place before",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When does Season 1 take place?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What event occurs just before Thanksgiving 1960?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "went to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did Peggy go for medical attention?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who went to St. Mary's Hospital?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "gave birth to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who did Peggy give birth to?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who gave birth to a baby boy?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

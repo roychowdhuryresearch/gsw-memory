@@ -1,0 +1,415 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dreams from My Father: A Story of Race and Inheritance (Dreams from My Father)",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "memoir",
+            "published work"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1995",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Barack Obama",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author",
+            "political figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "U.S. President",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "political position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1988",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "law school entry year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "July 1995",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Illinois Senate",
+      "roles": [
+        {
+          "role": "political body",
+          "states": [
+            "state legislature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Harvard Law Review",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "academic journal"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "1990",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "election year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Ralph Ellison",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "author"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Invisible Man",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "novel"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "The New York Times",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "authored by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who authored Dreams from My Father?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Barack Obama author?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Dreams from My Father published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What was published in 1995?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "elected as",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position was Barack Obama elected to in 2008?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When was Barack Obama elected as U.S. President?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "entered law school in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When did Barack Obama enter law school?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who entered law school in 1988?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "When did Barack Obama publish Dreams from My Father?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did Barack Obama publish in July 1995?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "campaign for",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What was Barack Obama campaigning for when he published his memoir?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who was campaigning for the Illinois Senate in 1995?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "elected as president of",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What organization was Barack Obama elected president of in 1990?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was elected as the first African-American president of the Harvard Law Review?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "modeled on",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What was Dreams from My Father modeled on?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "What book was modeled on Invisible Man?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "reported by",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Who reported that Obama modeled his memoir on Invisible Man?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "What did The New York Times report about Dreams from My Father?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

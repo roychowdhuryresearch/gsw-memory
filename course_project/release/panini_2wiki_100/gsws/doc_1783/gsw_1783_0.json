@@ -1,0 +1,293 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Hound's Tooth",
+            "roles": [
+                {
+                    "role": "peak",
+                    "states": [
+                        "geographical feature",
+                        "rock pinnacle"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Purcell Mountains",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "Columbia Mountains",
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Columbia Mountains",
+            "roles": [
+                {
+                    "role": "mountain range",
+                    "states": [
+                        "geographical feature",
+                        "British Columbia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "southeastern British Columbia",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "region",
+                        "Canada"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Marmolata Mountain",
+            "roles": [
+                {
+                    "role": "mountain",
+                    "states": [
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Bugaboo Glacier",
+            "roles": [
+                {
+                    "role": "glacier",
+                    "states": [
+                        "geographical feature"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Nunatak",
+            "roles": [
+                {
+                    "role": "geological feature",
+                    "states": [
+                        "exposed rock"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "granite",
+            "roles": [
+                {
+                    "role": "rock type",
+                    "states": [
+                        "coarse",
+                        "fractured"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Hound's Tooth located?",
+                    "answers": [
+                        "e2",
+                        "e3",
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What peak is located in the Purcell Mountains?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What mountain range is part of the Columbia Mountains?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What larger mountain range is the Purcell Mountains part of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "at the end of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What is at the end of Marmolata Mountain's northeast ridge?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Where is Hound's Tooth located in relation to Marmolata Mountain?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "composed of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What is Hound's Tooth composed of?",
+                    "answers": [
+                        "e9"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What peak is composed of coarse, fractured granite?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "sticking up from",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is sticking up from the middle of the Bugaboo Glacier?",
+                    "answers": [
+                        "e1",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Where do Hound's Tooth and Marmolata Mountain stick up from?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "type of",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "What type of geological feature is Hound's Tooth?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What is a Nunatak in the context of Hound's Tooth?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

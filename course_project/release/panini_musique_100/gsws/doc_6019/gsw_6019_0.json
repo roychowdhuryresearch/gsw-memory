@@ -1,0 +1,249 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European",
+            "rugby team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Wales",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European",
+            "rugby team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "rugby union",
+      "roles": [
+        {
+          "role": "sport",
+          "states": [
+            "team sport",
+            "international competition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1994",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "first match",
+            "rugby history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "27",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "total matches",
+            "rugby history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "24",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "matches won by Wales",
+            "rugby history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "2",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "matches won by Italy",
+            "rugby history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "1",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "drawn matches",
+            "rugby history"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "played each other in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When did Italy and Wales first play each other in rugby union?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which countries played each other in rugby union starting in 1994?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "total matches played",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many total matches have Italy and Wales played in rugby union?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who played a total of 27 matches in rugby union?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "matches won by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "How many matches did Wales win against Italy in rugby union?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "How many matches did Italy win against Wales in rugby union?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Which country won 24 matches in rugby union against the other?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which country won 2 matches in rugby union against the other?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "drawn matches",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "How many matches between Italy and Wales ended in a draw?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What is the number of drawn matches between Italy and Wales in rugby union?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

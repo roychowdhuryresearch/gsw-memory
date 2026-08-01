@@ -1,0 +1,394 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nora Armani",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "actor",
+            "director"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Giza, Egypt",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "birthplace"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Armenian",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "ethnic background"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "England",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "education location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "University of London",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "London School of Economics",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "higher education",
+            "part of University of London"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "American University in Cairo",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "higher education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "UCLA Extension",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "continuing education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "RADA",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "acting and directing training"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Ariane Mnouchkine",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "theatre professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Théâtre du Soleil",
+      "roles": [
+        {
+          "role": "theatre company",
+          "states": [
+            "Paris-based"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Simon MacBurney",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "theatre professional"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Complicity Theatre",
+      "roles": [
+        {
+          "role": "theatre company",
+          "states": [
+            "London-based"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born in Giza, Egypt?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where was Nora Armani born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "of Armenian descent",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is of Armenian descent?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is Nora Armani's ethnic background?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "educated in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Where was Nora Armani educated?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was educated in England?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "holds a degree from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who holds a degree from the University of London?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which institution did Nora Armani receive a degree from?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "holds a degree from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who holds a degree from the American University in Cairo?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which institution did Nora Armani receive a degree from?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "trained at",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where did Nora Armani continue her training?",
+          "answers": [
+            "e8",
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who trained at UCLA Extension and RADA?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "participated in workshops by",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who participated in workshops by Ariane Mnouchkine?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Which theatre professional's workshops did Nora Armani attend?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "participated in workshops by",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "Who participated in workshops by Simon MacBurney?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which theatre professional's workshops did Nora Armani attend?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

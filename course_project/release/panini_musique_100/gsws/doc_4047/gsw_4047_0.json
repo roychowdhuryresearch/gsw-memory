@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "San Diego Padres",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "Major League Baseball",
+            "American"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "5th round of the 1999 Major League Baseball Draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "draft event",
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Thompson (Mike Thompson (2000s pitcher))",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "baseball player",
+            "athlete"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Double-A Mobile BayBears",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "minor league",
+            "baseball"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "10-2",
+      "roles": [
+        {
+          "role": "record",
+          "states": [
+            "win-loss",
+            "season performance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "3.41 ERA",
+      "roles": [
+        {
+          "role": "statistic",
+          "states": [
+            "earned run average",
+            "season performance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "selected by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was selected by the San Diego Padres?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which team selected Thompson?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "in the draft",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was Thompson selected?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who was selected in the 5th round of the 1999 Major League Baseball Draft?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which team did Thompson show potential with?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who showed potential with the Double-A Mobile BayBears?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "season record",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was Thompson's win-loss record that season?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who had a 10-2 record that season?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "ERA",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Thompson's ERA that season?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who had a 3.41 ERA that season?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

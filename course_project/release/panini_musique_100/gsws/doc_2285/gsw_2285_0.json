@@ -1,0 +1,365 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Dunn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "band member",
+            "musician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Steingard",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "band member",
+            "musician",
+            "vocalist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Hawk Nelson",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "music group",
+            "pop rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Fair Trade Services",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "December 11, 2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "announcement date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Made",
+      "roles": [
+        {
+          "role": "album",
+          "states": [
+            "music release",
+            "pop rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "April 2, 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "January 15, 2013",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "single release date",
+            "2010s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Words",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "single",
+            "pop rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Bart Millard",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "featured artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "MercyMe",
+      "roles": [
+        {
+          "role": "band",
+          "states": [
+            "music group",
+            "Christian rock"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Christian Hot AC/CHR charts",
+      "roles": [
+        {
+          "role": "chart",
+          "states": [
+            "music chart",
+            "Christian music"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "departure from",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who departed from Hawk Nelson?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which band did Dunn depart from?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "replaced by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who replaced Dunn in Hawk Nelson?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who did Steingard replace in Hawk Nelson?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "signed with",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which record label did Hawk Nelson sign with on December 11, 2012?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which band signed with Fair Trade Services on December 11, 2012?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released on",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the album 'Made' released?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was released on April 2, 2013?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "preceded by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What preceded the release of the album 'Made'?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did the release of 'Words' precede?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "featuring",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who is featured in the song 'Words'?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "In which song is Bart Millard featured?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "reached No. 1 on",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Which song reached No. 1 on the Christian Hot AC/CHR charts?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "On which chart did 'Words' reach No. 1?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

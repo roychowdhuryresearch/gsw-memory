@@ -1,0 +1,182 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Manchester Mercury",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "historical publication",
+                        "Tory"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Manchester",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "England"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "England",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "United Kingdom"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "1752",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "start year",
+                        "18th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "1830",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "end year",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "published in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was the Manchester Mercury published?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What newspaper was published in Manchester?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "In which country is Manchester located?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What city in England was the Manchester Mercury based in?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "published from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When did the Manchester Mercury start publishing?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What newspaper started publishing in 1752?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "published until",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "When did the Manchester Mercury stop publishing?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What newspaper stopped publishing in 1830?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

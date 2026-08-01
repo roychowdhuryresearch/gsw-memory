@@ -1,0 +1,242 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Chan (Priscilla Chan)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "spouse of Mark Zuckerberg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Zuckerberg",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "spouse of Chan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "May 19, 2012",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "marriage date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Facebook's stock market launch",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "business event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "July 31, 2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "announcement date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Maxima Chan Zuckerberg",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "child of Chan and Zuckerberg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "December 1, 2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "August",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "child of Chan and Zuckerberg"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "August 28, 2017",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "married on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who married on May 19, 2012?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When did Chan and Zuckerberg marry?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "announced expecting a baby",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who announced expecting a baby on July 31, 2015?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When did Zuckerberg announce expecting a baby?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "birth of daughter",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who announced the birth of their daughter on December 1, 2015?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "When was Maxima Chan Zuckerberg born?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "gave birth to",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who gave birth to their second daughter on August 28, 2017?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "When did Chan give birth to August?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,346 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Eochu Uairches",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "High King of Ireland"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Lugaid \u00cdardonn",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "father of Eochu Uairches"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "S\u00edrl\u00e1m",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "overthrew Lugaid \u00cdardonn"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Eochu F\u00edadmuine",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "killer of Eochu Uairches"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Conaing Bececlach",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "killer of Eochu Uairches"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "Lebor Gab\u00e1la \u00c9renn",
+            "roles": [
+                {
+                    "role": "text",
+                    "states": [
+                        "medieval Irish legend",
+                        "historical source"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "Geoffrey Keating",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historian",
+                        "author of Foras Feasa ar \u00c9irinn"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e8",
+            "name": "Artaxerxes I of Persia",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "ruler of Persia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e9",
+            "name": "465\u2013424 BC",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "reign of Artaxerxes I of Persia"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e10",
+            "name": "633\u2013621 BC",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "reign of Eochu Uairches according to Keating"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e11",
+            "name": "856\u2013844 BC",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "reign of Eochu Uairches according to Annals of the Four Masters"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "son of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is the son of Lugaid \u00cdardonn?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who is Eochu Uairches the son of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "overthrew and killed",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who overthrew and killed Lugaid \u00cdardonn?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who did S\u00edrl\u00e1m overthrow and kill?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "killed by",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who killed Eochu Uairches?",
+                    "answers": [
+                        "e4",
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who did Eochu F\u00edadmuine and Conaing Bececlach kill?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "ruled for",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "How long did Eochu Uairches rule?",
+                    "answers": [
+                        "twelve years"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who ruled for twelve years?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "synchronised with",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Whose reign is synchronised with Artaxerxes I of Persia?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "With whose reign is Eochu Uairches synchronised?",
+                    "answers": [
+                        "e8"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v6",
+            "phrase": "reign dated by",
+            "questions": [
+                {
+                    "id": "q11",
+                    "text": "Who dated Eochu Uairches's reign to 633\u2013621 BC?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q12",
+                    "text": "What dates did Geoffrey Keating assign to Eochu Uairches's reign?",
+                    "answers": [
+                        "e10"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v7",
+            "phrase": "reign dated by",
+            "questions": [
+                {
+                    "id": "q13",
+                    "text": "Who dated Eochu Uairches's reign to 856\u2013844 BC?",
+                    "answers": [
+                        "Annals of the Four Masters"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q14",
+                    "text": "What dates did the Annals of the Four Masters assign to Eochu Uairches's reign?",
+                    "answers": [
+                        "e11"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

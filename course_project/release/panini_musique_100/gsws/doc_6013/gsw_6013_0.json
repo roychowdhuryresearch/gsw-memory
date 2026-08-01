@@ -1,0 +1,178 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Reserve Bank of India",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "financial institution",
+            "regulator"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Indian money market (Money market in India)",
+      "roles": [
+        {
+          "role": "financial market",
+          "states": [
+            "organized sector",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "unorganised sector",
+      "roles": [
+        {
+          "role": "financial market",
+          "states": [
+            "unorganized sector",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "indigenous bankers",
+      "roles": [
+        {
+          "role": "financial entity",
+          "states": [
+            "unorganized sector",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "non-banking financial companies",
+      "roles": [
+        {
+          "role": "financial entity",
+          "states": [
+            "unorganized sector",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "India",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "financial market"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "regulates",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does the Reserve Bank of India regulate?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who regulates the Indian money market?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where is the Indian money market located?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What financial market is located in India?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who are part of the unorganised sector?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What sector are indigenous bankers part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

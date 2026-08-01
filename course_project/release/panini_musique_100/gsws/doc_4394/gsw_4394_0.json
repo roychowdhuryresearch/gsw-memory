@@ -1,0 +1,399 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Han-era medical physicians",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "historical",
+            "medical practitioners"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "human body",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "biological",
+            "subject of study"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "yin and yang",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "cosmological",
+            "philosophical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "five phases",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "cosmological",
+            "philosophical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "qi",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "vital energy",
+            "philosophical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Zhang Zhongjing",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "physician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "c. 150–c. 219 AD",
+      "roles": [
+        {
+          "role": "date range",
+          "states": [
+            "life span",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Hua Tuo",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "physician"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "d. 208 AD",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date",
+            "historical period"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "moxibustion",
+      "roles": [
+        {
+          "role": "treatment",
+          "states": [
+            "traditional medicine",
+            "health maintenance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "acupuncture",
+      "roles": [
+        {
+          "role": "treatment",
+          "states": [
+            "traditional medicine",
+            "health maintenance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "calisthenics",
+      "roles": [
+        {
+          "role": "activity",
+          "states": [
+            "physical exercise",
+            "health maintenance"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "anesthesia",
+      "roles": [
+        {
+          "role": "medical practice",
+          "states": [
+            "pain management",
+            "surgical procedure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "rubbing ointment",
+      "roles": [
+        {
+          "role": "treatment",
+          "states": [
+            "healing aid",
+            "post-surgical care"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "believed that",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What did Han-era medical physicians believe about the human body?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who believed that the human body was subject to cosmological cycles?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "associated with",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What was each organ of the body associated with according to Han-era physicians?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What is associated with the five phases in Han-era medicine?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "prescribed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What treatments were prescribed by Han-era physicians?",
+          "answers": [
+            "e10",
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who prescribed moxibustion, acupuncture, and calisthenics?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "used by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was used by Hua Tuo during surgery?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who used anesthesia during surgery?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "prescribed by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was prescribed by Hua Tuo to aid healing?",
+          "answers": [
+            "e14"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who prescribed a rubbing ointment for surgical wounds?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "lived during",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When did Zhang Zhongjing live?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who lived during c. 150–c. 219 AD?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "died in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When did Hua Tuo die?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who died in 208 AD?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

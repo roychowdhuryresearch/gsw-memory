@@ -1,0 +1,219 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Pak Nam-gi",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "North Korean official"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Park Nam-ki",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "North Korean official"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "21 February 1934",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date",
+            "disputed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "17 March 2010",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1928",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "alternative birth year",
+            "disputed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Director of the Planning and Finance Department",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "North Korean government",
+            "until January 2010"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "ruling party of North Korea",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "political party",
+            "North Korea"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Pak Nam-gi born?",
+          "answers": [
+            "e3",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born on 21 February 1934?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Pak Nam-gi die?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died on 17 March 2010?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "held position",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What position did Pak Nam-gi hold?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was the Director of the Planning and Finance Department?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which organization was Pak Nam-gi part of?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who was part of the ruling party of North Korea?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

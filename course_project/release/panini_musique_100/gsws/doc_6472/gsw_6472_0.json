@@ -1,0 +1,255 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Kaimana Regency",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "administrative division",
+            "Indonesia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "West Papua",
+      "roles": [
+        {
+          "role": "province",
+          "states": [
+            "Indonesia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Indonesia",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Southeast Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "16,241.84 sq. km",
+      "roles": [
+        {
+          "role": "area",
+          "states": [
+            "geographical size"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "46,249",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2010 Census"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "53,366",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2014 estimate"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Kaimana",
+      "roles": [
+        {
+          "role": "town",
+          "states": [
+            "administrative centre"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Kaimana Regency located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What is located in West Papua?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "part of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What province is part of Indonesia?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which country is West Papua a part of?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "covers an area of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the area of Kaimana Regency?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which location covers an area of 16,241.84 sq. km?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "had a population of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What was the population of Kaimana Regency at the 2010 Census?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which location had a population of 46,249 in 2010?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "estimated population as of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the estimated population of Kaimana Regency as of January 2014?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which location had an estimated population of 53,366 in 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "administrative centre",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the administrative centre of Kaimana Regency?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which regency has Kaimana as its administrative centre?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

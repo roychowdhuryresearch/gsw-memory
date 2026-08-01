@@ -1,0 +1,238 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "The Miscellany News",
+            "roles": [
+                {
+                    "role": "newspaper",
+                    "states": [
+                        "student publication",
+                        "Vassar College"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Vassar College",
+            "roles": [
+                {
+                    "role": "institution",
+                    "states": [
+                        "educational",
+                        "higher education"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "1866",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "establishment year",
+                        "19th century"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Poughkeepsie",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "town",
+                        "New York"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Thursday evening",
+            "roles": [
+                {
+                    "role": "time",
+                    "states": [
+                        "distribution time",
+                        "weekly"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "academic year",
+            "roles": [
+                {
+                    "role": "time period",
+                    "states": [
+                        "Vassar College",
+                        "annual"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e7",
+            "name": "40 to 50",
+            "roles": [
+                {
+                    "role": "quantity",
+                    "states": [
+                        "staff size",
+                        "student editors"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "established in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was The Miscellany News established?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What was established in 1866?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "distributed during",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When is The Miscellany News distributed?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is distributed during the academic year?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "distributed on",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "When is The Miscellany News distributed?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What is distributed on Thursday evening?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where is Vassar College located?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What institution is located in Poughkeepsie?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "staff size",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "What is the staff size of The Miscellany News?",
+                    "answers": [
+                        "e7"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Which newspaper has a staff size of 40 to 50?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

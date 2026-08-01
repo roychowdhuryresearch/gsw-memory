@@ -1,0 +1,371 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Matthew McConaughey",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "living",
+            "actor",
+            "producer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "November 4, 1969",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "American",
+      "roles": [
+        {
+          "role": "nationality",
+          "states": [
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Dazed and Confused",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "comedy",
+            "coming-of-age"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1993",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Angels in the Outfield",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Texas Chainsaw Massacre: The Next Generation",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "A Time to Kill",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "legal drama"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1996",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Contact",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "science fiction"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Amistad",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "historical drama"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "The Newton Boys",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "comedy-drama"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "EDtv",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "1990s",
+            "satire"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e14",
+      "name": "U-571",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "2000s",
+            "war drama"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e15",
+      "name": "Frailty",
+      "roles": [
+        {
+          "role": "film",
+          "states": [
+            "2000s",
+            "psychological thriller"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born on",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who was born on November 4, 1969?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When was Matthew McConaughey born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "has nationality",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is Matthew McConaughey's nationality?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is an American actor?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "acted in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "In which film did Matthew McConaughey act?",
+          "answers": [
+            "e4",
+            "e6",
+            "e7",
+            "e8",
+            "e10",
+            "e11",
+            "e12",
+            "e13",
+            "e14",
+            "e15"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who acted in Dazed and Confused?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "released in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was Dazed and Confused released?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What film was released in 1993?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "breakthrough performance",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was Matthew McConaughey's breakthrough performance?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who had a breakthrough performance in A Time to Kill?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

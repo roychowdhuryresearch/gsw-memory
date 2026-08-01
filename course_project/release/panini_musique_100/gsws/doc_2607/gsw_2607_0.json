@@ -1,0 +1,400 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Franklin (Aretha Franklin)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "aspiring pop artist"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "C.L.",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "manager",
+            "father of Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Sam Cooke",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "musician",
+            "influential figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Columbia Records",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "signed Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1960",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "year of signing"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Cholly Atkins",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "choreographer",
+            "coach"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "RCA",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "considered signing Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Berry Gordy",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "record label owner",
+            "courted Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Tamla",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "record label",
+            "considered signing Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Erma",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "sister of Franklin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Today I Sing the Blues",
+      "roles": [
+        {
+          "role": "song",
+          "states": [
+            "first Columbia single",
+            "released in 1960"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "September 1960",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "release date of single"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e13",
+      "name": "Hot Rhythm & Blues Sellers chart",
+      "roles": [
+        {
+          "role": "chart",
+          "states": [
+            "music chart",
+            "top ten"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "aspired to follow",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who aspired to follow Sam Cooke?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who did Franklin aspire to follow?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "managed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was managed by C.L.?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who managed Franklin?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "signed by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who was signed by Columbia Records in 1960?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which record label signed Franklin in 1960?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "coached by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who was coached by Cholly Atkins?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who coached Franklin?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "tried to persuade",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who tried to persuade Franklin's father to sign with RCA?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who did Sam Cooke try to persuade to sign Franklin?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "courted by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who was courted by Berry Gordy to sign with Tamla?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who courted Franklin to sign with Tamla?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "released",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What was released in September 1960?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "When was 'Today I Sing the Blues' released?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "reached the top ten",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What song reached the top ten of the Hot Rhythm & Blues Sellers chart?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "Which chart did 'Today I Sing the Blues' reach the top ten?",
+          "answers": [
+            "e13"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

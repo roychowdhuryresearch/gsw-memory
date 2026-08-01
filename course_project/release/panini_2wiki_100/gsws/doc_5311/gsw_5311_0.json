@@ -1,0 +1,159 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Juniper Airport",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "private airfield",
+                        "aviation facility"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "northeast of Juniper",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical position",
+                        "relative location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Juniper",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "town",
+                        "New Brunswick"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "New Brunswick",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "province",
+                        "Canada"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Canada",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "North America"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "located northeast of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where is Juniper Airport located?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What is located northeast of Juniper?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is Juniper located?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is located in New Brunswick?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "part of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "What province is part of Canada?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What country is New Brunswick part of?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

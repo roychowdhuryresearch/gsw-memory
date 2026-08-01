@@ -1,0 +1,224 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Petrus de Domarto",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "composer",
+                        "historical figure",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "c. 1445\u20131455",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "active period",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Franco-Flemish",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "European",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Ockeghem",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "composer",
+                        "historical figure",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "unified mass cycles",
+            "roles": [
+                {
+                    "role": "musical work",
+                    "states": [
+                        "composition",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "continental Europe",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geographical region",
+                        "Renaissance"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "active during",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was Petrus de Domarto active?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was active during c. 1445\u20131455?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "nationality",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What was the nationality of Petrus de Domarto?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who was Franco-Flemish?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "acquaintance of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who was a probable acquaintance of Ockeghem?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was Petrus de Domarto a probable acquaintance of?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "composer of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "What did Petrus de Domarto compose?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who composed at least one of the first unified mass cycles?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "written in",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Where were the first unified mass cycles written?",
+                    "answers": [
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "What was written in continental Europe?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

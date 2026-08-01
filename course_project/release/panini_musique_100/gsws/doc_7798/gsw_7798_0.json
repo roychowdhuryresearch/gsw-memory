@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "North America"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "02:00",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "local time",
+            "shift time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "spring",
+      "roles": [
+        {
+          "role": "season",
+          "states": [
+            "time of year",
+            "daylight saving time start"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "01:59",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "standard time",
+            "pre-shift time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "03:00",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "daylight saving time",
+            "post-shift time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "autumn",
+      "roles": [
+        {
+          "role": "season",
+          "states": [
+            "time of year",
+            "daylight saving time end"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "01:00",
+      "roles": [
+        {
+          "role": "time",
+          "states": [
+            "standard time",
+            "post-shift time"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "23 hours",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "day length",
+            "spring shift"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "25 hours",
+      "roles": [
+        {
+          "role": "duration",
+          "states": [
+            "day length",
+            "autumn shift"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "time shift occurs at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When does the time shift occur in the United States?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where does the time shift occur at 02:00?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "clock jumps forward from",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "From what time does the clock jump forward in spring?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "In which season does the clock jump forward from 01:59?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "clock jumps forward to",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "To what time does the clock jump forward in spring?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which season does the clock jump forward to 03:00?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "clock jumps backward from",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "From what time does the clock jump backward in autumn?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "In which season does the clock jump backward from 01:59?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "clock jumps backward to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "To what time does the clock jump backward in autumn?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "In which season does the clock jump backward to 01:00?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "day has duration",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "How long is the day when the clock jumps forward in spring?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "How long is the day when the clock jumps backward in autumn?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

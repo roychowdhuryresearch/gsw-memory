@@ -1,0 +1,198 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Bermuda",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "island",
+            "British Overseas Territory"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American Revolution",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "historical event",
+            "18th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Southern United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "region",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Great Britain",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European power",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Spain",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European power",
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "18th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "had difficulty with",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What did Bermuda have difficulty with?",
+          "answers": [
+            "over-population"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which location had difficulty with over-population?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "emigrated to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where did Bermudians emigrate to before the American Revolution?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who emigrated to the Southern United States before the American Revolution?",
+          "answers": [
+            "Bermudians"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "displaced as dominant power",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who displaced Spain as the dominant European imperial power?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which country was displaced by Great Britain as the dominant European imperial power?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "was at sea",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where was at least a third of Bermuda's manpower at any one time by the end of the 18th century?",
+          "answers": [
+            "sea"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "By the end of which century was at least a third of Bermuda's manpower at sea at any one time?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

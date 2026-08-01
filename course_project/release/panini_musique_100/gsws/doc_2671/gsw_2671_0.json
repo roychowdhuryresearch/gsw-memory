@@ -1,0 +1,345 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Brazilians",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "nationality",
+            "diverse heritage"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "African heritage",
+      "roles": [
+        {
+          "role": "heritage",
+          "states": [
+            "cultural background"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Salvador, Bahia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Brazil"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "people of color (Black people)",
+      "roles": [
+        {
+          "role": "demographic group",
+          "states": [
+            "ethnic diversity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Detroit",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "New Orleans",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "civil rights movement",
+      "roles": [
+        {
+          "role": "historical event",
+          "states": [
+            "1960s",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Voting Rights Act of 1965",
+      "roles": [
+        {
+          "role": "legislation",
+          "states": [
+            "USA",
+            "civil rights"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "1970s",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "decade",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Hurricane Katrina",
+      "roles": [
+        {
+          "role": "natural disaster",
+          "states": [
+            "2005",
+            "USA"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2005",
+      "roles": [
+        {
+          "role": "year",
+          "states": [
+            "21st century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "make up a large percentage of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who makes up a large percentage of the Brazilian population?",
+          "answers": [
+            "e1",
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What percentage of the population do Brazilians of African heritage make up?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "elected as politicians",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Have many blacks been elected as politicians in Brazil?",
+          "answers": [
+            "No"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "is 80% people of color",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "What percentage of Salvador, Bahia's population is people of color?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Which city is 80% people of color?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "elected a mayor of color",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "Has Salvador, Bahia elected a mayor of color?",
+          "answers": [
+            "No"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "elected white mayors",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Have Detroit and New Orleans elected white mayors since the civil rights movement?",
+          "answers": [
+            "No"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "protected the franchise for minorities",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "What did the Voting Rights Act of 1965 do?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Which act protected the franchise for minorities?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "elected its first black mayor",
+      "questions": [
+        {
+          "id": "q10",
+          "text": "When did New Orleans elect its first black mayor?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q11",
+          "text": "Which city elected its first black mayor in the 1970s?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "elected a white mayor",
+      "questions": [
+        {
+          "id": "q12",
+          "text": "When did New Orleans elect a white mayor after Hurricane Katrina?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q13",
+          "text": "Which city elected a white mayor after Hurricane Katrina?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

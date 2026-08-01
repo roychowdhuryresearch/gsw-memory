@@ -1,0 +1,181 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Avicenna",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "influential in medicine"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "March 2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "announcement date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Avicenna Directories",
+      "roles": [
+        {
+          "role": "project",
+          "states": [
+            "educational resource",
+            "health care"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "health care professionals",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "medical field"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "universities and schools",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "educational",
+            "health care education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "announced in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was it announced that Avicenna's name would be used for new Directories?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What was announced in March 2008?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "named after",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What is named after Avicenna?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is the Avicenna Directories named after?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "lists",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What do the Avicenna Directories list?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which directories list universities and schools for health care education?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "educates",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who are educated at the universities and schools listed in the Avicenna Directories?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Where are health care professionals educated?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,113 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Theodred II",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "religious leader",
+                    "states": [
+                        "Bishop of Elmham",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Elmham",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "religious see",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "995\u2013997",
+            "roles": [
+                {
+                    "role": "date range",
+                    "states": [
+                        "death date range",
+                        "medieval period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "Bishop of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was the Bishop of Elmham?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What position did Theodred II hold?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "died between",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "When did Theodred II die?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who died between 995 and 997?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,330 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Tito (Josip Broz Tito)",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "political figure",
+            "historical figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United States",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "country",
+            "visit location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Northeast",
+      "roles": [
+        {
+          "role": "region",
+          "states": [
+            "part of United States",
+            "visit location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Yugoslav emigrants",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "diaspora",
+            "political opposition"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "communism in Yugoslavia",
+      "roles": [
+        {
+          "role": "political ideology",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Yugoslav flag",
+      "roles": [
+        {
+          "role": "symbol",
+          "states": [
+            "national symbol",
+            "protest target"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "late 1970s",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical context"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "United Nations",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "international body",
+            "visit location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "New York",
+      "roles": [
+        {
+          "role": "city",
+          "states": [
+            "location",
+            "visit location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "United States authorities",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "government",
+            "law enforcement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "visited",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who visited the United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where did Tito visit?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "avoided",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What region did Tito avoid during his visits to the United States?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who avoided the Northeast during visits to the United States?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "protested against",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who protested against Tito?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who did the Yugoslav emigrants protest against?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "burned",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What did protesters frequently burn?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who frequently burned the Yugoslav flag?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "visited",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who visited the United Nations in the late 1970s?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "When did Tito visit the United Nations?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "shouted",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What did emigrants shout outside Tito's New York hotel?",
+          "answers": [
+            "Tito murderer"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who shouted 'Tito murderer' outside his New York hotel?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "protested to",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "Who did Tito protest to about the shouting?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who protested to the United States authorities?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

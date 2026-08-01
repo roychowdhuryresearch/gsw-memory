@@ -1,0 +1,254 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "KOLL",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "broadcasting entity",
+            "media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "106.3 FM",
+      "roles": [
+        {
+          "role": "frequency",
+          "states": [
+            "radio frequency",
+            "broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "La Zeta",
+      "roles": [
+        {
+          "role": "brand name",
+          "states": [
+            "station branding",
+            "media"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Lonoke, Arkansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "license location",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Little Rock, Arkansas",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "broadcast area",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Regional Mexican music",
+      "roles": [
+        {
+          "role": "music format",
+          "states": [
+            "genre",
+            "broadcast content"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "West Little Rock",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "studio location",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Pettus",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "transmitter location",
+            "geographical area"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "licensed in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is KOLL licensed?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What radio station is licensed in Lonoke, Arkansas?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "broadcasting to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where does KOLL broadcast to?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What radio station broadcasts to the Little Rock, Arkansas area?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "airs",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What music format does KOLL air?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Which radio station airs Regional Mexican music?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "studios located in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where are the studios of KOLL located?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What radio station has studios located in West Little Rock?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "transmitter tower located near",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where is the transmitter tower of KOLL located?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What radio station has a transmitter tower located near Pettus?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

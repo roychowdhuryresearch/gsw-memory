@@ -1,0 +1,286 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Constitution",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "legal framework",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Three Judges' Cases",
+      "roles": [
+        {
+          "role": "legal case",
+          "states": [
+            "India",
+            "judicial precedent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1982",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "case year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1993",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "case year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1998",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "case year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Supreme Court (Supreme Court of India)",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "judicial body",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "President of India",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "government official",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "collegium",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "judicial appointments",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Chief Justice of India",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "judicial leader",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Memorandum of Procedure",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "procedural guideline",
+            "India"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What was held by the court in the Three Judges' Cases?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which court held the Constitution in the Three Judges' Cases?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "appointed by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who appoints a judge to the Supreme Court?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who is appointed by the President of India to the Supreme Court?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "recommended by",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Who recommends judges to the Supreme Court?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who does the collegium recommend judges to?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "includes",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is included in the collegium?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which group includes the Chief Justice of India?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "resulted in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What has the appointment process resulted in?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What resulted in the Memorandum of Procedure?",
+          "answers": [
+            "v2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

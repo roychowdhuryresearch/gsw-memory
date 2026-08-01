@@ -1,0 +1,151 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Language management",
+            "roles": [
+                {
+                    "role": "discipline",
+                    "states": [
+                        "linguistic field",
+                        "multilingual context"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "people",
+            "roles": [
+                {
+                    "role": "group",
+                    "states": [
+                        "multilingual speakers"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "country",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "geopolitical entity"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "companies",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "business entities"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "cultural institutions",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "cultural entities"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e6",
+            "name": "international institutions",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "global entities"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "satisfies the needs of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What does language management satisfy the needs of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What discipline satisfies the needs of people who speak multiple languages?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "used in",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Where is language management used?",
+                    "answers": [
+                        "e3",
+                        "e4",
+                        "e5",
+                        "e6"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What discipline is used in countries, companies, and cultural or international institutions?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

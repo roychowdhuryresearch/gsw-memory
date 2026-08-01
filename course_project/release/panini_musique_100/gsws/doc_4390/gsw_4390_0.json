@@ -1,0 +1,259 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "atria",
+      "roles": [
+        {
+          "role": "heart chamber",
+          "states": [
+            "upper",
+            "smaller"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "ventricles",
+      "roles": [
+        {
+          "role": "heart chamber",
+          "states": [
+            "lower",
+            "larger"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "late diastole",
+      "roles": [
+        {
+          "role": "cardiac phase",
+          "states": [
+            "diastole",
+            "late"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "isovolumetric contraction",
+      "roles": [
+        {
+          "role": "cardiac event",
+          "states": [
+            "ventricular contraction",
+            "valves closed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "systole",
+      "roles": [
+        {
+          "role": "cardiac phase",
+          "states": [
+            "first stage",
+            "second phase"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "aorta",
+      "roles": [
+        {
+          "role": "blood vessel",
+          "states": [
+            "connected to left ventricle"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "lungs",
+      "roles": [
+        {
+          "role": "organ",
+          "states": [
+            "connected to right ventricle"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "contract during",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What contracts during late diastole?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "When do the atria contract?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "send blood to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where do the atria send blood?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What receives blood from the atria?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "undergo",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What do the ventricles undergo when filled?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What undergoes isovolumetric contraction?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "mark the first stage of",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What marks the first stage of systole?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What is marked by isovolumetric contraction?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "send blood from",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where does the left ventricle send blood during the second phase of systole?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What sends blood to the aorta during the second phase of systole?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "send blood to",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Where does the right ventricle send blood during the second phase of systole?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What sends blood to the lungs during the second phase of systole?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

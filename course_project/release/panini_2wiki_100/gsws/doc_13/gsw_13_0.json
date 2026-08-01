@@ -1,0 +1,91 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "YouTube",
+            "roles": [
+                {
+                    "role": "platform",
+                    "states": [
+                        "video sharing",
+                        "online"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Steam",
+            "roles": [
+                {
+                    "role": "platform",
+                    "states": [
+                        "digital distribution",
+                        "online"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "14 June 2017",
+            "roles": [
+                {
+                    "role": "date",
+                    "states": [
+                        "release date",
+                        "2010s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "released on",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "When was the film released on YouTube?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "When was the film released on Steam?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q3",
+                    "text": "What platforms was the film released on 14 June 2017?",
+                    "answers": [
+                        "e1",
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

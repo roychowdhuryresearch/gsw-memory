@@ -1,0 +1,406 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Sirkanay District",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "district",
+            "Kunar Province",
+            "Afghanistan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Kunar Province",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "province",
+            "Afghanistan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Afghanistan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Pakistan",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "South Asia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "24,200",
+      "roles": [
+        {
+          "role": "population",
+          "states": [
+            "2006"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Serkanay",
+      "roles": [
+        {
+          "role": "village",
+          "states": [
+            "administrative center",
+            "Sirkanay District"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "775 m",
+      "roles": [
+        {
+          "role": "altitude",
+          "states": [
+            "Serkanay"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Kunar River",
+      "roles": [
+        {
+          "role": "river",
+          "states": [
+            "irrigation source",
+            "Sirkanay District"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "drought",
+      "roles": [
+        {
+          "role": "problem",
+          "states": [
+            "Sirkanay District"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "70%",
+      "roles": [
+        {
+          "role": "percentage",
+          "states": [
+            "houses destroyed",
+            "wars"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "wars",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "destruction",
+            "Sirkanay District"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "young men",
+      "roles": [
+        {
+          "role": "demographic group",
+          "states": [
+            "migration",
+            "Pakistan"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Sirkanay District located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What district is located in Kunar Province?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "borders",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What country does Sirkanay District border to the south?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Which district borders Pakistan to the south?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "population in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the population of Sirkanay District in 2006?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In which year was the population of Sirkanay District 24,200?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "administrative center",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What is the administrative center of Sirkanay District?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which district has Serkanay as its administrative center?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "altitude of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the altitude of the village of Serkanay?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Which village is at an altitude of 775 m?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "irrigates",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What river irrigates the arable land in Sirkanay District?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What does the Kunar River irrigate?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "major problem",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What is the major problem in Sirkanay District?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "In which district is drought a major problem?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v8",
+      "phrase": "destroyed during",
+      "questions": [
+        {
+          "id": "q15",
+          "text": "What percentage of houses were destroyed during the wars in Sirkanay District?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q16",
+          "text": "During what event were 70% of the houses in Sirkanay District destroyed?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v9",
+      "phrase": "live and work in",
+      "questions": [
+        {
+          "id": "q17",
+          "text": "Where do many young men from Sirkanay District live and work?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q18",
+          "text": "Who from Sirkanay District live and work in Pakistan?",
+          "answers": [
+            "e12"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,220 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Nazi–Soviet Relations",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "historical document",
+            "published in 1948"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1948",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Stalin",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "Soviet leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Falsifiers of History",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "published by Stalin"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Hitler",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "historical figure",
+            "German leader"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Soviet Union",
+      "roles": [
+        {
+          "role": "political entity",
+          "states": [
+            "historical state",
+            "dissolved"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "published",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who published Falsifiers of History?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What did Stalin publish?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "included claim",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What claim did Falsifiers of History include?",
+          "answers": [
+            "Stalin rejected Hitler's claim to share in a division of the world"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where was the claim that Stalin rejected Hitler's division of the world included?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Nazi–Soviet Relations published?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What was published in 1948?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "persisted in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Where did the version of Stalin's claim persist?",
+          "answers": [
+            "historical studies, official accounts, memoirs, and textbooks"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What persisted in historical studies, official accounts, memoirs, and textbooks?",
+          "answers": [
+            "The version of Stalin's claim"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "dissolution of",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What dissolved leading to the end of the version's persistence?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What event marked the end of the version's persistence?",
+          "answers": [
+            "dissolution of the Soviet Union"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,316 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Jehovah's Witnesses",
+      "roles": [
+        {
+          "role": "religious group",
+          "states": [
+            "Christian denomination",
+            "active"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Watch Tower Society",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "publishing",
+            "religious literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "700 languages",
+      "roles": [
+        {
+          "role": "language count",
+          "states": [
+            "distribution",
+            "literature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Bible study",
+      "roles": [
+        {
+          "role": "activity",
+          "states": [
+            "religious education",
+            "conversion"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "baptized",
+      "roles": [
+        {
+          "role": "religious status",
+          "states": [
+            "membership",
+            "initiation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Field Service Report",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "monthly",
+            "preaching activity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "irregular",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "preaching",
+            "infrequent"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "inactive",
+      "roles": [
+        {
+          "role": "status",
+          "states": [
+            "preaching",
+            "non-participation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "elders",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "leadership",
+            "counseling"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "publishes literature",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who publishes literature in 700 languages?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What does the Watch Tower Society publish?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "engages in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What activity do Jehovah's Witnesses engage in?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who engages in Bible study?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "aims to baptize",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is the aim of Jehovah's Witnesses' Bible study?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who aims to baptize new members?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "submits",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What do Jehovah's Witnesses submit monthly?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who submits a Field Service Report?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "termed as",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What are baptized members who fail to report a month of preaching termed as?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who are termed as irregular?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "counseled by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who may counsel irregular members?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Who are counseled by elders?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "termed as",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "What are members who do not submit reports for six consecutive months termed as?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who are termed as inactive?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

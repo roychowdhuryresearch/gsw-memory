@@ -1,0 +1,181 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Greg A. Hill",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "artist",
+                        "curator",
+                        "First Nations"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Canadian",
+            "roles": [
+                {
+                    "role": "nationality",
+                    "states": [
+                        "North American"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Kanyen'kehaka",
+            "roles": [
+                {
+                    "role": "ethnic group",
+                    "states": [
+                        "First Nations"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Six Nations of the Grand River Territory",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "First Nations reserve",
+                        "Ontario"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "Ontario",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "Canadian province"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "born in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Where was Greg A. Hill born?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Who was born in Canada?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "is a member of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is a member of the Kanyen'kehaka?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What ethnic group does Greg A. Hill belong to?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "from",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is Greg A. Hill from?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who is from Six Nations of the Grand River Territory?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Where is Six Nations of the Grand River Territory located?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "What is located in Ontario?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

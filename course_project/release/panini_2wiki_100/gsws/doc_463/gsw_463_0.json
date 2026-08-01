@@ -1,0 +1,190 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Mehdi Abrishamchi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "politician",
+                        "Iranian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "People's Mujahedin of Iran",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "political group",
+                        "Iranian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Massoud Rajavi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "political leader",
+                        "Iranian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Maryam Rajavi",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "political leader",
+                        "Iranian"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "member of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is a member of the People's Mujahedin of Iran?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Which organization is Mehdi Abrishamchi a member of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "right hand man of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who is described as the right hand man of Massoud Rajavi?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is Mehdi Abrishamchi the right hand man of?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "former spouse of",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Who is the former spouse of Maryam Rajavi?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "Who was Mehdi Abrishamchi formerly married to?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "divorced",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who did Mehdi Abrishamchi divorce?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who divorced Maryam Rajavi?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "spouse of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is the spouse of Massoud Rajavi?",
+                    "answers": [
+                        "e4"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Maryam Rajavi married to?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

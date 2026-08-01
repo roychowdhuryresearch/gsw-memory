@@ -1,0 +1,196 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Steven Lamy",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "academic",
+            "living"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "professor of international relations",
+      "roles": [
+        {
+          "role": "profession",
+          "states": [
+            "academic position"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Vice Dean",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "administrative role"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "USC Dana and David Dornsife College of Letters, Arts and Sciences",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "academic institution"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "University of Southern California",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "university"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "past Director",
+      "roles": [
+        {
+          "role": "position",
+          "states": [
+            "former role"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "University of Southern California School of International Relations",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "academic department"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "holds position",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What position does Steven Lamy hold?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who is a professor of international relations?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q3",
+          "text": "Who is the Vice Dean at USC Dana and David Dornsife College of Letters, Arts and Sciences?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "works at",
+      "questions": [
+        {
+          "id": "q4",
+          "text": "Where does Steven Lamy work?",
+          "answers": [
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Who works at the University of Southern California?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "was past Director of",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "What was Steven Lamy's past position?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "Who was the past Director of the University of Southern California School of International Relations?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

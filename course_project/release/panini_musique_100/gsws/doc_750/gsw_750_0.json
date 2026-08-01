@@ -1,0 +1,193 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "1959",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "event year",
+            "20th century"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "International Commission of Jurists",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "legal body",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New Delhi",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "meeting location",
+            "capital city"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Declaration of Delhi",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "legal declaration",
+            "historical document"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "rule of law",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "legal principle",
+            "fundamental principle"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "independent judiciary",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "legal principle",
+            "judicial independence"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "social, economic and cultural conditions",
+      "roles": [
+        {
+          "role": "concept",
+          "states": [
+            "societal conditions",
+            "human dignity"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "held in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where was the international gathering of judges, lawyers, and law professors held in 1959?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What event was held in New Delhi in 1959?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "made a declaration",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What did the International Commission of Jurists do in 1959?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who made the Declaration of Delhi?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "implies",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What does the rule of law imply according to the Declaration of Delhi?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What concept implies an independent judiciary and social, economic, and cultural conditions conducive to human dignity?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

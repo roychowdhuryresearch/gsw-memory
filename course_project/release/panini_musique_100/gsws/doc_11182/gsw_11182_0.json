@@ -1,0 +1,183 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "King's Scholars",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "educational",
+            "Eton College"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Oppidan Houses",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "educational",
+            "Eton College"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Oppidan Scholars",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "educational",
+            "Eton College"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Oppidan Scholarship",
+      "roles": [
+        {
+          "role": "award",
+          "states": [
+            "educational",
+            "Eton College"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "OS",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "post-nominal letters",
+            "Eton College"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "choose to become",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who can choose to become King's Scholars?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What can boys choose to become after passing the College election examination?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "known as",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What are boys who belong to one of the 24 Oppidan Houses known as?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who are known as Oppidan Scholars?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "awarded for",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is awarded for consistently performing with distinction in School and external examinations?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "For what can Oppidan Scholarships be awarded?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "entitled to use",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What are Oppidan Scholars entitled to use after their name?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who is entitled to use the letters OS after their name?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

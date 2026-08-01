@@ -1,0 +1,222 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "New York Giants Radio Network",
+      "roles": [
+        {
+          "role": "broadcast network",
+          "states": [
+            "sports broadcasting",
+            "American football"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "New York City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "headquarters",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "New York Giants",
+      "roles": [
+        {
+          "role": "sports team",
+          "states": [
+            "American football",
+            "NFL"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "WFAN",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "flagship station",
+            "CBS Radio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "CBS Radio",
+      "roles": [
+        {
+          "role": "company",
+          "states": [
+            "media company",
+            "radio broadcasting"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "WCBS",
+      "roles": [
+        {
+          "role": "radio station",
+          "states": [
+            "overflow broadcasts",
+            "CBS Radio"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "based in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the New York Giants Radio Network based?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What broadcast network is based in New York City?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "official broadcaster of",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who is the official broadcaster of the New York Giants?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What team is officially broadcasted by the New York Giants Radio Network?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "flagshipped at",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which station is the flagship for the New York Giants Radio Network?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What network is flagshipped at WFAN?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "owned by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who owns WFAN?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What station is owned by CBS Radio?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "overflow broadcasts on",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where do overflow broadcasts of the New York Giants Radio Network air?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What network has overflow broadcasts on WCBS?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

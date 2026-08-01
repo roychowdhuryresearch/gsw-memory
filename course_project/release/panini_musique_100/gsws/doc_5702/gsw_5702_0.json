@@ -1,0 +1,241 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Prony Bay",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical feature",
+            "bay"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "southern end of New Caledonia",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "geographical region",
+            "New Caledonia"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Rivière Bleue",
+      "roles": [
+        {
+          "role": "water body",
+          "states": [
+            "stream",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Ruisseau de la Bergerie",
+      "roles": [
+        {
+          "role": "water body",
+          "states": [
+            "stream",
+            "tributary"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "1955",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start of period",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1968",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "end of period",
+            "historical event"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "red clay deposits",
+      "roles": [
+        {
+          "role": "natural resource",
+          "states": [
+            "mineral deposit",
+            "environmental feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "oversized madrepore species",
+      "roles": [
+        {
+          "role": "marine life",
+          "states": [
+            "coral species",
+            "biological feature"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "located at",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is Prony Bay located?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What bay is located at the southern end of New Caledonia?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "flows into",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What streams flow into Prony Bay?",
+          "answers": [
+            "e3",
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Where does the Rivière Bleue flow into?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q5",
+          "text": "Where does the Ruisseau de la Bergerie flow into?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "increased between",
+      "questions": [
+        {
+          "id": "q6",
+          "text": "What increased between 1955 and 1968?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q7",
+          "text": "When did red clay deposits increase?",
+          "answers": [
+            "e5",
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "growing in",
+      "questions": [
+        {
+          "id": "q8",
+          "text": "What species are said to be growing in turbid waters of Prony Bay?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q9",
+          "text": "Where are oversized madrepore species growing?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

@@ -1,0 +1,298 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Spanish (Spanish language in the United States)",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "most widely taught",
+            "non-English",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "American secondary schools",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "education",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "higher education",
+      "roles": [
+        {
+          "role": "education level",
+          "states": [
+            "post-secondary",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "1.4 million",
+      "roles": [
+        {
+          "role": "quantity",
+          "states": [
+            "students",
+            "enrollment",
+            "autumn 2002"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "autumn 2002",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "enrollment period",
+            "early 2000s"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "American colleges and universities",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "higher education",
+            "United States"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "French",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "German",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "Italian",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "American Sign Language",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Japanese",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Chinese",
+      "roles": [
+        {
+          "role": "language",
+          "states": [
+            "taught",
+            "American education"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "most widely taught language",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is the most widely taught non-English language in American secondary schools?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Where is Spanish the most widely taught non-English language?",
+          "answers": [
+            "e2",
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "enrolled in language courses",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "How many university students were enrolled in language courses in autumn 2002?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "When were 1.4 million university students enrolled in language courses?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "taught in American colleges and universities",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What language is the most widely taught in American colleges and universities?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Where is Spanish the most widely taught language?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "followed by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Which language is followed by French in terms of being taught in American colleges?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Which language follows Spanish in being taught in American colleges?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

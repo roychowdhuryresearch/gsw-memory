@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "U.S.",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "North America",
+            "nation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Vital Records Office",
+      "roles": [
+        {
+          "role": "government office",
+          "states": [
+            "state level",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "birth certificate",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "identity document",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "American citizenship",
+      "roles": [
+        {
+          "role": "citizenship",
+          "states": [
+            "nationality",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "U.S. passport",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "travel document",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "U.S. State Department",
+      "roles": [
+        {
+          "role": "government department",
+          "states": [
+            "federal level",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Consular Report of Birth Abroad",
+      "roles": [
+        {
+          "role": "document",
+          "states": [
+            "identity document",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "U.S. citizens",
+      "roles": [
+        {
+          "role": "people",
+          "states": [
+            "nationality",
+            "U.S."
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "military bases in foreign territory",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "military",
+            "international"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "issues",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does the Vital Records Office issue?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who issues birth certificates in the U.S.?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "establishes eligibility for",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does birth in the U.S. establish eligibility for?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What establishes eligibility for American citizenship?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "provided to obtain",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What is a birth certificate provided to obtain?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What document is provided to the federal government to obtain a U.S. passport?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "issues",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What does the U.S. State Department issue for children born to U.S. citizens?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who issues the Consular Report of Birth Abroad?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "born to",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who are children born to that are eligible for a Consular Report of Birth Abroad?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who are eligible for a Consular Report of Birth Abroad if born to U.S. citizens?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "includes",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What does the Consular Report of Birth Abroad include?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What includes births on military bases in foreign territory?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

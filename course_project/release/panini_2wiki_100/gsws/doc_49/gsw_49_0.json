@@ -1,0 +1,96 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Scott Fox",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "living",
+                        "film industry"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "professional",
+                    "states": [
+                        "pornographic film director"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "AVN Hall of Fame",
+            "roles": [
+                {
+                    "role": "organization",
+                    "states": [
+                        "honorary group",
+                        "adult film industry"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "member of",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who is a member of the AVN Hall of Fame?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What organization is Scott Fox a member of?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "profession",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "What is Scott Fox's profession?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "Who is a pornographic film director?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

@@ -1,0 +1,80 @@
+# ECE 232E — Panini MuSiQue Companion Package
+
+[Read the complete 150-point project handout](../../PROJECT_HANDOUT.pdf).
+The editable LaTeX source is available at
+[`PROJECT_HANDOUT.tex`](../../PROJECT_HANDOUT.tex).
+
+This folder is the 100-question MuSiQue companion to the
+[2Wiki starter repository](https://github.com/YigitTurali/panini-course-project).
+It contains the selected questions, source documents, normalized GSW JSON
+networks, flattened entity/QA metadata, supplied Qwen3-Embedding-8B vectors,
+dense/TF-IDF/BM25 indices, model configuration, and the `panini_course`
+Python package.
+
+## Fixed subset
+
+- 50 two-hop questions: 40 development and 10 held out.
+- 30 three-hop questions: 24 development and 6 held out.
+- 20 four-hop questions: 16 development and 4 held out.
+- 841 source documents and corresponding GSWs.
+- 8,260 flattened entities and 9,991 flattened QA records.
+
+Every supporting paragraph is included. Each question also receives
+deterministically sampled distractors for a total of ten context documents.
+All annotated atomic answers were checked for named-node coverage in the
+packaged GSWs.
+
+## Setup
+
+Open the root `Panini_Course_Project.ipynb`; it loads this companion package
+automatically for the MuSiQue transfer sections. The notebook uses separate,
+restartable decomposer, reranker/RICR, and answer stages and keeps student code
+and custom tests in its Drive work directory. For a manual package-only setup,
+install:
+
+```python
+!pip install -q -r requirements-colab.txt
+```
+
+Load the package and run the starter tests:
+
+```bash
+python quickstart.py .
+pytest -q tests
+```
+
+The supplied RICR tests turn on automatically after the scaffold functions are
+implemented. See `TESTING.md` for details.
+
+## Supplied models
+
+The default free-tier pipeline uses:
+
+1. [GSW-QA-Decomposer-Qwen3-4B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
+2. supplied Qwen3-Embedding-8B corpus/fixed-query embeddings;
+3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B) in 4-bit
+   mode on a 15 GiB T4, or
+   [Qwen3-Reranker-4B](https://huggingface.co/Qwen/Qwen3-Reranker-4B) on a
+   the 4B fallback after an actual OOM; and
+4. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
+   final answers.
+
+Load models sequentially in 4-bit mode; use batch size 1 and 256-token
+reranker inputs on T4. The optional
+[8B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
+is not required.
+
+## Student boundary
+
+Corpus GSW and embedding generation is not a student task. Students analyze
+the network, compare retrieval methods, run decomposition, and implement the
+connected-DAG RICR executor, including multi-parent beam combination and the
+different intermediate/final-hop pruning rules. Held-out answers and
+supporting evidence are stored separately from this package.
+
+Global entity reconciliation is required only for the network-analysis
+questions. Panini retrieval keeps document-local entity occurrences and must
+not consume edges from the reconciled analysis graph.
+
+MuSiQue is distributed under
+[CC BY 4.0](https://github.com/stonybrooknlp/musique).

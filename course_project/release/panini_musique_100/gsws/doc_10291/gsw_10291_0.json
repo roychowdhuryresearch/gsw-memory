@@ -1,0 +1,274 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Bioscience Horizons",
+      "roles": [
+        {
+          "role": "journal",
+          "states": [
+            "scientific",
+            "online"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "bioscience research",
+      "roles": [
+        {
+          "role": "subject",
+          "states": [
+            "academic",
+            "scientific"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "students",
+      "roles": [
+        {
+          "role": "authors",
+          "states": [
+            "undergraduate",
+            "Masters"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2014",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "international expansion"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "academic reviewers",
+      "roles": [
+        {
+          "role": "reviewers",
+          "states": [
+            "experts",
+            "rigorous"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "UK universities",
+      "roles": [
+        {
+          "role": "publisher",
+          "states": [
+            "consortium"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Oxford University Press",
+      "roles": [
+        {
+          "role": "partner",
+          "states": [
+            "publishing"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "2008",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "establishment"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "publishes",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What does Bioscience Horizons publish?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Which journal publishes bioscience research?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "authored by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who are the authors of the research published in Bioscience Horizons?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What journal features research authored by students?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "went international in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When did Bioscience Horizons go international?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What happened to Bioscience Horizons in 2014?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "assessed by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who assesses the manuscripts for Bioscience Horizons?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What do academic reviewers assess?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "published by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who publishes Bioscience Horizons?",
+          "answers": [
+            "e6",
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What journal is published by a consortium of UK universities and Oxford University Press?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "established in",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was Bioscience Horizons established?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What journal was established in 2008?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

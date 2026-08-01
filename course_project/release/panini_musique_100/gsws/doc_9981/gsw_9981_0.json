@@ -1,0 +1,348 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Mr. Irrelevant",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "NFL Draft",
+            "annual award"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "National Football League draft",
+      "roles": [
+        {
+          "role": "event",
+          "states": [
+            "sports",
+            "annual"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1936",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "start year",
+            "NFL Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Kelvin Kirk",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "first Mr. Irrelevant",
+            "NFL Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "487",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "draft pick",
+            "1976"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "1976",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "draft year",
+            "NFL Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Trey Quinn",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "current Mr. Irrelevant",
+            "NFL Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "SMU Mustangs football team",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "college football",
+            "Trey Quinn's team"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "256",
+      "roles": [
+        {
+          "role": "number",
+          "states": [
+            "draft pick",
+            "2018"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "Washington Redskins",
+      "roles": [
+        {
+          "role": "organization",
+          "states": [
+            "NFL team",
+            "drafted Trey Quinn"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "2018",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "draft year",
+            "NFL Draft"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "title bestowed upon",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What title is bestowed upon the last pick of the NFL Draft?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who receives the title Mr. Irrelevant?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "first Mr. Irrelevant",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who was the first person to be given the Mr. Irrelevant title?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What title was Kelvin Kirk the first to receive?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "drafted in",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "When was Kelvin Kirk drafted?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was drafted in 1976 as Mr. Irrelevant?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "current Mr. Irrelevant",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who is the current Mr. Irrelevant?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What title does Trey Quinn currently hold?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "played for",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which team did Trey Quinn play for?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "Who played for the SMU Mustangs football team?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "drafted by",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who drafted Trey Quinn?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "Which player was drafted by the Washington Redskins?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v7",
+      "phrase": "drafted in",
+      "questions": [
+        {
+          "id": "q13",
+          "text": "When was Trey Quinn drafted?",
+          "answers": [
+            "e11"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q14",
+          "text": "Who was drafted in 2018 as Mr. Irrelevant?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

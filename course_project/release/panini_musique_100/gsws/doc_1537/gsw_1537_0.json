@@ -1,0 +1,272 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Capital punishment",
+      "roles": [
+        {
+          "role": "legal penalty",
+          "states": [
+            "United States",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "United States (Capital punishment in the United States)",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "Western",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "31 states",
+      "roles": [
+        {
+          "role": "political division",
+          "states": [
+            "United States",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "federal government",
+      "roles": [
+        {
+          "role": "government",
+          "states": [
+            "United States",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "military",
+      "roles": [
+        {
+          "role": "institution",
+          "states": [
+            "United States",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "American colonies",
+      "roles": [
+        {
+          "role": "historical region",
+          "states": [
+            "United States",
+            "historical"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "54 countries",
+      "roles": [
+        {
+          "role": "country group",
+          "states": [
+            "worldwide",
+            "current"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "lethal injection",
+      "roles": [
+        {
+          "role": "execution method",
+          "states": [
+            "United States",
+            "developed"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "five other countries",
+      "roles": [
+        {
+          "role": "country group",
+          "states": [
+            "worldwide",
+            "adopted"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "used by",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "What is used by 31 states, the federal government, and the military?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who uses capital punishment in the United States?",
+          "answers": [
+            "e3",
+            "e4",
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "traced to",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Where can the existence of capital punishment in the United States be traced to?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What can be traced to the beginning of the American colonies?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "applying",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which Western country is currently applying the death penalty?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What is the United States currently applying?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "developed",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What execution method was first developed by the United States?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who developed lethal injection as a method of execution?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "adopted by",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Which countries have adopted lethal injection as a method of execution?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What method of execution has been adopted by five other countries?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

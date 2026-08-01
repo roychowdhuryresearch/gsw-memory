@@ -1,0 +1,257 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "History of Joseph Smith by His Mother",
+      "roles": [
+        {
+          "role": "book",
+          "states": [
+            "biography",
+            "Latter Day Saint movement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Joseph Smith",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "founder",
+            "Latter Day Saint movement"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Lucy Mack Smith",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "mother",
+            "biographer"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Biographical Sketches of Joseph Smith, the Prophet, and His Progenitors for Many Generations",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "original title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Orson Pratt",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "publisher"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Liverpool",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "publication location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "1853",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "publication year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "biography of",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Who is the biography 'History of Joseph Smith by His Mother' about?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What biography is about Joseph Smith?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "written by",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "Who wrote 'History of Joseph Smith by His Mother'?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What did Lucy Mack Smith write?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "originally titled",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What was the original title of 'History of Joseph Smith by His Mother'?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What book was originally titled 'Biographical Sketches of Joseph Smith, the Prophet, and His Progenitors for Many Generations'?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "published by",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who published 'History of Joseph Smith by His Mother'?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What did Orson Pratt publish?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "published in",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Where was 'History of Joseph Smith by His Mother' published?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What book was published in Liverpool?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "published in year",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "When was 'History of Joseph Smith by His Mother' published?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What book was published in 1853?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

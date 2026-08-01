@@ -1,0 +1,337 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Haoui Montaug",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "deceased",
+            "nightlife figure"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "1952",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "birth year"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "June 7, 1991",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "death date"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "New York City",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "nightlife location"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Hurrah",
+      "roles": [
+        {
+          "role": "nightclub",
+          "states": [
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Danceteria",
+      "roles": [
+        {
+          "role": "nightclub",
+          "states": [
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "Studio 54",
+      "roles": [
+        {
+          "role": "nightclub",
+          "states": [
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "Palladium",
+      "roles": [
+        {
+          "role": "nightclub",
+          "states": [
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "No Entiendes",
+      "roles": [
+        {
+          "role": "cabaret revue",
+          "states": [
+            "roving",
+            "New York City"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e10",
+      "name": "I Dunno",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "original name"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e11",
+      "name": "Madonna",
+      "roles": [
+        {
+          "role": "person",
+          "states": [
+            "performer",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e12",
+      "name": "Beastie Boys",
+      "roles": [
+        {
+          "role": "music group",
+          "states": [
+            "performers",
+            "music industry"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "born in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was Haoui Montaug born?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "Who was born in 1952?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "died on",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When did Haoui Montaug die?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "Who died on June 7, 1991?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "doorman of",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "Which nightclubs did Haoui Montaug work as a doorman?",
+          "answers": [
+            "e5",
+            "e6",
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "Who was the doorman of Hurrah, Danceteria, Studio 54, and the Palladium?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "ran",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "What cabaret revue did Haoui Montaug run?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "Who ran the cabaret revue No Entiendes?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "originally named",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What was the original name of No Entiendes?",
+          "answers": [
+            "e10"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What cabaret revue was originally named I Dunno?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "showcased",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who did No Entiendes showcase?",
+          "answers": [
+            "e11",
+            "e12"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "In which cabaret revue did Madonna and the Beastie Boys perform early in their careers?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

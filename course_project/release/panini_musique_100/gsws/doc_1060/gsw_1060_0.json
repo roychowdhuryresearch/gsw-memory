@@ -1,0 +1,293 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "Rialto Bridge",
+      "roles": [
+        {
+          "role": "structure",
+          "states": [
+            "bridge",
+            "tourist attraction"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "Ponte di Rialto",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Italian name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "Ponte de Rialto",
+      "roles": [
+        {
+          "role": "title",
+          "states": [
+            "Venetian name",
+            "alternative title"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "Grand Canal",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "waterway",
+            "Venice"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "Venice",
+      "roles": [
+        {
+          "role": "location",
+          "states": [
+            "city",
+            "Italy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "Italy",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "European country"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "San Marco",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "sestiere",
+            "Venice"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "San Polo",
+      "roles": [
+        {
+          "role": "district",
+          "states": [
+            "sestiere",
+            "Venice"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e9",
+      "name": "12th century",
+      "roles": [
+        {
+          "role": "time period",
+          "states": [
+            "historical period",
+            "medieval"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "is located in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "Where is the Rialto Bridge located?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What bridge is located in Venice?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "spans",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "What does the Rialto Bridge span?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What bridge spans the Grand Canal?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "connects",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What districts does the Rialto Bridge connect?",
+          "answers": [
+            "e7",
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "What bridge connects San Marco and San Polo?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "first constructed in",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "When was the Rialto Bridge first constructed?",
+          "answers": [
+            "e9"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What was first constructed in the 12th century?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "Italian name",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "What is the Italian name of the Rialto Bridge?",
+          "answers": [
+            "e2"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What bridge is known as Ponte di Rialto in Italian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "Venetian name",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "What is the Venetian name of the Rialto Bridge?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What bridge is known as Ponte de Rialto in Venetian?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

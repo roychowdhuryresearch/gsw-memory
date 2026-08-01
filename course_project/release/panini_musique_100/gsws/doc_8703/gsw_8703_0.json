@@ -1,0 +1,277 @@
+{
+  "entity_nodes": [
+    {
+      "id": "e1",
+      "name": "one-child policy",
+      "roles": [
+        {
+          "role": "policy",
+          "states": [
+            "population planning",
+            "family planning"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e2",
+      "name": "China",
+      "roles": [
+        {
+          "role": "country",
+          "states": [
+            "location",
+            "policy implementation"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e3",
+      "name": "1979",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "introduction year",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e4",
+      "name": "2015",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "phase-out year",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e5",
+      "name": "2007",
+      "roles": [
+        {
+          "role": "date",
+          "states": [
+            "statistical year",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e6",
+      "name": "ethnic minorities",
+      "roles": [
+        {
+          "role": "group",
+          "states": [
+            "exception",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e7",
+      "name": "provincial governments",
+      "roles": [
+        {
+          "role": "government body",
+          "states": [
+            "enforcement",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    },
+    {
+      "id": "e8",
+      "name": "local and national governments",
+      "roles": [
+        {
+          "role": "government body",
+          "states": [
+            "awareness and registration",
+            "policy"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null,
+      "summary": null
+    }
+  ],
+  "verb_phrase_nodes": [
+    {
+      "id": "v1",
+      "phrase": "introduced in",
+      "questions": [
+        {
+          "id": "q1",
+          "text": "When was the one-child policy introduced?",
+          "answers": [
+            "e3"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q2",
+          "text": "What policy was introduced in 1979?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v2",
+      "phrase": "phased out in",
+      "questions": [
+        {
+          "id": "q3",
+          "text": "When was the one-child policy phased out?",
+          "answers": [
+            "e4"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q4",
+          "text": "What policy was phased out in 2015?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v3",
+      "phrase": "subject to policy",
+      "questions": [
+        {
+          "id": "q5",
+          "text": "What percentage of China's population was subject to a strict one-child restriction in 2007?",
+          "answers": [
+            "36%"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q6",
+          "text": "In what year was 36% of China's population subject to a strict one-child restriction?",
+          "answers": [
+            "e5"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v4",
+      "phrase": "allowed exceptions for",
+      "questions": [
+        {
+          "id": "q7",
+          "text": "Who were allowed exceptions under the one-child policy?",
+          "answers": [
+            "e6"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q8",
+          "text": "What policy allowed exceptions for ethnic minorities?",
+          "answers": [
+            "e1"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v5",
+      "phrase": "imposed fines",
+      "questions": [
+        {
+          "id": "q9",
+          "text": "Who imposed fines for violations of the one-child policy?",
+          "answers": [
+            "e7"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q10",
+          "text": "What did provincial governments do in relation to the one-child policy?",
+          "answers": [
+            "imposed fines"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    },
+    {
+      "id": "v6",
+      "phrase": "created commissions",
+      "questions": [
+        {
+          "id": "q11",
+          "text": "Who created commissions to raise awareness and carry out registration and inspection work for the one-child policy?",
+          "answers": [
+            "e8"
+          ],
+          "chunk_id": null
+        },
+        {
+          "id": "q12",
+          "text": "What did local and national governments do in relation to the one-child policy?",
+          "answers": [
+            "created commissions"
+          ],
+          "chunk_id": null
+        }
+      ],
+      "chunk_id": null
+    }
+  ],
+  "space_nodes": [],
+  "time_nodes": [],
+  "similarity_edges": [],
+  "space_edges": [],
+  "time_edges": []
+}

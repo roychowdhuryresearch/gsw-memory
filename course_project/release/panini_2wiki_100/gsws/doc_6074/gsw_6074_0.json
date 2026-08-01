@@ -1,0 +1,89 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Japan",
+            "roles": [
+                {
+                    "role": "country",
+                    "states": [
+                        "Asian country",
+                        "film production location"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "2000s",
+            "roles": [
+                {
+                    "role": "decade",
+                    "states": [
+                        "21st century",
+                        "film production period"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "films produced in",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "What films were produced in Japan?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "Where were films produced in the 2000s?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "ordered by year",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "How are the films produced in Japan organized?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What is the order criterion for films produced in Japan in the 2000s?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}

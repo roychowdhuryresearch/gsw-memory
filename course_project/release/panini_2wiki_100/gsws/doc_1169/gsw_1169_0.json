@@ -1,0 +1,212 @@
+{
+    "entity_nodes": [
+        {
+            "id": "e1",
+            "name": "Adib Kheir",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "historical figure",
+                        "20th century"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "role": "nationalist",
+                    "states": [
+                        "Syrian",
+                        "1920s"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e2",
+            "name": "Librairie Universelle",
+            "roles": [
+                {
+                    "role": "business",
+                    "states": [
+                        "bookstore",
+                        "Damascus"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e3",
+            "name": "Damascus",
+            "roles": [
+                {
+                    "role": "location",
+                    "states": [
+                        "city",
+                        "Syria"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e4",
+            "name": "Manaf Tlass",
+            "roles": [
+                {
+                    "role": "person",
+                    "states": [
+                        "contemporary figure"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        },
+        {
+            "id": "e5",
+            "name": "granddaughter",
+            "roles": [
+                {
+                    "role": "family relation",
+                    "states": [
+                        "descendant"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null,
+            "summary": null
+        }
+    ],
+    "verb_phrase_nodes": [
+        {
+            "id": "v1",
+            "phrase": "was a leading nationalist",
+            "questions": [
+                {
+                    "id": "q1",
+                    "text": "Who was a leading Syrian nationalist of the 1920s?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q2",
+                    "text": "What was Adib Kheir's role in the 1920s?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v2",
+            "phrase": "owner of",
+            "questions": [
+                {
+                    "id": "q3",
+                    "text": "Who was the owner of the Librairie Universelle?",
+                    "answers": [
+                        "e1"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q4",
+                    "text": "What business did Adib Kheir own?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v3",
+            "phrase": "located in",
+            "questions": [
+                {
+                    "id": "q5",
+                    "text": "Where is the Librairie Universelle located?",
+                    "answers": [
+                        "e3"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q6",
+                    "text": "What bookstore is located in Damascus?",
+                    "answers": [
+                        "e2"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v4",
+            "phrase": "spouse of",
+            "questions": [
+                {
+                    "id": "q7",
+                    "text": "Who is the spouse of Manaf Tlass?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q8",
+                    "text": "Who is Manaf Tlass married to?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        },
+        {
+            "id": "v5",
+            "phrase": "granddaughter of",
+            "questions": [
+                {
+                    "id": "q9",
+                    "text": "Who is the granddaughter of Adib Kheir?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                },
+                {
+                    "id": "q10",
+                    "text": "Who is Adib Kheir's granddaughter?",
+                    "answers": [
+                        "e5"
+                    ],
+                    "chunk_id": null
+                }
+            ],
+            "chunk_id": null
+        }
+    ],
+    "space_nodes": [],
+    "time_nodes": [],
+    "similarity_edges": [],
+    "space_edges": [],
+    "time_edges": []
+}
