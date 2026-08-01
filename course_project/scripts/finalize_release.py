@@ -30,6 +30,7 @@ MODEL_CONFIG = {
         "prompt": "models/decomposition_prompt.txt",
         "quantization": "4bit-nf4-recommended-for-colab",
         "temperature": 0.0,
+        "max_new_tokens": 768,
     },
     "embedding": {
         "model": "Qwen/Qwen3-Embedding-8B",
@@ -39,7 +40,11 @@ MODEL_CONFIG = {
     },
     "reranker": {
         "model": "Qwen/Qwen3-Reranker-8B",
+        "free_colab_t4_fallback": "Qwen/Qwen3-Reranker-4B",
+        "use_8b_at_or_above_gib": 18,
         "quantization": "4bit-nf4-recommended-for-colab",
+        "free_colab_batch_size": 1,
+        "free_colab_max_length": 256,
     },
     "answer_model": {
         "model": "Qwen/Qwen3-4B",

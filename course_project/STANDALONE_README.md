@@ -95,7 +95,10 @@ decomposition prompt. Models should be loaded sequentially in Colab:
    - [Qwen3-8B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
      is the higher-capacity option.
 2. 4-bit Qwen query encoder for uncached instantiated queries.
-3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B).
+3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B) on GPUs
+   with at least 18 GiB, or the
+   [Qwen3-Reranker-4B](https://huggingface.co/Qwen/Qwen3-Reranker-4B)
+   fallback on a 15 GiB T4. Use batch size 1 and 256-token inputs on T4.
 4. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
    final answers.
 

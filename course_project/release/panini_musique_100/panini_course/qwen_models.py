@@ -1,4 +1,4 @@
-"""Standalone wrappers for the supplied Qwen decomposer, encoder, and reranker."""
+"""Standalone wrappers for decomposition, encoding, reranking, and answering."""
 
 from __future__ import annotations
 
@@ -61,7 +61,13 @@ class QwenDecomposer:
             ),
         ).eval()
 
-    def decompose(self, question: str, *, max_new_tokens: int = 768) -> list[dict]:
+    def generate_raw(self, question: str, *, max_new_tokens: int = 768) -> str:
+        """Generate the model response without parsing it.
+
+        Keeping generation separate from parsing lets long-running Colab jobs
+        persist the original response before validating its JSON structure.
+        """
+
         import torch
 
         prompt = self.prompt_template.format(question=question)
@@ -88,10 +94,15 @@ class QwenDecomposer:
                 do_sample=False,
                 max_new_tokens=max_new_tokens,
             )
-        response = self.tokenizer.decode(
+        return self.tokenizer.decode(
             generated[0, inputs["input_ids"].shape[1] :],
             skip_special_tokens=True,
         )
+
+    @staticmethod
+    def parse_response(response: str) -> list[dict]:
+        """Parse and normalize a raw decomposer response."""
+
         payload = _extract_json_object(response)
         questions = payload.get("questions")
         if not isinstance(questions, list):
@@ -106,6 +117,13 @@ class QwenDecomposer:
             }
             for item in questions
         ]
+
+    def decompose(self, question: str, *, max_new_tokens: int = 768) -> list[dict]:
+        """Generate and parse a decomposition in one call."""
+
+        return self.parse_response(
+            self.generate_raw(question, max_new_tokens=max_new_tokens)
+        )
 
 
 class QwenQueryEncoder:

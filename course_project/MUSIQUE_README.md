@@ -47,11 +47,15 @@ The default free-tier pipeline uses:
 
 1. [GSW-QA-Decomposer-Qwen3-4B](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-4B)
 2. supplied Qwen3-Embedding-8B corpus/fixed-query embeddings;
-3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B); and
+3. [Qwen3-Reranker-8B](https://huggingface.co/Qwen/Qwen3-Reranker-8B) on GPUs
+   with at least 18 GiB, or
+   [Qwen3-Reranker-4B](https://huggingface.co/Qwen/Qwen3-Reranker-4B) on a
+   15 GiB T4; and
 4. [Qwen3-4B](https://huggingface.co/Qwen/Qwen3-4B) for evidence-grounded
    final answers.
 
-Load models sequentially in 4-bit mode. The optional
+Load models sequentially in 4-bit mode; use batch size 1 and 256-token
+reranker inputs on T4. The optional
 [8B decomposer](https://huggingface.co/yigitturali/GSW-QA-Decomposer-Qwen3-8B)
 is not required.
 
