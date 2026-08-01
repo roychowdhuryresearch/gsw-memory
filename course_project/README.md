@@ -65,6 +65,7 @@ course_project/
 │   └── panini_2wiki_100/
 ├── scripts/
 │   ├── build_dataset.py
+│   ├── build_student_starter_notebook.py
 │   ├── export_embeddings.py
 │   ├── build_indices.py
 │   └── finalize_release.py

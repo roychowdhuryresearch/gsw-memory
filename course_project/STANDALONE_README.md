@@ -65,9 +65,13 @@ Verify the supplied retrieval artifacts without loading any Qwen model:
 python quickstart.py .
 ```
 
-`Panini_Course_Project.ipynb` is the Colab-ready student workspace. Its setup
-cell uses `/content/panini-course-project`; change `PACKAGE_ROOT` only when
-using a Drive copy or another directory.
+`Panini_Course_Project.ipynb` is the 48-cell Colab-ready student workspace. It
+mirrors the complete Questions 1–12 workflow but leaves the graded algorithms,
+tables, conclusions, and twelve written responses as TODOs. Its run controls
+separate decomposition, reranking/RICR, and answering so only one Qwen model is
+resident at a time. JSONL checkpoints, the student's `ricr.py`, and custom
+tests are kept under the selected Drive work directory and survive a runtime
+disconnect. Start with `QUESTION_LIMIT = 2`; use `None` only for final runs.
 
 ## Supplied embeddings
 

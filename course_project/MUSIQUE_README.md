@@ -26,7 +26,11 @@ packaged GSWs.
 
 ## Setup
 
-Set the notebook's `PACKAGE_ROOT` to this directory and install:
+Open the root `Panini_Course_Project.ipynb`; it loads this companion package
+automatically for the MuSiQue transfer sections. The notebook uses separate,
+restartable decomposer, reranker/RICR, and answer stages and keeps student code
+and custom tests in its Drive work directory. For a manual package-only setup,
+install:
 
 ```python
 !pip install -q -r requirements-colab.txt
