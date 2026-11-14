@@ -1,0 +1,89 @@
+cff-version: 1.2.0
+message: "If you use GSW Memory, please cite the AAAI 2026 paper below. If you use the continual-learning setting, please also cite Panini (ICML 2026)."
+title: "GSW Memory: Generative Semantic Workspaces"
+type: software
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/roychowdhuryresearch/gsw-memory"
+abstract: >-
+  Generative Semantic Workspaces (GSW) is a structured episodic memory for LLMs
+  and LLM agents. An Operator maps incoming text to actors, roles, states and
+  space-time anchors, and a Reconciler merges them into a persistent workspace
+  that stays temporally, spatially and logically coherent. The workspace serves
+  as long-term memory for retrieval-augmented generation and for non-parametric
+  continual learning.
+keywords:
+  - agent memory
+  - episodic memory
+  - long-term memory
+  - LLM memory
+  - structured memory
+  - retrieval-augmented generation
+  - continual learning
+  - Generative Semantic Workspace
+  - EpBench
+authors:
+  - given-names: Shreyas
+    family-names: Rajesh
+    affiliation: "University of California, Los Angeles"
+  - given-names: Pavan
+    family-names: Holur
+    affiliation: "University of California, Los Angeles"
+  - given-names: Mehmet Yigit
+    family-names: Turali
+    affiliation: "University of California, Los Angeles"
+  - given-names: Chenda
+    family-names: Duan
+    affiliation: "University of California, Los Angeles"
+  - given-names: David
+    family-names: Chong
+    affiliation: "University of California, Los Angeles"
+  - given-names: Vwani
+    family-names: Roychowdhury
+    affiliation: "University of California, Los Angeles"
+preferred-citation:
+  type: conference-paper
+  title: "Beyond Fact Retrieval: Episodic Memory for RAG with Generative Semantic Workspaces"
+  collection-title: "Proceedings of the AAAI Conference on Artificial Intelligence"
+  conference:
+    name: "AAAI 2026"
+  year: 2026
+  url: "https://arxiv.org/abs/2511.07587"
+  identifiers:
+    - type: url
+      value: "https://arxiv.org/abs/2511.07587"
+      description: "arXiv:2511.07587"
+  authors:
+    - given-names: Shreyas
+      family-names: Rajesh
+    - given-names: Pavan
+      family-names: Holur
+    - given-names: Chenda
+      family-names: Duan
+    - given-names: David
+      family-names: Chong
+    - given-names: Vwani
+      family-names: Roychowdhury
+references:
+  - type: conference-paper
+    title: "Panini: Continual Learning in Token Space via Structured Memory"
+    collection-title: "Proceedings of the 43rd International Conference on Machine Learning"
+    conference:
+      name: "ICML 2026"
+    year: 2026
+    url: "https://arxiv.org/abs/2602.15156"
+    identifiers:
+      - type: url
+        value: "https://openreview.net/forum?id=BNGK86bQRr"
+        description: "OpenReview"
+    authors:
+      - given-names: Shreyas
+        family-names: Rajesh
+      - given-names: Pavan
+        family-names: Holur
+      - given-names: Mehmet Yigit
+        family-names: Turali
+      - given-names: Chenda
+        family-names: Duan
+      - given-names: Vwani
+        family-names: Roychowdhury
